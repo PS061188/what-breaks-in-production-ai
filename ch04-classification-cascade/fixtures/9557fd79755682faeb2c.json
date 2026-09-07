@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third trial, albuterol sulfate HFA was evaluated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albuterol sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached masks.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"acute wheezing\"}",
+  "elapsed_ms": 912,
+  "usage": {
+    "input_tokens": 473,
+    "output_tokens": 12
+  }
+}

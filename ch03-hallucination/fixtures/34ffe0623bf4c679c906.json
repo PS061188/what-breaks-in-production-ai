@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Atorvastatin Calcium?\n\nRESPONSE:\nBased on the label excerpt provided, atorvastatin calcium has documented interactions requiring dosage modification with the following drug classes:\n\n**Anti-Viral Medications:**\n- Saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir, and letermovir (limit atorvastatin to ≤20 mg daily)\n- Nelfinavir (limit atorvastatin to ≤40 mg daily)\n\n**Azole Antifungals:**\n- Itraconazole (limit atorvastatin to ≤20 mg daily)\n\n**Macrolide Antibiotics:**\n- Clarithromycin (limit atorvastatin to ≤20 mg daily)\n\n**Important Notes:**\n- The label indicates there are additional recommendations for other anti-viral medications, azole antifungals, and macrolide antibiotics referenced in the full prescribing information Drug Interactions section (7.1)\n- These interactions are primarily CYP3A4-mediated, as atorvastatin is metabolized by this enzyme\n- The dosage reductions are necessary because these drugs inhibit atorvastatin metabolism, increasing statin levels and myopathy risk\n- When prescribing atorvastatin with interacting drugs, always check the full prescribing information for complete interaction details and dosage guidance",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2854,
+  "usage": {
+    "input_tokens": 848,
+    "output_tokens": 17
+  }
+}

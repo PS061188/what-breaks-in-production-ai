@@ -1,0 +1,121 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are a clinical data extraction assistant. Extract the requested\nfields from the drug label below into the schema. Include a short source_quote\nfor each field. If a field is not stated in the label, use \"N/A\".\n\n<source_document>\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</source_document>",
+  "user": "Extract these fields: indications, adult_dosage, pediatric_dosage, pregnancy_guidance, overdose_management, drug_interactions",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "indications": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "adult_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pediatric_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pregnancy_guidance": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "overdose_management": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "drug_interactions": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "indications",
+      "adult_dosage",
+      "pediatric_dosage",
+      "pregnancy_guidance",
+      "overdose_management",
+      "drug_interactions"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"indications\":{\"value\":\"Treatment of frequent heartburn (occurring 2 or more days a week); not intended for immediate relief of heartburn, as it may take 1 to 4 days for full effect\",\"source_quote\":\"treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\"},\"adult_dosage\":{\"value\":\"Adults 18 years and older: swallow 1 tablet whole with a glass of water before eating in the morning, once a day (every 24 hours) for 14 days. Do not chew or crush. Do not take more than 1 tablet a day or use more than 14 days unless directed by a doctor. A 14-day course may be repeated every 4 months.\",\"source_quote\":\"for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days ... swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets ... you may repeat a 14-day course every 4 months\"},\"pediatric_dosage\":{\"value\":\"Children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\",\"source_quote\":\"children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\"},\"pregnancy_guidance\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"},\"overdose_management\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"},\"drug_interactions\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"}}",
+  "elapsed_ms": 6376,
+  "usage": {
+    "input_tokens": 1325,
+    "output_tokens": 590
+  }
+}

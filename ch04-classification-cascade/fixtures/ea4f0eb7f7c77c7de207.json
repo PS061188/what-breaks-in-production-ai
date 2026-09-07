@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWhen doses exceeding 80 mg/day are given for prolonged periods, careful clinical observation and laboratory monitoring are particularly advisable (see PRECAUTIONS: Laboratory Tests ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Explicit dosing instructions for pediatric patients including initial dose of 2 mg/kg, titration guidance, and maximum recommended dose of 6 mg/kg; (b) Specific dosing considerations for geriatric patients with recommendation to start at low end of range; (c) Discussion of clinical monitoring for high-dose prolonged therapy.\\n\\n2. Most plausible categories: (a) 'dosage_and_administration' - The passage contains detailed instructions on how much to give, how often, and by what route (oral furosemide), with specific dosing regimens. (b) 'pediatric_use' and 'geriatric_use' - The passage discusses age-specific dosing considerations, which could suggest these categories.\\n\\n3. Classification decision: This is clearly 'dosage_and_administration' because the primary content is prescriptive dosing information (specific mg/kg doses, timing, titration protocols) applicable to different populations. While it mentions pediatric and geriatric patients, the core message is HOW MUCH TO GIVE and WHEN TO GIVE IT. The pediatric_use and geriatric_use sections typically focus on safety/efficacy data and special considerations in those populations, not the actual dosing instructions themselves. The passage IS the dosage section, formatted to address population-specific dosing.\\n\\n4. Confidence: HIGH (>90%) - The text unmistakably provides dosing regimens with specific quantities, timing intervals, and dose adjustment protocols.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 4897,
+  "usage": {
+    "input_tokens": 1038,
+    "output_tokens": 387
+  }
+}

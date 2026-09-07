@@ -1,0 +1,97 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a precision extraction assistant. Each field below may be\nfilled ONLY from its own section of the label. Do not carry content across\nsections — a condition the drug treats and a condition that forbids the drug\nare opposite instructions, and putting one where the other belongs inverts the\nmeaning.\n\nFIELD SOURCES — apply without exception:\n  what_it_treats        -> [indications_and_usage] only\n  who_must_not_take_it  -> [contraindications] only\n  side_effects          -> [adverse_reactions] only\n\nFor each field, quote the supporting text character-for-character and name the\nsection header you took it from. If a field's own section does not support it,\nleave the value empty rather than borrowing from another section.\n\n<label>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Hypothyroidism Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Limitations of Use Levothyroxine sodium tablets are not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients as there are no clinical benefits and overtreatment with levothyroxine sodium may induce hyperthyroidism [see Warnings and Precautions (5.1) ]. Levothyroxine sodium tablets are not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis. Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients, including neonates, for: Hypothyroidism: As replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. (1) Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression: As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. (1) Limitations of Use: Not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients Not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis\n\n[contraindications]\n4 CONTRAINDICATIONS Levothyroxine sodium tablets are contraindicated in patients with uncorrected adrenal insufficiency [see Warnings and Precautions (5.4) ]. Uncorrected adrenal insufficiency. (4)\n\n[adverse_reactions]\n6 ADVERSE REACTIONS Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, muscle weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdominal cramps, elevations in liver function tests Dermatologic: hair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone complete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products. These include urticaria, pruritus, skin rash, flushing, angioedema, various gastrointestinal symptoms (abdominal pain, nausea, vomiting and diarrhea), fever, arthralgia, serum sickness, and wheezing. Hypersensitivity to levothyroxine itself is not known to occur. Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage: arrhythmias, myocardial infarction, dyspnea, muscle spasm, headache, nervousness, irritability, insomnia, tremors, muscle weakness, increased appetite, weight loss, diarrhea, heat intolerance, menstrual irregularities, and skin rash. (6) To report SUS\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"what_it_treats\": {\n    \"value\": \"1 INDICATIONS AND USAGE Hypothyroidism Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Limitations of Use Levothyroxine sodium tablets are not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients as there are no clinical benefits and overtreatment with levothyroxine sodium may induce hyperthyroidism [see Warnings and Precautions (5.1) ]. Levothyroxine sodium tablets are not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis. Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients, including neonates, for: Hypothyroidism: As replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. (1) Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression: As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. (1) Limitations of Use: Not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients Not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis\",\n    \"source_quote\": \"1 INDICATIONS AND USAGE Hypothyroidism Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Limitations of Use Levothyroxine sodium tablets are not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients as there are no clinical benefits and overtreatment with levothyroxine sodium may induce hyperthyroidism [see Warnings and Precautions (5.1) ]. Levothyroxine sodium tablets are not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis. Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients, including neonates, for: Hypothyroidism: As replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. (1) Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression: As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. (1) Limitations of Use: Not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients Not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis\",\n    \"source_section\": \"indications_and_usage\"\n  },\n  \"who_must_not_take_it\": {\n    \"value\": \"4 CONTRAINDICATIONS Levothyroxine sodium tablets are contraindicated in patients with uncorrected adrenal insufficiency [see Warnings and Precautions (5.4) ]. Uncorrected adrenal insufficiency. (4)\",\n    \"source_quote\": \"4 CONTRAINDICATIONS Levothyroxine sodium tablets are contraindicated in patients with uncorrected adrenal insufficiency [see Warnings and Precautions (5.4) ]. Uncorrected adrenal insufficiency. (4)\",\n    \"source_section\": \"contraindications\"\n  },\n  \"side_effects\": {\n    \"value\": \"6 ADVERSE REACTIONS Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, muscle weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdominal cramps, elevations in liver function tests Dermatologic: hair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone complete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products. These include urticaria, pruritus, skin rash, flushing, angioedema, various gastrointestinal symptoms (abdominal pain, nausea, vomiting and diarrhea), fever, arthralgia, serum sickness, and wheezing. Hypersensitivity to levothyroxine itself is not known to occur. Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage: arrhythmias, myocardial infarction, dyspnea, muscle spasm, headache, nervousness, irritability, insomnia, tremors, muscle weakness, increased appetite, weight loss, diarrhea, heat intolerance, menstrual irregularities, and skin rash. (6) To report SUS\",\n    \"source_quote\": \"6 ADVERSE REACTIONS Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, muscle weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdominal cramps, elevations in liver function tests Dermatologic: hair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone complete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products. These include urticaria, pruritus, skin rash, flushing, angioedema, various gastrointestinal symptoms (abdominal pain, nausea, vomiting and diarrhea), fever, arthralgia, serum sickness, and wheezing. Hypersensitivity to levothyroxine itself is not known to occur. Adverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage: arrhythmias, myocardial infarction, dyspnea, muscle spasm, headache, nervousness, irritability, insomnia, tremors, muscle weakness, increased appetite, weight loss, diarrhea, heat intolerance, menstrual irregularities, and skin rash. (6) To report SUS\",\n    \"source_section\": \"adverse_reactions\"\n  }\n}",
+  "elapsed_ms": 38725,
+  "usage": {
+    "input_tokens": 1261,
+    "output_tokens": 3015
+  }
+}

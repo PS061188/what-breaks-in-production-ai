@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Metformin Hydrochloride for pediatric patients?\n\nRESPONSE:\n**Pediatric dosing (immediate-release metformin hydrochloride tablets), children ≥10 years of age with type 2 diabetes:**\n\n- **Starting dose:** 500 mg orally twice daily, taken with meals.\n- **Titration:** Increase in increments of 500 mg per week, based on glycemic control and tolerability.\n- **Maximum dose:** 2000 mg per day, given in divided doses twice daily (note this is lower than the adult maximum of 2550 mg/day).\n\n**Key practical points:**\n\n- **Age limit:** Metformin IR tablets are not indicated in children under 10 years; safety and effectiveness have not been established in that group. (Extended-release metformin products are generally labeled for ≥10 or ≥17 years depending on the product — check the specific formulation.)\n- **Always give with meals** to minimize GI adverse effects (nausea, diarrhea, abdominal discomfort, metallic taste), which are the most common reason for early discontinuation. Slow titration is the main strategy to improve tolerability; if GI effects occur, back down to the prior tolerated dose and re-titrate more slowly.\n- **Renal function:** Assess eGFR before starting and periodically thereafter. Contraindicated if eGFR <30 mL/min/1.73 m²; initiation not recommended if eGFR 30–45; reassess risk/benefit if eGFR falls below 45 during therapy.\n- **Lactic acidosis risk:** Rare but serious. Hold for conditions predisposing to hypoperfusion/hypoxemia — acute illness with dehydration, vomiting, sepsis, hypoxia, acute heart failure, or significant hepatic impairment. Counsel adolescents about alcohol, which potentiates metformin's effect on lactate metabolism.\n- **Iodinated contrast:** Discontinue at or before the procedure in patients with eGFR 30–60 mL/min/1.73 m², a history of liver disease, alcoholism, or heart failure, or when intra-arterial contrast will be used; recheck eGFR at 48 hours and restart if renal function is stable.\n- **Monitoring:** HbA1c every ~3 months during titration; consider periodic vitamin B12 measurement with long-term use, as metformin can cause B12 malabsorption/deficiency.\n- **Hypoglycemia:** Uncommon with metformin monotherapy, but risk increases with concomitant insulin or insulin secretagogues, or with missed meals/intense exercise — dose adjustment of the companion agent may be needed.\n- **Adolescent females:** Metformin can restore ovulation in girls with PCOS-type anovulation; counsel about contraception if pregnancy is not desired.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1565,
+  "usage": {
+    "input_tokens": 1301,
+    "output_tokens": 17
+  }
+}

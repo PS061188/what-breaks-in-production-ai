@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical information assistant. Answer the question using\nthe drug label excerpt below.\n\n<label_excerpt>\n2 DOSAGE AND ADMINISTRATION Pediatric Patients aged 3 months to 12 years weighing less than or equal to 40 kg: 90 mg/kg/day divided every 12 hours, administered for 10 days. ( 2 ) 2.1 Important Administration Instructions To minimize the potential for gastrointestinal intolerance, amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL should be taken at the start of a meal. Absorption of clavulanate potassium may be enhanced when amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is administered at the start of a meal. 2.2 Dosage in Pediatric Patients Pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended dose of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is 90 mg/kg/day divided every 12 hours, administered for 10 days (see Table 1 as a general example guideline for attainment of this dosage). This dose provides 6.4 mg/kg/day of the clavulanic acid component. Table 1: General Dosage Guidelines for Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL in Pediatric Patients Body Weight (kg) Volume of Amoxicillin and Clavulanate Potassium for Oral Suspension, ​​​​​​​600 mg/42.9 mg per 5 mL providing 90 mg/kg/day 8 \n</label_excerpt>",
+  "user": "Based only on the excerpt above, what is the recommended dosage of Amoxicillin for: Dosage in Pediatric Patients?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "answer": {
+        "type": "string"
+      },
+      "dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "the dosage stated for this topic, or null if the excerpt does not state one"
+      }
+    },
+    "required": [
+      "answer",
+      "dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"answer\":\"90 mg/kg/day divided every 12 hours, administered for 10 days\",\"dose\":\"90 mg/kg/day\"}",
+  "elapsed_ms": 2250,
+  "usage": {
+    "input_tokens": 755,
+    "output_tokens": 37
+  }
+}

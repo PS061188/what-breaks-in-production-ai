@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAlthough the clinical significance of these effects is not known, caution is advised in the coadministration of Albuterol Sulfate HFA with non–potassium-sparing diuretics. 7.3 Digoxin Mean decreases of 16% to 22% in serum digoxin levels were demonstrated after single-dose intravenous and oral administration of albuterol, respectively, to normal volunteers who had received digoxin for 10 days. The clinical relevance of these findings for patients with obstructive airway disease who are receiving inhaled albuterol and digoxin on a chronic basis is unclear. Nevertheless, it would be prudent to carefully evaluate the serum digoxin levels in patients who are currently receiving digoxin and albuterol.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"non-potassium-sparing diuretics, digoxin\"}",
+  "elapsed_ms": 1369,
+  "usage": {
+    "input_tokens": 443,
+    "output_tokens": 23
+  }
+}

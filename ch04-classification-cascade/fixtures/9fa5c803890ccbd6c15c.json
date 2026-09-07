@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWarfarin sodium tablets, USP contain warfarin sodium, an anticoagulant that acts by inhibiting vitamin K-dependent coagulation factors. The chemical name of warfarin sodium is 3-(α-acetonylbenzyl)-4-hydroxycoumarin sodium salt, which is a racemic mixture of the R - and S -enantiomers. Crystalline warfarin sodium is an isopropanol clathrate. Its structural formula may be represented as follows: C 19 H 15 NaO 4 M.W. 330.31 Crystalline warfarin sodium occurs as a white, odorless, crystalline powder that is discolored by light. It is very soluble in water, freely soluble in alcohol, and very slightly soluble in chloroform and ether. Each tablet, for oral administration, contains 1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg, 6 mg, 7.5 mg or 10 mg warfarin sodium, USP.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage provides the chemical name '3-(α-acetonylbenzyl)-4-hydroxycoumarin sodium salt' and describes it as a racemic mixture of R- and S-enantiomers; (b) It describes the physical properties of crystalline warfarin sodium (white, odorless, crystalline powder, solubility characteristics); (c) It specifies multiple tablet strengths available (1 mg through 10 mg) for oral administration.\\n\\n2. Two most plausible categories: (a) 'description' - because this passage contains chemical name, structure information (structural formula C19H15NaO4, M.W. 330.31), and physical/chemical properties; (b) 'how_supplied' - because it lists available dosage forms and strengths (1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg, 6 mg, 7.5 mg, 10 mg tablets for oral administration).\\n\\n3. Winner and rationale: 'description' wins. While the passage does mention how the drug is supplied (tablet strengths and route), the primary focus and majority of the content is devoted to describing the drug itself - its chemical identity, structural formula, molecular weight, physical appearance, and solubility properties. This is clearly characteristic of a Description section of prescribing information. The 'how_supplied' information is mentioned but is secondary to the descriptive chemical and physical content.\\n\\n4. Confidence: HIGH (>90%). The content is unambiguously descriptive in nature, with clear chemical nomenclature, structure information, and physical properties being the dominant elements. This is a textbook example of a Description section.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 4817,
+  "usage": {
+    "input_tokens": 1108,
+    "output_tokens": 440
+  }
+}

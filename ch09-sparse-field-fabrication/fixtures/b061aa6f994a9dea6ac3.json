@@ -1,0 +1,229 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are an extraction assistant. Your ONLY job is to extract what is\nexplicitly present in the source document. You are NOT a writer, summariser, or\ncontent generator.\n\nSPARSE FIELD PROTOCOL — THE MOST IMPORTANT RULE:\nIf a field's information is not clearly present in the source text:\n  - Return null for that field. Do NOT invent, infer, or approximate.\n  - Do NOT use \"common sense\" to fill in what \"probably\" belongs.\n  - A null field is a correct answer, not a failure.\n\nBEFORE FILLING ANY FIELD, ask yourself:\n  \"Can I quote the source text that justifies this value?\"\n  If NO  -> return null.\n  If YES -> include \"source_quote\" copied exactly from the document.\n\nFABRICATION PATTERNS TO AVOID:\nDo not use phrases like \"as needed\", \"per standard protocol\", \"to be determined\"\nor \"N/A\" unless those exact words appear in the source. These are fabrication\nindicators. Return null instead.\n\nIf value is null, source_quote must also be null.\nsource_section must name the [section] header the quote was taken from, exactly\nas it appears in the document. Use \"none\" when the value is null.\n\n<source_document>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Warfarin sodium tablets are indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism (PE). Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation (AF) and/or cardiac valve replacement. Reduction in the risk of death, recurrent myocardial infarction (MI), and thromboembolic events such as stroke or systemic embolization after myocardial infarction. Limitations of Use Warfarin sodium tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage. Once a thrombus has occurred, however, the goals of anticoagulant treatment are to prevent further extension of the formed clot and to prevent secondary thromboembolic complications that may result in serious and possibly fatal sequelae. Warfarin sodium tablets are a vitamin K antagonist indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism ( 1 ) Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation and/or cardiac valve replacement ( 1 ) Reduction in the risk of death, recurrent myocardial infarction, and thromboembolic events such as stroke or systemic embolization after myocardial infarction ( 1 ) Limitations of Use Warfarin sodium tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage. ( 1 )\n\n[dosage_and_administration]\n2 DOSAGE AND ADMINISTRATION Individualize dosing regimen for each patient, and adjust based on INR response. ( 2.1 , 2.2 ) Knowledge of genotype can inform initial dose selection. ( 2.3 ) Monitoring: Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks. ( 2.4 ) Review conversion instructions from other anticoagulants. ( 2.8 ) 2.1 Individualized Dosing The dosage and administration of warfarin sodium tablets must be individualized for each patient according to the patient’s International Normalized Ratio (INR) response to the drug. Adjust the dose based on the patient’s INR and the condition being treated. Consult the latest evidence-based clinical practice guidelines regarding the duration and intensity of anticoagulation for the indicated conditions. 2.2 Recommended Target INR Ranges and Durations for Individual Indications An INR of greater than 4 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding. Venous Thromboembolism (including deep venous thrombosis [DVT] and PE) Adjust the warfarin dose to maintain a target INR of 2.5 (INR range, 2 to 3) for all treatment durations. The duration of treatment is based on the indication as follows: For patients with a DVT or PE secondary to a transient (reversible) risk factor, treatment with warfarin for 3 months is recommended. For patients with an unprovoked DVT or PE, treatment with warfarin is recommended for at least 3 months. After 3 months of therapy, evaluate the risk-benefit ratio of long-term treatment for the individual patient. For patients with two episodes of unprovoked DVT or PE, long-term treatment with warfarin is recommended. For a patient receiving long-term anticoagulant treatment, periodically reassess the risk-benefit ratio of continuing such treatment in the individual patient. Atrial Fibrillation In patients with non-valvular AF, anticoagulate with warfarin to target INR of 2.5 (range, 2 to 3). In patients with non-valvular AF that is persistent or paroxysmal and at high risk of stroke (i.e., having any of the following features: prior ischemic stroke, transient ischemic attack, or systemic embolism, or 2 of the following risk factors: age greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. In patients with non-valvular AF that is persistent or paroxysmal and at an intermediate risk of ischemic stroke (i.e., having 1 of the following risk factors: age greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. For patients with AF and mitral stenosis, long-term anticoagulation with warfarin is recommended. For pat\n</source_document>",
+  "user": "Extract the following fields: indications, adult_dosage, pediatric_dosage, pregnancy_guidance, overdose_management, drug_interactions",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "indications": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "adult_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "pediatric_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "pregnancy_guidance": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "overdose_management": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "drug_interactions": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_quote": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "indications",
+      "adult_dosage",
+      "pediatric_dosage",
+      "pregnancy_guidance",
+      "overdose_management",
+      "drug_interactions"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"indications\":{\"value\":\"Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism (PE); prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation (AF) and/or cardiac valve replacement; reduction in the risk of death, recurrent myocardial infarction (MI), and thromboembolic events such as stroke or systemic embolization after myocardial infarction. Limitations of Use: no direct effect on an established thrombus, nor does it reverse ischemic tissue damage.\",\"source_quote\":\"Warfarin sodium tablets are indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism (PE). Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation (AF) and/or cardiac valve replacement. Reduction in the risk of death, recurrent myocardial infarction (MI), and thromboembolic events such as stroke or systemic embolization after myocardial infarction. Limitations of Use Warfarin sodium tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage.\",\"source_section\":\"indications_and_usage\"},\"adult_dosage\":{\"value\":\"Individualize dosing for each patient based on INR response; knowledge of genotype can inform initial dose selection. Obtain daily INR determinations upon initiation until stable in the therapeutic range, then every 1 to 4 weeks. Venous thromboembolism (including DVT and PE): adjust dose to maintain target INR of 2.5 (range 2 to 3) for all treatment durations; 3 months for DVT/PE secondary to a transient (reversible) risk factor, at least 3 months for unprovoked DVT or PE, and long-term treatment for two episodes of unprovoked DVT or PE. Atrial fibrillation: in non-valvular AF, anticoagulate to target INR of 2.5 (range, 2 to 3); long-term anticoagulation recommended for persistent or paroxysmal non-valvular AF at high or intermediate risk of stroke and for patients with AF and mitral stenosis. An INR greater than 4 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding.\",\"source_quote\":\"Individualize dosing regimen for each patient, and adjust based on INR response. ( 2.1 , 2.2 ) Knowledge of genotype can inform initial dose selection. ( 2.3 ) Monitoring: Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks. ( 2.4 )\",\"source_section\":\"dosage_and_administration\"},\"pediatric_dosage\":{\"value\":null,\"source_quote\":null,\"source_section\":\"none\"},\"pregnancy_guidance\":{\"value\":null,\"source_quote\":null,\"source_section\":\"none\"},\"overdose_management\":{\"value\":null,\"source_quote\":null,\"source_section\":\"none\"},\"drug_interactions\":{\"value\":null,\"source_quote\":null,\"source_section\":\"none\"}}",
+  "elapsed_ms": 10233,
+  "usage": {
+    "input_tokens": 3464,
+    "output_tokens": 1064
+  }
+}

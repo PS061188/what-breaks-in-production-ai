@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the portions of the label provided here (Indications and Dosage & Administration), the interactions specifically addressed are with monoamine oxidase inhibitors (MAOIs) and MAOI-like agents:\n\n**1. MAOIs used to treat psychiatric disorders (e.g., phenelzine, tranylcypromine, isocarboxazid, selegiline)**\n- Concomitant use is contraindicated.\n- At least 14 days must elapse between stopping an MAOI and starting sertraline.\n- At least 14 days must elapse after stopping sertraline before starting an MAOI.\n\n**2. Linezolid and intravenous methylene blue (drugs with MAOI activity)**\n- Do not start sertraline in a patient being treated with linezolid or IV methylene blue because of an increased risk of serotonin syndrome; if urgent psychiatric treatment is needed, other interventions (including hospitalization) should be considered.\n- If a patient already on sertraline urgently needs linezolid or IV methylene blue and no acceptable alternative exists, sertraline should be stopped promptly, the patient monitored for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last dose of linezolid/IV methylene blue (whichever comes first), and sertraline may be resumed 24 hours after the last dose.\n- The risk with non-intravenous methylene blue (oral or local injection) or IV doses much lower than 1 mg/kg is unclear, but serotonin syndrome remains a possibility.\n\n**Important caveat:** This excerpt does not include the label's full CONTRAINDICATIONS, WARNINGS, PRECAUTIONS, or DRUG INTERACTIONS sections. Sertraline labeling elsewhere addresses additional interactions (for example, pimozide, disulfiram with the oral solution, other serotonergic drugs such as triptans, tricyclic antidepressants, fentanyl, tramadol, St. John's Wort, drugs affecting hemostasis such as NSAIDs, aspirin and warfarin, CYP2D6 substrates, cimetidine, and others). Please consult the complete prescribing information and a pharmacist or prescriber to review a specific patient's full medication list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1966,
+  "usage": {
+    "input_tokens": 1129,
+    "output_tokens": 17
+  }
+}

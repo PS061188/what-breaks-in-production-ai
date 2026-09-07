@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\n**Short answer:** This prednisone label contains no separate pediatric dosing table. The only dosing statement is the general one — an initial dose of **5 mg to 60 mg per day**, individualized to the disease and patient response — plus guidance on tapering and alternate-day therapy (ADT). In practice, pediatric dosing is **weight- or BSA-based and indication-specific**, and is derived from standard pediatric references rather than the label.\n\n**What the label does say that applies to children**\n- Dose must be individualized: \"DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT.\"\n- After a favorable response, reduce in small decrements to the lowest effective maintenance dose.\n- After long-term therapy, withdraw gradually, never abruptly.\n- Increase the dose temporarily during intercurrent stress (illness, surgery, trauma) because of HPA suppression.\n- **Alternate-day therapy (ADT)** — twice the usual daily dose every other morning — is explicitly recommended when long-term therapy is anticipated, in part to minimize **growth suppression in children**, Cushingoid effects, and HPA suppression. Prednisone/prednisolone are short-acting (adrenal suppression ~1¼–1½ days) and therefore suitable for ADT; dexamethasone and betamethasone are not.\n- Labeled pediatric indications include juvenile rheumatoid arthritis, acute leukemia of childhood, congenital adrenal hyperplasia, nephrotic syndrome, asthma and other allergic states, and congenital hypoplastic anemia.\n\n**Commonly used pediatric regimens (standard pharmacology / practice references)**\n- **General anti-inflammatory/immunosuppressive range:** 0.05–2 mg/kg/day, given once daily or divided 2–4 times daily; typical maximum 60–80 mg/day.\n- **Acute asthma exacerbation:** 1–2 mg/kg/day (max 40–60 mg/day) once daily or divided BID for 3–5 days; no taper needed for short bursts (<7–10 days).\n- **Idiopathic nephrotic syndrome (initial episode):** 60 mg/m²/day (or 2 mg/kg/day), max 60–80 mg/day, for 4–6 weeks, then 40 mg/m² (1.5 mg/kg) every other day for 2–5 months with taper.\n- **ITP:** 1–2 mg/kg/day for 1–2 weeks (or 4 mg/kg/day × 3–4 days), then taper.\n- **JIA / other rheumatologic disease:** typically 0.5–2 mg/kg/day initially, tapering to the lowest effective dose or ADT.\n- **Physiologic replacement (adrenal insufficiency/CAH):** hydrocortisone is preferred in growing children; prednisone/prednisolone are generally reserved for older adolescents/adults because of greater growth-suppressive potency.\n- **Leukemia/lymphoma:** dose is protocol-driven (e.g., 40–60 mg/m²/day) — follow the oncology regimen.\n- **Croup:** dexamethasone is the preferred agent; if prednisolone is used, 1–2 mg/kg.\n\n**Practical prescribing points**\n- **Formulation:** for young children unable to swallow tablets, use prednisolone oral solution/ODT (prednisone oral solution and 1 mg tablets also exist); prednisone requires hepatic conversion to prednisolone, so prednisolone is preferred in significant hepatic impairment.\n- **Dosing time:** give in the morning (~8 AM) to align with peak endogenous cortisol and minimize HPA suppression and insomnia.\n- **Monitor:** linear growth and weight at each visit, blood pressure, glucose, and behavior/mood changes (common in children); consider bone health, ophthalmologic exam (cataracts/glaucoma) and GI prophylaxis if on NSAIDs, with prolonged therapy.\n- **Infection/vaccines:** doses ≥2 mg/kg/day or ≥20 mg/day for ≥14 days are considered immunosuppressive — avoid live vaccines during and for ~1 month after; varicella or measles exposure warrants prompt evaluation (VZIG/IG, antivirals).\n- **Taper/stress dosing:** any course >2–3 weeks (or repeated bursts) warrants a taper and consideration of stress-dose coverage for illness or surgery for up to a year after discontinuation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1823,
+  "usage": {
+    "input_tokens": 1969,
+    "output_tokens": 17
+  }
+}

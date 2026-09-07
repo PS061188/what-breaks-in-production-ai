@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Omeprazole?\n\nRESPONSE:\nBased on the label provided, the recommended starting dose for adults 18 years of age and older is 1 tablet taken once daily (every 24 hours) with a glass of water before eating in the morning. The medication should be taken every day for 14 days. The tablet should be swallowed whole and not chewed or crushed. Note that full effect may take 1 to 4 days, though some patients may experience complete symptom relief within 24 hours. For children under 18 years, a doctor should be consulted as heartburn may indicate a serious condition.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1924,
+  "usage": {
+    "input_tokens": 548,
+    "output_tokens": 17
+  }
+}

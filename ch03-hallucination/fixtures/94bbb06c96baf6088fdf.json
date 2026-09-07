@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nThe label does not provide a specific recommended dose of Prednisone for pediatric patients. The dosage section states that initial dosage may vary from 5 mg to 60 mg per day depending on the disease entity being treated, and emphasizes that dosage requirements are variable and must be individualized on the basis of the disease under treatment and the patient's response. The only pediatric-specific mention relates to acute leukemia of childhood as a neoplastic disease indication and a reference to growth suppression in children in the context of Alternate Day Therapy (ADT), but no specific pediatric dosing regimen is provided in this label excerpt.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1784,
+  "usage": {
+    "input_tokens": 585,
+    "output_tokens": 16
+  }
+}

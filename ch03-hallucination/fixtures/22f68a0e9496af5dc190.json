@@ -1,0 +1,27 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Prednisone?\n\nRESPONSE:\nI can't answer that from the excerpt you've given me — the sections provided here are only the INDICATIONS and DOSAGE AND ADMINISTRATION sections of the prednisone label. The ADVERSE REACTIONS section is not included, so I can't quote the labeled adverse reactions or their frequencies.\n\nA couple of things the excerpt does hint at indirectly: it discusses undesirable corticosteroid effects that alternate-day therapy (ADT) is designed to minimize — namely pituitary-adrenal (HPA) suppression, the Cushingoid state, corticosteroid withdrawal symptoms, and growth suppression in children. It also describes the clinical picture of hyperadrenocorticism that can occur with long-term pharmacologic-dose daily therapy: obesity with centripetal fat distribution, thinning of the skin with easy bruisability, muscle wasting with weakness, hypertension, latent diabetes, osteoporosis, and electrolyte imbalance.\n\nFor a complete and accurate list of adverse reactions (including common short-term effects such as insomnia, mood changes, increased appetite, fluid retention, elevated blood glucose, and GI upset), please consult the ADVERSE REACTIONS section of the full prescribing information or speak with your pharmacist or prescriber. Also note the label's advice that after long-term therapy the drug should be withdrawn gradually rather than abruptly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "elapsed_ms": 2287,
+  "usage": {
+    "input_tokens": 850,
+    "output_tokens": 17
+  }
+}

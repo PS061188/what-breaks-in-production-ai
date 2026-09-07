@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAs an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailable, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia Atorvastatin calcium tablets are an HMG-CoA reductase inhibitor (statin) indicated ( 1 ): To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD. MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage lists specific disease conditions the drug treats (homozygous familial hypercholesterolemia, primary dysbetalipoproteinemia, hypertriglyceridemia, coronary heart disease risk reduction). (2) The passage explicitly uses the phrase 'indicated' followed by conditions. (3) The passage specifies patient populations (adults, pediatric patients aged 10+, type 2 diabetes patients). Step 2 - Most plausible categories: (a) 'indications_and_usage' - the passage directly states what conditions the drug is indicated for, using standard pharma language about therapeutic uses and approved patient populations. (b) 'description' - could include mechanism of action mention (HMG-CoA reductase inhibitor/statin), but this is secondary to the primary focus on approved uses. Step 3 - Winner and ruling: 'indications_and_usage' clearly wins. The entire passage is structured around stating the approved therapeutic indications, patient populations, and conditions the drug treats. The mechanism of action is mentioned only parenthetically and serves to support the indication statement, not to describe the drug's chemical composition or formulation. The phrase 'indicated' is a direct indicator of indications_and_usage content. Step 4 - Confidence: HIGH (>90%). The passage is unambiguously listing therapeutic indications using standard FDA label language. There is no ambiguity about the primary purpose of this content section.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 4375,
+  "usage": {
+    "input_tokens": 1062,
+    "output_tokens": 373
+  }
+}

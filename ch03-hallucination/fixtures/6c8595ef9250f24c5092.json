@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Atorvastatin Calcium?\n\nRESPONSE:\nI have to be upfront: the label excerpt I was given only contains the Indications and Usage and Dosage and Administration sections — it does not include the Adverse Reactions section, so I can't quote specific rates or the official list from this document.\n\nFor general reference, the most commonly reported adverse reactions in clinical trials of atorvastatin (occurring in ≥2% of patients and at a rate greater than placebo) are typically listed in the full prescribing information as:\n\n- Nasopharyngitis (common cold–type symptoms)\n- Arthralgia (joint pain)\n- Diarrhea\n- Pain in extremity\n- Urinary tract infection\n- Dyspepsia, nausea\n- Musculoskeletal pain, muscle spasms, myalgia\n- Insomnia\n- Pharyngolaryngeal pain\n\nImportant safety issues that are discussed elsewhere in the full label include myopathy/rhabdomyolysis (risk increased with higher doses, older age, hypothyroidism, renal impairment, and certain interacting drugs such as clarithromycin, itraconazole, some HIV/HCV antivirals, gemfibrozil, and cyclosporine), liver enzyme elevations, and increases in HbA1c/fasting glucose. Muscle pain with weakness or dark urine, or symptoms suggesting liver injury (unusual fatigue, jaundice, upper abdominal pain), should prompt urgent medical evaluation.\n\nPlease check the complete FDA-approved prescribing information (Section 6, Adverse Reactions) or speak with your pharmacist or prescriber for the authoritative list and frequencies.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2261,
+  "usage": {
+    "input_tokens": 924,
+    "output_tokens": 71
+  }
+}

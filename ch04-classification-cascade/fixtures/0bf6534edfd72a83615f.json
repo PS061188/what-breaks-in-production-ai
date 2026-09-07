@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril can be removed by hemodialysis. (See WARNINGS, Anaphylactoid reaction during membrane exposure .) Hydrochlorothiazide Oral administration of a single oral dose of 10 g/kg to mice and rats was not lethal. The most common signs and symptoms observed are those caused by electrolyte depletion (hypokalemia, hypochloremia, hyponatremia) and dehydration resulting from excessive diuresis. If digitalis has also been administered, hypokalemia may accentuate cardiac arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n(1) The passage discusses removal of lisinopril via hemodialysis and mentions anaphylactoid reactions during membrane exposure.\\n(2) It presents acute toxicity data (LD50-type information: 10 g/kg dose to mice/rats was not lethal).\\n(3) It describes clinical manifestations of overdose including electrolyte depletion (hypokalemia, hypochloremia, hyponatremia), dehydration, and potential cardiac arrhythmias when combined with digitalis.\\n\\nStep 2 - Evaluating most plausible categories:\\n(a) OVERDOSAGE: This section typically covers signs/symptoms of excessive dosing, management approaches (like hemodialysis), and acute toxicity data. The passage explicitly addresses overdose manifestations and treatment via hemodialysis.\\n(b) ADVERSE_REACTIONS: This section covers side effects from normal therapeutic use. While electrolyte depletion can occur as an adverse reaction, the context here focuses specifically on overdose scenarios and acute toxicity data.\\n\\nStep 3 - Determining the winner:\\nOVERDOSAGE is the clear winner. The passage contains: (1) acute toxicity data from animal studies, (2) specific discussion of overdose signs/symptoms (excessive diuresis-induced electrolyte depletion), (3) management approach (hemodialysis), and (4) drug interaction concerns in overdose context (digitalis interaction). This is the classical structure and content of an Overdosage section.\\n\\nADVERSE_REACTIONS is ruled out because while it discusses side effects, the framing is explicitly about overdose situations (\\\"signs and symptoms observed are those caused by electrolyte depletion...resulting from excessive diuresis\\\") rather than expected adverse effects at therapeutic doses.\\n\\nStep 4 - Confidence assessment:\\nThe classification is highly confident (>90%) because the passage explicitly addresses overdose management (hemodialysis), presents acute toxicity data, and describes overdose-specific manifestations.\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 6058,
+  "usage": {
+    "input_tokens": 988,
+    "output_tokens": 513
+  }
+}

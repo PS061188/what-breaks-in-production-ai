@@ -1,0 +1,179 @@
+<!-- ============================ CHAPTER 4 ============================ -->
+<h2 class="part">Chapter 4 — Classification cascade errors</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 4 &middot; Classification cascade errors</span>
+<p class="oneline">A passage is filed under the wrong category, and every stage downstream does exactly what it was told to do with a label that was wrong. The cascade is real. On clean, well-taxonomised documents the wrong label is rare &mdash; and the chapter&rsquo;s own prompt makes it more likely, not less.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>FDA label passages with the heading removed &mdash; the heading <em>is</em> the answer key, so ground truth needs no annotation</td></tr><tr><td style="width:26%">Cases</td><td>96 opening passages and 96 body passages; 192 classifications per configuration</td></tr><tr><td style="width:26%">Task</td><td>Name the heading this text was printed under, then run a downstream stage that trusts the label</td></tr><tr><td style="width:26%">Model</td><td>Claude Haiku 4.5 throughout</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 200&ndash;1,200 by stage, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>2 live runs of the baseline, 3 of the ensemble</td></tr><tr><td style="width:26%">Cost</td><td>$0.88 baseline, $1.02 ensemble, per run</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>The failure itself</td><td>Barely reproduces</td><td class="num">8&ndash;9 errors of 96</td><td class="num">stable, 2 runs</td></tr><tr><td>Prompt template</td><td><strong>Harmful here</strong></td><td class="num">6 pts below a one-line prompt</td><td class="num">confident</td></tr><tr><td>1 &middot; Confidence gating</td><td><strong>Cannot work</strong></td><td class="num">LOW never issued in 192</td><td class="num">decisive</td></tr><tr><td>2 &middot; Ensemble vote</td><td><strong>Works</strong></td><td class="num">98%, and perfectly stable</td><td class="num">strong</td></tr><tr><td>3 &middot; Per-category F1 gate</td><td><strong>Works</strong></td><td class="num">2 broken categories found</td><td class="num">strong</td></tr><tr><td>4 &middot; Audit trail</td><td><strong>Works</strong></td><td class="num">runner-up correct 89&ndash;100%</td><td class="num">strong</td></tr></table>
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 3, the per-category F1 gate.</strong> The only fix that would have caught this chapter&rsquo;s own dominant error before a user complained. Costs no model calls.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2, the ensemble</strong> &mdash; but sell it on <em>stability</em>, not accuracy. Three runs returned bit-identical numbers on all ten measures while the single classifier moved on every one.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, the audit trail.</strong> <code>alternative_considered</code> held the true category 89&ndash;100% of the time it was wrong.</li><li><span class='drop'>DROP</span> — <strong>Confidence-gated routing as the first fix.</strong> LOW was never issued once in 192 classifications. A gate on &ldquo;below HIGH&rdquo; has nothing to bite on.</li><li><span class='drop'>DROP</span> — <strong>The claim that the chapter&rsquo;s template improves accuracy.</strong> It scored 6 points <em>below</em> a one-line prompt on the harder set.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;200+ documents per category.&rdquo;</strong> 7&ndash;12 per category caught both broken categories. Volume was not what mattered; derivable ground truth was.</li><li><span class='drop'>DROP</span> — <strong>The fix&rsquo;s &ldquo;100% accuracy&rdquo;.</strong> Three fresh runs all gave 98% &mdash; and the denominator moved because the ensemble discards disagreements before scoring.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>The ensemble&rsquo;s real advantage is that it does not move.</strong> Its accuracy edge is modest &mdash; 98% against 91&ndash;92%. But three live runs returned identical numbers on every measure, while the single classifier varied on all of them. A metric that moves on its own is a metric you cannot alert on. The caveat is half the lesson: those identical runs contain identical <em>errors</em>. Stable is not correct.</p>
+<h4>Where this is weakest</h4>
+<p>Every cascade percentage in this chapter has a denominator under ten. The cascade itself is well-evidenced &mdash; a wrong label produced confident wrong-category output 56&ndash;100% of the time &mdash; but on this input the wrong label is rare, so the rates rest on 8 or 9 cases.</p>
+</div>
+
+<h3 class="top">The failure: one wrong label, and every step after it is correct</h3>
+
+<p class="lede">A document is misclassified early. Everything downstream then
+processes it correctly — for the wrong category. No stage is broken. The error is
+invisible at every one of them.</p>
+
+<h4>How it was tested</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>The derivation</strong></td>
+      <td><strong>A passage's true class is the label section it was cut from.</strong>
+      Strip the header, ask which of ten sections it belongs to. The answer key is
+      where the text actually came from — derived, never authored.</td></tr>
+  <tr><td><strong>Cases</strong></td>
+      <td>96 passages from 12 documents, 10 candidate categories.</td></tr>
+  <tr><td><strong>Two variants</strong></td>
+      <td>Passages taken from the <em>opening</em> of a section, and from the
+      <em>body</em>. The body is harder and is the honest test.</td></tr>
+  <tr><td><strong>The cascade</strong></td>
+      <td>The predicted label chooses a downstream extractor, which is given an
+      explicit "return nothing" escape hatch — so the cascade rate measures
+      whether the next stage <em>notices</em>, rather than being 100% by
+      construction.</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">Two design problems the author had to solve honestly</span>
+  <p><strong>Every section restates its own title in the first three words.</strong>
+  Without stripping the header the task is a string match and every prompt scores
+  100%. It is stripped.</p>
+  <p><strong>25–29% of passages still name their own section</strong> via
+  cross-references inside the text. That leakage rate is printed next to every
+  accuracy figure rather than hidden.</p>
+</div>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:44%">Prompt / fix</th><th class="num">Opening passages</th><th class="num">Body passages</th></tr>
+  <tr><td>Naive one-line classifier</td><td class="num">99% — 95/96</td><td class="num">97% — 93/96</td></tr>
+  <tr><td><strong>Chapter 4's prompt template</strong></td><td class="num">97% — 93/96</td>
+      <td class="num"><strong>91% — 87/96</strong></td></tr>
+  <tr><td>Heading prompt, options reversed</td><td class="num">99%</td><td class="num">99%</td></tr>
+  <tr><td><strong>Cascade rate</strong> (wrong label → confident wrong-category output)</td>
+      <td class="num">100% — 3/3</td><td class="num">56% — 5/9</td></tr>
+  <tr><td>Counter-metric: downstream answered when the label was right</td>
+      <td class="num">85%</td><td class="num">86%</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">The chapter's own prompt was the worst classifier tested</span>
+  <p>Two points below a one-line prompt on openings; <strong>six points below on
+  body passages</strong>. A reader who adopts the template may end up with a worse
+  classifier than the one they had.</p>
+  <p>It buys something real — an <code>alternative_considered</code> field, which
+  is fix 4's input and genuinely valuable. But the chapter presents it as an
+  accuracy improvement and it was not one here.</p>
+</div>
+
+<h4>The failure barely reproduces</h4>
+
+<p>91–99% accuracy. Three errors out of 96 on openings, nine on bodies.
+<strong>Every cascade percentage in this chapter has a denominator under
+ten.</strong> The mechanism holds — a wrong label really does produce confident
+wrong-category output more than half the time — but the frequency the chapter
+implies does not, on structured documents with a clean taxonomy.</p>
+
+<h4>The four engineering fixes</h4>
+
+<table>
+  <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Confidence-gated routing</strong></td>
+      <td class="num">caught 2 of 9 body errors;<br>60% of the queue it created was already correct</td>
+      <td><strong>Cannot work</strong> — see below</td></tr>
+  <tr><td><strong>2 · Ensemble majority vote</strong></td>
+      <td class="num">8 of 9 errors removed, 1% sent to review, <strong>0 correct
+      answers held</strong></td>
+      <td><strong>Works</strong> — the strongest fix in the chapter</td></tr>
+  <tr><td><strong>3 · Per-category F1 gate</strong></td>
+      <td class="num">fires: <code>description</code> 0.74,
+      <code>pediatric_use</code> 0.77 — under a 91% aggregate</td>
+      <td><strong>Works</strong>, and is under-sold in the chapter</td></tr>
+  <tr><td><strong>4 · Classification audit trail</strong></td>
+      <td class="num">runner-up was the true category on 89–100% of errors</td>
+      <td><strong>Works</strong></td></tr>
+</table>
+
+<h4>Fix 1 — the fourth measurement of the same thing</h4>
+
+<div class="headline">
+  <b>LOW confidence was never issued once in 192 classifications.</b> 95–99% came
+  back HIGH; 67–78% of the errors arrived stamped HIGH.
+</div>
+
+<p>It is not that the grade is noise — MEDIUM genuinely is less accurate than
+HIGH, 60% against 92%. It is that the grade is <strong>almost never
+issued</strong>, so a "route anything below HIGH to review" gate has nothing to
+bite on.</p>
+
+<p>One part is reliable: the model's <code>requires_human_review</code> flag
+matched its own stated rule on <strong>100% of 192 cases</strong>. It applies the
+rule perfectly. The input to the rule is worthless.</p>
+
+<p>And the chapter contains this contradiction in its own text: it says
+<em>"a classifier cannot be trusted to police its own confidence"</em>, then makes
+its first fix ask the classifier to police its own confidence.</p>
+
+<h4>Fix 3 — the one that should lead</h4>
+
+<p>Aggregate accuracy of 91% hides two categories at F1 0.74 and 0.77. It is the
+<strong>only fix of the four that would have caught this chapter's own dominant
+error</strong> — <code>description</code> misread as <code>how_supplied</code>, 4
+of 11 body errors — before a user complained. It costs no model calls.</p>
+
+<p>The chapter's stated threshold of "200+ documents per category" is also wrong
+here: <strong>7–12 per category caught both broken categories.</strong> What
+mattered was that ground truth was derivable from document structure, not
+volume.</p>
+
+<h4>Two bugs the author found in their own scoring</h4>
+
+<p>Both were the same error: <strong>scoring a component against a label some
+other component produced.</strong> The router-policy table scored every policy —
+including the "no gate" baseline — against the ensemble majority; a second
+function credited the confidence gate with errors the ensemble had already
+removed, printing "errors the router caught: 100%".</p>
+
+<p>Fixing it is what turned fix 1 from looking effective into measuring 22%.
+It surfaced because two numbers in one run could not both be true.</p>
+
+<h4>Sampling noise exceeds two of the four fixes</h4>
+
+<p>Same prompt, same passages, two runs: 94/96 then 93/96. Fix 1 moves one to two
+cases on the opening run — <strong>inside that spread</strong>. This is why
+<code>fixed.py</code> replays the baseline's calls rather than re-sampling them;
+otherwise part of the measured difference is the sampler.</p>
+
+<h4>Cost</h4>
+
+<p>647 recorded runs, <strong>$0.85</strong> of Haiku calls (about $1.95 across
+iterations).</p>
+
+<h3>Chapter 4 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>The failure itself</td><td>Barely reproduces</td><td>3 and 9 errors of 96</td></tr>
+  <tr><td>Prompt template</td><td><strong>Harmful here</strong></td><td>6 points below a one-line prompt</td></tr>
+  <tr><td>1 · Confidence gating</td><td><strong>Cannot work</strong></td>
+      <td>LOW never issued in 192 cases — decisive</td></tr>
+  <tr><td>2 · Ensemble vote</td><td><strong>Works</strong></td><td>8 of 9, no correct answers lost</td></tr>
+  <tr><td>3 · Per-category F1 gate</td><td><strong>Works</strong></td><td>two categories caught under a passing aggregate</td></tr>
+  <tr><td>4 · Audit trail</td><td><strong>Works</strong></td><td>runner-up correct on 89–100%</td></tr>
+</table>
+
+<p><strong>The chapter's ordering is upside down.</strong> Its first fix cannot
+work, its prompt template may make a reader's classifier worse, and the fix that
+would have caught its own dominant error sits third in the list and costs
+nothing.</p>

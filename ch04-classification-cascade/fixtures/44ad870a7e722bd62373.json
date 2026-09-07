@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nImmune system disorders: hypersensitivity/allergic reactions (including urticaria and anaphylactic reactions) Vascular disorders: vasculitis Hepatobiliary disorders: hepatitis, elevated liver enzymes. Cholestatic hepatitis has been associated with concomitant administration of warfarin sodium and ticlopidine. Gastrointestinal disorders: nausea, vomiting, diarrhea, taste perversion, abdominal pain, flatulence, bloating Skin disorders: rash, dermatitis (including bullous eruptions), pruritus, alopecia Respiratory disorders: tracheal or tracheobronchial calcification General disorders: chills Most common adverse reactions to warfarin sodium are fatal and nonfatal hemorrhage from any tissue or organ. ( 6 ) To report SUSPECTED ADVERSE REACTIONS, contact Teva at 1-888-838-2872 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage lists multiple organ system disorders with specific manifestations (immune, vascular, hepatobiliary, gastrointestinal, skin, respiratory, general), (2) It explicitly states 'Most common adverse reactions to warfarin sodium are fatal and nonfatal hemorrhage from any tissue or organ', (3) It includes instructions for reporting suspected adverse reactions to regulatory bodies (Teva, FDA, MedWatch). Step 2 - Most plausible categories: (a) adverse_reactions - This passage systematically lists unwanted effects observed in patients taking warfarin, organized by body system, with emphasis on hemorrhage as the primary concern. (b) overdosage - While hemorrhage can be associated with overdosage, the passage presents these as observed adverse reactions from normal use, not specifically overdose management or toxicity signs. Step 3 - Classification determination: adverse_reactions is the clear winner. The passage comprehensively catalogs side effects and reactions across multiple organ systems, uses clinical terminology for adverse events, and provides the standard adverse reaction reporting contact information. This is definitional adverse_reactions content. Overdosage would focus on excess dosing scenarios and management strategies, which is not present here. Step 4 - Confidence assessment: This is HIGH confidence (>90%) because the structure, content, and explicit statement about adverse reactions to warfarin sodium unambiguously place this in the adverse_reactions category.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"overdosage\", \"requires_human_review\": false}",
+  "elapsed_ms": 4540,
+  "usage": {
+    "input_tokens": 1088,
+    "output_tokens": 356
+  }
+}

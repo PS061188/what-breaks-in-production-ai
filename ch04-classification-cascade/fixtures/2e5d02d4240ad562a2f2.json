@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nIn the high-dose atorvastatin calcium group, there were more patients with serious adverse reactions (1.8%) and discontinuations due to adverse reactions (9.9%) as compared to the low-dose group (1.4%; 8.1%, respectively) during a median follow-up of 4.9 years. Persistent transaminase elevations (≥3 x ULN twice within 4 to10 days) occurred in 1.3% of individuals with atorvastatin 80 mg and in 0.2% of individuals with atorvastatin 10 mg. Elevations of CK (≥ 10 x ULN) were higher in the high-dose atorvastatin group (0.3%) compared to the low-dose atorvastatin group (0.1%). Stroke Prevention by Aggressive Reduction in Cholesterol Levels (SPARCL) In SPARCL, 4731 subjects (age range 21 to 92 years, 40% women;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 1044,
+  "usage": {
+    "input_tokens": 677,
+    "output_tokens": 11
+  }
+}

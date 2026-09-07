@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Omeprazole?\n\nRESPONSE:\nThe label excerpt you've provided only contains the \"Uses\" (indications) and \"Directions\" (dosage and administration) sections for this OTC omeprazole delayed‑release product — it does not include an adverse reactions/side effects section, so I can't cite specific side‑effect information from it.\n\nFor general context (not from the excerpt above), the adverse reactions most commonly reported with omeprazole in prescribing information are:\n\n- Headache\n- Abdominal pain\n- Nausea and/or vomiting\n- Diarrhea\n- Flatulence (gas)\n- Constipation\n- Upper respiratory infection symptoms, dizziness, and rash have also been reported\n\nMore serious but less common concerns associated with proton pump inhibitors, particularly with long-term or high-dose use, include Clostridioides difficile–associated diarrhea, low magnesium levels, vitamin B12 deficiency, bone fractures, acute interstitial nephritis, and cutaneous/systemic lupus erythematosus.\n\nA few points that are supported by the excerpt you shared: this OTC product is for adults 18 and older, is taken as one tablet daily before eating in the morning for a 14‑day course, should not be used for more than 14 days or repeated more often than every 4 months unless a doctor directs, and it is not intended for immediate heartburn relief (full effect may take 1–4 days).\n\nFor the complete safety information — including warnings, when to stop use and ask a doctor, and drug interactions — please refer to the full package labeling or consult a pharmacist or physician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1584,
+  "usage": {
+    "input_tokens": 883,
+    "output_tokens": 17
+  }
+}

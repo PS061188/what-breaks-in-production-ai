@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Lisinopril?\n\nRESPONSE:\nShort answer: the excerpt you've given me (Indications and Usage, Dosage and Administration) does not include the DRUG INTERACTIONS section of the lisinopril/hydrochlorothiazide label, so I can't quote specific interaction language from it. The only interaction-related point in the text provided is that adding lisinopril \"blunted the hypokalemia normally seen with diuretics\" — i.e., the ACE inhibitor raises potassium while the thiazide lowers it.\n\nFor general awareness (not from this excerpt — please verify against the full prescribing information):\n\n• Potassium supplements, potassium-containing salt substitutes, and potassium-sparing diuretics (spironolactone, eplerenone, amiloride, triamterene) — risk of hyperkalemia.\n• Other agents blocking the renin-angiotensin system: ARBs (e.g., valsartan) and aliskiren — dual blockade increases hypotension, hyperkalemia, and renal impairment; aliskiren is contraindicated in patients with diabetes and generally avoided with renal impairment.\n• Neprilysin inhibitors (sacubitril/valsartan) and racecadotril — contraindicated/avoid within 36 hours because of angioedema risk; mTOR inhibitors (sirolimus, everolimus) and DPP-4 inhibitors may also raise angioedema risk.\n• NSAIDs, including COX-2 inhibitors — reduced antihypertensive effect and risk of acute renal deterioration, especially in elderly, volume-depleted, or renally impaired patients.\n• Lithium — increased lithium levels and toxicity (both ACE inhibitors and thiazides contribute).\n• Diuretics in general — added hypotensive effect, particularly first-dose hypotension in volume-depleted patients.\n• Gold (injectable sodium aurothiomalate) — nitritoid reactions reported.\n• Antidiabetic agents (insulin, oral agents) — dosage adjustment may be needed; hydrochlorothiazide can raise blood glucose while ACE inhibitors may enhance glucose lowering.\n• Hydrochlorothiazide-specific: alcohol/barbiturates/narcotics (orthostatic hypotension), corticosteroids and ACTH (electrolyte depletion), digitalis (hypokalemia-related toxicity), skeletal muscle relaxants, cholestyramine/colestipol (reduced absorption — separate dosing), and other drugs that prolong QT or cause hypokalemia.\n\nAlso relevant clinically: monitor renal function and potassium when starting or changing any of these, and tell your prescriber/pharmacist about all prescription, OTC (especially NSAIDs), and herbal products. Please consult the complete package insert or your pharmacist for the authoritative interaction list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2408,
+  "usage": {
+    "input_tokens": 1319,
+    "output_tokens": 17
+  }
+}

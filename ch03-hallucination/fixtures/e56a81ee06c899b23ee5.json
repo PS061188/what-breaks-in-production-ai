@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Levothyroxine Sodium?\n\nRESPONSE:\nI can't give you a full adverse-reaction list from what I have here — the excerpt you provided only contains the Indications and Usage and Dosage and Administration sections, not Section 6 (Adverse Reactions).\n\nWhat the excerpt does hint at:\n\n- **Choking or gagging** with tablet administration — this is why the label instructs taking the tablet with a full glass of water (it cross-references Adverse Reactions, Section 6).\n- **Symptoms of over-treatment (hyperthyroidism/thyrotoxicosis)** — the label warns that overtreatment with levothyroxine may induce hyperthyroidism, which is why it is not indicated for benign nodules or nontoxic diffuse goiter in iodine-sufficient patients.\n- **Hyperactivity in pediatric patients** — the dosing section advises starting at one-fourth the full replacement dose and increasing weekly in children at risk, specifically to minimize this risk.\n- **Exacerbation of cardiac symptoms** in adults at risk for atrial fibrillation or with underlying cardiac disease, and risk of **cardiac failure** in infants birth to 3 months, which is why lower starting doses and slower titration are recommended.\n\nIn general, adverse reactions to levothyroxine are largely those of excess thyroid hormone (e.g., palpitations, tachycardia, arrhythmias, tremor, nervousness, insomnia, heat intolerance, sweating, weight loss, diarrhea, menstrual irregularities, and, with chronic overtreatment, decreased bone mineral density), but for the complete and authoritative list — including hypersensitivity reactions and pediatric-specific effects such as pseudotumor cerebri and premature epiphyseal closure — please consult Section 6 of the full prescribing information for the specific product, or speak with your pharmacist or prescriber.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1548,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 17
+  }
+}

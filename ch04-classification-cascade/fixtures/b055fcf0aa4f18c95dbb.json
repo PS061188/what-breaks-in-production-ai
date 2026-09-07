@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nAll Dosage Forms of Sertraline: The use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride or within 14 days of stopping treatment with Sertraline hydrochloride is contraindicated because of an because of an increased risk if serotonin syndrome. The use of Sertraline hydrochloride within 14 days of stopping an MAOI intended to treat psychiatric disorders is also contraindicated (see WARNINGS and DOSAGE AND ADMINISTRATION ). Starting Sertraline hydrochloride in a patient who is being treated with MAOIs such as linezolid or intravenous methyelene blue is also contraindicated because of an increased risk of serotonin syndrome (see WARNINGS and DOSAGE AND ADMINISTRATION).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"contraindications\"}",
+  "elapsed_ms": 917,
+  "usage": {
+    "input_tokens": 633,
+    "output_tokens": 11
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nThe provided label excerpt does not contain information about drug interactions with prednisone. To obtain comprehensive drug interaction information, you should consult additional resources such as:\n\n1. **Full prescribing information** - The complete prednisone package insert typically includes a detailed interactions section\n2. **Drug interaction databases** - UpToDate, Micromedex, or similar clinical databases\n3. **Pharmacy references** - Lexi-Interact or similar tools\n\nCommon prednisone interactions generally include:\n- **CYP3A4 inhibitors/inducers** - May alter prednisone metabolism\n- **NSAIDs** - Increased GI bleeding risk\n- **Anticoagulants** - May require dose adjustment\n- **Antidiabetic agents** - Prednisone may increase blood glucose\n- **Live vaccines** - Contraindicated due to immunosuppression\n- **Certain antibiotics and anticonvulsants** - May affect corticosteroid levels\n\nI recommend consulting the full prescribing information or a drug interaction checker for your specific clinical scenario, as interactions can be significant and dosage-dependent.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 536,
+    "output_tokens": 11
+  }
+}

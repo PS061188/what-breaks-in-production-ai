@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\nThe excerpt you've shared only covers the Indications and Dosage/Administration sections — it does not include the Drug Interactions section (Section 7) of the metformin label, so I can't give you the label-specific interaction list from this text.\n\nWhat the provided excerpt does mention that is interaction-related:\n\n- **Iodinated contrast media:** Metformin should be stopped at the time of, or prior to, an iodinated contrast imaging procedure in patients with an eGFR of 30–60 mL/min/1.73 m², in patients with a history of liver disease, alcoholism, or heart failure, or in patients receiving intra-arterial iodinated contrast. Renal function (eGFR) should be re-checked 48 hours after the procedure, and metformin restarted only if renal function is stable. (This is because contrast-induced changes in renal function can raise the risk of lactic acidosis.)\n\nFor completeness (from general knowledge of metformin labeling, not from the excerpt above), the full label typically discusses:\n\n- **Carbonic anhydrase inhibitors** (e.g., topiramate, acetazolamide, zonisamide, dichlorphenamide) — increase lactic acidosis risk.\n- **Drugs that reduce metformin clearance** (e.g., ranolazine, vandetanib, dolutegravir, cimetidine) — increase metformin exposure.\n- **Alcohol** — potentiates metformin's effect on lactate metabolism.\n- **Insulin and insulin secretagogues** (sulfonylureas, meglitinides) — increase risk of hypoglycemia; dose reduction may be needed.\n- **Drugs affecting glycemic control** (e.g., corticosteroids, thiazides and other diuretics, sympathomimetics, phenytoin, niacin, estrogens/oral contraceptives, thyroid products, phenothiazines) — may worsen glycemic control.\n\nPlease consult the complete prescribing information (Sections 5 and 7) or a pharmacist for the authoritative, product-specific interaction list, and review your full medication list with your clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1718,
+  "usage": {
+    "input_tokens": 1068,
+    "output_tokens": 17
+  }
+}

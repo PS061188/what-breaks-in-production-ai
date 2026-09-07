@@ -1,0 +1,411 @@
+{
+  "models": [
+    "claude-opus-5",
+    "gpt-5-mini",
+    "gpt-4.1-mini"
+  ],
+  "results": {
+    "claude-opus-5": {
+      "ch02-input-integrity/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Silent corruption rate": "68% (28/41)",
+          "Damaged inputs the model said it was confident about": "85% (35/41)",
+          "Model calls made on documents that should never have been processed": "41"
+        },
+        "cost": 0.4262,
+        "seconds": 187.266224458
+      },
+      "ch02-input-integrity/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Damaged inputs stopped at the gate": "85% (35/41)",
+          "Clean inputs wrongly rejected": "17% (2/12)",
+          "Silent corruptions that survived": "12% (5/41)",
+          "Model calls avoided": "37"
+        },
+        "cost": 0.1356,
+        "seconds": 59.24887520799999
+      },
+      "ch03-hallucination/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate, soft-inference prompt": "100% (48/48)"
+        },
+        "cost": 6.8601,
+        "seconds": 340.222763042
+      },
+      "ch03-hallucination/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on questions the sources cannot answer": "31% (15/48)",
+          "Answered correctly when the sources did cover it": "92% (22/24)",
+          "Answers rejected by code, not by the model": "0",
+          "Claims the model flagged as unverified": "74"
+        },
+        "cost": 2.8858,
+        "seconds": 736.64934075
+      },
+      "ch03-hallucination/fix_judge.py": {
+        "ok": true,
+        "metrics": {
+          "Recall \u2014 ungrounded answers the judge caught": "100% (48/48)",
+          "Precision cost \u2014 grounded answers wrongly flagged": "100% (24/24)"
+        },
+        "cost": 4.2489,
+        "seconds": 956.418817084
+      },
+      "ch03-hallucination/fix_retrieval.py": {
+        "ok": true,
+        "metrics": {
+          "Retrieved passages that were superseded versions": "83% (15/18)",
+          "Oldest superseded label served to the model": "2748 days (7.5 years) behind the current label",
+          "Drugs where the two answers differ": "100% (6/6)"
+        },
+        "cost": 0.2591,
+        "seconds": 80.72099095800013
+      },
+      "ch03-hallucination/fix_similarity.py": {
+        "ok": true,
+        "metrics": {
+          "The book's threshold, applied to the model the book names": "not defined"
+        },
+        "cost": 4.2489,
+        "seconds": 79.24118399999998
+      },
+      "ch05-extraction-normalisation/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "46% (26/56)",
+          "Qualifier retention in the stored value": "53% (20/38)",
+          "Dose ranges preserved": "91% (10/11)"
+        },
+        "cost": 0.3823,
+        "seconds": 140.65108783300002
+      },
+      "ch05-extraction-normalisation/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "95% (134/141)",
+          "Qualifier retention in the stored value": "89% (34/38)",
+          "Dose ranges preserved": "100% (11/11)",
+          "Losses recorded by the normaliser": "123"
+        },
+        "cost": 0.6197,
+        "seconds": 182.44965954200006
+      },
+      "ch08-routing-placement/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Placement error rate": "0% (0/33)",
+          "Quotes that match no supplied section at all": "0% (0/33)",
+          "Cases where the model named the wrong section for its own quote": "64% (21/33)"
+        },
+        "cost": 0.4005,
+        "seconds": 107.47952333400008
+      },
+      "ch08-routing-placement/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Placement error rate, before the rules engine runs": "0% (0/33)",
+          "Placement errors that survived into storage": "0% (0/33)",
+          "Boxes filled and stored": "97% (32/33)"
+        },
+        "cost": 0.4228,
+        "seconds": 115.46462220800004
+      },
+      "ch09-sparse-field-fabrication/broken.py": {
+        "ok": false,
+        "error": "RuntimeError: Response hit max_tokens=2000 and was cut off mid-output. Raise max_tokens for this call; the fixture was not written.",
+        "seconds": 115.75615941700016
+      },
+      "ch09-sparse-field-fabrication/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on fields the document does not cover": "0% (0/48)",
+          "Recall on fields the document does cover": "92% (22/24)",
+          "Fields nulled by the code checks rather than by the model": "10"
+        },
+        "cost": 0.5734,
+        "seconds": 138.3964377919997
+      },
+      "ch09-sparse-field-fabrication/fix_provenance.py": {
+        "ok": true,
+        "metrics": {
+          "Highest-scoring fabrication vs lowest-scoring real extraction": "0.85 vs 0.55",
+          "Why": "the fabricated text is really in the document"
+        },
+        "cost": 0.467,
+        "seconds": 6.907910124999944
+      }
+    },
+    "gpt-5-mini": {
+      "ch02-input-integrity/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Silent corruption rate": "80% (33/41)",
+          "Damaged inputs the model said it was confident about": "100% (41/41)",
+          "Model calls made on documents that should never have been processed": "41"
+        },
+        "cost": 0.0338,
+        "seconds": 268.36753054200017
+      },
+      "ch02-input-integrity/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Damaged inputs stopped at the gate": "85% (35/41)",
+          "Clean inputs wrongly rejected": "17% (2/12)",
+          "Silent corruptions that survived": "12% (5/41)",
+          "Model calls avoided": "37"
+        },
+        "cost": 0.0095,
+        "seconds": 69.80631254200034
+      },
+      "ch03-hallucination/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate, soft-inference prompt": "98% (47/48)"
+        },
+        "cost": 0.2816,
+        "seconds": 251.31149666600004
+      },
+      "ch03-hallucination/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on questions the sources cannot answer": "29% (14/48)",
+          "Answered correctly when the sources did cover it": "96% (23/24)",
+          "Answers rejected by code, not by the model": "0",
+          "Claims the model flagged as unverified": "32"
+        },
+        "cost": 0.2451,
+        "seconds": 1024.1398479999998
+      },
+      "ch03-hallucination/fix_judge.py": {
+        "ok": true,
+        "metrics": {
+          "Recall \u2014 ungrounded answers the judge caught": "85% (41/48)",
+          "Precision cost \u2014 grounded answers wrongly flagged": "21% (5/24)"
+        },
+        "cost": 0.1715,
+        "seconds": 404.51414904100056
+      },
+      "ch03-hallucination/fix_retrieval.py": {
+        "ok": true,
+        "metrics": {
+          "Retrieved passages that were superseded versions": "83% (15/18)",
+          "Oldest superseded label served to the model": "2748 days (7.5 years) behind the current label",
+          "Drugs where the two answers differ": "100% (6/6)"
+        },
+        "cost": 0.0113,
+        "seconds": 48.477085958000316
+      },
+      "ch03-hallucination/fix_similarity.py": {
+        "ok": true,
+        "metrics": {
+          "The book's threshold, applied to the model the book names": "not defined"
+        },
+        "cost": 0.1715,
+        "seconds": 45.03168000000005
+      },
+      "ch05-extraction-normalisation/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "46% (22/48)",
+          "Qualifier retention in the stored value": "50% (19/38)",
+          "Dose ranges preserved": "64% (7/11)"
+        },
+        "cost": 0.0439,
+        "seconds": 177.2597497910001
+      },
+      "ch05-extraction-normalisation/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "98% (78/80)",
+          "Qualifier retention in the stored value": "47% (18/38)",
+          "Dose ranges preserved": "73% (8/11)",
+          "Losses recorded by the normaliser": "67"
+        },
+        "cost": 0.1077,
+        "seconds": 519.1601357090003
+      },
+      "ch08-routing-placement/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Placement error rate": "0% (0/33)",
+          "Quotes that match no supplied section at all": "0% (0/33)",
+          "Cases where the model named the wrong section for its own quote": "55% (18/33)"
+        },
+        "cost": 0.0361,
+        "seconds": 243.4696503340001
+      },
+      "ch08-routing-placement/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Placement error rate, before the rules engine runs": "3% (1/33)",
+          "Placement errors that survived into storage": "0% (0/33)",
+          "Boxes filled and stored": "97% (32/33)"
+        },
+        "cost": 0.0721,
+        "seconds": 430.148457583
+      },
+      "ch09-sparse-field-fabrication/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on fields the document does not cover": "25% (12/48)",
+          "Fabrications whose source_quote IS in the document": "100% (12/12)",
+          "Recall on fields the document does cover": "96% (23/24)"
+        },
+        "cost": 0.04,
+        "seconds": 152.2858356249999
+      },
+      "ch09-sparse-field-fabrication/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on fields the document does not cover": "0% (0/48)",
+          "Recall on fields the document does cover": "92% (22/24)",
+          "Fields nulled by the code checks rather than by the model": "12"
+        },
+        "cost": 0.0919,
+        "seconds": 489.0863320839999
+      },
+      "ch09-sparse-field-fabrication/fix_provenance.py": {
+        "ok": true,
+        "metrics": {
+          "Highest-scoring fabrication vs lowest-scoring real extraction": "0.85 vs 0.59",
+          "Why": "the fabricated text is really in the document"
+        },
+        "cost": 0.04,
+        "seconds": 7.381581333000213
+      }
+    },
+    "gpt-4.1-mini": {
+      "ch02-input-integrity/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Silent corruption rate": "59% (24/41)",
+          "Damaged inputs the model said it was confident about": "95% (39/41)",
+          "Model calls made on documents that should never have been processed": "41"
+        },
+        "cost": 0.012,
+        "seconds": 61.09197379200032
+      },
+      "ch02-input-integrity/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Damaged inputs stopped at the gate": "85% (35/41)",
+          "Clean inputs wrongly rejected": "17% (2/12)",
+          "Silent corruptions that survived": "10% (4/41)",
+          "Model calls avoided": "37"
+        },
+        "cost": 0.004,
+        "seconds": 27.900839666000138
+      },
+      "ch03-hallucination/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate, soft-inference prompt": "94% (45/48)"
+        },
+        "cost": 0.1555,
+        "seconds": 81.08622637500048
+      },
+      "ch03-hallucination/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on questions the sources cannot answer": "25% (12/48)",
+          "Answered correctly when the sources did cover it": "100% (24/24)",
+          "Answers rejected by code, not by the model": "0",
+          "Claims the model flagged as unverified": "19"
+        },
+        "cost": 0.0892,
+        "seconds": 225.58597391700005
+      },
+      "ch03-hallucination/fix_judge.py": {
+        "ok": true,
+        "metrics": {
+          "Recall \u2014 ungrounded answers the judge caught": "81% (39/48)",
+          "Precision cost \u2014 grounded answers wrongly flagged": "12% (3/24)"
+        },
+        "cost": 0.081,
+        "seconds": 283.87915379100014
+      },
+      "ch03-hallucination/fix_retrieval.py": {
+        "ok": true,
+        "metrics": {
+          "Retrieved passages that were superseded versions": "83% (15/18)",
+          "Oldest superseded label served to the model": "2748 days (7.5 years) behind the current label",
+          "Drugs where the two answers differ": "83% (5/6)"
+        },
+        "cost": 0.0069,
+        "seconds": 34.79521845900035
+      },
+      "ch03-hallucination/fix_similarity.py": {
+        "ok": true,
+        "metrics": {
+          "The book's threshold, applied to the model the book names": "not defined"
+        },
+        "cost": 0.081,
+        "seconds": 26.41829683299966
+      },
+      "ch05-extraction-normalisation/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "71% (55/78)",
+          "Qualifier retention in the stored value": "21% (8/38)",
+          "Dose ranges preserved": "45% (5/11)"
+        },
+        "cost": 0.011,
+        "seconds": 85.18203245800032
+      },
+      "ch05-extraction-normalisation/fixed.py": {
+        "ok": true,
+        "metrics": {
+          "Stored values still findable in the source": "94% (72/77)",
+          "Qualifier retention in the stored value": "39% (15/38)",
+          "Dose ranges preserved": "64% (7/11)",
+          "Losses recorded by the normaliser": "58"
+        },
+        "cost": 0.0125,
+        "seconds": 78.64497866700003
+      },
+      "ch08-routing-placement/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Placement error rate": "0% (0/33)",
+          "Quotes that match no supplied section at all": "3% (1/33)",
+          "Cases where the model named the wrong section for its own quote": "3% (1/33)"
+        },
+        "cost": 0.0161,
+        "seconds": 119.54462970900022
+      },
+      "ch08-routing-placement/fixed.py": {
+        "ok": false,
+        "error": "RuntimeError: Response hit max_tokens=2000 and was cut off mid-output.",
+        "seconds": 65.64829599999939
+      },
+      "ch09-sparse-field-fabrication/broken.py": {
+        "ok": true,
+        "metrics": {
+          "Fabrication rate on fields the document does not cover": "27% (13/48)",
+          "Fabrications whose source_quote IS in the document": "100% (13/13)",
+          "Recall on fields the document does cover": "96% (23/24)"
+        },
+        "cost": 0.0175,
+        "seconds": 93.66932383399944
+      },
+      "ch09-sparse-field-fabrication/fixed.py": {
+        "ok": false,
+        "error": "RuntimeError: Response hit max_tokens=2000 and was cut off mid-output.",
+        "seconds": 22.078781917000015
+      },
+      "ch09-sparse-field-fabrication/fix_provenance.py": {
+        "ok": true,
+        "metrics": {
+          "Highest-scoring fabrication vs lowest-scoring real extraction": "0.90 vs 0.64",
+          "Why": "the fabricated text is really in the document"
+        },
+        "cost": 0.0175,
+        "seconds": 6.773734124999464
+      }
+    }
+  }
+}

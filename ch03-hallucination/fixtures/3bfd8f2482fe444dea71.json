@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nThe recommended dose of Gabapentin for pediatric patients depends on age:\n\n**Patients 3 to 11 years of age:**\n- Starting dose: 10-15 mg/kg/day given in three divided doses\n- Maintenance dose reached by upward titration over approximately 3 days\n- For ages 3-4 years: 40 mg/kg/day in three divided doses\n- For ages 5-11 years: 25-35 mg/kg/day in three divided doses\n- Dosages up to 50 mg/kg/day have been well tolerated in long-term clinical studies\n- Maximum time interval between doses should not exceed 12 hours\n\n**Patients 12 years of age and older (adolescents):**\n- Starting dose: 300 mg three times daily\n- Recommended maintenance dose: 300-600 mg three times daily\n- Dosages up to 2400 mg/day have been well tolerated\n- Maximum time between doses should not exceed 12 hours\n\n**Important note:** These dosing recommendations apply to epilepsy with partial onset seizures. The use of Gabapentin in patients less than 12 years of age with compromised renal function has not been studied, so dose adjustments based on renal function are only recommended for patients 12 years and older.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1903,
+  "usage": {
+    "input_tokens": 788,
+    "output_tokens": 17
+  }
+}

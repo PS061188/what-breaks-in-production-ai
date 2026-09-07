@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Atorvastatin Calcium for pediatric patients?\n\nRESPONSE:\n**Pediatric dosing of atorvastatin (per label)**\n\n**Heterozygous familial hypercholesterolemia (HeFH), age ≥10 years**\n- Starting dose: **10 mg once daily**\n- Dose range: **10–20 mg once daily** (20 mg is the maximum studied/approved in HeFH pediatrics)\n\n**Homozygous familial hypercholesterolemia (HoFH), age ≥10 years**\n- Starting dose: **10–20 mg once daily**\n- Dose range: **10–80 mg once daily**, used as an adjunct to other LDL-C–lowering therapies (e.g., ezetimibe, LDL apheresis, PCSK9 inhibitor/lomitapide where appropriate)\n\n**Administration and titration**\n- Give orally once daily at any time of day, with or without food; tablets need not be taken in the evening (long half-life of the active metabolites).\n- Check a lipid panel/LDL-C as early as **4 weeks** after initiation or dose change, then titrate to goal/percent-reduction target.\n\n**Practical points not spelled out in the excerpt**\n- Safety and effectiveness have **not been established in children younger than 10 years**, nor for indications other than HeFH/HoFH; specialist (lipid clinic) involvement is advisable for HoFH and for any child under 10.\n- Counsel post-menarchal adolescents about pregnancy avoidance — statins are generally discontinued when pregnancy is planned or recognized, and during breastfeeding. Ensure effective contraception if sexually active.\n- Monitor growth (height, weight) and sexual maturation at routine visits; pediatric trials showed no adverse effect, but longer-term data are limited.\n- Baseline hepatic transaminases; repeat as clinically indicated. Routine CK monitoring isn't required, but obtain CK if unexplained muscle pain, tenderness, or weakness occurs, and counsel the family to report these symptoms.\n- Diet, weight management, and physical activity remain adjunctive therapy at all doses.\n\n**Drug-interaction dose caps also apply to pediatric patients** (scaled to their dose range): do not exceed 20 mg/day with clarithromycin, itraconazole, saquinavir+ritonavir, darunavir+ritonavir, fosamprenavir ± ritonavir, elbasvir/grazoprevir, or letermovir; do not exceed 40 mg/day with nelfinavir. Avoid concomitant strong CYP3A4 inhibitors and cyclosporine, gemfibrozil, or tipranavir/ritonavir where possible; use caution and consider lower doses with diltiazem, verapamil, amiodarone, colchicine, and large quantities of grapefruit juice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1633,
+  "usage": {
+    "input_tokens": 1315,
+    "output_tokens": 17
+  }
+}

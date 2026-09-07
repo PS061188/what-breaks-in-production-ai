@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nThe provided label excerpt does not include a dedicated interactions section. However, based on standard pharmacology and clinical practice, prednisone has several important drug interactions:\n\n**Major Interactions:**\n- **CYP3A4 Inducers** (rifampin, phenytoin, carbamazepine): Decrease prednisone levels and therapeutic effect\n- **CYP3A4 Inhibitors** (ketoconazole, ritonavir): Increase prednisone levels and toxicity risk\n- **NSAIDs**: Increased GI ulceration and bleeding risk\n- **Anticoagulants** (warfarin): Prednisone may increase anticoagulation effect\n- **Antidiabetic agents**: Prednisone increases blood glucose; may require dose adjustment\n- **Antihypertensives**: Prednisone's sodium-retaining effects may reduce efficacy\n- **Live vaccines**: Prednisone may impair immune response; generally contraindicated\n- **Acetaminophen**: Increased hepatotoxicity risk with chronic use\n- **Potassium-depleting diuretics**: Increased hypokalemia risk\n\n**Monitoring Recommendations:**\n- Monitor blood glucose in diabetic patients\n- Monitor INR when co-prescribed with warfarin\n- Avoid live vaccines during therapy\n- Monitor blood pressure and electrolytes\n- Consider GI protection (PPI) if co-prescribing NSAIDs\n\nFor a comprehensive interaction check for your specific patient, consult current drug interaction databases or pharmacy resources, as the label provided focuses on indications and dosing guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2082,
+  "usage": {
+    "input_tokens": 924,
+    "output_tokens": 17
+  }
+}

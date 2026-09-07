@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Albuterol Sulfate for pediatric patients?\n\nRESPONSE:\nAccording to the label, Albuterol Sulfate HFA Inhalation Aerosol is approved for pediatric patients aged 4 years and older (the same dosing as adults):\n\n**For treatment or prevention of bronchospasm (acute episodes/symptoms) in reversible obstructive airway disease:**\n- 2 inhalations by oral inhalation every 4 to 6 hours\n- In some patients, 1 inhalation every 4 hours may be sufficient\n- More frequent administration or a greater number of inhalations is NOT recommended\n\n**For prevention of exercise-induced bronchospasm:**\n- 2 inhalations by oral inhalation 15 to 30 minutes before exercise\n\n**Important administration notes:**\n- For oral inhalation only\n- Priming: Prime the inhaler before first use, if not used for more than 2 weeks, or if dropped \from from from the face \\u2014 release 4 sprays into the air away from the face, shaking well before each spray, and avoid spraying in the eyes\n- Cleaning: At least once a week, wash the actuator with warm water and let it air-dry completely\n\nNote: The label does not provide dosing for children under 4 years of age; safety and effectiveness in that age group are not established for this product. Always follow the prescribing clinician's specific instructions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 4430,
+  "usage": {
+    "input_tokens": 813,
+    "output_tokens": 17
+  }
+}

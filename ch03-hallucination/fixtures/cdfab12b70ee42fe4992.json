@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\nAccording to the label, there is no single fixed starting dose — the initial dose of prednisone ranges from 5 mg to 60 mg per day, depending on the specific disease being treated. Lower doses generally suffice for less severe conditions, while some patients may need higher initial doses.\n\nKey points from the labeling:\n\n- **Individualization is essential:** \"Dosage requirements are variable and must be individualized on the basis of the disease under treatment and the response of the patient.\"\n- **Maintain or adjust** the initial dose until a satisfactory response is seen. If there is no satisfactory clinical response after a reasonable period, prednisone should be discontinued and the patient switched to other appropriate therapy.\n- **Tapering to maintenance:** After a favorable response, decrease the dose in small decrements at appropriate intervals to the lowest dose that maintains an adequate clinical response.\n- **Do not stop abruptly:** After long-term therapy, withdraw the drug gradually.\n- **Special situation – acute exacerbations of multiple sclerosis:** 200 mg daily for one week, followed by 80 mg every other day for one month (dosage range is the same for prednisone and prednisolone).\n- **Alternate-day therapy (ADT):** For patients needing long-term treatment, twice the usual daily dose may be given every other morning to reduce side effects such as HPA-axis suppression, Cushingoid features, and growth suppression in children.\n\nDose adjustments may also be needed for disease remissions/exacerbations, individual drug responsiveness, and periods of stress. This information is for general reference only — the prescribing clinician should determine the appropriate dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1563,
+  "usage": {
+    "input_tokens": 919,
+    "output_tokens": 17
+  }
+}

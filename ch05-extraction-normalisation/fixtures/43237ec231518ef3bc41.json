@@ -1,0 +1,50 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Extract the dosing\ninformation from the label text below into clean, standardised, database-ready\nvalues.\n\nStandardise as you go:\n- Doses as a number in milligrams.\n- Frequency as the number of doses per day.\n- Durations in days.\n- One canonical value per field. Keep it tidy and consistent.\n\n<label_text>\nDOSAGE AND ADMINISTRATION Initial Treatment Dosage for Adults Major Depressive Disorder –Sertraline hydrochloride treatment should be administered at a dose of 50 mg once daily. While a relationship between dose and effect has not been established for major depressive disorder, OCD, panic disorder, PTSD or social anxiety disorder, patients were dosed in a range of 50-200 mg/day in the clinical trials demonstrating the effectiveness of Sertraline hydrochloride for the treatment of this indication. Consequently, a dose of 50 mg, administered once daily, is recommended as the initial therapeutic dose. Patients not responding to a 50 mg dose may benefit from dose increases up to a maximum of 200 mg/day. Given the 24 hour elimination half-life of sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Premenstrual Dysphoric Disorder – Sertraline hydrochloride treatment should be initiated with a dose of 50 mg/day, either daily throughout the menstrual cycle or limited to the luteal phase of the menstrual cycle, depending on physician assessment. While a relationship between dose and effect has not been established for PMDD, patients were dosed in the range of 50-150 mg/day with dose increases at the onset of each new menstrual cycle (see Clinical Trials under CLINICAL PHARMACOLOGY ). Patients not responding to a 50 mg/day dose may benefit from dose increases (at 50 mg increments/ menstrual cycle) up to 150 mg/day when dosing daily throughout the menstrual cycle, or 100 mg/day when dosing during the luteal phase of the menstrual cycle. If a 100 mg/day dose has been established with luteal phase dosing, a 50 mg/day titration step for three days should be utilized at the beginning of each luteal phase dosing period. Sertraline hydrochloride should be administered once daily, either in the morning or evening. Dosage for Pediatric Population (Children and Adolescents) Obsessive-Compulsive Disorder – Sertraline hydrochloride treatment should be initiated with a dose of 25 mg once daily in children (ages 6-12) and at a dose of 50 mg once daily in adolescents (ages 13-17). While a relationship between dose and effect has not been established for OCD, patients were dosed in a range of 25-200 mg/day in the clinical trials demonstrating the effectiveness of Sertraline hydrochloride for pediatric patients (6-17 years) with OCD. Patients not responding to an initial dose of 25 or 50 mg/day may benefit from dose increases up to a maximum of 200 mg/day. For children with OCD, their generally lower body weights compared to adults should be taken into consideration in advancing the dose, in order to avoid excess dosing. Given the 24 hour elimination half-life of Sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Sertraline hydrochloride should be administered once daily, either in the morning or evening. Maintenance/Continuation/Extended Treatment Major Depressive Disorder –It is generally agreed that acute episodes of major depressive disorder require several months or longer of sustained pharmacologic therapy beyond response to the acute episode. Systematic evaluation of sertraline hydrochloride has demonstrated that its antidepressant efficacy is maintained for periods of up to 44 weeks following 8 weeks of initial treatment at a dose of 50-200 mg/day (mean dose of 70 mg/day) (see Clinical Trials under CLINICAL PHARMACOLOGY ). It is not known whether the dose of sertraline hydrochlor\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"fields\": [\n    {\n      \"field\": \"starting_dose\",\n      \"value\": \"50\",\n      \"qualifiers\": [\n        \"Adult (Major Depressive Disorder) initial: 50 mg once daily\",\n        \"Premenstrual Dysphoric Disorder: 50 mg/day (either daily or luteal-phase)\",\n        \"Pediatric OCD: children (6-12 years) 25 mg once daily; adolescents (13-17 years) 50 mg once daily\"\n      ],\n      \"source_quote\": \"Sertraline hydrochloride treatment should be administered at a dose of 50 mg once daily. ... Premenstrual Dysphoric Disorder – Sertraline hydrochloride treatment should be initiated with a dose of 50 mg/day, either daily throughout the menstrual cycle or limited to the luteal phase of the menstrual cycle... Dosage for Pediatric Population (Children and Adolescents) Obsessive-Compulsive Disorder – Sertraline hydrochloride treatment should be initiated with a dose of 25 mg once daily in children (ages 6-12) and at a dose of 50 mg once daily in adolescents (ages 13-17).\"\n    },\n    {\n      \"field\": \"maximum_dose\",\n      \"value\": \"200\",\n      \"qualifiers\": [\n        \"Adults and pediatric OCD: maximum 200 mg/day\",\n        \"PMDD: up to 150 mg/day when dosing daily throughout cycle; up to 100 mg/day when dosing during the luteal phase\"\n      ],\n      \"source_quote\": \"Patients not responding to a 50 mg dose may benefit from dose increases up to a maximum of 200 mg/day. ... Patients not responding to a 50 mg/day dose may benefit from dose increases (at 50 mg increments/ menstrual cycle) up to 150 mg/day when dosing daily throughout the menstrual cycle, or 100 mg/day when dosing during the luteal phase of the menstrual cycle.\"\n    },\n    {\n      \"field\": \"frequency\",\n      \"value\": \"1\",\n      \"qualifiers\": [\n        \"Administered once daily (either morning or evening)\",\n        \"PMDD may be dosed daily throughout cycle or limited to luteal phase (intermittent)\"\n      ],\n      \"source_quote\": \"Consequently, a dose of 50 mg, administered once daily, is recommended as the initial therapeutic dose. ... Sertraline hydrochloride should be administered once daily, either in the morning or evening. ... Premenstrual Dysphoric Disorder – Sertraline hydrochloride treatment should be initiated with a dose of 50 mg/day, either daily throughout the menstrual cycle or limited to the luteal phase of the menstrual cycle...\"\n    },\n    {\n      \"field\": \"dose_adjustment\",\n      \"value\": \"Increase generally in 50 mg increments; do not change dose more frequently than every 7 days; for luteal-phase PMDD when 100 mg/day established, use a 50 mg/day titration step for 3 days at start of each luteal phase.\",\n      \"qualifiers\": [\n        \"General increment: 50 mg steps\",\n        \"Minimum interval between dose changes: 7 days\",\n        \"PMDD luteal-phase specific titration: 50 mg/day for 3 days at beginning of each luteal phase if 100 mg/day target\"\n      ],\n      \"source_quote\": \"Patients not responding to a 50 mg/day dose may benefit from dose increases (at 50 mg increments/ menstrual cycle) up to 150 mg/day... Given the 24 hour elimination half-life of sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. ... If a 100 mg/day dose has been established with luteal phase dosing, a 50 mg/day titration step for three days should be utilized at the beginning of each luteal phase dosing period.\"\n    }\n  ]\n}",
+  "elapsed_ms": 17375,
+  "usage": {
+    "input_tokens": 905,
+    "output_tokens": 2412
+  }
+}

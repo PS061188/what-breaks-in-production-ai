@@ -1,0 +1,34 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are auditing an assistant's answer for grounding.\n\nYou will be shown the SOURCES the assistant was given and the ANSWER it\nproduced. Decide whether the answer asserts any factual claim that is not\nsupported by the sources.\n\nJudge grounding, not correctness. A claim can be true in the world and still be\nunsupported here — that is exactly what you are looking for. Hedging does not\nexcuse a claim: \"the sources do not cover this, however X is typically Y\"\nasserts X.\n\nList every unsupported claim you find. If there are none, return an empty list.",
+  "user": "SOURCES:\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n\nQUESTION:\nWhat is the recommended dose of Omeprazole for pediatric patients?\n\nANSWER:\nOmeprazole is indicated for use in adults 18 years of age and older. For pediatric patients under 18, the label advises consulting a doctor, as heartburn in children may sometimes be caused by a serious condition. Therefore, the recommended dose for pediatric patients is not provided and use should be directed by a healthcare professional.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "unsupported_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "GROUNDED",
+          "UNGROUNDED"
+        ]
+      }
+    },
+    "required": [
+      "unsupported_claims",
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"unsupported_claims\":[],\"verdict\":\"GROUNDED\"}",
+  "elapsed_ms": 1782,
+  "usage": {
+    "input_tokens": 963,
+    "output_tokens": 28
+  }
+}

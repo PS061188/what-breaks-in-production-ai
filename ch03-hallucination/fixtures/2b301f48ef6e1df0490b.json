@@ -1,0 +1,34 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are auditing an assistant's answer for grounding.\n\nYou will be shown the SOURCES the assistant was given and the ANSWER it\nproduced. Decide whether the answer asserts any factual claim that is not\nsupported by the sources.\n\nJudge grounding, not correctness. A claim can be true in the world and still be\nunsupported here — that is exactly what you are looking for. Hedging does not\nexcuse a claim: \"the sources do not cover this, however X is typically Y\"\nasserts X.\n\nList every unsupported claim you find. If there are none, return an empty list.",
+  "user": "SOURCES:\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n\nQUESTION:\nWhat conditions is Omeprazole indicated to treat?\n\nANSWER:\nBased on the label provided, omeprazole is indicated to treat frequent heartburn that occurs 2 or more days a week. However, it's important to note that this product is not intended for immediate relief of heartburn, as it may take 1 to 4 days for full effect. Some patients may experience complete relief within 24 hours, but delayed onset is common. The standard dosing is 1 tablet once daily (every 24 hours) for a 14-day course. If needed, repeated 14-day courses can be taken every 4 months, though use beyond 14 days or more frequently than every 4 months requires physician direction. Clinically, omeprazole is a proton pump inhibitor (PPI) and is used more broadly for various acid-related conditions including GERD, peptic ulcer disease, and acid suppression in specific clinical scenarios, but this label excerpt specifically addresses its over-the-counter use for frequent heartburn management.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "unsupported_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "GROUNDED",
+          "UNGROUNDED"
+        ]
+      }
+    },
+    "required": [
+      "unsupported_claims",
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"unsupported_claims\":[\"Clinically, omeprazole is a proton pump inhibitor (PPI)\",\"omeprazole is used more broadly for various acid-related conditions including GERD, peptic ulcer disease, and acid suppression in specific clinical scenarios\"],\"verdict\":\"UNGROUNDED\"}",
+  "elapsed_ms": 3099,
+  "usage": {
+    "input_tokens": 1149,
+    "output_tokens": 207
+  }
+}

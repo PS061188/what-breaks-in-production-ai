@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe inhaler should be discarded when the counter reads 000. Contents Under Pressure Do not puncture. Do not use or store near heat or open flame. Exposure to temperatures above 120°F may cause bursting. Never throw canister into fire or incinerator. Storage Store at room temperature between 68°F and 77°F (20°C and 25°C); excursions permitted from 59°F to 86°F (15°C to 30°C) [See USP Controlled Room Temperature]. Store the inhaler with the mouthpiece down. For best results, the inhaler should be at room temperature before use.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Instructions for discarding the inhaler when counter reads 000, (b) Pressure warnings about not puncturing, storing away from heat/flame, and temperature limits, (c) Specific storage temperature ranges (68-77°F with excursions 59-86°F) and position instructions (mouthpiece down). 2. Two most plausible categories: (a) 'how_supplied' - covers packaging, storage, and physical handling; (b) 'dosage_and_administration' - could include device handling instructions. 3. The winning category is 'how_supplied' because this passage focuses entirely on the physical form of the product (inhaler canister under pressure), storage conditions, handling precautions, and product lifecycle (discarding at counter 000). This is classic 'how_supplied' content describing the dosage form, packaging materials, storage requirements, and physical handling. The passage contains zero information about dosing frequency, administration technique, clinical indications, or patient-specific dosing guidance that would place it in 'dosage_and_administration'. The USP reference to Controlled Room Temperature is characteristic of 'how_supplied' sections. 4. Confidence is HIGH (>90%) because the language and content structure are definitively aligned with how_supplied: pressure warnings, temperature specifications, storage position, product lifecycle information, and USP references are hallmarks of this section in pharmaceutical labeling.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 5724,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 359
+  }
+}

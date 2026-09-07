@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Metformin Hydrochloride?\n\nRESPONSE:\nAccording to the label, the recommended starting dose depends on the patient's age:\n\n**Adults:** 500 mg orally twice a day, OR 850 mg once a day \\u2014 taken with meals.\n- The dose can then be increased in increments of 500 mg weekly, or 850 mg every 2 weeks, based on glycemic control and tolerability.\n- Maximum dose: 2550 mg per day, given in divided doses. Doses above 2000 mg per day may be better tolerated when given 3 times a day with meals.\n\n**Pediatric patients 10 years of age and older:** 500 mg orally twice a day, with meals.\n- Increase in increments of 500 mg weekly based on glycemic control and tolerability.\n- Maximum dose: 2000 mg per day, given in divided doses twice daily.\n\n**Important note on kidney function:** Renal function (eGFR) should be assessed before starting metformin and periodically thereafter. Metformin is contraindicated if eGFR is below 30 mL/min/1.73 m\\if eGFR is below 30 mL/minute/1.73 m2, and starting it is not recommended if eGFR is between 30 and 45 mL/minute/1.73 m2.\n\nThis information is for general reference \\u2014 your prescriber will determine the appropriate dose for your individual situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1712,
+  "usage": {
+    "input_tokens": 814,
+    "output_tokens": 17
+  }
+}

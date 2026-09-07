@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAtorvastatin calcium tablets, USP 80 mg of atorvastatin: white coloured, oval shaped, biconvex, film-coated tablets with \"MA\" on one side and \"4\" on other side. NDC: 71335-1336-1: 30 Tablets in a BOTTLE NDC: 71335-1336-2: 60 Tablets in a BOTTLE NDC: 71335-1336-3: 90 Tablets in a BOTTLE NDC: 71335-1336-4: 180 Tablets in a BOTTLE Store at controlled room temperature 20º to 25ºC (68º to 77ºF). Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (a) The passage describes physical characteristics of tablets (white, oval, biconvex, film-coated with specific markings), (b) It lists multiple NDC codes with specific package quantities (30, 60, 90, 180 tablets per bottle), (c) It provides storage instructions (controlled room temperature 20-25°C). Step 2 - Most plausible categories: (1) 'how_supplied' - This section typically documents dosage forms, strengths, packaging configurations, NDC codes, and storage conditions. (2) 'description' - This category covers chemical names, formulation, inactive ingredients, and could include tablet appearance and storage. Step 3 - Winner determination: 'how_supplied' is the clear winner. The passage is fundamentally an inventory/packaging specification document. It lists multiple SKUs (NDC numbers), quantity configurations, and storage conditions - all hallmarks of how_supplied sections. While some physical appearance details might appear in 'description', the overwhelming focus on packaging units, NDC codes, and storage makes this clearly a how_supplied section. The description category would typically emphasize chemical composition and formulation details, which are absent here. Step 4 - Confidence: This is HIGH (>90%) because the content directly matches the defining characteristics of how_supplied sections with NDC codes, package sizes, and storage conditions being the primary content.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 4481,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 349
+  }
+}

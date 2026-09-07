@@ -1,0 +1,280 @@
+<!-- ============================ CHAPTER 6 ============================ -->
+<h2 class="part">Chapter 6 — State mismatch failures</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 6 &middot; State mismatch</span>
+<p class="oneline">The index holds a superseded version of the document and nothing in the pipeline notices. The filter that fixes it is one clause &mdash; and the chapter prints it with an extra condition that silently empties the result set for a third of queries.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>48 real FDA labels across 6 drugs, each with a real effective date; newest per drug marked ACTIVE, the rest SUPERSEDED</td></tr><tr><td style="width:26%">Retrieval</td><td>Chroma vector store, unfiltered top-3, honest metadata headers on every document</td></tr><tr><td style="width:26%">Scoring</td><td>Set arithmetic on dose values &mdash; if a dose only the superseded label states appears in the answer, the answer used it. Does not depend on what the model claims</td></tr><tr><td style="width:26%">Model</td><td>Claude Haiku 4.5</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 400&ndash;700, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>5 live runs</strong> of the prompt arms; monitoring is deterministic over 398 simulated weeks &times; 6 drugs</td></tr><tr><td style="width:26%">Cost</td><td>$0.12 per run</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Prompt, full protocol</td><td>Works, then inherits fix 1&rsquo;s defect</td><td class="num">30% stale acceptance</td><td class="num">5 runs</td></tr><tr><td>Prompt, status rule only</td><td><strong>Best arm</strong></td><td class="num"><strong>17%</strong>, 5 of 6 drugs right</td><td class="num">5 runs</td></tr><tr><td>Prompt, 90-day rule only</td><td><strong>Inert</strong></td><td class="num">67% &mdash; same as no rule</td><td class="num">5 runs</td></tr><tr><td>1 &middot; Filter as printed</td><td><strong>Broken as written</strong></td><td class="num">empties results for 33%</td><td class="num">certain</td></tr><tr><td>1 &middot; Filter without the date</td><td><strong>Works</strong></td><td class="num">matches Chapter 3&rsquo;s</td><td class="num">certain</td></tr><tr><td>2 &middot; Freshness monitor</td><td>Works &mdash; not at what it claims</td><td class="num">50% recall, 0 false alarms</td><td class="num">strongest here</td></tr><tr><td>3 &middot; Boundary truncation</td><td>Mid-clause cuts only</td><td class="num">4 cases, p = 0.12</td><td class="num">tentative</td></tr><tr><td>4 &middot; Session isolation</td><td>Not implemented as written</td><td class="num">infrastructure</td><td class="num">&mdash;</td></tr></table>
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>The status check, alone.</strong> 17% stale acceptance against 67% with no rule, and it got 5 of 6 drugs exactly right.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2, the monitor</strong> &mdash; but describe it as detecting <em>ranking churn</em>, and track the maximum <code>last_verified</code> per query instead. 0 false alarms in 1,381 quiet weeks is excellent.</li><li><span class='drop'>DROP</span> — <strong>The 90-day clause, everywhere it appears.</strong> On its own it performs exactly as well as no rule at all, in all five runs. Added to the status rule it doubles failures.</li><li><span class='drop'>DROP</span> — <strong>The claim that top-k overlap detects staleness.</strong> It detects ranking churn. 50% recall on the thing it is sold as detecting.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Your six-rule protocol is beaten by one of its own rules.</strong> Status-only scores 17%; the full protocol 30%. <code>status</code> is a statement about supersession; <code>last_updated</code> is a statement about editing activity. Most current documents are not recently edited, so the date rule cannot separate stale from settled &mdash; it adds noise to a clean signal. And a refusal is often the right answer: retrieval returned a current document for only 3 of 6 drugs.</p>
+<h4>Where this is weakest</h4>
+<p>Six drugs. The stability across runs is striking &mdash; four of five arms returned an identical number every time &mdash; but the corpus is small and inherits Chapter 3&rsquo;s caveat: these are 48 different labelers&rsquo; documents, not 48 revisions of one. The <em>ordering</em> of the arms is what this establishes.</p>
+</div>
+
+<h3 class="top">The failure: the answer is right about something that is no longer true</h3>
+
+<p class="lede">A stale retrieved document. A conversation history truncated
+mid-fact. Context leaking between sessions. The model answers correctly from
+information that has expired — and this chapter found the two places where your
+book contradicts itself.</p>
+
+<h4>How it was tested</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>The derivation</strong></td>
+      <td>One pattern search over dose values. Everything else is set arithmetic:
+      what a truncated context contains, what truncation removed, what an answer
+      asserted — and therefore what an answer asserted that was <em>not in front
+      of it</em>.</td></tr>
+  <tr><td><strong>Truncation regimes</strong></td>
+      <td>Three, at budgets derived from the documents' own subsection headings.
+      <strong>MIDFACT</strong>: cut on the digit inside a dose sentence.
+      <strong>NEAR</strong>: cut between a heading and its content.
+      <strong>CONTROL</strong>: cut past the subsection — the counter-metric.</td></tr>
+  <tr><td><strong>Version corpus</strong></td>
+      <td>48 real FDA labels for 6 drugs, filed across several years, each with a
+      real effective date.</td></tr>
+</table>
+
+<h4>Fix 3 — conversation truncation, the one nobody had tested</h4>
+
+<table>
+  <tr><th style="width:44%">Measure</th><th class="num">Naive cut</th><th class="num">Boundary-aware cut</th></tr>
+  <tr><td><strong>MIDFACT</strong>: asserted a dose not in the excerpt</td>
+      <td class="num">10% — 4 of 39</td><td class="num"><strong>0% — 0 of 39</strong></td></tr>
+  <tr><td><strong>NEAR</strong>: same measure</td>
+      <td class="num">0%</td><td class="num">0% — <strong>complete null</strong></td></tr>
+  <tr><td>CONTROL recall (counter-metric)</td>
+      <td class="num">78% — 14 of 18</td><td class="num">78% — 14 of 18</td></tr>
+  <tr><td>Declined in the schema field, fabricated in the prose</td>
+      <td class="num">3% — 1 of 39</td><td class="num">0%</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">The author's own caveat, which is the right one</span>
+  <p>4 of 39 against 0 of 39 is <strong>Fisher p = 0.12 — not significant</strong>.
+  The repo cannot control sampling temperature, so counts move run to run. It is
+  reported because it is what happened, not because one run can distinguish it
+  from zero.</p>
+</div>
+
+<p><strong>NEAR is a complete null across both arms.</strong> Given a dangling
+heading with no content, the model recognises the text is incomplete and says so.
+Boundary-aware truncation buys nothing there — which narrows the chapter's claim
+usefully: <strong>the fix is for mid-clause cuts, not structural ones.</strong></p>
+
+<p>And all four MIDFACT failures are the same shape: <strong>severed numeric
+ranges or table rows</strong>. <code>"...is 20 to "</code> became
+<code>"20 mg"</code>. That is a sharper, more actionable claim than the chapter
+currently makes.</p>
+
+<p>One case is worth its own line: a naive-cut answer returned
+<code>dose: null</code> in its structured field while its prose reconstructed a
+seven-value renal dosing table. <strong>A validator reading the field would pass
+it.</strong></p>
+
+<h4>The chapter's prompt — six rules measured as one, then split apart</h4>
+
+<p>The prompt audit that followed the Chapter 3 finding flagged this chapter for a
+different defect. The baseline here is honest. <strong>The treatment is not one
+fix — it is six</strong>, given as a single block and scored as a single thing:</p>
+
+<ol>
+  <li><code>last_updated</code> must be within 90 days</li>
+  <li><code>status</code> must be ACTIVE</li>
+  <li>prefer the highest <code>version</code></li>
+  <li>say explicitly which document was rejected and why</li>
+  <li>context-integrity check — same entity? conflicting documents?</li>
+  <li>conversation history overrides earlier statements</li>
+</ol>
+
+<p>No effect can be attributed to any one of them. And Task 6.1 already
+establishes that rule 1 is broken — a document can be the newest in existence and
+still be older than ninety days.</p>
+
+<p>So the block was split into arms and each run <strong>five times, live</strong>,
+against the same six drugs and the same unfiltered top-3 retrieval.</p>
+
+<h4>The result</h4>
+
+<p>Measured on the check that does not depend on what the model claims about its
+own sources: <em>did the answer contain a dose that only a superseded label
+states?</em></p>
+
+<table>
+  <tr><th style="width:34%">Prompt</th><th class="num">Run by run (of 6)</th>
+      <th class="num">Mean</th><th>What it tells you</th></tr>
+  <tr><td>Neutral — no metadata rules</td><td class="num">4, 4, 4, 4, 4</td>
+      <td class="num">67%</td><td>the baseline</td></tr>
+  <tr><td><strong>Status rule only</strong></td><td class="num">1, 1, 1, 1, 1</td>
+      <td class="num"><strong>17%</strong></td>
+      <td><strong>the best arm, in every run</strong></td></tr>
+  <tr><td><strong>90-day rule only</strong></td><td class="num">4, 4, 4, 4, 4</td>
+      <td class="num">67%</td>
+      <td><strong>identical to no rule at all, in every run</strong></td></tr>
+  <tr><td>Status + date + version</td><td class="num">2, 2, 2, 2, 2</td>
+      <td class="num">33%</td><td>adding the date rule doubles the failures</td></tr>
+  <tr><td>Full protocol (the book's)</td><td class="num">2, 2, 1, 2, 2</td>
+      <td class="num">30%</td><td>the integrity check adds nothing</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">The chapter's prompt is beaten by one of its own six rules</span>
+  <p><strong>The status check alone is twice as good as the full protocol</strong>
+  — 17% against 30%, and it won in all five runs.</p>
+  <p><strong>The 90-day rule is not merely useless, it is harmful.</strong> On its
+  own it performs <em>exactly</em> as well as no rule at all — 4 of 6, identical,
+  five runs running. Added to the status rule, it takes failures from 1 to 2.</p>
+  <p>These runs are unusually stable — four of the five arms returned the same
+  number every single time — so this is not a sampling artefact.</p>
+</div>
+
+<h4>Why the date rule hurts, and why "refused" is not the cost it looks like</h4>
+
+<p>Retrieval put an ACTIVE document in the top-3 for only <strong>3 of the 6
+drugs</strong>. That is the ceiling: no prompt can answer correctly for the other
+three, and refusing is the right answer there.</p>
+
+<p>Here is the status-only arm drug by drug:</p>
+
+<table>
+  <tr><th style="width:24%">Drug</th><th class="num">ACTIVE docs in top-3</th>
+      <th>What the status rule did</th><th class="num">Right?</th></tr>
+  <tr><td>Furosemide</td><td class="num"><strong>0 of 3</strong></td><td>refused everything</td><td class="num">✓</td></tr>
+  <tr><td>Metformin</td><td class="num"><strong>0 of 3</strong></td><td>refused everything</td><td class="num">✓</td></tr>
+  <tr><td>Prednisone</td><td class="num"><strong>0 of 3</strong></td><td>refused everything</td><td class="num">✓</td></tr>
+  <tr><td>Gabapentin</td><td class="num">1 of 3</td><td>used the active document only</td><td class="num">✓</td></tr>
+  <tr><td>Lisinopril</td><td class="num">1 of 3</td><td>used the active document only</td><td class="num">✓</td></tr>
+  <tr><td>Sertraline</td><td class="num">1 of 3</td><td>kept a superseded document</td><td class="num">✗</td></tr>
+</table>
+
+<p><strong>Five of six exactly right</strong>, and the three refusals are precisely
+the three drugs where no current document was retrieved. That is not the price of
+the gate — it is the gate working.</p>
+
+<p>The 90-day rule breaks this because it fires on documents that are perfectly
+current. Most FDA labels are older than ninety days; the rule cannot distinguish
+"stale" from "not recently edited", so it adds noise to a signal that was clean.
+The <code>status</code> field is a statement about supersession. The date is a
+statement about editing activity. The chapter treats them as interchangeable.</p>
+
+<div class="plain">
+  <span class="label">Limits</span>
+  <p>Six drugs. The stability across runs is striking but the corpus is small, and
+  it inherits the Chapter 3 caveat: these are 48 different labelers' documents,
+  not 48 revisions of one. The <em>ordering</em> of the arms is what this
+  establishes; the rates would move on another corpus.</p>
+</div>
+
+<h4>Fix 1 — where your book contradicts your book</h4>
+
+<table>
+  <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
+  <tr><td><strong>Drugs where the filter as printed returns NOTHING</strong></td>
+      <td class="num"><strong>33% — 2 of 6</strong></td></tr>
+  <tr><td>Of those, answers that stated a dose anyway</td><td class="num">0 of 2 — fails safe</td></tr>
+  <tr><td>Freshness <em>scoring</em> picks a different document than a hard filter</td>
+      <td class="num">50% — 3 of 6</td></tr>
+  <tr><td>Correct-looking <code>status</code> flag over a stale index</td>
+      <td class="num"><strong>100% — 6 of 6 served a superseded label</strong></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Chapter 6 and Chapter 3 give the same fix, and one is broken</span>
+  <p>Chapter 6 specifies <code>status == "ACTIVE" AND last_verified &gt; now() −
+  90d</code>. A document can be the newest label in existence and still be older
+  than ninety days — so the conjunction <strong>returns nothing, silently</strong>,
+  for a third of drugs.</p>
+  <p><strong>Chapter 3 gives the same fix without the date clause, and Chapter 3
+  is right.</strong> Two chapters, one fix, one broken. Only running both finds
+  this.</p>
+  <p>The chapter's prompt inherits the same defect: two of six answers refused
+  every document, including the current one.</p>
+</div>
+
+<p>The stale-flag result is a genuine gap. <strong>The chapter never says that
+<code>status</code> is itself a snapshot with an age.</strong> A filter that
+correctly asks for ACTIVE documents, over an index last ingested some time ago,
+served a superseded label every single time.</p>
+
+<div class="plain">
+  <span class="label">A caveat review added to that 100%</span>
+  <p>The simulated ingest date sits shortly before the earliest current label, so
+  the result is closer to a tautology than a measurement. The <em>mechanism</em> is
+  real and worth the book's attention; the 6-of-6 is not evidence for its
+  frequency.</p>
+</div>
+
+<h4>Fix 2 — the cleanest result in the repository, and it fails half the time</h4>
+
+<table>
+  <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Weeks a new current label arrived and the monitor alerted</td>
+      <td class="num"><strong>50% — 20 of 40</strong></td></tr>
+  <tr><td>Weeks nothing changed and the monitor alerted anyway</td>
+      <td class="num"><strong>0% — 0 of 1,381</strong></td></tr>
+</table>
+
+<p>398 simulated weeks × 6 drugs. No model calls, no pattern search in the ground
+truth, and a denominator in the thousands — <strong>this is the best-evidenced
+number in the whole report.</strong></p>
+
+<p>What it shows is that the chapter's claim is wrong as worded. <strong>Top-k
+overlap detects ranking churn, not staleness.</strong> It missed half the weeks a
+new current label actually arrived. Zero false alarms is excellent; 50% recall on
+the thing it is sold as detecting is not. The recommendation: track the maximum
+<code>last_verified</code> per canonical query instead.</p>
+
+<h4>Fix 4 — session isolation</h4>
+
+<p><strong>Not implemented as written.</strong> It is an infrastructure property —
+separate credentials per tenant so a forgotten filter errors instead of returning
+another customer's data. There is no API call that tests it, and a mock proves
+only the mock. Marked untested rather than faked.</p>
+
+<h4>The bug the author found in their own code</h4>
+
+<p>Fixtures stopped replaying after the search index directory was moved — a
+change that cannot affect a prompt. Chapter 3 had already fixed half of this
+(retrieval <em>order</em> varies between runs; it sorts by id). The other half:
+rebuilding the index changed top-3 <strong>membership</strong> for one drug in
+six, because the label versions are near-identical text from different labelers
+and an approximate index breaks ties arbitrarily.</p>
+
+<p>It failed loudly rather than quietly reporting different numbers — the
+content-addressed cache is an equality check on the prompt. <strong>This also
+matters for fix 2: a monitor keyed on top-k identity would alert on churn that
+never happened.</strong></p>
+
+<h4>Cost</h4>
+
+<p>165 recorded runs, about <strong>$0.50</strong>.</p>
+
+<h3>Chapter 6 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>Prompt template</td><td>Works, then inherits fix 1's defect</td>
+      <td>83% → 33% on stale-doc acceptance; 2 of 6 refuse everything</td></tr>
+  <tr><td>1 · Metadata filter <em>as printed</em></td><td><strong>Broken as written</strong></td>
+      <td>empties the result set for 33% of drugs</td></tr>
+  <tr><td>1 · Metadata filter <em>without the date clause</em></td><td><strong>Works</strong></td>
+      <td>same as Chapter 3's version</td></tr>
+  <tr><td>2 · Freshness monitoring</td><td>Works — but not at what it claims</td>
+      <td>50% recall, 0 false alarms of 1,381 — strongest evidence in the repo</td></tr>
+  <tr><td>3 · Boundary-aware truncation</td><td>Works on mid-clause cuts only</td>
+      <td>⚠️ 4 cases, p = 0.12</td></tr>
+  <tr><td>4 · Session isolation</td><td>Not implemented as written</td><td>infrastructure</td></tr>
+</table>
+
+<p><strong>This chapter produced the single most consequential finding in the
+report</strong> — not a fix that fails, but two chapters of the same book giving
+the same advice with different results. That is the class of error no amount of
+re-reading catches and one afternoon of running catches immediately.</p>

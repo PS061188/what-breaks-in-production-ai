@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nGabapentin Capsules USP 300 mg capsules: Hard gelatin capsules with yellow opaque body with caramel opaque cap, imprinted with “AHD” on cap and “300” on body in black ink and filled with white to off-white powder. NDC: 71335-1093-8: 40 Capsules in a BOTTLE NDC: 71335-1093-1: 90 Capsules in a BOTTLE NDC: 71335-1093-2: 28 Capsules in a BOTTLE NDC: 71335-1093-3: 58 Capsules in a BOTTLE NDC: 71335-1093-4: 30 Capsules in a BOTTLE NDC: 71335-1093-5: 60 Capsules in a BOTTLE NDC: 71335-1093-6: 120 Capsules in a BOTTLE NDC: 71335-1093-7: 180 Capsules in a BOTTLE Store at 20° to 25° C (68° to 77° F); excursions permitted to 15° to 30°C (59° to B6°F). [See USP Controlled Room Temperature] Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Gabapentin Capsules USP 300 mg - Hard gelatin capsules. Available in the following package sizes: 40 capsules in a bottle, 90 capsules in a bottle, 28 capsules in a bottle, 58 capsules in a bottle, 30 capsules in a bottle, 60 capsules in a bottle, 120 capsules in a bottle, and 180 capsules in a bottle.\"}",
+  "elapsed_ms": 2375,
+  "usage": {
+    "input_tokens": 587,
+    "output_tokens": 108
+  }
+}

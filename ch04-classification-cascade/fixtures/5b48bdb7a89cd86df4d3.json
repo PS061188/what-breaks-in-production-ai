@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nWarfarin sodium tablets are a vitamin K antagonist indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism ( 1 ) Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation and/or cardiac valve replacement ( 1 ) Reduction in the risk of death, recurrent myocardial infarction, and thromboembolic events such as stroke or systemic embolization after myocardial infarction ( 1 ) Limitations of Use Warfarin sodium tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage. ( 1 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"indications_and_usage\"}",
+  "elapsed_ms": 993,
+  "usage": {
+    "input_tokens": 615,
+    "output_tokens": 14
+  }
+}

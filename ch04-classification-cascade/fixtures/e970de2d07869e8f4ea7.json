@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nxanthopsia Hematologic Reactions 1. aplastic anemia 2. thrombocytopenia 3. agranulocytosis 4. hemolytic anemia 5. leukopenia 6. anemia 7. eosinophilia Dermatologic-Hypersensitivity Reactions 1. toxic epidermal necrolysis 2. Stevens-Johnson Syndrome 3. erythema multiforme 4. drug rash with eosinophilia and systemic symptoms 5. acute generalized exanthematous pustulosis 6. exfoliative dermatitis 7. bullous pemphigoid 8. purpura 9. photosensitivity 10. rash 11. pruritus 12. urticaria Cardiovascular Reaction 1. Orthostatic hypotension may occur and be aggravated by alcohol, barbiturates or narcotics. 2. Increase in cholesterol and triglyceride serum levels Other Reactions 1. hyperglycemia 2. glycosuria 3. hyperuricemia 4. muscle spasm 5. weakness 6. restlessness 7. urinary bladder spasm 8. thrombophlebitis 9. fever Whenever adverse reactions are moderate or severe, furosemide dosage should be reduced or therapy withdrawn.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Exhaustive listing of adverse reactions organized by body system (hematologic, dermatologic, cardiovascular, other), (2) Specific medical conditions and side effects with multiple examples under each category, (3) Guidance on management ('dosage should be reduced or therapy withdrawn') when reactions occur. Step 2 - Most plausible categories: (a) adverse_reactions: The passage is clearly an enumerated list of side effects and unwanted drug effects organized systematically. (b) dosage_and_administration: Could be considered due to the final sentence about dose adjustment, but this is secondary guidance related to adverse reaction management, not primary dosage instructions. Step 3 - Classification decision: This is definitively adverse_reactions. The overwhelming content (95%+) consists of documented hematologic reactions, dermatologic reactions, cardiovascular reactions, and other adverse effects. The brief mention of dose adjustment is a management note appended to an adverse reaction section, not the primary purpose of this passage. Step 4 - Confidence: HIGH (>95%). The classification is unambiguous - this is a comprehensive adverse reactions listing from a drug label.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 7604,
+  "usage": {
+    "input_tokens": 1168,
+    "output_tokens": 299
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Sertraline Hydrochloride?\n\nRESPONSE:\nAccording to the label, the recommended starting (initial) dose depends on the indication and the patient's age:\n\n**Adults**\n- **Major depressive disorder (and, per the same dosing guidance, OCD, panic disorder, PTSD, and social anxiety disorder):** 50 mg once daily. Patients who do not respond to 50 mg may benefit from dose increases up to a maximum of 200 mg/day. Because sertraline has a ~24-hour elimination half-life, dose changes should not be made at intervals of less than 1 week.\n- **Premenstrual dysphoric disorder (PMDD):** Start at 50 mg/day, given either continuously throughout the menstrual cycle or only during the luteal phase, based on physician assessment. Doses may be increased in 50 mg increments per menstrual cycle up to 150 mg/day (continuous dosing) or 100 mg/day (luteal-phase dosing). If 100 mg/day is used with luteal-phase dosing, a 50 mg/day titration step for 3 days should be used at the start of each luteal phase period.\n\n**Pediatric patients with OCD**\n- **Children ages 6–12:** 25 mg once daily\n- **Adolescents ages 13–17:** 50 mg once daily\n- Doses may be increased up to a maximum of 200 mg/day; in children, lower body weight should be considered when advancing the dose to avoid excess dosing.\n\n**Special populations:** In patients with hepatic impairment, a lower or less frequent dose should be used, and sertraline should be used with caution.\n\nSertraline is taken once daily, either in the morning or evening. This information is from the drug label and is not a substitute for your prescriber's individualized instructions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1391,
+  "usage": {
+    "input_tokens": 949,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Gabapentin?\n\nRESPONSE:\n**Short answer:** Gabapentin is not metabolized by the liver, does not induce or inhibit CYP450 enzymes, and is essentially not protein-bound — so it has very few pharmacokinetic interactions. The clinically important interactions are (1) additive CNS/respiratory depression with opioids and other sedatives, and (2) reduced absorption with aluminum/magnesium antacids. The label excerpt you provided contains only the indications and dosing sections, so the following draws on the full gabapentin labeling and standard pharmacology.\n\n**1. Opioids — most important interaction**\n- **Morphine:** When controlled-release morphine is given ~2 hours before gabapentin, gabapentin AUC increases by roughly 44%, with increased somnolence, dizziness, nausea, and respiratory depression. Reduce the gabapentin dose (or the opioid dose) and titrate slowly.\n- **Hydrocodone:** Coadministration decreases hydrocodone Cmax/AUC in a gabapentin dose-dependent fashion (~3–4% and 21–22% at 300 mg; ~21% and 24% at 600 mg); hydrocodone increases gabapentin AUC ~14%.\n- **Class effect:** FDA has warned of serious, sometimes fatal respiratory depression when gabapentinoids are combined with opioids or other CNS depressants. Highest risk: elderly patients, renal impairment, underlying respiratory disease (COPD, OSA), and those on multiple sedatives. Start low, go slow, and counsel patients/caregivers about sedation and breathing changes; consider naloxone co-prescribing when opioids are involved.\n\n**2. Other CNS depressants**\nBenzodiazepines, \"Z-drugs\" (zolpidem, eszopiclone), barbiturates, sedating antihistamines, muscle relaxants (baclofen, tizanidine, cyclobenzaprine), antipsychotics, tricyclics, and alcohol all produce additive somnolence, dizziness, ataxia, cognitive impairment, and fall risk. Advise caution with driving/operating machinery until effects are known.\n\n**3. Antacids (aluminum/magnesium-containing, e.g., Maalox)**\nReduce gabapentin bioavailability by ~20% (up to ~24%). **Administer gabapentin at least 2 hours after the antacid.** Calcium carbonate and PPIs/H2 blockers do not have this effect (though cimetidine causes a small, clinically insignificant reduction in gabapentin renal clearance).\n\n**4. Drugs affecting renal function**\nBecause gabapentin is cleared unchanged by the kidneys, anything that lowers GFR (NSAIDs, ACE inhibitors/ARBs, diuretics, contrast, nephrotoxins) can raise gabapentin levels and precipitate toxicity (sedation, myoclonus, ataxia, confusion). Recheck renal function and re-dose per the CrCl table in Section 2.3 when renal status changes.\n\n**5. Interactions that are NOT clinically significant**\n- Other antiepileptics: phenytoin, carbamazepine, valproic acid, phenobarbital — no meaningful pharmacokinetic interaction in either direction.\n- Oral contraceptives (norethindrone/ethinyl estradiol): norethindrone Cmax rose ~13%; no contraceptive failure expected.\n- Naproxen: increases gabapentin absorption ~12–15%; not clinically relevant.\n- Probenecid: no effect on renal excretion of gabapentin.\n\n**6. Drug–laboratory test interference**\nFalse-positive urine protein readings have occurred with the Ames N-Multistix SG dipstick when gabapentin is combined with other antiepileptics. Use the sulfosalicylic acid precipitation method to confirm proteinuria.\n\n**Practical prescribing points**\n- In opioid-treated or elderly patients, consider starting below the usual 300 mg schedule (e.g., 100 mg at bedtime) and titrating more slowly than the Day 1–3 schedule in Section 2.1.\n- Watch for the label's other class warnings that pair with these interactions: suicidal behavior/ideation risk with all antiepileptics, DRESS/multiorgan hypersensitivity, anaphylaxis/angioedema, and withdrawal-precipitated seizures.\n- Never stop gabapentin abruptly — taper over a minimum of 1 week (Section 2.5), longer if the patient has epilepsy or has been on high doses.\n- Gabapentin has recognized misuse potential, particularly in patients with opioid or alcohol use disorder; screen accordingly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1995,
+  "usage": {
+    "input_tokens": 1958,
+    "output_tokens": 17
+  }
+}

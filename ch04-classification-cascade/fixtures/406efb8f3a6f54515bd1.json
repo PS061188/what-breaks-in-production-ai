@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nRecovery time for normal HPA activity is variable depending upon the dose and duration of treatment. During this time the patient is vulnerable to any stressful situation. Although it has been shown that there is considerably less adrenal suppression following a single morning dose of prednisolone (10 mg) as opposed to a quarter of that dose administered every 6 hours, there is evidence that some suppressive effect on adrenal activity may be carried over into the following day when pharmacologic doses are used. Further, it has been shown that a single dose of certain corticosteroids will produce adrenocortical suppression for two or more days. Other corticoids, including methylprednisolone, hydrocortisone, prednisone, and prednisolone, are considered to be short acting (producing adrenocortical suppression for 1¼ to 1½ days following a single dose) and thus are recommended for alternate day therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"dosage_and_administration\"}",
+  "elapsed_ms": 882,
+  "usage": {
+    "input_tokens": 665,
+    "output_tokens": 14
+  }
+}

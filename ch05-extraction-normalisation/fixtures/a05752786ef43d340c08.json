@@ -1,0 +1,50 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\nDOSAGE AND ADMINISTRATION The initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated. In situations of less severity lower doses will generally suffice while in selected patients higher initial doses may be required. The initial dosage should be maintained or adjusted until a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, prednisone should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT . After a favorable response is noted, the proper maintenance dosage should be determined by decreasing the initial drug dosage in small decrements at appropriate time intervals until the lowest dosage which will maintain an adequate clinical response is reached. It should be kept in mind that constant monitoring is needed in regard to drug dosage. Included in the situations which may make dosage adjustments necessary are changes in clinical status secondary to remissions or exacerbations in the disease process, the patient’s individual drug responsiveness, and the effect of patient exposure to stressful situations not directly related to the disease entity under treatment; in this latter situation it may be necessary to increase the dosage of prednisone for a period of time consistent with the patient’s condition. If after long-term therapy the drug is to be stopped, it is recommended that it be withdrawn gradually rather than abruptly. Multiple Sclerosis In the treatment of acute exacerbations of multiple sclerosis daily doses of 200 mg of prednisolone for a week followed by 80 mg every other day for 1 month have been shown to be effective. (Dosage range is the same for prednisone and prednisolone.) ADT ® (Alternate Day Therapy) ADT is a corticosteroid dosing regimen in which twice the usual daily dose of corticoid is administered every other morning. The purpose of this mode of therapy is to provide the patient requiring long-term pharmacologic dose treatment with the beneficial effects of corticoids while minimizing certain undesirable effects, including pituitary-adrenal suppression, the Cushingoid state, corticoid withdrawal symptoms, and growth suppression in children. The rationale for this treatment schedule is based on two major premises: (a) the anti-inflammatory or therapeutic effect of corticoids persists longer than their physical presence and metabolic effects and (b) administration of the corticosteroid every other morning allows for re-establishment of more nearly normal hypothalamic-pituitary-adrenal (HPA) activity on the off-steroid day. A brief review of the HPA physiology may be helpful in understanding this rationale. Acting primarily through the hypothalamus a fall in free cortisol stimulates the pituitary gland to produce increasing amounts of corticotropin (ACTH) while a rise in free cortisol inhibits ACTH secretion. Normally the HPA system is characterized by diurnal (circadian) rhythm. Serum levels of ACTH rise from a low point about 10 pm to a peak level about 6 am. Increasing levels of ACTH stimulate adrenocortical activity resulting in a rise in plasma cortisol with maximal levels occurring between 2 am and 8 am. This rise in cortisol dampens ACTH production and in turn adrenocortical act\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\": [{\"field\": \"starting_dose\", \"value\": \"5 mg to 60 mg of prednisone per day\", \"qualifiers\": [\"initial\", \"depending on the specific disease entity being treated\", \"variable\", \"individualized\"], \"source_quote\": \"The initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated\"}, {\"field\": \"maximum_dose\", \"value\": \"not specified\", \"qualifiers\": [], \"source_quote\": \"\"}, {\"field\": \"frequency\", \"value\": \"per day\", \"qualifiers\": [\"initial\"], \"source_quote\": \"The initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day\"}, {\"field\": \"dose_adjustment\", \"value\": \"maintained or adjusted until a satisfactory response is noted\", \"qualifiers\": [\"initial dosage\", \"decreasing the initial drug dosage in small decrements at appropriate time intervals\", \"lowest dosage which will maintain an adequate clinical response\"], \"source_quote\": \"The initial dosage should be maintained or adjusted until a satisfactory response is noted. After a favorable response is noted, the proper maintenance dosage should be determined by decreasing the initial drug dosage in small decrements at appropriate time intervals until the lowest dosage which will maintain an adequate clinical response is reached\"}]}",
+  "elapsed_ms": 3994,
+  "usage": {
+    "input_tokens": 1386,
+    "output_tokens": 317
+  }
+}

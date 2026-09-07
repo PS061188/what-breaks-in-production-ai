@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Levothyroxine Sodium indicated to treat?\n\nRESPONSE:\n**FDA-approved indications for levothyroxine sodium tablets (L-thyroxine, T4):**\n\n**1. Hypothyroidism** — as replacement therapy in adult and pediatric patients, including neonates, for:\n- Primary (thyroidal) hypothyroidism\n- Secondary (pituitary) hypothyroidism\n- Tertiary (hypothalamic) hypothyroidism\n- Both congenital and acquired forms\n\n**2. Pituitary TSH (thyrotropin) suppression** — in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer (papillary/follicular). The degree of suppression targeted is individualized to tumor stage and clinical/recurrence-risk status.\n\n**Explicit Limitations of Use (not indicated for):**\n- Suppression of benign thyroid nodules or nontoxic diffuse goiter in iodine-sufficient patients — no demonstrated clinical benefit, and overtreatment risks iatrogenic hyperthyroidism (with associated atrial fibrillation and bone loss, particularly in older adults and postmenopausal women).\n- Treatment of hypothyroidism during the recovery phase of subacute thyroiditis (this phase is typically transient and self-resolving).\n\n**Additional context from standard practice (not label indications):**\n- Levothyroxine is also commonly used off-label/by guideline for myxedema coma (though IV levothyroxine, not tablets, is used in that setting) and for subclinical hypothyroidism in selected patients (e.g., TSH >10 mIU/L, positive TPO antibodies, symptomatic patients, pregnancy or preconception planning).\n- Levothyroxine should **not** be used for the treatment of obesity or weight loss. In euthyroid patients, doses within the normal replacement range are ineffective for weight reduction; larger doses may produce serious or life-threatening toxicity, particularly with sympathomimetic amines. This carries a boxed warning.\n\n**Key practice points:** Take once daily on an empty stomach, 30–60 minutes before breakfast with a full glass of water; separate by ≥4 hours from calcium, iron, antacids, bile-acid sequestrants, and proton-pump inhibitors/other absorption-interfering agents. Full replacement is ~1.6 mcg/kg/day, with lower starting doses in the elderly and in patients with cardiac disease or atrial fibrillation risk. Recheck TSH 6–8 weeks after any dose change (every 4 weeks in pregnancy, every 2 weeks in pediatrics); peak effect of a given dose may take 4–6 weeks. Hold biotin supplements ≥2 days before thyroid function testing to avoid assay interference.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1935,
+  "usage": {
+    "input_tokens": 1337,
+    "output_tokens": 17
+  }
+}

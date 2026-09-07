@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Gabapentin?\n\nRESPONSE:\nIt depends on why gabapentin is being used:\n\n**1. Postherpetic neuralgia (adults):** A 3‑day titration —\n- Day 1: a single 300 mg dose\n- Day 2: 600 mg/day (300 mg twice daily)\n- Day 3: 900 mg/day (300 mg three times daily)\nThe dose may then be titrated up as needed for pain relief to 1800 mg/day (600 mg three times daily). Doses above 1800 mg/day did not show additional benefit in clinical studies.\n\n**2. Epilepsy with partial onset seizures:**\n- Patients 12 years and older: start at 300 mg three times a day (900 mg/day); usual maintenance is 300–600 mg three times a day.\n- Pediatric patients 3 to 11 years: start at 10–15 mg/kg/day given in three divided doses, titrating upward over about 3 days to the maintenance dose (40 mg/kg/day for ages 3–4; 25–35 mg/kg/day for ages 5–11).\n\n**Important cautions:** The maximum interval between doses should not exceed 12 hours. Doses must be reduced in patients with renal impairment (creatinine clearance <60 mL/min) and in patients on hemodialysis, and care is needed in elderly patients since they often have reduced renal function. Capsules are swallowed whole with water and may be taken with or without food, and gabapentin should not be stopped abruptly — taper over at least 1 week.\n\nThis is general information from the label; your prescriber determines the right dose for you.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1889,
+  "usage": {
+    "input_tokens": 888,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nHypothyroidism Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Limitations of Use Levothyroxine sodium tablets are not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients as there are no clinical benefits and overtreatment with levothyroxine sodium may induce hyperthyroidism [see Warnings and Precautions (5.1) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features: (1) States that levothyroxine sodium tablets are 'indicated in adult and pediatric patients' for two specific conditions; (2) Uses language characteristic of approved uses ('replacement therapy in...hypothyroidism' and 'adjunct to surgery and radioiodine therapy'); (3) Explicitly defines limitations of use with negative indications. Step 2 - Most plausible categories: (a) indications_and_usage - the passage directly states what conditions the drug is indicated to treat, including hypothyroidism and TSH suppression in thyroid cancer; (b) dosage_and_administration - less likely, as there are no dosing schedules, amounts, frequencies, or routes of administration mentioned. Step 3 - Classification decision: 'indications_and_usage' clearly wins. The entire passage is structured around defining approved uses ('indicated in...'), patient populations, clinical purposes, and explicit limitations on use. This is definitional language for the indications section of a label. Step 4 - Confidence: HIGH (>90%). The passage uses standard label language for indications, explicitly states 'indicated,' describes clinical purposes, and includes limitations of use - all hallmarks of the indications_and_usage section.\",\"classification\":\"indications_and_usage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"dosage_and_administration\",\"requires_human_review\":false}",
+  "elapsed_ms": 4719,
+  "usage": {
+    "input_tokens": 1080,
+    "output_tokens": 316
+  }
+}

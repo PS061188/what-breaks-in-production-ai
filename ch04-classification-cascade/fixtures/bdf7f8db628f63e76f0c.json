@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe signs and symptoms of overdosage are those of hyperthyroidism [see Warnings and Precautions (5) and Adverse Reactions (6) ] . In addition, confusion and disorientation may occur. Cerebral embolism, shock, coma, and death have been reported. Seizures occurred in a 3-year-old child ingesting 3.6 mg of levothyroxine. Symptoms may not necessarily be evident or may not appear until several days after ingestion of levothyroxine sodium. Reduce the levothyroxine sodium dosage or discontinue temporarily if signs or symptoms of overdosage occur. Initiate appropriate supportive treatment as dictated by the patient’s medical status. For current information on the management of poisoning or overdosage, contact the National Poison Control Center at 1-800-222-1222 or www.poison.org.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Explicit discussion of 'signs and symptoms of overdosage' and hyperthyroidism manifestations; (b) Specific case examples (cerebral embolism, shock, coma, death, seizures in 3-year-old); (c) Management guidance ('Reduce dosage or discontinue', 'supportive treatment', Poison Control reference). Step 2 - Most plausible categories: (1) 'overdosage' - the passage directly addresses overdose signs, symptoms, and management; (2) 'adverse_reactions' - hyperthyroidism symptoms could be framed as adverse effects. Step 3 - Classification winner: 'overdosage' clearly wins because the passage explicitly frames content within an overdosage context ('signs and symptoms of overdosage'), discusses dose reduction/discontinuation as overdose management, and provides poison control contact information - all hallmarks of overdosage sections. Adverse reactions would typically describe side effects at therapeutic doses, whereas this focuses on excess ingestion and toxicity management. Step 4 - Confidence: HIGH (>90%) - the language is unambiguous and follows standard overdosage section structure in pharmaceutical labeling.\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4596,
+  "usage": {
+    "input_tokens": 1057,
+    "output_tokens": 310
+  }
+}

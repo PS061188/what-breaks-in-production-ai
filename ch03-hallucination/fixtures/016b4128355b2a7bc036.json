@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nThe recommended starting dose of Levothyroxine Sodium varies by patient population:\n\n**Adults with Primary, Secondary, or Tertiary Hypothyroidism:**\n- Standard starting dose: 1.6 mcg/kg/day (full replacement dose)\n- Some patients require a lower starting dose\n- Titrate by 12.5 to 25 mcg increments every 4-6 weeks as needed\n\n**Adults at Risk for Atrial Fibrillation or with Underlying Cardiac Disease:**\n- Lower starting dose (less than 1.6 mcg/kg/day)\n- Titrate every 6-8 weeks more slowly to avoid cardiac complications\n\n**Geriatric Patients:**\n- Lower starting dose (less than 1.6 mcg/kg/day)\n\n**Pediatric Patients:**\n- Dosing is weight-based and age-dependent, ranging from 10-15 mcg/kg/day (0-3 months) down to 1.6 mcg/kg/day (after growth and puberty complete)\n- Titrate every 2 weeks based on clinical response\n\n**Pregnant Patients with New-Onset Hypothyroidism:**\n- TSH ≥10 mIU/L: 1.6 mcg/kg/day\n- TSH <10 mIU/L: 1.0 mcg/kg/day\n\nNote: Peak therapeutic effect may not be attained for 4-6 weeks. Dosing must be individualized based on age, body weight, cardiovascular status, concomitant medications, and other clinical factors.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1414,
+  "usage": {
+    "input_tokens": 900,
+    "output_tokens": 17
+  }
+}

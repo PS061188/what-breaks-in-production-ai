@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\n( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm) Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation repeated every 4 to 6 hours; in some patients, 1 inhalation every 4 hours may be sufficient. More frequent administration or a greater number of inhalations is not recommended. 2.2 Recommended Dosage for Prevention of Exercise-Induced Bronchospasm Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. 2.3 Administration Information Albuterol Sulfate HFA should be administered by the orally inhaled route only.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features: (1) The passage contains specific dosing instructions including frequency ('every 4 to 6 hours'), quantity ('2 inhalations'), and route ('by oral inhalation'). (2) It specifies age groups eligible for treatment ('adult and pediatric patients aged 4 years and older'). (3) It includes administration method details ('orally inhaled route only') and cleaning/maintenance instructions for the device.\\n\\nStep 2 - Most Plausible Categories: (a) DOSAGE_AND_ADMINISTRATION - The passage explicitly covers recommended dosages, frequency of administration, timing relative to activity (15-30 min before exercise), and route of administration. This is the primary focus. (b) INDICATIONS_AND_USAGE - The passage mentions indications ('Bronchospasm (Acute Episodes)', 'Prevention of Exercise-Induced Bronchospasm') but these are secondary to the detailed dosing information.\\n\\nStep 3 - Classification Decision: DOSAGE_AND_ADMINISTRATION wins decisively. The passage's main content is structured around section 2.1, 2.2, and 2.3 which are explicitly about recommended dosages, dosing frequencies, timing, patient populations (by age), and route of administration. While indications are mentioned as headers/context, the substance of the text is instruction on how to administer the drug. The cleaning instructions and device maintenance also fall under administration guidance.\\n\\nStep 4 - Confidence: HIGH (>90%). The structure and content clearly align with dosage and administration guidance. The passage contains no information typically found in other categories (chemical composition, side effects, drug interactions, contraindications, etc.). The classification is straightforward and unambiguous.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 5098,
+  "usage": {
+    "input_tokens": 1081,
+    "output_tokens": 438
+  }
+}

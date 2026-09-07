@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\nAccording to the label, the initial dosage of prednisone may vary from 5 mg to 60 mg per day depending on the specific disease entity being treated. For less severe conditions, lower doses will generally suffice, while selected patients with more severe disease may require higher initial doses. The initial dosage should be maintained or adjusted until a satisfactory response is noted. It is emphasized that dosage requirements are variable and must be individualized based on the disease being treated and the patient's response. The exception is for acute exacerbations of multiple sclerosis, which has a specific regimen: 200 mg daily for a week followed by 80 mg every other day for 1 month.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1570,
+  "usage": {
+    "input_tokens": 588,
+    "output_tokens": 17
+  }
+}

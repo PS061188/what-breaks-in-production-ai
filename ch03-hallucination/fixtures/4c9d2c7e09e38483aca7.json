@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Lisinopril indicated to treat?\n\nRESPONSE:\n**Per the label excerpt you provided (lisinopril/hydrochlorothiazide fixed-dose combination):**\n\nThe only approved indication is **hypertension — to lower blood pressure** and thereby reduce the risk of fatal and non-fatal cardiovascular events (primarily stroke and myocardial infarction).\n\nImportant caveats specific to the combination product:\n- **Not indicated for initial therapy.** Combination therapy should generally follow failure to reach goal on monotherapy (lisinopril 10–80 mg/day or HCTZ 12.5–50 mg/day). It may also be used as replacement therapy substituting for the individually titrated components.\n- A useful niche: patients controlled on HCTZ 25 mg who develop significant hypokalemia may be switched to lisinopril/HCTZ 10/12.5 mg for similar or better BP control with less potassium loss.\n- **Renal impairment:** no dose adjustment needed if CrCl >30 mL/min/1.73 m² (serum creatinine ≤ ~3 mg/dL). Below that, loop diuretics are preferred over thiazides and this combination is not recommended.\n- Do not exceed lisinopril 80 mg / HCTZ 50 mg daily; wait 2–3 weeks before increasing the HCTZ component.\n- Black patients have a higher reported incidence of ACE-inhibitor–associated angioedema and generally a smaller BP response to ACE inhibitors as monotherapy.\n\n**Lisinopril as a single agent (standard labeling, beyond this excerpt) is approved for three indications:**\n1. **Hypertension** — in adults and children ≥6 years, alone or with other antihypertensives.\n2. **Heart failure (reduced ejection fraction)** — as adjunctive therapy with diuretics and (usually) digitalis/beta-blockers, to improve symptoms and survival.\n3. **Acute myocardial infarction** — in hemodynamically stable patients within 24 hours of onset, to improve survival; continued for 6 weeks. Avoid if SBP <100 mmHg or in cardiogenic shock.\n\nLisinopril is also widely used off-label (and supported by guidelines) for **diabetic and non-diabetic proteinuric chronic kidney disease** and for **post-MI/CKD cardiovascular risk reduction**, though the FDA-approved renal-protection indication in this class belongs to captopril.\n\n**Key contraindications/monitoring reminders:** contraindicated in pregnancy (discontinue immediately if pregnancy is detected — fetal toxicity), in patients with a history of ACE-inhibitor–associated angioedema or hereditary/idiopathic angioedema, with aliskiren in diabetics, and within 36 hours of sacubitril/valsartan. Check baseline and follow-up serum creatinine and potassium (1–2 weeks after initiation/dose change), monitor for hyperkalemia (especially with K+ supplements, K+-sparing diuretics, NSAIDs), volume depletion/first-dose hypotension, and hyponatremia, hypokalemia, hyperuricemia/gout, hypercalcemia, and dysglycemia from the thiazide component. Avoid the combination in patients with sulfonamide allergy caution and in anuria.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3927,
+  "usage": {
+    "input_tokens": 1485,
+    "output_tokens": 17
+  }
+}

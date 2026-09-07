@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Sertraline Hydrochloride indicated to treat?\n\nRESPONSE:\n**FDA-approved indications for sertraline hydrochloride (oral)**\n\n1. **Major Depressive Disorder (MDD) – adults.** Efficacy shown in 6–8 week controlled outpatient trials; maintenance efficacy demonstrated for up to 44 weeks after 8 weeks of acute treatment (52 weeks total). Antidepressant effect in *hospitalized* depressed patients has not been adequately studied.\n2. **Obsessive-Compulsive Disorder (OCD) – adults AND pediatric patients ages 6–17.** This is the only pediatric indication. Efficacy established in 12-week trials; maintenance benefit shown over 28 weeks of relapse-prevention follow-up after a 52-week treatment phase.\n3. **Panic Disorder – adults**, with or without agoraphobia. Established in three 10–12 week trials; maintenance benefit over up to 28 weeks.\n4. **Posttraumatic Stress Disorder (PTSD) – adults.** Two 12-week placebo-controlled trials; maintenance up to 28 weeks after 24 weeks of open-label treatment.\n5. **Premenstrual Dysphoric Disorder (PMDD) – adults.** Two placebo-controlled trials over 3 menstrual cycles. Rule out other cyclical mood disorders (e.g., bipolar spectrum) that could be worsened by an antidepressant. Use beyond 3 cycles has not been systematically studied.\n6. **Social Anxiety Disorder (social phobia) – adults.** Two placebo-controlled trials; maintenance up to 24 weeks after 20 weeks of treatment.\n\n**Practical dosing anchors**\n- Adults, all indications except PMDD: start 50 mg once daily; titrate in 50 mg steps no more often than weekly (24-hour half-life), max 200 mg/day. Panic disorder, PTSD, and social anxiety are often started at 25 mg/day in practice to limit early activation/jitteriness, then increased to 50 mg after a week.\n- PMDD: 50 mg/day either continuously or luteal-phase only; max 150 mg/day continuous or 100 mg/day luteal. With luteal dosing at 100 mg, use a 3-day 50 mg titration step at the start of each luteal phase.\n- Pediatric OCD: 25 mg once daily (ages 6–12) or 50 mg once daily (ages 13–17), max 200 mg/day; advance cautiously in smaller children given lower body weight.\n- Hepatic impairment: use a lower or less frequent dose; not studied in moderate/severe impairment. No adjustment required for renal impairment.\n\n**Key safety points to keep in mind**\n- Contraindicated with MAOIs; allow 14 days between an MAOI and sertraline in either direction. Do not start in patients on linezolid or IV methylene blue (serotonin syndrome risk).\n- Boxed warning: increased risk of suicidal thoughts/behaviors in children, adolescents, and young adults; monitor closely, especially early in therapy and after dose changes.\n- Third-trimester exposure has been associated with neonatal complications; weigh risks and benefits.\n- Taper rather than stop abruptly to avoid discontinuation symptoms; if intolerable, resume the prior dose and taper more slowly.\n- Off-label/common additional uses in practice include generalized anxiety disorder and premature ejaculation, though these are not in the labeled indications.\n\nPeriodically reassess the need for continued therapy in all long-term users.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1719,
+  "usage": {
+    "input_tokens": 1582,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Lisinopril safe to use during pregnancy?\n\nRESPONSE:\nNo — lisinopril/hydrochlorothiazide should not be used during pregnancy. Products containing an ACE inhibitor such as lisinopril carry a boxed warning about fetal toxicity: when pregnancy is detected, the drug should be discontinued as soon as possible. Drugs that act directly on the renin-angiotensin system can cause injury and even death to the developing fetus, particularly when used in the second and third trimesters — reported effects include reduced fetal renal function leading to oligohydramnios, fetal lung hypoplasia, skeletal deformations, hypotension, anuria/renal failure, and death in the newborn. The hydrochlorothiazide component also crosses the placenta and has been associated with fetal or neonatal jaundice, thrombocytopenia, and electrolyte disturbances, and thiazides are generally not recommended for treating hypertension in pregnancy.\n\nPlease note: the label excerpt provided here contains only the Indications and Usage and Dosage and Administration sections, so the specific pregnancy language is not shown in it — the above reflects the standard boxed warning and Use in Specific Populations information for this drug class. Women who are pregnant, become pregnant, or are planning pregnancy should contact their prescriber promptly so that an alternative antihypertensive appropriate for pregnancy can be started; do not stop or change blood pressure medication on your own.\n\nThis information is educational and is not a substitute for advice from your healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1660,
+  "usage": {
+    "input_tokens": 862,
+    "output_tokens": 17
+  }
+}

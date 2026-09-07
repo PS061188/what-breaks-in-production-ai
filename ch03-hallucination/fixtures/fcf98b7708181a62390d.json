@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Metformin Hydrochloride safe to use during pregnancy?\n\nRESPONSE:\n**Short answer:** Metformin is not contraindicated in pregnancy, and available human data have not shown an increased risk of major birth defects or miscarriage. However, insulin remains the preferred agent for glycemic control in pregnancy per ACOG/ADA, because it does not cross the placenta and has the most robust long-term safety data.\n\n**What the label says (and doesn't say):** The excerpt you provided covers only Indications and Dosage/Administration, so it contains no pregnancy-specific language. Current metformin labeling (PLLR format, Section 8.1) states that limited data from published studies and postmarketing reports have not identified a drug-associated risk of major birth defects, miscarriage, or adverse maternal/fetal outcomes with metformin use in pregnancy, but that poorly controlled diabetes in pregnancy itself carries substantial maternal and fetal risk (major birth defects ~6–10% with periconceptional HbA1c >7%, rising to 20–25% with HbA1c >10%; also stillbirth, macrosomia, preeclampsia, neonatal hypoglycemia, hyperbilirubinemia). The old \"Pregnancy Category B\" designation has been retired.\n\n**Practical clinical guidance:**\n\n- **Pre-existing type 2 diabetes:** Most guidelines recommend transitioning to insulin before conception or as soon as pregnancy is confirmed, since insulin achieves tighter, more titratable control and metformin monotherapy frequently fails to maintain targets as insulin resistance rises in the second and third trimesters. Some clinicians continue metformin as an adjunct to insulin to limit total insulin requirement and maternal weight gain — this is a reasonable shared-decision option.\n- **Gestational diabetes:** Insulin is first-line. Metformin is a commonly used alternative when insulin is declined or not feasible; counsel that metformin crosses the placenta (fetal levels approach maternal levels) and that long-term offspring outcome data are reassuring through mid-childhood but incomplete. Some studies suggest slightly higher childhood BMI in metformin-exposed offspring. Roughly 25–50% of GDM patients on metformin will eventually need supplemental insulin.\n- **PCOS/infertility:** Metformin is often used to restore ovulation; it is generally discontinued once pregnancy is confirmed unless there is a diabetes indication, as it does not reduce miscarriage rates.\n- **Pharmacokinetics:** Renal clearance increases substantially in pregnancy, so metformin levels fall — higher or more frequent dosing may be needed in the second/third trimesters. Standard maximum of 2550 mg/day (divided, with meals) still applies.\n- **Renal function:** The eGFR rules in the label still govern — avoid if eGFR <30 mL/min/1.73 m², don't initiate at eGFR 30–45. Check renal function at baseline and periodically; pregnancy-related complications (preeclampsia, hyperemesis with volume depletion) can precipitate AKI and lactic acidosis risk.\n- **Peripartum:** Hold metformin if the patient becomes NPO, has significant vomiting, becomes hypotensive/septic, or is scheduled for iodinated contrast imaging per Section 2.4. Restart when hemodynamically stable, eating, and renal function confirmed stable.\n\n**Lactation:** Metformin is excreted into breast milk in small amounts (relative infant dose ~0.3–0.7%); no adverse effects have been reported in breastfed infants, and it is generally considered compatible with breastfeeding. Monitor the infant for hypoglycemia, though this is rarely reported.\n\n**Bottom line for the prescriber:** Don't stop metformin abruptly and leave a pregnant patient hyperglycemic — untreated hyperglycemia is the greater risk. Coordinate with maternal-fetal medicine, target fasting <95 mg/dL and 1-hour postprandial <140 mg/dL, and add or switch to insulin when those targets aren't met.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1639,
+  "usage": {
+    "input_tokens": 1748,
+    "output_tokens": 17
+  }
+}

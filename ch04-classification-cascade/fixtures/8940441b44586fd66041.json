@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe safety and effectiveness of atorvastatin calcium as an adjunct to diet to reduce LDL-C have been established pediatric patients 10 years of age and older with HeFH. Use of atorvastatin calcium for this indication is based on a double-blind, placebo-controlled clinical trial in 187 pediatric patients 10 years of age and older with HeFH. In this limited controlled trial, there was no significant effect on growth or sexual maturation in the boys or girls, or on menstrual cycle length in girls. The safety and effectiveness of atorvastatin calcium as an adjunct to other LDL-C-lowering therapies to reduce LDL-C have been established pediatric patients 10 years of age and older with HoFH. Use of atorvastatin calcium for this indication is based on a trial without a concurrent control group in 8 pediatric patients 10 years of age and older with HoFH [see Clinical Studies (14) ].\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Atorvastatin calcium is established for use in pediatric patients 10 years of age and older with HeFH (heterozygous familial hypercholesterolemia) as an adjunct to diet to reduce LDL-C, based on a double-blind, placebo-controlled trial in 187 pediatric patients. It is also established for use in pediatric patients 10 years of age and older with HoFH (homozygous familial hypercholesterolemia) as an adjunct to other LDL-C-lowering therapies, based on an uncontrolled trial in 8 pediatric patients. In the controlled trial, there was no significant effect on growth, sexual maturation in boys or girls, or menstrual cycle length in girls.\"}",
+  "elapsed_ms": 1943,
+  "usage": {
+    "input_tokens": 493,
+    "output_tokens": 183
+  }
+}

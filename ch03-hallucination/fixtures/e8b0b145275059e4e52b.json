@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Furosemide?\n\nRESPONSE:\nIt depends on what the furosemide is being used for and the patient's age.\n\n**For edema** (from heart failure, liver cirrhosis, or kidney disease including nephrotic syndrome):\n- **Adults:** The usual starting dose is **20 to 80 mg as a single dose**. If needed, the same dose may be repeated 6–8 hours later, or the dose can be increased by 20–40 mg increments (no sooner than 6–8 hours after the previous dose) until the desired diuretic effect is achieved. The individualized single dose is then given once or twice daily (e.g., 8 am and 2 pm). In clinically severe edematous states, the dose may be carefully titrated up to 600 mg/day. Doses above 80 mg/day given for prolonged periods require careful clinical observation and lab monitoring.\n- **Pediatric patients:** The usual initial oral dose is **2 mg/kg as a single dose**, which may be increased by 1–2 mg/kg no sooner than 6–8 hours after the prior dose if response is inadequate. Doses greater than 6 mg/kg are not recommended; maintenance dosing should be the minimum effective level.\n\n**For hypertension (adults only):** The usual initial dose is **80 mg per day, usually divided as 40 mg twice daily**, then adjusted according to response. If other antihypertensive drugs are already being taken, their dose should be reduced by at least 50% when furosemide is added, to prevent an excessive drop in blood pressure.\n\n**Elderly patients:** Dose selection should be cautious, generally starting at the low end of the dosing range.\n\nTherapy should always be individualized to the lowest dose that maintains the desired response, and dosing should be directed by the prescribing clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2521,
+  "usage": {
+    "input_tokens": 952,
+    "output_tokens": 17
+  }
+}

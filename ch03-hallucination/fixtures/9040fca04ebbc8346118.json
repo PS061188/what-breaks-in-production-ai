@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nI'm sorry — the label excerpt I've been given for prednisone tablets only contains the INDICATIONS and DOSAGE AND ADMINISTRATION sections. It does not include a Drug Interactions section, so I can't cite specific interaction information from this document.\n\nWhat the excerpt does mention indirectly is that prednisone is sometimes given together with other therapy (for example, with mineralocorticoids in adrenocortical insufficiency, and concurrently with appropriate antituberculous chemotherapy in fulminating/disseminated pulmonary tuberculosis and tuberculous meningitis) — but these are co-administration recommendations, not interaction warnings.\n\nTo get accurate interaction information you should consult the full prescribing information for the specific prednisone product (the PRECAUTIONS/Drug Interactions section), or ask a pharmacist or prescriber, ideally with your complete list of medications, supplements, and vaccines. Corticosteroid labels generally do address interactions involving drugs that affect steroid metabolism, anticoagulants, anticonvulsants, antidiabetic agents, NSAIDs, potassium-depleting agents, and live vaccines, among others — but you should verify the specifics against the full label rather than rely on this summary.\n\nIf you can share the complete label or tell me the specific drug you're concerned about, I can help you look at what the full prescribing information says.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 2620,
+  "usage": {
+    "input_tokens": 831,
+    "output_tokens": 16
+  }
+}

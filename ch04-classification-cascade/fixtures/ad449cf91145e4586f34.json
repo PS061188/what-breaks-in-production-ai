@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAcute liver failure or decompensated cirrhosis [see Warnings and Precautions (5.3) ] Hypersensitivity to atorvastatin or any excipients in atorvastatin calcium. Hypersensitivity reactions, including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis, have been reported [see Adverse Reactions (6.2) ]. Acute liver failure or decompensated cirrhosis ( 4 ). Hypersensitivity to atorvastatin or any excipient in atorvastatin calcium ( 4 ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features: (1) The passage lists specific conditions under which the drug should NOT be used (acute liver failure, decompensated cirrhosis); (2) It explicitly states hypersensitivity contraindications with reference to section 4; (3) It enumerates specific hypersensitivity reaction types (anaphylaxis, angioneurotic edema, Stevens-Johnson syndrome, etc.) with cross-reference to Adverse Reactions section. Step 2 - Most Plausible Categories: The two strongest candidates are (a) 'contraindications' - the passage uses absolute language ('must not be used') and lists conditions under which the drug is contraindicated, and (b) 'adverse_reactions' - the passage does enumerate hypersensitivity reactions including anaphylaxis and Stevens-Johnson syndrome. Step 3 - Classification Decision: 'Contraindications' wins decisively. The passage is structured as a contraindications list (prefaced with conditions where use is prohibited and hypersensitivities that must be avoided). While hypersensitivity reactions are mentioned, they are cited as evidence FOR why hypersensitivity is a contraindication, not as a catalog of adverse reactions. The cross-references to section 4 (standard contraindications section) and the language 'must not be used' confirm this is contraindications material. Step 4 - Confidence: HIGH (>90%). The passage clearly lists absolute contraindications with standard regulatory language and structure typical of contraindications sections in prescribing information.\", \"classification\": \"contraindications\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5422,
+  "usage": {
+    "input_tokens": 1012,
+    "output_tokens": 385
+  }
+}

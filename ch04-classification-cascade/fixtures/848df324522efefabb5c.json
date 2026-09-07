@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nLisinopril and hydrochlorothiazide tablets have been evaluated for safety in 930 patients, including 100 patients treated for 50 weeks or more. In clinical trials with lisinopril and hydrochlorothiazide tablets no adverse experiences peculiar to this combination drug have been observed. Adverse experiences that have occurred have been limited to those that have been previously reported with lisinopril or hydrochlorothiazide. The most frequent clinical adverse experiences in controlled trials (including open label extensions) with any combination of lisinopril and hydrochlorothiazide tablets were: dizziness (7.5%), headache (5.2%), cough (3.9%), fatigue (3.7%) and orthostatic effects (3.2%) all of which were more common than in placebo-treated patients.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"dizziness (7.5%), headache (5.2%), cough (3.9%), fatigue (3.7%), orthostatic effects (3.2%)\"}",
+  "elapsed_ms": 1224,
+  "usage": {
+    "input_tokens": 449,
+    "output_tokens": 46
+  }
+}

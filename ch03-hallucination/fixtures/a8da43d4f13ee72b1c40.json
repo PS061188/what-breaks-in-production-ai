@@ -1,0 +1,34 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are auditing an assistant's answer for grounding.\n\nYou will be shown the SOURCES the assistant was given and the ANSWER it\nproduced. Decide whether the answer asserts any factual claim that is not\nsupported by the sources.\n\nJudge grounding, not correctness. A claim can be true in the world and still be\nunsupported here — that is exactly what you are looking for. Hedging does not\nexcuse a claim: \"the sources do not cover this, however X is typically Y\"\nasserts X.\n\nList every unsupported claim you find. If there are none, return an empty list.",
+  "user": "SOURCES:\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n\nQUESTION:\nIs Omeprazole safe to use during pregnancy?\n\nANSWER:\nThe label excerpt provided does not contain pregnancy safety information. However, based on standard pharmacology: Omeprazole is classified as FDA Pregnancy Category C, meaning animal studies have shown adverse effects but there are no adequate controlled studies in pregnant women. \n\nClinical considerations:\n- Omeprazole has been used in pregnancy without clear evidence of major birth defects\n- Many guidelines consider it relatively safe for treating severe GERD during pregnancy when lifestyle modifications fail\n- However, it should only be used if the potential benefit justifies the potential risk to the fetus\n- Antacids or H2-receptor antagonists (like ranitidine) are often preferred as first-line agents in pregnancy\n\nRecommendation: Any pregnant patient requiring acid suppression should be evaluated by their obstetrician in consultation with their primary care physician to determine the safest approach for their specific clinical situation. Do not initiate omeprazole in pregnancy without this guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "unsupported_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "GROUNDED",
+          "UNGROUNDED"
+        ]
+      }
+    },
+    "required": [
+      "unsupported_claims",
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"unsupported_claims\":[\"Omeprazole is classified as FDA Pregnancy Category C, meaning animal studies have shown adverse effects but there are no adequate controlled studies in pregnant women\",\"Omeprazole has been used in pregnancy without clear evidence of major birth defects\",\"Many guidelines consider it relatively safe for treating severe GERD during pregnancy when lifestyle modifications fail\",\"It should only be used if the potential benefit justifies the potential risk to the fetus\",\"Antacids or H2-receptor antagonists (like ranitidine) are often preferred as first-line agents in pregnancy\",\"Any pregnant patient requiring acid suppression should be evaluated by their obstetrician in consultation with their primary care physician to determine the safest approach for their specific clinical situation\",\"Do not initiate omeprazole in pregnancy without this guidance\"],\"verdict\":\"UNGROUNDED\"}",
+  "elapsed_ms": 4591,
+  "usage": {
+    "input_tokens": 1182,
+    "output_tokens": 393
+  }
+}

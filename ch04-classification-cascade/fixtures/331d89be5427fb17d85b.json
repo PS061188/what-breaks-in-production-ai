@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAND ADMlNlSTRATION Postherpetic Neuralgia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilepsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"For Postherpetic Neuralgia: Titrate up to 1800 mg/day; Day 1: 300 mg once; Day 2: 300 mg twice daily; Day 3: 300 mg three times daily. For Epilepsy with Partial Onset Seizures: Patients ≥12 years: 300 mg three times daily, titrate up to 600 mg three times daily. Patients 3-11 years: 10-15 mg/kg/day in three divided doses; ages 3-4 years: 40 mg/kg/day in three divided doses; ages 5-11 years: 25-35 mg/kg/day in three divided doses. Route: Oral (implied).\"}",
+  "elapsed_ms": 2035,
+  "usage": {
+    "input_tokens": 527,
+    "output_tokens": 183
+  }
+}

@@ -1,0 +1,655 @@
+<!-- ============================ CHAPTER 10 ============================ -->
+<h2 class="part">Chapter 10 — Silent omissions</h2>
+<h3 class="top">The failure that did not happen</h3>
+
+<p class="lede">This chapter produced the most uncomfortable result in the
+report. The failure it describes did not occur once — and applying its
+recommended fixes made the output slightly worse.</p>
+
+<h4>What the failure looks like</h4>
+
+<p>An extraction returns three parties from a contract that named five. A summary
+covers four of seven obligations. Nothing is wrong with what came back. There is
+simply less of it than there should be, and <strong>a short list looks exactly
+like a complete one</strong>.</p>
+
+<p>The chapter is right that this is the quietest of the nine patterns. There is
+no wrong value to find and no fabricated claim to trace. Detecting it needs a
+different instrument: an independent count of what was in the document, made
+without asking the model.</p>
+
+<h3>Experiment 10.1 — Does the model drop items from a long list?</h3>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Documents</strong></td>
+      <td>The dosing section of 6 FDA labels — the ones with at least six distinct
+      dose figures. Up to <strong>11,700 characters</strong> each, cut at a
+      sentence boundary.</td></tr>
+  <tr><td><strong>Task</strong></td>
+      <td>"List every dose amount mentioned in the text."</td></tr>
+  <tr><td><strong>Independent count</strong></td>
+      <td>A pattern search for a number followed by a dose unit, run over the same
+      text. Between 6 and 13 distinct figures per document, 55 in total.</td></tr>
+</table>
+
+<p>The book's version of this check uses a named-entity model for the independent
+count. A pattern search stands in here because dose figures have a rigid shape
+and it keeps the repo free of a large download. The principle is identical and it
+is the principle that matters: <strong>the second count must not come from the
+thing being checked.</strong></p>
+
+<div class="plain">
+  <span class="label">The first attempt measured nothing, and that is worth recording</span>
+  <p>It used excerpts of about 2,600 characters and returned 100% of dose figures
+  from every document. That says more about the size of the excerpt than about
+  the model. <strong>Omission is a load failure; testing it on short text tests
+  nothing.</strong> Documents were extended to full realistic length before any
+  number here was taken.</p>
+</div>
+
+<h4>What actually came back</h4>
+
+<p>Gabapentin — the hardest document in the set, 8,962 characters, thirteen
+distinct dose figures scattered through titration schedules, paediatric weight
+bands and renal adjustment tables:</p>
+
+<pre>SOURCE contains 13 distinct dose figures
+
+MODEL returned:
+  300 mg · 600 mg · 900 mg · 1800 mg · 1800 mg/day · 3600 mg/day
+  300 mg three times daily · 600 mg three times daily
+  10 mg/kg/day · 15 mg/kg/day · 40 mg/kg/day
+  25 mg/kg/day · 35 mg/kg/day · 2400 mg/day · 3600 mg/day · 300 mg
+
+matched: 13    missed: none    invented: none</pre>
+
+<p>Every figure, including the per-kilogram paediatric rates and both ends of the
+titration range. Nothing dropped, nothing added.</p>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:34%">Document</th><th class="num">In source</th>
+      <th class="num">Returned</th><th class="num">Missed</th></tr>
+  <tr><td>Lisinopril</td><td class="num">8</td><td class="num">8</td><td class="num">0</td></tr>
+  <tr><td>Levothyroxine Sodium</td><td class="num">11</td><td class="num">11</td><td class="num">0</td></tr>
+  <tr><td>Amoxicillin</td><td class="num">10</td><td class="num">10</td><td class="num">0</td></tr>
+  <tr><td>Sertraline Hydrochloride</td><td class="num">7</td><td class="num">7</td><td class="num">0</td></tr>
+  <tr><td>Warfarin Sodium</td><td class="num">6</td><td class="num">6</td><td class="num">0</td></tr>
+  <tr><td>Gabapentin</td><td class="num">13</td><td class="num">13</td><td class="num">0</td></tr>
+  <tr class="total"><td>Total</td><td class="num">55</td><td class="num"><strong>55</strong></td><td class="num">0</td></tr>
+</table>
+
+<div class="headline">
+  <b>100% of dose figures returned.</b> Nothing was silently dropped, in any
+  document, at up to 12,000 characters.
+</div>
+
+<div class="plain">
+  <span class="label">Two caveats that keep this from being a stronger claim</span>
+  <p><strong>Re-sampled, it is not perfectly stable.</strong> Three re-runs gave
+  0, 1 and 2 documents with something dropped, against a committed 0. So "no
+  omission at all" is the committed run; the truthful range is "none to a
+  couple of items across six documents."</p>
+  <p><strong>The reference count is itself imperfect.</strong> Review found that
+  about a third of the figures it counts are per-kilogram rate coefficients rather
+  than doses, and that flattened tables are invisible to it. The reference is a
+  lower bound of reasonable quality, not a gold standard.</p>
+</div>
+
+<h4>The bug the independent count caught — in the measurement, not the model</h4>
+
+<div class="verdict">
+  <span class="label">A gene identifier read as a 1,639-gram dose</span>
+  <p>An earlier run reported one missing figure: <strong>"1639 g"</strong> from the
+  warfarin label. That looked like a genuine omission and would have been reported
+  as one.</p>
+  <p>It is not a dose. The label contains <code>VKORC1−1639G &gt; A</code> — a gene
+  variant identifier. The pattern search read it as 1,639 grams and manufactured an
+  omission that never happened. <strong>The model was right to exclude it.</strong></p>
+  <p>An independent count that is too high invents omissions — worse than one that
+  is too low, because it produces a finding rather than a gap. That is exactly the
+  failure this experiment's own code was warned about, in its own comments, before
+  doing it anyway.</p>
+</div>
+
+<h4>Cost and time</h4>
+
+<p>6 calls, under $0.05, about 40 seconds.</p>
+
+<h3>Experiment 10.2 — Do the chapter's fixes help?</h3>
+
+<h4>The completeness prompt</h4>
+
+<table>
+  <tr><th style="width:56%">Measure</th><th class="num">Plain request</th><th class="num">Completeness prompt</th></tr>
+  <tr><td>Dose figures returned</td>
+      <td class="num"><strong>100%</strong> — 55/55</td><td class="num">96% — 53/55</td></tr>
+</table>
+
+<p><strong>The prompt asking the model to be careful about completeness made it
+slightly less complete.</strong> Two figures lost. On a sample this size that is
+inside the noise and should not be called a regression — but it is certainly not
+the improvement the chapter implies, and the direction is wrong.</p>
+
+<h4>The four engineering fixes</h4>
+
+<table>
+  <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Independent entity count</strong></td>
+      <td class="num">agreed every time; caught a bug in itself</td>
+      <td><strong>Works</strong> — the only fix here worth keeping</td></tr>
+  <tr><td><strong>2 · List-length assertions</strong></td>
+      <td class="num">model's self-count wrong on <strong>6 of 6</strong></td>
+      <td>Works with a real range; <strong>cannot work</strong> when the model
+      supplies the number</td></tr>
+  <tr><td><strong>3 · Completeness audit call</strong></td>
+      <td class="num">9 flags, <strong>1 real</strong></td>
+      <td>Works, with a caveat that swamps the benefit</td></tr>
+  <tr><td><strong>4 · "What I did not extract" field</strong></td>
+      <td class="num">11 items flagged, <strong>0 omissions</strong></td>
+      <td><strong>Works</strong> — as a review queue and as schema feedback, not
+      as a completeness check</td></tr>
+</table>
+
+<h4>Fix 1 — the independent count, and the bug it found in this experiment</h4>
+
+<p>The fix is to count the items yourself, in code, and compare that number with
+what the model returned. No model involved on the checking side.</p>
+
+<pre>DOSE = re.compile(r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|g|units?)\b", re.I)</pre>
+
+<p>A number, then a dose unit. That is the whole checker. And on the first run it
+reported an omission that had not happened.</p>
+
+<h4>The bug, from the Warfarin label</h4>
+
+<p>Warfarin dosing depends on genetics, so its label names the gene variants.
+This sentence is in the source:</p>
+
+<pre>"...ranges are derived from multiple published clinical studies.
+ VKORC1-1639G > A (rs9923231) variant is used in this table."</pre>
+
+<p>Read <code>1639G</code> with that regular expression: a number, then the unit
+<code>g</code>. <strong>The checker recorded a 1,639-gram dose</strong> — roughly
+a bag of sugar of warfarin — added it to the list of figures the document
+contains, then noted that the model had failed to extract it.</p>
+
+<div class="verdict">
+  <span class="label">Why this is the most instructive bug in the report</span>
+  <p>The model was <strong>right</strong>. It read a gene variant and correctly
+  declined to call it a dose. The checker was wrong, and because the checker is
+  the thing that decides what counts as truth, <strong>the model's correct
+  behaviour was recorded as a failure.</strong></p>
+  <p>A reference count that is too high does not produce a gap in your data. It
+  produces a <em>finding</em> — a confident, specific, false report that something
+  was missed. Those are far more dangerous than a count that is too low, because
+  someone acts on them.</p>
+</div>
+
+<p>The fix is two exclusions, and the comment in the code records why:</p>
+
+<pre>IDENTIFIER_BEFORE     = re.compile(r"[A-Z]{2,}[0-9]*[\u2212\-]?$")
+FOLLOWED_BY_COMPARISON = re.compile(r"^\s*[><=]")</pre>
+
+<p>Skip a match preceded by an all-caps identifier (<code>VKORC1-</code>), and
+skip one followed by a comparison operator (<code>1639G &gt; A</code>). Either
+alone catches this case; both are kept because they fail in different directions.</p>
+
+<p><strong>This is why fix 1 is the only fix in the chapter worth keeping.</strong>
+It is free, it involves no model, and the one real error it caught was in the
+measuring apparatus — which is the error you are least likely to find any other
+way, because nothing else in the pipeline is looking at it.</p>
+
+<h4>Fix 2 — the model counting its own source</h4>
+
+<table>
+  <tr><th style="width:38%">Document</th><th class="num">Independent count</th>
+      <th class="num">Model's own count</th></tr>
+  <tr><td>Lisinopril</td><td class="num">8</td><td class="num">13</td></tr>
+  <tr><td>Levothyroxine Sodium</td><td class="num">11</td><td class="num">13</td></tr>
+  <tr><td>Amoxicillin</td><td class="num">10</td><td class="num">25</td></tr>
+  <tr><td>Sertraline Hydrochloride</td><td class="num">7</td><td class="num">21</td></tr>
+  <tr><td>Warfarin Sodium</td><td class="num">6</td><td class="num">11</td></tr>
+  <tr><td>Gabapentin</td><td class="num">13</td><td class="num"><strong>41</strong></td></tr>
+</table>
+
+<div class="headline">
+  Wrong on <b>every document</b>, always by overcounting — once by more than
+  three times.
+</div>
+
+<p>Note what this is <em>not</em>: the model's extraction was perfect on all six.
+It listed every figure correctly and then, asked how many were in the source,
+gave a number bearing no relation to reality. <strong>A model asked to audit
+itself is the same reader reading twice.</strong> A completeness check built on
+that number is measuring nothing.</p>
+
+<h4>Fix 3 — the expensive audit, priced</h4>
+
+<table>
+  <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Items flagged as missing by a second, stronger model</td><td class="num">9</td></tr>
+  <tr><td>Of which genuinely missing</td><td class="num"><strong>1</strong></td></tr>
+  <tr><td>Share of the total run cost spent on the audit</td><td class="num">the large majority</td></tr>
+</table>
+
+<p>Eight humans sent to check something already correct, at premium prices, on a
+task where the extraction was essentially perfect.</p>
+
+<h4>Fix 4 — the "what I did not extract" field, with what it actually contained</h4>
+
+<p><strong>The fix.</strong> Add a field to the answer schema where the model
+lists anything it chose not to extract, with a reason. The chapter's argument is
+that an empty list becomes an explicit claim of completeness rather than a silent
+one — <em>"I extracted everything"</em> stated out loud, where it can be
+challenged.</p>
+
+<p><strong>What happened.</strong> The model filled the field on four of six
+documents, listing eleven items. <strong>Not one of them was a dose it had
+missed.</strong> Every single entry was a judgement call about what counts as a
+dose. These are the real entries, verbatim:</p>
+
+<table>
+  <tr><th style="width:30%">Document</th><th>What the model put in the field</th></tr>
+  <tr><td><strong>Lisinopril</strong><br>
+      <span style="color:#6a7681">11 doses extracted</span></td>
+      <td><code>2-3 weeks (time duration, not a dose amount)</code></td></tr>
+  <tr><td><strong>Warfarin</strong><br>
+      <span style="color:#6a7681">12 doses extracted</span></td>
+      <td><code>'greater than 4' — described as an INR value rather than a dose amount</code><br><br>
+      <code>'2.5' — described as target INR values rather than dose amounts</code><br><br>
+      <code>frequency intervals ('1 to 4 weeks', 'every 1 to 4 weeks', '&gt; 2 to 4 weeks') — these describe monitoring intervals, not dose amounts</code><br><br>
+      <code>age/physical characteristic comparisons ('greater than 75 years') — demographic criteria, not dose amounts</code></td></tr>
+  <tr><td><strong>Amoxicillin</strong><br>
+      <span style="color:#6a7681">22 doses extracted</span></td>
+      <td><code>10 days (duration, not dose amount)</code><br><br>
+      <code>2/3 of total water (relative amount, preparation instruction not dose)</code><br><br>
+      <code>remainder of water (relative amount, preparation instruction not dose)</code></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Read the Warfarin row against the Fix 1 bug</span>
+  <p>The model set aside <code>'2.5'</code> as an INR target, and the monitoring
+  intervals, and <code>'greater than 75 years'</code> — every one correctly.</p>
+  <p><strong>That is the same discrimination the code-based checker failed to
+  make</strong> when it read <code>VKORC1-1639G</code> as a 1,639-gram dose. On
+  this particular judgement — <em>is this number a dose?</em> — the model
+  outperformed the regular expression, and it wrote down its reasoning.</p>
+</div>
+
+<h4>One document, all three checks, side by side</h4>
+
+<p>Amoxicillin is the document where an omission actually happened, so it is the
+only one where the three completeness checks can be compared against a known
+answer. This section is the whole chapter in miniature.</p>
+
+<h4>The sentence the figures were dropped from</h4>
+
+<p>Verbatim from the label. Six dose figures, in three paired strengths:</p>
+
+<pre>"Amoxicillin and clavulanate potassium for oral suspension,
+ 600 mg/42.9 mg per 5 mL contains 42.9 mg of clavulanic acid per
+ 5 mL, whereas the amoxicillin and clavulanate potassium,
+ 200 mg/28.5 mg per 5 mL suspension contains 28.5 mg of clavulanic
+ acid per 5 mL and the 400 mg/57 mg per 5 mL suspension contains
+ 57 mg of clavulanic acid per 5 mL."</pre>
+
+<p>The model captured the 600 mg pair and then <strong>dropped the 200 mg and
+400 mg strengths</strong> — it read the first clause of a three-part sentence,
+produced a well-formed answer, and abandoned the rest of the enumeration.</p>
+
+<div class="verdict">
+  <span class="label">Why these two figures, specifically</span>
+  <p>This sentence exists to say the three suspensions are <strong>not
+  interchangeable</strong> — they carry different ratios of clavulanic acid. An
+  extraction that keeps only the 600 mg line has kept one strength and deleted the
+  warning's entire subject.</p>
+  <p>And the 200 and 400 mg/5 mL strengths are the paediatric ones, dosed by
+  weight. They are where a substitution error reaches the smallest patients.</p>
+</div>
+
+<h4>What each check said</h4>
+
+<table>
+  <tr><th style="width:22%">Check</th><th>What it reported on this document</th>
+      <th class="num" style="width:12%">Verdict</th></tr>
+  <tr><td><strong>Fix 1</strong><br>
+      <span style="color:#6a7681">independent count, in code</span></td>
+      <td>Found <code>200 mg</code> and <code>400 mg</code> in the source and
+      absent from the output. <strong>Cost: $0.</strong></td>
+      <td class="num"><strong>✓</strong></td></tr>
+  <tr><td><strong>Fix 3</strong><br>
+      <span style="color:#6a7681">second-model audit</span></td>
+      <td>Flagged exactly <code>['200 mg', '400 mg']</code> — two flags, both real,
+      none false, on this document.</td>
+      <td class="num"><strong>✓</strong></td></tr>
+  <tr><td><strong>Fix 4</strong><br>
+      <span style="color:#6a7681">the model's own "what I did not extract"</span></td>
+      <td>Three entries:<br>
+      <code>10 days (duration, not dose amount)</code><br>
+      <code>2/3 of total water (relative amount, preparation instruction not dose)</code><br>
+      <code>remainder of water (relative amount, preparation instruction not dose)</code><br>
+      <strong>Silent on both missing strengths.</strong></td>
+      <td class="num"><strong>✗</strong></td></tr>
+</table>
+
+<h4>Read the three gaps on their own merits first</h4>
+
+<p><strong>All three are correct, and none of them is a dose.</strong>
+<code>10 days</code> is a treatment duration. The two water entries come from the
+reconstitution instructions — amoxicillin suspension ships as a powder a pharmacist
+mixes with water, adding roughly two-thirds first and then the remainder.
+<strong>They are quantities of water, not drug.</strong> Excluding them is not
+merely defensible; a "doses" field containing <em>2/3 of total water</em> would be
+actively dangerous.</p>
+
+<p>So the model reasoned carefully three times and was right three times.</p>
+
+<div class="verdict">
+  <span class="label">Which is what makes the result worse, not better</span>
+  <p>The field asked <em>what did you leave out?</em> and received three careful
+  judgements about water and time — alongside silence about two drug strengths it
+  had just deleted from a paediatric antibiotic.</p>
+  <p><strong>The model is not careless here. It is demonstrably careful.</strong>
+  It examined precisely the items that were <em>hard to classify</em> — the
+  ambiguous edges — and reported those. The 200 mg and 400 mg were never hard to
+  classify: they are unambiguous doses, in the same format as the ten it kept.
+  They never reached the field because the model never noticed it had skipped
+  them.</p>
+  <p>That is the mechanism of silent omission, stated as plainly as this project
+  can state it: <strong>a model reports the decisions it made, and an omission is
+  exactly the case where no decision was made.</strong> You cannot ask a system to
+  report what it did not notice.</p>
+</div>
+
+<h4>And one useful property of the expensive audit</h4>
+
+<p>Fix 3 was <strong>perfect on this document</strong> — two flags, both real, no
+false alarms. Its six false flags across the whole run came from the other five
+documents, where there was nothing to find.</p>
+
+<p><strong>It is accurate where something is wrong and noisy where nothing
+is.</strong> That is a usable property, but only if you pay for it after a cheap
+check has already raised suspicion — the same routing argument as Chapter 3's
+second-AI auditor. Run on everything, its precision is 2 in 8. Run only on
+documents where the independent count already disagrees, it would have been 2 in
+2.</p>
+
+<h4>So it works — but not as a completeness check</h4>
+
+<table>
+  <tr><th style="width:44%">What the chapter claims it does</th><th>What it did</th></tr>
+  <tr><td>Surfaces items the model omitted</td>
+      <td><strong>Zero omissions surfaced</strong>, out of 11 entries</td></tr>
+  <tr><td>An empty list is a claim of completeness</td>
+      <td>True in form. But the field was empty on 2 of 6 documents where the
+      extraction was <em>also</em> complete — so an empty list carried no
+      information here either way</td></tr>
+  <tr><td>&mdash;</td>
+      <td><strong>Surfaced every ambiguous judgement in the document</strong>,
+      with a stated reason, at no extra call</td></tr>
+</table>
+
+<p><strong>Describe it accurately and it becomes valuable.</strong> It is a
+<em>"here is where I had to decide something"</em> field, not a <em>"here is what
+I missed"</em> field. Those are different products:</p>
+
+<ul>
+  <li>As a completeness check it failed — 0 of 11.</li>
+  <li>As a <strong>review queue</strong> it is excellent. The eleven entries are
+  precisely the records where a person's judgement would differ from the model's,
+  and they arrive pre-sorted with the reasoning attached.</li>
+  <li>As <strong>schema feedback</strong> it is better still. Three of the eleven
+  say the same thing — <em>this document contains durations and intervals and
+  your schema has one field called "doses"</em>. That is a design defect the field
+  reported for free.</li>
+</ul>
+
+<p><strong>Cost:</strong> a few dozen extra output tokens per document. No extra
+call, no extra latency. On the strength of the review queue alone it is the second
+fix in this chapter worth keeping &mdash; provided the documentation stops calling
+it a completeness signal.</p>
+
+<h3>So what is actually left for this chapter?</h3>
+
+<p class="lede">Two of four fixes failed and the prompt did nothing. That reads
+like an empty chapter. It is not — but what survives is one fix and a principle,
+not four fixes.</p>
+
+<h4>First: the failure does reproduce. It was called too early.</h4>
+
+<p>Run three times, the baseline returned <strong>55/55, 54/55 and 53/55</strong>
+dose figures. In two of the three runs, one document silently dropped figures.
+Here is the run in the current recording:</p>
+
+<table>
+  <tr><th style="width:30%">Document</th><th class="num">In the source</th>
+      <th class="num">Returned</th><th>What was dropped</th></tr>
+  <tr><td>Lisinopril</td><td class="num">8</td><td class="num">8</td><td>&mdash;</td></tr>
+  <tr><td>Levothyroxine</td><td class="num">11</td><td class="num">11</td><td>&mdash;</td></tr>
+  <tr><td>Amoxicillin</td><td class="num">10</td><td class="num">10</td><td>&mdash;</td></tr>
+  <tr><td>Sertraline</td><td class="num">7</td><td class="num">7</td><td>&mdash;</td></tr>
+  <tr><td>Warfarin</td><td class="num">6</td><td class="num">6</td><td>&mdash;</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Gabapentin</strong></td>
+      <td class="num"><strong>13</strong></td><td class="num"><strong>11</strong></td>
+      <td><strong>10 mg, 25 mg</strong></td></tr>
+</table>
+
+<p><strong>Not one output said anything was missing.</strong> Every list looked
+complete, because a list always does. That is the chapter's failure, happening,
+at a rate of roughly <strong>2&ndash;4% of figures and 1 in 6 documents</strong>.</p>
+
+<p>The earlier verdict of "did not reproduce" came from the single run that
+happened to return 55 of 55. <strong>Rare is not the same as absent</strong>, and
+rare is the harder case — it is exactly the rate at which nobody notices.</p>
+
+<h4>Second: fix 1 is not a consolation prize. It is the whole chapter.</h4>
+
+<div class="verdict">
+  <span class="label">Notice what made every other result in this chapter knowable</span>
+  <p>How do we know Gabapentin dropped <code>10 mg</code> and <code>25 mg</code>?
+  <strong>Because fix 1 counted the source independently.</strong></p>
+  <p>How do we know the model's self-count is wrong 6 times out of 6? Because
+  there was an independent count to compare it against. How do we know the
+  expensive audit raised 8 flags of which 2 were real? Same. How do we know fix
+  4's eleven entries contained no omissions? Same.</p>
+  <p><strong>Fix 1 is the ground truth that makes fixes 2, 3 and 4 measurable at
+  all.</strong> Without it this chapter has no findings — not weak findings, none.
+  It costs $0 and involves no model.</p>
+</div>
+
+<h4>Third: the pattern across the four fixes is the transferable lesson</h4>
+
+<table>
+  <tr><th style="width:34%">Fix</th><th style="width:26%">Who does the checking</th>
+      <th>Result</th></tr>
+  <tr><td><strong>1 · Independent count</strong></td>
+      <td><strong>Code, outside the model</strong></td>
+      <td><strong>Works.</strong> Detected every real omission, and caught a bug in
+      the checker itself</td></tr>
+  <tr><td>3 · Second-model audit</td><td>A different model</td>
+      <td>Partly. Found the 2 real omissions and 6 false ones —
+      <strong>87% of the total bill</strong> for that</td></tr>
+  <tr><td>4 · "What I did not extract"</td><td>The model, about itself</td>
+      <td><strong>0 of 11 entries were omissions.</strong> On Amoxicillin it
+      declared 3 gaps, none of them the 2 doses it actually dropped</td></tr>
+  <tr><td>2 · Model counts the source</td><td>The model, about itself</td>
+      <td><strong>Wrong 6 of 6</strong>, always overcounting — once by 46 against
+      a true 13</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Sort that table by "who does the checking" and the chapter writes itself</span>
+  <p><strong>Everything computed outside the model worked. Everything that asked
+  the model about its own completeness failed — 0 of 6, and 0 of 11.</strong>
+  The second-model audit sits in between, which is what you would predict: better
+  than self-report, still a model, still expensive.</p>
+  <p>This is the fifth independent measurement in this report that a model cannot
+  assess its own work. Chapter 10's contribution is that it is the cleanest,
+  because completeness has an objective answer a regular expression can compute.</p>
+</div>
+
+<h4>What to actually ship</h4>
+
+<ol>
+  <li><strong>Fix 1, always.</strong> Count independently in code and compare.
+  Free, no model, no latency. This is the chapter's recommendation and it should
+  be the only one presented as a default.</li>
+  <li><strong>Fix 4, renamed.</strong> Keep the field, describe it as <em>"where I
+  had to make a judgement"</em>, and use it as a review queue and as schema
+  feedback. Do not read an empty list as a completeness claim &mdash; it was empty
+  on the document that failed.</li>
+  <li><strong>Fix 3, only where fix 1 cannot reach.</strong> If your items cannot
+  be counted by a pattern &mdash; obligations in a contract, findings in a report
+  &mdash; a second model is the only option left. Price it honestly: 87% of the
+  bill, and 6 false flags for 2 real ones.</li>
+  <li><strong>Fix 2, never.</strong> Wrong on every document tested.</li>
+</ol>
+
+<h4>Task 10.1 — the prose enumeration test, run, with a prediction that failed</h4>
+
+<p>Everything above uses <strong>short, salient, numeric</strong> items. This
+report previously said the honest verdict was <em>"rare on short numeric lists,
+unknown on prose"</em>, and named the prose version as the most valuable
+experiment left undone. It has now been run.</p>
+
+<h4>What was predicted, in print, before running it</h4>
+
+<div class="plain">
+  <span class="label">The two predictions this report published</span>
+  <ol>
+    <li><strong>"The omission rate should rise"</strong> — 2&ndash;4% on the easy
+    case is a floor, not a ceiling.</li>
+    <li><strong>"Fix 1 stops working"</strong>, because no pattern counts
+    obligations in prose.</li>
+  </ol>
+  <p><strong>The first is wrong. The second did not arise.</strong></p>
+</div>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Document</strong></td>
+      <td>Sertraline's ADVERSE REACTIONS section — <strong>18,791
+      characters</strong>, the longest prose enumeration in the corpus</td></tr>
+  <tr><td><strong>Ground truth</strong></td>
+      <td><strong>185 distinct reactions</strong>, derived from the label's own
+      delimiters: <code>Body System – Frequent: a, b; Infrequent: c, d; Rare: e,
+      f.</code> No model involved. Every item is a real clinical term; all 185 are
+      distinct.</td></tr>
+  <tr><td><strong>The variable</strong></td>
+      <td>Only <em>how much is asked for at once.</em> The source text is
+      byte-identical in all three arms.</td></tr>
+  <tr><td><strong>Runs</strong></td><td>4, live. <strong>$1.39 total.</strong></td></tr>
+</table>
+
+<h4>The result</h4>
+
+<table>
+  <tr><th style="width:28%">Arm</th><th class="num">Calls</th>
+      <th class="num">Items per ask</th><th class="num">Recall, 4 runs</th></tr>
+  <tr style="background:#f4efe6"><td><strong>All at once</strong></td>
+      <td class="num">1</td><td class="num"><strong>185</strong></td>
+      <td class="num"><strong>99%, 100%, 100%, 100%</strong></td></tr>
+  <tr><td>By body system</td><td class="num">17</td><td class="num">~11</td>
+      <td class="num">94%, 95%, 99%, 95%</td></tr>
+  <tr><td>By frequency group</td><td class="num">39</td><td class="num">~5</td>
+      <td class="num">99%, 99%, 99%, 99%</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Asking for 185 items in one call returns 185 items</span>
+  <p>Three of four runs were <strong>perfect</strong>. The fourth dropped a single
+  term, <code>periorbital edema</code>.</p>
+  <p><strong>There is no load failure here.</strong> Recall did not fall as the ask
+  grew from 5 items to 185 over the same document. The prediction this report
+  published was wrong, and wrong by a wide margin.</p>
+</div>
+
+<h4>Two details that matter more than the headline</h4>
+
+<p><strong>The middle arm is the worst, and that is a defect in the measurement,
+not the model.</strong> Asking "list everything under body system X" requires the
+model to agree with <em>our</em> assignment of terms to systems. Its 94&ndash;99%
+swing is noise in the ground truth. Both arms that do not depend on that
+segmentation sit at 99&ndash;100%. <strong>The only unstable number in this
+experiment is the one our own code introduced</strong> — which is the third time
+that has happened in this project.</p>
+
+<p><strong>The single-call arm returned 251 items against 185 expected.</strong>
+It was not skimming. It extracted reactions from parts of the section the
+delimiter parser does not cover — postmarketing lists, trial tables. On a long
+prose enumeration the failure mode is <strong>over-inclusion, not
+omission</strong>: the opposite of what the chapter predicts.</p>
+
+<h4>What this settles</h4>
+
+<p>This was the strongest available test of the chapter's own examples — forty
+obligations in a contract, two hundred entries in an adverse-reactions list. The
+corpus contained a genuine 185-item clinical enumeration in a 19,000-character
+document, and <strong>the failure did not occur.</strong></p>
+
+<p>The chapter can no longer say the prose case is unknown. It is known, and the
+answer is negative:</p>
+
+<ul>
+  <li>Silent omission reproduces <strong>rarely</strong> on short numeric lists —
+  2 of 55 figures, and the Amoxicillin case is real and clinically serious.</li>
+  <li>It <strong>does not</strong> reproduce on long prose enumerations, which is
+  where the chapter's own examples live.</li>
+</ul>
+
+<div class="plain">
+  <span class="label">The limits, stated plainly</span>
+  <p><strong>One document, one model, one domain.</strong> Sertraline's list is
+  well-formed, delimited, and written to be enumerated — a contract's obligations
+  are not. What this rules out is the simple load hypothesis: <em>"long list,
+  therefore dropped items."</em> That hypothesis is dead on this evidence.</p>
+  <p>What it does not rule out is omission from prose that <em>resists</em>
+  enumeration, where the items are not comma-separated terms but clauses a reader
+  has to recognise as items at all. <strong>That is a different experiment and it
+  needs a different corpus.</strong> It is now the honest remaining gap, and it is
+  a narrower one than the gap this test closed.</p>
+</div>
+
+<h3>Chapter 10 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:28%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>The failure itself, short numeric lists</td>
+      <td><strong>Reproduces, rarely</strong></td>
+      <td>2 of 55 figures; 1 in 6 documents in 2 of 3 runs</td></tr>
+  <tr><td>The failure itself, long prose enumeration</td>
+      <td><strong>Did not reproduce</strong></td>
+      <td><strong>185/185 in 3 of 4 runs</strong>, 184/185 in the fourth</td></tr>
+  <tr><td>Prompt template</td><td>Did nothing here</td><td>−2 cases, inside the noise</td></tr>
+  <tr><td>1 · Independent count</td><td><strong>Works</strong></td>
+      <td>caught a real error — a gene variant read as a 1,639 g dose</td></tr>
+  <tr><td>2 · List-length assertions</td><td>Cannot work as described</td>
+      <td>6 of 6 wrong — decisive</td></tr>
+  <tr><td>3 · Completeness audit</td><td>Works, with a caveat</td><td>9 flags, 1 real</td></tr>
+  <tr><td>4 · "Not extracted" field</td><td><strong>Works</strong>, differently</td>
+      <td>11 items, 0 omissions — all judgement calls, all correct</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">The recommendation, and the reason it is not a firm one</span>
+  <p>Chapter 10 currently reads as though silent omission is a live danger with
+  four fixes worth deploying. On this evidence it is the weakest of the nine
+  patterns, its prompt costs a little accuracy, and two of its four fixes are
+  measuring the model with itself.</p>
+  <p>What survives is the independent count — free, effective, and the one thing
+  in the chapter that caught a real error.</p>
+  <p><strong>This is the largest editorial call in the report and it should not be
+  made from six documents.</strong> The test covers short, salient, numeric items.
+  It does not cover long prose enumerations — forty obligations in a contract, two
+  hundred entries in an adverse-reactions list — which is where the chapter's own
+  examples live. The correct statement today is <em>"did not reproduce on this
+  task"</em>, not <em>"does not happen"</em>. Running the prose version is the
+  single most valuable follow-up left undone.</p>
+</div>

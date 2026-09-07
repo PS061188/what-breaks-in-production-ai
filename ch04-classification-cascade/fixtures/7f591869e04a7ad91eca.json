@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nClinical studies of lisinopril and hydrochlorothiazide tablets did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy. In a multiple-dose pharmacokinetic study in elderly versus young hypertensive patients using the lisinopril/hydrochlorothiazide combination, area under the plasma concentration time curve (AUC) increased approximately 120% for lisinopril and approximately 80% for hydrochlorothiazide in older patients.\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Clinical studies of lisinopril and hydrochlorothiazide tablets did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. Dose selection for elderly patients should be cautious, usually starting at the low end of the dosing range, reflecting greater frequency of decreased hepatic, renal, or cardiac function, and concomitant disease or other drug therapy. In elderly versus young hypertensive patients, AUC increased approximately 120% for lisinopril and approximately 80% for hydrochlorothiazide in older patients.\"}",
+  "elapsed_ms": 1623,
+  "usage": {
+    "input_tokens": 462,
+    "output_tokens": 152
+  }
+}

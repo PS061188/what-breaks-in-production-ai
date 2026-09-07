@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nhair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone complete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 1099,
+  "usage": {
+    "input_tokens": 632,
+    "output_tokens": 11
+  }
+}

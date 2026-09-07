@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Furosemide safe to use during pregnancy?\n\nRESPONSE:\nShort answer: the excerpt you've provided doesn't contain the pregnancy information, so I can't quote it directly — but furosemide is not considered routinely \"safe\" in pregnancy and should only be used when clearly needed under a clinician's supervision.\n\nWhat the excerpt covers: only the indications (edema from congestive heart failure, cirrhosis, renal disease/nephrotic syndrome; and hypertension in adults) and dosing. It contains no Pregnancy, Nursing Mothers, or Warnings sections.\n\nGeneral points from standard furosemide labeling (please verify against the full prescribing information):\n• Furosemide has historically been classified as Pregnancy Category C. In animal studies (mice, rats, rabbits) it caused fetal harm/abortions and unexplained maternal deaths at doses several times the maximum recommended human dose.\n• Adequate, well-controlled studies in pregnant women are lacking; furosemide crosses the placenta. It should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus.\n• Diuretics are generally not recommended for treating routine gestational edema or hypertension in pregnancy, because they can reduce maternal plasma volume and placental perfusion. They may still be appropriate for specific conditions such as heart failure or pulmonary edema.\n• Furosemide is excreted in human milk and may suppress lactation — relevant if breastfeeding.\n\nBottom line: this is a decision for the prescribing clinician (obstetrician/maternal-fetal medicine or cardiologist), who can weigh the underlying condition against the risks. If you are pregnant, planning pregnancy, or breastfeeding and are taking furosemide, don't stop it on your own — contact your prescriber, and consult the complete FDA prescribing information for the Pregnancy and Nursing Mothers sections.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1603,
+  "usage": {
+    "input_tokens": 992,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nShort answer: the excerpt you've given me is only the Indications and Dosage & Administration sections, so it does not contain the full Drug Interactions list (Section 7) for warfarin. Based on what this excerpt does say:\n\n\ns Explicitly mentioned in this label excerpt\n- Heparin: named as a \"common concomitant drug\" that increases the INR. When heparin and warfarin are given together, INR should be checked at least 5 hours after the last IV bolus, 4 hours after stopping a continuous IV infusion, or 24 hours after the last subcutaneous dose. Warfarin can also prolong the aPTT even without heparin (aPTT >50 seconds with an in-range INR signals increased postoperative bleeding risk).\n- Low-dose aspirin (\\u2264100 mg/day): used intentionally with moderate-intensity warfarin (INR 2\\u20133) for at least 3 months in high-risk post-MI patients, and may be added for some patients with AF and prosthetic valves \\u2014 a combination that increases bleeding risk and requires careful monitoring.\n- Dietary vitamin K: the label notes warfarin's action may be affected by \"other drugs and dietary vitamin K,\" so intake should be consistent.\n- General principle: warfarin has a narrow therapeutic index; \"concomitant medications\" influence dose requirements, and additional INR testing should be performed whenever any other medication is started, stopped, or taken irregularly \\u2014 or when a different warfarin product is substituted.\n\nWhat this excerpt does not cover\nThe complete Drug Interactions section of warfarin labeling lists many agents affecting warfarin through CYP2C9/CYP3A4/CYP1A2 metabolism, protein binding, vitamin K metabolism, or bleeding risk \\u2014 for example many antibiotics/antifungals, amiodarone, NSAIDs, SSRIs, other antiplatelets and anticoagulants, and botanicals such as St. John's wort, ginkgo, ginseng, and coenzyme Q10. Because these are not in the text provided, I can't enumerate them authoritatively here.\n\nRecommendation: consult the full prescribing information (Section 7, Drug Interactions) or a pharmacist before adding, stopping, or changing any medication, supplement, or herbal product while taking warfarin, and increase INR monitoring around any such change.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 12389,
+  "usage": {
+    "input_tokens": 1166,
+    "output_tokens": 17
+  }
+}

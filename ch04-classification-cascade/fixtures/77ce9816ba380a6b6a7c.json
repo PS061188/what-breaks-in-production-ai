@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essential for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Closely monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Prominent features: (a) The passage explicitly states indications for levothyroxine in pediatric patients ('patients from birth to less than 17 years of age'), listing specific conditions (primary/secondary/tertiary hypothyroidism, thyroid cancer management); (b) It emphasizes the critical importance of rapid restoration of normal T4 concentrations to prevent adverse cognitive and physical development effects; (c) It includes dosing/timing guidance ('initiate...immediately upon diagnosis,' 'continued for life,' 'monitor during first 2 weeks').\\n\\n2. Two most plausible categories: (a) 'indications_and_usage' - the passage clearly delineates approved uses for specific patient populations and conditions; (b) 'pediatric_use' - the passage is specifically focused on children from birth to <17 years with disease-specific guidance.\\n\\n3. Classification decision: While this passage does contain pediatric-specific information, it is fundamentally structured as a statement of indications and usage. The primary content describes what conditions the drug treats in pediatric patients (replacement therapy for congenital/acquired hypothyroidism, adjunctive therapy for thyroid cancer), which is the core definition of indications. The pediatric_use category typically covers general safety/efficacy information specific to children, whereas this passage is prescriptive about which diseases justify treatment. The clinical reasoning about cognitive development supports the indication rationale rather than serving as general pediatric guidance. 'Indications_and_usage' is the more appropriate classification.\\n\\n4. Confidence: HIGH (>90%). The passage unambiguously lists approved conditions and uses with clinical justification. The only minor ambiguity is the overlap between pediatric-specific indications and the pediatric_use category, but the regulatory structure and content organization clearly prioritize this as an indications statement.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 6562,
+  "usage": {
+    "input_tokens": 1061,
+    "output_tokens": 452
+  }
+}

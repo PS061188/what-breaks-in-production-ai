@@ -1,0 +1,50 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\n2 DOSAGE AND ADMINISTRATION For oral inhalation only. ( 2 ) Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation every 4 to 6 hours. For some patients, 1 inhalation every 4 hours may be sufficient. ( 2.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. ( 2.2 ) Priming information: Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. ( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm) Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation repeated every 4 to 6 hours; in some patients, 1 inhalation every 4 hours may be sufficient. More frequent administration or a greater number of inhalations is not recommended. 2.2 Recommended Dosage for Prevention of Exercise-Induced Bronchospasm Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. 2.3 Administration Information Albuterol Sulfate HFA should be administered by the orally inhaled route only. Priming Priming Albuterol Sulfate HFA is essential to ensure appropriate albuterol content in each actuation. Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. Avoid spraying in eyes. Cleaning To ensure proper dosing and to prevent actuator orifice blockage, wash the actuator with warm water and let it air-dry completely at least once a week.\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\": [{\"field\": \"starting_dose\", \"value\": \"2 inhalations by oral inhalation\", \"qualifiers\": [], \"source_quote\": \"2 inhalations by oral inhalation every 4 to 6 hours\"}, {\"field\": \"maximum_dose\", \"value\": \"More frequent administration or a greater number of inhalations is not recommended\", \"qualifiers\": [\"not recommended\"], \"source_quote\": \"More frequent administration or a greater number of inhalations is not recommended.\"}, {\"field\": \"frequency\", \"value\": \"every 4 to 6 hours\", \"qualifiers\": [], \"source_quote\": \"2 inhalations by oral inhalation every 4 to 6 hours\"}, {\"field\": \"dose_adjustment\", \"value\": \"1 inhalation every 4 hours may be sufficient\", \"qualifiers\": [\"some patients\", \"may be sufficient\"], \"source_quote\": \"For some patients, 1 inhalation every 4 hours may be sufficient.\"}]}",
+  "elapsed_ms": 3042,
+  "usage": {
+    "input_tokens": 1202,
+    "output_tokens": 237
+  }
+}

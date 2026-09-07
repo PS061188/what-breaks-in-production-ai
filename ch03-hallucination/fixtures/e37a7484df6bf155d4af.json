@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Omeprazole safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt provided does not contain pregnancy safety information. However, based on standard pharmacology: Omeprazole is classified as FDA Pregnancy Category C, meaning animal studies have shown adverse effects but there are no adequate controlled studies in pregnant women. \n\nClinical considerations:\n- Omeprazole has been used in pregnancy without clear evidence of major birth defects\n- Many guidelines consider it relatively safe for treating severe GERD during pregnancy when lifestyle modifications fail\n- However, it should only be used if the potential benefit justifies the potential risk to the fetus\n- Antacids or H2-receptor antagonists (like ranitidine) are often preferred as first-line agents in pregnancy\n\nRecommendation: Any pregnant patient requiring acid suppression should be evaluated by their obstetrician in consultation with their primary care physician to determine the safest approach for their specific clinical situation. Do not initiate omeprazole in pregnancy without this guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 483,
+    "output_tokens": 11
+  }
+}

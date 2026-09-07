@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTwo patients in the group treated with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL and one patient in the group treated with amoxicillin and clavulanate potassium were withdrawn due to diarrhea. 6.2 Postmarketing Experience The following adverse reactions have been identified during postmarketing use of amoxicillin and clavulanate potassium products, including amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL. Because these reactions are reported voluntarily from a population of unknown size, it is not always possible to reliably estimate their frequency or establish a causal relationship to drug exposure. Gastrointestinal:\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"diarrhea\"}",
+  "elapsed_ms": 1159,
+  "usage": {
+    "input_tokens": 452,
+    "output_tokens": 12
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\n( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm) Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation repeated every 4 to 6 hours; in some patients, 1 inhalation every 4 hours may be sufficient. More frequent administration or a greater number of inhalations is not recommended. 2.2 Recommended Dosage for Prevention of Exercise-Induced Bronchospasm Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. 2.3 Administration Information Albuterol Sulfate HFA should be administered by the orally inhaled route only.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"For acute bronchospasm: 2 inhalations by oral inhalation every 4-6 hours (some patients may use 1 inhalation every 4 hours). For exercise-induced bronchospasm prevention: 2 inhalations by oral inhalation 15-30 minutes before exercise. Route: oral inhalation only.\"}",
+  "elapsed_ms": 1966,
+  "usage": {
+    "input_tokens": 496,
+    "output_tokens": 88
+  }
+}

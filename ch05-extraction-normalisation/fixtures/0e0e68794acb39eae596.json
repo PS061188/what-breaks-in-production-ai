@@ -1,0 +1,50 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Extract the dosing\ninformation from the label text below into clean, standardised, database-ready\nvalues.\n\nStandardise as you go:\n- Doses as a number in milligrams.\n- Frequency as the number of doses per day.\n- Durations in days.\n- One canonical value per field. Keep it tidy and consistent.\n\n<label_text>\nDOSAGE AND ADMINISTRATION Edema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states. Edema may be most efficiently and safely mobilized by giving furosemide tablets on 2 to 4 consecutive days each week. When doses exceeding 80 mg/day are given for prolonged periods, careful clinical observation and laboratory monitoring are particularly advisable (see PRECAUTIONS: Laboratory Tests ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level. Hypertension Therapy should be individualized according to the patient's response to gain maximal therapeutic response and to determine the minimal dose needed to maintain the therapeutic response. Adults: The usual initial dose of furosemide tablets for hypertension is 80 mg, usually divided into 40 mg twice a day. Dosage should then be adjusted according to response. If response is not satisfactory, add other antihypertensive agents. Changes in blood pressure must be carefully monitored when furosemide tablets are used with other antihypertensive drugs, especially during initial therapy. To prevent excessive drop in blood pressure, the dosage of other agents should be reduced by at least 50 percent when furosemide tablets are added to the regimen. As the blood pressure falls under the potentiating effect of furosemide tablets, a further reduction in dosage or even discontinuation of other antihypertensive drugs may be necessary. Geriatric Patients: In general, dose selection and dose adjustment for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ).\n\nEdema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then b\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"fields\": [\n    {\n      \"field\": \"starting_dose\",\n      \"value\": \"20-80 mg\",\n      \"qualifiers\": [\n        \"adult\",\n        \"edema therapy\",\n        \"oral\",\n        \"initial single dose\"\n      ],\n      \"source_quote\": \"The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose.\"\n    },\n    {\n      \"field\": \"maximum_dose\",\n      \"value\": \"600 mg/day\",\n      \"qualifiers\": [\n        \"adult\",\n        \"clinically severe edematous states\",\n        \"total daily\"\n      ],\n      \"source_quote\": \"The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states.\"\n    },\n    {\n      \"field\": \"frequency\",\n      \"value\": \"1-2 per day\",\n      \"qualifiers\": [\n        \"adult\",\n        \"maintenance dosing\",\n        \"example: 8 am and 2 pm\"\n      ],\n      \"source_quote\": \"The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm).\"\n    },\n    {\n      \"field\": \"dose_adjustment\",\n      \"value\": \"Increase by 20 or 40 mg (adults) no sooner than 6–8 hours after previous dose until desired effect; for pediatrics start 2 mg/kg single dose and may increase by 1–2 mg/kg no sooner than 6–8 hours; do not exceed 6 mg/kg (pediatrics).\",\n      \"qualifiers\": [\n        \"titrate in increments\",\n        \"timing: ≥6–8 hours between increases\",\n        \"pediatric max 6 mg/kg\"\n      ],\n      \"source_quote\": \"If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended.\"\n    }\n  ]\n}",
+  "elapsed_ms": 12649,
+  "usage": {
+    "input_tokens": 915,
+    "output_tokens": 1566
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nShort answer: the excerpt you've provided (Indications and Usage + Dosage and Administration for lisinopril/hydrochlorothiazide) does not contain the ADVERSE REACTIONS section, so I can't give you the labeled frequency data for lisinopril's most common side effects from this text.\n\nWhat this excerpt does say about safety:\n- \"The side effects of lisinopril are generally rare and apparently independent of dose,\" whereas hydrochlorothiazide's effects are a mix of dose-dependent problems (primarily hypokalemia) and dose-independent ones (e.g., pancreatitis). Adding lisinopril to a thiazide blunted the hypokalemia normally seen with diuretics.\n- ACE inhibitors as a class: captopril has caused agranulocytosis, particularly in patients with renal impairment or collagen vascular disease, and available data are insufficient to show lisinopril lacks a similar risk.\n- Head and neck angioedema is reported more often in Black patients receiving ACE inhibitors than in non‑Black patients.\n- Anaphylactoid reactions during membrane exposure (e.g., dialysis/apheresis) are referenced in the WARNINGS section.\n\nFor context (not from this excerpt), lisinopril labeling generally lists dry persistent cough, dizziness, headache, fatigue, hypotension/orthostatic effects, hyperkalemia, and increases in serum creatinine/BUN among the more frequently reported reactions; angioedema is uncommon but potentially life-threatening. Also note ACE inhibitors are contraindicated in pregnancy (fetal toxicity).\n\nPlease consult the full prescribing information's ADVERSE REACTIONS, WARNINGS, and PRECAUTIONS sections, and speak with your prescriber or pharmacist about symptoms you're experiencing—seek emergency care for swelling of the face, lips, tongue, or throat or difficulty breathing.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1377,
+  "usage": {
+    "input_tokens": 1028,
+    "output_tokens": 17
+  }
+}

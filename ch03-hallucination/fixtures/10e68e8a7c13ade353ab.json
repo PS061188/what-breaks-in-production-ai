@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Lisinopril indicated to treat?\n\nRESPONSE:\nBased on this label, lisinopril and hydrochlorothiazide tablets are indicated for one condition: **hypertension (high blood pressure)** — specifically, to lower blood pressure.\n\nKey points from the label:\n\n- **Purpose of lowering blood pressure:** Reducing blood pressure lowers the risk of fatal and non-fatal cardiovascular events, primarily strokes and myocardial infarctions.\n- **Part of broader care:** Blood pressure control should be part of comprehensive cardiovascular risk management, including lipid control, diabetes management, antithrombotic therapy, smoking cessation, exercise, and limited sodium intake. Many patients need more than one drug to reach blood pressure goals.\n- **Not for initial therapy:** This fixed-dose combination is not indicated as initial therapy. It is generally appropriate to begin combination therapy only after a patient has not achieved the desired effect with monotherapy (lisinopril or hydrochlorothiazide alone), or it may be substituted for the titrated individual components (replacement therapy).\n\nSafety considerations noted in the indications section:\n- An ACE inhibitor (captopril) has caused agranulocytosis, particularly in patients with renal impairment or collagen vascular disease; available data are insufficient to show lisinopril lacks a similar risk.\n- Black patients receiving ACE inhibitors have been reported to have a higher incidence of angioedema than non-Black patients.\n\nNote: This excerpt covers the lisinopril/hydrochlorothiazide combination product. Lisinopril alone has additional approved uses (e.g., heart failure, acute myocardial infarction) that are not described in this label excerpt. This information is for educational purposes—treatment decisions should be made with your healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1601,
+  "usage": {
+    "input_tokens": 967,
+    "output_tokens": 17
+  }
+}

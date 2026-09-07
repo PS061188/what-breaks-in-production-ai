@@ -1,0 +1,50 @@
+{
+  "model": "gpt-4.1-mini",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\nDOSAGE AND ADMINISTRATION Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg, while hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day. In clinical trials of lisinopril/hydrochlorothiazide combination therapy using lisinopril doses of 10 mg to 80 mg and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive response rates generally increased with increasing dose of either component. The side effects (see WARNINGS ) of lisinopril are generally rare and apparently independent of dose; those of hydrochlorothiazide are a mixture of dose-dependent phenomena (primarily hypokalemia) and dose-independent phenomena (e.g., pancreatitis), the former much more common than the latter. Therapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg. Further increases of either or both components could depend on clinical response. The hydrochlorothiazide dose should generally not be increased until 2-3 weeks have elapsed. Patients whose blood pressures are adequately controlled with 25 mg of daily hydrochlorothiazide, but who experience significant potassium loss with this regimen, may achieve similar or greater blood pressure control with less potassium loss if they are switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg. Dosage higher than lisinopril 80 mg and hydrochlorothiazide 50 mg should not be used. Replacement Therapy The combination may be substituted for the titrated individual components. Use in Renal Impairment The usual regimens of therapy with lisinopril and hydrochlorothiazide tablets need not be adjusted as long as the patient's creatinine clearance is greater than 30 mL/min/1.73 m 2 (serum creatinine approximately less than or equal to 3 mg/dL or 265 μmol/L). In patients with more severe renal impairment, loop diuretics are preferred to thiazides, so lisinopril and hydrochlorothiazide tablets are not recommended (see WARNINGS, Anaphylactoid reactions during membrane exposure ).\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\":[{\"field\":\"starting_dose\",\"value\":\"10 mg to 80 mg\",\"qualifiers\":[\"once-daily\"],\"source_quote\":\"Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg\"},{\"field\":\"starting_dose\",\"value\":\"12.5 mg to 50 mg\",\"qualifiers\":[\"once-daily\"],\"source_quote\":\"hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day\"},{\"field\":\"starting_dose\",\"value\":\"10 mg/12.5 mg or 20 mg/12.5 mg\",\"qualifiers\":[\"initial\"],\"source_quote\":\"A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg\"},{\"field\":\"maximum_dose\",\"value\":\"lisinopril 80 mg and hydrochlorothiazide 50 mg\",\"qualifiers\":[\"not to exceed\"],\"source_quote\":\"Dosage higher than lisinopril 80 mg and hydrochlorothiazide 50 mg should not be used.\"},{\"field\":\"frequency\",\"value\":\"once-daily\",\"qualifiers\":[], \"source_quote\":\"Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg\"},{\"field\":\"frequency\",\"value\":\"per day\",\"qualifiers\":[], \"source_quote\":\"hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day\"},{\"field\":\"dose_adjustment\",\"value\":\"Further increases of either or both components could depend on clinical response\",\"qualifiers\":[\"depending on the response\"],\"source_quote\":\"Further increases of either or both components could depend on clinical response.\"},{\"field\":\"dose_adjustment\",\"value\":\"The hydrochlorothiazide dose should generally not be increased until 2-3 weeks have elapsed\",\"qualifiers\":[\"gradually\"],\"source_quote\":\"The hydrochlorothiazide dose should generally not be increased until 2-3 weeks have elapsed.\"}]}",
+  "elapsed_ms": 8139,
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 460
+  }
+}

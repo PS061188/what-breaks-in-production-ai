@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Lisinopril indicated to treat?\n\nRESPONSE:\nBased on this label, lisinopril and hydrochlorothiazide tablets are indicated for the treatment of hypertension (high blood pressure), to lower blood pressure. Lowering blood pressure reduces the risk of fatal and non-fatal cardiovascular events, primarily strokes and myocardial infarctions.\n\nA few important points from the label:\n\n- This fixed-dose combination is NOT indicated for initial therapy of hypertension. It is generally appropriate to begin combination therapy only after a patient has not achieved the desired response with lisinopril or hydrochlorothiazide monotherapy (or as replacement therapy substituting for the titrated individual components).\n- Blood pressure control should be part of comprehensive cardiovascular risk management, including lipid control, diabetes management, antithrombotic therapy, smoking cessation, exercise, and limited sodium intake. Many patients need more than one drug to reach blood pressure goals.\n- The label notes that some antihypertensives have smaller blood pressure effects as monotherapy in Black patients, and that Black patients receiving ACE inhibitors have a reported higher incidence of angioedema.\n- It also notes that another ACE inhibitor (captopril) has caused agranulocytosis, particularly in patients with renal impairment or collagen vascular disease, and available data are insufficient to show lisinopril lacks a similar risk.\n\nNote: this excerpt covers only the lisinopril/hydrochlorothiazide combination product. Lisinopril alone has additional approved uses (e.g., heart failure, acute myocardial infarction) that are not described in this label excerpt — consult the single-ingredient lisinopril labeling for those. This information is not a substitute for advice from your prescriber or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3334,
+  "usage": {
+    "input_tokens": 959,
+    "output_tokens": 17
+  }
+}

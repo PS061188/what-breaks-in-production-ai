@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Prednisone?\n\nRESPONSE:\nI can't answer that from the material provided — the label excerpt you've shared only contains the INDICATIONS and DOSAGE AND ADMINISTRATION sections for prednisone tablets. It does not include the ADVERSE REACTIONS, WARNINGS, PRECAUTIONS, or CONTRAINDICATIONS sections, so I can't quote specific adverse reactions or their frequency from this document.\n\nWhat I can point out from the excerpt is that the dosing section does allude to some of the recognized undesirable effects of long-term corticosteroid therapy, which is the rationale given for alternate-day therapy (ADT). Specifically it mentions:\n- Pituitary–adrenal (HPA axis) suppression and corticoid withdrawal symptoms\n- The Cushingoid state — described as obesity with centripetal fat distribution, thinning of the skin with easy bruisability, muscle wasting with weakness, hypertension, latent diabetes, osteoporosis, and electrolyte imbalance\n- Growth suppression in children\n\nThe excerpt also warns that during corticosteroid therapy and while the HPA axis is recovering, \"the patient is vulnerable to any stressful situation,\" and that after long-term therapy the drug should be withdrawn gradually rather than abruptly.\n\nFor a complete and accurate list of adverse reactions (including infection risk, GI effects, mood/psychiatric changes, ophthalmic effects, etc.), please consult the full prescribing information for the specific prednisone product, or ask your pharmacist or prescriber. If you're experiencing a new or concerning symptom while taking prednisone, contact your healthcare provider — and do not stop the medication abruptly on your own.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1673,
+  "usage": {
+    "input_tokens": 942,
+    "output_tokens": 16
+  }
+}

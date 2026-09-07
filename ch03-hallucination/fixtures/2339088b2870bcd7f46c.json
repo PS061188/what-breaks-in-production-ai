@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\n**Short answer: the lisinopril/hydrochlorothiazide combination product has no established pediatric dose and should not be used in children.** Pediatric dosing exists only for *single-ingredient lisinopril*.\n\n**Lisinopril monotherapy — pediatric hypertension (per standard lisinopril labeling):**\n\n- **Age ≥6 years with creatinine clearance >30 mL/min/1.73 m²:**\n  - **Starting dose:** 0.07 mg/kg once daily, **up to a maximum starting dose of 5 mg**.\n  - **Titration:** Adjust at ~1–2 week intervals according to blood pressure response.\n  - **Maximum studied dose:** 0.61 mg/kg once daily (or 40 mg total daily), whichever is less. Doses above 0.61 mg/kg (or >40 mg) have not been studied.\n- **Not recommended:** children <6 years of age, or any pediatric patient with **GFR <30 mL/min/1.73 m²** (efficacy/safety not established).\n- **Formulation tip:** For small children, a 1 mg/mL extemporaneous oral suspension can be compounded (per the manufacturer's labeled recipe using 200 mg lisinopril, Bicitra/Ora-Sweet SF and Ora-Plus, shaken before use, stable ~4 weeks at ≤25°C).\n\n**Why the combination is inappropriate in children:**\n1. The excerpt states these fixed-dose combinations are **not indicated for initial therapy** and are intended for patients failing monotherapy — pediatric safety/efficacy of the combination has not been established.\n2. Fixed ratios (10/12.5, 20/12.5, 20/25) cannot deliver weight-based mg/kg dosing.\n3. If a thiazide is genuinely needed in a child, dose hydrochlorothiazide separately (typically 1–2 mg/kg/day, max ~50 mg/day, in consultation with pediatric nephrology).\n\n**Key safety points that apply at any age:**\n- **Contraindicated in pregnancy** — discontinue as soon as pregnancy is detected; counsel adolescent females of childbearing potential and consider a non-RAAS alternative.\n- **Angioedema** risk (higher in Black patients); stop drug immediately and manage airway.\n- Monitor **serum potassium, sodium, creatinine/BUN** at baseline and after initiation/titration; hyperkalemia risk rises with renal impairment, potassium supplements, K-sparing diuretics, or salt substitutes.\n- Avoid concomitant **aliskiren in diabetes**, and use caution with dual RAAS blockade (ARB + ACEi) — increased hypotension, hyperkalemia, renal dysfunction.\n- **NSAIDs** blunt effect and increase AKI risk, especially with volume depletion.\n- Hypotension risk is greatest in volume/salt-depleted patients — correct depletion first or start at the low end.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2188,
+  "usage": {
+    "input_tokens": 1389,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Warfarin Sodium indicated to treat?\n\nRESPONSE:\nWarfarin sodium is indicated for: \n- Prophylaxis and treatment of venous thrombosis and its extension, including pulmonary embolism (PE). \n- Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation (AF) and/or cardiac valve replacement. \n- Reduction in the risk of death, recurrent myocardial infarction (MI), and thromboembolic events (eg, stroke or systemic embolization) after MI. \nNote: Warfarin is a vitamin K antagonist and does not directly dissolve an established thrombus or reverse ischemic tissue damage; its goal is to prevent clot extension and secondary thromboembolic complications.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2706,
+  "usage": {
+    "input_tokens": 619,
+    "output_tokens": 17
+  }
+}

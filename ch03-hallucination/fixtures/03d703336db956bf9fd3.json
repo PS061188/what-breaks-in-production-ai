@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Amoxicillin indicated to treat?\n\nRESPONSE:\n**For this specific product — amoxicillin/clavulanate potassium oral suspension 600 mg/42.9 mg per 5 mL (\"ES-600\") — the labeled indication is narrow:**\n\n**Indication (single, FDA-approved):**\n- Recurrent or persistent **acute otitis media (AOM)** in pediatric patients **3 months to 12 years of age weighing ≤40 kg**, due to:\n  - *Streptococcus pneumoniae* (penicillin MIC ≤2 mcg/mL)\n  - *Haemophilus influenzae* (including beta-lactamase–producing strains)\n  - *Moraxella catarrhalis* (including beta-lactamase–producing strains)\n- **And** characterized by these risk factors: antibacterial exposure for AOM within the preceding 3 months, **plus either** age ≤2 years **or** day-care attendance.\n\n**Limitations of use:**\n- Not indicated for AOM due to *S. pneumoniae* with penicillin MIC ≥4 mcg/mL.\n- AOM due to *S. pneumoniae* alone can be treated with plain amoxicillin — the high-dose clavulanate formulation adds nothing for that organism.\n- No data in children >40 kg or in adults; adults who cannot swallow tablets should **not** be given ES-600 in place of the 500 mg or 875 mg tablets.\n- Empiric therapy before culture results is reasonable when both penicillin-susceptible *S. pneumoniae* (MIC ≤2) and beta-lactamase producers are plausible.\n\n**Dosing reminders for this formulation:**\n- 90 mg/kg/day of the amoxicillin component divided q12h × 10 days (delivers 6.4 mg/kg/day clavulanate). Practical volumes: 8 kg → 3 mL BID; 16 kg → 6 mL BID; 24 kg → 9 mL BID; 32 kg → 12 mL BID; 40 kg → 15 mL BID.\n- Give at the **start of a meal** to improve clavulanate absorption and reduce GI upset.\n- **Not interchangeable** with the 200/28.5 or 400/57 suspensions (different clavulanate content per 5 mL).\n- Reconstituted suspension: refrigerate, shake well, discard after 10 days.\n- Dose cautiously and monitor LFTs in hepatic impairment.\n\n**Broader context (standard pharmacology, beyond this excerpt):**\nOther amoxicillin and amoxicillin/clavulanate formulations carry wider indications, commonly including:\n- Acute bacterial otitis media, sinusitis, and pharyngitis/tonsillitis (group A strep)\n- Lower respiratory tract infections, including community-acquired pneumonia and acute exacerbations of chronic bronchitis\n- Skin and skin-structure infections (including animal/human bite wounds, where clavulanate coverage of anaerobes and *Pasteurella* is valuable)\n- Urinary tract infections\n- *Helicobacter pylori* eradication (amoxicillin as part of combination regimens)\n- Endocarditis prophylaxis before dental procedures in at-risk patients (amoxicillin alone)\n- Lyme disease (early localized) and anthrax post-exposure prophylaxis in selected patients (amoxicillin alone)\n\nUse any of these agents only for proven or strongly suspected bacterial infection, and narrow to plain amoxicillin whenever beta-lactamase coverage is unnecessary.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1776,
+  "usage": {
+    "input_tokens": 1566,
+    "output_tokens": 17
+  }
+}

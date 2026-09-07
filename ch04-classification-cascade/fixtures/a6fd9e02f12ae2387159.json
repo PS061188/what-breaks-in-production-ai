@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nIn premature infants furosemide may precipitate nephrocalcinosis/nephrolithiasis. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity who have been treated chronically with furosemide. Monitor renal function, and renal ultrasonography should be considered, in pediatric patients receiving furosemide. If furosemide is administered to premature infants during the first weeks of life, it may increase the risk of persistence of patent ductus arteriosus. Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"pediatric_use\"}",
+  "elapsed_ms": 971,
+  "usage": {
+    "input_tokens": 705,
+    "output_tokens": 12
+  }
+}

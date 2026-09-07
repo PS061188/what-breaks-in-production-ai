@@ -1,0 +1,50 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\nDOSAGE AND ADMINISTRATION Edema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states. Edema may be most efficiently and safely mobilized by giving furosemide tablets on 2 to 4 consecutive days each week. When doses exceeding 80 mg/day are given for prolonged periods, careful clinical observation and laboratory monitoring are particularly advisable (see PRECAUTIONS: Laboratory Tests ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level. Hypertension Therapy should be individualized according to the patient's response to gain maximal therapeutic response and to determine the minimal dose needed to maintain the therapeutic response. Adults: The usual initial dose of furosemide tablets for hypertension is 80 mg, usually divided into 40 mg twice a day. Dosage should then be adjusted according to response. If response is not satisfactory, add other antihypertensive agents. Changes in blood pressure must be carefully monitored when furosemide tablets are used with other antihypertensive drugs, especially during initial therapy. To prevent excessive drop in blood pressure, the dosage of other agents should be reduced by at least 50 percent when furosemide tablets are added to the regimen. As the blood pressure falls under the potentiating effect of furosemide tablets, a further reduction in dosage or even discontinuation of other antihypertensive drugs may be necessary. Geriatric Patients: In general, dose selection and dose adjustment for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ).\n\nEdema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then b\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\": [{\"field\": \"starting_dose\", \"value\": \"20 to 80 mg\", \"qualifiers\": [\"initial\", \"usual\", \"single dose\"], \"source_quote\": \"The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose.\"}, {\"field\": \"maximum_dose\", \"value\": \"600 mg/day\", \"qualifiers\": [\"carefully titrated\", \"clinically severe edematous states\"], \"source_quote\": \"The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states.\"}, {\"field\": \"frequency\", \"value\": \"once or twice daily\", \"qualifiers\": [\"individually determined single dose\"], \"source_quote\": \"The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm).\"}, {\"field\": \"dose_adjustment\", \"value\": \"20 or 40 mg\", \"qualifiers\": [\"raised\", \"not sooner than 6 to 8 hours after the previous dose\", \"until the desired diuretic effect has been obtained\"], \"source_quote\": \"The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained.\"}]}",
+  "elapsed_ms": 2406,
+  "usage": {
+    "input_tokens": 1434,
+    "output_tokens": 318
+  }
+}

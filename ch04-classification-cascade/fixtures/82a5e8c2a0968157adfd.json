@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAtorvastatin calcium tablets, USP for oral use contain atorvastatin 10 mg, 20 mg, 40 mg, or 80 mg (equivalent to 10.34 mg, 20.68 mg, 41.36 mg, or 82.73 mg atorvastatin calcium anhydrous) and the following inactive ingredients: croscarmellose sodium, hydroxypropyl cellulose, lactose monohydrate, magnesium stearate, magnesium aluminometasilicate, microcrystalline cellulose, polysorbate 80, precipitated calcium carbonate, polyvinyl alcohol, titanium dioxide, talc, polyethylene glycol and lecithin.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Atorvastatin calcium\\nMolecular Formula: Not provided in passage\\nInactive Ingredients: croscarmellose sodium, hydroxypropyl cellulose, lactose monohydrate, magnesium stearate, magnesium aluminometasilicate, microcrystalline cellulose, polysorbate 80, precipitated calcium carbonate, polyvinyl alcohol, titanium dioxide, talc, polyethylene glycol, lecithin\"}",
+  "elapsed_ms": 1703,
+  "usage": {
+    "input_tokens": 432,
+    "output_tokens": 119
+  }
+}

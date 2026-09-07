@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Warfarin Sodium safe to use during pregnancy?\n\nRESPONSE:\n**Short answer: No — warfarin is generally contraindicated in pregnancy, with one important exception (selected women with mechanical heart valves).** The label excerpt you provided covers only Indications and Dosage, so the following draws on the full warfarin labeling (Section 8.1 / Contraindications) and standard obstetric–hematology practice.\n\n**Why it is avoided**\n- Warfarin crosses the placenta and is a known human teratogen (former Pregnancy Category X except in women with mechanical valves).\n- **Warfarin embryopathy** — nasal/midface hypoplasia and stippled epiphyses (chondrodysplasia punctata) — occurs with exposure during the **first trimester, particularly weeks 6–12** of gestation. Reported incidence ranges widely (roughly 1–10%, and is strongly dose-dependent).\n- **Second/third trimester exposure** carries risk of CNS abnormalities (dorsal midline dysplasia, optic atrophy, microcephaly), ocular defects, fetal/neonatal intracranial hemorrhage (the immature fetal liver makes few clotting factors, and fetal INR exceeds maternal), placental abruption, spontaneous abortion, stillbirth, prematurity, and neurodevelopmental impairment.\n- Warfarin is also contraindicated in **threatened abortion, eclampsia/pre-eclampsia**, and in any patient in whom bleeding risk outweighs benefit.\n\n**Dose relationship**\n- Risk of embryopathy appears substantially lower at maintenance doses **≤5 mg/day**. This is the basis for continuing warfarin in some valve patients whose therapeutic INR is achieved on a low dose.\n\n**The mechanical heart valve exception**\n- Warfarin remains the most effective agent for preventing valve thrombosis; LMWH and UFH are associated with higher rates of maternal valve thrombosis and death. Common approaches (ACC/AHA, ACCP, ESC), individualized with cardiology/MFM input:\n  1. Warfarin ≤5 mg/day throughout pregnancy, switching to UFH/LMWH near term; or\n  2. Substitute dose-adjusted LMWH (with anti-Xa monitoring) or IV UFH during weeks 6–12, then resume warfarin; or\n  3. LMWH throughout if the required warfarin dose is >5 mg/day and the patient declines the fetal risk.\n- Warfarin should be **stopped and replaced with heparin around 36 weeks** (or ~2–4 weeks before planned delivery) because of fetal intracranial hemorrhage risk during labor. Vaginal delivery is contraindicated if the mother is still on warfarin — cesarean delivery is required.\n\n**Practical management points**\n- **Women of reproductive potential:** counsel on teratogenicity, confirm effective contraception, and obtain a pregnancy test before starting. Discuss a plan for what to do if pregnancy occurs.\n- **If a patient conceives on warfarin:** do not stop abruptly without arranging alternative anticoagulation if she has a thrombotic indication. Transition to therapeutic LMWH, refer urgently to MFM/hematology, and offer detailed fetal ultrasound (and fetal echocardiography) around 18–22 weeks. Exposure is not an automatic indication for termination — many exposed pregnancies are normal, especially if exposure occurred before 6 weeks.\n- **VTE, atrial fibrillation, or post-MI indications in pregnancy:** use **LMWH** (preferred) or UFH instead of warfarin for the entire pregnancy. DOACs are also contraindicated/not recommended in pregnancy.\n- **Postpartum and lactation:** warfarin can be restarted after delivery once hemostasis is secured; it is **compatible with breastfeeding** — it is highly protein-bound and not detected in breast milk, and no anticoagulant effect has been seen in breastfed infants. Monitor the infant clinically if it is premature or has hepatic impairment; routine infant INR is not required.\n\nBottom line: unless the patient has a mechanical valve and the risk–benefit has been explicitly weighed with specialist input, switch to LMWH for anticoagulation during pregnancy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2198,
+  "usage": {
+    "input_tokens": 1824,
+    "output_tokens": 17
+  }
+}

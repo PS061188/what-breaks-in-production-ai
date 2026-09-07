@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Levothyroxine Sodium?\n\nRESPONSE:\nMost adverse reactions to levothyroxine are those of excess thyroid hormone (iatrogenic hyperthyroidism). The most commonly seen reactions include: palpitations, tachycardia and arrhythmias; exacerbation of angina or other ischemic heart disease; nervousness, anxiety; tremor; insomnia; heat intolerance and increased sweating; weight loss; diarrhea; muscle weakness; menstrual irregularities; and transient hair loss (especially in children during dose initiation). The label also warns about choking/gagging if tablets are not taken with a full glass of water. \n\nThese effects are usually dose-related. Management: verify dosing and adherence, check TSH/free T4 (allow 4–6 weeks for full effect after dose changes), consider dose reduction if signs of excess, and treat symptoms (e.g., short‑term beta‑blocker for tachycardia). Use lower starting doses and slower titration in elderly or patients with cardiac disease.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2084,
+  "usage": {
+    "input_tokens": 712,
+    "output_tokens": 17
+  }
+}

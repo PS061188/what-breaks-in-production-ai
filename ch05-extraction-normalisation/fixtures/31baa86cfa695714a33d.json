@@ -1,0 +1,50 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Extract the dosing\ninformation from the label text below into clean, standardised, database-ready\nvalues.\n\nStandardise as you go:\n- Doses as a number in milligrams.\n- Frequency as the number of doses per day.\n- Durations in days.\n- One canonical value per field. Keep it tidy and consistent.\n\n<label_text>\n2 DOSAGE AND ADMlNlSTRATION Postherpetic Neuralgia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilepsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neuralgia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated 2.2 Dosage for Epilepsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 300 mg three times a day. The recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer Gabapentin three times a day using 300 mg or 400 mg capsules. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of Gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses. The recommended maintenance dose of Gabapentin in patients 5 to 11 years of age is 25 mg/kg/day to 35 mg/kg/day, given in three divided doses. Gabapentin may be administered as the capsule formulations. Dosages up to 50 mg/kg/day have been well tolerated in a long-term clinical study. The maximum time interval between doses should not exceed 12 hours. 2.3 Dosage Adjustment in Patients with Renal Impairment Dosage adjustment in patients 12 years of age and older with renal impairment or undergoing hemodialysis is recommended, as follows (see dosing recommendations above for effective doses in each indication): TABLE 1. Gabapentin Dosage Based on Renal Function TID = Three times a day; BID = Two times a day; QD = Single daily dose Renal Function Creatinine Clearance (mL/min) Total Daily Dose Range (mg/day) Dose Regimen (mg) ≥60 900 to 3600 300 TID 400 TID 600 TID 800 TID 1200 TID >30 to 59 400 to 1400 200 BID 300 BID 400 BID 500 BID 700 BID >15 to 29 200 to 700 200 QD 300 QD 400 QD 500 QD 700 QD 15 For patients with creatinine clearance <1\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"fields\": [\n    {\n      \"field\": \"starting_dose\",\n      \"value\": \"300 mg\",\n      \"qualifiers\": [\n        \"Adult epilepsy starting dose: 300 mg three times daily (TID)\",\n        \"Postherpetic neuralgia initiation: Day 1 single 300 mg dose (1/day); Day 2 600 mg/day (300 mg BID); Day 3 900 mg/day (300 mg TID)\",\n        \"Pediatric (3–11 years) starting dose: 10–15 mg/kg/day divided TID\"\n      ],\n      \"source_quote\": \"Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily. In adults with postherpetic neuralgia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). Patients 3 to 11 years of age: starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses.\"\n    },\n    {\n      \"field\": \"maximum_dose\",\n      \"value\": \"3600 mg/day\",\n      \"qualifiers\": [\n        \"Postherpetic neuralgia: can be titrated to 1800 mg/day (600 mg TID) — efficacy shown 1800–3600 mg/day but no clear additional benefit >1800 mg/day\",\n        \"Epilepsy maintenance typical max 1800 mg/day; dosages up to 2400 mg/day well tolerated; 3600 mg/day administered to a small number of patients\"\n      ],\n      \"source_quote\": \"The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated.\"\n    },\n    {\n      \"field\": \"frequency\",\n      \"value\": \"3 per day\",\n      \"qualifiers\": [\n        \"Standard maintenance dosing: three times a day (TID)\",\n        \"Exceptions: PHN initiation Day 1 = single dose (1/day), Day 2 = BID, renal impairment regimens may use BID or QD\"\n      ],\n      \"source_quote\": \"Administer Gabapentin three times a day using 300 mg or 400 mg capsules. The maximum time between doses should not exceed 12 hours. In adults with postherpetic neuralgia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day).\"\n    },\n    {\n      \"field\": \"dose_adjustment\",\n      \"value\": \"Adjust dose by creatinine clearance: CrCl ≥60 mL/min 900–3600 mg/day divided TID; CrCl 30–59 mL/min 400–1400 mg/day divided BID; CrCl 15–29 mL/min 200–700 mg/day as single daily dose (QD); adjust for hemodialysis\",\n      \"qualifiers\": [\n        \"Dose adjustment recommended for patients ≥12 years with renal impairment or on hemodialysis\",\n        \"Refer to Table 1 for specific mg per dose regimens by CrCl\"\n      ],\n      \"source_quote\": \"Dosage adjustment in patients 12 years of age and older with renal impairment or undergoing hemodialysis is recommended, as follows (see dosing recommendations above for effective doses in each indication): TABLE 1. Gabapentin Dosage Based on Renal Function ... Renal Function Creatinine Clearance (mL/min) Total Daily Dose Range (mg/day) Dose Regimen (mg) ≥60 900 to 3600 300 TID 400 TID 600 TID 800 TID 1200 TID >30 to 59 400 to 1400 200 BID 300 BID 400 BID 500 BID 700 BID >15 to 29 200 to 700 200 QD 300 QD 400 QD 500 QD 700 QD\"\n    }\n  ]\n}",
+  "elapsed_ms": 32275,
+  "usage": {
+    "input_tokens": 1100,
+    "output_tokens": 2869
+  }
+}

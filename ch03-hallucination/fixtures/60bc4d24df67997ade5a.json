@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Omeprazole safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt you've provided doesn't contain pregnancy information — it only covers the indication (frequent heartburn occurring 2 or more days a week) and dosing directions (one tablet daily before eating in the morning for a 14-day course, repeatable no more often than every 4 months).\n\nOn OTC omeprazole packages, pregnancy is addressed in the \"Other information\"/\"Warnings\" section, which typically states: **\"If pregnant or breast-feeding, ask a health professional before use.\"** So the manufacturer's guidance is not to self-treat during pregnancy without first checking with a clinician.\n\nSome general context that does not replace individualized medical advice:\n- Omeprazole has been used in pregnancy, and available data have not shown a clear increase in major birth defects, but data are not complete and heartburn in pregnancy is often managed stepwise (lifestyle/diet measures, then antacids or other agents) before a proton pump inhibitor.\n- Prescription omeprazole labeling likewise advises weighing benefit versus potential risk, with a clinician making that decision.\n\nBottom line: if you are pregnant, trying to conceive, or breastfeeding, talk to your obstetric provider or pharmacist before starting omeprazole rather than using it as self-care. Also see a doctor promptly if you have heartburn with chest pain, trouble or pain swallowing, vomiting blood, or black/bloody stools, or if symptoms persist despite the 14-day course.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1570,
+  "usage": {
+    "input_tokens": 861,
+    "output_tokens": 17
+  }
+}

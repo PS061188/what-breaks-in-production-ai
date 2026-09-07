@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nThe dosing of prednisone for pediatric patients is not specified as a fixed dose in the provided label excerpt. Instead, the initial dosage varies depending on the specific disease being treated and the severity of the condition, typically ranging from 5 mg to 60 mg per day for prednisone in general. Dosage must be individualized based on the disease, the patient's response, and clinical status. For juvenile rheumatoid arthritis (a pediatric condition mentioned among indications), low-dose maintenance therapy may be required in selected cases. It is important to start with an appropriate dose to achieve clinical response, then gradually taper to the lowest effective dose. For more precise pediatric dosing, clinical guidelines or specialist consultation should be used alongside this general guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1429,
+  "usage": {
+    "input_tokens": 634,
+    "output_tokens": 17
+  }
+}

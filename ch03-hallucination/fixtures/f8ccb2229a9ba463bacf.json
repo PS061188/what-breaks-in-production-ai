@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nShort answer: the excerpt you've provided doesn't contain the ADVERSE REACTIONS section of the lisinopril/hydrochlorothiazide label, so I can't quote the specific frequency data for you. Here's what the excerpt does say, plus general context:\n\nFrom the label excerpt provided:\n• \"The side effects of lisinopril are generally rare and apparently independent of dose,\" whereas hydrochlorothiazide's effects are a mix of dose-dependent (primarily hypokalemia — the most common) and dose-independent (e.g., pancreatitis) phenomena. Adding lisinopril to a thiazide blunted the hypokalemia normally seen with diuretics.\n• Serious risks specifically flagged: head and neck angioedema (reported more frequently in Black patients receiving ACE inhibitors than in non-Black patients), and the class concern for agranulocytosis (seen with captopril, particularly in patients with renal impairment or collagen vascular disease; data are insufficient to exclude a similar risk with lisinopril). Anaphylactoid reactions during membrane exposure (e.g., dialysis/apheresis) are also referenced.\n\nGenerally known (from the full prescribing information, not this excerpt): the most commonly reported adverse reactions with lisinopril and lisinopril/HCTZ include dizziness, headache, cough (a persistent, dry, non-productive cough typical of ACE inhibitors), fatigue, and orthostatic hypotension; laboratory changes can include increases in serum creatinine/BUN and potassium (hyperkalemia from lisinopril) or, with the thiazide, hypokalemia, hyponatremia, hyperuricemia, and increases in glucose or lipids.\n\nBoxed warning to be aware of: drugs acting on the renin-angiotensin system can cause fetal injury and death — discontinue as soon as pregnancy is detected.\n\nPlease consult the complete prescribing information (ADVERSE REACTIONS and WARNINGS sections) or your pharmacist/prescriber for the full, frequency-ranked list, and report any severe symptoms — especially swelling of the face, lips, tongue or throat, trouble breathing, fainting, or signs of infection such as fever/sore throat — to a healthcare professional immediately.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1793,
+  "usage": {
+    "input_tokens": 1140,
+    "output_tokens": 17
+  }
+}

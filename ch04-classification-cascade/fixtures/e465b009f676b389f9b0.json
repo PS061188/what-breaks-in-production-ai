@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nTable 1. Adverse Reactions with Albuterol Sulfate HFA with ≥3% Incidence and More Common than Placebo in Adult and Adolescent Subjects Adverse Reaction Percent of Subjects Albuterol Sulfate HFA (n = 202) % CFC 11/12-Propelled Albuterol Inhaler (n = 207) % Placebo HFA-134a (n = 201) % Ear, nose, and throat Throat irritation 10 6 7 Upper respiratory inflammation 5 5 2 Lower respiratory Viral respiratory infections 7 4 4 Cough 5 2 2 Musculoskeletal Musculoskeletal pain 5 5 4 Adverse reactions reported by <3% of the adult and adolescent subjects receiving albuterol sulfate HFA and by a greater proportion of subjects receiving albuterol sulfate HFA than receiving HFA-134a placebo inhaler and that have the potential to be related to albuterol sulfate HFA include diarrhea, laryngitis, oropharyngeal edema, cough, lung disorders, tachycardia, and extrasystoles.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Prominent features: (1) This is a structured table presenting adverse reaction data with incidence percentages across three treatment groups (Albuterol Sulfate HFA, CFC-propelled albuterol, and placebo); (2) It reports side effects and unwanted reactions observed in clinical trial subjects, organized by body system (ear/nose/throat, lower respiratory, musculoskeletal); (3) It includes comparative incidence data and mentions additional adverse reactions reported at lower frequencies.\\n\\nStep 2 - Most plausible categories: (a) adverse_reactions - This is clearly a compilation of unwanted effects experienced by patients, reported with incidence rates and organized systematically. (b) drug_interactions - While adverse reactions can sometimes result from drug-drug interactions, this table focuses on direct side effects from the drug itself, not interactions with other substances.\\n\\nStep 3 - Classification decision: adverse_reactions wins decisively. The passage explicitly presents a table of 'Adverse Reactions' with incidence data in clinical subjects. It systematically lists side effects (throat irritation, viral respiratory infections, cough, musculoskeletal pain, tachycardia, etc.) that occurred during treatment. This is the canonical format for adverse_reactions sections in drug labeling. drug_interactions is ruled out because there is no mention of concurrent medications, food interactions, or synergistic effects with other substances.\\n\\nStep 4 - Confidence: HIGH (>90%). The document unmistakably presents adverse reaction data with clear labeling and systematic organization by body system and incidence rates. The context is unambiguous.\",\"classification\":\"adverse_reactions\",\"confidence\":\"HIGH\",\"alternative_considered\":\"drug_interactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 6654,
+  "usage": {
+    "input_tokens": 1140,
+    "output_tokens": 394
+  }
+}

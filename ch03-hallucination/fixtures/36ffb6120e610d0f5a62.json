@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Warfarin Sodium for pediatric patients?\n\nRESPONSE:\nThe label excerpt provided does not contain any pediatric dosing recommendation for warfarin sodium tablets. The dosing section (Section 2) addresses only individualized adult dosing — i.e., a usual initial dose of 2 to 5 mg once daily when CYP2C9/VKORC1 genotypes are unknown, typical maintenance doses of 2 to 10 mg once daily, genotype-guided ranges (Table 1), and target INR ranges by indication (generally 2 to 3, or 2.5 to 3.5 for certain mechanical valves). It also advises lower initial and maintenance doses for elderly/debilitated and Asian patients.\n\nFor warfarin generally, safety and effectiveness in pediatric patients have not been established in adequate and well-controlled studies; when used in children, dosing is individualized and titrated to the target INR with frequent monitoring, and pediatric patients often require higher weight-based doses (infants typically the highest, adolescents the lowest). Because that information is not in this excerpt, please consult the full prescribing information (Section 8.4 Pediatric Use), evidence-based pediatric anticoagulation guidelines, and a pediatric hematologist or anticoagulation specialist before dosing a child.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1982,
+  "usage": {
+    "input_tokens": 797,
+    "output_tokens": 16
+  }
+}

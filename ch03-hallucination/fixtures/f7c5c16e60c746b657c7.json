@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Warfarin Sodium?\n\nRESPONSE:\nThe recommended starting dose of Warfarin Sodium depends on whether the patient's genotype is known:\n\n**Without Genotype Information:**\nThe initial dose is usually 2 to 5 mg once daily. The dose should be individualized based on close monitoring of INR response and the indication being treated. Typical maintenance doses range from 2 to 10 mg once daily.\n\n**With Genotype Information (CYP2C9 and VKORC1):**\nIf genotype is known, refer to the dosing table based on the specific genetic variants. For example:\n- Patients with CYP2C9 *1/*1 and VKORC1 GG may require 5-7 mg\n- Patients with CYP2C9 *3/*3 and VKORC1 AA may require 0.5-2 mg\n\n**Important Considerations:**\n- Initial dose should be based on expected maintenance dose, considering clinical factors (age, race, body weight, sex, medications, comorbidities)\n- Lower initial and maintenance doses are recommended for elderly, debilitated, or Asian patients\n- Loading doses are NOT recommended as they may increase hemorrhagic complications\n- INR must be monitored daily after the initial dose until results stabilize in the therapeutic range\n- The dose is then adjusted based on INR response and the specific indication",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1619,
+  "usage": {
+    "input_tokens": 805,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Atorvastatin Calcium for pediatric patients?\n\nRESPONSE:\nThe recommended dose of Atorvastatin Calcium for pediatric patients depends on the condition being treated:\n\n1. Pediatric patients aged 10 years and older with Heterozygous Familial Hypercholesterolemia (HeFH): Starting dose is 10 mg once daily, with a dosage range of 10 to 20 mg once daily.\n\n2. Pediatric patients aged 10 years and older with Homozygous Familial Hypercholesterolemia (HoFH): Starting dose is 10 to 20 mg once daily, with a dosage range of 10 to 80 mg once daily.\n\nAll dosing should be taken orally once daily with or without food, and LDL-C levels should be assessed as early as 4 weeks after initiating therapy to determine if dosage adjustment is necessary.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1482,
+  "usage": {
+    "input_tokens": 650,
+    "output_tokens": 17
+  }
+}

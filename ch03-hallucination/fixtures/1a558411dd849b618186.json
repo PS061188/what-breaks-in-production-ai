@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Atorvastatin Calcium safe to use during pregnancy?\n\nRESPONSE:\nNo — atorvastatin is not considered safe in pregnancy. Statins inhibit HMG‑CoA reductase and can interfere with fetal cholesterol synthesis, so they should be discontinued as soon as pregnancy is suspected or confirmed. Women of childbearing potential should use effective contraception while taking atorvastatin and should stop the drug if planning pregnancy. If a patient becomes pregnant, stop atorvastatin, notify the obstetric provider, and discuss alternative management (dietary measures; for very high LDL‑C such as homozygous familial hypercholesterolemia consider specialist input and options such as LDL apheresis). Atorvastatin is also not recommended during breastfeeding — avoid use or discontinue nursing. (Human data are limited and animal studies suggest potential fetal risk, so the usual clinical recommendation is to avoid statins in pregnancy.)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2151,
+  "usage": {
+    "input_tokens": 685,
+    "output_tokens": 17
+  }
+}

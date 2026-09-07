@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nThe recommended starting dose of levothyroxine sodium depends on the patient population and clinical situation:\n\n**Adults with Primary Hypothyroidism:**\n- Full replacement dose is 1.6 mcg/kg/day, though some patients may require a lower starting dose\n- Titrate by 12.5 to 25 mcg increments every 4 to 6 weeks until euthyroid\n\n**Adults at Risk for Cardiac Disease (atrial fibrillation or underlying cardiac disease):**\n- Start with a lower dose (less than 1.6 mcg/kg/day)\n- Titrate more slowly every 6 to 8 weeks to avoid exacerbating cardiac symptoms\n\n**Geriatric Patients:**\n- Lower starting dose (less than 1.6 mcg/kg/day)\n\n**Pediatric Patients:**\nStarting doses vary by age based on body weight:\n- 0-3 months: 10-15 mcg/kg/day\n- 3-6 months: 8-10 mcg/kg/day\n- 6-12 months: 6-8 mcg/kg/day\n- 1-5 years: 5-6 mcg/kg/day\n- 6-12 years: 4-5 mcg/kg/day\n- >12 years (incomplete growth/puberty): 2-3 mcg/kg/day\n- Growth and puberty complete: 1.6 mcg/kg/day\n\n**Pregnant Patients with New-Onset Hypothyroidism:**\n- TSH ≥10 mIU/L: 1.6 mcg/kg/day\n- TSH <10 mIU/L: 1.0 mcg/kg/day\n\nDosing must be individualized based on age, body weight, cardiovascular status, concurrent medications, and clinical conditions. Peak therapeutic effect may not be achieved for 4-6 weeks.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1552,
+  "usage": {
+    "input_tokens": 996,
+    "output_tokens": 17
+  }
+}

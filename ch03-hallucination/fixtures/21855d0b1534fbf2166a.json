@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Levothyroxine Sodium for pediatric patients?\n\nRESPONSE:\nThe recommended starting dose of levothyroxine sodium for pediatric patients with hypothyroidism is based on age and body weight: 0 to 3 months: 10 to 15 mcg/kg/day; 3 to 6 months: 8 to 10 mcg/kg/day; 6 to 12 months: 6 to 8 mcg/kg/day; 1 to 5 years: 5 to 6 mcg/kg/day; 6 to 12 years: 4 to 5 mcg/kg/day; greater than 12 years but growth and puberty incomplete: 2 to 3 mcg/kg/day; growth and puberty complete: 1.6 mcg/kg/day. Dosage should be adjusted based on clinical response and laboratory parameters. For pediatric patients from birth to 3 months at risk for cardiac failure, start with a lower dose and increase every 4 to 6 weeks based on clinical and laboratory response. For patients at risk for hyperactivity, start at one-fourth the recommended full replacement dosage and increase weekly by one-fourth until the full recommended replacement dosage is reached. Dosage titration is done every 2 weeks based on serum TSH or free-T4 until the patient is euthyroid.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2245,
+  "usage": {
+    "input_tokens": 798,
+    "output_tokens": 17
+  }
+}

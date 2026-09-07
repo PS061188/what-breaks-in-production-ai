@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOf the total number of atorvastatin calcium -treated patients in clinical trials, 15,813 (40%) were ≥65 years old and 2,800 (7%) were ≥75 years old. No overall differences in safety or effectiveness were observed between these patients and younger patients. Advanced age (≥65 years) is a risk factor for atorvastatin calcium -associated myopathy and rhabdomyolysis. Dose selection for an elderly patient should be cautious, recognizing the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy and the higher risk of myopathy. Monitor geriatric patients receiving atorvastatin calcium for the increased risk of myopathy [see Warnings and Precautions (5.1) and Clinical Pharmacology (12.3) ].\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Of the total number of atorvastatin calcium-treated patients in clinical trials, 15,813 (40%) were ≥65 years old and 2,800 (7%) were ≥75 years old. No overall differences in safety or effectiveness were observed between these patients and younger patients. Advanced age (≥65 years) is a risk factor for atorvastatin calcium-associated myopathy and rhabdomyolysis. Dose selection for an elderly patient should be cautious, recognizing the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy and the higher risk of myopathy. Monitor geriatric patients receiving atorvastatin calcium for the increased risk of myopathy.\"}",
+  "elapsed_ms": 1475,
+  "usage": {
+    "input_tokens": 475,
+    "output_tokens": 179
+  }
+}

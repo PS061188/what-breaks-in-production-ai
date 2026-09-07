@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nFor pediatric patients with partial‑onset seizures:\n\n- Age 3 to 11 years: start 10–15 mg/kg/day given in three divided doses. Recommended maintenance doses (reached by upward titration over ≈3 days):\n  - 3 to 4 years: 40 mg/kg/day divided TID\n  - 5 to 11 years: 25–35 mg/kg/day divided TID\n  (Doses up to 50 mg/kg/day have been tolerated in long‑term study.)\n\n- Age ≥12 years: treat as adults — start 300 mg three times daily; maintenance 300–600 mg three times daily (900–1800 mg/day); higher doses up to 2400 mg/day have been used.\n\nNotes: Gabapentin is indicated in patients ≥3 years of age. Adjust dosing for renal impairment; do not exceed a 12‑hour interval between doses.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1437,
+  "usage": {
+    "input_tokens": 680,
+    "output_tokens": 17
+  }
+}

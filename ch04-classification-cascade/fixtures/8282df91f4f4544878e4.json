@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets have been evaluated for safety in 930 patients, including 100 patients treated for 50 weeks or more. In clinical trials with lisinopril and hydrochlorothiazide tablets no adverse experiences peculiar to this combination drug have been observed. Adverse experiences that have occurred have been limited to those that have been previously reported with lisinopril or hydrochlorothiazide. The most frequent clinical adverse experiences in controlled trials (including open label extensions) with any combination of lisinopril and hydrochlorothiazide tablets were: dizziness (7.5%), headache (5.2%), cough (3.9%), fatigue (3.7%) and orthostatic effects (3.2%) all of which were more common than in placebo-treated patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 822,
+  "usage": {
+    "input_tokens": 644,
+    "output_tokens": 11
+  }
+}

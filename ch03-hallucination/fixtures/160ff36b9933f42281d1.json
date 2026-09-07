@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe excerpt you've given me is from the Indications and Dosage & Administration sections of the warfarin sodium label — it does not include the full Drug Interactions section (Section 7), so I can't give you the complete interaction list from this text. Here is what the excerpt itself does say:\n\n**Interactions mentioned in this excerpt**\n- **Heparin** – A \"common concomitant drug\" that increases the INR. Because heparin affects the INR, patients on both drugs should have INR checked at least 5 hours after the last IV bolus of heparin, 4 hours after stopping a continuous IV infusion, or 24 hours after the last subcutaneous injection. Warfarin can also increase the aPTT even without heparin; a severe aPTT elevation (>50 seconds) with an in-range INR signals increased risk of postoperative hemorrhage.\n- **Dietary vitamin K** – Warfarin has a narrow therapeutic index and its action may be affected by other drugs and by dietary vitamin K intake, so anticoagulation must be carefully monitored.\n- **Aspirin** – Used deliberately with warfarin in some settings (e.g., low-dose aspirin ≤100 mg/day plus moderate-intensity warfarin, INR 2–3, for at least 3 months after a high-risk MI; aspirin may also be added for certain prosthetic valve patients). This combination increases bleeding risk and should be physician-directed.\n- **Other anticoagulants** – Consult the labeling of the other anticoagulant for conversion instructions.\n- **Concomitant medications generally** – Listed as a clinical factor influencing initial warfarin dose. Perform additional INR tests whenever any medication is started, stopped, or taken irregularly, and also when other warfarin products are interchanged with these tablets.\n\n**Important:** Warfarin has hundreds of clinically significant drug, herbal, and food interactions (including many antibiotics, antifungals, amiodarone, NSAIDs, SSRIs, and CYP2C9/CYP3A4/CYP1A2 inhibitors and inducers). For the full list, refer to Section 7 (Drug Interactions) and Section 12.3 of the complete prescribing information, and check with your pharmacist or prescriber before starting or stopping any medication or supplement.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2589,
+  "usage": {
+    "input_tokens": 1143,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Gabapentin?\n\nRESPONSE:\nShort answer: the excerpt you've given me (Sections 1 and 2 — Indications and Dosage/Administration) does not contain the Drug Interactions section, so I can't quote interaction information from this label text.\n\nWhat I can tell you generally (from the standard gabapentin prescribing information — please verify against the full label, Section 7 \"Drug Interactions\" and Section 5 \"Warnings and Precautions\"):\n\n- Opioids (e.g., morphine, hydrocodone): Concomitant use increases the risk of respiratory depression, profound sedation, syncope, and death. Gabapentin exposure can be increased when given with morphine; hydrocodone concentrations may be decreased while gabapentin exposure increases. Start at the lowest doses and monitor closely.\n- Other CNS depressants (benzodiazepines, alcohol, sedating antihistamines, muscle relaxants, anesthetics): additive somnolence, dizziness, and respiratory/CNS depression.\n- Aluminum- and magnesium-containing antacids (e.g., Maalox): reduce gabapentin bioavailability by up to ~20%. Take gabapentin at least 2 hours after the antacid.\n- Other antiepileptic drugs (phenytoin, carbamazepine, valproic acid, phenobarbital) and oral contraceptives: no clinically important pharmacokinetic interactions have been demonstrated.\n- Drug/laboratory test interaction: false-positive readings have been reported with some urine protein dipstick tests (sulfosalicylic acid precipitation is recommended).\n- Renal considerations: because gabapentin is eliminated unchanged by the kidneys, drugs or conditions that reduce renal function may raise gabapentin levels — dose adjustment by creatinine clearance is required (see Section 2.3 of your excerpt).\n\nFor a definitive list, consult the complete prescribing information for your specific gabapentin product, and ask your pharmacist or prescriber to review your full medication list. This is general information, not medical advice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1961,
+  "usage": {
+    "input_tokens": 1049,
+    "output_tokens": 17
+  }
+}

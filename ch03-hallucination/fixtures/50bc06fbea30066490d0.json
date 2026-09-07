@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Warfarin Sodium?\n\nRESPONSE:\nThe single most common and clinically important adverse reaction with warfarin is bleeding/hemorrhage (ranging from minor bruising, epistaxis, hematuria and GI bleeding to major life‑threatening bleeds such as intracranial hemorrhage). Other relatively common or clinically recognized reactions include easy bruising, prolonged bleeding from cuts, and menstrual bleeding abnormalities. Less common but important reactions include skin necrosis (usually in early therapy, esp. with protein C deficiency), purple toe syndrome (cholesterol microembolization), hypersensitivity/dermatitis, alopecia, nausea/diarrhea, and rare hepatotoxicity. \n\nClinical points: monitor INR frequently (daily when initiating, then every 1–4 weeks when stable), recognize that bleeding risk rises with higher INR and interacting drugs/illness, and manage bleeding by holding warfarin and reversing with vitamin K and, for major bleeds, prothrombin complex concentrate (or FFP if PCC not available) per institutional protocols.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1462,
+  "usage": {
+    "input_tokens": 746,
+    "output_tokens": 17
+  }
+}

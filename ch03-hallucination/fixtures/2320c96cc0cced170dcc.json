@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Sertraline Hydrochloride?\n\nRESPONSE:\n**Adults — 50 mg once daily** is the standard starting dose for most indications:\n\n| Indication | Starting dose | Titration / usual range | Max |\n|---|---|---|---|\n| Major depressive disorder | 50 mg once daily | ↑ in 50 mg steps, no more often than weekly | 200 mg/day |\n| OCD (adults) | 50 mg once daily | Same | 200 mg/day |\n| Panic disorder | 50 mg once daily (label lists 50 mg initial; in practice many clinicians start 25 mg × 1 week to limit early anxiety/jitteriness, then 50 mg) | ↑ weekly | 200 mg/day |\n| PTSD | 50 mg once daily (25 mg × 1 week often used for tolerability) | ↑ weekly | 200 mg/day |\n| Social anxiety disorder | 50 mg once daily (25 mg start often used) | ↑ weekly | 200 mg/day |\n| PMDD | 50 mg/day, either continuously or luteal-phase only | ↑ 50 mg per menstrual cycle | 150 mg/day continuous; 100 mg/day luteal-phase dosing (with a 3-day 50 mg titration step at the start of each luteal period if the established dose is 100 mg/day) |\n\n**Pediatric OCD (only approved pediatric indication):**\n- Ages 6–12: start 25 mg once daily\n- Ages 13–17: start 50 mg once daily\n- Range 25–200 mg/day; titrate no more often than weekly, and account for lower body weight in children to avoid overdosing.\n\n**Practical points**\n- Dose once daily, morning or evening; can be taken with or without food (food may improve GI tolerability). Take consistently the same way if using oral concentrate (must be diluted in 4 oz water, ginger ale, lemon/lime soda, lemonade, or orange juice and taken immediately).\n- Because the elimination half-life is ~24 hours (active metabolite longer), wait **at least 1 week between dose increases**; steady state takes ~1 week.\n- **Hepatic impairment:** use a lower or less frequent dose (e.g., 25 mg/day or 50 mg every other day) in mild impairment; not studied in moderate–severe impairment — use caution or avoid. No adjustment needed for renal impairment.\n- **Elderly:** consider 25 mg/day start; monitor for hyponatremia/SIADH.\n- **MAOIs:** contraindicated — allow 14 days off an MAOI before starting sertraline and 14 days after stopping sertraline before an MAOI. Do not start in patients on linezolid or IV methylene blue.\n- **Discontinuation:** taper gradually rather than stopping abruptly to avoid discontinuation symptoms; if intolerable, resume the prior dose and taper more slowly.\n- Monitor all patients, especially those ≤24 years, for worsening depression, agitation, or emergent suicidality during initiation and after dose changes.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2071,
+  "usage": {
+    "input_tokens": 1394,
+    "output_tokens": 17
+  }
+}

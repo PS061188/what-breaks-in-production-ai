@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nCardiovascular: Cardiac arrest, myocardial infarction or cerebrovascular accident, possibly secondary to excessive hypotension in high-risk patients (see WARNINGS, Hypotension ), pulmonary embolism and infarction, worsening of heart failure, arrhythmias (including tachycardia, ventricular tachycardia, atrial tachycardia, atrial fibrillation, bradycardia, and premature ventricular contractions), angina pectoris, transient ischemic attacks, paroxysmal nocturnal dyspnea, decreased blood pressure, peripheral edema, vasculitis; Digestive: Pancreatitis, hepatitis (hepatocellular or cholestatic jaundice) (see WARNINGS, Hepatic Failure ), gastritis, anorexia, flatulence, increased salivation; Endocrine:\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Cardiac arrest, myocardial infarction, cerebrovascular accident, pulmonary embolism, pulmonary infarction, worsening of heart failure, tachycardia, ventricular tachycardia, atrial tachycardia, atrial fibrillation, bradycardia, premature ventricular contractions, angina pectoris, transient ischemic attacks, paroxysmal nocturnal dyspnea, decreased blood pressure, peripheral edema, vasculitis, pancreatitis, hepatitis, hepatocellular jaundice, cholestatic jaundice, gastritis, anorexia, flatulence, increased salivation\"}",
+  "elapsed_ms": 1698,
+  "usage": {
+    "input_tokens": 470,
+    "output_tokens": 165
+  }
+}

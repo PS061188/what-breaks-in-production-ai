@@ -1,0 +1,299 @@
+<!-- ============================ COVER ============================ -->
+<div class="cover">
+  <div class="kicker">Companion Report</div>
+  <div class="rule"></div>
+  <h1>What Breaks in<br>Production AI</h1>
+  <h2>The Experiments — every prompt and every engineering fix in the book,
+      run against real documents, in the order the book presents them</h2>
+  <div class="meta">
+    Prachi Sharma<br>
+    August 2026<br><br>
+    All nine failure patterns · 12 real FDA drug labels · 4,126 recorded runs<br>
+    Five models · two providers · every number reproducible for free
+  </div>
+</div>
+
+<!-- ============================ CONTENTS ============================ -->
+<h2 class="part first">Contents</h2>
+
+<p class="lede">This report follows the book. One part per chapter, in chapter
+order. Inside each part, the chapter's prompt template comes first, then its
+engineering fixes in exactly the order the chapter lists them.</p>
+
+<div class="toc">
+  <div><span class="n">A</span> Why this report exists
+    <span class="sub">A book full of code that had never been run</span></div>
+  <div><span class="n">B</span> How the experiments work
+    <span class="sub">The documents, the trick that gives us right answers, and the words you need</span></div>
+  <div><span class="n">C</span> How to read a chapter
+    <span class="sub">The five things reported for every prompt and every fix</span></div>
+  <div><span class="n">2</span> Input integrity failures
+    <span class="sub">Silent corruption 39% · the stronger model is worse · 1 prompt, 4 fixes</span></div>
+  <div><span class="n">3</span> Hallucinations and confident fabrication
+    <span class="sub">92% → 23% from one clause · the best-evidenced chapter · 1 prompt, 4 fixes</span></div>
+  <div><span class="n">4</span> Classification cascade errors
+    <span class="sub">Barely reproduces · the book's own prompt was the worst classifier · 4 fixes</span></div>
+  <div><span class="n">5</span> Extraction and normalisation quality loss
+    <span class="sub">52% → 91% auditability · 52 losses made visible · 4 fixes</span></div>
+  <div><span class="n">6</span> State mismatch failures
+    <span class="sub">Two chapters of this book contradict each other · 4 fixes</span></div>
+  <div><span class="n">7</span> Edge input failures
+    <span class="sub">144/144 baseline · the fix destroyed half of legitimate traffic · 4 fixes</span></div>
+  <div><span class="n">8</span> Routing and placement errors
+    <span class="sub">Did not reproduce · but produced the finding that corrected Chapter 9</span></div>
+  <div><span class="n">9</span> Sparse field fabrication
+    <span class="sub">29% fabrication · and the worst mistake in this report, corrected · 4 fixes</span></div>
+  <div><span class="n">10</span> Silent omissions
+    <span class="sub">55 of 55 returned · the fixes made it worse · 4 fixes</span></div>
+  <div><span class="n">D</span> Does any of this hold on other models?
+    <span class="sub">Four models, two providers — and one finding that inverts the usual advice</span></div>
+  <div><span class="n">E</span> What everything cost
+    <span class="sub">$24 for the whole project · and the one fix that costs 10× what it protects</span></div>
+  <div><span class="n">F</span> The experiments had bugs too
+    <span class="sub">Fourteen of them, five that would have published false numbers</span></div>
+  <div><span class="n">G</span> What the book should change
+    <span class="sub">Corrections, promotions, and where I am uncertain</span></div>
+  <div><span class="n">H</span> What this does not prove
+    <span class="sub">The limits, stated before anyone else states them</span></div>
+</div>
+
+<!-- ============================ A ============================ -->
+<h2 class="part">A — Why this report exists</h2>
+<h3 class="top">A book full of code that had never been run</h3>
+
+<p class="lede">Every chapter of <em>What Breaks in Production AI</em> ends with
+a prompt template and a list of engineering fixes. They were written carefully.
+They were never executed. This report is what happened when they were.</p>
+
+<p>That gap matters more than it might sound. A prompt is not like a paragraph
+of prose, where a careful writer can be reasonably confident the words do what
+they intend. A prompt is an instruction to a machine, and the only way to find
+out what a machine does with an instruction is to give it the instruction and
+watch. Two prompts that read almost identically on the page can behave
+completely differently in production. A fix that sounds obviously correct can
+turn out to break something else that nobody was measuring.</p>
+
+<p>So the exercise here is deliberately narrow, and deliberately unkind to the
+book. For all nine failure patterns, we took the exact prompt the chapter
+recommends and the exact engineering fixes it lists, ran them against real
+documents, and measured what changed. Where a fix worked, we say by how much.
+Where it did nothing, we say that in the same size type. Where a chapter's
+failure did not occur at all, we say that too.</p>
+
+<div class="plain">
+  <span class="label">The short version</span>
+  <p>Most of what the book claims held up, and two prompt fixes work
+  dramatically — one of them across four models from two different companies.</p>
+  <p>But <strong>four of the nine failures did not reproduce on a current
+  model</strong>. <strong>Five engineering fixes do not work as the book
+  describes</strong>, two of them cannot work on the problem they are aimed at,
+  one costs ten times the thing it protects, and one <strong>reproduces the exact
+  harm its own chapter opens by warning about</strong>. Two chapters give the same
+  advice and one of them is broken.</p>
+  <p>The book also makes a claim five separate times without knowing it: that a
+  model cannot be trusted to assess its own work. Three fixes are built on
+  exactly that signal.</p>
+  <p>None of that was knowable from reading. All of it cost about twenty-four
+  dollars.</p>
+</div>
+
+<h4>Who this is for</h4>
+
+<p>You do not need to write software to read this. Part B explains every
+technical term as it arrives, and the experiments are described the way you
+would describe them to a colleague over coffee: here is what we asked the
+machine, here is what it did, here is why that is a problem, here is what we
+changed, here is what happened next.</p>
+
+<p>If you do write software, everything here is in a public code repository.
+Every run is recorded, so you can replay all of it on your own laptop in a few
+seconds without paying anything or creating an account anywhere.</p>
+
+<!-- ============================ B ============================ -->
+<h2 class="part">B — How the experiments work</h2>
+<h3 class="top">The documents</h3>
+
+<p>Every experiment uses the same source material: the printed labels that come
+with prescription drugs. Not the leaflet in the box — the full regulatory
+document a manufacturer files with the US Food and Drug Administration, running
+to dozens of pages and covering what the drug treats, how much to give, who
+should not take it, what happens in overdose, and so on.</p>
+
+<p>The FDA publishes all of these free in a machine-readable form. They are in
+the public domain, so anyone can download the same ones we used. We took twelve
+common drugs — prednisone, lisinopril, metformin, warfarin, and nine others.</p>
+
+<h4>Why these documents, and not something more exciting</h4>
+
+<p>Three reasons, and the third is the one that matters.</p>
+
+<p>First, they are <strong>real</strong>. A great deal of AI demonstration work
+runs on examples somebody invented for the demonstration, which means the
+demonstration proves only that the example was well chosen. Nothing here was
+invented.</p>
+
+<p>Second, they are <strong>the right kind of hard</strong>. Drug labels are
+written with enormous care about precision. A dose is not "about 20 milligrams";
+it is "20 to 80 mg given as a single dose", and the difference between those two
+phrasings is the entire subject of one of the chapters.</p>
+
+<p>Third — and this is the trick that makes the whole report possible — the
+labels are <strong>naturally incomplete, in ways nobody arranged</strong>.</p>
+
+<h3>The trick: how we know the right answer</h3>
+
+<p>The hardest problem in testing an AI system is knowing what the correct
+answer was supposed to be. Usually somebody has to sit down and write out the
+right answers by hand, which is slow, expensive, and produces an answer key that
+people can argue with. Two experts often disagree about what a summary should
+have said.</p>
+
+<p>We avoided all of that, because the documents gave us the answer key for
+free.</p>
+
+<p>Not every drug label has every section. Prednisone's label has no
+pediatric-use section at all. Sertraline's has no pregnancy section.
+Omeprazole's is missing nine of the fourteen sections we looked for. These gaps
+are real — they are simply how those documents were filed — and they are
+recorded in the data, so a computer can check them without a human making a
+judgement call.</p>
+
+<p>That gives us something unusually clean. If we hand the AI only two sections
+of a label and then ask a question that could only be answered from a third, we
+know with certainty that the correct response is <em>"I cannot answer that from
+what you gave me."</em> Not because an expert decided so, but because the text
+simply is not there.</p>
+
+<div class="plain">
+  <span class="label">In one sentence</span>
+  <p>We can measure making-things-up exactly, because we know exactly which
+  questions have no answer in the material — and the machine has no way of
+  knowing that we know.</p>
+</div>
+
+<h3>Broken and fixed</h3>
+
+<p>Each experiment is two programs doing the same job on the same documents.</p>
+
+<p><strong>The broken one</strong> uses the kind of prompt most teams write
+first: reasonable, well-intentioned, and missing the specific safeguard the
+chapter is about. This is not a straw man. In each case it is a prompt you could
+find in production today.</p>
+
+<p><strong>The fixed one</strong> applies the chapter's prompt and the chapter's
+engineering fixes, and nothing else. Same documents, same questions, same output
+format. The only things that change are the wording of the instruction and the
+code that runs after the model answers — so whatever moves in the numbers is
+attributable to those two things and not to some third difference.</p>
+
+<h3>Why anyone can re-run this for nothing</h3>
+
+<p>Every conversation with the AI — more than a thousand of them — was recorded
+to disk the first time it happened. Running the experiments again replays those
+recordings instead of asking the model afresh.</p>
+
+<ul>
+  <li><strong>It is free and instant for the reader.</strong> No account, no key,
+  no cost, no waiting.</li>
+  <li><strong>The numbers cannot drift.</strong> AI models are not
+  deterministic — ask the same question twice and you get two slightly different
+  answers. Recording means the figures in this report are the figures you will
+  see, not approximately.</li>
+  <li><strong>Every claim is auditable.</strong> Each recording is a plain text
+  file containing the exact question asked and the exact answer given. If a
+  number here looks wrong, the evidence for it is sitting there to be read.</li>
+</ul>
+
+<h3>The words you need</h3>
+
+<table>
+  <tr><th style="width:24%">Term</th><th>What it actually means</th></tr>
+  <tr><td><strong>Prompt</strong></td>
+      <td>The written instruction given to the AI before the real question. Think
+      of it as the job description you hand a temp on their first morning.</td></tr>
+  <tr><td><strong>Grounded</strong></td>
+      <td>An answer is grounded if every fact in it traces back to the documents
+      supplied. An answer can be perfectly true and still ungrounded — the model
+      knew it from elsewhere, not from your material.</td></tr>
+  <tr><td><strong>Fabrication</strong></td>
+      <td>Stating something as fact when the supplied documents do not support
+      it. Usually not a wild invention. Usually something that sounds exactly
+      like what should have been there.</td></tr>
+  <tr><td><strong>Schema</strong></td>
+      <td>A form the AI must fill in, with named boxes and rules about what goes
+      in each. Instead of free-form text you get structured, checkable fields.</td></tr>
+  <tr><td><strong>Null</strong></td>
+      <td>A formal "there is nothing here" — different from an empty box, and
+      importantly different from the text "N/A". A null can be counted and
+      alarmed on; "N/A" is indistinguishable from real data.</td></tr>
+  <tr><td><strong>Recall</strong></td>
+      <td>Of the things you should have caught, how many did you? A smoke alarm
+      with high recall goes off in every fire.</td></tr>
+  <tr><td><strong>False alarm</strong></td>
+      <td>The other half of that trade — the same alarm going off every time you
+      make toast. High recall is easy. High recall <em>without</em> false alarms
+      is the hard part.</td></tr>
+  <tr><td><strong>Embedding</strong></td>
+      <td>Turning a piece of text into a list of numbers, arranged so that texts
+      about similar things get similar numbers. It lets a computer ask "are these
+      two passages about the same thing?" without understanding either.</td></tr>
+</table>
+
+<!-- ============================ C ============================ -->
+<h2 class="part">C — How to read a chapter</h2>
+<h3 class="top">The same five things, every time</h3>
+
+<p class="lede">Each chapter part below opens with the failure in plain words and
+how we tested for it. Then the chapter's prompt template. Then its engineering
+fixes, numbered in the order the book lists them.</p>
+
+<p>For the prompt and for every single fix, the same five things are reported,
+in the same order, so you can review them without hunting:</p>
+
+<table>
+  <tr><th style="width:22%">Heading</th><th>What it tells you</th></tr>
+  <tr><td><strong>What it is</strong></td>
+      <td>The fix explained without jargon, and what the book says about it.</td></tr>
+  <tr><td><strong>What we ran</strong></td>
+      <td>Exactly what was done, and against what.</td></tr>
+  <tr><td><strong>Result</strong></td>
+      <td>The measured numbers, with the denominators shown.</td></tr>
+  <tr><td><strong>Verdict</strong></td>
+      <td>One of five, defined below. Deliberately blunt.</td></tr>
+  <tr><td><strong>Cost and when to use it</strong></td>
+      <td>What it costs to run, what it scales with, and the conditions under
+      which it earns its place.</td></tr>
+</table>
+
+<h4>The five verdicts</h4>
+
+<table>
+  <tr><th style="width:24%">Verdict</th><th>Meaning</th></tr>
+  <tr><td><strong>Works</strong></td>
+      <td>Measurably improved the thing it was aimed at, without breaking
+      something else.</td></tr>
+  <tr><td><strong>Works, with a caveat</strong></td>
+      <td>Improved the target, at a cost the book does not mention.</td></tr>
+  <tr><td><strong>Did nothing here</strong></td>
+      <td>Ran correctly and changed no outcome on this corpus. Not the same as
+      useless — the conditions where it would matter are stated.</td></tr>
+  <tr><td><strong>Cannot work on this failure</strong></td>
+      <td>Aimed at a different problem from the one the chapter has. No amount of
+      tuning fixes that.</td></tr>
+  <tr><td><strong>Not implemented as written</strong></td>
+      <td>The instruction in the book cannot be followed literally. What is wrong
+      with it is explained.</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">One thing to hold on to while reading</span>
+  <p>The fixes divide into two families, and the division predicts almost
+  everything that follows. Some fixes are <strong>instructions to the model</strong>
+  — prompt wording, requests to self-check, requests to state its own
+  confidence. Others are <strong>checks in ordinary code</strong> that run after
+  the model has answered and do not ask its permission.</p>
+  <p>Across all six chapters, the second family won almost every time, and the
+  cheapest members of it won most often. That is not because cheap is better. It
+  is because a check written in code is a check you can test, and a check you can
+  test still works after the model changes underneath you.</p>
+</div>

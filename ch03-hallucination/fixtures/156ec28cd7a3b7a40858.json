@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\nThe label excerpt you've provided doesn't contain any pediatric dosing recommendations for lisinopril/hydrochlorothiazide. The Dosage and Administration section only addresses adult use, and importantly, it notes that this fixed-dose combination is **not indicated for initial therapy** — it is intended for patients whose blood pressure is not adequately controlled on lisinopril or hydrochlorothiazide monotherapy.\n\nWhat the excerpt does say (for adults):\n- Lisinopril monotherapy: 10 mg to 80 mg once daily\n- Hydrochlorothiazide monotherapy: 12.5 mg to 50 mg daily\n- Combination starting options: lisinopril/HCTZ 10 mg/12.5 mg or 20 mg/12.5 mg, titrated by clinical response (HCTZ dose generally not increased until 2–3 weeks have elapsed)\n- Maximum: do not exceed lisinopril 80 mg / HCTZ 50 mg\n- Renal impairment: no adjustment needed if CrCl >30 mL/min/1.73 m²; not recommended in more severe renal impairment (loop diuretics preferred)\n\nIf you are asking about lisinopril alone in children, that information would be found in the single-ingredient lisinopril labeling (which does include pediatric hypertension dosing for children ≥6 years with adequate renal function), not in this combination product label. Please consult the full prescribing information for lisinopril or a pediatric clinician/pharmacist for weight-based dosing guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1635,
+  "usage": {
+    "input_tokens": 898,
+    "output_tokens": 16
+  }
+}

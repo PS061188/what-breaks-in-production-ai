@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIt is a beta-lactam structurally related to the penicillins and possesses the ability to inactivate a wide variety of beta-lactamases by blocking the active sites of these enzymes. Clavulanic acid is particularly active against the clinically important plasmid-mediated beta-lactamases frequently responsible for transferred drug resistance to penicillins and cephalosporins. Chemically, clavulanate potassium is potassium ( Z )-(2 R ,5 R )-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicyclo[3.2.0]-heptane-2-carboxylate and may be represented structurally as: C 8 H 8 KNO 5 M.W. 237.25 Following constitution, each 5 mL of oral suspension contains 600 mg of amoxicillin as the trihydrate and 42.9 mg of clavulanic acid (equivalent to 51.1 mg of clavulanate potassium).\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Potassium (Z)-(2R,5R)-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicyclo[3.2.0]-heptane-2-carboxylate (clavulanate potassium)\\n\\nMolecular Formula: C8H8KNO5\\n\\nMolecular Weight: 237.25\\n\\nInactive Ingredients: The passage does not list inactive ingredients. It only specifies that each 5 mL of oral suspension contains 600 mg of amoxicillin as the trihydrate and 42.9 mg of clavulanic acid (equivalent to 51.1 mg of clavulanate potassium).\"}",
+  "elapsed_ms": 1929,
+  "usage": {
+    "input_tokens": 516,
+    "output_tokens": 190
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nRecovery time for normal HPA activity is variable depending upon the dose and duration of treatment. During this time the patient is vulnerable to any stressful situation. Although it has been shown that there is considerably less adrenal suppression following a single morning dose of prednisolone (10 mg) as opposed to a quarter of that dose administered every 6 hours, there is evidence that some suppressive effect on adrenal activity may be carried over into the following day when pharmacologic doses are used. Further, it has been shown that a single dose of certain corticosteroids will produce adrenocortical suppression for two or more days. Other corticoids, including methylprednisolone, hydrocortisone, prednisone, and prednisolone, are considered to be short acting (producing adrenocortical suppression for 1¼ to 1½ days following a single dose) and thus are recommended for alternate day therapy.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": null}",
+  "elapsed_ms": 879,
+  "usage": {
+    "input_tokens": 478,
+    "output_tokens": 8
+  }
+}

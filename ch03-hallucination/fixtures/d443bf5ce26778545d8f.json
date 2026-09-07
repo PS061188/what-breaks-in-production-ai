@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nThis particular label is for the lisinopril–hydrochlorothiazide fixed‑dose combination, so it does not give a starting (initial) dose for lisinopril alone. What it does state is:\n\n- **Lisinopril monotherapy** is effective for hypertension in once‑daily doses of **10 mg to 80 mg** (hydrochlorothiazide monotherapy 12.5–50 mg/day). The label does not designate a specific initial dose within that range — for lisinopril used alone you should consult the single‑ingredient lisinopril labeling (where the usual starting dose for uncomplicated hypertension is 10 mg once daily, lower if the patient is volume/salt‑depleted, on a diuretic, or has renal impairment).\n\n- **The combination product is NOT indicated for initial therapy.** It is generally used after a patient has failed to reach goal on monotherapy. A patient inadequately controlled on either lisinopril or hydrochlorothiazide alone may be switched to **lisinopril/HCTZ 10 mg/12.5 mg or 20 mg/12.5 mg**, with further titration based on clinical response (HCTZ dose generally not increased more often than every 2–3 weeks). Maximum: lisinopril 80 mg / HCTZ 50 mg per day.\n\n- **Renal impairment:** usual regimens need no adjustment if creatinine clearance >30 mL/min/1.73 m²; in more severe renal impairment loop diuretics are preferred and this combination is not recommended.\n\nDosing decisions should be individualized by the prescriber.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2964,
+  "usage": {
+    "input_tokens": 902,
+    "output_tokens": 17
+  }
+}

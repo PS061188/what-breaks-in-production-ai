@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMetformin hydrochloride tablets are contraindicated in patients with an estimated glomerular filtration rate (eGFR) below 30 mL/minute/1.73 m 2 . Initiation of metformin hydrochloride tablets in patients with an eGFR between 30 to 45 mL/minute/1.73 m 2 is not recommended. In patients taking metformin hydrochloride tablets whose eGFR later falls below 45 mL/min/1.73 m 2 , assess the benefit risk of continuing therapy. Discontinue metformin hydrochloride tablets if the patient’s eGFR later falls below 30 mL/minute/1.73 m 2 [ see Warnings and Precautions (5.1) ] . 2.4 Discontinuation for Iodinated Contrast Imaging Procedures Discontinue metformin hydrochloride tablets at the time of, or prior to, an iodinated contrast imaging procedure in patients with an eGFR between 30 and 60 mL/min/1.73 m 2 ;\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": null}",
+  "elapsed_ms": 882,
+  "usage": {
+    "input_tokens": 538,
+    "output_tokens": 8
+  }
+}

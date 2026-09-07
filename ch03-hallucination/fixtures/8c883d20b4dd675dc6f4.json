@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Atorvastatin Calcium?\n\nRESPONSE:\nThe recommended starting dose of Atorvastatin Calcium depends on the patient population:\n\n**Adults:** 10 mg or 20 mg once daily. Patients requiring LDL-C reduction greater than 45% may start at 40 mg once daily.\n\n**Pediatric patients aged 10 years and older with Heterozygous Familial Hypercholesterolemia (HeFH):** 10 mg once daily.\n\n**Pediatric patients aged 10 years and older with Homozygous Familial Hypercholesterolemia (HoFH):** 10 mg to 20 mg once daily.\n\nThe medication is taken orally once daily with or without food. LDL-C should be assessed as early as 4 weeks after initiating therapy, and dosage should be adjusted if necessary based on response. The typical adult dosage range is 10 mg to 80 mg once daily.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1769,
+  "usage": {
+    "input_tokens": 665,
+    "output_tokens": 17
+  }
+}

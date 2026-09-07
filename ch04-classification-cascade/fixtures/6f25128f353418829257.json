@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nFurosemide Tablets, USP 80 mg: White-off white, round, scored, debossed \"3171\" over \"V\" on one side and plain on the reverse side, available as follows: • Bottles of 500: NDC 63629-1120-1 You may report side effects to Solco Healthcare US, LLC at 1-866-257-2597 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch . STORAGE Store at 20° to 25°C (68° to 77°F) [see USP Controlled Room Temperature]. Protect from light. Dispense in well-closed, light-resistant containers. Exposure to light might cause a slight discoloration. Discolored tablets should not be dispensed.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Furosemide Tablets, USP 80 mg supplied in bottles of 500 tablets\"}",
+  "elapsed_ms": 998,
+  "usage": {
+    "input_tokens": 456,
+    "output_tokens": 30
+  }
+}

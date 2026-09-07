@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\n**Label-stated range:** The initial dose of prednisone is **5 mg to 60 mg orally per day**, chosen according to the disease being treated and its severity. The label emphasizes in capital letters that dosage requirements are variable and must be individualized based on the disease under treatment and the patient's response.\n\n**How to use that range in practice**\n- *Milder disease / maintenance-type conditions* (e.g., mild rheumatoid arthritis flare, mild asthma, chronic maintenance in RA/polymyalgia-type presentations): lower end, roughly 5–15 mg/day.\n- *Moderate disease* (e.g., moderate asthma exacerbation, dermatitis, ulcerative colitis flare, gout flare): roughly 20–40 mg/day.\n- *Severe/urgent inflammatory or autoimmune disease* (e.g., pemphigus, severe SLE, ITP, nephrotic syndrome, acute leukemia palliation): higher doses, up to 60 mg/day or more; standard practice for many of these conditions is weight-based dosing at approximately 0.5–2 mg/kg/day, which may exceed the 60 mg figure quoted in the label. Pediatric dosing is likewise typically 0.5–2 mg/kg/day (max often 60 mg/day) for asthma, nephrotic syndrome, etc.\n- *Acute MS exacerbation* — the label cites a specific regimen: **200 mg daily for 1 week, then 80 mg every other day for 1 month** (dose range is the same for prednisone and prednisolone).\n- *Adrenal insufficiency*: hydrocortisone or cortisone is the first choice; if prednisone is used, physiologic replacement is roughly 5–7.5 mg/day, with mineralocorticoid added when needed (particularly important in infancy).\n\n**Timing and titration**\n- Give as a single **morning dose** with food when possible — dosing at the time of maximal adrenal activity (2 am–8 am) minimizes HPA suppression and GI upset.\n- Maintain or adjust the initial dose until a satisfactory response is seen. If there is no satisfactory clinical response after a reasonable period, discontinue prednisone and move to alternative therapy.\n- Once controlled, taper in **small decrements at appropriate intervals** to the lowest dose that maintains an adequate response.\n- Increase the dose temporarily during intercurrent stress (surgery, infection, trauma) or disease flare.\n- **Do not stop abruptly after long-term therapy** — withdraw gradually to avoid adrenal insufficiency and steroid withdrawal syndrome. Courses of roughly ≤2–3 weeks can usually be stopped without a taper.\n\n**Alternate-day therapy (ADT)**\nFor patients needing long-term pharmacologic dosing, twice the usual daily dose given every other morning can preserve efficacy while reducing HPA suppression, Cushingoid features, withdrawal symptoms, and growth suppression in children. Prednisone/prednisolone, methylprednisolone, and hydrocortisone are short-acting (adrenal suppression ~1¼–1½ days) and suitable for ADT; dexamethasone and betamethasone are not. Severe disease usually needs daily divided high-dose therapy first (typically 4–10 days) before converting; keep that initial suppressive phase as brief as possible. In patients already on chronic daily steroids, conversion may require tripling or quadrupling the daily maintenance dose given every other day rather than simply doubling it.\n\n**Monitoring with any starting dose:** blood glucose, blood pressure, weight/fluid status, potassium, signs of infection, mood/sleep changes; consider bone protection (calcium, vitamin D, ± bisphosphonate) and GI prophylaxis if NSAIDs or other risk factors are present, and PJP prophylaxis at ≥20 mg/day for ≥4 weeks in higher-risk patients.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1970,
+  "usage": {
+    "input_tokens": 1710,
+    "output_tokens": 17
+  }
+}

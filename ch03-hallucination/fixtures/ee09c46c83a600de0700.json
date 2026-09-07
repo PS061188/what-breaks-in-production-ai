@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Prednisone safe to use during pregnancy?\n\nRESPONSE:\nShort answer: the excerpt you've provided doesn't contain the pregnancy information from the prednisone label — it only covers the INDICATIONS and DOSAGE AND ADMINISTRATION sections. So I can't quote label-specific pregnancy language from this text.\n\nWhat I can tell you generally (from standard prednisone/corticosteroid labeling and clinical practice, not from the excerpt above):\n\n• Prednisone crosses the placenta, though it is largely inactivated by placental enzymes, so relatively little active drug reaches the fetus compared with some other steroids (e.g., betamethasone or dexamethasone, which are used deliberately when fetal effects are desired).\n• Corticosteroids have caused fetal harm (including cleft palate) in animal studies at doses comparable to or above human doses. Human data are less clear; some older studies suggested a small increase in oral clefts with first-trimester exposure, while more recent data are reassuring. Prolonged or high-dose use has been associated with fetal growth restriction.\n• Traditional labeling states that corticosteroids should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus.\n• Infants born to mothers who received substantial corticosteroid doses during pregnancy should be observed for signs of hypoadrenalism.\n• Importantly, untreated maternal disease (e.g., severe asthma, lupus flare, inflammatory bowel disease) also carries real risks to both mother and fetus, which is why prednisone is often continued at the lowest effective dose in pregnancy.\n\nBottom line: prednisone is not absolutely contraindicated in pregnancy and is commonly used when needed, but it is not automatically \"safe\" — the decision requires an individualized risk–benefit discussion. Do not start, stop, or change your dose on your own; abrupt discontinuation after prolonged therapy can be dangerous. Please discuss with your prescriber or obstetrician, and consult the full prescribing information (Pregnancy/Nursing Mothers sections) for the specific product you have.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1550,
+  "usage": {
+    "input_tokens": 1059,
+    "output_tokens": 17
+  }
+}

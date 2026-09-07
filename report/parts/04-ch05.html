@@ -1,0 +1,354 @@
+<!-- ============================ CHAPTER 5 ============================ -->
+<h2 class="part">Chapter 5 — Extraction and normalisation quality loss</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 5 &middot; Extraction and normalisation quality loss</span>
+<p class="oneline">Asking one model call to both read a value and tidy it into a database shape destroys the qualifiers and ranges that carried the clinical meaning. Separating the two steps makes the loss <em>visible</em> &mdash; it does not prevent it, and on dose ranges the chapter&rsquo;s fix performs worse than saying nothing.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code></td></tr><tr><td style="width:26%">Measures</td><td>Three: values still findable in the source, qualifier retention, dose ranges preserved. All deterministic, no model judging</td></tr><tr><td style="width:26%">Ground truth</td><td>Qualifiers (38) and range-bearing labels (11) derived from the source and fixed. Values-findable has a denominator <em>the model chooses</em></td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; GPT-5-mini, GPT-4.1-mini and Opus 5 in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens=1500</code>, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>5 live runs of each arm</strong>, plus a third &lsquo;plain&rsquo; baseline added after the prompt audit</td></tr><tr><td style="width:26%">Cost</td><td>$0.04 per arm per run</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Capture prompt &mdash; auditability</td><td><strong>Works</strong></td><td class="num">66% &rarr; 93%, 5 of 5 runs</td><td class="num">strong</td></tr><tr><td>Capture prompt &mdash; qualifiers</td><td><strong>Does not work</strong></td><td class="num">38% vs 39%</td><td class="num">null, clean</td></tr><tr><td>Capture prompt &mdash; ranges</td><td><strong>Actively worse</strong></td><td class="num">85% &rarr; 65%, lost 5 of 5</td><td class="num">strong</td></tr><tr><td>1 &middot; Validators</td><td>Works, partly untested</td><td class="num">doses and frequencies only</td><td class="num">structural</td></tr><tr><td>2 &middot; Retry loop</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>3 &middot; Discard log</td><td><strong>Works</strong></td><td class="num">52 recorded losses</td><td class="num">strong</td></tr><tr><td>4 &middot; Golden set</td><td>Not implemented as written</td><td class="num">no labelled set</td><td class="num">&mdash;</td></tr></table>
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>The separation, for auditability only.</strong> 66% &rarr; 93% of values still findable in the source, ahead in every run. That is the real result.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the discard log.</strong> 52 rows, each naming a specific thing the conversion could not carry, on a specific field, in a specific document.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;29% &rarr; 45% qualifier retention.&rdquo;</strong> Against a fair baseline it is 38% vs 39% &mdash; nothing. The gain was the fix repairing damage the baseline prompt caused itself.</li><li><span class='drop'>DROP</span> — <strong>Any claim that the fix preserves ranges.</strong> It preserves fewer than a prompt that says nothing about ranges &mdash; behind in all five runs, spreads not overlapping.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;52 versus 0&rdquo;.</strong> The zero is a definition: the baseline never ran the converter.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Two of the three measures have source-derived denominators, and those two show no benefit and one harm.</strong> The single measure showing a large benefit is the one whose denominator the model chooses &mdash; and it swung 54 to 77 across identical runs. In a book about measurement, that ordering deserves saying out loud.</p>
+<h4>Where this is weakest</h4>
+<p>The baseline prompt named all three scored failures as instructions &mdash; <em>&ldquo;one canonical value per field&rdquo;</em> is the range collapse, written down. This was found only by re-reading the prompts after the same defect surfaced in Chapter 3. Twelve documents, one model.</p>
+</div>
+
+<h3 class="top">The failure: nothing is wrong, everything is vaguer</h3>
+
+<p class="lede">This is the failure where every check you have passes. Nothing is
+invented, so a hallucination check passes. Nothing is missing, so a completeness
+check passes. The output is simply less precise than the document it came
+from — and precision was carrying the instruction.</p>
+
+<h3>Experiment 5.1 — What does "extract into clean values" actually cost?</h3>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Documents</strong></td>
+      <td>The <code>dosage_and_administration</code> section of 12 FDA labels,
+      truncated to 3,500 characters — text written to be exact.</td></tr>
+  <tr><td><strong>Fields requested</strong></td>
+      <td>Four: starting dose, maximum dose, frequency, dose adjustment.</td></tr>
+  <tr><td><strong>Output form</strong></td>
+      <td>Identical in both arms: field name, value, a list of qualifiers, and a
+      supporting quotation.</td></tr>
+  <tr><td><strong>Cases</strong></td><td>12 documents × 4 fields = 48 values per arm.</td></tr>
+</table>
+
+<h4>The two instructions</h4>
+
+<pre>TIDY-AS-YOU-GO  (the baseline)
+──────────────────────────────
+Extract the dosing information into clean, standardised, database-ready
+values. Standardise as you go:
+  - Doses as a number in milligrams.
+  - Frequency as the number of doses per day.
+  - Durations in days.
+  - One canonical value per field. Keep it tidy and consistent.</pre>
+
+<pre>CAPTURE VERBATIM  (Chapter 5's template)
+────────────────────────────────────────
+You are a precision data extractor. Capture what the document says.
+Converting, standardising or tidying a value is a failure mode.
+
+DOSAGES:
+  - Output number and unit exactly as written: "5 mg to 60 mg"
+  - Never collapse a range to a single number
+QUALIFIERS:
+  - Capture any word that narrows a value: "initial", "maintenance",
+    "individualized", "not to exceed"
+  - Put every one you find in "qualifiers" — never drop it
+
+Do not output a normalised value. Normalisation runs after this
+step, in code.</pre>
+
+<h4>What actually came back — the same document, both ways</h4>
+
+<p>Prednisone. The source sentence is:</p>
+
+<pre>"The initial dosage of prednisone may vary from 5 mg to 60 mg of
+prednisone per day depending on the specific disease entity being
+treated."</pre>
+
+<table>
+  <tr><th style="width:16%">Field</th><th style="width:40%">Tidy-as-you-go</th><th>Capture verbatim</th></tr>
+  <tr><td><strong>starting_dose</strong></td>
+      <td><code>'5-60 mg'</code><br>
+      <span style="color:#6a7681">qualifiers: variable, disease-dependent, individualized</span></td>
+      <td><code>'5 mg to 60 mg of prednisone per day'</code><br>
+      <span style="color:#6a7681">qualifiers: initial, depending on the specific disease entity being treated, variable</span></td></tr>
+  <tr><td><strong>maximum_dose</strong></td>
+      <td><code>'60 mg'</code><br>
+      <span style="color:#6a7681">qualifiers: initial dosage, selected patients</span></td>
+      <td><code>'not specified'</code></td></tr>
+  <tr><td><strong>frequency</strong></td>
+      <td><code>'1'</code><br>
+      <span style="color:#6a7681">qualifiers: daily dosing, standard approach</span></td>
+      <td><code>'per day'</code></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Read the maximum_dose row</span>
+  <p>The tidy arm returned <strong>60 mg</strong> as a maximum dose. The document
+  does not state a maximum. Sixty is the top of the <em>starting</em> range, and
+  the model promoted it to a ceiling to satisfy a field that wanted a number.</p>
+  <p>The verbatim arm returned <strong>"not specified"</strong> — which is
+  correct, and useless to a database, and therefore exactly the kind of answer a
+  tidy-output instruction trains a model out of giving.</p>
+  <p>Note also the frequency row. <code>'1'</code> is a number a database can
+  store. <code>'per day'</code> is not. The tidy arm produced the more usable
+  value and lost the fact that the source never actually said "once".</p>
+</div>
+
+<h4>How it was scored — three deterministic checks</h4>
+
+<table>
+  <tr><th style="width:32%">Check</th><th>The rule</th></tr>
+  <tr><td><strong>Findable in the source</strong></td>
+      <td>Does the stored value appear in the document, by approximate string
+      match? If yes it can be audited later; if the model rewrote it, it cannot
+      be checked without re-reading the document by hand.</td></tr>
+  <tr><td><strong>Qualifier retention</strong></td>
+      <td>17 narrowing terms — <em>initial</em>, <em>maintenance</em>,
+      <em>individualiz</em>, <em>gradual</em>, <em>not to exceed</em>,
+      <em>titrat</em>, <em>taper</em>… — built by searching the corpus for hedges
+      actually present in it. Only terms present in a given document count
+      against that document.</td></tr>
+  <tr><td><strong>Range preservation</strong></td>
+      <td>Regular expression for a numeric range. Source has one → does the output
+      still contain one?</td></tr>
+</table>
+
+<p>All three ignore the supporting quotation and look only at the stored value.
+Both arms must return a quotation, and a long enough quotation would let an
+output score well on precision it never captured. The value is what a database
+keeps, so the value is what is tested.</p>
+
+<h4>The missing arm, found by auditing the prompts</h4>
+
+<p>After a reader found that Chapter 3's baseline had instructed the failure it
+measured, every prompt pair in the repo was re-read. <strong>This chapter had the
+same defect, more severely.</strong></p>
+
+<p>Read the baseline again against the three things being scored:</p>
+
+<table>
+  <tr><th style="width:46%">What the baseline prompt says</th><th>What is scored</th></tr>
+  <tr><td>"Doses as a number in milligrams"</td>
+      <td>whether the value is findable in the source</td></tr>
+  <tr><td>"<strong>One canonical value per field</strong>"</td>
+      <td>whether the dose range survived</td></tr>
+  <tr><td>"Keep it tidy and consistent"</td>
+      <td>whether qualifiers survived</td></tr>
+</table>
+
+<p>All three failures are instructions. The fix then says the exact opposite —
+<em>never collapse a range, never drop a qualifier</em>. Tell the model to
+collapse ranges and it collapses ranges; tell it not to and it does not. That
+comparison cannot support the chapter's architectural claim.</p>
+
+<p>So a third arm was added: extraction requested, <strong>nothing said about how
+to render a value</strong>.</p>
+
+<pre>PLAIN  (the honest baseline)
+────────────────────────────
+You are a clinical data extraction assistant. Extract the dosing
+information from the label text below.</pre>
+
+<h4>The numbers — five live runs of each arm</h4>
+
+<table>
+  <tr><th style="width:30%">Measure</th><th class="num">Plain</th>
+      <th class="num">Fix</th><th class="num">Fix wins</th><th class="num">Sign p</th></tr>
+  <tr><td>Values findable in source</td>
+      <td class="num">66%</td><td class="num"><strong>93%</strong></td>
+      <td class="num">5 of 5</td><td class="num">0.062</td></tr>
+  <tr><td>Qualifier retention</td>
+      <td class="num">38%</td><td class="num">39%</td>
+      <td class="num">4 of 5</td><td class="num">0.375</td></tr>
+  <tr><td><strong>Dose ranges preserved</strong></td>
+      <td class="num"><strong>85%</strong></td><td class="num"><strong>65%</strong></td>
+      <td class="num"><strong>0 of 5</strong></td><td class="num">0.062</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">One of three claims survives, and one reverses</span>
+  <p><strong>Auditability is real.</strong> 66% &rarr; 93%, the fix ahead in every
+  run. This is the chapter's genuine result.</p>
+  <p><strong>Qualifier retention is nothing.</strong> 38% against 39%. The
+  published "29% &rarr; 45%" was the fix repairing damage the baseline prompt had
+  inflicted on itself. Against a prompt that never told the model to tidy
+  anything, the fix retains no more qualifiers than saying nothing at all — even
+  though it contains the line <em>"Put every one you find in qualifiers — never
+  drop it."</em></p>
+  <p><strong>Ranges got worse.</strong> The plain prompt preserved 9&ndash;10 of 11
+  in every run. The fix preserved 6&ndash;8, and was <strong>behind in all five
+  runs with no overlap between the two spreads</strong> — despite containing the
+  instruction <em>"Never collapse a range to a single number."</em></p>
+</div>
+
+<h4>Which of these three numbers you can actually trust</h4>
+
+<p>This matters more than the numbers, and it points the wrong way for the
+chapter's headline.</p>
+
+<table>
+  <tr><th style="width:30%">Measure</th><th style="width:26%">Denominator comes from</th>
+      <th>Consequence</th></tr>
+  <tr><td>Values findable</td><td><strong>the model</strong> — it decides how many
+      fields to return</td>
+      <td>Swings 56&ndash;72 (plain) and 54&ndash;77 (fixed) across runs. A 43%
+      swing in the denominator on an identical prompt.</td></tr>
+  <tr><td>Qualifier retention</td><td>the source — 38 every run</td>
+      <td>Stable. Directly comparable.</td></tr>
+  <tr><td>Dose ranges</td><td>the source — 11 every run</td>
+      <td>Stable. Directly comparable.</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">Read that table against the results table</span>
+  <p>The two measures with <strong>stable, source-derived denominators</strong>
+  are the two that show <em>no benefit and one harm</em>. The single measure
+  showing a large benefit is the one whose denominator the model chooses, and
+  which moves by up to 43% between identical runs.</p>
+  <p>That does not make the auditability result wrong — it is a proportion, and it
+  held in 5 of 5 runs. It does mean it is the weakest-founded of the three, and
+  the chapter currently leads with it.</p>
+</div>
+
+<h4>What the per-drug output shows</h4>
+
+<p>The fix does not so much collapse ranges as return a different set of fields.
+Same document, same run:</p>
+
+<table>
+  <tr><th style="width:26%">Drug</th><th class="num">Plain: values / range kept</th>
+      <th class="num">Fix: values / range kept</th></tr>
+  <tr><td>Metformin</td><td class="num">11 &middot; <strong>yes</strong></td>
+      <td class="num">4 &middot; <strong>NO</strong></td></tr>
+  <tr><td>Sertraline</td><td class="num">13 &middot; <strong>yes</strong></td>
+      <td class="num">4 &middot; <strong>NO</strong></td></tr>
+  <tr><td>Atorvastatin</td><td class="num">4 &middot; yes</td>
+      <td class="num">12 &middot; yes</td></tr>
+  <tr><td>Gabapentin</td><td class="num">4 &middot; yes</td>
+      <td class="num">13 &middot; yes</td></tr>
+</table>
+
+<p>Field counts swing between 4 and 13 on the same document depending on the
+instruction, and the drugs that lost their range are among those where the fix
+returned fewest fields. <strong>That is a partial explanation, not a
+demonstrated mechanism</strong> — Levothyroxine returned 4 fields in both arms and
+lost its range only under the fix. The effect reproduces; the cause does not yet.</p>
+
+<h4>Cost and time</h4>
+
+<p>12 calls per arm. <strong>$0.04 each</strong>, about 90 seconds. Roughly
+$3.50 per thousand documents — and it replaces a call you were making anyway, so
+the true marginal cost is a longer instruction and a few hundred more output
+tokens for the qualifiers.</p>
+
+<h3>Experiment 5.2 — Normalisation in code, and what it records</h3>
+
+<h4>What was built</h4>
+
+<p>A converter that turns <code>"5 mg to 60 mg per day"</code> into a minimum and
+a maximum in milligrams — and, crucially, <strong>writes down what it discarded
+while doing it</strong>, keeping the original text beside the converted value.</p>
+
+<h4>What the discard log actually contains</h4>
+
+<pre>Prednisone   starting_dose    qualifying text not representable in min_mg/max_mg: 'prednisone per day'
+Prednisone   maximum_dose     no parsable dose in 'not specified'
+Prednisone   frequency        unrecognised frequency 'per day' — left unnormalised rather than guessed
+Prednisone   dose_adjustment  no parsable dose in 'decreasing the initial drug dosage in small
+                              decrements at appropriate time intervals'
+Lisinopril   dose_adjustment  no parsable dose in 'greater than 30 mL/min/1.73 m2'</pre>
+
+<p>Fifty-two such rows. Each names a specific thing the conversion could not
+carry, on a specific field, in a specific document.</p>
+
+<div class="plain">
+  <span class="label">A correction: the "52 versus 0" comparison was not real</span>
+  <p>The baseline was reported as logging zero losses. It logs zero because
+  <code>broken.py</code> never imports the converter — <strong>the zero is a
+  definition, not a measurement</strong>. Run the same converter over the
+  baseline's own values and it produces <strong>53</strong> rows.</p>
+  <p>The argument survives intact and is arguably stronger stated correctly:
+  <em>the same information is lost either way; the difference is whether anything
+  writes it down.</em> In the baseline those 53 losses happen inside a model call
+  where nothing records them. In the fixed version they are rows you can query.
+  But "52 versus 0" implied the fix prevented losses, and it does not.</p>
+</div>
+
+<h4>The bug this experiment found in itself</h4>
+
+<div class="verdict">
+  <span class="label">Every "twice daily" dose was recorded as "once daily"</span>
+  <p>The first version of the frequency parser checked the pattern matching
+  <em>daily</em> before the pattern matching <em>twice daily</em>. Every
+  twice-daily dose came out as once.</p>
+  <p>A three-line unit test caught it in seconds. That is this chapter's argument
+  in a single example: <strong>the identical bug written into a prompt produces
+  the identical wrong answer, and there is no test you can run against it.</strong>
+  The bug is preserved in the repository's history deliberately.</p>
+</div>
+
+<h3>The four engineering fixes</h3>
+
+<table>
+  <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Field-level validators</strong></td>
+      <td class="num">all values converted or explicitly refused</td>
+      <td><strong>Works</strong> on doses and frequencies; dates and unit
+      conversion untested — this corpus has neither</td></tr>
+  <tr><td><strong>2 · Retry with the validation error fed back</strong></td>
+      <td class="num">never triggered</td>
+      <td>Not implemented as written — schema-enforced output removed the class of
+      error it exists to catch</td></tr>
+  <tr><td><strong>3 · Normalisation as separate code</strong></td>
+      <td class="num">52 discard rows</td>
+      <td><strong>Works</strong> — the strongest idea in the chapter</td></tr>
+  <tr><td><strong>4 · Golden-set regression tests</strong></td>
+      <td class="num">not built</td>
+      <td>Not implemented as written — needs a labelled set that costs human
+      hours, not compute</td></tr>
+</table>
+
+<p>Fix 2 deserves one sentence of nuance: it was not tested because a
+<em>different</em> fix made it unnecessary here. That is not evidence the retry
+loop is useless — it is evidence that if your provider enforces the output shape,
+this loop will sit idle, which is the correct outcome rather than a wasted fix.</p>
+
+<h3>Chapter 5 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>Capture-verbatim prompt — <em>auditability</em></td><td><strong>Works</strong></td>
+      <td>66% → 93% vs a plain baseline, ahead in 5 of 5 runs — but on a
+      <strong>model-chosen denominator</strong> that swings up to 43%</td></tr>
+  <tr><td>Capture-verbatim prompt — <em>qualifiers</em></td><td><strong>Does not work</strong></td>
+      <td>38% vs 39% against a plain baseline. The published 29% → 45% was
+      measured against a prompt told to "keep it tidy"</td></tr>
+  <tr><td>Capture-verbatim prompt — <em>ranges</em></td>
+      <td><strong>Actively worse</strong></td>
+      <td>85% → 65%; the fix lost in <strong>5 of 5 runs</strong>, spreads do not
+      overlap, despite instructing "never collapse a range"</td></tr>
+  <tr><td>1 · Validators</td><td>Works (partly untested)</td><td>doses and frequencies only</td></tr>
+  <tr><td>2 · Retry loop</td><td>Not implemented as written</td><td>superseded here</td></tr>
+  <tr><td>3 · Separate normalisation + discard log</td><td><strong>Works</strong></td>
+      <td>52 rows; ⚠️ the "vs 0" baseline was a definition</td></tr>
+  <tr><td>4 · Golden set</td><td>Not implemented as written</td><td>no labelled set</td></tr>
+</table>
+
+<p><strong>The chapter holds and is the cheapest in the book</strong> — its fixes
+cost nothing at runtime because the expensive work moved out of the model and
+into code. What the chapter should stop implying is that separating the steps
+<em>solves</em> specificity loss. It makes specificity loss <strong>visible</strong>,
+which is a different and more defensible claim, and the discard log is the
+evidence for it.</p>

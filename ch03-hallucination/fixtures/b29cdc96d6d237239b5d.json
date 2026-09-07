@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nThe recommended starting dose of levothyroxine sodium for hypothyroidism in adults depends on the patient's age and cardiac status:\n\n**Adults with Primary, Secondary, or Tertiary Hypothyroidism:**\n- **General adult population (without cardiac disease):** Full replacement dose is 1.6 mcg/kg/day. Some patients require a lower starting dose.\n- **Adults at risk for atrial fibrillation or with underlying cardiac disease:** Start with a lower dose (less than 1.6 mcg/kg/day)\n- **Geriatric patients:** Start with a lower dose (less than 1.6 mcg/kg/day)\n\n**Titration:** Dosage is titrated by 12.5 to 25 mcg increments every 4 to 6 weeks (or every 6 to 8 weeks in cardiac patients) until the patient is clinically euthyroid.\n\n**Pediatric Patients:** Starting doses vary by age and body weight, ranging from 10-15 mcg/kg/day in infants 0-3 months to 1.6 mcg/kg/day in adolescents with completed growth and puberty.\n\n**Important Note:** Peak therapeutic effect may not be attained for 4 to 6 weeks, and dosages greater than 200 mcg/day are seldom required. Dosing must be individualized based on age, body weight, cardiovascular status, concomitant medications, and other factors.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1762,
+  "usage": {
+    "input_tokens": 855,
+    "output_tokens": 17
+  }
+}

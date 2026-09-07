@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nUse of furosemide concomitantly with chloral hydrate is therefore not recommended. Phenytoin interferes directly with renal action of furosemide. There is evidence that treatment with phenytoin leads to decrease intestinal absorption of furosemide, and consequently to lower peak serum furosemide concentrations. Methotrexate and other drugs that, like furosemide, undergo significant renal tubular secretion may reduce the effect of furosemide. Conversely, furosemide may decrease renal elimination of other drugs that undergo tubular secretion. High-dose treatment of both furosemide and these other drugs may result in elevated serum levels of these drugs and may potentiate their toxicity as well as the toxicity of furosemide.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"chloral hydrate, phenytoin, methotrexate\"}",
+  "elapsed_ms": 1203,
+  "usage": {
+    "input_tokens": 441,
+    "output_tokens": 22
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Atorvastatin Calcium safe to use during pregnancy?\n\nRESPONSE:\nShort answer: atorvastatin is generally not recommended during pregnancy, and this decision should always be made with your prescriber.\n\nImportant caveat about the excerpt you provided: the sections shown here are only the Indications and Usage (Section 1) and Dosage and Administration (Section 2). They contain no information about pregnancy, lactation, contraindications, or warnings, so I can't cite pregnancy guidance directly from this text. The relevant information would be in Section 4 (Contraindications), Section 5 (Warnings and Precautions), and Section 8.1/8.2 (Use in Specific Populations \\u2013 Pregnancy and Lactation) of the full prescribing information.\n\nGeneral background (not from the excerpt above): Statins such as atorvastatin have historically been avoided in pregnancy because cholesterol and cholesterol-derived products are important for fetal development, and lowering cholesterol is not expected to provide benefit over the short interval of pregnancy. In 2021 the FDA requested removal of the blanket contraindication from statin labeling, so current labels typically state that the drug should generally be discontinued when pregnancy is recognized, while allowing that in rare, very high-risk situations (for example, homozygous familial hypercholesterolemia or established cardiovascular disease) a clinician may decide continued treatment is warranted. Statins are also generally not recommended while breastfeeding.\n\nWhat to do: If you are pregnant, think you may be pregnant, or are planning a pregnancy, contact your prescriber promptly rather than stopping or continuing on your own \\u2014 and check the full prescribing information (Sections 4, 5, and 8) for the specific product you have.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2593,
+  "usage": {
+    "input_tokens": 934,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nOther short-acting sympathomimetic aerosol bronchodilators should not be used concomitantly with albuterol. If additional adrenergic drugs are to be administered by any route, they should be used with caution to avoid deleterious cardiovascular effects. Beta-blockers: Use with caution. May block bronchodilatory effects of beta-agonists and produce severe bronchospasm. ( 7.1 ) Diuretics: Use with caution. Electrocardiographic changes and/or hypokalemia associated with non–potassium-sparing diuretics may worsen with concomitant beta-agonists. ( 7.2 ) Digoxin: May decrease serum digoxin levels. Consider monitoring digoxin levels. ( 7.3 ) Monoamine oxidase inhibitors and tricyclic antidepressants:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"drug_interactions\"}",
+  "elapsed_ms": 1289,
+  "usage": {
+    "input_tokens": 659,
+    "output_tokens": 11
+  }
+}

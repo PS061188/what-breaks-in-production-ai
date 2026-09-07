@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Gabapentin indicated to treat?\n\nRESPONSE:\nAccording to the label, gabapentin capsules are indicated for two uses:\n\n1. **Postherpetic neuralgia (PHN) in adults** — the nerve pain that can persist after a shingles (herpes zoster) infection. Typical dosing starts at a single 300 mg dose on Day 1, 600 mg/day on Day 2, and 900 mg/day on Day 3, and may be titrated as needed for pain relief up to 1800 mg/day (600 mg three times daily).\n\n2. **Adjunctive (add-on) therapy for partial onset seizures, with or without secondary generalization, in adults and pediatric patients 3 years of age and older with epilepsy** — for patients 12 years and older, the starting dose is 300 mg three times daily, with a maintenance dose of 300–600 mg three times daily; for children 3–11 years, dosing is weight-based (starting 10–15 mg/kg/day in three divided doses).\n\nNote that gabapentin is an add-on treatment for seizures, not indicated as monotherapy in this label, and doses must be adjusted in patients with reduced kidney function (including elderly patients, who are more likely to have decreased renal function). If gabapentin is stopped, reduced, or switched to another medication, it should be done gradually over at least 1 week.\n\nThis information is from the product label; talk with your healthcare provider about whether gabapentin is appropriate for your situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2654,
+  "usage": {
+    "input_tokens": 840,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Levothyroxine Sodium?\n\nRESPONSE:\nLevothyroxine sodium's absorption and effectiveness can be affected by various drugs, which necessitates careful management to avoid interactions that impair therapy. Key points are:\n\n- Levothyroxine should be administered at least 4 hours before or after drugs known to interfere with its absorption.\n- Certain foods taken within one hour of levothyroxine administration may affect its absorption and may require dosage adjustments.\n\nCommon categories of interacting drugs include:\n\n1. **Drugs affecting absorption:** Calcium supplements, iron supplements, aluminum-containing antacids, sucralfate, and bile acid sequestrants can reduce levothyroxine absorption.\n\n2. **Drugs altering thyroid hormone metabolism:** Some drugs like carbamazepine, phenytoin, rifampin, and sertraline can increase the metabolism of levothyroxine, potentially reducing its effectiveness.\n\n3. **Drugs affecting thyroid hormone binding:** Certain agents may displace thyroid hormones from binding proteins.\n\nIn clinical practice, it is important to review the patient's medications for potential interactions, administer levothyroxine appropriately around other drugs, and monitor thyroid function tests to adjust levothyroxine dosing as needed.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2256,
+  "usage": {
+    "input_tokens": 799,
+    "output_tokens": 17
+  }
+}

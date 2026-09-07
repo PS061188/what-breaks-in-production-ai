@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin Hydrochloride Tablets The safety and effectiveness of metformin hydrochloride tablets for the treatment of type 2 diabetes mellitus have been established in pediatric patients 10 to 16 years old. Safety and effectiveness of metformin hydrochloride tablets have not been established in pediatric patients less than 10 years old. Use of metformin hydrochloride tablets in pediatric patients 10 to 16 years old for the treatment of type 2 diabetes mellitus is supported by evidence from adequate and well-controlled studies of metformin hydrochloride tablets in adults with additional data from a controlled clinical study in pediatric patients 10 to 16 years old with type 2 diabetes mellitus, which demonstrated a similar response in glycemic control to that seen in adults [ see Clinical Studies (14.1) ] . In this study, adverse reactions were similar to those described in adults. A maximum daily dose of 2000 mg of metformin hydrochloride tablets is recommended. [ see Dosage and Administration (2.2) . ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly discusses safety and effectiveness of metformin in pediatric patients aged 10-16 years old; (b) It specifies that effectiveness has NOT been established in children under 10 years old; (c) It references clinical studies conducted specifically in the pediatric population and compares results to adult studies. Step 2 - Most plausible categories: (1) pediatric_use - The entire passage is dedicated to discussing the drug's use, safety, and efficacy in children of specific age groups, with comparative data to adults. (2) indications_and_usage - The passage mentions type 2 diabetes mellitus treatment, which is an indication. Step 3 - Classification decision: pediatric_use clearly wins. While the passage does mention an indication (type 2 diabetes), the primary focus and structure of this text is entirely dedicated to pediatric-specific information: age-stratified safety/effectiveness data, comparison of pediatric vs. adult responses, and pediatric dosing recommendations. The passage is explicitly about what is known regarding pediatric use. Step 4 - Confidence: HIGH (>90%). The passage uses unambiguous pediatric-focused language, discusses age-specific populations (10-16 years, <10 years), and explicitly addresses pediatric clinical trials and safety profile in children.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 4200,
+  "usage": {
+    "input_tokens": 1098,
+    "output_tokens": 339
+  }
+}

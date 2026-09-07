@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Warfarin Sodium for pediatric patients?\n\nRESPONSE:\nThe label excerpt you've provided does not contain any pediatric dosing recommendations for warfarin sodium tablets — the Dosage and Administration section (Sections 2.1–2.8) addresses only individualized dosing based on INR, target INR ranges by indication, genotype-informed initial dosing, monitoring, renal impairment, missed doses, dentistry/surgery, and conversion from other anticoagulants.\n\nWhat the excerpt does say that is relevant:\n\n- Dosing must be individualized for every patient according to INR response and the condition being treated (Section 2.1).\n- Without CYP2C9/VKORC1 genotype information, the usual adult initial dose is 2–5 mg once daily, with typical maintenance doses of 2–10 mg once daily (Section 2.3). These figures are not stated as pediatric doses.\n- Routine loading doses are not recommended.\n- INR should be measured daily after initiation until stable in the therapeutic range, then every 1–4 weeks, with extra testing whenever other medications are started, stopped, or taken irregularly (Section 2.4).\n\nFor pediatric use, please consult the full prescribing information, particularly Section 8.4 (Pediatric Use). In general, warfarin has not been established in adequate and well-controlled pediatric trials; pediatric dosing is derived from clinical experience and is highly individualized, requiring frequent INR monitoring, attention to vitamin K intake (including infant formula/breast milk), and management by a clinician experienced in pediatric anticoagulation. This response is informational only and not a substitute for professional medical advice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1677,
+  "usage": {
+    "input_tokens": 912,
+    "output_tokens": 16
+  }
+}

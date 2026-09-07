@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Metformin Hydrochloride indicated to treat?\n\nRESPONSE:\nAccording to the label, metformin hydrochloride tablets are indicated as an adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus. Metformin is a biguanide. Note that this is its only labeled indication in this excerpt — it is not indicated for type 1 diabetes, and treatment is meant to accompany (not replace) dietary changes and physical activity. Before starting, renal function should be assessed with an eGFR; metformin is contraindicated when eGFR is below 30 mL/minute/1.73 m², and initiation is not recommended when eGFR is between 30 and 45 mL/minute/1.73 m². Talk with your healthcare provider about whether metformin is appropriate for your situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2198,
+  "usage": {
+    "input_tokens": 645,
+    "output_tokens": 17
+  }
+}

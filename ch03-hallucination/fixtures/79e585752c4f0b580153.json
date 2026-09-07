@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Metformin Hydrochloride?\n\nRESPONSE:\n**Most common adverse reactions (metformin immediate-release, adults, monotherapy trials — >5% and more common than placebo):**\n\n| Reaction | Metformin | Placebo |\n|---|---|---|\n| Diarrhea | ~53% | ~12% |\n| Nausea/vomiting | ~26% | ~8% |\n| Flatulence | ~12% | ~6% |\n| Asthenia | ~9% | ~6% |\n| Indigestion/dyspepsia | ~7% | ~4% |\n| Abdominal discomfort | ~6% | ~5% |\n| Headache | ~6% | ~5% |\n\nOther frequently reported: metallic/unpleasant taste (dysgeusia, ~3%), anorexia/decreased appetite, bloating. Pediatric patients (10–16 years) report a similar GI-predominant profile.\n\n**Key points for practice:**\n\n- **GI effects are usually dose-related, transient, and occur early or after a dose increase.** They resolve in most patients within a few weeks. Mitigation: always dose **with meals**, start low (500 mg once or twice daily), titrate slowly (500 mg weekly, or 850 mg every 2 weeks), and consider a temporary dose reduction or switch to the extended-release formulation if intolerance persists.\n- **New-onset GI symptoms in a patient previously stable on metformin should not be dismissed as a drug side effect** — this can be a presenting sign of lactic acidosis (also malaise, myalgia, respiratory distress, somnolence, hypothermia, hypotension, bradyarrhythmia). Evaluate for precipitants (acute kidney injury, dehydration, sepsis, hypoxia, excessive alcohol, hepatic impairment, iodinated contrast).\n- **Vitamin B12 deficiency:** metformin decreases B12 absorption; subnormal levels occur in roughly 7% of patients and may be more likely with long-term use, higher doses, and pre-existing risk factors. Check B12 at baseline and periodically (e.g., every 2–3 years, or sooner with anemia or peripheral neuropathy); supplement rather than stop metformin in most cases.\n- **Hypoglycemia** is uncommon with metformin monotherapy but risk rises when combined with insulin or a sulfonylurea, or with caloric restriction, strenuous exercise, or alcohol — consider reducing the secretagogue/insulin dose.\n- **Serious but rare:** lactic acidosis (boxed warning), which carries high mortality. Risk factors include eGFR <30 mL/min/1.73 m² (contraindicated), acute or unstable heart failure, hepatic impairment, alcohol excess, age ≥65, and iodinated contrast exposure.\n\n**Monitoring:** eGFR at baseline and at least annually (more often — every 3–6 months — if eGFR 30–60 or other risk factors), hematologic parameters annually, and B12 as above. Hold metformin before/at the time of iodinated contrast in patients with eGFR 30–60 mL/min/1.73 m², liver disease, alcoholism, heart failure, or intra-arterial contrast; recheck eGFR at 48 hours and resume if stable.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1647,
+  "usage": {
+    "input_tokens": 1469,
+    "output_tokens": 17
+  }
+}

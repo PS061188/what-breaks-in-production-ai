@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Albuterol Sulfate?\n\nRESPONSE:\nThe label excerpt you provided does not include a drug‑interactions section. Clinically important interactions with inhaled albuterol are mostly pharmacodynamic (effects add or oppose each other) rather than metabolic. Key interactions to know and how to manage them:\n\n- Nonselective beta‑blockers (e.g., propranolol, nadolol, carvedilol, timolol eye drops): can block albuterol’s bronchodilator effect and may precipitate bronchospasm. Recommendation: avoid if possible in patients with reactive airways disease; if a beta‑blocker is required use a cardioselective agent with caution and monitor closely.\n\n- Cardioselective beta‑blockers (e.g., metoprolol, atenolol): may still reduce albuterol efficacy at higher doses — use cautiously and monitor respiratory status.\n\n- Other sympathomimetics/pressors (e.g., epinephrine, norepinephrine, pseudoephedrine, phenylephrine, stimulants such as amphetamines/methylphenidate): additive cardiovascular effects (tachycardia, hypertension, arrhythmia). Recommendation: avoid unnecessary co‑administration and monitor pulse/BP.\n\n- MAO inhibitors and tricyclic antidepressants (e.g., phenelzine, tranylcypromine, amitriptyline, nortriptyline): may potentiate cardiovascular effects (tachycardia, hypertension, arrhythmias). Recommendation: use with caution; consider alternatives or close monitoring.\n\n- Diuretics that cause hypokalemia (e.g., furosemide, bumetanide, hydrochlorothiazide) and other potassium‑lowering agents (e.g., amphotericin B): albuterol can shift K+ into cells and cause hypokalemia; combined use increases risk of clinically significant hypokalemia and arrhythmia. Recommendation: monitor serum potassium and ECG as indicated.\n\n- Digoxin: hypokalemia from albuterol may increase risk of digoxin‑related arrhythmias; there are case reports of arrhythmias when albuterol is given to patients on digoxin. Recommendation: monitor digoxin levels/EKG and electrolytes if co‑administered.\n\n- Theophylline/xanthine derivatives: combined use may increase risk of cardiac side effects (arrhythmias) — monitor.\n\n- Inhaled or systemic corticosteroids/anticholinergics: not adverse interactions — often used together for additive therapeutic benefit (e.g., ipratropium, inhaled steroids), but be mindful of cumulative side effects of each class.\n\n- Anesthetic agents (volatile halogenated anesthetics): possible increased risk of arrhythmias when used together — anesthesiology should be informed.\n\n- Diabetes medications and blood glucose: albuterol may cause transient hyperglycemia and increased insulin resistance. Recommendation: monitor glucose in diabetics and adjust antidiabetic therapy if needed.\n\nPractical approach: review the patient’s current drugs (including ophthalmic beta blockers and OTC decongestants), avoid coadministration with nonselective beta‑blockers and strong sympathomimetics when possible, monitor heart rate/BP/K+ (and ECG, digoxin levels, or glucose as clinically indicated), and educate patients about possible palpitations/tremor. If you want, tell me the patient’s current medication list and I’ll flag specific interactions and monitoring steps.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3123,
+  "usage": {
+    "input_tokens": 1554,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the overdose_protocol stage of a drug-label processing\npipeline. The passage below has already been classified as overdosage\n(signs of overdose and how to manage one).\n\nState how an overdose of this drug presents and how it should be managed.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nResumption of warfarin sodium administration reverses the effect of vitamin K, and a therapeutic INR can again be obtained by careful dosage adjustment. If rapid re-anticoagulation is indicated, heparin may be preferable for initial therapy. Prothrombin complex concentrate (PCC), fresh frozen plasma, or activated Factor VII treatment may be considered if the requirement to reverse the effects of warfarin sodium is urgent. A risk of hepatitis and other viral diseases is associated with the use of blood products; PCC and activated Factor VII are also associated with an increased risk of thrombosis. Therefore, these preparations should be used only in exceptional or life-threatening bleeding episodes secondary to warfarin sodium overdosage.\n</passage>",
+  "user": "Run the overdose_protocol stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium overdose is managed by reversing anticoagulation effects. Treatment options include: (1) Resumption of warfarin sodium administration with careful dosage adjustment to restore therapeutic INR; (2) Heparin for initial therapy if rapid re-anticoagulation is needed; (3) Prothrombin complex concentrate (PCC), fresh frozen plasma, or activated Factor VII for urgent reversal of warfarin effects, particularly in life-threatening bleeding episodes. Blood products carry risks of hepatitis and viral disease transmission, while PCC and activated Factor VII increase thrombosis risk, so these should be reserved for exceptional or life-threatening bleeding situations only.\"}",
+  "elapsed_ms": 2248,
+  "usage": {
+    "input_tokens": 424,
+    "output_tokens": 154
+  }
+}

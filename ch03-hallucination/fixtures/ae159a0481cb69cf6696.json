@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Metformin Hydrochloride?\n\nRESPONSE:\nShort answer: the excerpt you've provided doesn't contain the Adverse Reactions section — it only covers Indications and Dosage/Administration — so I can't quote adverse reaction data from this label text.\n\nFor general context (from metformin labeling overall, not from the excerpt above): the most commonly reported adverse reactions with immediate-release metformin are gastrointestinal, including diarrhea, nausea/vomiting, flatulence, abdominal discomfort, indigestion/dyspepsia, and asthenia; a metallic or unpleasant taste and headache are also reported. These GI effects are most common when starting therapy or increasing the dose and often lessen over time, which is why the label advises taking doses with meals and titrating gradually (e.g., 500 mg increments weekly).\n\nImportant safety issues highlighted elsewhere in metformin labeling include:\n- Lactic acidosis (boxed warning) — rare but serious; risk increases with renal impairment, hypoxic states, sepsis, excessive alcohol intake, hepatic impairment, and use of iodinated contrast. Symptoms can include malaise, muscle pain, unusual sleepiness, trouble breathing, and abdominal pain.\n- Vitamin B12 deficiency — may develop with long-term use; periodic hematologic monitoring is recommended.\n- Hypoglycemia — uncommon with metformin alone, but more likely when combined with insulin or sulfonylureas, or with missed meals/alcohol.\n\nPlease consult the complete prescribing information (Sections 5 and 6) or your pharmacist/prescriber for the full, label-specific adverse reaction list and incidence rates.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1899,
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 17
+  }
+}

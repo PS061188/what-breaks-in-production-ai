@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nHow Supplied The color of the dry powder for Amoxicillin and clavulanate potassium for oral suspension, USP, 600 mg/42.9 mg per 5 mL is white to off-white powder. Each 5 mL of reconstituted orange-flavored suspension contains 600 mg amoxicillin trihydrate and 42.9 mg clavulanic acid as the potassium salt. It is available in bottles of 75 mL (NDC 62135-095-75), 125 mL (NDC 62135-095-13), and 200 mL (NDC 62135-095-22). Storage Store dry powder at 20° to 25°C (68° to 77°F) [See USP Controlled Room Temperature]. Dispense in original container. Keep tightly closed. Store reconstituted suspension under refrigeration. Discard unused suspension after 10 days. Keep this and all medications out of the reach of children.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"how_supplied\"}",
+  "elapsed_ms": 874,
+  "usage": {
+    "input_tokens": 691,
+    "output_tokens": 11
+  }
+}

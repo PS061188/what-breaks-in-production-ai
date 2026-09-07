@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Atorvastatin Calcium?\n\nRESPONSE:\n**Overview of the mechanism.** Atorvastatin is metabolized primarily by CYP3A4 and is a substrate of the hepatic uptake transporter OATP1B1 and of P-gp/BCRP. Therefore, strong CYP3A4 inhibitors and OATP1B1 inhibitors raise atorvastatin (and its active metabolite) exposure and increase the risk of myopathy/rhabdomyolysis, while CYP3A4 inducers reduce efficacy. Atorvastatin itself can raise levels of a few P-gp substrates (e.g., digoxin).\n\n**A. Interactions requiring an atorvastatin dose cap (per label §2.5)**\n- Saquinavir + ritonavir, darunavir + ritonavir, fosamprenavir, fosamprenavir + ritonavir, elbasvir/grazoprevir, letermovir → **do not exceed 20 mg/day**\n- Nelfinavir → **do not exceed 40 mg/day**\n- Clarithromycin or itraconazole → **do not exceed 20 mg/day**\n\n**B. Combinations to avoid / contraindicated-in-practice**\n- **Cyclosporine** – ~8–10-fold increase in atorvastatin AUC; avoid concomitant use.\n- **Tipranavir + ritonavir; glecaprevir/pibrentasvir** – avoid atorvastatin entirely.\n- **Gemfibrozil** – avoid; markedly increased myopathy risk (impairs glucuronidation and OATP uptake). If a fibrate is needed, use **fenofibrate** (still some added myopathy risk — use lowest effective statin dose and counsel on muscle symptoms).\n- **Telaprevir, lopinavir/ritonavir** – avoid or use the lowest possible dose.\n- **Strong CYP3A4 inhibitors generally**: ketoconazole, posaconazole, voriconazole, itraconazole, telithromycin, erythromycin, nefazodone, cobicistat-containing regimens, ritonavir-boosted regimens. Use the lowest necessary atorvastatin dose, cap as above, or hold the statin during short courses (e.g., a 5–10 day clarithromycin course).\n\n**C. Other clinically important interactions**\n- **Colchicine** – additive myopathy/rhabdomyolysis risk; monitor CK and muscle symptoms, especially in renal impairment.\n- **Niacin ≥1 g/day** – increased myopathy risk.\n- **Digoxin** – atorvastatin 80 mg raises digoxin concentrations ~20%; monitor digoxin levels.\n- **Oral contraceptives** – atorvastatin increases norethindrone and ethinyl estradiol AUC; usually no action needed but consider when selecting a product.\n- **Rifampin and other strong inducers** (efavirenz, phenytoin, carbamazepine, St. John's wort) – reduce atorvastatin exposure; with rifampin, give both **simultaneously**, since staggered dosing markedly lowers atorvastatin levels. Monitor lipid response.\n- **Grapefruit juice** – large quantities (>1.2 L/day) increase exposure; advise moderation.\n- **Bile acid sequestrants (colestipol/cholestyramine)** – reduce atorvastatin levels ~25%, though LDL-C lowering is additive; separate dosing by ≥4 hours.\n- **Antacids** – ~35% decrease in atorvastatin concentration; LDL-C effect unchanged.\n- **Warfarin** – possible transient INR increase early in therapy; check INR after initiation and dose changes.\n- **Daptomycin** – consider temporarily holding the statin or monitoring CK weekly.\n- **Ticagrelor, ranolazine, amiodarone, verapamil/diltiazem** – moderate CYP3A4/transporter inhibition; watch for muscle symptoms, particularly at atorvastatin 80 mg.\n\n**D. Practical monitoring**\n- Counsel every patient to report unexplained muscle pain, tenderness, or weakness, especially with fever or malaise.\n- Obtain a baseline CK in high-risk patients (elderly, renal impairment, hypothyroidism, prior statin myopathy, polypharmacy); check CK if symptoms occur and discontinue if markedly elevated or if rhabdomyolysis/immune-mediated necrotizing myopathy is suspected.\n- Recheck lipids ~4 weeks after any interacting drug is started or stopped, since exposure changes can alter LDL-C response.\n- Remember the pregnancy/lactation contraindication and the need to hold the statin for planned or discovered pregnancy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1796,
+  "usage": {
+    "input_tokens": 1982,
+    "output_tokens": 17
+  }
+}

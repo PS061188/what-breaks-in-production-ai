@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\n**Omeprazole drug–drug interactions — practical prescriber summary**\n\nThe OTC label excerpt you have covers only dosing (1 tablet daily before breakfast, 14 days, repeat no more often than every 4 months) and does not list interactions. The OTC \"Ask a doctor or pharmacist before use\" wording flags warfarin, clopidogrel, cilostazol, diazepam, digoxin, tacrolimus, methotrexate, prescription antifungals/anti-yeast drugs, and atazanavir. Below is the fuller picture from standard pharmacology.\n\n**Mechanism 1 — CYP2C19 inhibition (omeprazole is both a substrate and a moderate inhibitor; also mild CYP3A4 effects)**\n- **Clopidogrel** – the clinically most important one. Omeprazole (and esomeprazole) reduce formation of the active metabolite and lower platelet inhibition; co-administration is discouraged in the US labeling. If a PPI is truly needed with clopidogrel, use **pantoprazole** (or rabeprazole), or switch antiplatelet, or consider an H2RA (famotidine).\n- **Warfarin** – case reports of raised INR/bleeding; check INR within ~1 week of starting or stopping and periodically.\n- **Phenytoin, diazepam and other benzodiazepines metabolized by 2C19** – reduced clearance, prolonged sedation; monitor levels/clinical effect.\n- **Citalopram/escitalopram** – increased exposure and QT concern; limit citalopram to 20 mg/day with omeprazole.\n- **Cilostazol** – increased exposure of cilostazol and its active metabolite; reduce cilostazol to 50 mg BID.\n- **Tacrolimus** – increased whole-blood levels, especially in CYP2C19 poor metabolizers; monitor trough and creatinine.\n- **Methotrexate** (particularly high-dose) – delayed elimination and possible toxicity; consider temporary PPI withdrawal.\n- **Voriconazole** – inhibits omeprazole metabolism (omeprazole exposure can quadruple); consider halving the omeprazole dose with high-dose voriconazole.\n- **Clarithromycin** – mutual increases in exposure (this is exploited, not avoided, in H. pylori regimens).\n- **Rifampin, St John's wort, carbamazepine** – induce metabolism and reduce omeprazole efficacy; avoid or use an alternative acid suppressant.\n\n**Mechanism 2 — gastric pH–dependent absorption (usually the more clinically consequential category)**\n- *Reduced absorption / possible therapeutic failure:* **rilpivirine (contraindicated)**, **atazanavir and nelfinavir** (avoid; atazanavir only with boosting and strict dose separation in treatment-naïve patients), **ketoconazole, itraconazole capsules, posaconazole suspension**, **erlotinib, dasatinib, nilotinib, pazopanib, gefitinib, neratinib, acalabrutinib capsules, sotorasib, ceritinib**, **mycophenolate mofetil**, **oral iron salts**, **ampicillin esters**, **ledipasvir/velpatasvir-containing HCV regimens**, and to a lesser degree **levothyroxine** (may need dose retitration). Ulipristal is also affected.\n- *Increased absorption:* **digoxin** (~10% AUC rise; watch in narrow-margin patients), **raltegravir**, **saquinavir**, **nifedipine**.\n\n**Mechanism 3 — additive/long-term risks**\n- **Diuretics and other hypomagnesemia-causing drugs** – check magnesium with prolonged use, especially with digoxin.\n- **Chronic use with corticosteroids/aromatase inhibitors** – additive fracture risk; also B12 and iron deficiency, hypomagnesemia, C. difficile diarrhea, acute interstitial nephritis.\n\n**Lab interference:** falsely elevated serum chromogranin A (stop PPI ~14 days before testing), interference with secretin stimulation testing, and false-positive urine THC screens.\n\n**Bottom line for OTC self-treatment:** patients on clopidogrel, warfarin, methotrexate, tacrolimus, digoxin, azole antifungals, HIV/HCV antivirals, or oral oncology agents should not self-select this product without prescriber input; verify the interaction and either pick pantoprazole/famotidine or manage with dose separation and monitoring.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2205,
+  "usage": {
+    "input_tokens": 1926,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\nThe label excerpt provided does not include a drug interactions section. To get comprehensive information about drug interactions with metformin hydrochloride, you should consult the complete prescribing information, which would typically include a dedicated interactions section.\n\nHowever, from standard pharmacology knowledge, clinically relevant interactions include:\n\n1. **Contrast agents (iodinated)** - The label specifically addresses this: discontinue metformin before iodinated contrast imaging in patients with eGFR 30-60 mL/min/1.73m² or those with liver disease, alcoholism, heart failure, or intra-arterial contrast administration. Restart 48 hours post-procedure if renal function is stable.\n\n2. **Alcohol** - Increases risk of lactic acidosis; counsel patients to limit alcohol consumption.\n\n3. **Medications affecting renal function** - ACE inhibitors, ARBs, NSAIDs, diuretics can impair renal clearance of metformin and increase lactic acidosis risk.\n\n4. **Certain antibiotics** - Fluoroquinolones and other agents may affect renal function or glucose metabolism.\n\n5. **Topiramate, carbonic anhydrase inhibitors** - May increase metformin levels.\n\nI recommend reviewing the full prescribing information for the complete interactions section and checking clinical references (e.g., Lexicomp, UpToDate) for your specific patient scenario, especially if renal function is impaired.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 613,
+    "output_tokens": 11
+  }
+}

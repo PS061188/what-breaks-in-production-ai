@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Omeprazole?\n\nRESPONSE:\n**OTC product (as described in this label — omeprazole magnesium 20 mg delayed‑release tablets)**\n\n- **Dose:** 1 tablet (20 mg) by mouth **once daily**, swallowed whole with a glass of water, **before eating in the morning** (ideally 30–60 minutes before breakfast). Do not chew, crush, or split.\n- **Duration:** One **14‑day course**; do not exceed 1 tablet/day or 14 days of use unless a clinician directs otherwise.\n- **Repeat courses:** May repeat a 14‑day course **no more often than every 4 months** without medical supervision.\n- **Onset:** Not for immediate heartburn relief — full effect may take **1–4 days**, though some patients get complete relief within 24 hours. Counsel patients to use an antacid or H2RA for breakthrough symptoms in the interim if appropriate.\n- **Age:** Adults ≥18 years. Children <18 should be evaluated by a physician (pediatric heartburn may signal serious pathology).\n\n**Prescription omeprazole — usual adult starting doses (standard pharmacology, for context)**\n\n| Indication | Typical starting dose | Duration |\n|---|---|---|\n| Symptomatic GERD (no erosions) | 20 mg once daily | 4–8 weeks |\n| Erosive esophagitis (healing) | 20 mg once daily | 4–8 weeks |\n| Erosive esophagitis (maintenance) | 20 mg once daily | Reassess periodically |\n| Duodenal ulcer | 20 mg once daily | 4 weeks |\n| Gastric ulcer | 40 mg once daily | 4–8 weeks |\n| H. pylori eradication (triple therapy with amoxicillin + clarithromycin) | 20 mg twice daily | 10–14 days |\n| Pathologic hypersecretion (e.g., Zollinger‑Ellison) | 60 mg once daily, titrate to acid output; doses >80 mg/day divided BID | Long term |\n\nPediatric (Rx) dosing is weight‑based: ~5 mg/day (5–<10 kg), 10 mg/day (10–<20 kg), 20 mg/day (≥20 kg).\n\n**Practical prescribing points**\n\n- **Timing matters:** PPIs work best on an empty stomach, 30–60 min before the first meal; efficacy drops if taken with or after food or at bedtime without a meal.\n- **Hepatic impairment / Asian ancestry:** Consider dose reduction (CYP2C19 poor metabolizers have higher exposure); no renal adjustment needed.\n- **Key interactions:** Avoid concomitant **clopidogrel** (CYP2C19 inhibition — use pantoprazole or an H2RA instead); contraindicated with **rilpivirine**; avoid with **atazanavir/nelfinavir**; increases exposure to **methotrexate** (high dose), **citalopram**, **diazepam**, **phenytoin**, **warfarin** (monitor INR); reduces absorption of **ketoconazole/itraconazole**, **iron**, **mycophenolate**.\n- **Long‑term risks to weigh:** *C. difficile* diarrhea, community‑acquired pneumonia, hypomagnesemia (check Mg if >1 year or on diuretics/digoxin), B12 deficiency, fundic gland polyps, osteoporosis‑related fractures, acute interstitial nephritis, cutaneous/systemic lupus erythematosus. Use the lowest effective dose for the shortest necessary duration and periodically attempt de‑escalation.\n- **Red flags warranting evaluation rather than OTC self‑treatment:** dysphagia, odynophagia, GI bleeding/melena, unintentional weight loss, persistent vomiting, anemia, chest pain, age >50 with new symptoms, or symptoms persisting beyond the 14‑day course.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1716,
+  "usage": {
+    "input_tokens": 1711,
+    "output_tokens": 17
+  }
+}

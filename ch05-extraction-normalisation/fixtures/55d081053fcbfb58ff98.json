@@ -1,0 +1,50 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\n2 DOSAGE AND ADMINISTRATION Individualize dosing regimen for each patient, and adjust based on INR response. ( 2.1 , 2.2 ) Knowledge of genotype can inform initial dose selection. ( 2.3 ) Monitoring: Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks. ( 2.4 ) Review conversion instructions from other anticoagulants. ( 2.8 ) 2.1 Individualized Dosing The dosage and administration of warfarin sodium tablets must be individualized for each patient according to the patient’s International Normalized Ratio (INR) response to the drug. Adjust the dose based on the patient’s INR and the condition being treated. Consult the latest evidence-based clinical practice guidelines regarding the duration and intensity of anticoagulation for the indicated conditions. 2.2 Recommended Target INR Ranges and Durations for Individual Indications An INR of greater than 4 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding. Venous Thromboembolism (including deep venous thrombosis [DVT] and PE) Adjust the warfarin dose to maintain a target INR of 2.5 (INR range, 2 to 3) for all treatment durations. The duration of treatment is based on the indication as follows: For patients with a DVT or PE secondary to a transient (reversible) risk factor, treatment with warfarin for 3 months is recommended. For patients with an unprovoked DVT or PE, treatment with warfarin is recommended for at least 3 months. After 3 months of therapy, evaluate the risk-benefit ratio of long-term treatment for the individual patient. For patients with two episodes of unprovoked DVT or PE, long-term treatment with warfarin is recommended. For a patient receiving long-term anticoagulant treatment, periodically reassess the risk-benefit ratio of continuing such treatment in the individual patient. Atrial Fibrillation In patients with non-valvular AF, anticoagulate with warfarin to target INR of 2.5 (range, 2 to 3). In patients with non-valvular AF that is persistent or paroxysmal and at high risk of stroke (i.e., having any of the following features: prior ischemic stroke, transient ischemic attack, or systemic embolism, or 2 of the following risk factors: age greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. In patients with non-valvular AF that is persistent or paroxysmal and at an intermediate risk of ischemic stroke (i.e., having 1 of the following risk factors: age greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. For patients with AF and mitral stenosis, long-term anticoagulation with warfarin is recommended. For patients with AF and prosthetic heart valves, long-term anticoagulation with warfarin is recommended; the target INR may be increased and aspirin added depending on valve type and position, and on patient factors. Mechanical and Bioprosthetic Heart Valves For patients with a bileaflet mechanical valve or a Medtronic Hall (Minneapolis, MN) tilting disk valve in the aortic position who are in sinus rhythm and without left atrial enlargement, therapy with warfarin to a target INR of 2.5 (range, 2 to 3\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\":[{\"field\":\"starting_dose\",\"value\":\"Knowledge of genotype can inform initial dose selection.\",\"qualifiers\":[\"initial dose selection\"],\"source_quote\":\"Knowledge of genotype can inform initial dose selection. ( 2.3 )\"},{\"field\":\"maximum_dose\",\"value\":\"An INR of greater than 4 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding.\",\"qualifiers\":[\"greater than 4\",\"in most patients\",\"higher risk of bleeding\"],\"source_quote\":\"An INR of greater than 4 appears to provide no additional therapeutic benefit in most patients and is associated with a higher risk of bleeding.\"},{\"field\":\"frequency\",\"value\":\"Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks.\",\"qualifiers\":[\"upon initiation\",\"until stable in the therapeutic range\",\"every 1 to 4 weeks\",\"daily\"],\"source_quote\":\"Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks. ( 2.4 )\"},{\"field\":\"dose_adjustment\",\"value\":\"Adjust the dose based on the patient’s INR and the condition being treated.\",\"qualifiers\":[\"based on the patient’s INR\",\"the condition being treated\",\"Individualize dosing regimen for each patient\",\"adjust based on INR response\"],\"source_quote\":\"Individualize dosing regimen for each patient, and adjust based on INR response. ( 2.1 , 2.2 )\\n\\nThe dosage and administration of warfarin sodium tablets must be individualized for each patient according to the patient’s International Normalized Ratio (INR) response to the drug. Adjust the dose based on the patient’s INR and the condition being treated.\"}]}",
+  "elapsed_ms": 30279,
+  "usage": {
+    "input_tokens": 1115,
+    "output_tokens": 3064
+  }
+}

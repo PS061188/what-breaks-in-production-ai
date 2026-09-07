@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Furosemide for pediatric patients?\n\nRESPONSE:\nFor pediatric patients (oral furosemide tablets), the label gives the following guidance for treating edema:\n\n• **Initial dose:** 2 mg/kg of body weight, given as a single dose.\n• **Titration:** If the diuretic response is not satisfactory after the initial dose, the dose may be increased by 1 to 2 mg/kg, given no sooner than 6 to 8 hours after the previous dose.\n• **Maximum:** Doses greater than 6 mg/kg body weight are not recommended.\n• **Maintenance:** The dose should be adjusted down to the minimum effective level.\n\nNote that the oral hypertension indication in this label applies to adults only; pediatric dosing is given for edema associated with congestive heart failure, hepatic cirrhosis, and renal disease including nephrotic syndrome. Therapy should always be individualized to the patient's response, with appropriate clinical and laboratory monitoring.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1634,
+  "usage": {
+    "input_tokens": 688,
+    "output_tokens": 17
+  }
+}

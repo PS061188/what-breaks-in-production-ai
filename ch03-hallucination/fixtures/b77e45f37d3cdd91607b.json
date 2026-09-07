@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Furosemide?\n\nRESPONSE:\nThe recommended starting dose of furosemide depends on the indication:\n\n**For Edema (Adults):** The usual initial dose is 20 to 80 mg given as a single dose. If needed, the same dose can be administered 6 to 8 hours later or increased by 20 or 40 mg increments, given no sooner than 6 to 8 hours after the previous dose.\n\n**For Hypertension (Adults):** The usual initial dose is 80 mg, typically divided as 40 mg twice daily.\n\n**For Pediatric Patients:** The usual initial dose is 2 mg/kg body weight given as a single dose. If diuretic response is unsatisfactory, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose, with a maximum of 6 mg/kg body weight.\n\n**For Geriatric Patients:** Dose selection should be cautious, usually starting at the low end of the dosing range. Therapy should be individualized based on patient response to achieve maximal therapeutic effect with the minimal effective dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1540,
+  "usage": {
+    "input_tokens": 728,
+    "output_tokens": 17
+  }
+}

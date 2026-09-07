@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nWarfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces [see Warnings and Precautions ( 5.8 )] Bleeding tendencies associated with: − Active ulceration or overt bleeding of the gastrointestinal, genitourinary, or respiratory tract − Central nervous system hemorrhage − Cerebral aneurysms, dissecting aorta − Pericarditis and pericardial effusions − Bacterial endocarditis Threatened abortion, eclampsia, and preeclampsia Unsupervised patients with conditions associated with potential high level of non-compliance Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding Hypersensitivity to warfarin or to any other components of this product (e.g., anaphylaxis) [see Adverse Reactions ( 6 )] Major regional or lumbar block anesthesia Malignant hypertension Pregnancy, except in women with mechanical heart valves ( 4 , 5.7 , 8.1 ) Hemorrhagic tendencies or blood dyscrasias ( 4 ) Recent or contemplated surgery of the central nervous system (CNS) or eye, or traumatic surgery resulting in large open surfaces ( 4 , 5.8 ) Bleeding tendencies associated with certain conditions ( 4 ) Threatened abortion, eclampsia, and preeclampsia ( 4 ) Unsupervised patients with potential high levels of non-compliance ( 4 ) Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding ( 4 ) Hypersensitivity to warfarin or any component of the product ( 4 ) Major regional or lumbar block anesthesia ( 4 ) Malignant hypertension ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"contraindications\"}",
+  "elapsed_ms": 1058,
+  "usage": {
+    "input_tokens": 882,
+    "output_tokens": 11
+  }
+}

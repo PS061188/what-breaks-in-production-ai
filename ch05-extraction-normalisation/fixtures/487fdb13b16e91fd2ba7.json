@@ -1,0 +1,50 @@
+{
+  "model": "gpt-4.1-mini",
+  "system": "You are a precision data extractor. Capture what the document says.\nConverting, standardising or tidying a value is a failure mode.\n\nCAPTURE RULES — apply without exception:\n\nDOSAGES:\n  - Output number and unit exactly as written: \"five hundred milligrams\", \"500mg\",\n    \"5 mg to 60 mg\"\n  - Never collapse a range to a single number\n  - Never supply a unit the text does not state\n\nFREQUENCY AND DURATION:\n  - Exactly as written: \"every 6 to 8 hours\", \"for at least 10 days\"\n  - Do not convert to a count per day or a number of days\n\nQUALIFIERS:\n  - Capture any word that narrows a value: \"initial\", \"maintenance\",\n    \"individualized\", \"gradually\", \"not to exceed\", \"depending on the response\"\n  - Put every one you find in \"qualifiers\" — never drop it\n\nFor each field, output the value as written, the qualifiers attached to it, and\na source_quote copied character-for-character from the text below.\n\nDo not output a normalised value. Normalisation runs after this step, in code.\n\n<label_text>\n2 DOSAGE AND ADMINISTRATION Administer once daily, preferably on an empty stomach, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours before or after drugs that are known to interfere with absorption. (2.1) Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption. (2.1) Advise patients to stop biotin and biotin-containing supplements at least 2 days before assessing TSH and/or T4 levels. (2.2) Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. Peak therapeutic effect may not be attained for 4 to 6 weeks. (2.2) See full prescribing information for dosing in specific patient populations. (2.3) Adequacy of therapy determined with periodic monitoring of TSH and/or T4 as well as clinical status. (2.4) 2.1 Important Administration Instructions Administer levothyroxine sodium tablets as a single daily dose, on an empty stomach, one-half to one hour before breakfast with a full glass of water to avoid choking or gagging [see Adverse Reactions (6) ]. Administer levothyroxine sodium tablets at least 4 hours before or after drugs known to interfere with levothyroxine sodium absorption [see Drug Interactions (7.1) ]. Evaluate the need for dosage adjustments when regularly administering within one hour of certain foods that may affect levothyroxine sodium tablets absorption [see Dosage and Administration (2.2 and 2.3) , Drug Interactions (7.9), and Clinical Pharmacology (12.3) ]. Administer levothyroxine sodium tablets to pediatric patients who cannot swallow intact tablets by crushing the tablet, suspending the freshly crushed tablet in a small amount (5 to 10 mL) of water and immediately administering the suspension by spoon or dropper. Ensure the patient ingests the full amount of the suspension. Do not store the suspension. Do not administer in foods that decrease absorption of levothyroxine sodium tablets, such as soybean-based infant formula [see Drug Interactions (7.9) ]. 2.2 Important Considerations for Dosing The dosage of levothyroxine sodium tablets for hypothyroidism or pituitary TSH suppression depends on a variety of factors including: the patient's age, body weight, cardiovascular status, concomitant medical conditions (including pregnancy), concomitant medications, co-administered food and the specific nature of the condition being treated [see Dosage and Administration (2.3) , Warnings and Precautions (5) , and Drug Interactions (7) ] . Dosing must be individualized to account for these factors and dosage adjustments made based on periodic assessment of the patient's clinical response and laboratory parameters [see Dosage and Administration (2.4) ]. For adult patients with primary hypothyroidism, titrate until the patient is clinically euthyroid and the serum TSH returns to normal [see Dosage and Administration (2.3) ]. For secondary or tertiary hypothyroidism, serum TSH is not a reliable measure of levothyroxine sodium dosage adequacy and should not be used to monitor therapy. Use the serum free-T4 level to titrate levothyroxine sodium tablets dosing until the patient is clinically euthyroid and the serum free-T4 level is restored to the upper half of the normal range [see Dosage and Administration (2.3) ]. Inquire whether patients are taking biotin or biotin-containing supplements. If so, advise them to stop biotin supplementation at leas\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\":[{\"field\":\"starting_dose\",\"value\":\"Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications\",\"qualifiers\":[\"Starting\"],\"source_quote\":\"Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications.\"},{\"field\":\"maximum_dose\",\"value\":\"\",\"qualifiers\":[],\"source_quote\":\"\"},{\"field\":\"frequency\",\"value\":\"once daily\",\"qualifiers\":[\"single\",\"daily\"],\"source_quote\":\"Administer levothyroxine sodium tablets as a single daily dose, on an empty stomach, one-half to one hour before breakfast with a full glass of water to avoid choking or gagging\"},{\"field\":\"dose_adjustment\",\"value\":\"Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption\",\"qualifiers\":[\"when regularly administering within one hour of certain foods that may affect absorption\"],\"source_quote\":\"Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect levothyroxine sodium tablets absorption\"}]}",
+  "elapsed_ms": 3170,
+  "usage": {
+    "input_tokens": 1101,
+    "output_tokens": 220
+  }
+}

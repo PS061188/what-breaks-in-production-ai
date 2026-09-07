@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Amoxicillin safe to use during pregnancy?\n\nRESPONSE:\n**Short answer:** Yes — amoxicillin (and amoxicillin/clavulanate) is among the best-studied and most widely used antibacterials in pregnancy and is generally considered safe. One important exception applies to clavulanate use in preterm premature rupture of membranes (PPROM).\n\n**Note on this particular product:** The label excerpt you're working from is for the 600 mg/42.9 mg per 5 mL pediatric oral suspension, which is indicated only for children 3 months–12 years weighing ≤40 kg with recurrent/persistent acute otitis media. There is no adult experience with this formulation, and adults who have trouble swallowing should not be given it in place of the 500 mg or 875 mg tablets. So for a pregnant patient you'd prescribe an adult amoxicillin or amoxicillin/clavulanate dosage form, not this suspension.\n\n**Safety data**\n- Amoxicillin: former FDA Pregnancy Category B. Large cohort and case-control data (tens of thousands of exposures, including first trimester) show no consistent increase in major congenital malformations, stillbirth, or adverse neonatal outcomes. Penicillins cross the placenta but are not teratogenic.\n- Clavulanate: also reassuring in general obstetric use; animal reproduction studies show no fetal harm, and human data have not demonstrated a teratogenic signal.\n- **Key caveat — PPROM:** In the ORACLE I trial, antenatal co-amoxiclav given for preterm premature rupture of membranes was associated with an increased rate of neonatal necrotizing enterocolitis. Avoid amoxicillin/clavulanate in that setting; use the standard ampicillin/erythromycin (or azithromycin) latency regimen instead.\n- Practical corollary: when a beta-lactamase inhibitor isn't needed, plain amoxicillin is the preferred agent (e.g., asymptomatic bacteriuria, group B strep prophylaxis alternatives, uncomplicated sinusitis, dental infection, Lyme disease in pregnancy).\n\n**Dosing considerations in pregnancy**\n- Pregnancy increases glomerular filtration and volume of distribution, lowering amoxicillin serum and tissue concentrations. Don't dose-reduce; use full standard adult doses (e.g., amoxicillin 500 mg TID or 875 mg BID; amoxicillin/clavulanate 875/125 mg BID), and favor the higher end of the range for respiratory or deep-tissue infections.\n- For asymptomatic bacteriuria/cystitis, obtain a culture and confirm susceptibility — E. coli resistance to plain amoxicillin is high in many regions.\n\n**Lactation:** Compatible with breastfeeding. Only small amounts appear in milk (relative infant dose well under 1–2%). Counsel the mother to watch for loose stools, diaper-area candidiasis/thrush, or rash in the infant, none of which usually require stopping therapy.\n\n**Other counseling points that carry over from the label**\n- Take at the start of a meal to improve clavulanate absorption and reduce GI intolerance — relevant advice for pregnant patients already prone to nausea.\n- Diarrhea is the most common adverse effect and is more frequent with the clavulanate-containing products; consider *C. difficile* if diarrhea is severe or persistent.\n- Contraindicated with a history of serious hypersensitivity to penicillins or of amoxicillin/clavulanate-associated cholestatic jaundice/hepatic dysfunction; use caution and monitor liver function in hepatic impairment.\n\n**Bottom line:** Amoxicillin is a first-line, pregnancy-appropriate choice. Add clavulanate only when beta-lactamase coverage is genuinely needed, and avoid it specifically in PPROM.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2043,
+  "usage": {
+    "input_tokens": 1674,
+    "output_tokens": 17
+  }
+}

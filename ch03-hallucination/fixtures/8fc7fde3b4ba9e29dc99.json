@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Prednisone safe to use during pregnancy?\n\nRESPONSE:\nThe excerpt you've shared covers only the Indications and Dosage/Administration sections of the prednisone label, so it doesn't contain any pregnancy-specific information. Prednisone labeling normally addresses this in the Precautions/Pregnancy (or Use in Specific Populations) section, which isn't included here — so I can't quote label language on pregnancy safety.\n\nWhat I can say generally (not from this excerpt): corticosteroids like prednisone are not absolutely contraindicated in pregnancy, and they are sometimes needed to treat serious maternal conditions such as severe asthma, lupus flares, inflammatory bowel disease, or adrenal insufficiency. Traditional corticosteroid labeling notes that these drugs cross the placenta, that animal studies have shown adverse fetal effects (e.g., cleft palate), and that adequate, well-controlled human studies are lacking; therefore they should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus. Labels also advise that infants born to mothers who received substantial corticosteroid doses during pregnancy be observed for signs of hypoadrenalism. Small amounts pass into breast milk, so nursing considerations also apply.\n\nBecause the risk–benefit balance depends on the dose, duration, trimester, and the condition being treated, this decision should be made with the prescribing clinician or obstetrician rather than by stopping or starting the drug on your own — abruptly discontinuing prednisone after prolonged use can be dangerous. If you'd like, I can look at the full prescribing information sections on pregnancy and lactation if you provide them.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1586,
+  "usage": {
+    "input_tokens": 914,
+    "output_tokens": 17
+  }
+}

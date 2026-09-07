@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nxanthopsia Hematologic Reactions 1. aplastic anemia 2. thrombocytopenia 3. agranulocytosis 4. hemolytic anemia 5. leukopenia 6. anemia 7. eosinophilia Dermatologic-Hypersensitivity Reactions 1. toxic epidermal necrolysis 2. Stevens-Johnson Syndrome 3. erythema multiforme 4. drug rash with eosinophilia and systemic symptoms 5. acute generalized exanthematous pustulosis 6. exfoliative dermatitis 7. bullous pemphigoid 8. purpura 9. photosensitivity 10. rash 11. pruritus 12. urticaria Cardiovascular Reaction 1. Orthostatic hypotension may occur and be aggravated by alcohol, barbiturates or narcotics. 2. Increase in cholesterol and triglyceride serum levels Other Reactions 1. hyperglycemia 2. glycosuria 3. hyperuricemia 4. muscle spasm 5. weakness 6. restlessness 7. urinary bladder spasm 8. thrombophlebitis 9. fever Whenever adverse reactions are moderate or severe, furosemide dosage should be reduced or therapy withdrawn.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 930,
+  "usage": {
+    "input_tokens": 770,
+    "output_tokens": 11
+  }
+}

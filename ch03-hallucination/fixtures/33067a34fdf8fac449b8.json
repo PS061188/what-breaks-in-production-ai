@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Amoxicillin for pediatric patients?\n\nRESPONSE:\n**For this product (amoxicillin/clavulanate potassium oral suspension, 600 mg/42.9 mg per 5 mL — the \"ES-600\" formulation):**\n\n**Dose:** 90 mg/kg/day of the amoxicillin component, divided every 12 hours, for 10 days. This also delivers ~6.4 mg/kg/day of clavulanic acid.\n\n**Population:** Pediatric patients 3 months to 12 years of age weighing ≤40 kg (indicated for recurrent/persistent acute otitis media with the specified risk factors).\n\n**Weight-based volume guide (twice daily):**\n- 8 kg → 3 mL BID\n- 12 kg → 4.5 mL BID\n- 16 kg → 6 mL BID\n- 20 kg → 7.5 mL BID\n- 24 kg → 9 mL BID\n- 28 kg → 10.5 mL BID\n- 32 kg → 12 mL BID\n- 36 kg → 13.5 mL BID\n- 40 kg → 15 mL BID\n\n(Quick math: mL per dose = weight in kg × 90 ÷ 600 ÷ 2 = weight × 0.075.)\n\n**Key practical points:**\n- **Administer at the start of a meal** to improve clavulanate absorption and reduce GI intolerance (diarrhea is the most common adverse effect).\n- **Not studied in children >40 kg** or in adults — do not substitute ES-600 suspension for the 500 mg or 875 mg tablets in patients who cannot swallow pills.\n- **Not interchangeable with other suspensions.** ES-600 contains 42.9 mg clavulanate/5 mL, versus 28.5 mg/5 mL (200 mg/28.5 mg) and 57 mg/5 mL (400 mg/57 mg). Write the strength explicitly on the prescription.\n- **Reconstitution:** 75 mL bottle → 68 mL water; 125 mL → 108 mL; 200 mL → 170 mL (add water in two portions, shaking vigorously each time). Refrigerate, shake before each use, discard after 10 days. FLAVORx (apple, banana cream, bubble gum, cherry, watermelon) may be added 1 drop per 5 mL if needed.\n- **Hepatic impairment:** dose with caution and monitor LFTs periodically; cholestatic hepatitis/jaundice is a known (rare, usually reversible) risk with amoxicillin/clavulanate.\n- **Renal impairment:** the high-dose ES-600 formulation has not been studied and is generally not recommended in patients with renal impairment (CrCl <30 mL/min) or in infants <3 months; use a lower-dose amoxicillin/clavulanate formulation with appropriate interval adjustment instead. For infants <3 months, the usual recommendation is 30 mg/kg/day amoxicillin divided q12h using the 125 mg/5 mL suspension.\n- **Contraindications/cautions:** prior serious hypersensitivity to penicillins/cephalosporins; prior amoxicillin-clavulanate–associated cholestatic jaundice/hepatic dysfunction; avoid in suspected infectious mononucleosis (rash risk).\n\n**Context from standard practice:** for routine acute otitis media where high-dose therapy is desired but ES-600 is not needed, amoxicillin alone 80–90 mg/kg/day divided BID (max ~4 g/day) is standard; conventional amoxicillin/clavulanate dosing for other infections is 25–45 mg/kg/day divided q12h (using 200/28.5 or 400/57 suspensions).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1877,
+  "usage": {
+    "input_tokens": 1615,
+    "output_tokens": 17
+  }
+}

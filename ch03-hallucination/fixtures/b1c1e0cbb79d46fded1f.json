@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the label excerpt provided, the specific drug interactions highlighted are:\n\n**MAOIs (Monoamine Oxidase Inhibitors):**\n- At least 14 days must elapse between discontinuing an MAOI intended to treat psychiatric disorders and starting sertraline hydrochloride\n- Conversely, at least 14 days should pass after stopping sertraline hydrochloride before starting an MAOI\n\n**Other MAOI-like drugs:**\n- Linezolid (antibiotic) - Do not start sertraline in patients currently taking linezolid due to increased risk of serotonin syndrome\n- Intravenous methylene blue - Do not start sertraline in patients currently receiving IV methylene blue due to increased risk of serotonin syndrome\n- If a patient on sertraline requires urgent treatment with linezolid or IV methylene blue, sertraline should be stopped promptly. The patient should be monitored for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last dose of linezolid or IV methylene blue. Sertraline may be resumed 24 hours after the last dose of these agents.\n- Non-intravenous methylene blue or lower IV doses carry unclear risk, but clinicians should be aware of possible serotonin syndrome symptoms\n\n**Note:** The label excerpt focuses on these specific interactions but does not provide a comprehensive list of all potential drug interactions. For a complete drug interaction profile, you should consult the full prescribing information or a drug interaction database, as sertraline as an SSRI likely has other clinically significant interactions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 648,
+    "output_tokens": 11
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Warfarin Sodium?\n\nRESPONSE:\nThe recommended starting dose of Warfarin Sodium varies based on whether genotype information is available:\n\n**WITHOUT Genotype Information:**\nThe initial dose is usually **2 to 5 mg once daily**. The specific dose for each patient should be determined by close monitoring of INR response and consideration of the indication being treated.\n\n**WITH Genotype Information:**\nIf CYP2C9 and/or VKORC1 genotypes are known, refer to the dosing table based on the patient's genetic profile. Expected maintenance doses range from 0.5 to 7 mg daily depending on the genotype combination.\n\n**Important Considerations:**\n- Dosing must be individualized for each patient based on INR response\n- Lower initial and maintenance doses should be considered for elderly, debilitated, and Asian patients\n- Routine use of loading doses is NOT recommended, as this may increase hemorrhagic and other complications without offering more rapid protection\n- Typical maintenance doses are 2 to 10 mg once daily\n- Knowledge of genotype can inform initial dose selection and help predict time to maximum INR effect",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1693,
+  "usage": {
+    "input_tokens": 745,
+    "output_tokens": 17
+  }
+}

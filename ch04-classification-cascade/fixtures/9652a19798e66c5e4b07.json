@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFollowing overdosage, patients have experienced primarily gastrointestinal symptoms including stomach and abdominal pain, vomiting, and diarrhea. Rash, hyperactivity, or drowsiness have also been observed in a small number of patients. In the case of overdosage, discontinue amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL, treat symptomatically, and institute supportive measures as required. If the overdosage is very recent and there is no contraindication, an attempt at emesis or other means of removal of drug from the stomach may be performed. A prospective study of 51 pediatric patients at a poison control center suggested that overdosages of less than 250 mg/kg of amoxicillin are not associated with significant clinical symptoms and do not require gastric emptying.1 Interstitial nephritis resulting in oliguric renal failure has been reported in a small number of patients after overdosage with amoxicillin.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Discusses overdosage symptoms including gastrointestinal manifestations (stomach pain, vomiting, diarrhea), rash, hyperactivity, drowsiness; (b) Provides management instructions: discontinue medication, treat symptomatically, supportive measures, potential gastric emptying; (c) References clinical data from poison control study about overdose thresholds and renal complications. Step 2 - Most plausible categories: (1) 'overdosage' - explicitly discusses signs/symptoms of overdose and management approach; (2) 'adverse_reactions' - mentions symptoms like rash, hyperactivity, drowsiness which could be side effects. Step 3 - The winner is 'overdosage' because: the passage explicitly frames all information within the context of overdosage (\\\"Following overdosage...\\\", \\\"In the case of overdosage...\\\", \\\"after overdosage with amoxicillin\\\"), provides overdose-specific management protocols (discontinue, treat symptomatically, consider gastric emptying), and references toxicology data about overdose thresholds. The symptoms described are presented as overdose manifestations rather than normal adverse effects. Step 4 - Confidence assessment: The passage is unambiguously structured as an overdosage section with clear management guidance and toxicology references. No reasonable alternative interpretation exists.\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4717,
+  "usage": {
+    "input_tokens": 1093,
+    "output_tokens": 352
+  }
+}

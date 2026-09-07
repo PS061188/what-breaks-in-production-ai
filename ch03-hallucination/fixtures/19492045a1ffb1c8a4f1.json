@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Gabapentin?\n\nRESPONSE:\nThe recommended starting dose of Gabapentin depends on the indication:\n\n**For Postherpetic Neuralgia (Adults):**\n- Day 1: 300 mg as a single dose\n- Day 2: 600 mg/day (300 mg twice daily)\n- Day 3: 900 mg/day (300 mg three times daily)\n- Then titrate upward as needed to a maximum of 1800 mg/day\n\n**For Epilepsy with Partial Onset Seizures:**\n\n*Patients 12 years and older:*\n- 300 mg three times daily (900 mg/day total)\n\n*Pediatric patients 3-11 years:*\n- Starting dose range: 10-15 mg/kg/day in three divided doses\n- Titrate upward over approximately 3 days to reach recommended maintenance dose\n\nIn all cases, dosing should be adjusted based on renal function, particularly in elderly patients and those with renal impairment. If the dose needs to be reduced, discontinued, or changed to an alternative medication, this should be done gradually over a minimum of 1 week.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1582,
+  "usage": {
+    "input_tokens": 726,
+    "output_tokens": 17
+  }
+}

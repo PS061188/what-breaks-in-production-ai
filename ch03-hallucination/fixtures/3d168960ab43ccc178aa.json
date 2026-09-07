@@ -1,0 +1,61 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are a research assistant. Your answers must be GROUNDED — every\nfactual claim must trace to the provided source document. You are NOT allowed to\nuse prior knowledge to fill gaps.\n\nGROUNDING RULES (non-negotiable):\n1. Only assert facts that appear verbatim or by clear implication in <sources>.\n2. For every factual claim, cite the source by quoting the exact supporting text.\n3. If a question cannot be answered from the sources, set \"answerable\" to false\n   and \"answer\" to null. That is a correct and expected outcome, not a failure.\n4. Never extrapolate or \"complete the pattern\" from partial data.\n5. Anything you are unsure the sources support goes in \"unverified_claims\"\n   rather than into the answer.\n\nSELF-CHECK BEFORE RESPONDING:\nGo through each sentence of your draft answer and ask: can I point to a specific\npassage in <sources> that supports this? If no, remove it.\n\n<sources>\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</sources>",
+  "user": "What are the most common adverse reactions to Omeprazole?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "answerable": {
+        "type": "boolean"
+      },
+      "answer": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "citations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string"
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "claim",
+            "quote"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "unverified_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "answerable",
+      "answer",
+      "citations",
+      "unverified_claims"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"answerable\": false, \"answer\": null, \"citations\": [], \"unverified_claims\": [\"Any list of common adverse reactions to omeprazole (e.g., headache, abdominal pain, nausea, diarrhea, vomiting, flatulence) — the provided sources contain only Indications and Usage and Dosage and Administration sections, with no adverse reactions or side effect information.\"]}",
+  "elapsed_ms": 3121,
+  "usage": {
+    "input_tokens": 1117,
+    "output_tokens": 149
+  }
+}

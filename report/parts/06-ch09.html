@@ -1,0 +1,306 @@
+<!-- ============================ CHAPTER 9 ============================ -->
+<h2 class="part">Chapter 9 — Sparse field fabrication</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 9 &middot; Sparse field fabrication</span>
+<p class="oneline">Give a schema a field the document does not cover and the model fills it anyway &mdash; plausibly, in the right format, with a quote attached that really is in the document. This chapter has the cleanest reproduction in the book, and the most decisive negative result.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>FDA labels; five requested fields, of which several have no supporting section in the supplied text</td></tr><tr><td style="width:26%">Cases</td><td>48 field-fills per configuration, 24 of them with source content present</td></tr><tr><td style="width:26%">Ground truth</td><td>Corpus-intrinsic &mdash; a field is unsupported <em>by construction</em> because its section was withheld</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; Opus 5, GPT-5-mini and GPT-4.1-mini in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>4 live runs</strong>; the provenance fix rebuilt on a 4-section corpus after the first design was found circular</td></tr><tr><td style="width:26%">Cost</td><td>$0.06 baseline, $0.08 fixed, per run</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>The failure itself</td><td><strong>Reproduces</strong></td><td class="num">29%, ±1 case over 4 runs</td><td class="num">strong</td></tr><tr><td>Prompt template</td><td><strong>Works</strong></td><td class="num">declined on 3 of 4 field types</td><td class="num">strong</td></tr><tr><td>1 &middot; Optional, no defaults</td><td>Works &mdash; prerequisite</td><td class="num">not separable</td><td class="num">structural</td></tr><tr><td>2 &middot; Quote verification</td><td><strong>Cannot work here</strong></td><td class="num">0 of 14 caught</td><td class="num">decisive</td></tr><tr><td>2b &middot; Section constraint</td><td><strong>Works</strong></td><td class="num">0% fabrication, 76% recall</td><td class="num">small n</td></tr><tr><td>3 &middot; Null-rate monitoring</td><td><strong>Works as a monitor</strong></td><td class="num">separates completely</td><td class="num">strong</td></tr><tr><td>4 &middot; Embedding provenance</td><td><strong>Cannot work here</strong></td><td class="num">0.85 vs 0.55</td><td class="num">decisive</td></tr></table>
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>The prompt template.</strong> Declining unprompted on 3 of 4 field types is the cheapest win available.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2b, the section constraint</strong> &mdash; each field filled only from its own named section. 0% fabrication.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, null-rate monitoring.</strong> It separates fabricating from declining configurations completely, and costs nothing.</li><li><span class='drop'>DROP</span> — <strong>Fix 2, quote verification, as a fabrication check.</strong> <strong>All 14 fabrications carried a quote that really was in the document.</strong> The model does not invent quotes; it attaches real ones to invented values. 0 of 14 caught.</li><li><span class='drop'>DROP</span> — <strong>Fix 4, embedding provenance.</strong> A fabricated value scored 0.85 similarity against the document; a genuine one 0.55. The signal runs backwards.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>The fabrications came with real quotes.</strong> Fourteen of fourteen. This is the finding that should reshape the chapter: a citation check confirms a quote exists, not that it supports the value attached to it. Every &ldquo;require a source quote&rdquo; recommendation in the industry rests on an assumption this measured and broke.</p>
+<h4>Where this is weakest</h4>
+<p>The section-constraint result rests on a small denominator &mdash; 0 of 6 &mdash; and the first version of the provenance experiment was <em>circular</em>: the check was bit-identical to the ground-truth predicate, so its &ldquo;29% &rarr; 0%&rdquo; was arithmetic, not measurement. It was rebuilt. That is the kind of error nothing but re-reading the code will catch.</p>
+</div>
+
+<h3 class="top">The failure: a blank the system will not accept gets filled</h3>
+
+<p class="lede">Give a system a form with a box on it and the box gets filled.
+This chapter also contains the most serious mistake in this report — a headline
+result that turned out to be arithmetic rather than measurement — so it is
+written twice: once as it was run, and once as it should have been.</p>
+
+<h4>What the failure looks like</h4>
+
+<p>A family-history section in a clinical note where family history was never
+discussed, filled with plausible family history. A criminal-record field in a
+background check returning something rather than nothing. A renovation-history
+field in property underwriting where the question was never asked.</p>
+
+<p>The pattern is always the same: the schema requires a value, no source content
+exists, and the model produces something that fits.</p>
+
+<h3>Experiment 9.1 — How often does an empty box get filled?</h3>
+
+<h4>The materials and procedure</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Documents</strong></td><td>The same 12 FDA drug labels.</td></tr>
+  <tr><td><strong>What the model sees</strong></td>
+      <td>Two sections only: <code>indications_and_usage</code> and
+      <code>dosage_and_administration</code>, each truncated to 3,000 characters.</td></tr>
+  <tr><td><strong>The form</strong></td>
+      <td>Six boxes: indications, adult dose, children's dose, pregnancy
+      guidance, overdose management, drug interactions. Each requires a value and
+      a supporting quotation.</td></tr>
+  <tr><td><strong>Ground truth</strong></td>
+      <td>Two of the six have supporting material. Four do not, because the
+      section that would answer them was not supplied. Derived from the corpus,
+      not authored.</td></tr>
+  <tr><td><strong>Cases</strong></td><td>72 boxes — 24 supported, 48 not.</td></tr>
+</table>
+
+<p>The baseline does what most systems do: every box is required to be a string,
+and the instruction offers <code>"N/A"</code> for anything not stated. That sounds
+like permission to leave a box empty. It is not — the model still has to produce
+a string, and a plausible string beats <code>"N/A"</code> by every instinct it
+has.</p>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Boxes filled that had no supporting material</td>
+      <td class="num"><strong>29%</strong> — 14 of 48</td></tr>
+  <tr><td>Boxes correctly filled where material existed</td>
+      <td class="num">96% — 23 of 24</td></tr>
+</table>
+
+<p>Re-sampled three times during review, this ran 13, 12 and 12 of 48 against a
+committed 14 — so the 29% is stable to about ±1 case.</p>
+
+<h4>What a fabrication actually looks like</h4>
+
+<p>Prednisone's label has <strong>no paediatric-use section at all</strong>. Asked
+for a children's dose, this is what came back — value and supporting quotation,
+verbatim:</p>
+
+<div class="verdict">
+  <span class="label">Field: pediatric_dosage · supporting section: does not exist</span>
+  <p><strong>Value returned:</strong> "Dosage requirements are variable and must
+  be individualized on the basis of the disease under treatment and response of
+  the patient. Pediatric dosing not specifically differentiated in label; ADT
+  dosing may help minimize growth suppression in children."</p>
+  <p style="margin-top:3mm"><strong>Quotation supplied:</strong> "DOSAGE
+  REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE
+  DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT…growth suppression in
+  children."</p>
+</div>
+
+<p>Look carefully at what happened, because it is not what the word
+"fabrication" suggests.</p>
+
+<p><strong>The quotation is real.</strong> Every word of it is in the document —
+in the <em>adult dosing</em> section. The model did not invent a paediatric dose.
+It went looking, found real text that mentions children, and filed it under
+children's dosing with an accurate citation attached.</p>
+
+<div class="headline">
+  <b>All 14 fabricated values carried a quotation that is genuinely in the
+  document.</b> Not one was an invented quotation.
+</div>
+
+<p>This is Chapter 3's source-tracking failure appearing inside Chapter 9's
+defences — content that exists somewhere in the material, attributed to the wrong
+place. And it defeats the chapter's main engineering fix completely, because that
+fix checks whether the quotation exists.</p>
+
+<h3>Experiment 9.2 — The fix, and the mistake in how it was tested</h3>
+
+<h4>What the fix is</h4>
+
+<p>Keep a short table in your own code saying which sections of a document may
+answer which question. A children's dose may come from the paediatric section and
+nowhere else. Then check every quotation against it. <strong>The model never sees
+this table</strong> — which is the point.</p>
+
+<h4>What was reported, and why it was wrong</h4>
+
+<p>The first run reported <strong>fabrication 29% → 0%</strong> with recall
+unchanged, and that number was repeated three times as the strongest result in
+this project. A review then proved by enumeration that it could not have come out
+any other way.</p>
+
+<div class="verdict">
+  <span class="label">The mistake, stated plainly</span>
+  <p>Every field in that design is either supplied for all twelve labels or
+  supplied for none. <code>pediatric_use</code> was never among the two sections
+  shown to the model — so a paediatric quotation could never be located in a
+  permitted section, so the check <strong>rejected every unsupported field
+  unconditionally</strong>.</p>
+  <p>"Can this field pass the check" was bit-for-bit identical to "does this field
+  have supporting material" — the ground-truth predicate. <strong>The filter was
+  the answer key wearing a filter's clothes.</strong> 0% was guaranteed on any
+  corpus, any model, any temperature.</p>
+</div>
+
+<p>The idea was not wrong. The corpus made it untestable. So the corpus was
+changed.</p>
+
+<h3>Experiment 9.3 — The same fix, on a corpus where it can fail</h3>
+
+<h4>What changed</h4>
+
+<p>Four sections are now supplied instead of two — <strong>but only when the label
+actually carries them</strong>:</p>
+
+<table>
+  <tr><th style="width:44%">Section</th><th class="num">Present in</th></tr>
+  <tr><td>indications_and_usage</td><td class="num">12 of 12</td></tr>
+  <tr><td>dosage_and_administration</td><td class="num">12 of 12</td></tr>
+  <tr><td><strong>pediatric_use</strong></td><td class="num"><strong>8 of 12</strong></td></tr>
+  <tr><td><strong>drug_interactions</strong></td><td class="num"><strong>10 of 12</strong></td></tr>
+</table>
+
+<p>Now a children's dose is legitimately answerable for eight drugs and
+unanswerable for four, <strong>in the same run</strong>. The check has to
+discriminate rather than reject. A check that nulls everything now scores
+terribly on recall; a check that passes everything scores terribly on
+fabrication. Neither is free any more.</p>
+
+<h4>The real numbers</h4>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">Circular design</th><th class="num">Non-circular design</th></tr>
+  <tr><td>Fabrication on unsupported fields</td>
+      <td class="num">0% — <em>forced</em></td><td class="num"><strong>0% — 0 of 6</strong></td></tr>
+  <tr><td>Recall on supported fields</td>
+      <td class="num">92%</td><td class="num"><strong>76% — 32 of 42</strong></td></tr>
+  <tr><td>Fields nulled by code</td><td class="num">13</td><td class="num">9</td></tr>
+</table>
+
+<p><strong>The fix does work — and it costs about a quarter of legitimate
+extractions.</strong> That is a far more useful sentence than the one it
+replaces, and it is a sentence the original design could not have produced.</p>
+
+<p>The 0-of-6 carries an honest caveat: six unsupported fields is a small
+denominator, and one fabrication would make it 17%. What matters more is that the
+zero is now <em>earned</em> — the check had six chances to fail and did not.</p>
+
+<h4>Where the recall went — every loss, with its reason</h4>
+
+<table>
+  <tr><th style="width:24%">Drug</th><th style="width:22%">Field</th><th>Why it was lost</th></tr>
+  <tr><td>Metformin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
+  <tr><td>Atorvastatin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
+  <tr><td>Albuterol</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
+  <tr><td>Gabapentin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
+  <tr><td>Furosemide</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
+  <tr><td>Lisinopril</td><td>pediatric_dosage</td><td>model returned nothing</td></tr>
+  <tr><td>Levothyroxine</td><td>pediatric_dosage</td><td>model returned nothing</td></tr>
+  <tr><td>Atorvastatin</td><td>drug_interactions</td><td>quote not found in document</td></tr>
+</table>
+
+<p><strong>Five of the eight losses are the same story.</strong> A paediatric
+section existed, and the model answered from the adult dosing section anyway. The
+check rejected it — correctly by its own rule, since the quotation is not in the
+permitted section.</p>
+
+<p>Whether that is the right call is a judgement your domain has to make. The
+adult dosing section may well contain a legitimate paediatric statement. What the
+check guarantees is that <strong>a value only survives if its evidence sits where
+that value is supposed to come from</strong> — and it is now measurable that this
+guarantee costs 24 points of recall on this corpus.</p>
+
+<h4>Cost and time</h4>
+
+<p>12 calls, roughly $0.08, under a minute. The check itself is a dictionary
+lookup and a string search — no model, no download, well under a millisecond per
+field.</p>
+
+<h3>The four engineering fixes</h3>
+
+<table>
+  <tr><th style="width:28%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Optional fields, no defaults</strong></td>
+      <td class="num">prerequisite</td>
+      <td><strong>Works</strong> — its contribution cannot be separated from the others</td></tr>
+  <tr><td><strong>2 · Quote anchoring + verification</strong></td>
+      <td class="num">caught <strong>0 of 14</strong></td>
+      <td>Cannot work on this failure — the quotes were real</td></tr>
+  <tr><td><strong>2b · Section constraint</strong> <em>(added)</em></td>
+      <td class="num">0 of 6 fabricated<br>76% recall</td>
+      <td><strong>Works</strong>, at a measurable cost</td></tr>
+  <tr><td><strong>3 · Null-rate monitoring</strong></td>
+      <td class="num">0% vs 100% per field</td>
+      <td><strong>Works</strong> as a monitor, never as a gate</td></tr>
+  <tr><td><strong>4 · Embedding provenance</strong></td>
+      <td class="num">no threshold separates</td>
+      <td>Cannot work on this failure</td></tr>
+</table>
+
+<h4>Fix 2 — and a second problem in the rule as printed</h4>
+
+<p>Beyond catching none of the fabrications, the rule has a defect that costs
+recall. The chapter says to verify the quotation with approximate matching above
+a threshold of 85, and says nothing about quotation length.</p>
+
+<table>
+  <tr><th style="width:44%">How much of the quote is checked</th>
+      <th class="num">Correct extractions kept</th><th class="num">Fabrications caught</th></tr>
+  <tr><td>All of it — the rule as printed</td>
+      <td class="num"><strong>54%</strong></td><td class="num">14%</td></tr>
+  <tr><td>The first 80 characters</td><td class="num"><strong>95%</strong></td><td class="num">22%</td></tr>
+  <tr><td>The first 150 characters</td><td class="num">83%</td><td class="num">22%</td></tr>
+</table>
+
+<p>The matching method scores the quotation against the best-matching stretch of
+document <em>of the quotation's own length</em>, so its tolerance shrinks as
+quotations grow. The model returns quotations of 240–720 characters that are
+near-perfect with a few words elided; those score in the sixties and are
+discarded as fabrications.</p>
+
+<p><strong>The rule as printed trades 42 points of correct extractions for 8
+points of fabrication catching, with no warning that the trade is happening.</strong></p>
+
+<p>One caution the review added: the 80-character window is job-specific. Imported
+unchanged into Chapter 8's placement check, it produced that chapter's only
+"error" — a false one.</p>
+
+<h4>Fix 4 — a fix that cannot work here, shown rather than asserted</h4>
+
+<table>
+  <tr><th class="num" style="width:22%">Strictness</th>
+      <th class="num">Fabrications rejected</th><th class="num">Real extractions destroyed</th></tr>
+  <tr><td class="num">0.5</td><td class="num">7%</td><td class="num">0%</td></tr>
+  <tr><td class="num">0.7</td><td class="num">43%</td><td class="num">35%</td></tr>
+  <tr><td class="num">0.8</td><td class="num">86%</td><td class="num"><strong>61%</strong></td></tr>
+</table>
+
+<div class="headline">
+  Most source-like fabrication: <b>0.85</b>. Least source-like real extraction:
+  <b>0.55</b>. The distributions overlap completely — <b>no setting separates
+  them.</b>
+</div>
+
+<p>The reason is now familiar. This tool asks whether the text resembles the
+source document. These fabrications were lifted <em>from</em> the source
+document. Of course they resemble it — they are it.</p>
+
+<h3>Chapter 9 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:28%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>The failure itself</td><td><strong>Reproduces</strong></td>
+      <td>29%, stable to ±1 case over 4 runs</td></tr>
+  <tr><td>Prompt template</td><td><strong>Works</strong></td>
+      <td>declined unprompted on 3 of 4 field types</td></tr>
+  <tr><td>1 · Optional, no defaults</td><td><strong>Works</strong></td><td>prerequisite; not separable</td></tr>
+  <tr><td>2 · Quote verification</td><td>Cannot work here</td><td>0 of 14 — unambiguous</td></tr>
+  <tr><td>2b · Section constraint</td><td><strong>Works</strong></td>
+      <td><strong>0 of 6 fabrication, 76% recall</strong> — small denominator, but earned</td></tr>
+  <tr><td>3 · Null-rate monitoring</td><td>Works as a monitor</td><td>separates completely</td></tr>
+  <tr><td>4 · Embedding provenance</td><td>Cannot work here</td><td>0.85 vs 0.55 — decisive</td></tr>
+</table>
+
+<p><strong>The chapter's diagnosis is right and its main engineering fix is
+aimed at the wrong failure.</strong> Sparse fields do get filled, at 29%. But
+quotation verification catches none of it, because the failure is misattribution
+rather than invention. The fix that works is a lookup table the chapter does not
+currently contain — and, now that it has been tested honestly, it costs about a
+quarter of legitimate extractions, which the chapter should say.</p>

@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical information assistant. Answer the question using\nthe drug label excerpt below.\n\n<label_excerpt>\nDOSAGE AND ADMINISTRATION Initial Treatment Dosage for Adults Major Depressive Disorder –Sertraline hydrochloride treatment should be administered at a dose of 50 mg once daily.\n</label_excerpt>",
+  "user": "Based only on the excerpt above, what is the recommended dosage of Sertraline Hydrochloride for: Adults Major Depressive Disorder?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "answer": {
+        "type": "string"
+      },
+      "dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "description": "the dosage stated for this topic, or null if the excerpt does not state one"
+      }
+    },
+    "required": [
+      "answer",
+      "dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"answer\": \"The recommended dosage of Sertraline hydrochloride for adults with Major Depressive Disorder is 50 mg once daily.\", \"dose\": \"50 mg once daily\"}",
+  "elapsed_ms": 1365,
+  "usage": {
+    "input_tokens": 331,
+    "output_tokens": 47
+  }
+}

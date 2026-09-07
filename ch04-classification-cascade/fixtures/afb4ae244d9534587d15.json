@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAlthough the clinical significance of these effects is not known, caution is advised in the coadministration of Albuterol Sulfate HFA with non–potassium-sparing diuretics. 7.3 Digoxin Mean decreases of 16% to 22% in serum digoxin levels were demonstrated after single-dose intravenous and oral administration of albuterol, respectively, to normal volunteers who had received digoxin for 10 days. The clinical relevance of these findings for patients with obstructive airway disease who are receiving inhaled albuterol and digoxin on a chronic basis is unclear. Nevertheless, it would be prudent to carefully evaluate the serum digoxin levels in patients who are currently receiving digoxin and albuterol.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of coadministration with other drugs (non-potassium-sparing diuretics and digoxin); (2) Specific quantitative data about drug interactions (16-22% decreases in serum digoxin levels); (3) Clinical guidance about monitoring and caution when combining medications. Step 2 - Most plausible categories: (a) 'drug_interactions' - the passage explicitly discusses effects of taking albuterol with other drugs (diuretics, digoxin), mechanisms of interaction, and clinical recommendations; (b) 'adverse_reactions' - could potentially classify if these were side effects rather than interactions. Step 3 - Classification decision: This is clearly 'drug_interactions' because the passage is specifically structured around the effects of coadministration with other substances, provides interaction data, and gives guidance on monitoring when combining drugs. This is not about adverse reactions to albuterol alone, but rather about how it interacts with other drugs. 'Adverse_reactions' is ruled out because the passage focuses on drug-drug interactions, not standalone side effects. Step 4 - Confidence: HIGH (>90%) because the language explicitly references 'coadministration,' discusses interactions with named drugs, provides quantitative interaction data, and gives clinical guidance for concurrent use - all hallmark features of drug interactions documentation.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4304,
+  "usage": {
+    "input_tokens": 1032,
+    "output_tokens": 343
+  }
+}

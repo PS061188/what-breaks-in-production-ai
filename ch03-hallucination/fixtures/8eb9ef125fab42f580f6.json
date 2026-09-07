@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Amoxicillin indicated to treat?\n\nRESPONSE:\nFrom the provided label (amoxicillin + clavulanate oral suspension, 600 mg/42.9 mg per 5 mL):\n- Indicated for treatment of recurrent or persistent acute otitis media (AOM) in pediatric patients aged 3 months to 12 years weighing ≤40 kg due to Streptococcus pneumoniae (penicillin MIC ≤2 µg/mL), Haemophilus influenzae (including β‑lactamase producers), or Moraxella catarrhalis (including β‑lactamase producers) when risk factors are present (recent antibacterial exposure for AOM within 3 months and either age ≤2 years or daycare attendance).  \n- Limitation: not indicated for AOM due to S. pneumoniae with penicillin MIC ≥4 µg/mL. The label also states that AOM due to S. pneumoniae alone can be treated with amoxicillin.\n\nGeneral clinical uses of amoxicillin (standard practice):\n- Commonly used to treat infections caused by susceptible bacteria, including acute otitis media, streptococcal pharyngitis/tonsillitis, sinusitis, community‑acquired pneumonia and other lower respiratory tract infections, skin and soft tissue infections, and urinary tract infections.  \n- Also used as a component of combination regimens (eg, H. pylori eradication) and for targeted prophylaxis in select procedures per guideline recommendations. \n\nClinical notes: use amoxicillin (or amoxicillin/clavulanate) only when bacterial infection is proven or strongly suspected; consider local epidemiology and susceptibility data and modify therapy when culture results are available. The clavulanate combination expands activity against β‑lactamase–producing organisms (eg, H. influenzae, M. catarrhalis).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2048,
+  "usage": {
+    "input_tokens": 980,
+    "output_tokens": 17
+  }
+}

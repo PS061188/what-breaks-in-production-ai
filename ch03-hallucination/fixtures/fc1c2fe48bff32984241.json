@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nKey drug interactions with omeprazole (clinical highlights and practical steps):\n\n1) Drugs whose activation or clearance depends on CYP2C19 (major concern)\n- Clopidogrel: omeprazole can reduce conversion to the active metabolite → decreased antiplatelet effect. Avoid coadministration if possible; if PPI is required, use pantoprazole (less CYP2C19 inhibition) or discuss alternative antiplatelet strategy with cardiology.\n- Phenytoin, diazepam, some tricyclic antidepressants: omeprazole can raise concentrations → monitor drug levels and for toxicity; adjust dose as needed.\n- Warfarin: omeprazole may increase warfarin exposure/INR and bleeding risk. Monitor INR closely after starting/stopping omeprazole and adjust warfarin dose per INR.\n\n2) Drugs with pH-dependent absorption (reduced absorption with acid suppression)\n- HIV protease inhibitors (especially atazanavir) and NNRTI rilpivirine: clinically important loss of efficacy; avoid concomitant use or follow specific dosing restrictions; rilpivirine is generally contraindicated with PPIs.\n- Azole antifungals given orally that require acid for absorption (ketoconazole, itraconazole, posaconazole): decreased absorption → consider alternative antifungal or stop PPI if possible.\n- Some tyrosine kinase inhibitors (eg, erlotinib) and other oral targeted therapies: reduced exposure; check product-specific guidance.\n- Oral iron (ferrous sulfate) and some other oral minerals/drugs: absorption may be reduced; consider alternative iron formulations or separate timing and reassess response.\n\n3) Methotrexate (high-dose)\n- Concomitant PPIs including omeprazole have been reported to reduce methotrexate elimination and increase toxicity risk. For high‑dose methotrexate, consider holding omeprazole and monitor methotrexate levels/renal function per oncology guidance.\n\n4) Calcineurin inhibitors\n- Tacrolimus and cyclosporine: reports of increased levels with PPIs; monitor drug concentrations and renal function and adjust dosing as needed.\n\n5) Other interactions to be aware of\n- Digoxin: possible increase in digoxin levels—monitor levels and for toxicity.\n- Clarithromycin and other strong CYP3A4 inhibitors can increase omeprazole levels; conversely, omeprazole’s inhibition of CYP enzymes can alter levels of other drugs.\n- St. John’s wort and other CYP inducers can reduce omeprazole efficacy.\n\nPractical recommendations\n- Before starting omeprazole, review the patient’s med list for the above agents. For clopidogrel and high-risk antiplatelet situations discuss alternatives (pantoprazole) or specialist input.\n- Monitor therapeutic drug levels and clinical markers where relevant (INR for warfarin, phenytoin levels, tacrolimus levels, methotrexate levels for high‑dose therapy, digoxin as indicated).\n- If a concomitant drug requires gastric acidity, consider alternative treatments, dose timing, or temporarily stopping PPI if safe.\n\nIf you have a specific co-medication in mind I can give tailored guidance (risk, severity, monitoring, and suggested alternatives).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1560,
+  "usage": {
+    "input_tokens": 1526,
+    "output_tokens": 17
+  }
+}

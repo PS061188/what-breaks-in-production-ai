@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nI have to be upfront with you: the label excerpt I've been given here only contains the **Indications and Usage** and **Dosage and Administration** sections for prednisone tablets. It does **not** include a Drug Interactions section, so I can't cite specific interaction information from this document.\n\nA couple of interaction-relevant points that *do* appear in the excerpt are therapeutic combinations rather than cautions — for example, prednisone is used together with appropriate antituberculous chemotherapy in fulminating or disseminated pulmonary tuberculosis and in tuberculous meningitis, and synthetic corticosteroid analogs may be used in conjunction with mineralocorticoids in adrenocortical insufficiency.\n\nFor a complete list of interacting drugs, you'll want to consult the full prescribing information (the DRUG INTERACTIONS and PRECAUTIONS sections) or a pharmacist. Broadly speaking, corticosteroids such as prednisone are known to interact with agents including CYP3A4 inducers and inhibitors (e.g., rifampin, phenytoin, barbiturates, ketoconazole), NSAIDs and aspirin (GI bleeding risk), anticoagulants such as warfarin, antidiabetic agents (reduced glycemic control), potassium-depleting diuretics and amphotericin B (hypokalemia), live vaccines (reduced response/infection risk), and cholinesterase inhibitors in myasthenia gravis — but please verify these against the full label, since none of them are documented in the excerpt I have.\n\nIf you can share the Drug Interactions section of the label, I'd be glad to walk through it with you.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1648,
+  "usage": {
+    "input_tokens": 920,
+    "output_tokens": 17
+  }
+}

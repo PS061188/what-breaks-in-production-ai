@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Levothyroxine Sodium for pediatric patients?\n\nRESPONSE:\n**Pediatric dosing of levothyroxine sodium tablets is weight‑based and varies with age.** The label gives the following recommended *starting* daily doses:\n\n| Age | Starting daily dose |\n|---|---|\n| 0 to 3 months | 10–15 mcg/kg/day |\n| 3 to 6 months | 8–10 mcg/kg/day |\n| 6 to 12 months | 6–8 mcg/kg/day |\n| 1 to 5 years | 5–6 mcg/kg/day |\n| 6 to 12 years | 4–5 mcg/kg/day |\n| >12 years, growth/puberty incomplete | 2–3 mcg/kg/day |\n| Growth and puberty complete | 1.6 mcg/kg/day |\n\n**Titration:** Adjust the dose about every 2 weeks as needed, based on serum TSH or free‑T4, until the patient is euthyroid.\n\n**Special situations:**\n- *Infants birth to 3 months at risk for cardiac failure:* start at a lower dose and increase every 4 to 6 weeks based on clinical and laboratory response.\n- *Children at risk for hyperactivity:* start at one‑fourth of the full replacement dose and increase weekly by one‑fourth until the full replacement dose is reached.\n- *Thyroid cancer (TSH suppression):* the dose is individualized to the target level of TSH suppression for the stage and clinical status of the cancer.\n\n**Administration:** Give once daily on an empty stomach, ½ to 1 hour before breakfast, with a full glass of water. For children who cannot swallow tablets, crush the tablet, suspend it in 5–10 mL of water, and give immediately by spoon or dropper (do not store the suspension); do not mix with foods that reduce absorption, such as soybean‑based infant formula. Keep levothyroxine at least 4 hours apart from drugs known to interfere with its absorption.\n\n**Monitoring:** Check serum TSH and total or free‑T4 at 2 and 4 weeks after starting therapy, 2 weeks after any dose change, and then every 3 to 12 months once stable until growth is complete, along with routine assessment of growth, development, and bone maturation. Biotin supplements should be stopped at least 2 days before thyroid lab testing.\n\nThis is general information from the label; actual dosing should be determined by the treating clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2061,
+  "usage": {
+    "input_tokens": 1184,
+    "output_tokens": 17
+  }
+}

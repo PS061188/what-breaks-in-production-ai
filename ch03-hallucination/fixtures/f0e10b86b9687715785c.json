@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Amoxicillin indicated to treat?\n\nRESPONSE:\nBased on this label (amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL — i.e., the \"ES\" high‑dose suspension), the indication is narrow:\n\n**Indicated use**\n- Treatment of **recurrent or persistent acute otitis media (middle ear infection)** in **pediatric patients aged 3 months to 12 years weighing ≤ 40 kg**, when caused by:\n  - *Streptococcus pneumoniae* (penicillin MIC ≤ 2 mcg/mL)\n  - *Haemophilus influenzae* (including beta‑lactamase–producing strains)\n  - *Moraxella catarrhalis* (including beta‑lactamase–producing strains)\n- And characterized by these risk factors: antibacterial drug exposure for acute otitis media within the preceding 3 months, **plus** either age ≤ 2 years or day‑care attendance.\n\n**Limitations of use**\n- Not indicated for acute otitis media due to *S. pneumoniae* with penicillin MIC ≥ 4 mcg/mL.\n- Acute otitis media caused by *S. pneumoniae* alone can be treated with amoxicillin (plain) instead.\n- Therapy may be started before culture results if both *S. pneumoniae* (penicillin MIC ≤ 2 mcg/mL) and the beta‑lactamase–producing organisms above are suspected.\n\n**Note:** This product should be used only for infections proven or strongly suspected to be caused by susceptible bacteria, to limit development of drug‑resistant bacteria. Other amoxicillin or amoxicillin/clavulanate products (tablets, 200 mg/28.5 mg or 400 mg/57 mg suspensions) have different indications and are not interchangeable with this strength. Talk with your prescriber or pharmacist about your specific situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1652,
+  "usage": {
+    "input_tokens": 1013,
+    "output_tokens": 17
+  }
+}

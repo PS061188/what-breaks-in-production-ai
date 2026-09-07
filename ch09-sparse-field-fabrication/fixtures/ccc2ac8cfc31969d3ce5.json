@@ -1,0 +1,121 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Extract the requested\nfields from the drug label below into the schema. Include a short source_quote\nfor each field. If a field is not stated in the label, use \"N/A\".\n\n<source_document>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD As an adjunct to diet to reduce low-density lipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailable, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia Atorvastatin calcium tablets are an HMG-CoA reductase inhibitor (statin) indicated ( 1 ): To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD. MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD. Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD. As an adjunct to diet to reduce low-density lipoprotein (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia. As an adjunct to diet for the treatment of adults with: Primary dysbetaliproteinemia. Hypertriglyceridemia.\n\n[dosage_and_administration]\n2 DOSAGE AND ADMINISTRATION Take orally once daily with or without food ( 2.1 ). Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ). See full prescribing information for atorvastatin calcium tablets dosage modifications due to drug interactions ( 2.5 ). 2.1 Important Dosage Information Take atorvastatin calcium tablets orally once daily at any time of the day, with or without food. Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust the dosage if necessary. 2.2 Recommended Dosage in Adult Patients The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. Patients who require reduction in LDL-C greater than 45% may be started at 40 mg once daily. 2.3 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HeFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg once daily. The dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification of atorvastatin calcium tablets [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ]. Anti-Viral Medications In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin calcium tablets 20 mg once daily. In patients taking nelfinavir, do not exceed atorvastatin calcium tablets 40 mg once daily. Select Azole Antifungals or Macrolide Antibiotics In patients taking clarithromycin or itraconazole, do not exceed atorvastatin calcium tablets 20 mg once daily. For additional recommendations regarding concomitant use of atorvastatin calcium tablets with other anti-viral medications, azole antifungals or macrolide antibiotics, see Drug Interactions (7.1).\n</source_document>",
+  "user": "Extract these fields: indications, adult_dosage, pediatric_dosage, pregnancy_guidance, overdose_management, drug_interactions",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "indications": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "adult_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pediatric_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pregnancy_guidance": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "overdose_management": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "drug_interactions": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "indications",
+      "adult_dosage",
+      "pediatric_dosage",
+      "pregnancy_guidance",
+      "overdose_management",
+      "drug_interactions"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"indications\": {\n    \"value\": \"Reduce risk of MI, stroke, revascularization procedures, and angina in adults with multiple risk factors for CHD; reduce MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD; reduce non‑fatal MI, fatal and non‑fatal stroke, revascularization, hospitalization for CHF, and angina in adults with clinically evident CHD; adjunct to diet to reduce LDL‑C in adults with primary hyperlipidemia and in patients ≥10 years with HeFH; adjunct to other LDL‑C‑lowering therapies or alone for HoFH in patients ≥10 years; adjunct to diet for primary dysbetalipoproteinemia and hypertriglyceridemia.\",\n    \"source_quote\": \"Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) ... As an adjunct to diet to reduce low-density lipoprotein (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH) ... As an adjunct to other LDL-C-lowering therapies to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia. As an adjunct to diet for the treatment of adults with: Primary dysbetaliproteinemia. Hypertriglyceridemia.\"\n  },\n  \"adult_dosage\": {\n    \"value\": \"Take orally once daily with or without food. Recommended starting dose 10 or 20 mg once daily; dosage range 10 mg to 80 mg once daily. Patients requiring >45% LDL‑C reduction may start at 40 mg once daily. Assess LDL‑C as early as 4 weeks after initiating and adjust as needed.\",\n    \"source_quote\": \"Take orally once daily with or without food (2.1). Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary (2.1).\"\n  },\n  \"pediatric_dosage\": {\n    \"value\": \"Pediatric patients ≥10 years with HeFH: starting 10 mg once daily; range 10 to 20 mg once daily. Pediatric patients ≥10 years with HoFH: starting 10 to 20 mg once daily; range 10 to 80 mg once daily.\",\n    \"source_quote\": \"Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily (2.3). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily (2.4).\"\n  },\n  \"pregnancy_guidance\": {\n    \"value\": \"N/A\",\n    \"source_quote\": \"N/A\"\n  },\n  \"overdose_management\": {\n    \"value\": \"N/A\",\n    \"source_quote\": \"N/A\"\n  },\n  \"drug_interactions\": {\n    \"value\": \"Concomitant use with certain antivirals, azole antifungals, or macrolide antibiotics requires atorvastatin dose limits: do not exceed 20 mg once daily with saquinavir+ritonavir, darunavir+ritonavir, fosamprenavir (±ritonavir), elbasvir+grazoprevir, or letermovir; do not exceed 40 mg once daily with nelfinavir; do not exceed 20 mg once daily with clarithromycin or itraconazole.\",\n    \"source_quote\": \"Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification ... In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin calcium tablets 20 mg once daily. In patients taking nelfinavir, do not exceed atorvastatin calcium tablets 40 mg once daily. In patients taking clarithromycin or itraconazole, do not exceed atorvastatin calcium tablets 20 mg once daily.\"\n  }\n}",
+  "elapsed_ms": 11568,
+  "usage": {
+    "input_tokens": 1423,
+    "output_tokens": 1815
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nThe label excerpt provided does not contain detailed information about the most common adverse reactions to lisinopril. However, it does note that:\n\n1. **Lisinopril side effects are generally rare** and apparently independent of dose\n2. **Agranulocytosis** is mentioned as a potential concern (based on captopril experience with ACE inhibitors), particularly in patients with renal impairment or collagen vascular disease\n3. **Angioedema** is noted as occurring at higher incidence in Black patients receiving ACE inhibitors\n\nFor comprehensive adverse reaction information, you would need to consult the full prescribing information, which typically includes a dedicated ADVERSE REACTIONS section with frequency data. \n\nFrom standard ACE inhibitor pharmacology, common adverse reactions generally include: cough (very frequent), dizziness, hyperkalemia, hypotension, and rarely angioedema. The combination product also carries hydrochlorothiazide's dose-dependent side effects (particularly hypokalemia at higher doses) and dose-independent effects (such as pancreatitis), though the label notes that lisinopril addition in trials \"blunted the hypokalemia normally seen with diuretics.\"\n\nI recommend reviewing the complete prescribing information for a full adverse reaction profile with incidence rates.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1529,
+  "usage": {
+    "input_tokens": 807,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Lisinopril safe to use during pregnancy?\n\nRESPONSE:\nNo — lisinopril/hydrochlorothiazide should not be used during pregnancy.\n\nACE inhibitors such as lisinopril carry a boxed warning about fetal toxicity: when pregnancy is detected, the drug should be discontinued as soon as possible. Drugs that act directly on the renin-angiotensin system can cause injury and even death to the developing fetus, particularly with exposure in the second and third trimesters (effects can include reduced fetal renal function, oligohydramnios, fetal lung hypoplasia, skull hypoplasia, limb contractures, hypotension, anuria, and death). Hydrochlorothiazide crosses the placenta as well and has been associated with fetal or neonatal jaundice, thrombocytopenia, and electrolyte disturbances; thiazides are generally not recommended for treating hypertension in pregnancy.\n\nPlease note: the label excerpt provided here covers only the Indications and Usage and Dosage and Administration sections and does not contain the pregnancy/boxed warning text — the above reflects the standard labeling for this drug class. If you are pregnant, planning pregnancy, or think you may be pregnant while taking this medication, contact your prescriber promptly (do not simply stop antihypertensive therapy on your own) so an alternative treatment appropriate for pregnancy can be started. Consult the full prescribing information for complete details.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1483,
+  "usage": {
+    "input_tokens": 837,
+    "output_tokens": 17
+  }
+}

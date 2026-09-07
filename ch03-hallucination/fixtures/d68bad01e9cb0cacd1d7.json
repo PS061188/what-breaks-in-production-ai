@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Albuterol Sulfate?\n\nRESPONSE:\nThe excerpt you've provided only covers the Indications and Usage and Dosage and Administration sections of the Albuterol Sulfate HFA label — it does not include the Drug Interactions section, so I can't cite specific interaction information from it.\n\nFor reference, albuterol product labeling generally describes cautions with the following (please confirm against the full prescribing information for this specific product):\n\n- **Beta-blockers (e.g., propranolol):** May block the bronchodilating effect of albuterol and can cause severe bronchospasm in patients with asthma; if needed, cardioselective agents are generally preferred and used with caution.\n- **Diuretics (loop and thiazide, non–potassium-sparing):** ECG changes and/or hypokalemia may be worsened by beta-agonists.\n- **Digoxin:** Beta-agonists may decrease serum digoxin levels.\n- **Monoamine oxidase inhibitors and tricyclic antidepressants (during or within 2 weeks of use):** May potentiate albuterol's effect on the cardiovascular system.\n- **Other short-acting sympathomimetic bronchodilators or adrenergic drugs:** Should be used with caution because of the potential for additive cardiovascular effects.\n\nAlso note the labeled dosing limits above — more frequent administration or more inhalations than recommended is not advised.\n\nFor a complete and authoritative list, refer to Section 7 (Drug Interactions) of the full Albuterol Sulfate HFA prescribing information, and discuss your specific medication list with your pharmacist or prescriber.\n\nThis is general information, not medical advice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1370,
+  "usage": {
+    "input_tokens": 909,
+    "output_tokens": 17
+  }
+}

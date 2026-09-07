@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nThe following clinically significant adverse reactions are described elsewhere in labeling: Anaphylactic reactions [see Warnings and Precautions (5.1) ] Severe Cutaneous Adverse Reactions (SCAR) [see Warnings and Precautions (5.2) ] Drug-Induced Enterocolitis Syndrome (DIES) [see Warnings and Precautions (5.3) ] Hepatic Dysfunction [see Warnings and Precautions (5.4) ] Clostridioides difficile- Associated Diarrhea (CDAD) [see Warnings and Precautions (5.5) ] Skin Rash in Patients with Mononucleosis [see Warnings and Precautions (5.6) ] The most frequently reported adverse reactions (incidence rate > 4 %) were coughing, vomiting, contact dermatitis (i.e., diaper rash), fever, upper respiratory tract infection, and diarrhea.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 10821,
+  "usage": {
+    "input_tokens": 687,
+    "output_tokens": 11
+  }
+}

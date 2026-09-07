@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIts empirical formula is C 7 H 8 ClN 3 O 4 S 2 and its structural formula is: Hydrochlorothiazide, USP is a white, or practically white, crystalline powder with a molecular weight of 297.73, which is slightly soluble in water, but freely soluble in sodium hydroxide solution. Lisinopril and hydrochlorothiazide tablets, USP are available for oral use in three tablet combinations of lisinopril with hydrochlorothiazide: lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg containing 10 mg lisinopril and 12.5 mg hydrochlorothiazide; lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg containing 20 mg lisinopril and 12.5 mg hydrochlorothiazide; and, lisinopril and hydrochlorothiazide tablets 20 mg/25 mg containing 20 mg lisinopril and 25 mg hydrochlorothiazide.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical name: Hydrochlorothiazide, USP. Molecular formula: C7H8ClN3O4S2. Molecular weight: 297.73. Inactive ingredients: Not specified in the passage.\"}",
+  "elapsed_ms": 1186,
+  "usage": {
+    "input_tokens": 523,
+    "output_tokens": 58
+  }
+}

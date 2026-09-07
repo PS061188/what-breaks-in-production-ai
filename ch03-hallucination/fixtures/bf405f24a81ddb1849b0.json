@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Sertraline Hydrochloride?\n\nRESPONSE:\nThe recommended starting dose of Sertraline Hydrochloride varies by indication and age group:\n\n**Adults:**\n- Major Depressive Disorder, OCD, Panic Disorder, PTSD, and Social Anxiety Disorder: 50 mg once daily\n- Premenstrual Dysphoric Disorder (PMDD): 50 mg/day (can be given daily throughout the menstrual cycle or limited to the luteal phase)\n\n**Pediatric Patients:**\n- OCD in children (ages 6-12): 25 mg once daily\n- OCD in adolescents (ages 13-17): 50 mg once daily\n\nFor patients not responding to the initial dose, increases up to the maximum recommended dose may be beneficial. Dose changes should not occur at intervals of less than 1 week due to the 24-hour elimination half-life of sertraline. Sertraline should be administered once daily, either in the morning or evening.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1564,
+  "usage": {
+    "input_tokens": 690,
+    "output_tokens": 17
+  }
+}

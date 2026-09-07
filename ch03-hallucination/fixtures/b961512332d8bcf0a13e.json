@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nThe manufacturer’s label does not give a single pediatric dosing regimen — it states that the initial prednisone dose may vary from 5 to 60 mg/day and that dosage requirements must be individualized based on the disease and patient response. (Label: “The initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day … DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED.”)\n\nClinical practice uses weight‑based pediatric dosing tailored to the indication. Common examples (typical ranges used in practice; verify with local guidelines):\n- Acute asthma exacerbation: 1–2 mg/kg/day PO (maximum ~60 mg/day) for 3–10 days. \n- Nephrotic syndrome (initial therapy): ~2 mg/kg/day PO (or 60 mg/m2/day) up to ~60 mg/day until remission, then taper per protocol.\n- Immune thrombocytopenia (ITP): ~1–2 mg/kg/day PO (commonly 2 mg/kg/day) up to ~60 mg/day for 2–4 weeks, then taper.\n- Juvenile idiopathic (rheumatoid) arthritis or other chronic conditions: use lowest effective dose; some patients require 0.25–2 mg/kg/day depending on severity, and alternate‑day therapy may be considered for long‑term use.\n\nImportant points:\n- Always individualize dose by indication, age and weight; observe for growth suppression and HPA axis suppression in children on prolonged therapy. \n- For long‑term treatment, taper gradually and consider alternate‑day therapy (give twice the usual daily dose every other morning) to reduce adverse effects when appropriate (per label). \n- In infants with primary/secondary adrenal insufficiency, mineralocorticoid supplementation may be necessary.\n\nIf you want, tell me the child’s age, weight and the specific indication and I can propose a more specific dosing regimen and taper plan.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2153,
+  "usage": {
+    "input_tokens": 1070,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Levothyroxine Sodium safe to use during pregnancy?\n\nRESPONSE:\nYes. Levothyroxine sodium (L‑thyroxine, T4) is indicated and commonly used during pregnancy to treat hypothyroidism and to maintain maternal euthyroidism — which is important for maternal health and fetal development. Practical points from the prescribing information you should follow: \n\n- Indication and overall approach: Use levothyroxine in pregnant patients with pre‑existing or new hypothyroidism and titrate to maintain serum TSH in the trimester‑specific reference range. For secondary/tertiary hypothyroidism use free T4 to guide dosing (aim for upper half of the normal range). \n\n- Dose adjustments: \n  - Pre‑existing primary hypothyroidism: pre‑pregnancy dose often needs to increase; increase by 12.5–25 mcg/day and monitor TSH every 4 weeks until stable. \n  - New onset hypothyroidism: if TSH ≥ 10 mIU/L start ~1.6 mcg/kg/day; if TSH < 10 mIU/L start ~1.0 mcg/kg/day. \n\n- Monitoring: Check TSH and free‑T4 as soon as pregnancy is confirmed and at minimum once each trimester; for dose changes monitor TSH every 4 weeks until stable. After delivery, reduce to the pre‑pregnancy dose immediately and check TSH 4–8 weeks postpartum. \n\n- Administration and testing considerations: Take levothyroxine once daily on an empty stomach (30–60 minutes before breakfast) and separate from calcium/iron or other interfering agents by at least 4 hours. Ask about biotin: stop biotin supplements at least 2 days before thyroid testing because biotin can artifactually alter TSH/T4 assay results. \n\n- Safety caveat: Avoid both undertreatment and overtreatment — adjust dosing to avoid maternal hyperthyroidism (which has its own risks). \n\nIn short: levothyroxine is appropriate and safe in pregnancy when dosed and monitored appropriately. Follow the dosing and monitoring schedule above and use trimester‑specific TSH targets. If you want, tell me the patient’s pre‑pregnancy dose, weight, or current TSH so I can suggest a specific starting or adjustment dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1555,
+  "usage": {
+    "input_tokens": 1159,
+    "output_tokens": 17
+  }
+}

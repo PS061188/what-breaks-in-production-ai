@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nShort answer: the label excerpt you've given me only contains the INDICATIONS and DOSAGE AND ADMINISTRATION sections for prednisone tablets — it does not include a Drug Interactions section, so I can't quote specific interaction information from it.\n\nWhat the excerpt does mention that is interaction-adjacent:\n• Prednisone is used together with mineralocorticoids in adrenocortical insufficiency (especially in infancy).\n• In fulminating/disseminated pulmonary tuberculosis and in tuberculous meningitis, it is to be used only concurrently with appropriate antituberculous chemotherapy.\n\nFor general awareness (not from this excerpt — please verify against the full prescribing information), corticosteroids such as prednisone are commonly reported to interact with:\n• CYP3A4 inducers (e.g., rifampin, phenytoin, phenobarbital, carbamazepine) — may reduce prednisone effect\n• CYP3A4 inhibitors (e.g., ketoconazole, itraconazole, clarithromycin, ritonavir, grapefruit) — may increase corticosteroid exposure/effects\n• NSAIDs and aspirin — increased risk of GI ulceration/bleeding\n• Anticoagulants such as warfarin — altered anticoagulant response (monitor INR)\n• Potassium-depleting agents (loop/thiazide diuretics, amphotericin B) — hypokalemia\n• Antidiabetic drugs and insulin — reduced glycemic control; doses may need adjustment\n• Live or live-attenuated vaccines — should generally be avoided at immunosuppressive doses; vaccine response may be diminished\n• Other immunosuppressants — additive infection risk\n• Cholinesterase inhibitors (e.g., in myasthenia gravis) — risk of severe weakness\n• Isoniazid, cyclosporine, digitalis glycosides, oral contraceptives/estrogens, quinolone antibiotics (tendon rupture risk)\n\nBecause the excerpt provided doesn't cover interactions, please consult the complete FDA-approved prescribing information for this specific product, or ask a pharmacist or prescriber, and give them your full medication, supplement, and vaccine history before starting or changing prednisone.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1694,
+  "usage": {
+    "input_tokens": 1132,
+    "output_tokens": 17
+  }
+}

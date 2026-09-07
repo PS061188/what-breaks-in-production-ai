@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAll Dosage Forms of Sertraline: The use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride or within 14 days of stopping treatment with Sertraline hydrochloride is contraindicated because of an because of an increased risk if serotonin syndrome. The use of Sertraline hydrochloride within 14 days of stopping an MAOI intended to treat psychiatric disorders is also contraindicated (see WARNINGS and DOSAGE AND ADMINISTRATION ). Starting Sertraline hydrochloride in a patient who is being treated with MAOIs such as linezolid or intravenous methyelene blue is also contraindicated because of an increased risk of serotonin syndrome (see WARNINGS and DOSAGE AND ADMINISTRATION).\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"1. Use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride. 2. Use of Sertraline hydrochloride within 14 days of stopping treatment with MAOIs intended to treat psychiatric disorders. 3. Use of MAOIs such as linezolid or intravenous methylene blue in patients being treated with Sertraline hydrochloride. 4. Starting Sertraline hydrochloride in a patient being treated with linezolid or intravenous methylene blue.\"}",
+  "elapsed_ms": 1675,
+  "usage": {
+    "input_tokens": 445,
+    "output_tokens": 128
+  }
+}

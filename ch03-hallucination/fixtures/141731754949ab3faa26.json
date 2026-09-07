@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Metformin Hydrochloride?\n\nRESPONSE:\nShort answer: the excerpt you've given me doesn't include the Adverse Reactions section of the label, so I can't quote specific rates or wording from it.\n\nWhat I can tell you from the excerpt: it covers only Indications and Usage and Dosage and Administration. Notably, it does emphasize renal safety considerations (contraindicated if eGFR <30 mL/min/1.73 m², not recommended to start if eGFR 30–45, and temporary discontinuation around iodinated contrast imaging in certain patients), which relate to the risk of lactic acidosis discussed in Warnings and Precautions (5.1).\n\nGenerally (from metformin labeling as a whole, not this excerpt): the most common adverse reactions are gastrointestinal — diarrhea, nausea/vomiting, flatulence, abdominal discomfort, indigestion/dyspepsia, and asthenia or headache. These often occur when starting therapy or increasing the dose and frequently lessen over time, especially when doses are taken with meals and titrated gradually as described above. Other labeled concerns include vitamin B12 deficiency (periodic monitoring of B12 levels is advised), hypoglycemia when used with insulin or insulin secretagogues, and the rare but serious risk of lactic acidosis (a boxed warning).\n\nFor exact adverse reaction frequencies and complete safety information, please consult the full prescribing information for the specific product, and discuss any symptoms with your healthcare provider — particularly unusual muscle pain, trouble breathing, unusual sleepiness, severe abdominal pain, or feeling very cold or weak, which can signal lactic acidosis and require urgent medical attention.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2026,
+  "usage": {
+    "input_tokens": 938,
+    "output_tokens": 17
+  }
+}

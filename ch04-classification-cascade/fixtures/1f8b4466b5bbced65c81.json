@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nHistory of a serious hypersensitivity reaction (e.g., anaphylaxis or Stevens-Johnson syndrome) to amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL or any other beta-lactams (e.g., penicillins or cephalosporins). ( 4.1 ) History of cholestatic jaundice/hepatic dysfunction associated with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL. ( 4.2 ) 4.1 Serious Hypersensitivity Reactions Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is contraindicated in patients with a history of serious hypersensitivity reactions (e.g., anaphylaxis or Stevens-Johnson syndrome) to amoxicillin, clavulanate, or to other beta-lactam antibacterial drugs (e.g., penicillins and cephalosporins).\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\":\"1. History of serious hypersensitivity reaction (e.g., anaphylaxis or Stevens-Johnson syndrome) to amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL or any other beta-lactams (e.g., penicillins or cephalosporins). 2. History of cholestatic jaundice/hepatic dysfunction associated with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL.\"}",
+  "elapsed_ms": 3374,
+  "usage": {
+    "input_tokens": 538,
+    "output_tokens": 143
+  }
+}

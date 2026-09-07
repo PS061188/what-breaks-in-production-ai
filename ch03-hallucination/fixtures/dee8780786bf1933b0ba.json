@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nShort answer: this label does not give a specific, weight‑based pediatric dose. Dosing in children must be individualized by the prescriber.\n\nWhat the label does say:\n\n• General dosing (all ages): The initial dose of prednisone may range from 5 mg to 60 mg per day, depending on the disease being treated. Less severe conditions generally need lower doses; selected patients may need higher initial doses.\n\n• Individualization is emphasized: \"DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT.\" In practice, pediatric dosing is usually based on body weight/body surface area and the specific condition, per current pediatric references — the label itself does not provide mg/kg figures.\n\n• Titration: Maintain the initial dose until a satisfactory response occurs, then taper in small decrements at appropriate intervals to the lowest effective maintenance dose. If there is no satisfactory response after a reasonable period, discontinue and switch to other therapy. After long‑term therapy, withdraw gradually rather than abruptly. Doses may need to be temporarily increased during stress (illness, surgery, trauma).\n\n• Alternate‑day therapy (ADT) — particularly relevant to children: giving twice the usual daily dose every other morning can preserve efficacy while minimizing HPA‑axis suppression, Cushingoid effects, steroid‑withdrawal symptoms, and growth suppression in children. Prednisone/prednisolone are short‑acting and therefore suitable for ADT (unlike dexamethasone or betamethasone).\n\n• Pediatric-relevant indications listed include juvenile rheumatoid arthritis (some cases need low‑dose maintenance), acute leukemia of childhood, nephrotic syndrome, asthma, and congenital adrenal hyperplasia (with mineralocorticoid supplementation especially important in infancy).\n\n• Note: the multiple sclerosis regimen cited (200 mg daily for 1 week, then 80 mg every other day for 1 month) is an adult regimen, not a pediatric one.\n\nBecause growth and development can be affected by prolonged corticosteroid use, children on chronic therapy should have growth and development monitored, and a pediatric specialist should determine the exact dose.\n\nThis information is for educational purposes; consult the child's prescriber or pharmacist for the actual dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2281,
+  "usage": {
+    "input_tokens": 1214,
+    "output_tokens": 17
+  }
+}

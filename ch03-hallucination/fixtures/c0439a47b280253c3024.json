@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Albuterol Sulfate for pediatric patients?\n\nRESPONSE:\n**Labeled pediatric dosing (Albuterol Sulfate HFA inhalation aerosol, 90 mcg albuterol base per actuation) — approved for patients aged 4 years and older:**\n\n**1. Treatment or prevention of bronchospasm (acute episodes/symptoms of reversible obstructive airway disease):**\n- 2 inhalations orally inhaled every 4 to 6 hours as needed.\n- Some patients may be adequately controlled with 1 inhalation every 4 hours.\n- More frequent dosing or a greater number of inhalations than this is **not** recommended per the label.\n\n**2. Prevention of exercise-induced bronchospasm (EIB):**\n- 2 inhalations 15 to 30 minutes before exercise.\n\n**Age limits:** Safety and efficacy of the HFA metered-dose inhaler have not been established in children younger than 4 years. For younger children, standard practice is to use albuterol via nebulizer (0.083% inhalation solution, typically 2.5 mg per nebulized dose q4–6h; some references use 0.63–1.25 mg in infants/toddlers) or an MDI with a valved holding chamber and age-appropriate face mask, per clinical judgment and institutional/asthma-guideline protocols.\n\n**Administration pearls for children:**\n- Use a valved holding chamber (spacer) with mask or mouthpiece — markedly improves lung deposition and reduces the need for hand–breath coordination in children. Most pediatric patients under about 8–10 years will not reliably self-coordinate an MDI.\n- Shake well before each actuation; actuate once per breath, inhale slowly and deeply, hold breath ~10 seconds.\n- **Priming:** release 4 sprays into the air away from the face (shaking before each spray) before first use, if unused for more than 2 weeks, or if the inhaler has been dropped. Avoid spraying toward the eyes.\n- **Cleaning:** wash the actuator with warm water at least weekly and let it air-dry completely to prevent orifice blockage and dose failure.\n- Track actuations with the dose counter; discard when the labeled number of actuations has been used even if the canister feels non-empty.\n\n**Acute exacerbations:** In moderate-to-severe exacerbations, guideline-based therapy uses higher, more frequent dosing (e.g., 4–8 puffs via spacer every 20 minutes for 3 doses, or continuous/repeated nebulization) in a monitored/urgent-care setting, along with systemic corticosteroids — this exceeds routine label dosing and should be done under direct medical supervision.\n\n**Monitoring/counseling points:**\n- Increasing need for the rescue inhaler (e.g., use more than 2 days per week for symptoms, or declining response) signals deteriorating asthma control — reassess and consider initiating or stepping up inhaled corticosteroid controller therapy.\n- Warn about expected effects: tachycardia, tremor, jitteriness, headache, and rarely hypokalemia at high doses.\n- Paradoxical bronchospasm can occur immediately after dosing — discontinue and seek care if it happens.\n- Caution with concurrent non-selective beta-blockers, MAOIs/TCAs, and additive hypokalemia with diuretics; caution in cardiovascular disease, seizure disorders, hyperthyroidism, and diabetes.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2038,
+  "usage": {
+    "input_tokens": 1523,
+    "output_tokens": 17
+  }
+}

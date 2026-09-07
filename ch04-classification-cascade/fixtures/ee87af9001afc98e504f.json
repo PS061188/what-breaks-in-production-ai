@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe following clinically significant adverse reactions are described elsewhere in labeling: Anaphylactic reactions [see Warnings and Precautions (5.1) ] Severe Cutaneous Adverse Reactions (SCAR) [see Warnings and Precautions (5.2) ] Drug-Induced Enterocolitis Syndrome (DIES) [see Warnings and Precautions (5.3) ] Hepatic Dysfunction [see Warnings and Precautions (5.4) ] Clostridioides difficile- Associated Diarrhea (CDAD) [see Warnings and Precautions (5.5) ] Skin Rash in Patients with Mononucleosis [see Warnings and Precautions (5.6) ] The most frequently reported adverse reactions (incidence rate > 4 %) were coughing, vomiting, contact dermatitis (i.e., diaper rash), fever, upper respiratory tract infection, and diarrhea.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Anaphylactic reactions, Severe Cutaneous Adverse Reactions (SCAR), Drug-Induced Enterocolitis Syndrome (DIES), Hepatic Dysfunction, Clostridioides difficile-Associated Diarrhea (CDAD), Skin Rash in Patients with Mononucleosis, coughing, vomiting, contact dermatitis (diaper rash), fever, upper respiratory tract infection, diarrhea\"}",
+  "elapsed_ms": 1329,
+  "usage": {
+    "input_tokens": 492,
+    "output_tokens": 113
+  }
+}

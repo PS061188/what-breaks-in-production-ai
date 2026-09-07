@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nEdema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Adults: Usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. If needed, the same dose can be administered 6 to 8 hours later or increased by 20 or 40 mg given not sooner than 6 to 8 hours after the previous dose. The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). Dose may be titrated up to 600 mg/day in severe edematous states. Route: Oral (tablets).\"}",
+  "elapsed_ms": 1848,
+  "usage": {
+    "input_tokens": 469,
+    "output_tokens": 139
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Metformin Hydrochloride?\n\nRESPONSE:\nThe label excerpt you've provided only covers the Indications and Usage and Dosage and Administration sections — it does not include the Adverse Reactions section, so I can't quote specific rates or verbatim text from it.\n\nSpeaking generally (from metformin's full prescribing information, not this excerpt), the most commonly reported adverse reactions with immediate-release metformin are gastrointestinal, including:\n\n- Diarrhea\n- Nausea and vomiting\n- Flatulence\n- Abdominal discomfort/pain\n- Indigestion or dyspepsia\n- Asthenia (weakness)\n- Headache\n- A metallic or unpleasant taste\n\nThese GI effects are most common when starting therapy or increasing the dose, and often lessen over time; taking the drug with meals and titrating slowly (as the dosing section describes — increasing by 500 mg weekly or 850 mg every 2 weeks) helps with tolerability.\n\nImportant safety issues noted elsewhere in the label include:\n- Lactic acidosis — a rare but serious, potentially fatal complication (the subject of a boxed warning); risk is increased with renal impairment, which is why eGFR must be assessed before and during treatment, and why the drug is contraindicated below an eGFR of 30 mL/min/1.73 m².\n- Vitamin B12 deficiency — can develop with long-term use; periodic monitoring of hematologic parameters and B12 levels is advised.\n- Hypoglycemia — uncommon with metformin alone, but more likely when combined with insulin or insulin secretagogues (e.g., sulfonylureas).\n\nFor exact incidence figures and the complete list, please refer to the Adverse Reactions (Section 6) and Warnings and Precautions (Section 5) of the full prescribing information, and discuss any symptoms with your prescriber or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1550,
+  "usage": {
+    "input_tokens": 993,
+    "output_tokens": 17
+  }
+}

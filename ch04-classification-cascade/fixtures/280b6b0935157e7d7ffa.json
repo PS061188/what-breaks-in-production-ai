@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nFurosemide is a diuretic which is an anthranilic acid derivative. Furosemide Tablets for oral administration contain furosemide as the active ingredient and the following inactive ingredients: corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP. Chemically, it is 4-chloro-N-furfuryl-5-sulfamoylanthranilic acid. Furosemide is available as white-off white tablets for oral administration in dosage strengths of 20, 40 and 80 mg. Furosemide is a white to off-white odorless crystalline powder. It is practically insoluble in water, sparingly soluble in alcohol, freely soluble in dilute alkali solutions and insoluble in dilute acids. The structural formula is as follows: Tested by USP Dissolution Test 1. This is an image of the structural formula for furosemide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"description\"}",
+  "elapsed_ms": 903,
+  "usage": {
+    "input_tokens": 693,
+    "output_tokens": 9
+  }
+}

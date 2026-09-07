@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nGabapentin capsules are approved in children 3 years and older only as add-on (adjunctive) therapy for partial onset seizures. Dosing depends on age:\n\n**Children 3 to 11 years old**\n- Starting dose: 10–15 mg/kg/day, divided into three doses per day.\n- Titrate upward over about 3 days to the maintenance dose.\n- Maintenance dose, ages 3–4 years: 40 mg/kg/day in three divided doses.\n- Maintenance dose, ages 5–11 years: 25–35 mg/kg/day in three divided doses.\n- Doses up to 50 mg/kg/day were well tolerated in a long-term study.\n- The interval between doses should not exceed 12 hours.\n\n**Patients 12 years and older**\n- Starting dose: 300 mg three times daily.\n- Recommended maintenance: 300–600 mg three times daily (up to 2400 mg/day well tolerated long term; 3600 mg/day used short term in a small number of patients).\n- Maximum time between doses: 12 hours.\n\n**Other points:** Gabapentin may be taken with or without food, and capsules should be swallowed whole with water. Dose adjustment based on creatinine clearance is recommended for patients 12 years and older with renal impairment; gabapentin has not been studied in children under 12 years with impaired renal function. If gabapentin is reduced, stopped, or switched, it should be done gradually over at least 1 week.\n\nThis is general label information—actual dosing should be determined by the child's prescriber based on weight, response, and tolerability.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1904,
+  "usage": {
+    "input_tokens": 904,
+    "output_tokens": 17
+  }
+}

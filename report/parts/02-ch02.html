@@ -1,0 +1,502 @@
+<!-- ============================ CHAPTER 2 ============================ -->
+<h2 class="part">Chapter 2 — Input integrity failures</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 2 &middot; Input integrity</span>
+<p class="oneline">A document arrives damaged &mdash; scanned wrong, pasted from the wrong character set, silently truncated &mdash; and the model answers anyway, confidently, with a different answer. The cheap check that refuses it before the model runs is the only fix here that both works and saves money.</p>
+
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>12 real FDA drug labels, <code>dosage_and_administration</code>, cut at a sentence boundary at ~1,800 characters</td></tr><tr><td style="width:26%">Damage</td><td>4 kinds applied by code with a fixed seed: OCR confusion, Cyrillic lookalikes, truncation, mojibake. 53 cases &mdash; 12 clean controls, 41 damaged</td></tr><tr><td style="width:26%">Task</td><td>One question per document: <em>what is the starting dose?</em> Structured answer with <code>starting_dose</code> and <code>confident</code></td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; re-run on Opus 5, GPT-5-mini and GPT-4.1-mini for the cross-model comparison</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens=500</code>, JSON schema enforced, provider default sampling</td></tr><tr><td style="width:26%">Runs</td><td>3 live runs of both arms in the reproducibility sweep</td></tr><tr><td style="width:26%">Cost</td><td>$0.05 per run</td></tr></table>
+
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Prompt template</td><td>Works, with a caveat</td><td class="num">&mdash;</td><td class="num">weak</td></tr><tr><td>1 &middot; Pre-flight validation</td><td><strong>Works</strong></td><td class="num">85% stopped (35/41)</td><td class="num">strong</td></tr><tr><td>2 &middot; OCR confidence</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">untestable here</td></tr><tr><td>3 &middot; Unicode gate</td><td><strong>Works</strong></td><td class="num">17 of 17</td><td class="num">deterministic</td></tr><tr><td>4 &middot; Dead-letter queue</td><td><strong>Works</strong></td><td class="num">37 rejections logged</td><td class="num">qualitative</td></tr>
+</table>
+
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the pre-flight gate.</strong> Four questions about the raw text, no AI. Stopped 85% of damage and avoided 37 model calls &mdash; one of only two fixes in the whole book that <em>saves</em> money.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the Unicode gate.</strong> 17 of 17, deterministic, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, the queue</strong> &mdash; as a reviewable list, not as upstream attribution.</li><li><span class='drop'>DROP</span> — <strong>The claim that confidence signals damage.</strong> Confidence was just as high on clean input. It carries no information either way.</li><li><span class='drop'>DROP</span> — <strong>The headline &ldquo;39% &rarr; 10%&rdquo;.</strong> It compares two differently-defined populations. Say <em>prevents by refusing</em>, not <em>improves</em>.</li></ul>
+
+<h4>The one thing to remember</h4>
+<p><strong>The stronger model is worse at this.</strong> Silent corruption rose from 39% on Haiku 4.5 to 68% on Opus 5 and 80% on GPT-5-mini. A more capable model reconstructs damaged text more fluently, which is exactly what makes the corruption silent. Upgrading the model makes this failure harder to see, not rarer.</p>
+
+<h4>Where this is weakest</h4>
+<p>The headline silent-corruption rate moved 34&ndash;56% across three runs against a published 59% &mdash; <strong>outside its own reproducible range</strong>. Publish a range, not a two-digit figure. And the gate catches only 6 of 12 scanning-damage cases, because OCR errors are made of ordinary letters.</p>
+</div>
+
+<h3 class="top">The failure: the document was never fit to process</h3>
+
+<p class="lede">Every other experiment in this report feeds the system clean
+documents. This one breaks them first, in the four ways real pipelines break
+text, and measures what happens when nothing checks the input before the
+expensive part runs.</p>
+
+<h4>What the failure looks like in the wild</h4>
+
+<p>A scanned contract where the scanner read <em>rn</em> as <em>m</em>. A form
+pasted out of a system that used the wrong character set, so every apostrophe is
+now three garbage characters. A document silently cut off at two thousand
+characters because something upstream had a length limit nobody wrote down. A
+file where a Cyrillic keyboard produced letters that look identical to Latin ones
+and match nothing.</p>
+
+<p>In each case the AI is handed the damage and answers anyway. It does not
+complain, because complaining is not what it was asked to do. It produces a
+confident answer built from a corrupted document, and that answer is stored next
+to all the answers built from good documents, indistinguishable from them.</p>
+
+<h3>Experiment 2.1 — How often does damaged input change the answer, silently?</h3>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Documents</strong></td>
+      <td>The <code>dosage_and_administration</code> section of 12 real FDA drug
+      labels, cut at a sentence boundary at roughly 1,800 characters.</td></tr>
+  <tr><td><strong>Damage</strong></td>
+      <td>Four kinds, applied by code with a fixed seed — the same document is
+      damaged identically every time it is run.</td></tr>
+  <tr><td><strong>Cases</strong></td>
+      <td>53 total: 12 clean controls, 41 damaged.</td></tr>
+  <tr><td><strong>Task</strong></td>
+      <td>One question per document: <em>"What is the starting dose?"</em>
+      Answer returned as a form with two fields: <code>starting_dose</code> and
+      <code>confident</code> (true/false).</td></tr>
+  <tr><td><strong>Model</strong></td>
+      <td>Claude Haiku 4.5, one run. Also re-run on Claude Opus 5 — see below.</td></tr>
+</table>
+
+<h4>The four kinds of damage, and exactly how each was made</h4>
+
+<table>
+  <tr><th style="width:22%">Damage</th><th>How it was applied</th><th>Where it comes from</th></tr>
+  <tr><td><strong>Scanning errors</strong></td>
+      <td>6% of positions: <em>rn</em>↔<em>m</em>, <em>0</em>↔<em>O</em>,
+      <em>l</em>↔<em>1</em>, <em>cl</em>→<em>d</em>, <em>5</em>→<em>S</em></td>
+      <td>Optical character recognition on a scan or photograph</td></tr>
+  <tr><td><strong>Lookalike letters</strong></td>
+      <td>8% of matching characters replaced with Cyrillic twins: а е о р с у х і;
+      5% of spaces replaced with non-breaking spaces</td>
+      <td>Text pasted from a system with a different keyboard or locale</td></tr>
+  <tr><td><strong>Cut off</strong></td>
+      <td>Truncated to 45% of its length, mid-sentence</td>
+      <td>An undocumented length limit somewhere upstream</td></tr>
+  <tr><td><strong>Encoding mangling</strong></td>
+      <td>UTF-8 bytes reinterpreted as Latin-1</td>
+      <td>A file read with the wrong character set assumed</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">A correction made during the experiment</span>
+  <p>Encoding mangling is a <strong>no-op on plain ASCII text</strong>. Seven
+  "damaged" documents came out byte-for-byte identical to their originals, and
+  were being counted as damage the gate had failed to catch. They are now
+  excluded — it was understating the gate for a reason unconnected to the gate.</p>
+  <p>An earlier version also cut documents at a fixed character count, so
+  <em>every</em> excerpt ended mid-sentence including the clean control. The
+  truncation check fired on everything and the experiment distinguished nothing.
+  Fixed by cutting at a sentence boundary.</p>
+</div>
+
+<h4>How "silent corruption" is defined</h4>
+
+<p>The clean version of each document is the control, and its answer is the
+reference. A damaged version counts as a <strong>silent corruption</strong> when
+both of these are true:</p>
+
+<ol>
+  <li>Its answer differs from the clean version's answer, and</li>
+  <li>The model reported itself confident.</li>
+</ol>
+
+<p>No human judged any answer. The comparison is string equality after
+whitespace normalisation.</p>
+
+<h4>What actually happened — one document, four ways</h4>
+
+<p>Lisinopril. The four texts below are the same document; only the damage
+differs. The gate column is what a pure-code check said about the bytes, before
+any model call.</p>
+
+<table>
+  <tr><th style="width:16%">Version</th><th style="width:36%">What the code gate said</th>
+      <th>The dose the model returned</th></tr>
+  <tr><td><strong>Clean</strong></td><td>passes</td>
+      <td>lisinopril and hydrochlorothiazide <strong>10 mg / 12.5 mg</strong></td></tr>
+  <tr><td>Scanning errors</td><td>"4 alphanumeric-mixed tokens — OCR damage likely"</td>
+      <td>lisinopril and hydrochlorothiazide 10 mg / 12.5 mg</td></tr>
+  <tr><td>Lookalike letters</td><td>"45 non-ASCII characters in an English document"</td>
+      <td>lisinopril and hydrochlorothiazide 10 mg / 12.5 mg</td></tr>
+  <tr><td><strong>Cut off</strong></td>
+      <td>"suspiciously short — possible truncation upstream"; "ends mid-sentence"</td>
+      <td>10 mg lisinopril and <strong>6.25 mg</strong> hydrochlorothiazide</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Read the last row again</span>
+  <p>The truncated document produced <strong>6.25 mg</strong> where the intact one
+  produced <strong>12.5 mg</strong>. Half the dose.</p>
+  <p>The answer is fluent, correctly formatted, and clinically plausible. It
+  names the right two drugs in the right order with the right units. Nothing
+  about it looks wrong. It went into the same field, in the same shape, as every
+  correct answer.</p>
+  <p>And the model reported <code>confident: true</code> — on all four versions,
+  including the one that gave the wrong number.</p>
+</div>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Damaged documents that changed the answer, with no error raised</td>
+      <td class="num"><strong>39%</strong> — 16 of 41</td></tr>
+  <tr><td>Damaged documents the model called itself confident about</td>
+      <td class="num"><strong>83%</strong> — 34 of 41</td></tr>
+  <tr><td>Model calls made on documents that should never have been processed</td>
+      <td class="num">41 — all of them paid for</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">What the 83% does and does not prove — a correction from review</span>
+  <p>83% sounds damning on its own, and it is weaker than it looks. The clean
+  controls were <em>also</em> answered confidently, so the honest comparison is
+  confidence on damaged input versus confidence on clean input — and those rates
+  are near-identical. <strong>The real finding is not "83% confidence on
+  corruption" but "confidence carries no information about input quality
+  either way."</strong> That is still worth knowing, and it is a different
+  sentence from the one first written here.</p>
+</div>
+
+<h4>The same experiment on a stronger model</h4>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">Haiku 4.5</th><th class="num">Opus 5</th></tr>
+  <tr><td>Silent corruption rate</td><td class="num">39%</td><td class="num"><strong>73%</strong></td></tr>
+  <tr><td>Confident on damaged input</td><td class="num">83%</td><td class="num">80%</td></tr>
+</table>
+
+<p><strong>The stronger model is nearly twice as bad at this.</strong> It is
+better at producing a fluent, plausible answer from a corrupted document — which
+is precisely the wrong capability here. If this holds, it inverts the assumption
+that upgrading a model reduces risk, and it is one of the more publishable
+findings in this report.</p>
+
+<h4>Cost and time</h4>
+
+<table>
+  <tr><th style="width:44%">Item</th><th class="num">Haiku 4.5</th><th class="num">Opus 5</th></tr>
+  <tr><td>Model calls</td><td class="num">53</td><td class="num">53</td></tr>
+  <tr><td>Cost</td><td class="num">$0.06</td><td class="num"><strong>$0.43</strong></td></tr>
+  <tr><td>Wall-clock</td><td class="num">~2 min</td><td class="num">~3.3 min</td></tr>
+</table>
+
+<h3>Experiment 2.2 — Does a pure-code gate before the model help?</h3>
+
+<h4>What the gate is</h4>
+
+<p>Four questions about the raw text. <strong>No AI anywhere in it.</strong>
+Every rejection carries a reason a person can act on.</p>
+
+<div class="plain">
+  <span class="label">What "byte-level" means, since the phrase recurs below</span>
+  <p>A computer stores text as a long list of numbers — one number per character.
+  Those numbers are the <em>bytes</em>. A <strong>byte-level check</strong> looks
+  only at that list: how many characters there are, what the last one is, whether
+  any of them come from an alphabet that should not appear, whether the pattern of
+  letters and digits looks normal.</p>
+  <p>It never asks what the text <em>means</em>. It cannot tell you that a sentence
+  is nonsense, or that a dose is implausible. It can only tell you that the
+  characters themselves look wrong.</p>
+  <p>That limitation is the whole story of this chapter's results, and it predicts
+  exactly which damage the gate catches and which it misses.</p>
+</div>
+
+<table>
+  <tr><th style="width:38%">Check</th><th>The rule</th></tr>
+  <tr><td>Suspiciously short</td><td>fewer than 900 characters</td></tr>
+  <tr><td>Ends mid-sentence</td><td>last character is not <code>.</code> <code>)</code> <code>:</code> <code>;</code></td></tr>
+  <tr><td>Wrong alphabet</td><td>after Unicode normalisation, more than 0.4% of characters are outside basic ASCII</td></tr>
+  <tr><td>Scanning damage</td><td>more than 3 tokens that mix letters and digits, excluding real dose units</td></tr>
+</table>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">No gate</th><th class="num">With gate</th></tr>
+  <tr><td>Silent corruption</td><td class="num">39% — 16 of 41</td><td class="num"><strong>10%</strong> — 4 of 41</td></tr>
+  <tr><td>Damaged documents stopped before the model</td><td class="num">0</td><td class="num"><strong>85%</strong> — 35 of 41</td></tr>
+  <tr><td>Clean documents wrongly rejected</td><td class="num">—</td><td class="num">17% — 2 of 12</td></tr>
+  <tr><td>Model calls made on unprocessable documents</td><td class="num">41</td><td class="num"><strong>4</strong></td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">A caveat from review that you should weigh</span>
+  <p>The two arms do not define "silent corruption" over the same set of
+  documents — the gated arm never sees the ones it rejected, so only 6 of 41
+  slots can even register a corruption. Among those 6, the gated arm is
+  <em>worse</em> than the baseline (4 of 6). <strong>The honest claim is that the
+  gate prevents most corruption by refusing the document, not that it improves
+  answers on documents it lets through.</strong> The 39% → 10% headline overstates
+  a real effect.</p>
+</div>
+
+<h4>Which damage the gate catches — the interesting part</h4>
+
+<table>
+  <tr><th style="width:44%">Damage type</th><th class="num">Caught</th></tr>
+  <tr><td>Lookalike letters</td><td class="num">12 of 12</td></tr>
+  <tr><td>Cut off mid-sentence</td><td class="num">12 of 12</td></tr>
+  <tr><td>Encoding mangling</td><td class="num">5 of 5</td></tr>
+  <tr><td><strong>Scanning errors</strong></td><td class="num"><strong>6 of 12</strong></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Why scanning errors are the hard half</span>
+  <p>The other three kinds of damage look wrong to a computer inspecting bytes.
+  Non-ASCII characters in an English document are visibly foreign. A truncated
+  file visibly stops. Mangled encoding leaves a recognisable signature.</p>
+  <p>A scanning error looks like English. <em>Individua1ized</em> is a broken
+  word; <em>rnaintenance</em> reads almost correctly at a glance. There is no
+  byte-level tell.</p>
+  <p>This is the pattern that runs through every chapter of this report:
+  <strong>the failures that survive a check are the ones that look correct.</strong></p>
+</div>
+
+<h4>Cost and time</h4>
+
+<p>The gate itself is free — pure Python, well under a millisecond per document.
+The gated run made 16 model calls instead of 53. <strong>The gate is cheaper than
+not having it:</strong> 37 calls never made, and every rejected document arrives
+with a reason instead of a strange answer someone has to reverse-engineer weeks
+later.</p>
+
+<h3>The four engineering fixes</h3>
+
+<table>
+  <tr><th style="width:28%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Pre-flight validation</strong></td>
+      <td class="num">85% of damage stopped<br>37 calls avoided</td>
+      <td><strong>Works</strong>, and pays for itself</td></tr>
+  <tr><td><strong>2 · OCR confidence scores</strong></td>
+      <td class="num">untested</td>
+      <td>Not implemented as written — see below</td></tr>
+  <tr><td><strong>3 · Unicode normalisation gate</strong></td>
+      <td class="num">17 of 17 on its target damage</td>
+      <td><strong>Works</strong>, perfectly, for free</td></tr>
+  <tr><td><strong>4 · Dead-letter queue</strong></td>
+      <td class="num">37 documents queued with reasons</td>
+      <td><strong>Works</strong> — turns a rejection into a diagnosis</td></tr>
+</table>
+
+<h4>Fix 2 — OCR confidence scores, explained</h4>
+
+<p><strong>What OCR is.</strong> When a document arrives as a scan or a
+photograph, it is a picture, not text. Optical Character Recognition is the
+software that looks at the picture and decides which letters it is seeing. It
+turns an image of a page into a string of characters your system can process.</p>
+
+<p><strong>The part most people throw away.</strong> OCR does not simply output
+letters. For every single character it also outputs a number saying how sure it
+was:</p>
+
+<pre>  m    0.97      confident — clearly an "m"
+  a    0.99      confident
+  i    0.94      confident
+  n    0.96      confident
+  t    0.51      UNSURE — could be "t", could be "l"
+  e    0.88
+  1    0.44      UNSURE — could be "1", could be "l"</pre>
+
+<p>Almost every OCR engine emits these. Almost every pipeline discards them at the
+first step, keeping only the letters. <strong>Chapter 2's second fix is simply:
+stop throwing them away.</strong> Carry them downstream, and treat any stretch of
+text with low-confidence characters as suspect rather than as fact.</p>
+
+<h4>Why this is the only fix that can catch scanning damage</h4>
+
+<p>Look again at what the byte-level gate can and cannot see.</p>
+
+<table>
+  <tr><th style="width:26%">Damage</th><th style="width:38%">What the bytes look like</th>
+      <th>Can a byte-level check see it?</th></tr>
+  <tr><td>Lookalike letters</td>
+      <td>Contains Cyrillic characters in an English document</td>
+      <td><strong>Yes</strong> — those characters should not be there at all</td></tr>
+  <tr><td>Cut off</td>
+      <td>Ends without a full stop, unusually short</td>
+      <td><strong>Yes</strong> — the shape of the text is wrong</td></tr>
+  <tr><td>Encoding mangling</td>
+      <td>Contains a recognisable garbage pattern</td>
+      <td><strong>Yes</strong> — a known signature</td></tr>
+  <tr><td><strong>Scanning errors</strong></td>
+      <td><em>Ordinary English letters, in ordinary proportions</em></td>
+      <td><strong>Mostly no</strong></td></tr>
+</table>
+
+<p>That last row is why the gate caught only <strong>6 of 12</strong> scanning
+errors. <em>rnaintenance</em> is made entirely of normal letters in a normal
+arrangement. So is <em>individua1ized</em>, near enough. There is nothing in the
+bytes to object to — the characters are all fine, they are simply the
+<em>wrong</em> characters.</p>
+
+<div class="verdict">
+  <span class="label">Where the evidence lives</span>
+  <p>The proof that a scan went wrong does not survive into the text. It exists
+  for one moment — while the OCR software is looking at the picture and hesitating
+  between a "1" and an "l" — and then it is discarded.</p>
+  <p><strong>OCR confidence is the only fix in this chapter that can reach that
+  evidence</strong>, because it is the only one that runs early enough to still
+  have it. Once you have the letters and not the numbers, that information is gone
+  and no downstream check can reconstruct it.</p>
+</div>
+
+<h4>Why we could not test it, stated rather than skipped</h4>
+
+<p>Our corpus is text published by the FDA. <strong>It was never scanned</strong> —
+it was born as text, so no OCR software was ever involved and no confidence
+numbers exist.</p>
+
+<p>We could have invented some. That would mean generating the exact signal the
+fix depends on, then showing that a fix which reads that signal works — which
+proves nothing except that we generated it consistently. <strong>A fix tested
+against invented evidence has not been tested.</strong></p>
+
+<p>So it is marked <strong>Not implemented as written</strong>, and what the run
+does establish is the size of the gap it would need to close: half of all scanning
+damage, which is the one kind nothing else caught.</p>
+
+<h4>What to do with this if you handle scanned documents</h4>
+
+<ul>
+  <li><strong>Find out whether your OCR step already emits confidence
+  numbers.</strong> Most do — Tesseract, AWS Textract, Google Document AI, Azure
+  Document Intelligence all report per-character or per-word confidence. The
+  question is usually whether your code kept them, not whether they existed.</li>
+  <li><strong>Store them alongside the text</strong>, at whatever granularity you
+  can get — per character is ideal, per word is useful, per page is nearly
+  useless.</li>
+  <li><strong>Set a threshold on the fields that matter</strong>, not on the whole
+  document. A low-confidence character inside a dose, an account number, or a date
+  is worth stopping for; the same character inside a paragraph of boilerplate is
+  not.</li>
+  <li><strong>Route rather than repair.</strong> Send low-confidence regions to the
+  dead-letter queue (fix 4) with the confidence numbers attached, so a person can
+  see <em>why</em> the machine was unsure.</li>
+</ul>
+
+<h4>Fix 4 — what the queue actually contained</h4>
+
+<p>Every rejected document goes to a queue with its reason attached, before any
+model call. Thirty-seven documents landed there. Real rows, verbatim:</p>
+
+<pre>Prednisone      truncated  suspiciously short — possible truncation upstream; ends mid-sentence
+Lisinopril      unicode    45 non-ASCII characters in an English document
+Metformin       ocr        4 alphanumeric-mixed tokens — OCR damage likely
+Levothyroxine   mojibake   mojibake signature — UTF-8 read as Latin-1</pre>
+
+<div class="plain">
+  <span class="label">Why those four rows prove less than they appear to</span>
+  <p>They are genuine output. As evidence that a rejection becomes a
+  <em>diagnosis</em>, they are <strong>circular</strong>: the damage was planted by
+  us, so the queue naming it shows only that the labels are wired up correctly.
+  Nobody learned anything they did not already know.</p>
+  <p>The queue earning its keep looks like the next section, and it was filed as a
+  mistake for two weeks.</p>
+</div>
+
+<h4>The rejection that actually was a diagnosis</h4>
+
+<p>The gate rejected the <strong>clean control</strong> for Amoxicillin — a
+document with no damage applied to it at all. It was recorded as a false positive:
+<em>"the price of the gate."</em></p>
+
+<p>It was not a false positive. This is what it was complaining about:</p>
+
+<pre>distinct non-ASCII: U+200B  ZERO WIDTH SPACE  x14
+
+ "...Clavulanate Potassium for Oral Suspension, [7x U+200B]600 mg/42.9 mg per 5 mL"
+ "...13.5 mL twice daily 40 15 mL twice daily [7x U+200B] Pediatric patients weighing"</pre>
+
+<p><strong>Fourteen invisible characters, in a real FDA drug label</strong>, in two
+clusters of seven. They render as nothing at all. They survive copy-and-paste.
+And one cluster sits immediately before a dose.</p>
+
+<div class="verdict">
+  <span class="label">What that costs downstream</span>
+  <p>Any exact-match lookup for <code>600 mg/42.9 mg per 5 mL</code> fails on this
+  document. Any pattern anchored on a word boundary before the dose fails. A
+  reconciliation that compares this label against another source reports a
+  mismatch that is not there.</p>
+  <p>And a person proofreading the page sees nothing wrong — because there is
+  nothing to see. <strong>The gate was the only component in the pipeline capable
+  of reporting this, and the finding was overruled by a human who assumed a clean
+  document must be clean.</strong></p>
+</div>
+
+<p>That is the chapter's own argument, happening to the people measuring the
+chapter's argument. The cheap check told the truth; the expensive judgement threw
+it away.</p>
+
+<h4>The other clean rejection — one right complaint, one wrong</h4>
+
+<p>Omeprazole was rejected for two reasons. They deserve different verdicts:</p>
+
+<table>
+  <tr><th style="width:38%">Complaint</th><th>Verdict</th></tr>
+  <tr><td>"11 non-ASCII characters in an English document"</td>
+      <td><strong>Wrong.</strong> They are bullet points. Legitimate typography that
+      the heuristic is too crude to allow. Whitelisting typographic punctuation
+      removes the complaint at no cost — damage stopped stays at 85%.</td></tr>
+  <tr><td>"suspiciously short — possible truncation upstream"</td>
+      <td><strong>Wrong, and instructive.</strong> The document is genuinely 739
+      characters against a 900-character threshold. It is an over-the-counter
+      label; its dosage section really is that short, and it ends in a full
+      stop.</td></tr>
+</table>
+
+<p>The threshold encodes an assumption — <em>documents of this kind are long</em> —
+that held for eleven documents and failed on the twelfth. That is the standing
+hazard with every cheap check: it is not measuring damage, it is measuring
+distance from the documents its author had in mind.</p>
+
+<div class="plain">
+  <span class="label">A number in this chapter is therefore wrong</span>
+  <p>Published as <strong>"clean inputs wrongly rejected: 17% (2 of 12)"</strong>.
+  One of those two was a correct rejection of genuine invisible corruption. The
+  honest figure is <strong>1 of 12</strong>, and that one is a threshold meeting a
+  document type it was not written for.</p>
+  <p>Both directions of the error matter. We understated the gate, and we
+  understated it by making exactly the mistake the gate exists to prevent.</p>
+</div>
+
+<h4>What the queue is for, stated accurately</h4>
+
+<p>Without it, a rejected document either vanishes or retries forever, and both
+look like nothing happening. With it, you get a list you can sort — and
+occasionally, as above, a row that is telling you something true that nobody in the
+pipeline could otherwise have seen.</p>
+
+<p>The claim that survives the evidence is <strong>the queue makes rejections
+reviewable</strong>. The stronger claim — that it lets you identify the upstream
+system producing the damage — was not tested here, because we were the upstream
+system.</p>
+
+<h3>Chapter 2 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>Prompt template</td><td>Works, with a caveat</td>
+      <td>weak — confidence carries no signal either way</td></tr>
+  <tr><td>1 · Pre-flight validation</td><td><strong>Works</strong></td>
+      <td>strong on documents stopped; <strong>overstated</strong> on documents let through</td></tr>
+  <tr><td>2 · OCR confidence</td><td>Not implemented as written</td><td>corpus cannot test it</td></tr>
+  <tr><td>3 · Unicode gate</td><td><strong>Works</strong></td><td>17 of 17, deterministic</td></tr>
+  <tr><td>4 · Dead-letter queue</td><td><strong>Works</strong></td><td>makes rejections reviewable — demonstrated; upstream attribution untested</td></tr>
+</table>
+
+<p><strong>The chapter holds.</strong> Its central claim — that a cheap check
+before the model beats an expensive diagnosis afterwards — is supported, and this
+is one of only two fixes in the book that <em>saves</em> money. The honest gaps
+are scanning damage, where a byte-level gate catches half, and the headline
+39%&nbsp;→&nbsp;10%, which compares two differently-defined populations and
+should be stated as "prevents by refusing" rather than "improves".</p>

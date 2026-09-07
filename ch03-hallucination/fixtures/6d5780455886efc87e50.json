@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Gabapentin indicated to treat?\n\nRESPONSE:\nAccording to the label, gabapentin capsules are indicated for two uses:\n\n1. **Postherpetic neuralgia (PHN) in adults** — the nerve pain that can persist after a shingles (herpes zoster) infection. Typical dosing starts at 300 mg on Day 1, 600 mg/day on Day 2, and 900 mg/day on Day 3, and may be titrated up as needed for pain relief to 1800 mg/day (600 mg three times daily).\n\n2. **Adjunctive (add-on) therapy for partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years of age and older with epilepsy.** For patients 12 years and older, the starting dose is 300 mg three times daily, with a maintenance dose of 300–600 mg three times daily. For children 3 to 11 years, dosing is weight-based (starting 10–15 mg/kg/day in three divided doses, titrated over about 3 days to 40 mg/kg/day for ages 3–4 and 25–35 mg/kg/day for ages 5–11).\n\nNote that gabapentin is used as an add-on treatment for epilepsy, not as monotherapy in this labeling. Doses must be reduced in patients with renal impairment or on hemodialysis, and in elderly patients dosing should be based on creatinine clearance. This information is from the product label; talk with your healthcare provider about your specific situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1751,
+  "usage": {
+    "input_tokens": 846,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe label excerpt provided does not contain a comprehensive list of drugs that interact with Warfarin Sodium. However, it does mention the following key interaction information:\n\n1. **Heparin**: Increases the INR and requires special monitoring protocols. When converting from heparin to warfarin, overlap therapy for 4-5 days is recommended, with INR monitoring at specific intervals (5 hours after IV bolus, 4 hours after IV infusion cessation, or 24 hours after subcutaneous injection).\n\n2. **Other Medications**: The label states that warfarin's action \"may be affected by factors such as other drugs and dietary vitamin K.\" It recommends performing additional INR tests \"whenever other medications are initiated, discontinued, or taken irregularly.\"\n\n3. **General Statement**: The label notes warfarin has a \"narrow therapeutic range\" and emphasizes the need for careful monitoring when medications are added or removed.\n\nFor a complete and detailed list of drug interactions with Warfarin Sodium, you would need to consult the full prescribing information, particularly the \"Drug Interactions\" section (referenced as section 7 in this label), which is not fully included in the excerpt provided. The label does reference section 7 for additional drug interaction information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2598,
+  "usage": {
+    "input_tokens": 786,
+    "output_tokens": 17
+  }
+}

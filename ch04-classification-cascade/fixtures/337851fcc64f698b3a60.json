@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nImmune system disorders: hypersensitivity/allergic reactions (including urticaria and anaphylactic reactions) Vascular disorders: vasculitis Hepatobiliary disorders: hepatitis, elevated liver enzymes. Cholestatic hepatitis has been associated with concomitant administration of warfarin sodium and ticlopidine. Gastrointestinal disorders: nausea, vomiting, diarrhea, taste perversion, abdominal pain, flatulence, bloating Skin disorders: rash, dermatitis (including bullous eruptions), pruritus, alopecia Respiratory disorders: tracheal or tracheobronchial calcification General disorders: chills Most common adverse reactions to warfarin sodium are fatal and nonfatal hemorrhage from any tissue or organ. ( 6 ) To report SUSPECTED ADVERSE REACTIONS, contact Teva at 1-888-838-2872 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"hypersensitivity, allergic reactions, urticaria, anaphylactic reactions, vasculitis, hepatitis, elevated liver enzymes, cholestatic hepatitis, nausea, vomiting, diarrhea, taste perversion, abdominal pain, flatulence, bloating, rash, dermatitis, bullous eruptions, pruritus, alopecia, tracheal calcification, tracheobronchial calcification, chills, fatal hemorrhage, nonfatal hemorrhage\"}",
+  "elapsed_ms": 1644,
+  "usage": {
+    "input_tokens": 495,
+    "output_tokens": 122
+  }
+}

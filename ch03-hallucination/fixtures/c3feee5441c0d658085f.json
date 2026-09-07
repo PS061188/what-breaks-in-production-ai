@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Amoxicillin for pediatric patients?\n\nRESPONSE:\n**For amoxicillin/clavulanate potassium oral suspension 600 mg/42.9 mg per 5 mL (\"ES-600\"):**\n\n**Recommended dose:** 90 mg/kg/day (based on the amoxicillin component), divided every 12 hours, for 10 days — in pediatric patients aged 3 months to 12 years weighing ≤40 kg. This provides 6.4 mg/kg/day of clavulanic acid.\n\n**Weight-based volume guide (twice daily):**\n- 8 kg → 3 mL BID\n- 12 kg → 4.5 mL BID\n- 16 kg → 6 mL BID\n- 20 kg → 7.5 mL BID\n- 24 kg → 9 mL BID\n- 28 kg → 10.5 mL BID\n- 32 kg → 12 mL BID\n- 36 kg → 13.5 mL BID\n- 40 kg → 15 mL BID\n\n(Quick check: mL per dose ≈ weight in kg × 0.375.)\n\n**Key practical points:**\n- **Indication is narrow:** recurrent/persistent acute otitis media due to S. pneumoniae (penicillin MIC ≤2 mcg/mL), H. influenzae, or M. catarrhalis (including beta-lactamase producers) in children with recent (≤3 months) antibacterial exposure for AOM plus either age ≤2 years or day-care attendance. Not indicated for S. pneumoniae with penicillin MIC ≥4 mcg/mL; AOM due to S. pneumoniae alone can be treated with plain amoxicillin.\n- **Give at the start of a meal** to reduce GI intolerance and improve clavulanate absorption.\n- **Do not interchange strengths:** the 600/42.9 suspension has a different amoxicillin:clavulanate ratio (14:1) than the 200/28.5 and 400/57 suspensions (7:1); they are not substitutable.\n- **>40 kg or adults:** no data with this formulation; use the appropriate tablet/other formulation instead (do not substitute ES-600 for the 500 mg or 875 mg tablet in adults with swallowing difficulty).\n- **Hepatic impairment:** dose with caution and monitor hepatic function at regular intervals.\n- **Renal impairment (standard pharmacology, not in this excerpt):** the 14:1 ES formulation is generally not recommended in patients with CrCl <30 mL/min or on hemodialysis; use an alternative amoxicillin/clavulanate formulation with renal dose adjustment.\n- **Reconstitution/storage:** add water in two portions (75 mL bottle → 68 mL water; 125 mL → 108 mL; 200 mL → 170 mL), shake well before each use, refrigerate, and discard after 10 days. FLAVORx (apple, banana cream, bubble gum, cherry, watermelon) 1 drop per 5 mL may be added at reconstitution; stability with other flavors is unstudied.\n- **Counsel on:** diarrhea (including possible C. difficile–associated diarrhea), rash, and hypersensitivity; avoid in patients with prior amoxicillin/clavulanate-associated cholestatic jaundice/hepatic dysfunction or serious penicillin hypersensitivity.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1603,
+  "usage": {
+    "input_tokens": 1496,
+    "output_tokens": 17
+  }
+}

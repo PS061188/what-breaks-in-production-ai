@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nThe provided label excerpt does not list a frequency-ranked ‘‘most common’’ adverse reactions for lisinopril. It states that lisinopril’s side effects are generally rare and apparently independent of dose. The excerpt calls out two important safety concerns: angioedema of the head and neck (reported at higher incidence in Black patients) and the historical occurrence of agranulocytosis with the ACE inhibitor captopril (raising the possibility lisinopril could have a similar risk). It also notes that when used with hydrochlorothiazide the combination blunts the hypokalemia typically caused by thiazide diuretics. For a complete list of common and uncommon adverse reactions and their frequencies, see the full Adverse Reactions and Warnings sections of the full prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1702,
+  "usage": {
+    "input_tokens": 638,
+    "output_tokens": 16
+  }
+}

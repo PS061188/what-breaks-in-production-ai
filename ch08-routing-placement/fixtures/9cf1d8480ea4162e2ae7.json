@@ -1,0 +1,97 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a precision extraction assistant. Each field below may be\nfilled ONLY from its own section of the label. Do not carry content across\nsections — a condition the drug treats and a condition that forbids the drug\nare opposite instructions, and putting one where the other belongs inverts the\nmeaning.\n\nFIELD SOURCES — apply without exception:\n  what_it_treats        -> [indications_and_usage] only\n  who_must_not_take_it  -> [contraindications] only\n  side_effects          -> [adverse_reactions] only\n\nFor each field, quote the supporting text character-for-character and name the\nsection header you took it from. If a field's own section does not support it,\nleave the value empty rather than borrowing from another section.\n\n<label>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Gabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy Gabapentin Capsules, USP are indicated for Postherpetic neuralgia in adults (1) Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy (1)\n\n[contraindications]\n4 CONTRAINDICATIONS Gabapentin is contraindicated in patients who have demonstrated hypersensitivity to the drug or its ingredients. Known hypersensitivity to gabapentin or its ingredients (4)\n\n[adverse_reactions]\n6 ADVERSE REACTIONS The following serious adverse reactions are discussed in greater detail in other sections: Drug Reaction with Eosinophilia and Systemic Symptoms (DRESS)/Multiorgan Hypersensitivity [see Warnings and Precautions (5.1) ] Anaphylaxis and Angioedema [see Warnings and Precautions (5.2) ] Somnolence/Sedation and Dizziness [see see Warnings and Precautions (5.4) ] Withdrawal Precipitated Seizure, Status Epilepticus [see see Warnings and Precautions (5.5) ] Suicidal Behavior and Ideation [see see Warnings and Precautions (5.6) ] Respiratory Depression [see Warnings and Precautions (5.7) ] Neuropsychiatric Adverse Reactions (Pediatric Patients 3 to 12 Years of Age) [ see Warnings and Precautions (5.8) ] Sudden and Unexplained Death in Patients with Epilepsy [see Warnings and Precautions (5.10) ] Most common adverse reactions (incidence ≥8% and at least twice that for placebo) were: Postherpetic neuralgia: Dizziness, somnolence, and peripheral edema (6.1) Epilepsy in patients >12 years of age: Somnolence, dizziness, ataxia, fatigue, and nystagmus (6.1) Epilepsy in patients 3 to 12 years of age: Viral infection, fever, nausea and/or vomiting, somnolence, and hostility (6.1) To report SUSPECTED ADVERSE REACTIONS, contact ACI HealthcareUSA, Inc. at 1-888-802-1213 or www.acihealthcareusa.com or FDA at1-800-FDA-1088 or www.fda.gov/medwatch. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice. Postherpetic Neuralgia The most common adverse reactions associated with the use of Gabapentin in adults, not seen at an equivalent frequency among placebo-treated patients, were dizziness, somnolence, and peripheral edema. In the 2 controlled trials in postherpetic neuralgia, 16% of the 336 patients who received Gabapentin and 9% of the 227 patients who received placebo discontinued treatment because of an adverse reaction. The adverse reactions that most frequently led to withdrawal in Gabapentin-treated patients were dizziness, \n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\": {\"value\": \"Management of postherpetic neuralgia in adults and adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy\", \"source_quote\": \"Gabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy\", \"source_section\": \"indications_and_usage\"}, \"who_must_not_take_it\": {\"value\": \"Patients who have demonstrated hypersensitivity to gabapentin or its ingredients\", \"source_quote\": \"Gabapentin is contraindicated in patients who have demonstrated hypersensitivity to the drug or its ingredients. Known hypersensitivity to gabapentin or its ingredients\", \"source_section\": \"contraindications\"}, \"side_effects\": {\"value\": \"Dizziness, somnolence, peripheral edema, ataxia, fatigue, nystagmus, viral infection, fever, nausea and/or vomiting, hostility, anaphylaxis, angioedema, respiratory depression, and suicidal behavior and ideation\", \"source_quote\": \"Most common adverse reactions (incidence ≥8% and at least twice that for placebo) were: Postherpetic neuralgia: Dizziness, somnolence, and peripheral edema (6.1) Epilepsy in patients >12 years of age: Somnolence, dizziness, ataxia, fatigue, and nystagmus (6.1) Epilepsy in patients 3 to 12 years of age: Viral infection, fever, nausea and/or vomiting, somnolence, and hostility (6.1)\", \"source_section\": \"adverse_reactions\"}}",
+  "elapsed_ms": 4085,
+  "usage": {
+    "input_tokens": 1684,
+    "output_tokens": 464
+  }
+}

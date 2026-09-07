@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Metformin Hydrochloride indicated to treat?\n\nRESPONSE:\nAccording to the label, metformin hydrochloride tablets are indicated as an **adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus**.\n\nA few points worth noting:\n\n- Metformin is a **biguanide** and is used alongside (not instead of) lifestyle measures such as diet and exercise.\n- The pediatric indication starts at **age 10**; this excerpt does not support use in children younger than 10.\n- This excerpt does not list any other indications (for example, it does not mention type 1 diabetes, prediabetes, or polycystic ovary syndrome).\n\nImportant limitations on use from the same label: metformin is contraindicated in patients with an eGFR below 30 mL/min/1.73 m², initiation is not recommended with an eGFR of 30–45 mL/min/1.73 m², and it should be temporarily discontinued around certain iodinated contrast imaging procedures.\n\nPlease consult your healthcare provider or pharmacist regarding whether this medication is appropriate for your specific situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1645,
+  "usage": {
+    "input_tokens": 742,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are a clinical data extraction assistant. Extract the requested\nfields from the drug label below into the schema. Include a short source_quote\nfor each field. If a field is not stated in the label, use \"N/A\".\n\n<source_document>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Gabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy Gabapentin Capsules, USP are indicated for Postherpetic neuralgia in adults (1) Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy (1)\n\n[dosage_and_administration]\n2 DOSAGE AND ADMlNlSTRATION Postherpetic Neuralgia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilepsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neuralgia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated 2.2 Dosage for Epilepsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 300 mg three times a day. The recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer Gabapentin three times a day using 300 mg or 400 mg capsules. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of Gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses. The recommended maintenance dose of Gabapentin in patients 5 to 11 years of age is 25 mg/kg/day to 35 mg/kg/day, given in three divided doses. Gabapentin may be administered as the capsule formulations. Dosages up to 50 mg/kg/day have been well tolerated in a long-term clinical study. The maximum time interval between doses should not exceed 12 hours. 2.3 Dosage Adjustment in Patients with Renal Impairment Dosage adjustment in patients 12 years of age and older with renal impairment or undergoing hemodialysis is recommended, as follows (see dosing\n</source_document>",
+  "user": "Extract these fields: indications, adult_dosage, pediatric_dosage, pregnancy_guidance, overdose_management, drug_interactions",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "indications": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "adult_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pediatric_dosage": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "pregnancy_guidance": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "overdose_management": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "drug_interactions": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "indications",
+      "adult_dosage",
+      "pediatric_dosage",
+      "pregnancy_guidance",
+      "overdose_management",
+      "drug_interactions"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"indications\":{\"value\":\"Management of postherpetic neuralgia in adults; adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy\",\"source_quote\":\"Gabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy\"},\"adult_dosage\":{\"value\":\"Postherpetic neuralgia: Day 1 single 300 mg dose; Day 2 600 mg/day (300 mg twice daily); Day 3 900 mg/day (300 mg three times daily); may titrate up as needed for pain relief to 1800 mg/day (600 mg three times a day); no additional benefit demonstrated above 1800 mg/day. Epilepsy (patients 12 years and older): starting dose 300 mg three times a day; recommended maintenance 300 mg to 600 mg three times a day (up to 2400 mg/day well tolerated; 3600 mg/day administered to a small number of patients); maximum time between doses should not exceed 12 hours. Dose adjustment required in renal impairment/hemodialysis.\",\"source_quote\":\"In adults with postherpetic neuralgia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day)... The starting dose is 300 mg three times a day. The recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day.\"},\"pediatric_dosage\":{\"value\":\"Patients 3 to 11 years: starting dose range 10 to 15 mg/kg/day in three divided doses, with maintenance dose reached by upward titration over approximately 3 days; maintenance dose 40 mg/kg/day in three divided doses for ages 3 to 4 years and 25 to 35 mg/kg/day in three divided doses for ages 5 to 11 years. Doses up to 50 mg/kg/day well tolerated long-term; maximum interval between doses should not exceed 12 hours. Patients 12 years and older follow adult dosing (300 mg three times daily, titrated up to 600 mg three times daily).\",\"source_quote\":\"Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of Gabapentin in patients 3 to 4 years of age is 40 mg/kg/day... in patients 5 to 11 years of age is 25 mg/kg/day to 35 mg/kg/day, given in three divided doses.\"},\"pregnancy_guidance\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"},\"overdose_management\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"},\"drug_interactions\":{\"value\":\"N/A\",\"source_quote\":\"N/A\"}}",
+  "elapsed_ms": 11418,
+  "usage": {
+    "input_tokens": 2373,
+    "output_tokens": 1130
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nFor lisinopril monotherapy, the effective dose range is 10 mg to 80 mg once daily. When used as lisinopril/hydrochlorothiazide combination therapy, the recommended starting dose is typically lisinopril 10 mg/hydrochlorothiazide 12.5 mg or lisinopril 20 mg/hydrochlorothiazide 12.5 mg, depending on the patient's prior response to monotherapy. The label notes that fixed-dose combinations are not indicated for initial therapy—patients should generally be started on monotherapy first, with the combination reserved for patients who fail to achieve adequate blood pressure control with monotherapy alone. Further dose adjustments should be guided by clinical response, with a maximum lisinopril dose of 80 mg per day.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1650,
+  "usage": {
+    "input_tokens": 640,
+    "output_tokens": 17
+  }
+}

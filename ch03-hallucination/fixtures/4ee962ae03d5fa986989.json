@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Amoxicillin?\n\nRESPONSE:\nThe label excerpt provided does not contain information about drug interactions with amoxicillin and clavulanate potassium. It focuses only on indications, usage, and dosage administration.\n\nFrom standard pharmacology knowledge, clinically significant interactions with amoxicillin include:\n\n1. **Oral Contraceptives**: Amoxicillin may reduce contraceptive efficacy by altering gut flora and enterohepatic circulation of estrogen. Counsel patients to use backup contraception.\n\n2. **Methotrexate**: Amoxicillin may decrease methotrexate clearance, increasing toxicity risk. Monitor MTX levels and renal function.\n\n3. **Warfarin**: Amoxicillin may potentiate warfarin effect and increase bleeding risk. Monitor INR.\n\n4. **Allopurinol**: Concurrent use may increase the risk of amoxicillin-induced rash.\n\n5. **Clavulanate-Specific**: Clavulanate is a strong beta-lactamase inhibitor and overcomes resistance in beta-lactamase-producing organisms, which is the purpose of this combination.\n\nFor a complete drug interaction profile, consult the full prescribing information, drug reference databases (e.g., UpToDate, Lexicomp), or your pharmacy. Given this is a pediatric formulation, review patient's complete medication list for age-appropriate concerns.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1511,
+  "usage": {
+    "input_tokens": 836,
+    "output_tokens": 17
+  }
+}

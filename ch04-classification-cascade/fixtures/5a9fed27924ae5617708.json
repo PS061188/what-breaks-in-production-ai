@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFurosemide binding to albumin may be reduced in elderly patients. Furosemide is predominantly excreted unchanged in the urine. The renal clearance of furosemide after intravenous administration in older healthy male subjects (60 to 70 years of age) is statistically significantly smaller than in younger healthy male subjects (20 to 35 years of age). The initial diuretic effect of furosemide in older subjects is decreased relative to younger subjects (see PRECAUTIONS: Geriatric Use ). Geriatric Use Controlled clinical studies of furosemide did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n1. The passage explicitly addresses elderly patients aged 65 and over, with multiple references to 'older subjects,' 'older healthy male subjects,' and 'elderly patients'\\n2. It discusses pharmacokinetic differences in elderly populations (albumin binding, renal clearance, diuretic effect)\\n3. It cites 'PRECAUTIONS: Geriatric Use' and contains a section header 'Geriatric Use'\\n\\nStep 2 - Considering most plausible categories:\\n- Most plausible: geriatric_use - The content is explicitly framed under geriatric considerations, discusses age-related pharmacokinetic and pharmacodynamic differences in patients 65+, and directly addresses clinical study enrollment of elderly subjects\\n- Second most plausible: drug_interactions or adverse_reactions - However, the passage doesn't describe drug-drug interactions or side effects; rather it describes altered pharmacokinetics and efficacy in an age group\\n\\nStep 3 - Classification decision:\\nThe passage clearly belongs in geriatric_use because it:\\n- Explicitly states it addresses geriatric use with section headers and content\\n- Focuses on how elderly patients (65+) differ in drug response and clearance\\n- Discusses clinical study limitations and observational experience in the elderly population\\nThis is definitively NOT about adverse reactions (no side effects listed) or drug interactions (no other drugs or foods mentioned)\\n\\nStep 4 - Confidence assessment:\\nConfidence is HIGH (>90%) because the category assignment is unambiguous - the passage is structurally and substantively organized around geriatric use considerations with explicit section headers and age-specific pharmacokinetic/pharmacodynamic data.\", \"classification\": \"geriatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5286,
+  "usage": {
+    "input_tokens": 1029,
+    "output_tokens": 435
+  }
+}

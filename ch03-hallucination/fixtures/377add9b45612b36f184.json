@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Metformin Hydrochloride for pediatric patients?\n\nRESPONSE:\n**Pediatric dosing (type 2 diabetes mellitus, patients ≥10 years of age)**\n\n- **Starting dose:** 500 mg orally twice daily, taken **with meals** (to reduce GI upset).\n- **Titration:** Increase in increments of **500 mg per week**, based on glycemic control and tolerability.\n- **Maximum dose:** **2000 mg/day**, given in divided doses **twice daily** (note this is lower than the adult maximum of 2550 mg/day).\n- **Not indicated in children <10 years of age**; immediate-release metformin is the formulation studied in this age group (extended-release products generally are approved from age 10 or 17 depending on the product — check the specific label).\n\n**Practical points**\n- Take with food and titrate slowly — most GI adverse effects (diarrhea, nausea, abdominal discomfort, metallic taste) are dose-related and transient. If a dose increase isn't tolerated, drop back to the prior dose and retry later, or consider an extended-release formulation.\n- **Assess renal function (eGFR) before starting and at least annually.** Contraindicated if eGFR <30 mL/min/1.73 m²; do not initiate if eGFR 30–45; reassess risk/benefit if eGFR falls below 45 during therapy.\n- **Hold for iodinated contrast** in patients with eGFR 30–60 mL/min/1.73 m², a history of liver disease, alcoholism, or heart failure, or when intra-arterial contrast will be given; recheck eGFR at 48 hours and restart if renal function is stable.\n- Also hold during acute illness with dehydration, vomiting, sepsis, hypoxemia, or before major surgery — all raise lactic acidosis risk.\n- Counsel adolescents about alcohol (increases lactic acidosis and hypoglycemia risk) and, in females, that metformin may restore ovulation in PCOS — contraception counseling may be warranted.\n- Monitor **vitamin B12** periodically with long-term use, especially with anemia or peripheral neuropathy.\n- Metformin alone rarely causes hypoglycemia, but risk rises when combined with insulin or sulfonylureas — dose reductions of those agents may be needed.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1933,
+  "usage": {
+    "input_tokens": 1139,
+    "output_tokens": 17
+  }
+}

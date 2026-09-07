@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third trial, albuterol sulfate HFA was evaluated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albuterol sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached masks.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n(1) Discusses clinical trial results comparing albuterol dosages (90 mcg, 180 mcg, 360 mcg) and placebo over 4 weeks\\n(2) Focuses on pediatric population, specifically children younger than 24 months\\n(3) Describes measurement of asthma symptom scores as primary outcome in treatment groups\\n\\nStep 2 - Two most plausible categories:\\n(A) 'pediatric_use' - The passage explicitly focuses on pediatric subjects younger than 24 months, describing how the drug was evaluated in this age group with specific delivery methods\\n(B) 'indications_and_usage' - The passage mentions treatment of 'acute wheezing' and compares dosages for asthma symptom management\\n\\nStep 3 - Classification decision:\\n'pediatric_use' wins decisively. While the passage does mention indications (acute wheezing, asthma symptoms), the central focus is specifically on pediatric efficacy data. The passage emphasizes the age group (younger than 24 months), the specific delivery device used with pediatric patients (AeroChamber Plus with masks), and reports pediatric trial outcomes. This is not merely incidental mention of children but rather the organizing principle of the clinical evidence presented.\\n\\nStep 4 - Confidence assessment:\\nHIGH confidence (>90%). The explicit mention of 'pediatric subjects younger than 24 months' combined with discussion of pediatric-specific delivery considerations (holding chambers with attached masks for infants) makes this unambiguously a pediatric_use section. The content structure and focus clearly differentiate this from generic dosage_and_administration or indications sections.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 5452,
+  "usage": {
+    "input_tokens": 1065,
+    "output_tokens": 439
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nThere was a dose-related increase of liver adenomas in male mice receiving sertraline at 10-40 mg/kg (0.25-1.0 times the MRHD on a mg/m 2 basis). No increase was seen in female mice or in rats of either sex receiving the same treatments, nor was there an increase in hepatocellular carcinomas. Liver adenomas have a variable rate of spontaneous occurrence in the CD-1 mouse and are of unknown significance to humans. There was an increase in follicular adenomas of the thyroid in female rats receiving sertraline at 40 mg/kg (2 times the MRHD on a mg/m 2 basis); this was not accompanied by thyroid hyperplasia. While there was an increase in uterine adenocarcinomas in rats receiving sertraline at 10-40 mg/kg (0.5-2.0 times the MRHD on a mg/m 2 basis) compared to placebo controls, this effect was not clearly drug related.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"description\"}",
+  "elapsed_ms": 993,
+  "usage": {
+    "input_tokens": 694,
+    "output_tokens": 9
+  }
+}

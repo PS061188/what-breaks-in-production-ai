@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe total number of patients treated with Gabapentin in controlled clinical trials in patients with another condition was 336, of which 102 (30%) were 65 to 74 years of age, and 168 (50%) were 75 years of age and older. There was a larger treatment effect in patients 75 years of age and older compared with younger patients who received the same dosage. Since gabapentin is almost exclusively eliminated by renal excretion, the larger treatment effect observed in patients ≥75 years may be a consequence of increased gabapentin exposure for a given dose that results from an age-related decrease in renal function. However, other factors cannot be excluded. The types and incidence of adverse reactions were similar across age groups except for peripheral edema and ataxia, which tended to increase in incidence with age.\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"In controlled clinical trials with another condition, 336 patients were treated with Gabapentin, including 102 (30%) aged 65-74 years and 168 (50%) aged ≥75 years. A larger treatment effect was observed in patients ≥75 years compared with younger patients at the same dosage, likely due to decreased renal function with age leading to increased gabapentin exposure. Adverse reactions were similar across age groups except for peripheral edema and ataxia, which increased in incidence with advancing age.\"}",
+  "elapsed_ms": 1694,
+  "usage": {
+    "input_tokens": 464,
+    "output_tokens": 125
+  }
+}

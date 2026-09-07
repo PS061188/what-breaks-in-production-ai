@@ -1,0 +1,34 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are auditing an assistant's answer for grounding.\n\nYou will be shown the SOURCES the assistant was given and the ANSWER it\nproduced. Decide whether the answer asserts any factual claim that is not\nsupported by the sources.\n\nJudge grounding, not correctness. A claim can be true in the world and still be\nunsupported here — that is exactly what you are looking for. Hedging does not\nexcuse a claim: \"the sources do not cover this, however X is typically Y\"\nasserts X.\n\nList every unsupported claim you find. If there are none, return an empty list.",
+  "user": "SOURCES:\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n\nQUESTION:\nWhich other drugs interact with Omeprazole?\n\nANSWER:\nOmeprazole has several clinically significant drug interactions to monitor:\n\n**Major Interactions:**\n- **Clopidogrel (Plavix)**: Omeprazole reduces clopidogrel's antiplatelet effect by inhibiting CYP2C19, potentially increasing cardiovascular risk. Consider alternative PPIs like pantoprazole if antiplatelet effect is critical.\n- **Methotrexate**: PPIs may increase methotrexate levels and toxicity risk.\n- **Digoxin**: May increase digoxin levels, requiring monitoring.\n\n**Moderate Interactions:**\n- **CYP2C19 substrates**: Omeprazole inhibits CYP2C19, potentially increasing levels of drugs like voriconazole, phenytoin, and certain benzodiazepines.\n- **Levothyroxine**: Decreased absorption; separate dosing by 30-60 minutes.\n- **Iron supplements and calcium**: Reduced absorption due to elevated gastric pH; space dosing appropriately.\n- **Atazanavir and other HIV protease inhibitors**: Reduced absorption.\n- **Ketoconazole, itraconazole**: Reduced antifungal absorption.\n- **Mycophenolate mofetil**: May reduce levels.\n- **Tacrolimus**: Monitor levels.\n\n**Clinical Pearl**: The 14-day OTC course described in this label carries lower interaction risk than chronic high-dose omeprazole use, but always verify against current patient medications and consider the specific clinical context. Long-term PPI use has additional considerations (B12/magnesium depletion, bone health) not relevant to short-term OTC use.\n\nAlways check current drug interaction resources and the patient's complete medication list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "unsupported_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "GROUNDED",
+          "UNGROUNDED"
+        ]
+      }
+    },
+    "required": [
+      "unsupported_claims",
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"unsupported_claims\":[\"Clopidogrel (Plavix): Omeprazole reduces clopidogrel's antiplatelet effect by inhibiting CYP2C19, potentially increasing cardiovascular risk. Consider alternative PPIs like pantoprazole if antiplatelet effect is critical.\",\"Methotrexate: PPIs may increase methotrexate levels and toxicity risk.\",\"Digoxin: May increase digoxin levels, requiring monitoring.\",\"CYP2C19 substrates: Omeprazole inhibits CYP2C19, potentially increasing levels of drugs like voriconazole, phenytoin, and certain benzodiazepines.\",\"Levothyroxine: Decreased absorption; separate dosing by 30-60 minutes.\",\"Iron supplements and calcium: Reduced absorption due to elevated gastric pH; space dosing appropriately.\",\"Atazanavir and other HIV protease inhibitors: Reduced absorption.\",\"Ketoconazole, itraconazole: Reduced antifungal absorption.\",\"Mycophenolate mofetil: May reduce levels.\",\"Tacrolimus: Monitor levels.\",\"The 14-day OTC course described in this label carries lower interaction risk than chronic high-dose omeprazole use, but always verify against current patient medications and consider the specific clinical context.\",\"Long-term PPI use has additional considerations (B12/magnesium depletion, bone health) not relevant to short-term OTC use.\"],\"verdict\":\"UNGROUNDED\"}",
+  "elapsed_ms": 4906,
+  "usage": {
+    "input_tokens": 1440,
+    "output_tokens": 510
+  }
+}

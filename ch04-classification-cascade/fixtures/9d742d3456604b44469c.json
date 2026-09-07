@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nControlled clinical studies of metformin hydrochloride tablets did not include sufficient numbers of elderly patients to determine whether they respond differently from younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy and the higher risk of lactic acidosis. Assess renal function more frequently in elderly patients [ see Warnings and Precautions (5.1) .\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Controlled clinical studies did not include sufficient numbers of elderly patients to determine if they respond differently from younger patients. Dose selection for elderly patients should be cautious, usually starting at the low end of the dosing range, due to greater frequency of decreased hepatic, renal, or cardiac function, concomitant disease, other drug therapy, and higher risk of lactic acidosis. Renal function should be assessed more frequently in elderly patients.\"}",
+  "elapsed_ms": 1936,
+  "usage": {
+    "input_tokens": 398,
+    "output_tokens": 101
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Furosemide?\n\nRESPONSE:\nThe label excerpt provided does not include a dedicated drug interactions section. However, the label does highlight important clinical considerations when furosemide is combined with other antihypertensive agents:\n\n**Key interaction guidance from the label:**\n- When furosemide is added to a regimen with other antihypertensive drugs, blood pressure must be carefully monitored, especially during initial therapy\n- The dosage of other antihypertensive agents should be reduced by at least 50% when furosemide is added to prevent excessive blood pressure drops\n- As blood pressure falls due to furosemide's potentiating effect, further reduction or discontinuation of other antihypertensive drugs may be necessary\n\n**Standard pharmacology considerations:**\nBeyond the label, furosemide has several clinically important drug interactions you should be aware of:\n- **ACE inhibitors/ARBs/NSAIDs**: Increased risk of renal dysfunction and hyperkalemia\n- **Ototoxic drugs** (aminoglycosides, cisplatin): Increased risk of hearing loss, especially at high doses\n- **Lithium**: Furosemide can reduce lithium clearance and increase toxicity risk\n- **Aminoglycosides**: Enhanced nephrotoxicity and ototoxicity\n- **Corticosteroids**: Increased hypokalemia risk\n- **Digoxin**: Hypokalemia from furosemide can increase digoxin toxicity risk\n- **Probenecid and other uricosuric agents**: Furosemide may reduce their effectiveness\n\nFor a complete interaction profile, consult the full prescribing information or a drug interaction database, as this label excerpt is limited.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1679,
+  "usage": {
+    "input_tokens": 930,
+    "output_tokens": 17
+  }
+}

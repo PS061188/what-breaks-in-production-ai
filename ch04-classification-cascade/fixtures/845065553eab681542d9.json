@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nSee full prescribing information for details regarding concomitant use of atorvastatin calcium with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis ( 2.5 , 7.1 ). Rifampin: May reduce atorvastatin plasma concentrations. Administer simultaneously with atorvastatin calcium ( 7.2 ). Oral Contraceptives: May increase plasma levels of norethindrone and ethinyl estradiol; consider this effect when selecting an oral contraceptive (7.3 ). Digoxin: May increase digoxin plasma levels; monitor patients appropriately ( 7.3 ). 7.1 Drug Interactions that may Increase the Risk of Myopathy and Rhabdomyolysis with Atorvastatin Calcium Atorvastatin is a substrate of CYP3A4 and transporters (e.g., OATP1B1/1B3, P-gp, or BCRP).\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"grapefruit juice, rifampin, oral contraceptives, digoxin\"}",
+  "elapsed_ms": 1461,
+  "usage": {
+    "input_tokens": 507,
+    "output_tokens": 26
+  }
+}

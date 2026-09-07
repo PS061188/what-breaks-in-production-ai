@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe label excerpt provided contains limited specific drug interaction information. However, it highlights several important interaction principles:\n\n**Key Interaction Points from the Label:**\n\n1. **Heparin** - Increases the INR and requires special monitoring:\n   - Check INR at least 5 hours after last IV bolus of heparin\n   - Check at least 4 hours after stopping continuous IV infusion\n   - Check at least 24 hours after last subcutaneous injection\n   - Overlap heparin and warfarin for 4-5 days until therapeutic INR achieved\n\n2. **General Drug Interactions** - The label notes that:\n   - Warfarin's anticoagulant effect \"may be affected by other drugs\"\n   - Additional INR testing is needed \"whenever other medications are initiated, discontinued, or taken irregularly\"\n   - Dietary vitamin K affects warfarin action\n\n**Clinical Guidance:**\n\nWarfarin has a **narrow therapeutic index** and is subject to numerous drug interactions. The full label or drug interaction database should be consulted for specific agents, but common interactors include:\n\n- **CYP2C9 inhibitors** (increase warfarin levels): NSAIDs, amiodarone, fluconazole, metronidazole, sulfonamides\n- **CYP2C9 inducers** (decrease warfarin levels): rifampin, barbiturates, carbamazepine\n- **Platelet inhibitors**: Aspirin, clopidogrel (increased bleeding risk)\n- **Other anticoagulants**: Direct oral anticoagulants\n\n**Best Practice:** Always review complete drug interaction databases and increase INR monitoring frequency when initiating, discontinuing, or changing doses of concomitant medications.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1589,
+  "usage": {
+    "input_tokens": 955,
+    "output_tokens": 17
+  }
+}

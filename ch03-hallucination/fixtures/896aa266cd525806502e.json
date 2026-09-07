@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the provided label excerpt, the specific drug interactions mentioned are:\n\n1. **Monoamine Oxidase Inhibitors (MAOIs)** - intended to treat psychiatric disorders:\n   - Allow at least 14 days between discontinuing an MAOI and starting Sertraline hydrochloride\n   - Allow at least 14 days after stopping Sertraline hydrochloride before starting an MAOI\n\n2. **Other MAOIs - Linezolid and Intravenous Methylene Blue:**\n   - Do not start Sertraline hydrochloride in patients currently being treated with linezolid or intravenous methylene blue due to increased risk of serotonin syndrome\n   - If a patient on Sertraline requires urgent treatment with these agents, stop Sertraline promptly\n   - If linezolid or methylene blue is discontinued, Sertraline may be resumed 24 hours after the last dose\n   - Monitor patients for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last dose of linezolid/methylene blue\n   - Risk with non-intravenous methylene blue (oral tablets, local injection) or very low IV doses is unclear, but clinicians should be aware of possible serotonin syndrome symptoms\n\nNote: The label excerpt provided does not contain a comprehensive drug interactions section. For a complete list of potential drug interactions with Sertraline hydrochloride, you would need to consult the full prescribing information, particularly the INTERACTIONS or CONTRAINDICATIONS sections not included in this excerpt.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3158,
+  "usage": {
+    "input_tokens": 911,
+    "output_tokens": 17
+  }
+}

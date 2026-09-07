@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Metformin Hydrochloride indicated to treat?\n\nRESPONSE:\n**Indication (per label):** Metformin hydrochloride tablets are indicated as an **adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus.**\n\nThat is the sole FDA-approved indication on this label. A few practical points to keep in mind when prescribing:\n\n**What it is NOT indicated for**\n- Type 1 diabetes mellitus — metformin is not a substitute for insulin and does not treat insulin deficiency.\n- Diabetic ketoacidosis — this requires insulin and is a setting where metformin is contraindicated.\n- Children under 10 years of age — safety and effectiveness have not been established.\n\n**Common off-label / guideline-supported uses (not on this label)**\n- Prediabetes / diabetes prevention (supported by the Diabetes Prevention Program and ADA guidance, particularly in patients with BMI ≥35, age <60, or prior gestational diabetes).\n- Polycystic ovary syndrome — for insulin resistance, menstrual irregularity, and ovulation induction.\n- Antipsychotic-associated weight gain mitigation.\n- Gestational diabetes / diabetes in pregnancy in selected patients, though insulin remains first-line in the U.S.\n\n**Role in therapy**\nMetformin remains the preferred initial pharmacologic agent for type 2 diabetes in most patients because of its efficacy (typically ~1–1.5% A1c reduction), weight neutrality, low hypoglycemia risk as monotherapy, and cost. It may be used alone or in combination with sulfonylureas, DPP-4 inhibitors, SGLT2 inhibitors, GLP-1 receptor agonists, thiazolidinediones, or insulin. Note that in patients with established ASCVD, heart failure, or CKD, current guidelines favor adding an SGLT2 inhibitor or GLP-1 receptor agonist for organ protection regardless of whether metformin is on board or the A1c is at goal.\n\n**Key prescribing caveats tied to the indication**\n- Check eGFR before starting and at least annually: contraindicated below 30 mL/min/1.73 m²; do not initiate between 30–45; reassess risk/benefit if eGFR falls below 45.\n- Hold at or before iodinated contrast imaging if eGFR is 30–60, if intra-arterial contrast is planned, or if there is a history of liver disease, alcoholism, or heart failure; recheck eGFR at 48 hours and resume if stable.\n- Boxed warning for lactic acidosis — risk rises with renal impairment, hepatic impairment, excessive alcohol intake, hypoxic states, sepsis, and acute dehydration.\n- Titrate slowly with meals to limit GI intolerance; consider extended-release if diarrhea or nausea limits therapy.\n- Monitor vitamin B12 periodically, especially with long-term use, anemia, or peripheral neuropathy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1811,
+  "usage": {
+    "input_tokens": 1389,
+    "output_tokens": 17
+  }
+}

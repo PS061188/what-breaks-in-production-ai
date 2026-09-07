@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nMetformin Hydrochloride Tablets The safety and effectiveness of metformin hydrochloride tablets for the treatment of type 2 diabetes mellitus have been established in pediatric patients 10 to 16 years old. Safety and effectiveness of metformin hydrochloride tablets have not been established in pediatric patients less than 10 years old. Use of metformin hydrochloride tablets in pediatric patients 10 to 16 years old for the treatment of type 2 diabetes mellitus is supported by evidence from adequate and well-controlled studies of metformin hydrochloride tablets in adults with additional data from a controlled clinical study in pediatric patients 10 to 16 years old with type 2 diabetes mellitus, which demonstrated a similar response in glycemic control to that seen in adults [ see Clinical Studies (14.1) ] . In this study, adverse reactions were similar to those described in adults. A maximum daily dose of 2000 mg of metformin hydrochloride tablets is recommended. [ see Dosage and Administration (2.2) . ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"pediatric_use\"}",
+  "elapsed_ms": 2381,
+  "usage": {
+    "input_tokens": 700,
+    "output_tokens": 12
+  }
+}

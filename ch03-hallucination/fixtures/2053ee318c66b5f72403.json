@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Atorvastatin Calcium?\n\nRESPONSE:\nI have to be upfront with you: the label excerpt I was given only contains the Indications and Usage and Dosage and Administration sections for atorvastatin calcium tablets — it does not include the Adverse Reactions section, so I can't quote the labeled list of most common adverse reactions from this source.\n\nGenerally, for atorvastatin, the adverse reactions most commonly reported in clinical trials (per the full prescribing information) include nasopharyngitis, joint pain (arthralgia), diarrhea, pain in the extremities, and urinary tract infection. Muscle-related symptoms (myalgia, muscle weakness), elevated liver enzymes, and increases in blood sugar/HbA1c are also recognized concerns with statins, and rare but serious risks include myopathy/rhabdomyolysis and immune-mediated necrotizing myopathy.\n\nPlease check Section 6 (Adverse Reactions) of the complete prescribing information for your specific product, or ask your pharmacist or prescriber, for the authoritative list. Contact your healthcare provider promptly if you develop unexplained muscle pain, tenderness, or weakness — especially with fever or dark urine — or symptoms of liver problems such as unusual fatigue, upper abdominal pain, dark urine, or yellowing of the skin or eyes.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1648,
+  "usage": {
+    "input_tokens": 819,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Levothyroxine Sodium for pediatric patients?\n\nRESPONSE:\nRecommended starting daily dosages for pediatric patients (mcg/kg/day): 0–3 months: 10–15 mcg/kg/day; 3–6 months: 8–10 mcg/kg/day; 6–12 months: 6–8 mcg/kg/day; 1–5 years: 5–6 mcg/kg/day; 6–12 years: 4–5 mcg/kg/day; >12 years but growth/puberty incomplete: 2–3 mcg/kg/day; growth and puberty complete: 1.6 mcg/kg/day. Titrate every ~2 weeks as needed based on serum TSH and/or free‑T4 and clinical response. Special considerations: start lower and increase more slowly in infants at risk for cardiac failure; for patients at risk of hyperactivity start at one‑fourth the full replacement dose and increase weekly by one‑fourth until full dose. If the child cannot swallow tablets, crush and immediately suspend in 5–10 mL water and give right away (do not store).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2674,
+  "usage": {
+    "input_tokens": 729,
+    "output_tokens": 17
+  }
+}

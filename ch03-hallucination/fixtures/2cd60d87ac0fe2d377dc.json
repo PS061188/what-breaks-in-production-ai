@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Metformin Hydrochloride?\n\nRESPONSE:\n**Adults (≥18 years)**\n- Starting dose: **500 mg orally twice daily** OR **850 mg orally once daily**, always **taken with meals** (reduces GI upset).\n- Titration: increase by **500 mg weekly** or **850 mg every 2 weeks**, guided by glycemic response and tolerability.\n- Maximum: **2550 mg/day** in divided doses. Doses >2000 mg/day are often better tolerated when split **three times daily with meals**.\n\n**Pediatric patients ≥10 years**\n- Starting dose: **500 mg orally twice daily with meals**.\n- Titration: increase by **500 mg weekly**.\n- Maximum: **2000 mg/day**, given in **two divided doses**.\n\n**Before starting / practical points**\n- **Check renal function (eGFR) before initiation and at least annually** (more often if eGFR <60 or in patients at risk of renal decline).\n  - eGFR <30 mL/min/1.73 m²: **contraindicated** — do not use; discontinue if eGFR falls below this on therapy.\n  - eGFR 30–45: **do not initiate**; if already on therapy and eGFR drops below 45, reassess risk/benefit (many clinicians reduce to ~1000 mg/day maximum).\n  - eGFR ≥45: standard dosing.\n- **Iodinated contrast:** hold metformin at or before the procedure if eGFR 30–60, if intra-arterial contrast is planned, or if there is a history of liver disease, alcoholism, or heart failure. Recheck eGFR 48 hours later and restart only if renal function is stable.\n- **Tolerability:** starting low (e.g., 500 mg once daily with the evening meal for the first week) and titrating slowly, or using the extended-release formulation, markedly reduces diarrhea/nausea. GI effects are usually transient.\n- **Counsel on lactic acidosis risk factors** (renal impairment, excessive alcohol, hypoxic states, sepsis, dehydration, acute heart failure) and to hold the drug during acute illness with volume depletion.\n- **Monitor vitamin B12** periodically (every 1–2 years or if anemia/neuropathy develops), as long-term use can cause malabsorption.\n- Metformin monotherapy does not typically cause hypoglycemia, but risk rises when combined with insulin or sulfonylureas — consider lowering those agents as metformin is titrated.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1874,
+  "usage": {
+    "input_tokens": 1206,
+    "output_tokens": 17
+  }
+}

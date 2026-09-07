@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Levothyroxine Sodium indicated to treat?\n\nRESPONSE:\nLevothyroxine sodium tablets are indicated for two main conditions:\n\n1. **Hypothyroidism**: As replacement therapy in adult and pediatric patients (including neonates) with primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism.\n\n2. **Pituitary Thyrotropin (TSH) Suppression**: As an adjunct to surgery and radioiodine therapy in adult and pediatric patients (including neonates) for the management of thyrotropin-dependent well-differentiated thyroid cancer.\n\n**Important Limitations of Use**:\n- NOT indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients (no clinical benefits; overtreatment may induce hyperthyroidism)\n- NOT indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1441,
+  "usage": {
+    "input_tokens": 705,
+    "output_tokens": 17
+  }
+}

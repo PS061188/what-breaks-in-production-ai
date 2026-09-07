@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the provided label excerpt, the following drug interactions are specifically mentioned:\n\n1. **Monoamine Oxidase Inhibitors (MAOIs) for psychiatric disorders**: At least 14 days must elapse between discontinuation of an MAOI and initiation of sertraline hydrochloride, and vice versa (at least 14 days after stopping sertraline before starting an MAOI).\n\n2. **Linezolid**: Do not start sertraline hydrochloride in patients receiving linezolid due to increased risk of serotonin syndrome. If a patient already on sertraline requires linezolid, the drug should be stopped promptly. Sertraline may be resumed 24 hours after the last dose of linezolid. Monitor for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last linezolid dose.\n\n3. **Intravenous Methylene Blue**: Similar precautions apply as with linezolid—do not start sertraline in patients receiving IV methylene blue due to serotonin syndrome risk. If urgent treatment is needed, stop sertraline, administer methylene blue, and monitor for serotonin syndrome for 2 weeks or 24 hours after the last dose, whichever is first. Resume sertraline 24 hours after the last methylene blue dose.\n\n4. **Oral Methylene Blue and Local Injection Methylene Blue**: The risk is unclear, but clinicians should be aware of possible serotonin syndrome emergence.\n\nNote: The label excerpt provided does not include a comprehensive interaction section, so other potential interactions may exist in the full prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1468,
+  "usage": {
+    "input_tokens": 923,
+    "output_tokens": 17
+  }
+}

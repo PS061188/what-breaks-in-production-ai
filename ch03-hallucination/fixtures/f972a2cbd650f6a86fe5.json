@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nFor adults with hypothyroidism the usual full replacement starting dose is 1.6 mcg/kg/day. Patients at risk for atrial fibrillation, with underlying cardiac disease, or geriatric patients should start at a lower dose (<1.6 mcg/kg/day) and be titrated more slowly. Pediatric starting doses (by age, mcg/kg/day): 0–3 months: 10–15; 3–6 months: 8–10; 6–12 months: 6–8; 1–5 years: 5–6; 6–12 years: 4–5; >12 years with incomplete growth/puberty: 2–3; growth/puberty complete: 1.6. (Titrate per label every 2–6 weeks as appropriate.)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1909,
+  "usage": {
+    "input_tokens": 629,
+    "output_tokens": 17
+  }
+}

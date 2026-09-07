@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Amoxicillin?\n\nRESPONSE:\nFor this suspension (600 mg amoxicillin per 5 mL), the recommended dose is 90 mg/kg/day of amoxicillin (based on the amoxicillin component), given divided every 12 hours (administered for 10 days). (E.g., this is the 90 mg/kg/day dose listed in the label.)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1761,
+  "usage": {
+    "input_tokens": 485,
+    "output_tokens": 17
+  }
+}

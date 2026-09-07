@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nOmeprazole has several clinically significant drug interactions to consider:\n\nMAJOR INTERACTIONS:\n• Clopidogrel (Plavix) - Omeprazole reduces the antiplatelet effect of clopidogrel, potentially increasing cardiovascular risk. Avoid this combination or consider alternative antiplatelet/PPI combinations.\n• Methotrexate - Increased methotrexate levels and toxicity risk\n• Atazanavir and other protease inhibitors - Reduced absorption due to increased gastric pH\n• Ketoconazole and other azole antifungals - Reduced antifungal absorption\n\nMODERATE INTERACTIONS:\n• Digoxin - Potential increased digoxin levels\n• Warfarin - May increase INR and bleeding risk; monitor INR closely\n• Mycophenolate - Reduced absorption and efficacy\n• Iron supplements and calcium - Reduced absorption (take separately)\n• Levothyroxine - Reduced absorption (separate dosing by 30+ minutes)\n• Ampicillin, iron salts, bisphosphonates - Absorption reduced by elevated gastric pH\n\nOTHER CONSIDERATIONS:\n• Omeprazole is a CYP2C19 and CYP3A4 inhibitor, potentially increasing levels of drugs metabolized by these pathways (e.g., some benzodiazepines, certain anticonvulsants)\n• Long-term use may affect absorption of B12, magnesium, and calcium\n\nAlways review the patient's complete medication list and consider therapeutic alternatives or dosing adjustments as needed. The label provided focuses on OTC use for frequent heartburn and doesn't address interactions in detail, so consultation of a comprehensive drug interaction database is recommended for specific patient situations.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 679,
+    "output_tokens": 11
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nFor pediatric patients with partial-onset seizures (age ≥3 years):\n\n- Age 3 to 11 years: start 10–15 mg/kg/day divided TID, titrate up over ~3 days to the recommended maintenance dose. Recommended maintenance: \n  - 3–4 years: 40 mg/kg/day divided TID\n  - 5–11 years: 25–35 mg/kg/day divided TID\n  (Doses up to 50 mg/kg/day have been tolerated in long-term studies.)\n\n- Age ≥12 years: use adult dosing — start 300 mg TID; maintenance 300–600 mg TID (dosages up to 2400 mg/day commonly used; higher doses have been given in some patients).\n\nAdministration notes: give orally with or without food, capsules swallowed whole; maximum interval between doses should not exceed 12 hours. Gabapentin is not indicated for children <3 years for these indications, and dosing adjustment for renal impairment in children <12 years has not been studied.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2099,
+  "usage": {
+    "input_tokens": 718,
+    "output_tokens": 17
+  }
+}

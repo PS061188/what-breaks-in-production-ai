@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Amoxicillin for pediatric patients?\n\nRESPONSE:\nFor pediatric patients aged 3 months to 12 years weighing ≤40 kg, the recommended dose of amoxicillin and clavulanate potassium oral suspension (600 mg/42.9 mg per 5 mL) is 90 mg/kg/day of the amoxicillin component, divided and administered every 12 hours for 10 days.\n\nDosing table example: A child weighing 20 kg would receive 7.5 mL twice daily; a 40 kg child would receive 15 mL twice daily.\n\nKey administration points:\n- Administer at the start of a meal to minimize gastrointestinal intolerance and enhance clavulanate absorption\n- This dose provides approximately 6.4 mg/kg/day of the clavulanic acid component\n- The oral suspension must be refrigerated and discarded after 10 days\n- Shake well before each use\n\nNote: This formulation is specifically indicated for recurrent or persistent acute otitis media in patients with specific risk factors (prior antibacterial exposure within 3 months plus either age ≤2 years or daycare attendance). For patients weighing >40 kg or adults, experience with this specific formulation is not available.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 575,
+    "output_tokens": 11
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Prednisone safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt provided does not address prednisone safety during pregnancy. This is an important clinical question that requires consultation of additional resources beyond this label.\n\nFrom standard pharmacology and clinical practice: Prednisone is generally considered relatively safe in pregnancy when clinically necessary, particularly at lower doses. It is FDA Pregnancy Category C (now part of the Pregnancy and Lactation Labeling Rule). The placenta metabolizes prednisone to the less active prednisolone, which provides some protection to the fetus. However, systemic corticosteroid use in pregnancy carries potential risks including:\n\n- First trimester exposure: Small increased risk of cleft palate (rare)\n- Third trimester exposure: Risk of adrenal insufficiency in the newborn (if high doses used near delivery)\n- Prematurity and growth restriction with prolonged use\n\nThe decision to use prednisone in pregnancy should weigh the maternal benefits against potential fetal risks. Many conditions treated with prednisone (lupus, severe asthma exacerbations, adrenal insufficiency) may pose greater risks if untreated during pregnancy.\n\nFor any pregnant patient requiring prednisone, consultation with obstetrics and the relevant specialist is strongly recommended to determine whether treatment is indicated and to establish the lowest effective dose for the shortest duration necessary.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 570,
+    "output_tokens": 11
+  }
+}

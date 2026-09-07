@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Furosemide?\n\nRESPONSE:\nShort answer: the excerpt you've given me is only the Indications and Dosage sections, so it does not contain furosemide's full DRUG INTERACTIONS section. The only interaction actually described in this text is with other antihypertensive drugs.\n\nWhat the excerpt does say:\n• Other antihypertensive agents – Furosemide potentiates their blood‑pressure‑lowering effect. Blood pressure must be monitored carefully, especially at the start of therapy. When furosemide is added to an existing regimen, the dose of the other antihypertensive agent(s) should be reduced by at least 50%, and further reduction or even discontinuation may be needed as blood pressure falls.\n\nBeyond this excerpt: the complete furosemide label contains a separate 'Drug Interactions' subsection under PRECAUTIONS that lists additional clinically important interactions (for example, aminoglycosides and other ototoxic drugs, nephrotoxic agents such as cisplatin, lithium, NSAIDs/salicylates, corticosteroids/ACTH, digitalis glycosides, sucralfate, cyclosporine, and neuromuscular blockers, among others). I can't confirm the exact wording or the full list from the text provided—please consult the complete prescribing information or a pharmacist for a definitive interaction review, particularly before combining furosemide with any new medication.\n\nThis is general information, not a substitute for advice from your prescriber or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2159,
+  "usage": {
+    "input_tokens": 851,
+    "output_tokens": 17
+  }
+}

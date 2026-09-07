@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Amoxicillin safe to use during pregnancy?\n\nRESPONSE:\nI can't answer that from the label excerpt I've been given. The text provided here only covers the Indications and Usage and Dosage and Administration sections for amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL — it does not include Section 8.1 (Pregnancy) or any other Use in Specific Populations content, so there is no pregnancy safety information in this excerpt for me to summarize.\n\nA few things worth noting:\n\n- This particular product is a high-dose pediatric oral suspension indicated only for children aged 3 months to 12 years weighing 40 kg or less. The label explicitly states that experience with this formulation in adults is not available, and that adults who have trouble swallowing should not be given it in place of the 500 mg or 875 mg tablets. So this specific product would not normally be the formulation used in a pregnant patient.\n- For actual pregnancy guidance, the full prescribing information for the appropriate amoxicillin (or amoxicillin/clavulanate) product contains a Pregnancy subsection under Use in Specific Populations, which is where that risk information is described.\n\nPlease talk with your obstetric provider or pharmacist before taking any antibiotic during pregnancy — they can weigh the specific infection, the drug and formulation, gestational age, and your medical history. If you can share the full label or the specific product being considered, I'm happy to walk through what its pregnancy section says.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1801,
+  "usage": {
+    "input_tokens": 850,
+    "output_tokens": 16
+  }
+}

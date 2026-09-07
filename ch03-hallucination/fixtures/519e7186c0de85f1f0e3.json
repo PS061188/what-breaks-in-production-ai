@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Furosemide for pediatric patients?\n\nRESPONSE:\nFor pediatric patients (oral furosemide tablets, for edema), the label states:\n\n- **Initial dose:** 2 mg/kg body weight, given as a single dose.\n- **Titration:** If the diuretic response is not satisfactory after the initial dose, the dose may be increased by 1 to 2 mg/kg, given no sooner than 6 to 8 hours after the previous dose.\n- **Maximum:** Doses greater than 6 mg/kg body weight are not recommended.\n- **Maintenance:** The dose should be adjusted to the minimum effective level.\n\nNote that the labeled pediatric indication is for edema associated with congestive heart failure, cirrhosis of the liver, and renal disease (including nephrotic syndrome); the hypertension indication and dosing (usually 80 mg/day divided as 40 mg twice daily) apply to adults only. Therapy should always be individualized based on patient response, with appropriate clinical and laboratory monitoring. This information is from the label excerpt provided and is not a substitute for the prescriber's clinical judgment.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1657,
+  "usage": {
+    "input_tokens": 736,
+    "output_tokens": 17
+  }
+}

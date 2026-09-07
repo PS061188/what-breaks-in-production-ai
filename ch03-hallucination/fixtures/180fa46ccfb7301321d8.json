@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Albuterol Sulfate safe to use during pregnancy?\n\nRESPONSE:\nI can't answer that from the label excerpt I have. The text provided here only covers the indications (treatment/prevention of bronchospasm in reversible obstructive airway disease and prevention of exercise-induced bronchospasm in patients 4 years and older) and dosage/administration instructions (including priming and cleaning). It does not include Section 8.1 Pregnancy or any other Use in Specific Populations information.\n\nGenerally speaking, decisions about asthma medications in pregnancy involve weighing the risks of poorly controlled asthma — which can itself harm both the pregnant person and the fetus — against any potential medication risks, and short-acting inhaled beta-2 agonists are commonly used in pregnancy. However, you should not rely on that general statement in place of the actual labeling.\n\nTo get an accurate answer, please review the full prescribing information (Section 8.1 Pregnancy) for this specific product, and discuss your situation with your obstetrician, pulmonologist, or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 2079,
+  "usage": {
+    "input_tokens": 707,
+    "output_tokens": 16
+  }
+}

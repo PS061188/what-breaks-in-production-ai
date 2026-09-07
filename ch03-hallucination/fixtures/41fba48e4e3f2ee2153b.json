@@ -1,0 +1,27 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Prednisone safe to use during pregnancy?\n\nRESPONSE:\nShort answer: the label excerpt you've given me here (indications and dosing sections only) doesn't contain the pregnancy information, so I can't quote it directly — and prednisone use in pregnancy is a decision that needs to be made with your prescriber.\n\nWhat the full prednisone labeling generally says (from the Precautions/Pregnancy sections of standard prednisone labels):\n\n- Corticosteroids cross the placenta. In animal studies, corticosteroids given in large or repeated doses have been associated with an increased incidence of fetal abnormalities (e.g., cleft palate). Adequate human reproduction studies have not been done.\n- Therefore, prednisone should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus.\n- Infants born to mothers who received substantial corticosteroid doses during pregnancy should be carefully observed for signs of hypoadrenalism (adrenal insufficiency).\n- Corticosteroids are excreted in breast milk and can potentially suppress growth or interfere with endogenous corticosteroid production in a nursing infant, so caution is advised when given to a nursing mother.\n\nPractical context: prednisone is nevertheless commonly used in pregnancy when needed for conditions such as asthma, lupus, inflammatory bowel disease, or transplant/autoimmune disease, because uncontrolled maternal disease also carries risk. Clinicians typically aim for the lowest effective dose and monitor for maternal effects such as elevated blood pressure, gestational diabetes, and infection.\n\nBottom line: it is not classified as clearly \"safe,\" but it may be appropriate when the benefit outweighs the risk. Do not start, stop, or change the dose on your own — abrupt discontinuation after prolonged therapy can be dangerous. Discuss it with your obstetrician and the prescribing physician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2552,
+  "usage": {
+    "input_tokens": 992,
+    "output_tokens": 63
+  }
+}

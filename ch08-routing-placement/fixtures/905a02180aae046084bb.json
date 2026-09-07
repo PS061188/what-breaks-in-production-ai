@@ -1,0 +1,82 @@
+{
+  "model": "gpt-4.1-mini",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Albuterol Sulfate HFA is a beta 2 -adrenergic agonist indicated for: Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. ( 1.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older. ( 1.2 ) 1.1 Bronchospasm Albuterol Sulfate HFA Inhalation Aerosol is indicated for the treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. 1.2 Exercise-Induced Bronchospasm Albuterol Sulfate HFA is indicated for the prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older.\n\n[contraindications]\n4 CONTRAINDICATIONS Albuterol Sulfate HFA is contraindicated in patients with a history of hypersensitivity to any of the ingredients [see Warnings and Precautions ( 5.6 ), Description ( 11 )] . Hypersensitivity to any ingredient. ( 4 )\n\n[adverse_reactions]\n6 ADVERSE REACTIONS The following clinically significant adverse reactions are described elsewhere in the labeling: Paradoxical bronchospasm [see Warnings and Precautions ( 5.1 )] Cardiovascular effects [see Warnings and Precautions ( 5.4 )] Hypersensitivity reactions, including anaphylaxis [see Warnings and Precautions ( 5.6 )] Hypokalemia [see Warnings and Precautions ( 5.8 )] Most common adverse reactions (incidence ≥3%) are throat irritation, viral respiratory infections, upper respiratory inflammation, cough, and musculoskeletal pain. ( 6.1 ) To report SUSPECTED ADVERSE REACTIONS, contact Prasco Laboratories at 1-866-525-0688 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared with rates in the clinical trials of another drug and may not reflect the rates observed in practice. The safety data described below reflects exposure to albuterol sulfate HFA in 248 subjects treated with albuterol sulfate HFA in 3 placebo-controlled clinical trials of 2 to 12 weeks’ duration. The data from adults and adolescents is based upon 2 clinical trials in which 202 subjects with asthma aged 12 years and older were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 12 weeks’ duration. The adult/adolescent population was 92 female, 110 male and 163 white, 19 black, 18 Hispanic, 2 other. The data from pediatric subjects are based upon 1 clinical trial in which 46 subjects with asthma aged 4 to 11 years were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 2 weeks’ duration. The population was 21 female, 25 male and 25 white, 17 black, 3 Hispanic, 1 other. Adult and Adolescent Subjects Aged 12 Years and Older The two 12-week, randomized, double-blind trials in 610 adult and adolescent subjects with asthma that compared albuterol sulfate HFA, a CFC 11/12-propelled albuterol inhaler, and an HFA-134a placebo inhaler. Overall, the incidence and nature of the adverse reactions reported for albuterol sulfate HFA and a CFC 11/12‑propelled albuterol inhaler were c\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\":{\"value\":\"Albuterol Sulfate HFA is indicated for the treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease, and for the prevention of exercise-induced bronchospasm in the same population.\",\"source_quote\":\"Albuterol Sulfate HFA is a beta 2 -adrenergic agonist indicated for: Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. ( 1.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older. ( 1.2 )\",\"source_section\":\"INDICATIONS AND USAGE\"},\"who_must_not_take_it\":{\"value\":\"Albuterol Sulfate HFA is contraindicated in patients with a history of hypersensitivity to any of the ingredients.\",\"source_quote\":\"Albuterol Sulfate HFA is contraindicated in patients with a history of hypersensitivity to any of the ingredients\",\"source_section\":\"CONTRAINDICATIONS\"},\"side_effects\":{\"value\":\"Most common adverse reactions include throat irritation, viral respiratory infections, upper respiratory inflammation, cough, and musculoskeletal pain. Other significant adverse reactions include paradoxical bronchospasm, cardiovascular effects, hypersensitivity reactions including anaphylaxis, and hypokalemia.\",\"source_quote\":\"Most common adverse reactions (incidence \\u0002653%) are throat irritation, viral respiratory infections, upper respiratory inflammation, cough, and musculoskeletal pain. The following clinically significant adverse reactions are described elsewhere in the labeling: Paradoxical bronchospasm [see Warnings and Precautions ( 5.1 )] Cardiovascular effects [see Warnings and Precautions ( 5.4 )] Hypersensitivity reactions, including anaphylaxis [see Warnings and Precautions ( 5.6 )] Hypokalemia [see Warnings and Precautions ( 5.8 )]\",\"source_section\":\"ADVERSE REACTIONS\"}}",
+  "elapsed_ms": 9595,
+  "usage": {
+    "input_tokens": 975,
+    "output_tokens": 413
+  }
+}

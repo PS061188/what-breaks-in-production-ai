@@ -1,0 +1,212 @@
+<!-- ==================== THE REPRODUCIBILITY SWEEP ==================== -->
+<h2 class="part">The reproducibility sweep</h2>
+
+<h3 class="top">Every experiment, run three times, compared with what was published</h3>
+
+<p class="lede">This is the last experiment in the report and the one that should
+change how the rest of it is read. Nothing in this project was measured twice
+until the very end. When six chapters were finally run three times each,
+<strong>eight of fourteen published headline figures fell outside the range their
+own code reproduces</strong>.</p>
+
+<h4>Why this was run at all</h4>
+
+<p>Repeating things had already overturned four numbers by accident — a null that
+turned out to be a real effect, a fix whose benefit vanished against a fair
+baseline, a fix that made one measure worse, and a false-alarm rate that did not
+reproduce. Each was found while re-running something for an unrelated reason.</p>
+
+<p>So a small harness was built — <code>repeat.py</code>, which runs any experiment
+N times and prints every headline across runs, flagging the ones that moved — and
+pointed at the six cheapest chapters.</p>
+
+<div class="plain">
+  <span class="label">The harness had a bug on its first run, and the bug is instructive</span>
+  <p>The pattern that finds headline lines was compiled without the flag that lets
+  it match a line in the middle of a block of text. It therefore matched
+  <strong>nothing</strong>, in every run — and the script cheerfully reported that
+  no measure had moved.</p>
+  <p><strong>Forty-two live API calls produced a clean bill of health that was
+  really an empty result set.</strong> A check that cannot fire looks exactly like
+  a check that passed. That is the thesis of this entire book, committed by the
+  tool built to enforce it, and it cost $3.40 to learn twice.</p>
+  <p>The harness now refuses to report agreement when it parses zero headlines.</p>
+</div>
+
+<h4>What was run</h4>
+
+<table>
+  <tr><th style="width:30%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Scripts</strong></td>
+      <td>14, covering chapters 2, 6, 7, 8, 9 and 10</td></tr>
+  <tr><td><strong>Runs</strong></td><td>3 each, live, 42 in total</td></tr>
+  <tr><td><strong>Cost</strong></td><td><strong>$3.38</strong></td></tr>
+  <tr><td><strong>Not covered</strong></td>
+      <td>Chapters 3 and 5 (already run five times each) and
+      Chapter 4 was added afterwards under a hard $3.76 ceiling, 2 runs of the
+      baseline and 1 of the fix</td></tr>
+</table>
+
+<p>Of 53 measures, <strong>20 moved between runs and 33 held.</strong></p>
+
+<h4>Published figure against its own three-run range</h4>
+
+<table>
+  <tr><th class="num" style="width:6%">Ch</th><th style="width:38%">Measure</th>
+      <th class="num">Published</th><th class="num">3-run range</th><th class="num">Verdict</th></tr>
+  <tr><td class="num">2</td><td><strong>Silent corruption rate</strong></td>
+      <td class="num">59%</td><td class="num">34&ndash;56%</td>
+      <td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">2</td><td>Corruptions surviving the fix</td>
+      <td class="num">10%</td><td class="num">5&ndash;7%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">6</td><td>Asserted a dose not in the excerpt</td>
+      <td class="num">10%</td><td class="num">3&ndash;5%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">6</td><td>Answers changed with a stale index</td>
+      <td class="num">100%</td><td class="num">83&ndash;100%</td><td class="num">inside</td></tr>
+  <tr><td class="num">7</td><td><strong>Out-of-scope / noise answered anyway</strong></td>
+      <td class="num">0%</td><td class="num">2&ndash;4%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">7</td><td>Aggregate correctness, baseline</td>
+      <td class="num">100%</td><td class="num">99%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">7</td><td>Aggregate correctness, fixed</td>
+      <td class="num">82%</td><td class="num">83%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">7</td><td>Legitimate queries answered, fixed</td>
+      <td class="num">46%</td><td class="num">48&ndash;50%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">8</td><td>Wrong section named for own quote</td>
+      <td class="num">18%</td><td class="num">3&ndash;15%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+  <tr><td class="num">8</td><td>Placement error rate</td>
+      <td class="num">3%</td><td class="num">0&ndash;3%</td><td class="num">inside</td></tr>
+  <tr><td class="num">9</td><td>Recall on fields the document covers</td>
+      <td class="num">92%</td><td class="num">92&ndash;96%</td><td class="num">inside</td></tr>
+  <tr><td class="num">10</td><td>Dose figures returned</td>
+      <td class="num">96%</td><td class="num">96&ndash;100%</td><td class="num">inside</td></tr>
+  <tr><td class="num">10</td><td>Documents where something was dropped</td>
+      <td class="num">0%</td><td class="num">0&ndash;17%</td><td class="num">inside</td></tr>
+  <tr><td class="num">10</td><td>Model's count vs the independent count</td>
+      <td class="num">0%</td><td class="num">0&ndash;17%</td><td class="num">inside</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">An honest limit on reading that table</span>
+  <p>"Outside" does not always mean sampling noise. Several of these experiments
+  had genuine bugs fixed between the published run and this sweep — Chapter 8's
+  18% was already known to be a checker artefact, and Chapter 2 excluded a class of
+  no-op corruption. <strong>Some of the movement is corrected code, not
+  variance.</strong></p>
+  <p>The two cannot be cleanly separated after the fact, which is itself the
+  argument: <em>a number recorded once, from code that later changed, cannot be
+  audited.</em> The conclusion holds either way — no figure in this report should
+  appear without a spread beside it.</p>
+</div>
+
+<h4>The three that matter most</h4>
+
+<div class="verdict">
+  <span class="label">1 &middot; Chapter 7's failure does reproduce, at a low rate</span>
+  <p>Published: <strong>0 of 48</strong> out-of-scope or noise queries answered.
+  Observed: <strong>1, 1 and 2 of 48</strong> — every run non-zero.</p>
+  <p>"Zero" is a categorically stronger claim than "two percent". The book lists
+  this among the failures that <em>did not reproduce on current models</em>. It
+  reproduces. It is simply rare, and one run happened to catch none of it.</p>
+</div>
+
+<div class="verdict">
+  <span class="label">2 &middot; Chapter 2's headline sits above everything it can reproduce</span>
+  <p>Published: <strong>59%</strong>. Observed: <strong>49%, 56%, 34%</strong>.</p>
+  <p>A 22-point spread on the chapter's central number, and the published figure
+  is higher than any of the three re-runs. Whatever the cause, the chapter should
+  say <em>roughly a third to a half</em> and not a two-digit precision figure.</p>
+</div>
+
+<div class="verdict">
+  <span class="label">3 &middot; Chapter 4 was run afterwards, and it holds</span>
+  <p>Chapter 4 was held back on cost, then run under a hard $3.76 ceiling. Its
+  baseline is <strong>stable</strong>:</p>
+</div>
+
+<table>
+  <tr><th style="width:38%">Measure</th><th class="num">Published</th>
+      <th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Verdict</th></tr>
+  <tr><td>Classification accuracy, baseline</td><td class="num">91%</td>
+      <td class="num">92%</td><td class="num">91%</td><td class="num">inside</td></tr>
+  <tr><td>Errors that arrived stamped HIGH</td><td class="num">78%</td>
+      <td class="num">75%</td><td class="num">89%</td><td class="num">inside</td></tr>
+  <tr><td>Cascade rate</td><td class="num">&mdash;</td>
+      <td class="num">50% (4/8)</td><td class="num">44% (4/9)</td><td class="num">&mdash;</td></tr>
+  <tr><td><strong>Accuracy, the fixed arm</strong></td>
+      <td class="num"><strong>100%</strong> (91/91)</td>
+      <td class="num"><strong>98%</strong> (92/94)</td>
+      <td class="num"><strong>98%</strong> (92/94)</td>
+      <td class="num"><strong>OUTSIDE</strong></td></tr>
+</table>
+
+<p><strong>The chapter's central claim survives.</strong> Errors were 8 and 9 of
+96 against a published 9 &mdash; the failure really is rare on clean,
+well-taxonomised input, and unlike Chapter 7 this one does not change on
+repetition.</p>
+
+<div class="plain">
+  <span class="label">The 100% does not reproduce — confirmed</span>
+  <p>The fix was published at <strong>100% accuracy (91/91)</strong>. Three live
+  runs all return <strong>98% (92/94)</strong>. The denominator also moved, 91 to
+  94, because the ensemble discards cases its members disagree on before scoring:
+  <strong>part of "100%" was a denominator choice rather than a score.</strong></p>
+</div>
+
+<h4>The finding nobody was looking for: the ensemble does not move at all</h4>
+
+<p>Three live runs of the ensemble returned <strong>bit-identical numbers on all
+ten of its measures</strong>. Not similar — identical. Meanwhile the single
+classifier moved on every measure it reports:</p>
+
+<table>
+  <tr><th style="width:44%">Measure</th><th class="num">Run 1</th><th class="num">Run 2</th>
+      <th class="num">Run 3</th></tr>
+  <tr><td colspan="4" style="background:#f4efe6"><strong>Single classifier (the baseline)</strong></td></tr>
+  <tr><td>Classification accuracy</td><td class="num">92%</td><td class="num">91%</td>
+      <td class="num" style="color:#8a5c3b">&mdash;</td></tr>
+  <tr><td>Errors that arrived stamped HIGH</td><td class="num">75%</td><td class="num">89%</td>
+      <td class="num" style="color:#8a5c3b">&mdash;</td></tr>
+  <tr><td>Cascade rate</td><td class="num">50% (4/8)</td><td class="num">44% (4/9)</td>
+      <td class="num" style="color:#8a5c3b">&mdash;</td></tr>
+  <tr><td colspan="4" style="background:#f4efe6"><strong>Three-member ensemble (the fix)</strong></td></tr>
+  <tr><td>Classification accuracy</td><td class="num">98%</td><td class="num">98%</td><td class="num">98%</td></tr>
+  <tr><td>Members in unanimous agreement</td><td class="num">89%</td><td class="num">89%</td><td class="num">89%</td></tr>
+  <tr><td>Cascade rate</td><td class="num">50% (1/2)</td><td class="num">50% (1/2)</td><td class="num">50% (1/2)</td></tr>
+  <tr><td>Downstream answer rate</td><td class="num">84%</td><td class="num">84%</td><td class="num">84%</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">This is a better argument for the ensemble than the one the chapter makes</span>
+  <p>The chapter sells the ensemble on <em>accuracy</em>. Its accuracy advantage
+  is real but modest — 98% against 91&ndash;92%, and on a denominator it chose.</p>
+  <p><strong>Its stability advantage is total.</strong> Majority voting across
+  three prompts absorbs the run-to-run variance that this entire section has
+  documented as the project's central measurement problem. The single classifier
+  cannot be measured twice and give the same answer. The ensemble can.</p>
+  <p>For anyone who has to <em>monitor</em> a classifier in production — set a
+  threshold, alert on a drop, tell a real regression from noise — that matters
+  more than two points of accuracy. A metric that moves on its own is a metric you
+  cannot alert on.</p>
+</div>
+
+<p>Two honest limits. Three runs on 96 passages is not proof of determinism, only
+of variance far below the baseline's. And the identical numbers include identical
+<em>errors</em> — the ensemble is stably wrong about the same two cases, which is
+its own kind of warning: a stable metric is not a correct one.</p>
+
+<h4>The budget guard, since a strict ceiling was the point</h4>
+
+<p><code>repeat.py --max-cost 3.76</code> stops <em>before</em> starting a run
+that would breach the ceiling, estimating from the most expensive run seen so far.
+It spent $2.78 and declined the run that would have gone over. A ceiling that is
+checked after the money is spent is not a ceiling.</p>
+
+<h4>What held</h4>
+
+<p>Thirty-three measures returned an identical number in all three runs. They are
+the deterministic ones — the byte-level gate, the quote verifier, the freshness
+monitor, the rules engine — <strong>every measure that involves no model call at
+all was perfectly stable</strong>, and every measure that moved involved one.</p>
+
+<p>That is a cleaner statement of the book's argument than any single percentage in
+it: the parts of the pipeline you can test are the parts that stay still.</p>

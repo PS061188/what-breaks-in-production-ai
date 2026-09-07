@@ -1,0 +1,61 @@
+{
+  "model": "gpt-4.1-mini",
+  "system": "You are a research assistant. Your answers must be GROUNDED — every\nfactual claim must trace to the provided source document. You are NOT allowed to\nuse prior knowledge to fill gaps.\n\nGROUNDING RULES (non-negotiable):\n1. Only assert facts that appear verbatim or by clear implication in <sources>.\n2. For every factual claim, cite the source by quoting the exact supporting text.\n3. If a question cannot be answered from the sources, set \"answerable\" to false\n   and \"answer\" to null. That is a correct and expected outcome, not a failure.\n4. Never extrapolate or \"complete the pattern\" from partial data.\n5. Anything you are unsure the sources support goes in \"unverified_claims\"\n   rather than into the answer.\n\nSELF-CHECK BEFORE RESPONDING:\nGo through each sentence of your draft answer and ask: can I point to a specific\npassage in <sources> that supports this? If no, remove it.\n\n<sources>\n[indications_and_usage]\n1 INDICATIONS AND USAGE Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD As an adjunct to diet to reduce low-density lipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailable, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia Atorvastatin calcium tablets are an HMG-CoA reductase inhibitor (statin) indicated ( 1 ): To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD. MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD. Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD. As an adjunct to diet to reduce low-density lipoprotein (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia. As an adjunct to diet for the treatment of adults with: Primary dysbetaliproteinemia. Hypertriglyceridemia.\n\n[dosage_and_administration]\n2 DOSAGE AND ADMINISTRATION Take orally once daily with or without food ( 2.1 ). Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ). See full prescribing information for atorvastatin calcium tablets dosage modifications due to drug interactions ( 2.5 ). 2.1 Important Dosage Information Take atorvastatin calcium tablets orally once daily at any time of the day, with or without food. Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust the dosage if necessary. 2.2 Recommended Dosage in Adult Patients The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. Patients who require reduction in LDL-C greater than 45% may be started at 40 mg once daily. 2.3 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HeFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg once daily. The dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification of atorvastatin calcium tablets [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ]. Anti-Viral Medications In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin calcium tablets 20 mg once daily. In patients taking nelfinavir, do not exceed atorvastatin calcium tablets 40 mg once daily. Select Azole Antifungals or Macrolide Antibiotics In patients taking clarithromycin or itraconazole, do not exceed atorvastatin calcium tablets 20 mg once daily. For additional recommendations regarding concomitant use of atorvastatin calcium tablets with other anti-viral medications, azole antifungals or macrolide antibiotics, see Drug Interactions (7.1).\n</sources>",
+  "user": "What conditions is Atorvastatin Calcium indicated to treat?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "answerable": {
+        "type": "boolean"
+      },
+      "answer": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "citations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "claim": {
+              "type": "string"
+            },
+            "quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "claim",
+            "quote"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "unverified_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "answerable",
+      "answer",
+      "citations",
+      "unverified_claims"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"answerable\":true,\"answer\":\"Atorvastatin calcium is indicated to reduce the risk of myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) without clinically evident CHD; to reduce MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD; to reduce non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD; as an adjunct to diet to reduce low-density lipoprotein cholesterol (LDL-C) in adults with primary hyperlipidemia, adults and pediatric patients 10 years and older with heterozygous familial hypercholesterolemia (HeFH); as an adjunct to other LDL-C-lowering therapies or alone if unavailable to reduce LDL-C in adults and pediatric patients 10 years and older with homozygous familial hypercholesterolemia (HoFH); and as an adjunct to diet for treatment of adults with primary dysbetalipoproteinemia and hypertriglyceridemia.\",\"citations\":[{\"claim\":\"Indications for use\",\"quote\":\"Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD As an adjunct to diet to reduce low-density lipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familial hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailable, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia\"}],\"unverified_claims\":[]}",
+  "elapsed_ms": 7222,
+  "usage": {
+    "input_tokens": 1482,
+    "output_tokens": 497
+  }
+}

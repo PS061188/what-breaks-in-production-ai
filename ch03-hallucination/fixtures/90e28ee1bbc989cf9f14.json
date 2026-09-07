@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nAccording to the label provided, lisinopril monotherapy is effective in once-daily doses of 10 mg to 80 mg. However, the label does not specify a particular recommended starting dose for lisinopril monotherapy. For the combination tablet (lisinopril/hydrochlorothiazide), patients who have failed monotherapy may be switched to lisinopril/hydrochlorothiazide 10 mg/12.5 mg or 20 mg/12.5 mg. The label also notes that these fixed-dose combinations are not indicated for initial therapy. For specific starting dose recommendations, you would need to refer to additional clinical guidelines or prescribing resources beyond this label excerpt.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1672,
+  "usage": {
+    "input_tokens": 606,
+    "output_tokens": 16
+  }
+}

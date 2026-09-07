@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\n**Pediatric dosing applies only to adjunctive therapy for partial onset seizures (epilepsy)** — gabapentin is not indicated for postherpetic neuralgia in children.\n\n**Children 3 to 11 years of age**\n- **Starting dose:** 10 to 15 mg/kg/day, given in three divided doses\n- **Titration:** Increase to the maintenance dose over approximately 3 days\n- **Maintenance dose:**\n  - Ages 3–4 years: 40 mg/kg/day in three divided doses\n  - Ages 5–11 years: 25 to 35 mg/kg/day in three divided doses\n- Doses up to 50 mg/kg/day were well tolerated in a long-term clinical study.\n- The maximum interval between doses should not exceed 12 hours.\n- Gabapentin may be given as the capsule formulation (capsules should be swallowed whole with water, with or without food).\n\n**Patients 12 years of age and older** (dosed as adults)\n- Starting dose: 300 mg three times a day\n- Maintenance dose: 300 mg to 600 mg three times a day (up to 2400 mg/day well tolerated long-term; 3600 mg/day given short-term to a small number of patients)\n- Maximum interval between doses should not exceed 12 hours.\n\n**Other notes**\n- Gabapentin is indicated as adjunctive therapy for partial onset seizures in patients 3 years and older; safety/efficacy below age 3 for this use is not established in this labeling.\n- Use in patients under 12 years of age with compromised renal function has not been studied; renal dose adjustment recommendations apply to patients 12 years and older.\n- If the dose is reduced, discontinued, or switched to another medication, do so gradually over a minimum of 1 week.\n\nThis is general information from the label — actual dosing should be determined by the prescribing clinician based on the child's weight, response, and clinical situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1934,
+  "usage": {
+    "input_tokens": 1020,
+    "output_tokens": 17
+  }
+}

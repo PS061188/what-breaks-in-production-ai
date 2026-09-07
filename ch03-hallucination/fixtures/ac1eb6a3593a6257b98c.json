@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Furosemide indicated to treat?\n\nRESPONSE:\nBased on the label, furosemide tablets are indicated for two main uses:\n\n**1. Edema (adults and pediatric patients)** — treatment of edema associated with:\n- Congestive heart failure\n- Cirrhosis of the liver\n- Renal disease, including the nephrotic syndrome\n\nThe label notes furosemide is particularly useful when an agent with greater diuretic potential is desired.\n\n**2. Hypertension (adults only)** — oral furosemide may be used alone or in combination with other antihypertensive agents. The label cautions that hypertensive patients who cannot be adequately controlled with thiazides will probably also not be adequately controlled with furosemide alone.\n\nFor context on dosing: for edema, adults usually start at 20–80 mg as a single dose (pediatric patients 2 mg/kg); for hypertension, the usual adult starting dose is 80 mg/day, typically divided as 40 mg twice daily. Therapy should be individualized, and elderly patients should generally start at the low end of the dosing range.\n\nThis is general information from the labeling and is not a substitute for advice from your healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1479,
+  "usage": {
+    "input_tokens": 742,
+    "output_tokens": 17
+  }
+}

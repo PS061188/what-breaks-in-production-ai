@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n- The passage is organized as a comprehensive list of adverse effects systematically categorized by body system (Fluid and Electrolyte, Musculoskeletal, Gastrointestinal, Dermatologic, etc.)\\n- Each system contains multiple specific side effects and complications observed in patients (e.g., sodium retention, muscle weakness, peptic ulcer, cataracts)\\n- The formatting and exhaustive nature is consistent with a pharmacological reference documenting patient safety concerns\\n\\nStep 2: Two most plausible categories:\\n- ADVERSE_REACTIONS: This passage lists side effects and complications organized by physiological system. This is the standard format for reporting observed adverse effects in drug labeling.\\n- CONTRAINDICATIONS: One might initially consider this, as severe adverse reactions could necessitate avoiding the drug in certain conditions. However, this passage describes observed adverse reactions rather than absolute contraindications (conditions where use is prohibited).\\n\\nStep 3: Classification decision:\\nADVERSE_REACTIONS wins decisively. The passage is structured as a systematic enumeration of adverse effects organized by body system, which is the standard presentation format for the \\\"Adverse Reactions\\\" section of drug labeling. While some of these reactions (like severe CHF or hyperglycemia) might contribute to contraindications, the passage itself documents what reactions occur, not situations where the drug must be avoided. Contraindications would be stated as \\\"do not use in patients with X condition\\\" rather than listing effects that may occur.\\n\\nStep 4: Confidence assessment:\\nHIGH (>90%). This is a clear-cut case. The systematic organization by body system, the enumeration of specific adverse effects, and the comprehensive nature of the list are hallmark characteristics of the \\\"Adverse Reactions\\\" section of prescribing information. No ambiguity exists regarding whether this is discussing side effects versus contraindications or other categories.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"contraindications\", \"requires_human_review\": false}",
+  "elapsed_ms": 5882,
+  "usage": {
+    "input_tokens": 1226,
+    "output_tokens": 473
+  }
+}

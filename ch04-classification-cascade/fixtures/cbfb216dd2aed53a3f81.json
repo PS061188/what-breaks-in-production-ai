@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThis drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug may be greater in patients with impaired renal function. Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection. Evaluation of the hypertensive patient should always include assessment of renal function. (See DOSAGE AND ADMINISTRATION.)\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"This drug is substantially excreted by the kidney, and elderly patients are more likely to have decreased renal function. Care should be taken in dose selection for elderly patients, and evaluation should include assessment of renal function due to increased risk of toxic reactions in those with impaired renal function.\"}",
+  "elapsed_ms": 1314,
+  "usage": {
+    "input_tokens": 361,
+    "output_tokens": 68
+  }
+}

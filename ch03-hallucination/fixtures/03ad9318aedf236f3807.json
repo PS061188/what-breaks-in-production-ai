@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Gabapentin indicated to treat?\n\nRESPONSE:\n**FDA-approved indications for gabapentin capsules (immediate-release):**\n\n1. **Postherpetic neuralgia (PHN) in adults** — neuropathic pain persisting after a herpes zoster (shingles) outbreak.\n\n2. **Adjunctive therapy for partial-onset seizures, with or without secondary generalization**, in adults and pediatric patients **3 years of age and older** with epilepsy. Note this is an *add-on* indication — it is not approved as monotherapy, and it is not indicated for generalized (e.g., absence, primary generalized tonic-clonic) seizures, where it may be ineffective or aggravating.\n\n**Practical dosing reminders for these indications:**\n- *PHN:* Day 1 300 mg once, Day 2 300 mg BID, Day 3 300 mg TID; titrate as needed to 1800 mg/day (600 mg TID). Doses above 1800 mg/day showed no added benefit in trials.\n- *Epilepsy, ≥12 years:* Start 300 mg TID; maintenance 300–600 mg TID (up to 2400–3600 mg/day tolerated). Do not let the interval between doses exceed 12 hours.\n- *Epilepsy, ages 3–11:* Start 10–15 mg/kg/day divided TID; titrate over ~3 days to 40 mg/kg/day (ages 3–4) or 25–35 mg/kg/day (ages 5–11), divided TID.\n- *Renal impairment:* Dose adjustment is required (gabapentin is renally eliminated unchanged). CrCl 30–59: 200–700 mg BID; CrCl 15–29: 200–700 mg once daily; CrCl <15: 100–300 mg once daily with further proportional reduction. Hemodialysis patients need a supplemental dose (125–350 mg) after each 4-hour session. Estimate CrCl with Cockcroft-Gault; use caution in the elderly, who often have reduced clearance despite normal-appearing creatinine.\n- *Administration:* With or without food; swallow capsules whole with water. Taper over at least 1 week when reducing, stopping, or switching therapy (abrupt withdrawal risks seizures/withdrawal symptoms).\n\n**Common off-label uses** (not FDA-approved, so counsel accordingly): diabetic peripheral neuropathy and other neuropathic pain syndromes, restless legs syndrome, hot flashes, pruritus/uremic itch, alcohol use disorder, and anxiety. Gabapentin enacarbil (Horizant) is separately approved for RLS and PHN, and is not interchangeable on a mg-for-mg basis with immediate-release gabapentin.\n\n**Safety points worth mentioning:** somnolence/dizziness (especially with opioids, benzodiazepines, or other CNS depressants — risk of respiratory depression, particularly in the elderly or those with COPD), peripheral edema, weight gain, ataxia/fall risk, suicidal ideation/behavior class warning for antiepileptics, and rare DRESS/anaphylaxis. Antacids reduce absorption — separate dosing by at least 2 hours.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2031,
+  "usage": {
+    "input_tokens": 1449,
+    "output_tokens": 17
+  }
+}

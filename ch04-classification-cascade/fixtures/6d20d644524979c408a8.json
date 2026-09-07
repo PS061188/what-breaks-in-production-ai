@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe active ingredient in Gabapentin Capsules USP is gabapentin, which has the chemical name 1-(aminomethyl)cyclohexaneacetic acid. The molecular formula of gabapentin is C 9 H 17 NO 2 and the molecular weight is 171.24. The structural formula of gabapentin is: Gabapentin is a white to off-white crystalline solid with a pK a1 of 3.7 and a pK a2 of 10.7. It is freely soluble in water and both basic and acidic aqueous solutions. The log of the partition coefficient (n-octanol/0.05M phosphate buffer) at pH 7.4 is –1.25. Each Gabapentin capsule contains 100 mg, 300 mg, or 400 mg of gabapentin and the following inactive ingredients: Pregelatinized Maize starch, talc, gelatin, titanium dioxide, yellow iron oxide (300 mg and 400 mg only), and red iron oxide (300 mg and 400 mg only), black iron oxide (300 mg and 400 mg only). Ingredients of Imprinting Ink( Black SW-9049) are Black Iron Oxide NF(E 172), Butyl Alcohol NF, Dehydrated Alcohol USP, Isopropyl Alcohol USP, Potassium Hydroxide NF, Propylene Glycol USP, Shellac NF, and Strong Ammonia Solution NF.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage begins with chemical name and molecular formula/weight of gabapentin; (2) It provides structural and physical chemistry properties (pKa values, solubility, partition coefficient); (3) It lists inactive ingredients and capsule strengths (100mg, 300mg, 400mg) with detailed composition including colorants and imprinting ink ingredients.\\n\\nStep 2 - Most plausible categories: (a) DESCRIPTION - This section typically covers chemical name, structure, formulation composition, and inactive ingredients, which are all present here. (b) HOW_SUPPLIED - This could cover dosage forms, strengths, and packaging details, which are partially present (capsule strengths mentioned).\\n\\nStep 3 - Winner determination: DESCRIPTION is the clear winner. The passage is fundamentally about identifying what gabapentin IS chemically and what the formulation contains. It provides the chemical name, molecular formula, molecular weight, structural formula, physical/chemical properties (pKa, solubility, partition coefficient), and complete inactive ingredient lists. While how_supplied might mention capsule strengths, the primary focus here is on the drug substance description and formulation composition, which is the hallmark of a description section. The detailed chemistry properties, structural data, and comprehensive inactive ingredient/imprinting ink composition all point definitively to description.\\n\\nStep 4 - Confidence: HIGH (>90%). The passage explicitly describes the active ingredient chemically, provides molecular data, and lists all inactive ingredients - this is unambiguously the content of a product description section in pharmaceutical labeling.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 5210,
+  "usage": {
+    "input_tokens": 1211,
+    "output_tokens": 395
+  }
+}

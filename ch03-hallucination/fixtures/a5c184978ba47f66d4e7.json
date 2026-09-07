@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\nThe label excerpt provided here is for the **lisinopril/hydrochlorothiazide fixed‑dose combination**, and it does **not** contain any pediatric dosing recommendation. The Dosage and Administration section only addresses adult use: lisinopril monotherapy 10–80 mg once daily, hydrochlorothiazide 12.5–50 mg daily, with combination products (e.g., 10 mg/12.5 mg or 20 mg/12.5 mg) used after monotherapy fails, not for initial therapy, and not exceeding lisinopril 80 mg/HCTZ 50 mg per day. It also advises against use when creatinine clearance is ≤30 mL/min/1.73 m².\n\nA few important points:\n\n- Fixed‑dose lisinopril/HCTZ combinations are generally not recommended for children; safety and effectiveness in pediatric patients have not been established for this combination (see the full prescribing information's Pediatric Use subsection, which is not included in this excerpt).\n- Pediatric dosing information exists only for **single‑ingredient lisinopril** products (typically for hypertension in children aged 6 years and older with creatinine clearance >30 mL/min), and that dosing is weight‑based and titrated. Because that information is not in the excerpt provided, please consult the full prescribing information for the lisinopril single‑ingredient product.\n\nFor an individual child, dosing decisions should be made by the treating clinician (ideally with pediatric nephrology/cardiology input) based on weight, renal function, and blood pressure response. Note also that ACE inhibitors are contraindicated in pregnancy, which is relevant for adolescent patients who may become pregnant.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1626,
+  "usage": {
+    "input_tokens": 942,
+    "output_tokens": 16
+  }
+}

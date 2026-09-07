@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Warfarin Sodium?\n\nRESPONSE:\nI can't answer that from the label text I was given — the excerpt provided here only contains the Indications and Usage and Dosage and Administration sections. It does not include the Adverse Reactions (Section 6) or Warnings and Precautions (Section 5) content.\n\nWhat I can tell you from the excerpt: warfarin has a narrow therapeutic range, and an INR greater than 4 provides no additional therapeutic benefit in most patients while being associated with a higher risk of bleeding. The excerpt also notes that routine loading doses are not recommended because they may increase hemorrhagic and other complications, and that a markedly elevated aPTT (>50 seconds) with an in-range INR signals increased risk of postoperative hemorrhage.\n\nMore generally (outside this excerpt), bleeding/hemorrhage is the most common and most serious adverse reaction with warfarin, and the drug carries a boxed warning about the risk of major or fatal bleeding. Other reactions described in warfarin labeling include tissue necrosis/skin necrosis, calciphylaxis, systemic cholesterol microembolization (\"purple toe syndrome\"), and hypersensitivity reactions.\n\nFor a complete and accurate list, please consult Sections 5 and 6 of the full prescribing information for the specific warfarin sodium product, or ask your pharmacist or prescriber. Seek prompt medical attention for signs of bleeding such as unusual bruising, red or dark urine, black/tarry stools, coughing or vomiting blood, severe headache, or bleeding that won't stop.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1855,
+  "usage": {
+    "input_tokens": 896,
+    "output_tokens": 17
+  }
+}

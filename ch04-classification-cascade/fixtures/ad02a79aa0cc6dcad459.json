@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nNeonates with a history of in utero exposure to lisinopril and hydrochlorothiazide tablets: If oliguria or hypotension occurs, direct attention toward support of blood pressure and renal perfusion. Exchange transfusions or dialysis may be required as a means of reversing hypotension and/or substituting for disordered renal function. Lisinopril, which crosses the placenta, has been removed from neonatal circulation by peritoneal dialysis with some clinical benefit, and theoretically may be removed by exchange transfusion, although there is no experience with the latter procedure.\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Neonates with in utero exposure to lisinopril and hydrochlorothiazide tablets may develop oliguria or hypotension requiring management with blood pressure and renal perfusion support. Exchange transfusions or dialysis may be necessary to reverse hypotension and/or address disordered renal function. Lisinopril crosses the placenta and has been successfully removed from neonatal circulation through peritoneal dialysis with clinical benefit. Exchange transfusion may theoretically remove the drug, though there is no clinical experience with this approach.\"}",
+  "elapsed_ms": 1797,
+  "usage": {
+    "input_tokens": 402,
+    "output_tokens": 127
+  }
+}

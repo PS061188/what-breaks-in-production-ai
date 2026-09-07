@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Gabapentin?\n\nRESPONSE:\nIt depends on the indication and patient age:\n\n- Postherpetic neuralgia (adults): Day 1: 300 mg once; Day 2: 300 mg twice daily (600 mg/day); Day 3: 300 mg three times daily (900 mg/day). Can be titrated up as needed to 1800 mg/day.\n- Epilepsy (patients ≥12 years): start 300 mg three times daily (900 mg/day).\n- Pediatric epilepsy (age 3–11 years): start 10–15 mg/kg/day divided TID (then titrate to the recommended maintenance dose: 40 mg/kg/day for ages 3–4, 25–35 mg/kg/day for ages 5–11).\n\nNote: adjust dose in renal impairment and taper gradually (≥1 week) when reducing or stopping therapy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1400,
+  "usage": {
+    "input_tokens": 654,
+    "output_tokens": 17
+  }
+}

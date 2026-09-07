@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nSertraline hydrochloride, as a selective serotonin reuptake inhibitor (SSRI), has important drug interactions primarily related to its serotonergic effects. Specifically, it should not be used concurrently with monoamine oxidase inhibitors (MAOIs) intended to treat psychiatric disorders due to the risk of serotonin syndrome; a washout period of at least 14 days is required when switching to or from an MAOI. Similarly, co-administration with other MAOIs such as linezolid or intravenous methylene blue is contraindicated because of increased risk of serotonin syndrome. If urgent treatment with linezolid or IV methylene blue is necessary, sertraline should be stopped promptly, and the patient should be monitored for serotonin syndrome symptoms. Caution is advised when sertraline is used with other serotonergic drugs or medications that could increase serotonin levels, as this may increase the risk of serotonin syndrome. While the product labeling mainly highlights interactions with MAOIs and serotonergic agents, clinicians should also be cautious about potential interactions with drugs that affect hepatic metabolism, especially in patients with liver impairment, as sertraline dosing may need adjustment.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1660,
+  "usage": {
+    "input_tokens": 787,
+    "output_tokens": 17
+  }
+}

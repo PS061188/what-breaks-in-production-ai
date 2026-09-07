@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\n**Label-stated starting dose:** The initial dose of prednisone ranges from **5 mg to 60 mg per day**, depending on the disease being treated. Lower doses generally suffice for less severe conditions; selected patients with severe disease may require higher initial doses. The label emphasizes that **dosage requirements are highly variable and must be individualized** based on the disease under treatment and the patient's response.\n\n**Specific regimen given in the label:**\n- *Acute exacerbations of multiple sclerosis:* 200 mg/day of prednisolone for 1 week, followed by 80 mg every other day for 1 month (dosage range is the same for prednisone and prednisolone).\n\n**Practical prescribing points:**\n- Maintain the initial dose until a satisfactory clinical response is seen (often 4–10 days for many allergic and collagen diseases). If there is no satisfactory response after a reasonable trial, discontinue prednisone and switch to other appropriate therapy.\n- Once controlled, **taper in small decrements at appropriate intervals** to the lowest dose that maintains an adequate clinical response.\n- Give as a **single morning dose** when possible (adrenal suppression is least when steroid is given at the time of maximal endogenous cortisol activity, ~2–8 am). Divided daily dosing suppresses the HPA axis more.\n- **Alternate-day therapy (ADT)**: twice the usual daily dose every other morning; useful for patients requiring long-term therapy to reduce HPA suppression, Cushingoid features, withdrawal symptoms, and growth suppression in children. Prednisone/prednisolone, methylprednisolone, and hydrocortisone are short-acting (suppression 1¼–1½ days) and suitable for ADT; dexamethasone and betamethasone are not.\n- **Do not stop abruptly** after long-term therapy — withdraw gradually to avoid adrenal insufficiency and steroid withdrawal syndrome.\n- **Increase the dose temporarily during stress** (surgery, trauma, serious infection) in patients on chronic therapy or with suppressed HPA axis.\n- In an acute flare while on ADT, return to full daily divided suppressive dosing until control is regained, then resume ADT.\n\n**Common clinical starting doses (standard practice, not from this label excerpt):** asthma exacerbation 40–60 mg/day for 5–7 days (no taper needed for short bursts); acute gout 30–40 mg/day for 5 days; polymyalgia rheumatica 12.5–25 mg/day; giant cell arteritis 40–60 mg/day; nephrotic syndrome/severe autoimmune disease often 1 mg/kg/day (up to ~60–80 mg/day). Pediatric dosing is typically 0.05–2 mg/kg/day divided 1–4 times daily depending on indication.\n\n**Monitoring/adjuncts with prolonged use:** blood pressure, glucose, weight, electrolytes/potassium, ocular pressure and cataracts, bone density with calcium/vitamin D ± bisphosphonate for courses ≥3 months at ≥2.5–7.5 mg/day, GI protection if combined with NSAIDs or other ulcer risk factors, infection surveillance (including latent TB and strongyloides screening before prolonged high-dose therapy), and avoidance of live vaccines at immunosuppressive doses (≥20 mg/day for ≥2 weeks). Take with food to reduce GI upset.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2401,
+  "usage": {
+    "input_tokens": 1549,
+    "output_tokens": 17
+  }
+}

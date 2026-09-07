@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nEach tablet contains the inactive ingredients povidone (K-30), Povidone (K-90), pregelatinized starch, and magnesium stearate. In addition, the coating for the tablet contains artificial blackberry flavor, hypromellose, macrogol and titanium dioxide. metformin-structure.jpg.jpg\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Inactive ingredients: povidone (K-30), Povidone (K-90), pregelatinized starch, magnesium stearate, artificial blackberry flavor, hypromellose, macrogol, and titanium dioxide. Chemical name: Not provided. Molecular formula: Not provided.\"}",
+  "elapsed_ms": 1241,
+  "usage": {
+    "input_tokens": 337,
+    "output_tokens": 76
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the sections of the label provided here (Indications and Usage; Dosage and Administration), the only drug interactions specifically addressed are those involving monoamine oxidase inhibitors (MAOIs). The full DRUG INTERACTIONS/WARNINGS sections were not included in this excerpt, so this is not a complete interaction list.\n\nWhat the excerpt states:\n\n1. MAOIs used to treat psychiatric disorders (e.g., phenelzine, tranylcypromine, isocarboxazid, selegiline)\n- Concomitant use is contraindicated.\n- At least 14 days must elapse after stopping an MAOI before starting sertraline.\n- At least 14 days must elapse after stopping sertraline before starting an MAOI.\n\n2. Other MAOIs \"such as linezolid or intravenous methylene blue\"\n- Do not start sertraline in a patient already receiving linezolid or IV methylene blue because of an increased risk of serotonin syndrome; if urgent psychiatric treatment is needed, other interventions (including hospitalization) should be considered.\n- If a patient already on sertraline urgently needs linezolid or IV methylene blue and no acceptable alternative exists, sertraline should be stopped promptly, the other drug given, and the patient monitored for serotonin syndrome for 2 weeks or until 24 hours after the last dose of linezolid/IV methylene blue, whichever comes first. Sertraline may be resumed 24 hours after that last dose.\n- The risk with non-intravenous methylene blue (oral tablets, local injection) or IV doses much lower than 1 mg/kg is unclear, but clinicians should still watch for serotonin syndrome.\n\nOther considerations mentioned indirectly: caution/lower or less frequent dosing in hepatic impairment, and careful risk–benefit assessment when treating pregnant women in the third trimester.\n\nBecause sertraline is well known to have additional clinically important interactions (for example with other serotonergic agents such as triptans, tramadol, lithium, tryptophan, and St. John's wort; with drugs affecting hemostasis such as NSAIDs, aspirin, and warfarin; with pimozide; with CYP2D6 substrates; with disulfiram in the case of the oral solution; and with drugs that prolong the QT interval), you should review the complete prescribing information and consult a pharmacist or prescriber about a specific medication list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1787,
+  "usage": {
+    "input_tokens": 1184,
+    "output_tokens": 17
+  }
+}

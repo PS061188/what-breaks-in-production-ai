@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Sertraline Hydrochloride for pediatric patients?\n\nRESPONSE:\n**Labeled pediatric indication: OCD only.** Sertraline is FDA-approved in children/adolescents solely for obsessive-compulsive disorder (ages 6–17). It is *not* approved for pediatric major depressive disorder, panic disorder, PTSD, PMDD, or social anxiety disorder (though it is widely used off-label for pediatric anxiety disorders).\n\n**Dosing for pediatric OCD (per label):**\n- **Children 6–12 years:** start 25 mg once daily\n- **Adolescents 13–17 years:** start 50 mg once daily\n- **Titration:** Patients not responding to the initial 25–50 mg/day dose may benefit from increases up to a **maximum of 200 mg/day**. Clinical trials used a range of 25–200 mg/day.\n- **Interval between dose changes:** Because the elimination half-life is ~24 hours, do not increase the dose more often than **once weekly**.\n- **Administration:** Once daily, morning or evening, with or without food. (Oral concentrate must be diluted in 4 oz of water, ginger ale, lemon/lime soda, lemonade, or orange juice only, and taken immediately.)\n- **Body weight caution:** In younger children, lower body weight relative to adults should be factored into titration to avoid excessive dosing/exposure — advance more conservatively (e.g., 25 mg increments).\n\n**Practical clinical points:**\n- Many clinicians titrate more slowly than weekly in practice (every 2–4 weeks) since anti-obsessional response can take 8–12 weeks at a given dose; typical effective doses in pediatric OCD are 50–200 mg/day.\n- **Boxed warning:** Increased risk of suicidal thinking and behavior in children, adolescents, and young adults. Monitor closely — weekly face-to-face contact is often recommended for the first 4 weeks, then biweekly, then at 12 weeks, and after each dose change. Counsel families to watch for worsening depression, agitation, irritability, akathisia, or emergent suicidality.\n- **Activation/behavioral disinhibition** (restlessness, insomnia, hyperactivity, mania) is more common in youth; consider dose reduction if it occurs, and screen for bipolar disorder before starting.\n- Monitor growth (height and weight) during long-term treatment; modest weight gain differences vs. placebo have been observed.\n- **Hepatic impairment:** use a lower or less frequent dose; avoid/use great caution in moderate-to-severe impairment.\n- **Discontinuation:** taper gradually rather than stopping abruptly to limit withdrawal symptoms (dizziness, paresthesias, irritability, insomnia).\n- **Avoid with MAOIs** (14-day washout in both directions), linezolid, or IV methylene blue; monitor for serotonin syndrome with other serotonergic agents (triptans, tramadol, ondansetron, St. John's wort) and for bleeding risk with NSAIDs/aspirin.\n- Periodically reassess the ongoing need for treatment; OCD generally requires several months or longer of therapy beyond initial response.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2023,
+  "usage": {
+    "input_tokens": 1446,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Albuterol Sulfate?\n\nRESPONSE:\nThe excerpt you've provided only contains the Indications and Usage and Dosage and Administration sections of the Albuterol Sulfate HFA label — it does not include the Drug Interactions section, so I can't quote specific interaction information from it.\n\nFor a complete and authoritative answer, please consult Section 7 (Drug Interactions) and Section 5 (Warnings and Precautions) of the full prescribing information for this product.\n\nFor general background (not taken from the excerpt above), albuterol labeling typically discusses caution with:\n- Beta-blockers (including ophthalmic forms), which can block the bronchodilator effect and may cause severe bronchospasm in patients with asthma; cardioselective agents are used with caution if a beta-blocker is necessary.\n- Other short-acting sympathomimetic bronchodilators or adrenergic drugs, because of additive cardiovascular effects.\n- Monoamine oxidase inhibitors and tricyclic antidepressants (and use within 2 weeks of stopping them), which may potentiate albuterol's effect on the cardiovascular system.\n- Non–potassium-sparing diuretics (e.g., loop or thiazide diuretics), where ECG changes and/or hypokalemia may be worsened.\n- Digoxin, whose serum levels may be decreased.\n\nAlso note that beta-agonists can lower serum potassium, which may compound the effects of other drugs that do the same. Because product labels differ and your clinical situation matters, verify with the actual full label and your pharmacist or prescriber before making any medication decisions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2225,
+  "usage": {
+    "input_tokens": 894,
+    "output_tokens": 17
+  }
+}

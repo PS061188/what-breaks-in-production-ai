@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Amoxicillin for pediatric patients?\n\nRESPONSE:\nFor this specific product — amoxicillin/clavulanate potassium oral suspension 600 mg/42.9 mg per 5 mL — the labeled pediatric dose is:\n\n**90 mg/kg/day (based on the amoxicillin component), divided every 12 hours, given for 10 days**, in children aged 3 months to 12 years weighing ≤40 kg. This also delivers about 6.4 mg/kg/day of the clavulanic acid component.\n\nExample volumes from the label's general dosing guideline (twice daily):\n- 8 kg → 3 mL\n- 12 kg → 4.5 mL\n- 16 kg → 6 mL\n- 20 kg → 7.5 mL\n- 24 kg → 9 mL\n- 28 kg → 10.5 mL\n- 32 kg → 12 mL\n- 36 kg → 13.5 mL\n- 40 kg → 15 mL\n\nImportant points from the label:\n- Give at the start of a meal to reduce GI intolerance and enhance clavulanate absorption.\n- There is no experience with this formulation in children weighing more than 40 kg, or in adults.\n- Shake well before each use; refrigerate the reconstituted suspension and discard after 10 days.\n- The 200 mg/28.5 mg and 400 mg/57 mg per 5 mL suspensions are NOT interchangeable with the 600 mg/42.9 mg per 5 mL suspension because they contain different amounts of clavulanic acid.\n- Patients with hepatic impairment should be dosed with caution, with periodic monitoring of hepatic function.\n\nNote that other amoxicillin or amoxicillin/clavulanate products have different dosing; this answer applies only to the 600 mg/42.9 mg per 5 mL suspension described in this label. Dosing decisions should be made by the treating clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1574,
+  "usage": {
+    "input_tokens": 994,
+    "output_tokens": 17
+  }
+}

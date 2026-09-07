@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\n**Metformin drug–drug interactions: a practical prescriber's summary**\n\nThe label excerpt provided does not contain the Drug Interactions section, so the following draws on the full metformin labeling and standard pharmacology.\n\n---\n\n**1. Carbonic anhydrase inhibitors — increased lactic acidosis risk**\n- Topiramate, zonisamide, acetazolamide, dichlorphenamide.\n- These induce a non-anion-gap metabolic acidosis and thereby raise the risk of metformin-associated lactic acidosis.\n- Action: consider more frequent monitoring (serum bicarbonate, renal function); some clinicians reduce the metformin dose or avoid combination in patients with other risk factors.\n\n**2. Drugs that reduce renal clearance of metformin (OCT2/MATE inhibitors)** — increased metformin exposure\n- **Ranolazine, vandetanib, dolutegravir, cimetidine, isavuconazole, crizotinib, olaparib, trimethoprim, pyrimethamine.**\n- Dolutegravir: limit metformin to ≤1000 mg/day when co-administered; the metformin AUC roughly doubles.\n- Cimetidine raises metformin AUC ~40% and Cmax ~60%.\n- Ranolazine 1000 mg BID raises metformin AUC ~1.8-fold — limit metformin to 1700 mg/day.\n- Vandetanib raises metformin AUC ~74%.\n- Action: monitor for GI intolerance and hypoglycemia risk with insulin/sulfonylureas; consider dose reduction.\n\n**3. Alcohol**\n- Potentiates the effect of metformin on lactate metabolism; also risk of hypoglycemia (impaired gluconeogenesis).\n- Counsel patients against excessive acute or chronic intake and against binge drinking.\n\n**4. Iodinated contrast media**\n- Not a pharmacokinetic interaction but an acute renal-injury risk. Per the label: hold metformin at or before the procedure if eGFR 30–60 mL/min/1.73 m², or if there is a history of liver disease, alcoholism or heart failure, or if intra-arterial contrast will be given. Recheck eGFR at 48 hours and restart only if renal function is stable.\n\n**5. Drugs affecting renal function / volume status**\n- NSAIDs, ACE inhibitors, ARBs, and diuretics can precipitate AKI, which in turn causes metformin accumulation and lactic acidosis. Counsel on \"sick-day rules\": hold metformin during dehydrating illness (vomiting, diarrhea, poor oral intake, sepsis, hypoxemia).\n\n**6. Drugs that raise blood glucose (may reduce glycemic control)**\n- Thiazides and other diuretics, corticosteroids, phenothiazines, thyroid products, estrogens/oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, isoniazid, atypical antipsychotics, protease inhibitors.\n- Action: monitor glycemia closely when these are started or stopped and adjust metformin accordingly.\n\n**7. Insulin secretagogues and insulin**\n- Metformin alone rarely causes hypoglycemia, but the risk rises substantially in combination with sulfonylureas, meglitinides, or insulin. Consider a lower dose of the secretagogue/insulin when adding metformin.\n\n**8. Other notes**\n- **Furosemide:** metformin lowers furosemide Cmax/AUC; furosemide raises metformin Cmax ~22%. Clinical significance uncertain.\n- **Nifedipine:** increases metformin absorption (Cmax ↑20%, AUC ↑9%).\n- **Glyburide, propranolol, ibuprofen:** no clinically significant interaction in single-dose studies.\n- **Vitamin B12:** long-term metformin lowers B12 levels (a nutrient rather than a drug interaction). Check B12 every 2–3 years, or sooner in patients with anemia or peripheral neuropathy; concurrent PPIs may compound this.\n\n---\n\n**Bottom line for practice:** the interactions that actually change prescribing are (a) cationic/OCT2-MATE inhibitors such as dolutegravir, ranolazine, cimetidine and trimethoprim — cap or reduce the metformin dose; (b) carbonic anhydrase inhibitors — added acidosis risk; (c) anything that acutely impairs renal perfusion, including contrast, NSAIDs, and RAAS blockers with diuretics. Reassess eGFR periodically in all patients, and at least annually — more often if eGFR is under 60.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1935,
+  "usage": {
+    "input_tokens": 1975,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nConsider the risk/benefit of concomitant use of other azole antifungals or macrolide antibiotics with atorvastatin. Monitor all patients for signs and symptoms of myopathy particularly during initiation of therapy and during upward dose titration of either drug. Examples: Erythromycin, clarithromycin, itraconazole, ketoconazole, posaconazole, and voriconazole. Niacin Clinical Impact: Cases of myopathy and rhabdomyolysis have been observed with concomitant use of lipid modifying dosages of niacin ( > 1 gram/day niacin) with atorvastatin. Intervention: Consider if the benefit of using lipid modifying dosages of niacin concomitantly with atorvastatin outweighs the increased risk of myopathy and rhabdomyolysis.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Azole antifungals (itraconazole, ketoconazole, posaconazole, voriconazole), macrolide antibiotics (erythromycin, clarithromycin), niacin\"}",
+  "elapsed_ms": 1302,
+  "usage": {
+    "input_tokens": 473,
+    "output_tokens": 61
+  }
+}

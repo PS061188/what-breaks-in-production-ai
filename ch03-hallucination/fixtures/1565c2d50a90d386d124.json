@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\nThe label excerpt you've provided is for the **lisinopril/hydrochlorothiazide fixed-dose combination tablets**, and it does **not** contain any pediatric dosing recommendation.\n\nKey points from this excerpt:\n\n- All dosing guidance given is for adults with hypertension: lisinopril monotherapy 10–80 mg once daily, hydrochlorothiazide 12.5–50 mg daily, with combination products such as 10 mg/12.5 mg or 20 mg/12.5 mg used when monotherapy fails. Maximum stated is lisinopril 80 mg/HCTZ 50 mg.\n- The combination is **not indicated for initial therapy**; it is intended for dose titration/replacement after monotherapy.\n- Renal guidance: no adjustment needed if creatinine clearance >30 mL/min/1.73 m²; not recommended below that.\n- No statement regarding safety, effectiveness, or dosing in pediatric patients appears in the sections provided.\n\nIf you are asking about **lisinopril alone** in children, that information would be found in the single-ingredient lisinopril labeling (which addresses use in certain pediatric patients with hypertension, typically weight-based once-daily dosing), not in this combination-product excerpt. Please consult the full prescribing information for the specific lisinopril product and a prescribing clinician or pharmacist before using it in a child — fixed-dose combination products are generally unsuitable for pediatric weight-based titration.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1690,
+  "usage": {
+    "input_tokens": 874,
+    "output_tokens": 16
+  }
+}

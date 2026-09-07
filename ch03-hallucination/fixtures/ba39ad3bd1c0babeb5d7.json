@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Warfarin Sodium?\n\nRESPONSE:\n**Starting dose (when CYP2C9 and VKORC1 genotypes are not known): usually 2 to 5 mg once daily.**\n\nKey points from the label:\n\n- **Individualize the dose.** There is no single correct starting dose — select the initial dose based on the expected maintenance dose, taking into account clinical factors (age, race, body weight, sex, concomitant medications, comorbidities) and genetic factors, then adjust based on INR response.\n- **Typical maintenance dose:** 2 to 10 mg once daily.\n- **Loading doses are not recommended** — routine use may increase hemorrhagic and other complications and does not provide more rapid protection against clot formation.\n- **Lower initial and maintenance doses** should be considered for elderly and/or debilitated patients and for Asian patients.\n- **If genotype is known**, consider the expected maintenance dose ranges in Table 1 of the label when choosing the initial dose (roughly 5–7 mg/day for CYP2C9 *1/*1 with VKORC1 GG, down to 0.5–2 mg/day for patients with combinations such as CYP2C9 *3/*3 or VKORC1 AA with variant CYP2C9 alleles). Patients with CYP2C9 *1/*3, *2/*2, *2/*3, or *3/*3 may need more than 2–4 weeks to reach maximum INR effect at a given dose.\n- **Monitoring:** Check INR daily after the initial dose until results stabilize in the therapeutic range, then every 1 to 4 weeks; recheck when other medications are started, stopped, or taken irregularly, or when warfarin products are interchanged.\n\nTarget INR depends on the indication (commonly 2.5, range 2–3; range 2.5–3.5 for certain mechanical valves). Dosing decisions should be made by the prescribing clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1642,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 17
+  }
+}

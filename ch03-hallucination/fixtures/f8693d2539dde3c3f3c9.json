@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Gabapentin?\n\nRESPONSE:\nIt depends on what the gabapentin is being used for and the patient's age and kidney function:\n\n**Postherpetic neuralgia (adults):**\n- Day 1: a single 300 mg dose\n- Day 2: 600 mg/day (300 mg twice daily)\n- Day 3: 900 mg/day (300 mg three times daily)\n- Thereafter it may be titrated up as needed for pain relief to 1800 mg/day (600 mg three times daily). Doses above 1800 mg/day did not show added benefit in clinical studies.\n\n**Partial onset seizures (adjunctive therapy):**\n- Patients 12 years and older: start at 300 mg three times a day; usual maintenance is 300–600 mg three times a day.\n- Children 3–11 years: start at 10–15 mg/kg/day divided into three doses, titrating upward over about 3 days to the maintenance dose (40 mg/kg/day for ages 3–4; 25–35 mg/kg/day for ages 5–11).\n\n**Important qualifiers:** Doses should be given three times daily with no more than 12 hours between doses. In patients 12 years and older with renal impairment (creatinine clearance below 60 mL/min) or on hemodialysis, the dose must be reduced according to the label's renal dosing table, and elderly patients should be dosed based on creatinine clearance. Gabapentin can be taken with or without food, and capsules should be swallowed whole with water. If stopping or changing therapy, taper gradually over at least 1 week.\n\nThis is general information from the label — your prescriber will choose the appropriate starting dose for your situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1720,
+  "usage": {
+    "input_tokens": 910,
+    "output_tokens": 17
+  }
+}

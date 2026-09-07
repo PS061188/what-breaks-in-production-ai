@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWhen culture and susceptibility information are available, they should be considered in selecting or modifying antibacterial therapy. In the absence of such data, local epidemiology and susceptibility patterns may contribute to the empiric selection of therapy. Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is a combination of amoxicillin, a penicillin-class antibacterial and clavulanate potassium, a beta-lactamase inhibitor, indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL) and H. influenzae in pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg\"}",
+  "elapsed_ms": 1525,
+  "usage": {
+    "input_tokens": 456,
+    "output_tokens": 77
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAmoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with: Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H. influenzae (including beta-lactamase-producing strains), or M. catarrhalis (including beta-lactamase-producing strains) characterized by the following risk factors: Antibacterial drug exposure for acute otitis media within the preceding 3 months, and either of the following: 1) age 2 years, or younger or 2) day care attendance [see Microbiology (12.4) ] . Limitations of Use Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is not indicated for the treatment of acute otitis media due to S.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H. influenzae (including beta-lactamase-producing strains), or M. catarrhalis (including beta-lactamase-producing strains) in pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with risk factors including antibacterial drug exposure for acute otitis media within the preceding 3 months and either age 2 years or younger or day care attendance\"}",
+  "elapsed_ms": 1909,
+  "usage": {
+    "input_tokens": 522,
+    "output_tokens": 141
+  }
+}

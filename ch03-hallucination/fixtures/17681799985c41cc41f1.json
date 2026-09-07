@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Prednisone?\n\nRESPONSE:\nI can't answer that from the excerpt you've given me — the portion of the prednisone label provided here only includes the INDICATIONS AND USAGE and DOSAGE AND ADMINISTRATION sections. It does not contain the ADVERSE REACTIONS section, so I can't cite specific frequencies or a list of the most common reactions from this document.\n\nFor context, the prednisone label's DOSAGE AND ADMINISTRATION section does mention certain undesirable corticosteroid effects that alternate-day therapy (ADT) is designed to minimize: pituitary-adrenal (HPA axis) suppression, the Cushingoid state, corticosteroid withdrawal symptoms, and growth suppression in children. It also describes findings of hyperadrenocorticism that can occur with long-term pharmacologic-dose daily therapy — obesity with centripetal fat distribution, thinning of the skin with easy bruisability, muscle wasting with weakness, hypertension, latent diabetes, osteoporosis, and electrolyte imbalance. The label also notes that patients on corticosteroids are vulnerable during stressful situations because of adrenal suppression, and that after long-term therapy the drug should be withdrawn gradually rather than abruptly.\n\nTo get the actual list of adverse reactions (which for prednisone typically spans fluid/electrolyte, musculoskeletal, GI, dermatologic, neurologic, endocrine, ophthalmic, metabolic, and immunologic/infection effects), please refer to the ADVERSE REACTIONS section of the full prescribing information, or ask your pharmacist or prescriber. If you are experiencing a side effect you think may be from prednisone, contact your healthcare provider — and do not stop the medication abruptly without medical guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1851,
+  "usage": {
+    "input_tokens": 970,
+    "output_tokens": 16
+  }
+}

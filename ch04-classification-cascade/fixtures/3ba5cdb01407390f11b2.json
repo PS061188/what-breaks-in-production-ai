@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "This text was printed in an FDA drug label, underneath one of\nthe headings listed below. The heading itself has been removed. Decide which\nheading this text was printed under.\n\nHEADINGS:\n- geriatric_use: what is known about use in patients 65 and older\n- pediatric_use: what is known about use in children\n- description: chemical name, structure, formulation and inactive ingredients\n- how_supplied: dosage forms, strengths, packaging and storage\n- overdosage: signs of overdose and how to manage one\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- adverse_reactions: side effects and reactions observed in patients\n- contraindications: situations in which the drug must not be used at all\n- dosage_and_administration: how much to give, how often, and by what route\n- indications_and_usage: the conditions the drug is approved to treat\n\nAnswer with the heading name and nothing else.",
+  "user": "<passage>\nFurosemide Tablets, USP 80 mg: White-off white, round, scored, debossed \"3171\" over \"V\" on one side and plain on the reverse side, available as follows: • Bottles of 500: NDC 63629-1120-1 You may report side effects to Solco Healthcare US, LLC at 1-866-257-2597 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch . STORAGE Store at 20° to 25°C (68° to 77°F) [see USP Controlled Room Temperature]. Protect from light. Dispense in well-closed, light-resistant containers. Exposure to light might cause a slight discoloration. Discolored tablets should not be dispensed.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"how_supplied\"}",
+  "elapsed_ms": 1075,
+  "usage": {
+    "input_tokens": 644,
+    "output_tokens": 11
+  }
+}

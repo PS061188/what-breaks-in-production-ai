@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nThe recommended dose of Gabapentin for pediatric patients depends on age:\n\n**Patients Age 3 to 11 years:**\n- **Starting dose:** 10–15 mg/kg/day, given in three divided doses\n- **Recommended maintenance dose:** Reached by upward titration over approximately 3 days\n  - **Ages 3–4 years:** 40 mg/kg/day in three divided doses\n  - **Ages 5–11 years:** 25–35 mg/kg/day in three divided doses\n- **Maximum tolerated:** Up to 50 mg/kg/day has been well tolerated in long-term clinical studies\n- **Dosing interval:** Maximum time between doses should not exceed 12 hours\n\n**Patients Age 12 years and older:**\n- **Starting dose:** 300 mg three times daily\n- **Recommended maintenance dose:** 300–600 mg three times daily\n- **Maximum tolerated:** Up to 2400 mg/day well tolerated in long-term studies; 3600 mg/day administered to some patients for short durations\n\n**Important note:** The use of Gabapentin in pediatric patients less than 12 years of age with compromised renal function has not been studied, so dose adjustments based on renal function should be approached cautiously in this population. Always titrate gradually and monitor for efficacy and adverse effects.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1573,
+  "usage": {
+    "input_tokens": 829,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical data extraction assistant. Extract the dosing\ninformation from the label text below.\n\n<label_text>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"fields\": [{\"field\": \"starting_dose\", \"value\": \"1 tablet\", \"qualifiers\": [\"adults 18 years of age and older\", \"once a day\"], \"source_quote\": \"swallow 1 tablet with a glass of water before eating in the morning\"}, {\"field\": \"maximum_dose\", \"value\": \"1 tablet per day\", \"qualifiers\": [\"daily maximum\"], \"source_quote\": \"do not take more than 1 tablet a day\"}, {\"field\": \"frequency\", \"value\": \"once a day (every 24 hours)\", \"qualifiers\": [\"every day for 14 days\", \"swallow whole, do not chew or crush\"], \"source_quote\": \"this product is to be used once a day (every 24 hours), every day for 14 days\"}, {\"field\": \"dose_adjustment\", \"value\": \"may repeat a 14-day course every 4 months\", \"qualifiers\": [\"do not use for more than 14 days unless directed by doctor\", \"do not take for more than 14 days or more often than every 4 months unless directed by a doctor\", \"children under 18 years: ask a doctor\"], \"source_quote\": \"you may repeat a 14-day course every 4 months; do not take for more than 14 days or more often than every 4 months unless directed by a doctor\"}]}",
+  "elapsed_ms": 2347,
+  "usage": {
+    "input_tokens": 570,
+    "output_tokens": 319
+  }
+}

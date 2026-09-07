@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nThe excerpt provided is for the lisinopril/hydrochlorothiazide **combination** tablet, so it does not give a starting (initiation) dose for lisinopril monotherapy. Here is what the label does state:\n\n- **Lisinopril monotherapy** is described as effective for hypertension in once‑daily doses of **10 mg to 80 mg** (hydrochlorothiazide monotherapy: 12.5 mg to 50 mg daily). This is the effective dose range, not specifically a starting dose.\n- **The fixed-dose combination is NOT indicated for initial therapy.** Combination therapy is generally appropriate only after a patient has failed to achieve the desired effect with monotherapy.\n- A patient not adequately controlled on either lisinopril or hydrochlorothiazide alone may be switched to **lisinopril/HCTZ 10 mg/12.5 mg or 20 mg/12.5 mg**, with further increases of either component based on clinical response (the HCTZ dose should generally not be increased until 2–3 weeks have elapsed).\n- **Maximum:** do not exceed lisinopril 80 mg / hydrochlorothiazide 50 mg.\n- **Renal impairment:** no adjustment needed if creatinine clearance is >30 mL/min/1.73 m²; the combination is not recommended in more severe renal impairment (loop diuretics preferred).\n\nFor the actual initiation dose of lisinopril alone (which varies by indication—e.g., hypertension, heart failure, or post–myocardial infarction) and for individualized dosing, consult the lisinopril single-ingredient prescribing information and your prescriber or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1471,
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 16
+  }
+}

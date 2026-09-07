@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nGabapentin Capsules USP 300 mg capsules: Hard gelatin capsules with yellow opaque body with caramel opaque cap, imprinted with “AHD” on cap and “300” on body in black ink and filled with white to off-white powder. NDC: 71335-1093-8: 40 Capsules in a BOTTLE NDC: 71335-1093-1: 90 Capsules in a BOTTLE NDC: 71335-1093-2: 28 Capsules in a BOTTLE NDC: 71335-1093-3: 58 Capsules in a BOTTLE NDC: 71335-1093-4: 30 Capsules in a BOTTLE NDC: 71335-1093-5: 60 Capsules in a BOTTLE NDC: 71335-1093-6: 120 Capsules in a BOTTLE NDC: 71335-1093-7: 180 Capsules in a BOTTLE Store at 20° to 25° C (68° to 77° F); excursions permitted to 15° to 30°C (59° to B6°F). [See USP Controlled Room Temperature] Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"how_supplied\"}",
+  "elapsed_ms": 990,
+  "usage": {
+    "input_tokens": 755,
+    "output_tokens": 11
+  }
+}

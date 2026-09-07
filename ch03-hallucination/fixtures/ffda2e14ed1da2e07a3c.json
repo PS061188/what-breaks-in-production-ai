@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Omeprazole?\n\nRESPONSE:\nPer this OTC label, the dose for adults 18 years and older is **one tablet once a day (every 24 hours)** — swallowed whole with a glass of water before eating in the morning — taken every day for a 14-day course.\n\nKey points from the directions:\n\n- **Do not take more than 1 tablet a day.**\n- Swallow whole; do not chew or crush the tablets.\n- It may take **1 to 4 days for full effect**, though some people get complete relief within 24 hours. It is not intended for immediate heartburn relief.\n- **Do not use for more than 14 days** unless directed by your doctor.\n- If needed, a 14-day course may be repeated **every 4 months** — no more often than that unless a doctor directs otherwise.\n- **Children under 18 years:** ask a doctor, since heartburn in children can sometimes be caused by a serious condition.\n\nNote: This applies to the nonprescription (OTC) product for frequent heartburn (occurring 2 or more days a week). Prescription omeprazole dosing for conditions such as GERD, ulcers, or H. pylori differs and is determined by a healthcare provider. If your symptoms persist, worsen, or return frequently after treatment, contact your doctor.)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2112,
+  "usage": {
+    "input_tokens": 779,
+    "output_tokens": 17
+  }
+}

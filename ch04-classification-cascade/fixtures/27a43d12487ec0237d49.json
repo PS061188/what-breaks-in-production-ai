@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe following serious adverse reactions to warfarin sodium are discussed in greater detail in other sections of the labeling: Hemorrhage [see Boxed Warning, Warnings and Precautions (5.1), and Overdosage ( 10 )] Tissue Necrosis [see Warnings and Precautions ( 5.2 )] Calciphylaxis [see Warnings and Precautions ( 5.3 )] Acute Kidney Injury [see Warnings and Precautions ( 5.4 )] Systemic Atheroemboli and Cholesterol Microemboli [see Warnings and Precautions ( 5.5 )] Limb Ischemia, Necrosis, and Gangrene in Patients with HIT and HITTS [see Warnings and Precautions ( 5.6 )] Other Clinical Settings with Increased Risks [see Warnings and Precautions ( 5.8 )] Other adverse reactions to warfarin sodium include:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly discusses 'serious adverse reactions to warfarin sodium' and lists multiple specific adverse events (Hemorrhage, Tissue Necrosis, Calciphylaxis, Acute Kidney Injury, Systemic Atheroemboli, Limb Ischemia/Necrosis/Gangrene); (b) The passage references cross-references to other sections including 'Boxed Warning,' 'Warnings and Precautions,' and 'Overdosage,' indicating this is an overview section; (c) The language 'Other adverse reactions to warfarin sodium include:' at the end indicates this section is specifically enumerating adverse events observed in patients. Step 2 - Most plausible categories: (a) 'adverse_reactions' - this section explicitly lists and discusses adverse reactions with clinical details; (b) 'warnings_and_precautions' - while referenced multiple times, this section is actually summarizing serious adverse reactions rather than being the primary warnings section. Step 3 - Classification decision: The passage clearly belongs to 'adverse_reactions' because it is enumerating specific adverse events (hemorrhage, tissue necrosis, calciphylaxis, kidney injury, thromboembolism, gangrene) and discussing them as reactions that have occurred with the drug. Although it cross-references the Warnings section, the primary content here is cataloging adverse reactions. Step 4 - Confidence: HIGH (>90%) because the language is unambiguous - 'serious adverse reactions' and 'other adverse reactions' are explicitly stated, and the content matches the definition of adverse_reactions category perfectly.\",\"classification\":\"adverse_reactions\",\"confidence\":\"HIGH\",\"alternative_considered\":\"contraindications\",\"requires_human_review\":false}",
+  "elapsed_ms": 4761,
+  "usage": {
+    "input_tokens": 1093,
+    "output_tokens": 406
+  }
+}

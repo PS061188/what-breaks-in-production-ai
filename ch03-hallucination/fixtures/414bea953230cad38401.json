@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Lisinopril safe to use during pregnancy?\n\nRESPONSE:\nNo — lisinopril/hydrochlorothiazide should not be used during pregnancy. Please note that the label excerpt provided here only contains the Indications and Usage and Dosage and Administration sections, so it does not include the pregnancy-specific warnings; the following reflects the standard boxed warning and labeling for this drug class.\n\nKey points:\n\n- **Boxed warning — fetal toxicity:** Drugs that act directly on the renin-angiotensin system (including ACE inhibitors like lisinopril) can cause injury and even death to the developing fetus when used during the second and third trimesters. When pregnancy is detected, lisinopril and hydrochlorothiazide should be discontinued as soon as possible.\n- **Types of harm reported:** Oligohydramnios (reduced amniotic fluid), fetal lung hypoplasia, skeletal deformations, hypotension, renal failure/anuria in the newborn, and death.\n- **Hydrochlorothiazide component:** Thiazides cross the placenta and have been associated with fetal or neonatal jaundice, thrombocytopenia, and possible other adverse reactions; they are generally not recommended for treating hypertension in pregnancy.\n- **What to do:** Women of childbearing potential should be counseled about these risks and should tell their prescriber right away if they become pregnant or are planning pregnancy. Do not stop or change blood pressure medication on your own — a clinician can switch you to an agent considered safer in pregnancy (e.g., labetalol, nifedipine, or methyldopa are commonly used).\n- **Breastfeeding:** Discuss with your clinician as well, since both components require consideration during lactation.\n\nThis is general information from the drug labeling and is not a substitute for advice from your own healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1374,
+  "usage": {
+    "input_tokens": 966,
+    "output_tokens": 17
+  }
+}

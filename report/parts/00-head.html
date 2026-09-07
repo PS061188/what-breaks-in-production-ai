@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>What Breaks in Production AI — The Experiments</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 18mm 18mm; }
+  @page :first { margin: 0; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Charter", "Georgia", "Iowan Old Style", serif;
+    font-size: 10.4pt; line-height: 1.62; color: #1c1c1c; margin: 0;
+    hyphens: auto;
+  }
+
+  /* ---------- cover ---------- */
+  .cover {
+    height: 297mm; box-sizing: border-box; padding: 62mm 24mm 24mm 24mm;
+    background: #14202b; color: #f4f1ea; page-break-after: always;
+  }
+  .cover .kicker { font-size: 10pt; letter-spacing: .22em; text-transform: uppercase;
+    color: #c98a5e; margin-bottom: 14mm; }
+  .cover h1 { font-size: 33pt; line-height: 1.12; margin: 0 0 6mm 0; font-weight: 600; }
+  .cover h2 { font-size: 14pt; line-height: 1.45; font-weight: 400; color: #b9c4cd;
+    margin: 0 0 22mm 0; }
+  .cover .meta { font-size: 10pt; color: #8d9aa5; line-height: 1.9; }
+  .cover .rule { width: 46mm; height: 2px; background: #c98a5e; margin: 0 0 10mm 0; }
+
+  /* ---------- structure ---------- */
+  h2.part {
+    font-size: 9.5pt; letter-spacing: .2em; text-transform: uppercase; color: #8a5c3b;
+    border-bottom: 1.5px solid #d8cec0; padding-bottom: 2mm; margin: 0 0 6mm 0;
+    page-break-before: always; page-break-after: avoid;
+  }
+  h2.part.first { page-break-before: avoid; }
+  h3 { font-size: 15pt; line-height: 1.3; margin: 9mm 0 3mm 0; font-weight: 600;
+       page-break-after: avoid; }
+  h3.top { margin-top: 0; }
+  h4 { font-size: 11.4pt; margin: 7mm 0 2mm 0; font-weight: 600; color: #23303c;
+       page-break-after: avoid; }
+  p { margin: 0 0 3.4mm 0; }
+  ul, ol { margin: 0 0 3.6mm 0; padding-left: 6mm; }
+  li { margin-bottom: 1.6mm; }
+  strong { font-weight: 600; }
+  em { font-style: italic; }
+  a { color: #1c1c1c; text-decoration: none; }
+
+  .lede { font-size: 11.6pt; line-height: 1.55; color: #33414d; margin-bottom: 6mm; }
+
+  /* ---------- devices ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 4mm 0 5mm 0;
+          font-size: 9.1pt; page-break-inside: avoid; }
+  th { text-align: left; font-weight: 600; font-size: 8.3pt; letter-spacing: .06em;
+       text-transform: uppercase; color: #5d6b77; border-bottom: 1.2px solid #9aa7b2;
+       padding: 1.6mm 2.4mm 1.6mm 0; vertical-align: bottom; }
+  td { padding: 1.9mm 2.4mm 1.9mm 0; border-bottom: .5px solid #e2e2e2;
+       vertical-align: top; line-height: 1.45; }
+  td.num, th.num { text-align: right; padding-right: 4mm; white-space: nowrap; }
+  tr.total td { border-top: 1.2px solid #9aa7b2; border-bottom: none; font-weight: 600; }
+
+  .plain {
+    background: #f6f3ec; border-left: 3px solid #c98a5e; padding: 4mm 5mm;
+    margin: 5mm 0; page-break-inside: avoid; font-size: 9.9pt;
+  }
+  .plain .label { font-size: 8pt; letter-spacing: .16em; text-transform: uppercase;
+    color: #8a5c3b; display: block; margin-bottom: 2mm; font-weight: 600; }
+  .plain p:last-child { margin-bottom: 0; }
+
+  .verdict {
+    border: 1.2px solid #23303c; padding: 4mm 5mm; margin: 5mm 0;
+    page-break-inside: avoid; font-size: 10pt;
+  }
+  .verdict .label { font-size: 8pt; letter-spacing: .16em; text-transform: uppercase;
+    color: #23303c; display: block; margin-bottom: 2mm; font-weight: 600; }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  /* Chapter summary block — read this alone and you have the chapter. */
+  .summary {
+    border: 0.5pt solid #c9b9a2; background: #fbf8f3;
+    padding: 6mm 7mm 5mm; margin: 0 0 8mm; page-break-inside: avoid;
+  }
+  .summary h4 { margin: 5mm 0 2mm; font-size: 9.4pt; letter-spacing: .04em;
+                text-transform: uppercase; color: #8a5c3b; }
+  .summary h4:first-of-type { margin-top: 0; }
+  .summary .kicker { font-size: 8pt; letter-spacing: .18em; text-transform: uppercase;
+                     color: #8a5c3b; display: block; margin-bottom: 2mm; }
+  .summary .oneline { font-size: 11.4pt; line-height: 1.5; color: #14202b; margin: 0 0 4mm; }
+  .summary table { margin: 2mm 0 0; font-size: 9pt; }
+  .summary ul { margin: 1mm 0 0 4mm; padding: 0; }
+  .summary li { margin-bottom: 1.4mm; }
+  .summary p:last-child { margin-bottom: 0; }
+  .keep { color: #3d6b4a; font-weight: 600; }
+  .drop { color: #9c4221; font-weight: 600; }
+  .headline { font-size: 12pt; line-height: 1.4; margin: 4mm 0; color: #14202b; }
+  .headline b { color: #8a5c3b; }
+
+  code { font-family: "SF Mono", "Menlo", monospace; font-size: 8.6pt;
+         background: #f0eee9; padding: 0 .8mm; border-radius: 2px; }
+  pre { font-family: "SF Mono", "Menlo", monospace; font-size: 8.3pt; line-height: 1.5;
+        background: #f6f3ec; padding: 3.5mm 4mm; margin: 3mm 0 4mm 0;
+        white-space: pre-wrap; page-break-inside: avoid; border-radius: 2px; }
+
+  .toc { font-size: 10pt; }
+  .toc div { padding: 1.6mm 0; border-bottom: .5px dotted #d0d0d0; }
+  .toc .n { color: #8a5c3b; font-weight: 600; display: inline-block; width: 9mm; }
+  .toc .sub { color: #6a7681; font-size: 9pt; display: block; margin-left: 9mm; }
+
+  .footnote { font-size: 8.8pt; color: #5d6b77; line-height: 1.5;
+              border-top: .5px solid #d8d8d8; padding-top: 2.5mm; margin-top: 5mm; }
+  .keep { page-break-inside: avoid; }
+</style>
+</head>

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Furosemide safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt provided here only covers the indications and dosing for furosemide tablets — it does not include the Pregnancy/Use in Specific Populations sections, so I can't quote specific pregnancy guidance from it.\n\nWhat I can tell you generally (please verify against the full prescribing information and with your clinician):\n\n- Furosemide crosses the placenta, and adequate, well-controlled studies in pregnant women are lacking. Animal studies with furosemide have shown adverse fetal effects (including increased fetal loss/abnormalities at high doses), so furosemide labeling has historically advised that it should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus.\n- Diuretics are generally not recommended for the routine treatment of hypertension in pregnancy or for physiologic edema of pregnancy, because they can reduce maternal plasma volume and placental perfusion. They may still be appropriate for specific conditions such as heart failure or pulmonary edema.\n- Furosemide is also excreted in breast milk and may suppress lactation, which matters if you are breastfeeding.\n\nBottom line: furosemide is not automatically considered \"safe\" in pregnancy — it should only be used when a clinician judges the benefit to outweigh the risk. If you are pregnant, planning pregnancy, or breastfeeding, discuss this with your obstetrician or prescriber before starting or stopping the medication; don't discontinue a prescribed diuretic on your own, especially if it is treating heart, liver, or kidney disease.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1484,
+  "usage": {
+    "input_tokens": 885,
+    "output_tokens": 17
+  }
+}

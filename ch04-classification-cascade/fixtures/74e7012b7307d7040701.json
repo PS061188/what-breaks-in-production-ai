@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nConcentrations increased by morphine; may need dose adjustment (5.4, 7.1 ) 7.1 Opioids Respiratory depression and sedation, sometimes resulting in death, have been reported following coadministration of gabapentin with opioids (e.g., morphine, hydrocodone, oxycodone, buprenorphine) [ see Warnings and Precautions (5.7) ]. Hydrocodone Coadministration of gabapentin with hydrocodone decreases hydrocodone exposure [ see Clinical Pharmacology (12.3) ]. The potential for alteration in hydrocodone exposure and effect should be considered when gabapentin is started or discontinued in a patient taking hydrocodone. Morphine When gabapentin is administered with morphine, patients should be observed for signs of CNS depression, such as somnolence, sedation and respiratory depression [see Clinical Pharmacology (12.3) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage discusses interactions between gabapentin and multiple opioid drugs (morphine, hydrocodone, oxycodone, buprenorphine); (b) It describes specific pharmacokinetic effects (concentrations increased/decreased, exposure changes); (c) It details clinical consequences (respiratory depression, sedation, CNS depression, potential need for dose adjustment). Step 2 - Most plausible categories: (1) 'drug_interactions' - the passage explicitly discusses coadministration effects, altered drug concentrations/exposure, and clinical consequences of combining drugs. (2) 'adverse_reactions' - respiratory depression and sedation could be interpreted as side effects. Step 3 - Winner determination: 'drug_interactions' is clearly correct because the passage is structured specifically around what happens when gabapentin is combined WITH other drugs (opioids), how those drugs' pharmacokinetics change, and monitoring needed during coadministration. The respiratory depression and sedation mentioned are explicitly consequences of the drug-drug interaction, not standalone adverse reactions to gabapentin alone. The passage references sections on drug interactions (7.1) and pharmacology (12.3), further confirming this is interaction content. Step 4 - Confidence: This is HIGH (>90%) because the content is unambiguously about drug-drug interactions with clear statements about coadministration effects, exposure changes, and interaction-specific monitoring.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4817,
+  "usage": {
+    "input_tokens": 1071,
+    "output_tokens": 358
+  }
+}

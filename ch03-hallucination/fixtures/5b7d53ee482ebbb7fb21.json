@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Amoxicillin for pediatric patients?\n\nRESPONSE:\nFor this formulation (600 mg amoxicillin/42.9 mg clavulanate per 5 mL) the recommended pediatric dose (ages 3 months to 12 years, ≤40 kg) is 90 mg/kg/day of amoxicillin divided every 12 hours, given for 10 days. (Dose based on the amoxicillin component; this formulation provides 6.4 mg/kg/day of clavulanate.) Example volumes (twice daily): 8 kg = 3 mL; 12 kg = 4.5 mL; 16 kg = 6 mL; 20 kg = 7.5 mL; 24 kg = 9 mL; 28 kg = 10.5 mL; 32 kg = 12 mL; 36 kg = 13.5 mL; 40 kg = 15 mL.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1326,
+  "usage": {
+    "input_tokens": 654,
+    "output_tokens": 17
+  }
+}

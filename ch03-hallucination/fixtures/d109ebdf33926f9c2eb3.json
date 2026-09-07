@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Prednisone safe to use during pregnancy?\n\nRESPONSE:\nPrednisone should be used during pregnancy only if the potential benefit justifies the potential risk to the fetus. Although the label excerpt does not provide specific guidance on use in pregnancy, corticosteroids like prednisone can cross the placenta and may be associated with risks such as low birth weight or cleft palate when used during the first trimester. Prescribers should carefully weigh the benefits against risks, use the lowest effective dose, and monitor closely. Consultation with a specialist in high-risk pregnancies or a perinatologist may be beneficial.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1647,
+  "usage": {
+    "input_tokens": 560,
+    "output_tokens": 17
+  }
+}

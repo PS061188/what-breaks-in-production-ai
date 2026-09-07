@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Furosemide?\n\nRESPONSE:\nShort answer: the excerpt you've provided doesn't contain the label's DRUG INTERACTIONS section, so I can only tell you what these Indications/Dosage sections mention — plus some general context, which you should verify against the full prescribing information.\n\nWhat this excerpt actually says:\n• Other antihypertensive agents – Furosemide potentiates their blood‑pressure–lowering effect. Blood pressure must be monitored carefully when furosemide is combined with other antihypertensives, especially at the start of therapy. To prevent an excessive drop in blood pressure, the dose of the other agent(s) should be reduced by at least 50% when furosemide is added, and as blood pressure falls, further dose reduction or even discontinuation of the other antihypertensive drugs may be necessary.\n• The excerpt also cross‑references PRECAUTIONS: Laboratory Tests for monitoring when doses exceed 80 mg/day for prolonged periods (largely because of electrolyte effects, which underlie many of furosemide's interactions).\n\nNot in this excerpt (for context only — confirm in the full label): furosemide labeling typically also discusses interactions with aminoglycoside and other ototoxic drugs, nephrotoxic agents (e.g., cisplatin), lithium, digitalis glycosides and drugs prolonging the QT interval (via hypokalemia), corticosteroids and ACTH, NSAIDs including indomethacin and aspirin/high‑dose salicylates, ACE inhibitors/angiotensin receptor blockers, sucralfate, cyclosporine, phenytoin, methotrexate, skeletal muscle relaxants, thyroid hormones, and chloral hydrate.\n\nPlease consult the complete FDA prescribing information or your pharmacist/prescriber for the full, authoritative interaction list and for advice about your specific medication regimen.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1627,
+  "usage": {
+    "input_tokens": 997,
+    "output_tokens": 17
+  }
+}

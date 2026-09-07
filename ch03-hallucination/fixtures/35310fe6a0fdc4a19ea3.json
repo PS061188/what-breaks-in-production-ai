@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Amoxicillin?\n\nRESPONSE:\n**Short answer for this product (amoxicillin/clavulanate 600 mg/42.9 mg per 5 mL oral suspension — the \"ES-600\" formulation):**\n\n**Dose = 90 mg/kg/day of the amoxicillin component, divided every 12 hours, for 10 days** in children 3 months–12 years weighing ≤40 kg. This delivers 6.4 mg/kg/day of clavulanic acid. There is no loading/starting dose — you begin at the maintenance dose.\n\n**Weight-based volume (from the label's dosing table, given twice daily):**\n- 8 kg → 3 mL BID\n- 12 kg → 4.5 mL BID\n- 16 kg → 6 mL BID\n- 20 kg → 7.5 mL BID\n- 24 kg → 9 mL BID\n- 28 kg → 10.5 mL BID\n- 32 kg → 12 mL BID\n- 36 kg → 13.5 mL BID\n- 40 kg → 15 mL BID\n\nQuick math shortcut: volume per dose (mL) = weight (kg) × 0.375.\n\n**Key practical points**\n- **Indication is narrow:** recurrent/persistent acute otitis media in children with antibacterial exposure for AOM in the prior 3 months plus either age ≤2 years or daycare attendance. Not for AOM caused by *S. pneumoniae* with penicillin MIC ≥4 mcg/mL; AOM due to *S. pneumoniae* alone can be treated with plain amoxicillin.\n- **Give at the start of a meal** — improves clavulanate absorption and reduces GI upset (diarrhea is the dose-limiting adverse effect of the clavulanate component).\n- **>40 kg or adults:** no data with this suspension; use amoxicillin/clavulanate tablets instead. Adults who can't swallow tablets should not be switched to this suspension in place of 500 mg or 875 mg tablets.\n- **Do NOT substitute other suspension strengths.** The 200/28.5 and 400/57 mg per 5 mL suspensions have different clavulanate content and are not interchangeable with the 600/42.9 product.\n- **Reconstitution:** add water in two portions with vigorous shaking (75 mL bottle → 68 mL water; 125 mL → 108 mL; 200 mL → 170 mL). Refrigerate, shake before each use, discard after 10 days. FLAVORx (apple, banana cream, bubble gum, cherry, watermelon), 1 drop per 5 mL, may be added at reconstitution.\n- **Hepatic impairment:** dose with caution and monitor LFTs at regular intervals (cholestatic hepatitis risk with clavulanate).\n- **Renal impairment (standard pharmacology, not in this excerpt):** amoxicillin/clavulanate requires interval extension or dose reduction with CrCl <30 mL/min; the high-dose ES suspension is generally not recommended in patients with CrCl <30 mL/min or on hemodialysis — use an alternative regimen.\n\n**For context — plain amoxicillin (no clavulanate) standard dosing:**\n- Acute otitis media/pneumonia in children: 80–90 mg/kg/day divided q12h (max ~4 g/day).\n- Other pediatric infections: 25–45 mg/kg/day divided q12h or 20–40 mg/kg/day divided q8h.\n- Adults: 500 mg q8h or 875 mg q12h (mild–moderate); 875 mg q12h or 500 mg q8h for more severe infection.\n- Adult dental prophylaxis: 2 g single dose 30–60 minutes before the procedure (50 mg/kg in children).\n\nAlways check for penicillin allergy before prescribing, and reserve therapy for infections proven or strongly suspected to be bacterial.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2181,
+  "usage": {
+    "input_tokens": 1675,
+    "output_tokens": 17
+  }
+}

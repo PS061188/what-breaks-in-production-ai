@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nDuring its premarketing assessment, multiple doses of sertraline hydrochloride were administered to over 4000 adult subjects as of February 18, 2000. The conditions and duration of exposure to sertraline hydrochloride varied greatly, and included (in overlapping categories) clinical pharmacology studies, open and double-blind studies, uncontrolled and controlled studies, inpatient and outpatient studies, fixed-dose and titration studies, and studies for multiple indications, including major depressive disorder and PMDD. Untoward events associated with this exposure were recorded by clinical investigators using terminology of their own choosing. Consequently, it is not possible to provide a meaningful estimate of the proportion of individuals experiencing adverse events without first grouping similar types of untoward events into a smaller number of standardized event categories.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Key features analysis - (1) Discusses premarketing assessment and exposure to sertraline across 4000+ subjects; (2) Mentions recording of untoward events/adverse events by clinical investigators; (3) Discusses the methodology of categorizing adverse events for reporting purposes. Step 2: Most plausible categories - (A) adverse_reactions: The passage explicitly discusses 'untoward events' and 'adverse events' recorded during clinical studies, which is the hallmark of adverse reaction documentation. (B) description: Could describe the drug's development history, but the passage focuses on clinical safety data collection rather than chemical/formulation details. Step 3: Classification decision - adverse_reactions wins decisively. The passage explicitly states it is about 'untoward events associated with this exposure' and discusses how adverse events were recorded and categorized. This is textbook adverse_reactions content - discussing the methodology and scope of adverse event collection during clinical trials. The description category is ruled out because there is no discussion of chemical composition, formulation, inactive ingredients, or physical characteristics. Step 4: Confidence assessment - The language is unambiguous ('untoward events', 'adverse events', 'adverse reactions'). The context clearly pertains to safety monitoring during premarketing trials. This is HIGH confidence (>90%).\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 4369,
+  "usage": {
+    "input_tokens": 1034,
+    "output_tokens": 325
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Sertraline Hydrochloride for pediatric patients?\n\nRESPONSE:\nPer this label, sertraline hydrochloride is only approved for pediatric use in obsessive-compulsive disorder (OCD) — it is not approved for children/adolescents for depression, panic disorder, PTSD, PMDD, or social anxiety disorder.\n\n**Pediatric OCD dosing:**\n- **Children ages 6–12:** start at **25 mg once daily**\n- **Adolescents ages 13–17:** start at **50 mg once daily**\n\n**Titration:** Patients not responding to the initial 25 mg or 50 mg dose may benefit from dose increases up to a **maximum of 200 mg/day** (clinical trials used a range of 25–200 mg/day). Because sertraline has a ~24-hour elimination half-life, dose changes should not be made more often than **once weekly**.\n\n**Other points:**\n- Sertraline may be given once daily in either the morning or the evening.\n- In children, the generally lower body weight compared with adults should be taken into account when advancing the dose, to avoid excessive dosing.\n- OCD generally requires several months or longer of sustained therapy; patients should be periodically reassessed for the need for continued treatment.\n- When stopping, taper gradually rather than abruptly, and monitor for discontinuation symptoms.\n\nNote: This drug carries a boxed warning regarding increased risk of suicidal thinking and behavior in children, adolescents, and young adults; close monitoring is required. Dosing decisions should be made by the treating clinician.\n",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2679,
+  "usage": {
+    "input_tokens": 881,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Gabapentin?\n\nRESPONSE:\nThe label excerpt I was given only covers the Indications and Usage and Dosage and Administration sections — it does not include the Adverse Reactions section, so I can't quote specific adverse reaction rates or lists from it.\n\nFor reference (from general gabapentin prescribing information, not from this excerpt), the most commonly reported adverse reactions include dizziness, somnolence (drowsiness), peripheral edema, ataxia/unsteadiness, fatigue, and, in pediatric patients, viral infection, fever, nausea/vomiting, and behavioral changes such as hostility or emotional lability. Gabapentin, like other antiepileptic drugs, also carries warnings about suicidal thoughts and behavior, and about respiratory depression when combined with opioids or other CNS depressants.\n\nPlease consult Section 6 (Adverse Reactions) and Section 5 (Warnings and Precautions) of the complete product labeling, or speak with your pharmacist or prescriber, for the authoritative and complete list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2271,
+  "usage": {
+    "input_tokens": 712,
+    "output_tokens": 17
+  }
+}

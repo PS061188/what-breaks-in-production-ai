@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nMost commonly reported adverse reactions with lisinopril (ACE inhibitor class) are: \n\n- Dry cough\n- Dizziness/lightheadedness (including first‑dose or orthostatic hypotension)\n- Headache\n- Fatigue\n- Gastrointestinal complaints (nausea, diarrhea)\n- Rash\n\nClinically important laboratory/physiologic changes to watch for: hyperkalemia and increases in serum creatinine/renal dysfunction. \n\nLess common but serious reactions: angioedema (can be life‑threatening), neutropenia/agranulocytosis (rare, esp. in renal impairment or collagen vascular disease), and anaphylactoid reactions in certain settings. \n\nPractical points: monitor serum creatinine and potassium after initiation and with dose changes, counsel patients to report persistent cough, facial/tongue swelling, or lightheadedness, and avoid use in pregnancy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1609,
+  "usage": {
+    "input_tokens": 695,
+    "output_tokens": 17
+  }
+}

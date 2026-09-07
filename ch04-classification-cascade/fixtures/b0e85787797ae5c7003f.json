@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nPhenytoin In a single (400 mg) and multiple dose (400 mg three times a day) study of Gabapentin in epileptic patients (N=8) maintained on phenytoin monotherapy for at least 2 months, gabapentin had no effect on the steady-state trough plasma concentrations of phenytoin and phenytoin had no effect on gabapentin pharmacokinetics. Carbamazepine Steady-state trough plasma carbamazepine and carbamazepine 10, 11 epoxide concentrations were not affected by concomitant gabapentin (400 mg three times a day; N=12) administration. Likewise, gabapentin pharmacokinetics were unaltered by carbamazepine administration. Valproic Acid The mean steady-state trough serum valproic acid concentrations prior to and during concomitant gabapentin administration (400 mg three times a day;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"drug_interactions\"}",
+  "elapsed_ms": 1017,
+  "usage": {
+    "input_tokens": 653,
+    "output_tokens": 11
+  }
+}

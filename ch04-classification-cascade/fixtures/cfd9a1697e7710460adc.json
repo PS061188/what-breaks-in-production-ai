@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAdverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, muscle weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdominal cramps, elevations in liver function tests Dermatologic:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly begins with 'Adverse reactions associated with levothyroxine sodium therapy' and uses the term 'Adverse reactions'; (b) The content is organized by organ system (General, CNS, Musculoskeletal, Cardiovascular, etc.) with specific symptoms listed under each; (c) The passage explicitly references cross-references to 'Warnings and Precautions (5)' and 'Overdosage (10)', typical of FDA prescribing information structure. Step 2 - Most plausible categories: (a) 'adverse_reactions' - the heading explicitly states these are adverse reactions, and the content lists side effects and clinical manifestations organized by body system; (b) 'overdosage' - the passage mentions these reactions are 'primarily those of hyperthyroidism due to therapeutic overdosage' and references the Overdosage section. Step 3 - Classification decision: 'adverse_reactions' is the clear winner. While overdosage is mentioned as the cause of these reactions, the passage is explicitly titled and structured as a listing of adverse reactions. The Overdosage section would discuss management and treatment of overdose; this section documents the observable clinical effects. The reference to overdosage is contextual explanation, not the primary purpose. Step 4 - Confidence: HIGH (>90%). The language is unambiguous, the structure matches standard adverse reaction formatting, and the explicit heading confirms the classification.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"overdosage\", \"requires_human_review\": false}",
+  "elapsed_ms": 4823,
+  "usage": {
+    "input_tokens": 1055,
+    "output_tokens": 369
+  }
+}

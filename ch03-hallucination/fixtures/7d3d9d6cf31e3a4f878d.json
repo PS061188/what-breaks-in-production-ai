@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\nThe label excerpt you've provided doesn't contain any pediatric dosing information for this product.\n\nThe DOSAGE AND ADMINISTRATION section for lisinopril/hydrochlorothiazide tablets addresses only adult use, and specifically notes:\n\n- Lisinopril monotherapy is effective for hypertension at once-daily doses of 10 mg to 80 mg; hydrochlorothiazide monotherapy at 12.5 mg to 50 mg per day.\n- The fixed-dose combination is **not indicated for initial therapy** — it is generally appropriate to begin combination therapy only after a patient has failed monotherapy.\n- Typical switch options are lisinopril/HCTZ 10 mg/12.5 mg or 20 mg/12.5 mg, with further titration based on clinical response (the HCTZ component generally not increased until 2–3 weeks have elapsed).\n- Maximum: do not exceed lisinopril 80 mg / hydrochlorothiazide 50 mg.\n- Not recommended if creatinine clearance is ≤30 mL/min/1.73 m² (loop diuretics preferred in more severe renal impairment).\n\nFor pediatric dosing, you would need to consult the full prescribing information (the Pediatric Use subsection under PRECAUTIONS), which for this combination product generally states that safety and effectiveness in pediatric patients have not been established. Note that single-ingredient lisinopril products do carry pediatric hypertension dosing for children ≥6 years with creatinine clearance >30 mL/min, but that is a separate product label and outside the excerpt provided here.\n\nPlease verify against the complete FDA-approved label and consult a pharmacist or prescribing clinician before treating a pediatric patient.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1928,
+  "usage": {
+    "input_tokens": 965,
+    "output_tokens": 16
+  }
+}

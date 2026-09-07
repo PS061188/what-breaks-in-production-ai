@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Albuterol Sulfate?\n\nRESPONSE:\nThe provided label excerpt contains Indications and Dosage information only; it does not include an Adverse Reactions section. The label’s adverse reactions are typically found in Section 6 of the full prescribing information. I can (a) retrieve and summarize the label’s listed adverse reactions for you, or (b) provide a general list of common albuterol adverse effects (for example: nervousness, tremor, tachycardia, palpitations, headache). Which would you prefer?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1477,
+  "usage": {
+    "input_tokens": 533,
+    "output_tokens": 16
+  }
+}

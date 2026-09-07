@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nEach canister contains a microcrystalline suspension of albuterol sulfate in propellant HFA‑134a (1,1,1,2‑tetrafluoroethane). It contains no other excipients. After priming, each actuation of the inhaler delivers 120 mcg of albuterol sulfate, USP in 75 mg of suspension from the valve and 108 mcg of albuterol sulfate, USP from the mouthpiece (equivalent to 90 mcg of albuterol base from the mouthpiece). Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. Avoid spraying in eyes. Albuterol Sulfate chemical structure\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Albuterol sulfate\\n\\nMolecular Formula: Not provided in passage\\n\\nInactive Ingredients: Propellant HFA-134a (1,1,1,2-tetrafluoroethane). The passage states it contains no other excipients.\"}",
+  "elapsed_ms": 1304,
+  "usage": {
+    "input_tokens": 488,
+    "output_tokens": 78
+  }
+}

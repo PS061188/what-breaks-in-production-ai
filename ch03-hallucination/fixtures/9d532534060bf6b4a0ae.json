@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Atorvastatin Calcium?\n\nRESPONSE:\nAccording to the label, several drug classes interact with Atorvastatin Calcium and require dosage modification:\n\n1. **Anti-Viral Medications:** Saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir, letermovir, and nelfinavir\n\n2. **Azole Antifungals:** Including itraconazole\n\n3. **Macrolide Antibiotics:** Including clarithromycin\n\nSpecific dosage restrictions apply:\n- With saquinavir/ritonavir, darunavir/ritonavir, fosamprenavir, fosamprenavir/ritonavir, elbasvir/grazoprevir, or letermovir: do not exceed 20 mg once daily\n- With nelfinavir: do not exceed 40 mg once daily\n- With clarithromycin or itraconazole: do not exceed 20 mg once daily\n\nThe label notes that for additional recommendations regarding concomitant use with other anti-viral medications, azole antifungals, or macrolide antibiotics, refer to the Drug Interactions section (7.1) of the full prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1536,
+  "usage": {
+    "input_tokens": 773,
+    "output_tokens": 17
+  }
+}

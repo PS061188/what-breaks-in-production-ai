@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Amoxicillin?\n\nRESPONSE:\nThe label excerpt provided does not include a section on adverse reactions or side effects for this amoxicillin-clavulanate formulation. However, based on standard pharmacology of amoxicillin, the most common adverse reactions include:\n\n1. **Gastrointestinal effects** - diarrhea, nausea, vomiting, and abdominal pain (most frequent)\n2. **Rash** - particularly important to distinguish from allergic reactions\n3. **Allergic reactions** - ranging from mild rashes to anaphylaxis in penicillin-sensitive patients\n\n**Clinical notes:**\n- The label specifically recommends taking this medication **at the start of a meal** to minimize gastrointestinal intolerance and enhance clavulanate absorption\n- Amoxicillin-clavulanate combinations may have a higher incidence of diarrhea compared to amoxicillin alone due to the clavulanate component\n- Any patient with a documented penicillin allergy should not receive this medication\n- A non-pruritic, maculopapular rash may occur and should be distinguished from true allergic reactions\n\nFor complete adverse reaction information, you should consult the full prescribing information, which would include frequency data and additional less common but serious adverse events.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1627,
+  "usage": {
+    "input_tokens": 781,
+    "output_tokens": 17
+  }
+}

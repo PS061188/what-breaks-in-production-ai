@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe label excerpt specifically names heparin as a drug that interacts with warfarin sodium: heparin increases the INR and when converting from heparin to warfarin the two are typically overlapped for 4–5 days and until a therapeutic INR is achieved. The label also notes that other anticoagulants require specific conversion instructions (see those agents’ labeling) and that many other drugs (and dietary vitamin K) can affect warfarin’s action. It therefore recommends obtaining additional INR determinations whenever other medications are initiated, discontinued, or taken irregularly. Practical monitoring guidance from the label: obtain INR 5 hours after the last IV heparin bolus, 4 hours after stopping a continuous IV heparin infusion, or 24 hours after the last subcutaneous heparin dose; and be aware warfarin may increase aPTT even without heparin (a severe aPTT elevation >50 seconds with a therapeutic INR may indicate higher bleeding risk). For a complete list of interacting drugs, consult the full Drug Interactions section of the label.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2114,
+  "usage": {
+    "input_tokens": 734,
+    "output_tokens": 17
+  }
+}

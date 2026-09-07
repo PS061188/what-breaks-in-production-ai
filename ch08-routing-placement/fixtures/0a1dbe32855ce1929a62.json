@@ -1,0 +1,82 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\n[indications_and_usage]\nINDICATIONS AND USAGE Major Depressive Disorder – Sertraline hydrochloride is indicated for the treatment of major depressive disorder in adults. The efficacy of Sertraline hydrochloride in the treatment of a major depressive episode was established in six to eight week controlled trials of adult outpatients whose diagnoses corresponded most closely to the DSM-III category of major depressive disorder (see Clinical Trials under CLINICAL PHARMACOLOGY ). A major depressive episode implies a prominent and relatively persistent depressed or dysphoric mood that usually interferes with daily functioning (nearly every day for at least 2 weeks); it should include at least 4 of the following 8 symptoms: change in appetite, change in sleep, psychomotor agitation or retardation, loss of interest in usual activities or decrease in sexual drive, increased fatigue, feelings of guilt or worthlessness, slowed thinking or impaired concentration, and a suicide attempt or suicidal ideation. The antidepressant action of sertraline hydrochloride in hospitalized depressed patients has not been adequately studied. The efficacy of sertraline hydrochloride in maintaining an antidepressant response for up to 44 weeks following 8 weeks of open-label acute treatment (52 weeks total) was demonstrated in a placebo-controlled trial. The usefulness of the drug in patients receiving sertraline hydrochloride for extended periods should be reevaluated periodically (see Clinical Trials under CLINICAL PHARMACOLOGY ). Obsessive-Compulsive Disorder – Sertraline hydrochloride is indicated for the treatment of obsessions and compulsions in patients with obsessive-compulsive disorder (OCD), as defined in the DSM-III-R; i.e., the obsessions or compulsions cause marked distress, are time-consuming, or significantly interfere with social or occupational functioning. The efficacy of Sertraline hydrochloride was established in 12-week trials with obsessive-compulsive outpatients having diagnoses of obsessive-compulsive disorder as defined according to DSM-III or DSM-III-R criteria (see Clinical Trials under CLINICAL PHARMACOLOGY ). Obsessive-compulsive disorder is characterized by recurrent and persistent id\n\n[contraindications]\nCONTRAINDICATIONS All Dosage Forms of Sertraline: The use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride or within 14 days of stopping treatment with Sertraline hydrochloride is contraindicated because of an because of an increased risk if serotonin syndrome. The use of Sertraline hydrochloride within 14 days of stopping an MAOI intended to treat psychiatric disorders is also contraindicated (see WARNINGS and DOSAGE AND ADMINISTRATION ). Starting Sertraline hydrochloride in a patient who is being treated with MAOIs such as linezolid or intravenous methyelene blue is also contraindicated because of an increased risk of serotonin syndrome (see WARNINGS and DOSAGE AND ADMINISTRATION). Concomitant use in patients taking pimozide is contraindicated (see PRECAUTIONS ). Sertraline is contraindicated in patients with a hypersensitivity to sertraline or any of the inactive ingredients in sertraline hydrochloride tablets.\n\n[adverse_reactions]\nADVERSE REACTIONS During its premarketing assessment, multiple doses of sertraline hydrochloride were administered to over 4000 adult subjects as of February 18, 2000. The conditions and duration of exposure to sertraline hydrochloride varied greatly, and included (in overlapping categories) clinical pharmacology studies, open and double-blind studies, uncontrolled and controlled studies, inpatient and outpatient studies, fixed-dose and titration studies, and studies for multiple indications, including major depressive disorder and PMDD. Untoward events associated with this exposure were recorded by clinical investigators using terminology of their own choosing. Consequently, it is not possible to provide a meaningful estimate of the proportion of individuals experiencing adverse events without first grouping similar types of untoward events into a smaller number of standardized event categories. In the tabulations that follow, a World Health Organization dictionary of terminology has been used to classify reported adverse events. The frequencies presented, therefore, represent the proportion of the over 4000 adult individuals exposed to multiple doses of sertraline hydrochloride who experienced a treatment-emergent adverse event of the type cited on at least one occasion while receiving sertraline hydrochloride. An event was considered treatment-emergent if it occurred for the first time or worsened while receiving therapy following baseline evaluation. It is important to emphasize that events reported during therapy were not necessarily caused by it. The prescriber should be aware that the figures in the tables and tabulations cannot be used to predict the incidence of side effects in the course of usual medical practice where patient characteristics and other factors differ from those that prevailed in the clinical trials. Similarly, the cited frequencies cannot be compared with figures obtained from other clinical investigations involving different treatments, uses, and investigators. The cited figures, however, do provide the prescribing physician with some basis for estimating the relative contribution of drug and nondrug factors to the side effect inciden\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"what_it_treats\": {\n    \"value\": \"Treatment of major depressive disorder in adults; treatment of obsessions and compulsions in patients with obsessive-compulsive disorder (OCD).\",\n    \"source_quote\": \"Major Depressive Disorder – Sertraline hydrochloride is indicated for the treatment of major depressive disorder in adults. ... Obsessive-Compulsive Disorder – Sertraline hydrochloride is indicated for the treatment of obsessions and compulsions in patients with obsessive-compulsive disorder (OCD), as defined in the DSM-III-R; i.e., the obsessions or compulsions cause marked distress, are time-consuming, or significantly interfere with social or occupational functioning.\",\n    \"source_section\": \"INDICATIONS AND USAGE\"\n  },\n  \"who_must_not_take_it\": {\n    \"value\": \"Patients taking MAOIs intended to treat psychiatric disorders (concomitantly or within 14 days of stopping sertraline, and sertraline within 14 days of stopping an MAOI), patients being treated with MAOIs such as linezolid or intravenous methylene blue, patients taking pimozide, and patients with hypersensitivity to sertraline or any inactive ingredients.\",\n    \"source_quote\": \"The use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride or within 14 days of stopping treatment with Sertraline hydrochloride is contraindicated because of an because of an increased risk if serotonin syndrome. The use of Sertraline hydrochloride within 14 days of stopping an MAOI intended to treat psychiatric disorders is also contraindicated (see WARNINGS and DOSAGE AND ADMINISTRATION ). Starting Sertraline hydrochloride in a patient who is being treated with MAOIs such as linezolid or intravenous methyelene blue is also contraindicated because of an increased risk of serotonin syndrome (see WARNINGS and DOSAGE AND ADMINISTRATION). Concomitant use in patients taking pimozide is contraindicated (see PRECAUTIONS ). Sertraline is contraindicated in patients with a hypersensitivity to sertraline or any of the inactive ingredients in sertraline hydrochloride tablets.\",\n    \"source_section\": \"CONTRAINDICATIONS\"\n  },\n  \"side_effects\": {\n    \"value\": \"Numerous treatment-emergent adverse events were reported in clinical trials involving over 4,000 adults; the exact incidence of specific side effects cannot be precisely estimated because investigators used varying terminology and events reported during therapy were not necessarily caused by the drug.\",\n    \"source_quote\": \"During its premarketing assessment, multiple doses of sertraline hydrochloride were administered to over 4000 adult subjects as of February 18, 2000. ... An event was considered treatment-emergent if it occurred for the first time or worsened while receiving therapy following baseline evaluation. The prescriber should be aware that the figures in the tables and tabulations cannot be used to predict the incidence of side effects in the course of usual medical practice where patient characteristics and other factors differ from those that prevailed in the clinical trials.\",\n    \"source_section\": \"ADVERSE REACTIONS\"\n  }\n}",
+  "elapsed_ms": 21315,
+  "usage": {
+    "input_tokens": 1218,
+    "output_tokens": 1744
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nLevothyroxine sodium tablets, USP contain no ingredients made from a gluten-containing grain (wheat, barley, or rye). Table 9 provides a listing of the color additives by tablet strength: Table 9. Levothyroxine Sodium Tablet Color Additives Strength (mcg) Color additive(s) 25 FD&C Yellow No. 6 Aluminum Lake 50 None 75 FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 2 Aluminum Lake 88 FD&C Blue No. 2 Aluminum Lake, FD&C Yellow No. 5 Aluminum Lake 100 FD&C Yellow No. 5 Aluminum Lake, FD&C Yellow No. 6 Aluminum Lake 112 FD&C Red No. 40 Aluminum Lake, Carmine 125 FD&C Yellow No. 6 Aluminum Lake, FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 1 Aluminum Lake 137 FD&C Blue No. 1 Aluminum Lake 150 FD&C Blue No.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Levothyroxine sodium tablets, USP are supplied in the following strengths: 25 mcg, 50 mcg, 75 mcg, 88 mcg, 100 mcg, 112 mcg, 125 mcg, 137 mcg, and 150 mcg. Package sizes are not specified in this passage.\"}",
+  "elapsed_ms": 1409,
+  "usage": {
+    "input_tokens": 548,
+    "output_tokens": 91
+  }
+}

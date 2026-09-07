@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage lists specific adverse reactions including angioedema, bullous pemphigoid, erythema multiforme, Stevens-Johnson syndrome, respiratory depression, anxiety, insomnia, nausea, pain, and sweating. (b) It discusses postmarketing reports of serious adverse events. (c) It addresses adverse reactions following abrupt discontinuation. Step 2 - Most plausible categories: (1) adverse_reactions - the passage explicitly enumerates side effects and reactions observed in patients, postmarketing reports, and discontinuation effects; (2) warnings_and_precautions - referenced but not the primary content. Step 3 - Winner determination: This is clearly adverse_reactions because the entire passage is dedicated to cataloging specific adverse effects (angioedema, Stevens-Johnson syndrome, respiratory depression, anxiety, insomnia, nausea, pain, sweating) and discussing their frequency and context. The references to 'Warnings and Precautions' are cross-references, not the primary content. Step 4 - Confidence: HIGH (>90%) - The passage unmistakably focuses on adverse reactions with multiple specific examples and discussions of postmarketing experience.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"contraindications\", \"requires_human_review\": false}",
+  "elapsed_ms": 3683,
+  "usage": {
+    "input_tokens": 1046,
+    "output_tokens": 310
+  }
+}

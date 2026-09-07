@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nPotential Effects of Coadministration of Drugs Highly Bound to Plasma Proteins –Because sertraline is tightly bound to plasma protein, the administration of sertraline hydrochloride to a patient taking another drug which is tightly bound to protein (e.g., warfarin, digitoxin) may cause a shift in plasma concentrations potentially resulting in an adverse effect. Conversely, adverse effects may result from displacement of protein bound sertraline hydrochloride by other tightly bound drugs. In a study comparing prothrombin time AUC (0-120 hr) following dosing with warfarin (0.75 mg/kg) before and after 21 days of dosing with either sertraline hydrochloride (50-200 mg/day) or placebo, there was a mean increase in prothrombin time of 8% relative to baseline for sertraline hydrochloride compared to a 1% decrease for placebo (p<0.02).\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"warfarin, digitoxin\"}",
+  "elapsed_ms": 1901,
+  "usage": {
+    "input_tokens": 489,
+    "output_tokens": 15
+  }
+}

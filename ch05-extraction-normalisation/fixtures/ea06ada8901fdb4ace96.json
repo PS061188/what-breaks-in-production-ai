@@ -1,0 +1,50 @@
+{
+  "model": "gpt-5-mini",
+  "system": "You are a clinical data extraction assistant. Extract the dosing\ninformation from the label text below into clean, standardised, database-ready\nvalues.\n\nStandardise as you go:\n- Doses as a number in milligrams.\n- Frequency as the number of doses per day.\n- Durations in days.\n- One canonical value per field. Keep it tidy and consistent.\n\n<label_text>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</label_text>",
+  "user": "Extract these fields: starting_dose, maximum_dose, frequency, dose_adjustment",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "qualifiers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_quote": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "field",
+            "value",
+            "qualifiers",
+            "source_quote"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "fields"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\n  \"fields\": [\n    {\n      \"field\": \"starting_dose\",\n      \"value\": \"Not specified (1 tablet)\",\n      \"qualifiers\": [\n        \"Adults 18 years of age and older\",\n        \"Swallow 1 tablet in the morning before eating\",\n        \"Swallow whole; do not chew or crush\"\n      ],\n      \"source_quote\": \"swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days\"\n    },\n    {\n      \"field\": \"maximum_dose\",\n      \"value\": \"Not specified (1 tablet/day)\",\n      \"qualifiers\": [\n        \"Do not take more than 1 tablet a day\",\n        \"Do not use for more than 14 days unless directed by your doctor\"\n      ],\n      \"source_quote\": \"do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor\"\n    },\n    {\n      \"field\": \"frequency\",\n      \"value\": \"1\",\n      \"qualifiers\": [\n        \"Once a day (every 24 hours)\",\n        \"Every day for 14 days (course duration)\"\n      ],\n      \"source_quote\": \"this product is to be used once a day (every 24 hours), every day for 14 days\"\n    },\n    {\n      \"field\": \"dose_adjustment\",\n      \"value\": \"Repeat 14-day course every 4 months if needed; do not repeat more often than every 4 months; limit each course to 14 days unless directed by a doctor\",\n      \"qualifiers\": [\n        \"You may repeat a 14-day course every 4 months\",\n        \"Do not take for more than 14 days or more often than every 4 months unless directed by a doctor\"\n      ],\n      \"source_quote\": \"you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor\"\n    }\n  ]\n}",
+  "elapsed_ms": 11367,
+  "usage": {
+    "input_tokens": 371,
+    "output_tokens": 1395
+  }
+}

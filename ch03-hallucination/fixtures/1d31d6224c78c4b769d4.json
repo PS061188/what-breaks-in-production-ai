@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\n**Short answer for the combination product:** Lisinopril/hydrochlorothiazide fixed-dose tablets have no established pediatric dosing. Safety and effectiveness in children have not been established, the combination is not indicated for initial therapy in any age group, and the fixed ratios do not permit weight-based titration. Do not use the combination in children.\n\n**Lisinopril monotherapy (the pediatric-labeled use):**\n- **Age ≥6 years with GFR >30 mL/min/1.73 m²:** Start **0.07 mg/kg once daily, up to a maximum starting dose of 5 mg**.\n- **Titration:** Adjust at ~1–2 week intervals according to blood pressure response. Doses above **0.61 mg/kg (or above 40 mg total) daily have not been studied** and are not recommended.\n- **Not recommended:** children <6 years of age, and any pediatric patient with **GFR <30 mL/min/1.73 m²** (insufficient data).\n- An extemporaneous oral suspension (commonly 1 mg/mL) can be compounded per the manufacturer's labeled recipe when small or weight-based doses are needed; shake well and observe the assigned beyond-use date (typically 4 weeks refrigerated).\n\n**Practical monitoring points in children:**\n- Check serum creatinine and potassium at baseline and ~1–2 weeks after initiation and after each dose increase; watch for hyperkalemia, especially with renal impairment, potassium supplements, K-sparing diuretics, or NSAIDs.\n- Ensure adequate hydration; risk of symptomatic hypotension is greatest in volume- or salt-depleted patients (e.g., concurrent diuretic, vomiting/diarrhea).\n- **Contraindicated in pregnancy** — counsel post-menarchal adolescent girls about fetal toxicity (renal failure, oligohydramnios, skull hypoplasia, death) and discontinue immediately if pregnancy occurs; document a pregnancy discussion and consider testing before starting.\n- Also contraindicated with a history of ACE-inhibitor–associated angioedema, hereditary/idiopathic angioedema, and within 36 hours of sacubitril/valsartan; avoid combining with aliskiren in patients with diabetes.\n- Counsel about persistent dry cough and, urgently, about facial/lip/tongue/laryngeal swelling.\n\n**If a child truly needs both an ACE inhibitor and a thiazide,** titrate the two agents separately as individual components rather than using the fixed-dose combination, and consult pediatric nephrology/cardiology for goal BP (typically <90th percentile for age, sex, and height, or <130/80 in adolescents ≥13 years).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1631,
+  "usage": {
+    "input_tokens": 1306,
+    "output_tokens": 17
+  }
+}

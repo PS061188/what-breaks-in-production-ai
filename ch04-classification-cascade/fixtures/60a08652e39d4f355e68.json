@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nModify this dose based on consideration of patient-specific clinical factors. Consider lower initial and maintenance doses for elderly and/or debilitated patients and in Asian patients [see Use in Specific Populations ( 8.5 ) and Clinical Pharmacology ( 12.3 )] . Routine use of loading doses is not recommended as this practice may increase hemorrhagic and other complications and does not offer more rapid protection against clot formation. Individualize the duration of therapy for each patient. In general, anticoagulant therapy should be continued until the danger of thrombosis and embolism has passed [see Dosage and Administration ( 2.2 )] . Dosing Recommendations without Consideration of Genotype If the patient’s CYP2C9 and VKORC1 genotypes are not known, the initial dose of warfarin sodium tablets is usually 2 to 5 mg once daily.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Explicit discussion of dose modification based on patient characteristics (elderly, debilitated, Asian populations); (2) Specific initial dosing range provided (2-5 mg once daily); (3) References to dosing recommendations and clinical considerations for therapy duration. Step 2 - Most plausible categories: (a) 'dosage_and_administration' - the passage directly addresses initial doses, dose adjustments, and duration of therapy; (b) 'geriatric_use' - mentions elderly patients and dosing considerations. Step 3 - Classification decision: 'dosage_and_administration' is the primary category because the core content is dosing guidance (initial dose range, dose modification factors, therapy duration). The mention of elderly patients is incidental to the main dosing guidance rather than being the focus. The passage explicitly cross-references 'Dosage and Administration (2.2)' indicating this belongs in that section. Step 4 - Confidence: HIGH (>90%) because the passage clearly belongs in a dosing section with explicit dose recommendations and administration guidance, which is unambiguous.\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"geriatric_use\",\"requires_human_review\":false}",
+  "elapsed_ms": 4254,
+  "usage": {
+    "input_tokens": 1060,
+    "output_tokens": 289
+  }
+}

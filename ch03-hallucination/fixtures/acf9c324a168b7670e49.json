@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe label excerpt provided does not include a comprehensive Drug Interactions section that lists specific drugs that interact with Warfarin Sodium. The document only briefly mentions that:\n\n1. **Heparin** - increases the INR and requires specific monitoring protocols (INR must be checked 5 hours after IV bolus, 4 hours after IV infusion cessation, or 24 hours after subcutaneous injection)\n\n2. **Other medications in general** - the label states that warfarin's action may be affected by \"other drugs and dietary vitamin K,\" and recommends performing additional INR tests \"whenever other medications are initiated, discontinued, or taken irregularly.\"\n\nThe label also references a Drug Interactions section (section 7) but that detailed content is not included in the excerpt provided.\n\nFor a complete list of drug interactions with Warfarin Sodium, you should consult the full prescribing information, specifically section 7 (Drug Interactions), or clinical references such as UpToDate or drug interaction databases. Given warfarin's narrow therapeutic index, it is important to verify interactions with any new medications before prescribing.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1636,
+  "usage": {
+    "input_tokens": 741,
+    "output_tokens": 17
+  }
+}

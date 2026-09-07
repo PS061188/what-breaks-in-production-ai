@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe efficacy of Sertraline hydrochloride in the treatment of PTSD was established in two 12-week placebo-controlled trials of adult outpatients whose diagnosis met criteria for the DSM-III-R category of PTSD (see Clinical Trials under CLINICAL PHARMACOLOGY ). PTSD, as defined by DSM-III-R/IV, requires exposure to a traumatic event that involved actual or threatened death or serious injury, or threat to the physical integrity of self or others, and a response which involves intense fear, helplessness, or horror. Symptoms that occur as a result of exposure to the traumatic event include reexperiencing of the event in the form of intrusive thoughts, flashbacks or dreams, and intense psychological distress and physiological reactivity on exposure to cues to the event;\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"PTSD (Post-Traumatic Stress Disorder)\"}",
+  "elapsed_ms": 1067,
+  "usage": {
+    "input_tokens": 443,
+    "output_tokens": 22
+  }
+}

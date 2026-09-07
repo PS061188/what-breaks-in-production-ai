@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSee full prescribing information for drugs that affect thyroid hormone pharmacokinetics and metabolism (e.g., absorption, synthesis, secretion, catabolism, protein binding, and target tissue response) and may alter the therapeutic response to levothyroxine sodium. (7) 7.1 Drugs Known to Affect Thyroid Hormone Pharmacokinetics Many drugs can exert effects on thyroid hormone pharmacokinetics and metabolism (e.g., absorption, synthesis, secretion, catabolism, protein binding, and target tissue response) and may alter the therapeutic response to levothyroxine sodium (Tables 5 to 8). Table 5. Drugs That May Decrease T4 Absorption (Hypothyroidism) Potential impact: Concurrent use may reduce the efficacy of levothyroxine sodium by binding and delaying or preventing absorption, potentially resulting in hypothyroidism.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly discusses 'Drugs Known to Affect Thyroid Hormone Pharmacokinetics' with reference section numbers (7, 7.1); (2) It describes how various drugs can alter 'absorption, synthesis, secretion, catabolism, protein binding, and target tissue response' - core pharmacokinetic/pharmacodynamic concepts; (3) It provides a specific example in 'Table 5' about drugs that decrease T4 absorption and their 'potential impact' on levothyroxine efficacy. Step 2 - Most plausible categories: (a) 'drug_interactions' is the clear primary candidate because the entire passage focuses on how other drugs affect levothyroxine's pharmacokinetics and therapeutic response. (b) 'dosage_and_administration' could be considered secondarily since alterations to pharmacokinetics might inform dosing adjustments, but the passage does not discuss dosing amounts or schedules. Step 3 - Classification decision: 'drug_interactions' wins definitively. This passage is explicitly about drug-drug interactions and how concurrent medications alter levothyroxine's pharmacokinetic properties and efficacy. The alternative ('dosage_and_administration') is ruled out because while drug interactions might inform dosing decisions, this passage does not discuss dosing amounts, frequencies, routes, or administration instructions - it only addresses the mechanisms of drug interactions. Step 4 - Confidence: HIGH (>90%). The passage is unambiguously from a drug interactions section of prescribing information, explicitly titled as 'Drugs Known to Affect Thyroid Hormone Pharmacokinetics' with clear discussion of how other drugs impact levothyroxine's therapeutic response.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 13230,
+  "usage": {
+    "input_tokens": 1057,
+    "output_tokens": 433
+  }
+}

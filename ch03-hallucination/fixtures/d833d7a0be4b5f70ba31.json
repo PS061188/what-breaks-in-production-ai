@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nThe provided label excerpt includes only indications and dosing information and does not contain a drug interactions section, so I cannot list interacting drugs based on this excerpt. If you want, I can: 1) summarize commonly known drug interactions with omeprazole (from general medical knowledge), or 2) review an interactions section of the full label if you can provide it. Which would you prefer?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 2167,
+  "usage": {
+    "input_tokens": 496,
+    "output_tokens": 16
+  }
+}

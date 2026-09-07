@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Lisinopril?\n\nRESPONSE:\nShort answer: The label excerpt you've given me only covers **Indications and Usage** and **Dosage and Administration** — it does not include the Drug Interactions section, so I can't quote specific interactions from it.\n\nWhat the excerpt does hint at:\n- It repeatedly refers you to the **WARNINGS** section (e.g., regarding agranulocytosis, angioedema, anaphylactoid reactions during membrane exposure), which in the full label is where several interaction-related cautions appear.\n- It notes that hydrochlorothiazide causes dose-dependent **hypokalemia**, while adding lisinopril blunts that potassium loss — a pharmacologic interaction between the two components themselves that is clinically relevant when other potassium-altering drugs are used.\n\nFor completeness (general knowledge, not from this excerpt), interactions commonly listed for lisinopril/hydrochlorothiazide products include: potassium supplements, potassium-sparing diuretics and potassium-containing salt substitutes (hyperkalemia); other diuretics or antihypertensives (excessive hypotension); NSAIDs including COX-2 inhibitors (reduced antihypertensive effect, renal deterioration); aliskiren and angiotensin receptor blockers (dual RAS blockade — hypotension, hyperkalemia, renal impairment); neprilysin inhibitors such as sacubitril and other mTOR/DPP-4-related agents (angioedema risk); lithium (raised lithium levels); gold (sodium aurothiomalate) injections; antidiabetic agents including insulin; and, for the hydrochlorothiazide component, digitalis glycosides, corticosteroids/ACTH, cholestyramine and colestipol, skeletal muscle relaxants, and drugs affecting electrolytes.\n\nBecause this list is not verifiable from the text provided, please consult the complete prescribing information (PRECAUTIONS/Drug Interactions and WARNINGS sections) or a pharmacist for a definitive, product-specific list, especially before starting or stopping any medication.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1753,
+  "usage": {
+    "input_tokens": 1064,
+    "output_tokens": 17
+  }
+}

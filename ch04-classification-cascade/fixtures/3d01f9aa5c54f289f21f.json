@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIn premature infants furosemide may precipitate nephrocalcinosis/nephrolithiasis. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity who have been treated chronically with furosemide. Monitor renal function, and renal ultrasonography should be considered, in pediatric patients receiving furosemide. If furosemide is administered to premature infants during the first weeks of life, it may increase the risk of persistence of patent ductus arteriosus. Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level.\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"In premature infants, furosemide may precipitate nephrocalcinosis/nephrolithiasis and increase the risk of persistence of patent ductus arteriosus. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity treated chronically with furosemide. Renal function monitoring and renal ultrasonography should be considered in pediatric patients receiving furosemide. The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight as a single dose. If the diuretic response is not satisfactory, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level.\"}",
+  "elapsed_ms": 2037,
+  "usage": {
+    "input_tokens": 515,
+    "output_tokens": 219
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Gabapentin?\n\nRESPONSE:\nThe starting dose of gabapentin depends on the indication, the patient's age, and renal function.\n\n**1. Postherpetic neuralgia (adults)** — 3-day titration:\n- Day 1: 300 mg as a single dose\n- Day 2: 600 mg/day (300 mg twice daily)\n- Day 3: 900 mg/day (300 mg three times daily)\n- Then titrate as needed for pain relief up to 1800 mg/day (600 mg TID). Doses of 1800–3600 mg/day showed comparable efficacy, with no additional benefit demonstrated above 1800 mg/day.\n\n**2. Adjunctive therapy for partial-onset seizures**\n- Patients 12 years and older: start at 300 mg three times daily (900 mg/day). Maintenance is 300–600 mg TID (900–1800 mg/day); up to 2400 mg/day has been well tolerated long-term, and 3600 mg/day short-term in a small number of patients.\n- Pediatric patients 3–11 years: start at 10–15 mg/kg/day divided TID, titrating upward over ~3 days to maintenance:\n  • Ages 3–4 years: 40 mg/kg/day divided TID\n  • Ages 5–11 years: 25–35 mg/kg/day divided TID\n  • Up to 50 mg/kg/day was well tolerated in a long-term study.\n\n**Key practical points**\n- Dose three times daily; the maximum interval between doses should not exceed 12 hours (to avoid breakthrough seizures, given gabapentin's short half-life).\n- Renal impairment (patients ≥12 years) — adjust by CrCl (Cockcroft-Gault):\n  • CrCl ≥60 mL/min: 900–3600 mg/day (300–1200 mg TID)\n  • CrCl >30–59: 400–1400 mg/day (200–700 mg BID)\n  • CrCl >15–29: 200–700 mg/day (200–700 mg once daily)\n  • CrCl 15: 100–300 mg once daily; for CrCl <15, reduce the daily dose in proportion to CrCl (e.g., CrCl 7.5 → half the CrCl-15 dose)\n  • Hemodialysis: maintenance dose based on CrCl plus a supplemental post-dialysis dose of 125–350 mg after each 4 hours of dialysis (matched to the corresponding maintenance dose column)\n  • Use in children <12 years with renal impairment has not been studied.\n- Elderly: start low and titrate slowly; base dosing on estimated CrCl since renal function commonly declines with age. Absorption is saturable, so bioavailability falls at higher doses.\n- Administer with or without food; capsules should be swallowed whole with water.\n- Do not stop abruptly — taper over a minimum of 1 week (longer if clinically appropriate) when reducing, discontinuing, or switching, to reduce the risk of withdrawal symptoms and, in epilepsy, increased seizure frequency/status epilepticus.\n- Counsel about somnolence, dizziness, ataxia, and peripheral edema, especially during titration, and about additive CNS/respiratory depression with opioids, benzodiazepines, or other CNS depressants — particularly in the elderly and those with compromised respiratory function. Antacids reduce absorption; give gabapentin at least 2 hours after antacid. Monitor for suicidal ideation/behavior, as with all antiepileptic drugs.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1627,
+  "usage": {
+    "input_tokens": 1547,
+    "output_tokens": 17
+  }
+}

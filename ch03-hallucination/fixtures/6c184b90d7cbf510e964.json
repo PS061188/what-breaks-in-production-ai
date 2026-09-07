@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Levothyroxine Sodium safe to use during pregnancy?\n\nRESPONSE:\nYes — levothyroxine is not only considered appropriate in pregnancy, it is important to continue thyroid hormone replacement. Untreated hypothyroidism in pregnancy carries risks for both mother and baby, and this label includes specific dosing guidance for pregnant patients, which indicates it is intended to be used during pregnancy rather than stopped.\n\nWhat the label says about pregnancy:\n\n**If you already have hypothyroidism before pregnancy:**\n- Serum TSH and free‑T4 should be measured as soon as pregnancy is confirmed, and at minimum once each trimester.\n- The goal is to keep TSH within the trimester‑specific reference range. Levothyroxine requirements often rise during pregnancy.\n- If TSH is above the trimester‑specific range, the dose is typically increased by 12.5 to 25 mcg per day, with TSH rechecked every 4 weeks until stable.\n- After delivery, the dose is reduced back to the pre‑pregnancy level immediately, with a TSH check 4 to 8 weeks postpartum.\n\n**If hypothyroidism is newly diagnosed during pregnancy:**\n- TSH ≥10 mIU/L: starting dose 1.6 mcg/kg/day\n- TSH <10 mIU/L: starting dose 1.0 mcg/kg/day\n- In both cases, monitor TSH every 4 weeks and adjust until TSH is within the trimester‑specific range.\n\nImportant caveats: this excerpt does not include the full \"Use in Specific Populations\" pregnancy section, and it does contain a warning that overtreatment can cause hyperthyroidism — so dosing should be carefully individualized and monitored, not self‑adjusted. Do not stop or change your dose on your own; talk with your obstetrician or endocrinologist as soon as you know you are pregnant or are planning pregnancy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1341,
+  "usage": {
+    "input_tokens": 1008,
+    "output_tokens": 17
+  }
+}

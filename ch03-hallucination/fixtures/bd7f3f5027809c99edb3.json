@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Amoxicillin?\n\nRESPONSE:\nAmoxicillin/clavulanate has relatively few clinically important drug interactions, but the following are worth knowing (note: the label excerpt you provided contains only the Indications and Dosage sections, so the items below come from the full amoxicillin/clavulanate labeling and standard pharmacology):\n\n**1. Probenecid** – Decreases renal tubular secretion of amoxicillin, raising and prolonging amoxicillin serum levels (clavulanate is largely unaffected). Co-administration is **not recommended** in the labeling, although this interaction is occasionally exploited deliberately in adults for deep-seated infections. Not relevant to routine pediatric otitis media dosing.\n\n**2. Allopurinol** – Concurrent use is associated with a markedly increased incidence of non-allergic maculopapular rash compared with either drug alone. Counsel families that a rash in this setting is often not true penicillin allergy, but evaluate clinically before labeling the child penicillin-allergic.\n\n**3. Oral anticoagulants (warfarin, and to a lesser extent other VKAs)** – Abnormal prolongation of prothrombin time/INR has been reported with amoxicillin, partly via alteration of gut flora and vitamin K production. Monitor INR more frequently during and shortly after the course and adjust the anticoagulant dose as needed. (DOACs are not meaningfully affected.)\n\n**4. Methotrexate** – Penicillins reduce renal clearance of methotrexate, increasing exposure and risk of mucositis, myelosuppression, and nephrotoxicity. This matters most with high-dose oncologic methotrexate; monitor levels/counts, and consider an alternative antibacterial if feasible.\n\n**5. Mycophenolate mofetil** – Amoxicillin/clavulanate can reduce pre-dose mycophenolic acid concentrations by roughly 50%; the clinical significance is uncertain but monitor for reduced immunosuppressive effect in transplant patients.\n\n**6. Hormonal contraceptives** – The labeling notes that amoxicillin may reduce the efficacy of combined oral contraceptives; the actual pharmacokinetic evidence is weak (unlike rifampin), but many clinicians still advise a backup method during therapy in adolescents/adults.\n\n**7. Bacteriostatic antibacterials (tetracyclines, macrolides, chloramphenicol, sulfonamides)** – Theoretical antagonism of the bactericidal effect of penicillins; avoid routine co-administration for the same infection unless there is a specific rationale.\n\n**8. Live oral typhoid vaccine (Ty21a) and other live bacterial vaccines** – Antibacterial activity may inactivate the vaccine; separate administration.\n\n**Laboratory test interference (worth flagging to the team):**\n- False-positive urine glucose with copper-reduction methods (Clinitest, Benedict's, Fehling's) — use glucose-oxidase–based tests instead.\n- False-positive Aspergillus galactomannan EIA has been reported with amoxicillin/clavulanate.\n- Positive direct Coombs test can occur, complicating cross-matching.\n- Amoxicillin can transiently affect estriol levels in pregnant women.\n\n**Practical points for this product:** No renal-dose adjustment guidance is given for the 600 mg/42.9 mg per 5 mL suspension because it is not recommended in patients with significant renal impairment (CrCl <30 mL/min) — use a different formulation/strength in that setting. Dose with caution and monitor hepatic function at intervals in hepatic impairment. Give at the start of a meal to improve clavulanate absorption and reduce GI upset, and remember this strength is **not interchangeable** with the 200 mg/28.5 mg or 400 mg/57 mg suspensions because the clavulanate content per 5 mL differs.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1936,
+  "usage": {
+    "input_tokens": 1681,
+    "output_tokens": 17
+  }
+}

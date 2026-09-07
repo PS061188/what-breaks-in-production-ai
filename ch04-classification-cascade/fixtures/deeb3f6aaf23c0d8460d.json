@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIn addition, each tablet contains the following inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. The 1 mg also contains FD&C red no. 40. The 2 mg also contains FD&C blue no. 2 aluminum lake and FD&C red no. 40 aluminum lake. The 2.5 mg also contains D&C yellow no. 10 aluminum lake and FD&C blue no. 1 aluminum lake. The 3 mg also contains FD&C yellow no. 6 aluminum lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 aluminum lake, and D&C yellow no. 10 aluminum lake. The 4 mg also contains FD&C blue no. 1 aluminum lake and FD&C blue no. 2 aluminum lake. The 5 mg also contains FD&C yellow no. 6 aluminum lake, FD&C red no.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. Additional colorants vary by strength: 1 mg contains FD&C red no. 40; 2 mg contains FD&C blue no. 2 aluminum lake and FD&C red no. 40 aluminum lake; 2.5 mg contains D&C yellow no. 10 aluminum lake and FD&C blue no. 1 aluminum lake; 3 mg contains FD&C yellow no. 6 aluminum lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 aluminum lake, and D&C yellow no. 10 aluminum lake; 4 mg contains FD&C blue no. 1 aluminum lake and FD&C blue no. 2 aluminum lake; 5 mg contains FD&C yellow no. 6 aluminum lake and FD&C red no. (incomplete).\"}",
+  "elapsed_ms": 2189,
+  "usage": {
+    "input_tokens": 513,
+    "output_tokens": 250
+  }
+}

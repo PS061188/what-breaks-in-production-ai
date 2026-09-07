@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Prednisone?\n\nRESPONSE:\nShort answer: the label excerpt you've given me here doesn't include a Drug Interactions section — it only contains the INDICATIONS and DOSAGE AND ADMINISTRATION portions of the prednisone label. So I can't cite interaction information from this document.\n\nFor a complete list, you'd need the full prescribing information (the PRECAUTIONS/Drug Interactions section) or a pharmacist/drug-interaction database.\n\nFor general background only (not from this excerpt), prednisone labels and standard references commonly describe interactions with:\n\n• Drugs that speed prednisone breakdown (may reduce its effect): rifampin, phenytoin, phenobarbital, carbamazepine, ephedrine.\n• Drugs that slow its breakdown (may increase steroid effects/toxicity): ketoconazole, itraconazole, clarithromycin, ritonavir/cobicistat and other strong CYP3A4 inhibitors, estrogens/oral contraceptives, grapefruit juice.\n• NSAIDs and aspirin: increased risk of GI ulceration/bleeding; corticosteroids can also lower salicylate levels.\n• Anticoagulants (warfarin): unpredictable changes in INR — monitor closely.\n• Potassium-depleting agents (loop/thiazide diuretics, amphotericin B): additive hypokalemia; caution with digoxin because low potassium raises the risk of arrhythmias.\n• Antidiabetic drugs and insulin: corticosteroids raise blood glucose, so doses may need adjustment.\n• Vaccines: reduced response to, and risk from, live vaccines with immunosuppressive doses; also blunted response to inactivated vaccines.\n• Other immunosuppressants (e.g., cyclosporine, tacrolimus): increased infection risk and mutual level changes; convulsions have been reported with cyclosporine.\n• Neuromuscular blockers and cholinesterase inhibitors (e.g., in myasthenia gravis): risk of myopathy or worsening weakness.\n• Quinolone antibiotics: increased tendon rupture risk.\n• Isoniazid: corticosteroids may lower isoniazid levels.\n\nPlease verify against the full FDA-approved label and check your specific medication list with a pharmacist or prescriber before making any changes.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2197,
+  "usage": {
+    "input_tokens": 1148,
+    "output_tokens": 17
+  }
+}

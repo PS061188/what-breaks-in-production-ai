@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Lisinopril for pediatric patients?\n\nRESPONSE:\nFor pediatric hypertension the usual recommended lisinopril regimen is: start 0.07 mg/kg orally once daily (not to exceed about 5 mg as the initial dose) and titrate as needed. The typical maintenance range is approximately 0.07–0.61 mg/kg once daily (maximum about 40 mg/day). Lisinopril is generally used in children ≥6 years (check the specific product label for age approvals and formulations). Monitor blood pressure, renal function and serum potassium closely during dose titration and thereafter; follow product labeling for contraindications and special situations (pregnancy, bilateral renal artery stenosis, prior angioedema, renal impairment).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1482,
+  "usage": {
+    "input_tokens": 610,
+    "output_tokens": 17
+  }
+}

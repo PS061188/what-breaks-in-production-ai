@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Warfarin Sodium?\n\nRESPONSE:\nThe recommended starting dose of Warfarin Sodium is usually 2 to 5 mg once daily when the patient's CYP2C9 and VKORC1 genotypes are not known. However, the appropriate initial dose varies widely among patients and should be individualized based on: (1) Clinical factors including age, race, body weight, sex, concomitant medications, and comorbidities; (2) Genetic factors (CYP2C9 and VKORC1 genotypes) if known; and (3) Patient-specific considerations such as elderly/debilitated patients and Asian patients, who may require lower initial doses. The initial dose should be selected based on the expected maintenance dose and then modified based on the patient's INR response. Routine use of loading doses is not recommended. If genotype information is available, refer to Table 1 in the label for dosing guidance based on specific CYP2C9 and VKORC1 variants.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2189,
+  "usage": {
+    "input_tokens": 675,
+    "output_tokens": 17
+  }
+}

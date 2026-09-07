@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Gabapentin?\n\nRESPONSE:\nI can't answer that from the excerpt you've given me — the text provided only covers the Indications and Usage and Dosage and Administration sections of the gabapentin capsules label. It does not include Section 6 (Adverse Reactions) or Section 5 (Warnings and Precautions), which is where the most common adverse reactions are listed.\n\nFor reference, in the full FDA prescribing information for gabapentin capsules, the most commonly reported adverse reactions are generally listed as:\n\n- Postherpetic neuralgia (adults): dizziness, somnolence, peripheral edema, and ataxia\n- Epilepsy, adjunctive therapy (patients >12 years): somnolence, dizziness, ataxia, fatigue, and nystagmus\n- Epilepsy, adjunctive therapy (pediatric patients 3–11 years): viral infection, fever, nausea and/or vomiting, somnolence, and hostility\n\nThe label also carries important warnings about drug reaction with eosinophilia and systemic symptoms (DRESS)/multiorgan hypersensitivity, anaphylaxis and angioedema, respiratory depression (especially with opioids or other CNS depressants, or in patients with respiratory impairment), driving impairment/somnolence, suicidal behavior and ideation with antiepileptic drugs, and withdrawal-precipitated seizures if stopped abruptly (the excerpt does note that discontinuation should be gradual over at least 1 week).\n\nPlease check the complete prescribing information or consult a pharmacist or prescriber for the authoritative and complete safety details, and report any concerning symptoms to your healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1786,
+  "usage": {
+    "input_tokens": 922,
+    "output_tokens": 17
+  }
+}

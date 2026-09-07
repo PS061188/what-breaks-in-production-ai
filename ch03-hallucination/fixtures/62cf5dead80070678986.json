@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Lisinopril?\n\nRESPONSE:\nThe label excerpt provided does not contain information about drug interactions with lisinopril. However, based on standard pharmacology, here are the clinically important drug interactions with lisinopril:\n\n**Major Interactions:**\n\n1. **Potassium-elevating agents** (potassium supplements, potassium-sparing diuretics, NSAIDs, ARBs) - Risk of hyperkalemia. Note: The label mentions lisinopril blunts hypokalemia from diuretics, which is actually a beneficial effect in combination therapy.\n\n2. **NSAIDs and COX-2 inhibitors** - Reduced antihypertensive effect; increased risk of renal impairment and hyperkalemia.\n\n3. **ACE inhibitor/ARB combinations** - Increased risk of hyperkalemia, hypotension, and renal dysfunction; generally not recommended.\n\n4. **Lithium** - ACE inhibitors can increase lithium levels, risking toxicity. Monitor lithium levels closely.\n\n5. **Other antihypertensives** - Additive hypotensive effects; dosing may need adjustment.\n\n**Moderate Interactions:**\n\n- **Allopurinol** - Increased risk of hypersensitivity reactions\n- **Anesthetics** - Enhanced hypotensive effects\n- **Antidiabetic agents** - Lisinopril may potentiate glucose-lowering effects\n\n**Key Monitoring Points:**\nMonitor renal function and serum potassium regularly, especially when initiating or combining with interacting drugs. The label emphasizes caution in renal impairment.\n\nFor comprehensive interaction checking, consult current drug interaction databases or clinical references.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2074,
+  "usage": {
+    "input_tokens": 932,
+    "output_tokens": 17
+  }
+}

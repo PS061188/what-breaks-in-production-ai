@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Lisinopril indicated to treat?\n\nRESPONSE:\n**Per this label (lisinopril/hydrochlorothiazide fixed-dose combination):**\n\n- **Hypertension** — to lower blood pressure and thereby reduce the risk of fatal and non‑fatal cardiovascular events, primarily stroke and myocardial infarction.\n- Important caveat: the **fixed-dose combination is NOT indicated for initial therapy** of hypertension. It is intended for patients who have failed to achieve goal BP on monotherapy with either component, or as replacement therapy substituting for individually titrated components.\n\n**Lisinopril as a single agent (standard labeled indications, beyond this excerpt):**\n\n1. **Hypertension** — in adults and children ≥6 years; may be used alone or with other antihypertensives (typical adult dose 10 mg once daily, range 20–40 mg/day; up to 80 mg has been studied).\n2. **Heart failure with reduced ejection fraction** — as adjunctive therapy with diuretics and (usually) digitalis/beta-blockers; reduces mortality and hospitalization. Start low (2.5–5 mg daily) and titrate to target 20–40 mg daily as tolerated.\n3. **Acute myocardial infarction** — in hemodynamically stable patients within 24 hours of symptom onset, to improve survival; continued for 6 weeks. Avoid if SBP <100 mmHg or in cardiogenic shock.\n\n**Common evidence-based off-label/guideline uses:** diabetic and non-diabetic proteinuric chronic kidney disease (renoprotection), post-MI LV dysfunction, and migraine prophylaxis.\n\n**Key prescribing cautions applicable to all uses:**\n\n- **Fetal toxicity** — discontinue as soon as pregnancy is detected; boxed warning for drugs acting on the renin–angiotensin system.\n- **Angioedema** — higher incidence in Black patients; contraindicated with history of ACE-inhibitor–associated angioedema or hereditary/idiopathic angioedema.\n- **Do not combine with aliskiren in diabetes**, and avoid routine dual RAS blockade (ACE inhibitor + ARB) due to hyperkalemia, hypotension, and renal failure risk.\n- Do not give within 36 hours of **sacubitril/valsartan**.\n- Monitor **potassium and serum creatinine** within 1–2 weeks of initiation/dose change; watch for hyperkalemia (especially with K-sparing diuretics, K supplements, NSAIDs, or CKD) — note the HCTZ component blunts this.\n- **Volume depletion/high-dose diuretic use** predisposes to first-dose hypotension.\n- Regarding the combination product: HCTZ can cause hypokalemia, hyponatremia, hyperuricemia/gout, hyperglycemia, hypercalcemia, and photosensitivity; it is contraindicated with sulfonamide hypersensitivity (relative) and anuria.\n- **Renal impairment:** the combination is acceptable if CrCl >30 mL/min/1.73 m²; below that, loop diuretics are preferred and the combination is not recommended.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1574,
+  "usage": {
+    "input_tokens": 1442,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nPhenytoin In a single (400 mg) and multiple dose (400 mg three times a day) study of Gabapentin in epileptic patients (N=8) maintained on phenytoin monotherapy for at least 2 months, gabapentin had no effect on the steady-state trough plasma concentrations of phenytoin and phenytoin had no effect on gabapentin pharmacokinetics. Carbamazepine Steady-state trough plasma carbamazepine and carbamazepine 10, 11 epoxide concentrations were not affected by concomitant gabapentin (400 mg three times a day; N=12) administration. Likewise, gabapentin pharmacokinetics were unaltered by carbamazepine administration. Valproic Acid The mean steady-state trough serum valproic acid concentrations prior to and during concomitant gabapentin administration (400 mg three times a day;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. PROMINENT FEATURES: (a) The passage explicitly discusses drug-drug interactions between gabapentin and three major antiepileptic agents (phenytoin, carbamazepine, valproic acid); (b) The passage reports specific pharmacokinetic findings - that these drugs do NOT affect each other's plasma concentrations or pharmacokinetics; (c) The format and content are characteristic of a drug interaction section from a prescribing information document.\\n\\n2. MOST PLAUSIBLE CATEGORIES: (a) 'drug_interactions' - the content directly addresses how gabapentin behaves when taken with other medications, reporting steady-state plasma concentrations and pharmacokinetic effects; (b) 'adverse_reactions' - could theoretically describe unexpected reactions when combining drugs, but this passage explicitly discusses pharmacokinetic data, not clinical adverse effects.\\n\\n3. CLASSIFICATION WIN: 'drug_interactions' is the clear winner. The passage systematically presents interaction studies for three comedications with specific pharmacokinetic data points. This is the definition of a drug interactions section. 'adverse_reactions' is ruled out because the passage contains no mention of clinical adverse effects, patient symptoms, or safety signals - only objective pharmacokinetic measurements.\\n\\n4. CONFIDENCE: HIGH (>95%). The language (\\\"steady-state trough plasma concentrations\\\", \\\"pharmacokinetics\\\", \\\"concomitant administration\\\"), structure (multiple drug comparisons), and content (interaction study results) are unambiguous indicators of a drug_interactions classification.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4775,
+  "usage": {
+    "input_tokens": 1071,
+    "output_tokens": 383
+  }
+}

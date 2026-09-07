@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\n**Short answer:** For hypertension, lisinopril monotherapy is typically started at **10 mg once daily** in an otherwise uncomplicated adult, with usual maintenance of 20–40 mg once daily and a maximum of 80 mg/day. The lisinopril/HCTZ fixed-dose combination described in this label is **not indicated for initial therapy** — it is used after a patient fails monotherapy or as replacement therapy for the titrated individual components.\n\n**Starting doses by indication (standard lisinopril labeling):**\n- **Hypertension (adults, not on a diuretic):** 10 mg once daily; titrate at ~1–2 week intervals to 20–40 mg once daily based on BP response. Doses above 40 mg add little for most patients; max studied 80 mg/day.\n- **Hypertension in patients already on a diuretic, volume/salt depleted, or elderly/frail:** **5 mg once daily** (or lower), because of risk of symptomatic first-dose hypotension. If possible, stop the diuretic 2–3 days before starting lisinopril, then restart if needed. If the diuretic cannot be stopped, give the first dose under medical observation for several hours.\n- **Heart failure (adjunct):** start **2.5–5 mg once daily**, titrate to a target of up to 20–40 mg once daily as tolerated (watch BP, renal function, K+).\n- **Acute MI (hemodynamically stable):** 5 mg within 24 h, 5 mg at 24 h, 10 mg at 48 h, then 10 mg daily × 6 weeks; if systolic BP ≤120 mmHg, start at **2.5 mg**.\n- **Pediatric hypertension (≥6 years, CrCl >30):** 0.07 mg/kg once daily (max 5 mg initial); titrate to max 0.61 mg/kg or 40 mg/day.\n\n**Renal impairment (monotherapy):** CrCl 10–30 mL/min → start 5 mg daily; CrCl <10 mL/min or hemodialysis → start 2.5 mg daily; titrate upward by response with close monitoring of creatinine and potassium.\n\n**Notes specific to the combination product in this label:**\n- Switch to lisinopril/HCTZ **10/12.5 mg or 20/12.5 mg** when monotherapy is inadequate; then titrate either component by response. Do not increase the HCTZ component more often than every 2–3 weeks. Do not exceed lisinopril 80 mg/HCTZ 50 mg.\n- A patient controlled on HCTZ 25 mg who is losing potassium may be switched to 10/12.5 mg for equal or better BP control with less kaliuresis.\n- No dose adjustment needed if CrCl >30 mL/min/1.73 m² (SCr ≲3 mg/dL); with more severe renal impairment, use a loop diuretic instead — the combination is not recommended.\n\n**Monitoring/cautions:** check serum creatinine, potassium, and sodium at baseline and ~1–2 weeks after initiation or dose increase; watch for hyperkalemia (especially with K+ supplements, K+-sparing diuretics, NSAIDs, or CKD) and hyponatremia/hypokalemia from the thiazide. Avoid combining with aliskiren in diabetes, and generally avoid dual RAAS blockade with an ARB. ACE inhibitors are contraindicated in pregnancy — discontinue immediately if pregnancy is detected. Counsel about cough and about angioedema (higher incidence in Black patients); avoid within 36 h of sacubitril/valsartan or in patients with a history of ACEi-associated angioedema.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2994,
+  "usage": {
+    "input_tokens": 1623,
+    "output_tokens": 17
+  }
+}

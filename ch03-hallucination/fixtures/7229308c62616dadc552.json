@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Amoxicillin?\n\nRESPONSE:\nThe excerpt you provided does not include an “Adverse Reactions” section. Generally, the most commonly reported adverse reactions with amoxicillin (and with amoxicillin–clavulanate) are: \n\n- Gastrointestinal upset (diarrhea, loose stools, nausea, vomiting) — diarrhea is particularly common with amoxicillin–clavulanate\n- Skin reactions (rash, including maculopapular rash and urticaria)\n- Superinfection with yeast (oral or vaginal candidiasis)\n- Hypersensitivity reactions (from mild rash to rare but serious anaphylaxis)\n\nLess common but important: Clostridioides difficile–associated diarrhea can occur with antibiotic use. If you’d like, I can retrieve the full prescribing information’s “Adverse Reactions” section or summarize specific rates from the full label.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3422,
+  "usage": {
+    "input_tokens": 670,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Amoxicillin?\n\nRESPONSE:\nI can't answer this from the text you've given me — the excerpt provided only contains the Indications and Usage and Dosage and Administration sections for amoxicillin/clavulanate potassium 600 mg/42.9 mg per 5 mL oral suspension. It does not include the Drug Interactions (Section 7) content.\n\nFor reference, the full prescribing information for amoxicillin/clavulanate potassium products typically lists interactions such as:\n\n- Oral anticoagulants (e.g., warfarin) — abnormal prolongation of prothrombin time/INR has been reported; monitoring is advised.\n- Allopurinol — concurrent use has been associated with an increased incidence of rash.\n- Probenecid — decreases renal tubular secretion of amoxicillin, raising and prolonging amoxicillin blood levels; co-administration is not recommended.\n- Oral contraceptives — reduced efficacy has been reported with penicillins/ampicillin-class drugs.\n- Laboratory test interference — false-positive urinary glucose with certain non-enzymatic (copper reduction) tests, and interference with some estriol assays in pregnancy.\n\nPlease consult the complete FDA-approved label (Section 7, Drug Interactions) or a pharmacist for the authoritative and complete list, and to review a specific patient's medication regimen.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1496,
+  "usage": {
+    "input_tokens": 817,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nOmeprazole has several clinically significant drug interactions to monitor:\n\n**Major Interactions:**\n- **Clopidogrel (Plavix)**: Omeprazole reduces clopidogrel's antiplatelet effect by inhibiting CYP2C19, potentially increasing cardiovascular risk. Consider alternative PPIs like pantoprazole if antiplatelet effect is critical.\n- **Methotrexate**: PPIs may increase methotrexate levels and toxicity risk.\n- **Digoxin**: May increase digoxin levels, requiring monitoring.\n\n**Moderate Interactions:**\n- **CYP2C19 substrates**: Omeprazole inhibits CYP2C19, potentially increasing levels of drugs like voriconazole, phenytoin, and certain benzodiazepines.\n- **Levothyroxine**: Decreased absorption; separate dosing by 30-60 minutes.\n- **Iron supplements and calcium**: Reduced absorption due to elevated gastric pH; space dosing appropriately.\n- **Atazanavir and other HIV protease inhibitors**: Reduced absorption.\n- **Ketoconazole, itraconazole**: Reduced antifungal absorption.\n- **Mycophenolate mofetil**: May reduce levels.\n- **Tacrolimus**: Monitor levels.\n\n**Clinical Pearl**: The 14-day OTC course described in this label carries lower interaction risk than chronic high-dose omeprazole use, but always verify against current patient medications and consider the specific clinical context. Long-term PPI use has additional considerations (B12/magnesium depletion, bone health) not relevant to short-term OTC use.\n\nAlways check current drug interaction resources and the patient's complete medication list.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1817,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 17
+  }
+}

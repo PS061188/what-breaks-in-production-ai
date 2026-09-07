@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\nShort answer: the excerpt you've given me (Indications and Dosage & Administration sections only) does not contain the Drug Interactions section, so I can't quote specific interaction information from this label. The only interaction-type guidance visible here is about iodinated contrast media:\n\n• Iodinated contrast imaging (Section 2.4): Stop metformin at or before the procedure in patients with an eGFR 30–60 mL/min/1.73 m², in those with a history of liver disease, alcoholism, or heart failure, or in anyone receiving intra-arterial iodinated contrast. Recheck eGFR 48 hours afterward and restart only if renal function is stable. (This is because contrast can cause acute kidney injury, raising the risk of metformin-associated lactic acidosis.)\n\nFor completeness, metformin labeling generally describes these interaction categories in Section 7 — please verify against the full prescribing information for this product:\n\n• Carbonic anhydrase inhibitors (e.g., topiramate, acetazolamide, zonisamide, dichlorphenamide) – may increase lactic acidosis risk.\n• Drugs that reduce metformin clearance via OCT/MATE inhibition (e.g., ranolazine, vandetanib, dolutegravir, cimetidine) – can raise metformin levels and lactic acidosis risk.\n• Alcohol – potentiates metformin's effect on lactate metabolism; excessive intake should be avoided.\n• Insulin and insulin secretagogues (sulfonylureas, meglitinides) – increased risk of hypoglycemia; lower doses may be needed.\n• Drugs that affect glycemic control (e.g., corticosteroids, thiazide and other diuretics, phenothiazines, thyroid products, estrogens/oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, isoniazid) – may cause loss of glycemic control; monitor more closely when starting or stopping them.\n\nAlways review the complete label and discuss your full medication list (including over-the-counter drugs and supplements) with your prescriber or pharmacist.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1941,
+  "usage": {
+    "input_tokens": 1089,
+    "output_tokens": 17
+  }
+}

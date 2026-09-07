@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Levothyroxine Sodium?\n\nRESPONSE:\nLevothyroxine has a very large interaction profile. It is useful to think of interactions in mechanistic buckets, because the management differs (separate dosing vs. re-check TSH vs. adjust the *other* drug).\n\n**1. Drugs that DECREASE levothyroxine absorption — separate by ≥4 hours and recheck TSH**\n- Cation-containing binders: calcium carbonate/citrate, ferrous sulfate and other iron salts, magnesium and aluminum-containing antacids, sucralfate, sevelamer, lanthanum carbonate\n- Bile-acid sequestrants: cholestyramine, colestipol, colesevelam\n- Potassium/phosphate binders and ion-exchange resins: sodium polystyrene sulfonate, patiromer, sodium zirconium cyclosilicate\n- Others: orlistat, ciprofloxacin, raloxifene, chromium picolinate, simethicone\n- Gastric pH modifiers (PPIs, H2 blockers): may reduce absorption of some formulations — monitor TSH rather than relying on separation alone\n- Foods/supplements (label §7.9): soybean flour and soy-based infant formula, cottonseed meal, walnuts, high-fiber foods, grapefruit juice, coffee, calcium- or iron-fortified juices — take levothyroxine on an empty stomach 30–60 min before breakfast; if unavoidable co-administration, keep timing consistent and re-titrate.\n\n**2. Drugs that alter thyroid-binding globulin (change total T4/T3, usually more relevant in athyreotic patients)**\n- ↑ TBG (may increase levothyroxine requirement): estrogens/oral contraceptives, tamoxifen, raloxifene, methadone, mitotane, 5-fluorouracil, clofibrate, heroin\n- ↓ TBG (may decrease requirement): androgens/anabolic steroids, glucocorticoids, slow-release niacin, L-asparaginase\n\n**3. Drugs that displace T4 from protein binding**\n- High-dose salicylates (>2 g/day), high-dose IV furosemide (>80 mg), heparin, phenytoin/fosphenytoin, fenamate NSAIDs — mainly cause transient free-T4 assay changes; interpret labs cautiously.\n\n**4. Drugs that increase hepatic metabolism/clearance (often need higher levothyroxine dose)**\n- Phenobarbital, phenytoin, carbamazepine, rifampin\n- Tyrosine kinase inhibitors (imatinib, sunitinib, sorafenib)\n- HIV protease inhibitors (e.g., ritonavir), sertraline\n\n**5. Drugs that impair T4→T3 conversion**\n- Amiodarone, propylthiouracil, propranolol at high dose (>160 mg/day), glucocorticoids (e.g., dexamethasone ≥4 mg/day). Amiodarone also carries an iodine load and can cause de novo thyroid dysfunction.\n\n**6. Interactions where the OTHER drug needs adjusting**\n- Warfarin/vitamin K antagonists: levothyroxine increases catabolism of vitamin K–dependent clotting factors → increased anticoagulant effect. Monitor INR closely and reduce warfarin dose as needed when starting, stopping, or changing levothyroxine.\n- Digoxin: levothyroxine may reduce serum digoxin levels/effect — monitor levels and clinical response.\n- Insulin and oral antidiabetics (metformin, sulfonylureas, etc.): requirements may increase as euthyroidism is restored — monitor glycemic control.\n- Sympathomimetics and ketamine: additive risk of tachycardia, hypertension, arrhythmia, coronary insufficiency in patients with CAD.\n- Tricyclic/tetracyclic antidepressants: mutual potentiation with risk of arrhythmia and CNS stimulation.\n\n**7. Assay interference (not a true pharmacologic interaction)**\n- Biotin/biotin-containing supplements distort TSH, T4, and T3 immunoassays. Have patients stop biotin at least 2 days before testing.\n\n**Practical management points**\n- Reinforce consistent administration: once daily, empty stomach, 30–60 min before breakfast with a full glass of water; binders/interacting drugs ≥4 hours apart.\n- Recheck TSH (or free-T4 in central hypothyroidism) about 6–8 weeks after starting, stopping, or dose-changing any interacting drug; 4 weeks in pregnancy; 2 weeks in pediatric patients.\n- Unexplained need for >200 mcg/day (and especially >300 mcg/day) should prompt evaluation for nonadherence, malabsorption (celiac disease, H. pylori, atrophic gastritis, bariatric surgery), or an unrecognized drug/food interaction.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1710,
+  "usage": {
+    "input_tokens": 2049,
+    "output_tokens": 17
+  }
+}

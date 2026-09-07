@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Warfarin Sodium safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt provided does not contain information about warfarin use during pregnancy. However, based on standard clinical pharmacology knowledge: Warfarin is generally considered CONTRAINDICATED during pregnancy, particularly during the first trimester and near term. Warfarin is a vitamin K antagonist that crosses the placenta and is associated with fetal warfarin syndrome (characterized by nasal hypoplasia, skeletal abnormalities, and CNS abnormalities) when used in the first trimester, and with fetal hemorrhage and death when used near delivery. For pregnant patients requiring anticoagulation, alternative agents such as unfractionated heparin or low-molecular-weight heparin are preferred, as these are larger molecules that do not cross the placenta. Any pregnant patient currently on warfarin or considering warfarin therapy should discuss pregnancy planning and anticoagulation options with their obstetrician and anticoagulation specialist immediately. This is a critical safety issue requiring prompt clinical consultation and should not be managed based on this label excerpt alone.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 506,
+    "output_tokens": 11
+  }
+}

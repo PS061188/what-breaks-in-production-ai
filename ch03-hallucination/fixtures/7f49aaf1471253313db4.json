@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Albuterol Sulfate indicated to treat?\n\nRESPONSE:\nAccording to the label, Albuterol Sulfate HFA Inhalation Aerosol is a beta\nated for for two uses:\n\n1. **Bronchospasm** — treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older who have reversible obstructive airway disease (such as asthma).\n\n2. **Exercise-induced bronchospasm** — prevention of bronchospasm brought on by exercise, also in adults and children aged 4 years and older.\n\nIt is a beta2-adrenergic agonist and is for oral inhalation only.\n\nFor reference, the recommended dosing in the label is 2 inhalations every 4 to 6 hours for bronchospasm (1 inhalation every 4 hours may be enough for some patients), and 2 inhalations 15 to 30 minutes before exercise for prevention of exercise-induced bronchospasm.\n\nThis is general information from the product label and not a substitute for advice from your healthcare provider, who can determine whether this medicine is appropriate for you.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1463,
+  "usage": {
+    "input_tokens": 716,
+    "output_tokens": 17
+  }
+}

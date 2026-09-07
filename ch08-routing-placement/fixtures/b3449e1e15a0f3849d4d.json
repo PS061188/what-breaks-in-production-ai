@@ -1,0 +1,82 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\n[indications_and_usage]\nINDICATIONS Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2. Rheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in: Psoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3. Collagen Diseases During an exacerbation or as maintenance therapy in selected cases of: Systemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5. Allergic States Control of severe or incapacitating allergic conditions intractable to adequate trials of conventional treatment: Seasonal or perennial allergic rhinitis Bronchial asthma Contact dermatitis Atopic dermatitis Serum sickness Drug hypersensitivity reactions 6. Ophthalmic Diseases Severe acute and chronic allergic and inflammatory processes involving the eye and its adnexa such as: Allergic corneal marginal ulcers Herpes zoster ophthalmicus Anterior segment inflammation Diffuse posterior uveitis and choroiditis Sympathetic ophthalmia Allergic conjunctivitis Keratitis Chorioretinitis Optic neuritis Iritis and iridocyclitis 7. Respiratory Diseases Symptomatic sarcoidosis Loeffler’s syndrome not manageable by other means Berylliosis Fulminating or disseminated pulmonary tuberculosis when used concurrently with appropriate antituberculous chemotherapy Aspiration pneumoniti\n\n[contraindications]\nCONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\n\n[adverse_reactions]\nADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\": {\"value\": \"Prednisone tablets are indicated for endocrine disorders (adrenocortical insufficiency, congenital adrenal hyperplasia, hypercalcemia associated with cancer, nonsuppurative thyroiditis), rheumatic disorders (psoriatic arthritis, rheumatoid arthritis, ankylosing spondylitis, bursitis, tenosynovitis, gouty arthritis, osteoarthritis, epicondylitis), collagen diseases (systemic lupus erythematosus, dermatomyositis, acute rheumatic carditis), dermatologic diseases (pemphigus, bullous dermatitis herpetiformis, severe erythema multiforme, exfoliative dermatitis, mycosis fungoides, severe psoriasis, severe seborrheic dermatitis), allergic states (allergic rhinitis, bronchial asthma, contact dermatitis, atopic dermatitis, serum sickness, drug hypersensitivity reactions), ophthalmic diseases (allergic corneal marginal ulcers, herpes zoster ophthalmicus, anterior segment inflammation, uveitis, sympathetic ophthalmia, allergic conjunctivitis, keratitis, iritis and iridocyclitis), and respiratory diseases (symptomatic sarcoidosis, Loeffler's syndrome, berylliosis, pulmonary tuberculosis, aspiration pneumonitis).\", \"source_quote\": \"INDICATIONS Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders... 2. Rheumatic Disorders... 3. Collagen Diseases... 4. Dermatologic Diseases... 5. Allergic States... 6. Ophthalmic Diseases... 7. Respiratory Diseases\", \"source_section\": \"indications_and_usage\"}, \"who_must_not_take_it\": {\"value\": \"Patients with systemic fungal infections and patients with known hypersensitivity to components of the medication must not take prednisone.\", \"source_quote\": \"CONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\", \"source_section\": \"contraindications\"}, \"side_effects\": {\"value\": \"Fluid and electrolyte disturbances (sodium retention, fluid retention, congestive heart failure, potassium loss, hypokalemic alkalosis, hypertension), musculoskeletal effects (muscle weakness, steroid myopathy, loss of muscle mass, osteoporosis, tendon rupture, vertebral compression fractures, aseptic necrosis, pathologic fracture), gastrointestinal effects (peptic ulcer, pancreatitis, abdominal distention, ulcerative esophagitis), dermatologic effects (impaired wound healing, thin fragile skin, petechiae, facial erythema, increased sweating), metabolic effects (negative nitrogen balance), neurological effects (increased intracranial pressure, convulsions, vertigo, headache), endocrine effects (menstrual irregularities, Cushingoid state, secondary adrenocortical insufficiency, growth suppression, decreased carbohydrate tolerance, diabetes manifestations), ophthalmic effects (posterior subcapsular cataracts, increased intraocular pressure, glaucoma, exophthalmos), and hypersensitivity reactions (urticaria, anaphylactic reactions).\", \"source_quote\": \"ADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure... Musculoskeletal Muscle weakness... Gastrointestinal Peptic ulcer... Dermatologic Impaired wound healing... Metabolic Negative nitrogen balance... Neurological Increased intracranial pressure... Endocrine Menstrual irregularities... Ophthalmic Posterior subcapsular cataracts... Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\", \"source_section\": \"adverse_reactions\"}}",
+  "elapsed_ms": 6318,
+  "usage": {
+    "input_tokens": 1600,
+    "output_tokens": 941
+  }
+}

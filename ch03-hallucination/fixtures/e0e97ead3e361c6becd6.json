@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nThe excerpt you've provided is for the lisinopril/hydrochlorothiazide **combination** tablet, so it doesn't state a starting dose for lisinopril used alone. Here's what it does say:\n\n**Lisinopril monotherapy:** It is described as effective for hypertension in once-daily doses of **10 mg to 80 mg** — the label gives this as the effective dose range, not a specific initial dose. (For lisinopril alone, the usual starting dose in its own labeling is typically 10 mg once daily, or lower in patients on diuretics or with renal impairment — check the single-ingredient lisinopril label for that guidance.)\n\n**For the combination product:**\n- It is **not indicated for initial therapy** of hypertension.\n- A patient not adequately controlled on either lisinopril or hydrochlorothiazide monotherapy may be switched to **lisinopril/HCTZ 10 mg/12.5 mg or 20 mg/12.5 mg**, with further titration based on clinical response.\n- The HCTZ component should generally not be increased until 2–3 weeks have elapsed.\n- Maximum: do not exceed lisinopril 80 mg / HCTZ 50 mg per day.\n- No dose adjustment is needed if creatinine clearance is >30 mL/min/1.73 m²; in more severe renal impairment the combination is not recommended (loop diuretics preferred).\n\nDosing decisions should be individualized by the prescribing clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1681,
+  "usage": {
+    "input_tokens": 865,
+    "output_tokens": 17
+  }
+}

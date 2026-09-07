@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Atorvastatin Calcium?\n\nRESPONSE:\nThe excerpt provided covers only the interactions that require an atorvastatin **dose limit** (Section 2.5). Based on that section:\n\n**Antiviral medications**\n- Do **not exceed 20 mg once daily** with: saquinavir + ritonavir, darunavir + ritonavir, fosamprenavir, fosamprenavir + ritonavir, elbasvir + grazoprevir, or letermovir.\n- Do **not exceed 40 mg once daily** with: nelfinavir.\n\n**Select azole antifungals or macrolide antibiotics**\n- Do **not exceed 20 mg once daily** with: clarithromycin or itraconazole.\n\nThe label also notes that additional recommendations for other antivirals, azole antifungals, and macrolide antibiotics appear in the full Drug Interactions section (7.1), which is not included in this excerpt. In general, these interactions occur because such drugs inhibit atorvastatin metabolism/transport and raise the risk of myopathy and rhabdomyolysis (Warnings and Precautions 5.1). Some combinations may be contraindicated or require avoidance rather than just dose limits — check the complete prescribing information (Sections 5.1 and 7.1) or consult a pharmacist for any specific drug not listed above, including other medications a patient may be taking (e.g., cyclosporine, gemfibrozil, niacin, colchicine, oral contraceptives, digoxin, rifampin, grapefruit juice).",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1467,
+  "usage": {
+    "input_tokens": 871,
+    "output_tokens": 17
+  }
+}

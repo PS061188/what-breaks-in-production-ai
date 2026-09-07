@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Lisinopril indicated to treat?\n\nRESPONSE:\nBased on the label, lisinopril (in combination with hydrochlorothiazide) is indicated for the treatment of hypertension to lower blood pressure. By reducing blood pressure, it lowers the risk of fatal and non-fatal cardiovascular events, primarily strokes and myocardial infarctions.\n\nNote: The label excerpt provided focuses on the fixed-dose combination product. While lisinopril monotherapy is mentioned as effective for hypertension, the label does not detail other approved indications for lisinopril alone (such as heart failure or diabetic kidney disease, which are referenced as examples of additional approved indications for some ACE inhibitors). For a complete picture of all lisinopril indications, you would need to consult the full prescribing information for lisinopril monotherapy products.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1591,
+  "usage": {
+    "input_tokens": 638,
+    "output_tokens": 17
+  }
+}

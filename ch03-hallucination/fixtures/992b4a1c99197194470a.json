@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Lisinopril?\n\nRESPONSE:\nAccording to the label, lisinopril monotherapy is effective in once-daily doses ranging from 10 mg to 80 mg for hypertension treatment. However, the label does not explicitly specify a recommended starting dose for lisinopril monotherapy.\n\nFor the fixed-dose combination product (lisinopril/hydrochlorothiazide), the label indicates that these combinations are NOT indicated for initial therapy. When switching patients from monotherapy to combination therapy, the label mentions lisinopril/hydrochlorothiazide 10 mg/12.5 mg or 20 mg/12.5 mg as options, suggesting 10 mg may be a reasonable starting dose when combination therapy is appropriate.\n\nIn clinical practice, lisinopril is typically started at 10 mg once daily for hypertension in patients with normal renal function, with titration based on blood pressure response. For specific dosing guidance, you may want to consult additional prescribing references or institutional guidelines, as the label provided focuses on the combination product and does not detail the starting dose for lisinopril monotherapy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 524,
+    "output_tokens": 11
+  }
+}

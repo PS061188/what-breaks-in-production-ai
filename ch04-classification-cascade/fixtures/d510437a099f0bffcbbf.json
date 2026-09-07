@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin hydrochloride tablets, USP contain the antihyperglycemic agent metformin, which is a biguanide, in the form of monohydrochloride. The chemical name of metformin hydrochloride is N,N- dimethylimidodicarbonimidic diamide hydrochloride. The structural formula is as shown below: Metformin hydrochloride, USP is a white to off-white crystalline compound with a molecular formula of C 4 H 11 N 5 • HCl and a molecular weight of 165.63. Metformin hydrochloride is freely soluble in water, slightly soluble in alcohol, practically insoluble in acetone and in methylene chloride. The pKa of metformin is 12.4. The pH of a 1% aqueous solution of metformin hydrochloride is 6.68. Metformin hydrochloride tablets, USP contain 500 mg, 850 mg, or 1000 mg of metformin hydrochloride.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features:\\n(1) Chemical identity: N,N-dimethylimidodicarbonimidic diamide hydrochloride with structural formula provided\\n(2) Physical properties: white crystalline compound, molecular formula C4H11N5•HCl, molecular weight 165.63, solubility characteristics, pKa and pH data\\n(3) Formulation details: tablets containing 500 mg, 850 mg, or 1000 mg of metformin hydrochloride\\n\\nStep 2 - Most Plausible Categories:\\n(a) Description: This passage explicitly covers chemical name, structural information, physical/chemical properties (appearance, solubility, molecular weight, pH, pKa), and formulation composition - all hallmarks of a drug description section.\\n(b) How_supplied: The passage mentions tablet strengths (500 mg, 850 mg, 1000 mg), which relates to dosage forms available, but lacks typical how_supplied details like packaging, storage conditions, or NDC numbers.\\n\\nStep 3 - Classification Decision:\\nDescription wins clearly. The passage is fundamentally focused on characterizing the active pharmaceutical ingredient (metformin HCl) - its chemical identity, structural formula, physical and chemical properties (solubility, pKa, pH, appearance, molecular weight). While it mentions tablet strengths at the end, this serves to contextualize the formulation containing the described chemical entity, not to detail supply and storage information. The core content is pharmaceutical characterization, which is the essence of a description section.\\n\\nStep 4 - Confidence Assessment:\\nHigh confidence (>90%). The passage contains multiple definitive markers of description content: chemical name, structural formula, physical appearance, solubility data, molecular formula, molecular weight, and pH/pKa data. These are distinctively characteristic of description sections and rarely appear together in other categories.\",\"classification\": \"description\",\"confidence\": \"HIGH\",\"alternative_considered\": \"how_supplied\",\"requires_human_review\": false}",
+  "elapsed_ms": 5376,
+  "usage": {
+    "input_tokens": 1108,
+    "output_tokens": 469
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Sertraline Hydrochloride?\n\nRESPONSE:\n**Standard starting dose: 50 mg once daily (adults), taken in the morning or evening, with or without food.**\n\n**By indication (adults):**\n\n| Indication | Starting dose | Usual/target range | Max |\n|---|---|---|---|\n| Major depressive disorder | 50 mg once daily | 50–200 mg/day | 200 mg/day |\n| OCD | 50 mg once daily | 50–200 mg/day | 200 mg/day |\n| Panic disorder | 50 mg once daily per label*, but 25 mg once daily × 1 week is commonly used clinically to limit early jitteriness/anxiety exacerbation | 50–200 mg/day | 200 mg/day |\n| PTSD | 50 mg once daily* (25 mg start also commonly used) | 50–200 mg/day | 200 mg/day |\n| Social anxiety disorder | 50 mg once daily* (25 mg start also commonly used) | 50–200 mg/day | 200 mg/day |\n| PMDD | 50 mg/day, either continuously through the cycle or luteal-phase only | 50–150 mg/day continuous; 50–100 mg/day luteal | 150 mg/day (continuous), 100 mg/day (luteal) |\n\n*The label's Initial Treatment section specifies 50 mg daily; for panic disorder, PTSD, and social anxiety disorder many prescribers begin at 25 mg for the first week because these patients are particularly sensitive to activation.\n\n**Pediatric (OCD only, the sole approved pediatric indication):**\n- Ages 6–12: start 25 mg once daily\n- Ages 13–17: start 50 mg once daily\n- Titrate to a maximum of 200 mg/day; account for lower body weight in children to avoid excessive dosing.\n\n**Titration:** Because the elimination half-life is about 24 hours, do not increase the dose more often than every 7 days. Typical increments are 25–50 mg. For PMDD, increase by 50 mg increments at the onset of each new menstrual cycle; if a 100 mg/day luteal-phase dose is established, use a 3-day titration step at 50 mg/day at the start of each luteal dosing period.\n\n**Special populations:**\n- **Hepatic impairment:** use a lower dose or less frequent dosing (e.g., 25 mg/day or alternate-day dosing); moderate-to-severe impairment has not been studied — use caution.\n- **Renal impairment:** no dose adjustment needed.\n- **Elderly:** 25 mg/day is a prudent start; monitor for hyponatremia/SIADH.\n- **Third-trimester pregnancy:** weigh risks/benefits (neonatal adaptation syndrome, PPHN reported).\n\n**Other key points:**\n- Allow ≥14 days between an MAOI (for psychiatric use) and starting sertraline, and ≥14 days after stopping sertraline before starting an MAOI. Do not start sertraline in patients on linezolid or IV methylene blue.\n- Sertraline oral solution must be diluted before use; the concentrate contains alcohol and is contraindicated with disulfiram.\n- Allow 4–6 weeks at an adequate dose before judging response; monitor closely for worsening depression, agitation, or suicidality especially in patients <25 years during the first few months and after dose changes.\n- **Discontinuation:** taper gradually rather than stopping abruptly; if intolerable withdrawal symptoms occur, resume the prior dose and taper more slowly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1877,
+  "usage": {
+    "input_tokens": 1562,
+    "output_tokens": 17
+  }
+}

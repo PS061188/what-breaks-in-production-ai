@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Atorvastatin Calcium?\n\nRESPONSE:\nIt depends on the patient population:\n\n**Adults:** The recommended starting dosage is 10 mg to 20 mg once daily, with an overall dosage range of 10 mg to 80 mg once daily. Adults who need an LDL-C reduction greater than 45% may be started at 40 mg once daily.\n\n**Pediatric patients 10 years and older with heterozygous familial hypercholesterolemia (HeFH):** Start at 10 mg once daily; the dosage range is 10 mg to 20 mg once daily.\n\n**Pediatric patients 10 years and older with homozygous familial hypercholesterolemia (HoFH):** Start at 10 mg to 20 mg once daily; the dosage range is 10 mg to 80 mg once daily.\n\n**Other key points:** Atorvastatin is taken orally once daily at any time of day, with or without food. LDL-C should be assessed when clinically appropriate, as early as 4 weeks after starting, and the dose adjusted if needed.\n\nDose limits apply with certain interacting drugs \\mmg mg/day maximum with saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir (with or without ritonavir), elbasvir plus grazoprevir, letermovir, clarithromycin, or itraconazole; and 40 mg/day maximum with nelfinavir.\n\nThis is general information from the labeling \\u2014 your prescriber will determine the appropriate dose for you.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1571,
+  "usage": {
+    "input_tokens": 866,
+    "output_tokens": 17
+  }
+}

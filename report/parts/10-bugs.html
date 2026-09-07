@@ -1,0 +1,166 @@
+<!-- ============================ BUGS ============================ -->
+<h2 class="part">F — The experiments had bugs too</h2>
+<h3 class="top">Fourteen of them, and how every single one was caught</h3>
+
+<p class="lede">This report criticises a book for shipping code that was never
+run. It would be dishonest to leave out how often the code doing the criticising
+was wrong.</p>
+
+<p>Fourteen bugs were found in the experiment harness and scoring during this
+work — <strong>more than one per chapter</strong>. Five would have produced
+published numbers that were simply false, and one of those was published: it was
+reported three times as the strongest result in the project before a review
+proved it was arithmetic.</p>
+
+<h3>The five that would have produced false findings</h3>
+
+<table>
+  <tr><th style="width:28%">The bug</th><th>What it would have reported</th></tr>
+  <tr><td><strong>A filter that was the answer key</strong></td>
+      <td>Chapter 9's section check mapped each field to a section that was never
+      supplied — so it rejected every unsupported field unconditionally.
+      <strong>"Fabrication 29% → 0%" was guaranteed on any corpus, any model, any
+      temperature.</strong> Caught by a reviewer enumerating whether the check
+      could ever pass. Fixed by rebuilding the corpus so the check can fail.</td></tr>
+  <tr><td><strong>Section names compared in different formats</strong></td>
+      <td>The model returns <code>"ADVERSE REACTIONS"</code>; the corpus key is
+      <code>adverse_reactions</code>. Compared directly they never match. This
+      produced a dramatic finding — the model names the wrong section
+      <strong>83%</strong> of the time — that was entirely an artefact. The real
+      figure is 6–18%.</td></tr>
+  <tr><td><strong>Scoring a component against another component's label</strong></td>
+      <td>Chapter 4's router table scored every policy — including the "no gate"
+      baseline — against the ensemble's answer, and a second function credited the
+      confidence gate with errors the ensemble had already removed. It printed
+      "errors the router caught: 100%". The true figure is 22%.</td></tr>
+  <tr><td><strong>A gene identifier read as a dose</strong></td>
+      <td>Chapter 10's reference count read <code>VKORC1−1639G</code> as 1,639
+      grams and reported an omission that never happened. A reference count that
+      is too high <em>invents</em> findings, which is worse than one that is too
+      low.</td></tr>
+  <tr><td><strong>Cutting documents at a fixed length</strong></td>
+      <td>Chapter 2's excerpts all ended mid-sentence — including the clean
+      control — so the truncation check fired on everything and the experiment
+      distinguished nothing at all.</td></tr>
+</table>
+
+<h3>The nine that broke a run rather than a result</h3>
+
+<table>
+  <tr><th style="width:28%">The bug</th><th>What happened</th></tr>
+  <tr><td>Once-daily for twice-daily</td>
+      <td>The dose converter matched "daily" before "twice daily". A three-line
+      test caught it in seconds — which is the entire argument for putting
+      conversion in code rather than in a prompt.</td></tr>
+  <tr><td>Counting damage that never happened</td>
+      <td>Encoding corruption is a no-op on plain ASCII. Seven "damaged"
+      documents were byte-identical to their originals and were being counted as
+      damage the gate missed.</td></tr>
+  <tr><td><strong>A budget that fits one model and truncates another</strong></td>
+      <td>Reasoning models spend the output budget before writing an answer.
+      <strong>Hit three separate times</strong> — Opus 5, Sonnet 5, GPT-5-mini —
+      and each time the symptom was malformed output, never a message about
+      budgets.</td></tr>
+  <tr><td>A new key that broke the old one</td>
+      <td>Adding a second provider's credentials to a local settings file made
+      every call to the first provider fail with "no key configured" — the loader
+      stopped at the first file it found and never reached the one holding the
+      original key, one directory up. <strong>The bug was not in the code that
+      broke.</strong></td></tr>
+  <tr><td>Comparing two things that both changed</td>
+      <td>Chapter 3 uses a second model to classify whether an answer was asserted
+      or declined. In the cross-model sweep that classifier was changing along
+      with the thing being tested. Now pinned.</td></tr>
+  <tr><td><strong>A cache that absorbed a duplicate silently</strong></td>
+      <td>Two different cases produced an identical request, ran concurrently,
+      both missed the cache, both called the API, both wrote the same
+      content-addressed file. The live run used two answers; the recording kept
+      one; the replay later crashed. <strong>A flaw in shared code every chapter
+      depends on.</strong> It now warns.</td></tr>
+  <tr><td>An index that reorders itself</td>
+      <td>Rebuilding the search index changed which documents came back for one
+      drug in six, because near-identical texts break ties arbitrarily. Failed
+      loudly rather than quietly reporting different numbers — the
+      content-addressed cache is an equality check on the prompt.</td></tr>
+  <tr><td>A refusal predicate wrong in both directions</td>
+      <td>Chapter 7's scorer missed clear refusals and counted hedged real answers
+      as refusals, which flattered the counter-metric. Caught by reading recorded
+      answers, not by looking at the metric.</td></tr>
+  <tr><td>A canary that counted refusals as attacks</td>
+      <td>An answer saying "I will not output ZX9QCANARY7" contains the token.</td></tr>
+</table>
+
+<h3>How every one of them was caught</h3>
+
+<div class="verdict">
+  <span class="label">The uncomfortable part</span>
+  <p><strong>Not one was caught by looking at a summary statistic.</strong> Every
+  single one was caught by opening a raw response, or a single document, or one
+  row of a table, and reading it — or by a reviewer asking whether a number could
+  have come out any other way.</p>
+  <p>The 83% figure looked plausible. It was consistent across drugs, it had a
+  believable story attached, and it would have been quoted. What killed it was
+  printing one model response and noticing the capital letters.</p>
+  <p>The 0% figure looked <em>better</em> than plausible. It was the strongest
+  result in the project and it was reported three times. What killed it was one
+  person asking: <em>could this check ever have failed?</em></p>
+</div>
+
+<h3>The noise floor — the systematic error underneath all of them</h3>
+
+<p>Beyond individual bugs, one methodological problem affects many numbers in
+this report: <strong>nothing was measured twice.</strong></p>
+
+<p>A review re-ran four chapters three times each, for $0.55. The spread:</p>
+
+<table>
+  <tr><th style="width:40%">Metric</th><th class="num">Committed</th>
+      <th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Run 3</th></tr>
+  <tr><td>Ch9 fabrication, unsupported fields</td><td class="num">14/48</td>
+      <td class="num">13/48</td><td class="num">12/48</td><td class="num">12/48</td></tr>
+  <tr><td>Ch8 placement error rate</td><td class="num">1/33</td>
+      <td class="num">0/33</td><td class="num">1/33</td><td class="num">0/33</td></tr>
+  <tr><td>Ch8 wrong section named for own quote</td><td class="num"><strong>6/33</strong></td>
+      <td class="num">2/33</td><td class="num">3/33</td><td class="num">2/33</td></tr>
+  <tr><td>Ch10 documents silently truncated</td><td class="num">0/6</td>
+      <td class="num">0/6</td><td class="num">1/6</td><td class="num">2/6</td></tr>
+  <tr><td>Ch5 dose ranges preserved</td><td class="num">7/11</td>
+      <td class="num">9/11</td><td class="num">8/11</td><td class="num">8/11</td></tr>
+  <tr><td>Ch5 values findable — <em>denominator</em></td><td class="num">70</td>
+      <td class="num">69</td><td class="num">77</td><td class="num">65</td></tr>
+</table>
+
+<div class="headline">
+  <b>±1–2 cases per ~40 samples.</b> Any effect of three cases or fewer is
+  inside that spread.
+</div>
+
+<p>That invalidates nothing outright, but it demotes several results from
+findings to observations. Throughout this report those are marked. The large
+effects — Chapter 3's 69-point drop, Chapter 2's corruption rates, Chapter 7's
+26-point recall loss — are far outside it and stand.</p>
+
+<p><strong>The last row is the sharpest warning.</strong> Chapter 5's denominator
+moved from 65 to 77 on an identical prompt, because the model decides how many
+fields to return. A percentage whose denominator moves is not a percentage.</p>
+
+<h3>What this means for anyone doing this kind of work</h3>
+
+<ul>
+  <li><strong>Print the per-document table, not just the rate.</strong> That is
+  not decoration; it is the only reason the bugs above were findable, and it is
+  why the tables in this report appear at full length.</li>
+  <li><strong>Keep every model response on disk.</strong> When a number looks
+  surprising, the evidence can be read rather than re-argued. Four of the fourteen
+  were found by opening a stored response after a result looked too good.</li>
+  <li><strong>Ask of every headline: could this have come out differently?</strong>
+  That single question caught the worst bug in the project, and no amount of
+  code review had.</li>
+  <li><strong>Measure everything twice.</strong> Nothing here did, and it is the
+  clearest gap left in the method.</li>
+</ul>
+
+<p>The bug rate is not a confession of unusual carelessness. It is what
+measurement code normally does, on every team, on every project. <strong>The
+difference between a team that knows its bug rate and one that does not is
+whether anyone ever opens the raw output.</strong></p>

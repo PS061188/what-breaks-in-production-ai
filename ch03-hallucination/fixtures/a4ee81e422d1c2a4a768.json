@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Levothyroxine Sodium?\n\nRESPONSE:\nShort answer: this particular label excerpt doesn't reproduce the full Drug Interactions section (Section 7), so I can only tell you what it explicitly mentions — plus some general context.\n\nWhat the excerpt does say:\n\n1. Drugs that interfere with absorption (referenced as Section 7.1): The label instructs that levothyroxine sodium tablets be given at least 4 hours before or after any drug known to interfere with levothyroxine absorption. It doesn't list the specific agents in this excerpt, but the referenced section in the full label typically covers products such as calcium carbonate, ferrous sulfate, bile acid sequestrants (e.g., cholestyramine, colesevelam), ion exchange resins (e.g., sevelamer, sodium polystyrene sulfonate), orlistat, sucralfate, proton pump inhibitors, and antacids containing aluminum/magnesium.\n\n2. Foods/formula (referenced as Section 7.9): Certain foods can reduce absorption. The label specifically warns not to administer crushed tablets in soybean-based infant formula, and to evaluate the need for dose adjustment if the drug is regularly taken within one hour of foods that affect absorption.\n\n3. Biotin (referenced as Section 7.10): Biotin and biotin-containing supplements can interfere with immunoassays for TSH, T4, and T3, producing erroneous thyroid function results. Patients should stop biotin at least 2 days before TSH and/or T4 testing. This is a lab-test interference, not a change in drug effect.\n\n4. General statement: Concomitant medications are listed as one of the factors that determine dosing, and an inadequate response to doses above 300 mcg/day may reflect poor compliance, malabsorption, or drug interactions.\n\nOther interaction categories addressed in the complete prescribing information (not shown here) generally include drugs that alter T4 and T3 serum transport proteins (e.g., estrogens, oral contraceptives, androgens, glucocorticoids), drugs that affect T4 metabolism (e.g., phenobarbital, carbamazepine, phenytoin, rifampin, tyrosine kinase inhibitors, amiodarone), oral anticoagulants (increased bleeding risk), digoxin, antidiabetic agents (glycemic control may change), and sympathomimetics.\n\nFor a complete and accurate list, please consult the full Drug Interactions section of the product's prescribing information, and review your specific medication list with your pharmacist or prescriber.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1802,
+  "usage": {
+    "input_tokens": 1211,
+    "output_tokens": 17
+  }
+}

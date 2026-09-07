@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Prednisone?\n\nRESPONSE:\nI have to be upfront with you: the label excerpt I was given only contains the INDICATIONS and DOSAGE AND ADMINISTRATION sections for prednisone tablets. It does not include the ADVERSE REACTIONS section, so I can't quote specific adverse reactions from this document.\n\nWhat the excerpt does hint at, in its discussion of alternate-day therapy (ADT), is that long-term pharmacologic (higher-than-physiologic) corticosteroid dosing is associated with undesirable effects that ADT is designed to minimize, specifically:\n\n- Pituitary/adppression \\u2014 suppression of the hypothalamic-pituitary-adrenal (HPA) axis, leaving the patient vulnerable during stressful situations\n- Cushingoid state \\u2014 the label describes findings of hyperadrenocorticism seen with long-term daily divided-dose therapy: obesity with centripetal fat distribution, thinning of the skin with easy bruisability, muscle wasting with weakness, hypertension, latent diabetes, osteoporosis, and electrolyte imbalance\n- Corticoid withdrawal symptoms (which is why the label recommends gradual rather than abrupt withdrawal after long-term therapy)\n- Growth suppression in children\n\nFor a complete and accurate list of common adverse reactions, please consult the full prescribing information for your specific prednisone product (the ADVERSE REACTIONS section) or speak with your pharmacist or prescriber. Report any bothersome or unexpected effects to your healthcare provider, and never stop prednisone abruptly after prolonged use without medical guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1642,
+  "usage": {
+    "input_tokens": 919,
+    "output_tokens": 17
+  }
+}

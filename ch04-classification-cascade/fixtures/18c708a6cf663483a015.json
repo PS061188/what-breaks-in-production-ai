@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nCoadministration with probenecid is not recommended. ( 7.1 ) Concomitant use of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL with oral anticoagulants may increase the prolongation of prothrombin time. ( 7.2 ) Coadministration with allopurinol increases the risk of rash. ( 7.3 ) Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may reduce efficacy of oral contraceptives. ( 7.4 ) 7.1 Probenecid Probenecid decreases the renal tubular secretion of amoxicillin. Concurrent use with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may result in increased and prolonged blood levels of amoxicillin.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"probenecid, oral anticoagulants, allopurinol, oral contraceptives\"}",
+  "elapsed_ms": 1339,
+  "usage": {
+    "input_tokens": 517,
+    "output_tokens": 30
+  }
+}

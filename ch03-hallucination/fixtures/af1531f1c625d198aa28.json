@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\nWhile the provided label excerpt does not list specific drug interactions for Metformin Hydrochloride, standard clinical knowledge indicates several relevant drug interactions. Drugs that can increase the risk of lactic acidosis or affect metformin’s renal clearance are important to consider. These include: - Iodinated contrast agents: Risk of acute renal failure and lactic acidosis; metformin should be temporarily discontinued before and after contrast procedures in patients with certain risk factors. - Cationic drugs eliminated by renal tubular secretion (e.g., cimetidine): May increase metformin plasma levels. - Diuretics and corticosteroids: May increase hyperglycemia and affect glycemic control. - Drugs that impair renal function (e.g., NSAIDs, certain antihypertensives): Can increase metformin accumulation risk. - Other hypoglycemic agents (e.g., insulin, sulfonylureas): Concomitant use may increase risk of hypoglycemia. It is advisable to review patient medications for these and other interactions and adjust therapy accordingly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2763,
+  "usage": {
+    "input_tokens": 744,
+    "output_tokens": 17
+  }
+}

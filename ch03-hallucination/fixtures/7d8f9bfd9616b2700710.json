@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Gabapentin?\n\nRESPONSE:\nGabapentin has few clinically significant drug interactions because it is not metabolized by the liver and is excreted unchanged by the kidneys. However, some known interactions include: 1) Antacids containing aluminum or magnesium can reduce the bioavailability of gabapentin if taken simultaneously; therefore, gabapentin should be taken at least 2 hours after these antacids. 2) Gabapentin may interact with CNS depressants (e.g., opioids, benzodiazepines, alcohol), potentially increasing sedation and respiratory depression risk. 3) Morphine and other opioid analgesics may increase gabapentin plasma concentrations. 4) No significant interactions have been reported with antiepileptic drugs, but monitoring is advised. Always monitor patients for additive CNS effects when gabapentin is coadministered with other CNS-acting medications. This list is not exhaustive; consult full prescribing information and drug interaction databases for comprehensive guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1937,
+  "usage": {
+    "input_tokens": 700,
+    "output_tokens": 17
+  }
+}

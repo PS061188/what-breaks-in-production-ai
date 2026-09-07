@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nSoybean flour, cottonseed meal, walnuts, and dietary fiber may bind and decrease the absorption of levothyroxine sodium from the gastrointestinal tract. Grapefruit juice may delay the absorption of levothyroxine and reduce its bioavailability. 7.10 Drug-Laboratory Test Interactions Thyroxine-binding Globulin (TBG) Consider changes in TBG concentration when interpreting T4 and T3 values. Measure and evaluate unbound (free) hormone and/or determine the free-T4 index (FT4I) in this circumstance. Pregnancy, infectious hepatitis, estrogens, estrogen-containing oral contraceptives, and acute intermittent porphyria increase TBG concentration. Nephrosis, severe hypoproteinemia, severe liver disease, acromegaly, androgens, and corticosteroids decrease TBG concentration.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"drug_interactions\"}",
+  "elapsed_ms": 957,
+  "usage": {
+    "input_tokens": 650,
+    "output_tokens": 11
+  }
+}

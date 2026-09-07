@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces [see Warnings and Precautions ( 5.8 )] Bleeding tendencies associated with: − Active ulceration or overt bleeding of the gastrointestinal, genitourinary, or respiratory tract − Central nervous system hemorrhage − Cerebral aneurysms, dissecting aorta − Pericarditis and pericardial effusions − Bacterial endocarditis Threatened abortion, eclampsia, and preeclampsia Unsupervised patients with conditions associated with potential high level of non-compliance Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding Hypersensitivity to warfarin or to any other components of this product (e.g., anaphylaxis) [see Adverse Reactions ( 6 )] Major regional or lumbar block anesthesia Malignant hypertension Pregnancy, except in women with mechanical heart valves ( 4 , 5.7 , 8.1 ) Hemorrhagic tendencies or blood dyscrasias ( 4 ) Recent or contemplated surgery of the central nervous system (CNS) or eye, or traumatic surgery resulting in large open surfaces ( 4 , 5.8 ) Bleeding tendencies associated with certain conditions ( 4 ) Threatened abortion, eclampsia, and preeclampsia ( 4 ) Unsupervised patients with potential high levels of non-compliance ( 4 ) Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding ( 4 ) Hypersensitivity to warfarin or any component of the product ( 4 ) Major regional or lumbar block anesthesia ( 4 ) Malignant hypertension ( 4 )\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias; Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces; Bleeding tendencies associated with active ulceration or overt bleeding of the gastrointestinal, genitourinary, or respiratory tract, central nervous system hemorrhage, cerebral aneurysms, dissecting aorta, pericarditis and pericardial effusions, or bacterial endocarditis; Threatened abortion, eclampsia, and preeclampsia; Unsupervised patients with conditions associated with potential high level of non-compliance; Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding; Hypersensitivity to warfarin or to any other components of this product; Major regional or lumbar block anesthesia; Malignant hypertension; Pregnancy, except in women with mechanical heart valves\"}",
+  "elapsed_ms": 1827,
+  "usage": {
+    "input_tokens": 714,
+    "output_tokens": 226
+  }
+}

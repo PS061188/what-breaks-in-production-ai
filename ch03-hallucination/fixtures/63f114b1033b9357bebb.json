@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nWarfarin sodium interacts with many drugs that can either increase or decrease its anticoagulant effect. Concomitant use of certain medications may alter INR levels and the risk of bleeding or clotting. For example, Heparin increases INR and its anticoagulant effect overlaps with warfarin; therefore, when converting from heparin to warfarin, careful monitoring of INR is necessary. Additionally, other drugs such as antibiotics, antifungals, amiodarone, antiplatelet agents (e.g., aspirin, clopidogrel), nonsteroidal anti-inflammatory drugs (NSAIDs), sulfonamides, and certain herbal supplements (like ginkgo, garlic, and St. John's wort) can interact with warfarin. These interactions can either potentiate or antagonize warfarin's effect, necessitating close INR monitoring and possible dose adjustment. It is essential to review the patient's medication list for potential interactions, perform more frequent INR checks upon initiation or discontinuation of interacting drugs, and adjust warfarin dose accordingly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1466,
+  "usage": {
+    "input_tokens": 742,
+    "output_tokens": 17
+  }
+}

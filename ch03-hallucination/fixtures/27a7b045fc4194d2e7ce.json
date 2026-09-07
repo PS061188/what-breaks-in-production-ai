@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Amoxicillin?\n\nRESPONSE:\n**For this product (amoxicillin/clavulanate potassium oral suspension, 600 mg/42.9 mg per 5 mL — i.e., the \"ES-600\" formulation):**\n\n**Dose:** 90 mg/kg/day of the amoxicillin component, divided every 12 hours, for 10 days. This delivers 6.4 mg/kg/day of clavulanic acid.\n\n**Population:** Pediatric patients 3 months to 12 years weighing ≤40 kg, for recurrent/persistent acute otitis media with the specified risk factors (antibacterial exposure for AOM in the prior 3 months plus age ≤2 years or day-care attendance).\n\n**Practical volume guide (twice daily):**\n- 8 kg → 3 mL\n- 12 kg → 4.5 mL\n- 16 kg → 6 mL\n- 20 kg → 7.5 mL\n- 24 kg → 9 mL\n- 28 kg → 10.5 mL\n- 32 kg → 12 mL\n- 36 kg → 13.5 mL\n- 40 kg → 15 mL\n(Quick math: mL per dose = weight in kg × 0.75)\n\n**Key administration points:**\n- Give at the start of a meal to minimize GI intolerance and enhance clavulanate absorption.\n- Shake well before each use; refrigerate after reconstitution and discard after 10 days. Reconstitute with 68 mL (75 mL bottle), 108 mL (125 mL bottle), or 170 mL (200 mL bottle) of water, added in two portions with vigorous shaking.\n- FLAVORx (apple, banana cream, bubble gum, cherry, watermelon) may be added, 1 drop per 5 mL, immediately after reconstitution; stability remains 10 days refrigerated.\n\n**Cautions:**\n- Not interchangeable with the 200 mg/28.5 mg or 400 mg/57 mg suspensions — the clavulanate content per 5 mL differs. Do not substitute.\n- No data for children >40 kg or adults; do not use this suspension in place of 500 mg or 875 mg tablets for adults who have trouble swallowing.\n- Dose with caution and monitor hepatic function periodically in hepatic impairment.\n- Not indicated for AOM caused by S. pneumoniae with penicillin MIC ≥4 mcg/mL; AOM due to S. pneumoniae alone can be treated with plain amoxicillin.\n\n**For context, standard amoxicillin (single-agent) dosing:** Acute otitis media/high-dose therapy in children is typically 80–90 mg/kg/day divided q12h (max ~4 g/day). Other pediatric infections: 25–45 mg/kg/day divided q12h or 20–40 mg/kg/day divided q8h. Adults: 250–500 mg q8h or 500–875 mg q12h depending on infection severity. Renal impairment (CrCl <30 mL/min) requires dose reduction or extended interval; note that the 875 mg tablet and the ES-600 suspension should not be used when CrCl <30 mL/min.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1708,
+  "usage": {
+    "input_tokens": 1421,
+    "output_tokens": 17
+  }
+}

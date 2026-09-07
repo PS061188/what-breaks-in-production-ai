@@ -1,0 +1,232 @@
+<!-- ============================ CHAPTER 8 ============================ -->
+<h2 class="part">Chapter 8 — Routing and placement errors</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 8 &middot; Routing and placement</span>
+<p class="oneline">Content is filed under the wrong field &mdash; a condition the drug treats written where a condition that forbids it belongs. On current models this did not reproduce: zero real placement errors in 33 cases. What the experiment did find is that the model&rsquo;s own account of where content came from cannot be trusted.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>FDA labels supplying three named sections: indications, contraindications, adverse reactions</td></tr><tr><td style="width:26%">Fields</td><td>Three, each of which may be filled only from its own section &mdash; 33 field-fills per configuration</td></tr><tr><td style="width:26%">Scoring</td><td>Quote verification against the named section, using <code>rapidfuzz.partial_ratio</code></td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; Opus 5, GPT-5-mini and GPT-4.1-mini in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens=2000</code>, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>3 live runs</strong> (one baseline run failed on a transient API error and was retried)</td></tr><tr><td style="width:26%">Cost</td><td>$0.05 baseline, $0.06 fixed, per run</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>The failure itself</td><td><strong>Did not reproduce</strong></td><td class="num">0&ndash;1 of 33</td><td class="num">the 1 is an artefact</td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">3% either way</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Strict schema</td><td>Works, narrowly</td><td class="num">structural</td><td class="num">not measured</td></tr><tr><td>2 &middot; Rules engine</td><td><strong>Works</strong></td><td class="num">1 case</td><td class="num">⚠️ inside the noise</td></tr><tr><td>3 &middot; Confidence thresholding</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">trigger unreliable</td></tr><tr><td>Self-reported source accuracy</td><td><strong>Unreliable</strong></td><td class="num">3%, 9%, 15% wrong</td><td class="num">moves 5&times; across runs</td></tr></table>
+<h4>What to keep, what to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the strict field-to-section schema.</strong> Structural, free, and it makes the constraint explicit rather than hoped-for.</li><li><span class='keep'>KEEP</span> — <strong>Verifying the quote rather than trusting the label.</strong> This is the chapter&rsquo;s durable contribution and the reason fix 2 exists.</li><li><span class='drop'>DROP</span> — <strong>Any specific rate for this failure.</strong> Published at 18% wrong-section; three runs gave 3%, 9% and 15%. The measure moves by a factor of five.</li><li><span class='drop'>DROP</span> — <strong>Fix 3 as written.</strong> It triggers on self-reported confidence, which Chapters 2 and 4 both measured as carrying no signal.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>The model&rsquo;s own account of where content came from is not a check.</strong> That is why fix 2 verifies the quote against the section instead of trusting the label attached to it. The failure this chapter describes barely occurs on clean input &mdash; but the <em>habit</em> the chapter teaches, verify rather than trust the attribution, is what the evidence supports.</p>
+<h4>Where this is weakest</h4>
+<p>Thirty-three cases, and the published 18% was traced to a checker bug &mdash; a section-name format mismatch, <code>&ldquo;ADVERSE REACTIONS&rdquo;</code> against <code>adverse_reactions</code>. Every number here has a denominator small enough that one case moves it by three points.</p>
+</div>
+
+<h3 class="top">The failure: right content, wrong box</h3>
+
+<p class="lede">Nothing is invented and nothing is missing. A piece of the
+document is simply filed under the wrong heading — and when the two headings mean
+opposite things, that inverts the instruction. This chapter has the weakest
+headline number in the report and produced one of its most useful findings.</p>
+
+<h4>What the failure looks like</h4>
+
+<p>An address that belongs in "ship to" lands in "bill to". A date that was the
+signing date is stored as the expiry date. In a drug label, a condition the drug
+<em>treats</em> is filed as a condition that <em>forbids</em> the drug. Same
+words. Opposite instruction.</p>
+
+<h3>Experiment 8.1 — Does content end up in the wrong box?</h3>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Documents</strong></td>
+      <td>11 of the 12 FDA labels — the ones carrying all three required sections.
+      Omeprazole was excluded for lacking two of them.</td></tr>
+  <tr><td><strong>Sections supplied</strong></td>
+      <td>Three, each under a bracketed header, 2,200 characters each:
+      <code>indications_and_usage</code>, <code>contraindications</code>,
+      <code>adverse_reactions</code>.</td></tr>
+  <tr><td><strong>Boxes requested</strong></td>
+      <td>Three, one per section: what it treats · who must not take it ·
+      side effects.</td></tr>
+  <tr><td><strong>Cases</strong></td><td>11 documents × 3 boxes = 33 placements.</td></tr>
+</table>
+
+<p>The first two boxes are the dangerous pair. A condition listed as something
+the drug is <em>for</em> and a condition listed as a reason the drug must
+<em>never</em> be given are the same clinical words carrying opposite
+instructions.</p>
+
+<h4>How ground truth is derived</h4>
+
+<p>Every section is labelled in the text the model sees. The model returns a
+quotation with each value. The code then <strong>searches each section separately
+to find where that quotation actually is</strong>. A quotation for "who must not
+take it" that turns up in the indications section is a placement error, and no
+human judged it.</p>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">No constraint</th><th class="num">Constrained prompt</th></tr>
+  <tr><td>Content filed under the wrong box</td>
+      <td class="num">3% — 1 of 33</td><td class="num">3% — 1 of 33</td></tr>
+  <tr><td>Quotations matching no supplied section</td>
+      <td class="num">3% — 1 of 33</td><td class="num">3% — 1 of 33</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">This result should not be believed, and here is why</span>
+  <p>One error out of 33. Re-sampled three times during review, the placement
+  error rate ran <strong>0, 1, 0</strong> against a committed 1 — so the effect is
+  indistinguishable from zero.</p>
+  <p>Worse: the single "error" turns out to be an artefact. It is a quotation the
+  code could not locate in <em>any</em> section, because the verification window
+  was set to 80 characters — a constant imported from Chapter 9, where it is
+  correct, into a job that needs the opposite. <strong>At any other window,
+  Chapter 8 has zero real placement errors.</strong></p>
+  <p>The honest statement: on documents with clearly marked sections, this failure
+  did not occur.</p>
+</div>
+
+<h4>What the one flagged case actually was</h4>
+
+<pre>drug      : Prednisone
+box       : side_effects        (should come from adverse_reactions)
+located   : no section matched
+value     : "Fluid and electrolyte disturbances (sodium retention,
+             hypokalemia, hypertension), musculoskeletal effects
+             (muscle weakness, osteoporosis, aseptic necrosis)…"</pre>
+
+<p>The content is correct and it came from the right section. The model
+paraphrased across several sentences while quoting, so the 80-character window
+could not anchor it. <strong>A measurement artefact, reported as a placement
+error.</strong> It is left visible here rather than quietly dropped, because the
+same constant is used in three chapters and this is the one place its
+job-specificity shows.</p>
+
+<h4>Cost and time</h4>
+
+<p>11 calls per arm, about <strong>$0.05</strong> each, under a minute.</p>
+
+<h3>Experiment 8.2 — The finding nobody was looking for</h3>
+
+<p>Alongside the placement check, one incidental thing was measured: <strong>how
+often the model correctly names which section its own quotation came from.</strong>
+The form asks for it; the code independently locates the quotation; the two can be
+compared.</p>
+
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">Committed run</th><th class="num">Three re-runs</th></tr>
+  <tr><td>Wrong section named for its own quotation</td>
+      <td class="num"><strong>18%</strong> — 6 of 33</td>
+      <td class="num">2, 3, 2 of 33</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">The honest version of this number</span>
+  <p>18% was the committed run and it is at the top of the distribution. The
+  re-runs put it nearer <strong>6–9%</strong>. Review also found that some of the
+  original 6 were format mismatches rather than genuine misattributions.</p>
+  <p><strong>So the number is smaller than first reported, and the direction still
+  holds: a model's account of where its own content came from is wrong some of
+  the time, and you cannot tell which times.</strong> That is enough to justify
+  checking rather than asking — but "one in five" was too strong and is corrected
+  here.</p>
+</div>
+
+<h4>Why it mattered anyway</h4>
+
+<p>That measurement arrived <em>after</em> Chapter 9's fix had been written into
+the manuscript — and that fix asked the model to name the section its quotation
+came from, then checked the name against a list. It was checking a witness rather
+than the evidence.</p>
+
+<p>Chapter 9's fix now locates the quotation in code instead. The change cost
+four points of recall and removed a dependency on the model being accurate about
+itself.</p>
+
+<div class="verdict">
+  <span class="label">Why this is the best argument for the whole exercise</span>
+  <p>A weak experiment produced a measurement that corrected a strong one. Nobody
+  set out to test whether models report their own sources accurately — it fell out
+  of an experiment about something else, and it invalidated a fix that had already
+  been written down and looked entirely sound.</p>
+  <p>That is not an argument for this particular finding. It is an argument for
+  running the code at all.</p>
+</div>
+
+<h3>The three engineering fixes</h3>
+
+<table>
+  <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 · Strict schema, fixed field names</strong></td>
+      <td class="num">no invented section names</td>
+      <td><strong>Works</strong>, narrowly — and does not make the named section
+      <em>true</em></td></tr>
+  <tr><td><strong>2 · Post-extraction rules engine</strong></td>
+      <td class="num">errors reaching storage 3% → 0%<br>fill rate 97%</td>
+      <td><strong>Works</strong> — but on ~1 case, inside the noise</td></tr>
+  <tr><td><strong>3 · Confidence thresholding + review queue</strong></td>
+      <td class="num">not run as described</td>
+      <td>Not implemented as written — the trigger it proposes is measured
+      unreliable elsewhere in this report</td></tr>
+</table>
+
+<h4>Fix 1 — the distinction that matters</h4>
+
+<p>Constraining the section field to a fixed list of permitted values does stop
+the model inventing section names. It does <strong>not</strong> make the named
+section correct — the self-report error above was measured with this constraint
+in place. <strong>Constraining the vocabulary constrains the vocabulary, not the
+honesty.</strong></p>
+
+<h4>Fix 2 — what the rules engine actually checks</h4>
+
+<p>Two invariants, both ordinary code:</p>
+
+<ul>
+  <li><strong>Provenance.</strong> Each quotation must be locatable in the box's
+  own section — determined by the code, not claimed by the model.</li>
+  <li><strong>Contradiction.</strong> The same condition cannot appear in both
+  "what it treats" and "who must not take it". A rules engine is where domain
+  contradictions belong; no prompt can be relied on to notice one.</li>
+</ul>
+
+<p>It fires on the one flagged case and holds a 97% fill rate — the number that
+stops this being a fix by abstention. But with one case, this is a demonstration
+that the mechanism runs, not evidence that it is needed here.</p>
+
+<h4>Fix 3 — why it was not implemented as described</h4>
+
+<p>The chapter proposes routing anything below high confidence to a human queue.
+Chapter 2 measured the model reporting confidence on <strong>83% of deliberately
+corrupted documents</strong> — and, on the corrected reading, at essentially the
+same rate as on clean ones. Chapter 4 found <strong>LOW was never issued once in
+192 classifications</strong>.</p>
+
+<p>The queue is sound and worth having. The trigger the chapter proposes for it is
+not one this report can recommend. Drive it from failed invariants and failed
+provenance instead — checks that do not depend on the model's opinion of
+itself.</p>
+
+<h3>Chapter 8 verdict</h3>
+
+<table>
+  <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
+  <tr><td>The failure itself</td><td><strong>Did not reproduce</strong></td>
+      <td>0–1 cases of 33; the 1 is a measurement artefact</td></tr>
+  <tr><td>Prompt template</td><td>Did nothing here</td><td>3% either way</td></tr>
+  <tr><td>1 · Strict schema</td><td>Works, narrowly</td><td>structural, not measured</td></tr>
+  <tr><td>2 · Rules engine</td><td>Works</td><td>⚠️ 1 case — inside the noise</td></tr>
+  <tr><td>3 · Confidence thresholding</td><td>Not implemented as written</td>
+      <td>trigger measured unreliable in Ch 2 and Ch 4</td></tr>
+  <tr><td><em>Incidental:</em> self-reported source accuracy</td><td>—</td>
+      <td>6–18% wrong; direction solid, magnitude uncertain</td></tr>
+</table>
+
+<p><strong>The weakest chapter by its own headline and one of the most valuable by
+what it produced.</strong> On cleanly-sectioned documents, placement errors did
+not occur. The chapter should say so — a pattern that is real in principle and
+rare on structured input is a more useful thing to tell a reader than a rate that
+does not survive a second run. The incidental self-report measurement, which
+corrected another chapter's fix, is worth more than the placement result and
+currently is not in the book at all.</p>

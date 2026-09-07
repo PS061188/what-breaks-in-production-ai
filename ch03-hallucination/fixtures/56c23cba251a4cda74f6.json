@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Amoxicillin indicated to treat?\n\nRESPONSE:\nBased on the label provided, Amoxicillin and clavulanate potassium (600 mg/42.9 mg per 5 mL oral suspension) is indicated for treatment of recurrent or persistent acute otitis media in pediatric patients aged 3 months to 12 years weighing ≤40 kg. The infection must be caused by susceptible organisms—specifically S. pneumoniae (with penicillin MICs ≤2 mcg/mL), H. influenzae (including beta-lactamase-producing strains), or M. catarrhalis (including beta-lactamase-producing strains)—AND the patient must have specific risk factors: prior antibacterial drug exposure for acute otitis media within the preceding 3 months, plus either age ≤2 years OR daycare attendance. The label notes that acute otitis media due to S. pneumoniae alone can be treated with amoxicillin monotherapy (not the combination product), and the combination is not indicated for S. pneumoniae with penicillin MICs ≥4 mcg/mL.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2092,
+  "usage": {
+    "input_tokens": 721,
+    "output_tokens": 17
+  }
+}

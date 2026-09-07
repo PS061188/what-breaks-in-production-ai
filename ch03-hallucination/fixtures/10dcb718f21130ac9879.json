@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Prednisone?\n\nRESPONSE:\nThe label excerpt provided does not include a detailed adverse reactions section. However, based on standard pharmacology for systemic corticosteroids like prednisone, the most common adverse reactions include:\n\nMuscle/Skeletal: muscle weakness, steroid myopathy, osteoporosis, vertebral compression fractures\n\nEndocrine/Metabolic: cushingoid state (centripetal obesity, moon facies, buffalo hump), hyperglycemia, growth suppression in children, HPA axis suppression\n\nGastrointestinal: peptic ulcer disease, pancreatitis, abdominal distention, nausea\n\nNeuropsychiatric: insomnia, mood changes, anxiety, depression, psychosis (especially at higher doses)\n\nOcular: cataracts, glaucoma, blurred vision\n\nDermatologic: skin fragility, easy bruising, impaired wound healing, acne, hirsutism\n\nCardiovascular/Fluid: hypertension, sodium retention, fluid retention, edema, hypokalemia\n\nInfectious: increased susceptibility to infections, masking of signs of infection\n\nOther: headache, dizziness, appetite increase\n\nThe label specifically mentions that alternate day therapy (ADT) is designed to minimize certain undesirable effects including pituitary-adrenal suppression, the cushingoid state, corticoid withdrawal symptoms, and growth suppression in children. Adverse effects are generally dose- and duration-dependent, so using the lowest effective dose for the shortest duration is important for risk mitigation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1505,
+  "usage": {
+    "input_tokens": 896,
+    "output_tokens": 17
+  }
+}

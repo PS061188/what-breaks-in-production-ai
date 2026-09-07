@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Metformin Hydrochloride?\n\nRESPONSE:\nThe provided label excerpt does not contain a Drug Interactions section, so it does not list other drugs that interact with metformin. It does, however, call out a specific important precaution: discontinue metformin at the time of or prior to iodinated contrast imaging in patients with eGFR 30–60 mL/min/1.73 m2, those with a history of liver disease, alcoholism, or heart failure, or those receiving intra-arterial iodinated contrast; re-evaluate eGFR 48 hours after the procedure before restarting. If you want, I can (a) retrieve and summarize the full prescribing information’s drug interaction section, or (b) provide a list of commonly reported interacting drugs from clinical sources — which would you prefer?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1435,
+  "usage": {
+    "input_tokens": 620,
+    "output_tokens": 16
+  }
+}

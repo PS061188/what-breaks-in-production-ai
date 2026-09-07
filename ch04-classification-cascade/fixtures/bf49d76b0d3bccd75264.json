@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\ndibasic calcium phosphate dihydrate, hydroxypropyl cellulose, microcrystalline cellulose, magnesium stearate, opadry green (titanium dioxide, hypromellose 3cP, hypromellose 6cP, Macrogol/Peg 400, Polysorbate 80, D&C Yellow # 10 Aluminum Lake, and FD&C Blue # 2/Indigo Carmine Aluminum Lake for 25mg tablet), opadry light blue (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, FD&C Blue # 2/Indigo Carmine Aluminum Lake and Polysorbate 80 for 50 mg tablet), opadry yellow (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, Polysorbate 80, Iron Oxide Yellow, Iron oxide Red for 100mg tablet) and sodium starch glycolate. image\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage lists multiple inactive ingredients including binders (hydroxypropyl cellulose, microcrystalline cellulose), lubricants (magnesium stearate), and coating materials (various Opadry formulations with colorants); (b) Specific mention of tablet strengths (25mg, 50mg, 100mg) with different color coatings for each; (c) Detailed enumeration of coating components including titanium dioxide, hypromellose, Macrogol/PEG, dyes and lakes. Step 2 - Most plausible categories: (a) 'how_supplied' is the primary candidate because this passage explicitly describes dosage forms (tablets), their strengths (25/50/100mg), and packaging/formulation details with specific coloring; (b) 'description' is secondary as it could include inactive ingredients and formulation information. Step 3 - Winner determination: 'how_supplied' wins decisively because the passage focuses on the physical tablet characteristics (strengths, colors, coating formulations) and ingredient composition specific to how the product is manufactured and packaged - this is the defining characteristic of 'how_supplied' sections. While 'description' can include some ingredient information, 'how_supplied' is the more precise category for dosage form, strength, and detailed formulation/appearance specifications. Step 4 - Confidence assessment: HIGH (>90%) - the content is unambiguous in its focus on dosage forms, strengths, and the specific inactive ingredients comprising the tablets in different strengths, which is the core of 'how_supplied' sections in drug labeling.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 5310,
+  "usage": {
+    "input_tokens": 1115,
+    "output_tokens": 408
+  }
+}

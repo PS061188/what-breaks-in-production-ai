@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Atorvastatin Calcium?\n\nRESPONSE:\n**Adults:** The recommended starting dose is **10 mg or 20 mg once daily**, with an approved dose range of 10–80 mg once daily. Patients who need an LDL‑C reduction of **greater than 45%** may be started at **40 mg once daily**.\n\n**Pediatric patients ≥10 years of age:**\n- **HeFH:** start at **10 mg once daily** (range 10–20 mg once daily).\n- **HoFH:** start at **10–20 mg once daily** (range 10–80 mg once daily).\n\n**Administration:** Give orally once daily at any time of day, with or without food (no need to dose in the evening, unlike short half-life statins such as simvastatin, because atorvastatin's active metabolites have a long half-life).\n\n**Titration/monitoring:** Check a lipid panel when clinically appropriate — as early as **4 weeks** after initiation or dose change — and adjust the dose to achieve the desired LDL‑C reduction/goal. Roughly, 10–20 mg is moderate-intensity therapy (~30–50% LDL‑C reduction) and 40–80 mg is high-intensity (~≥50% reduction); ASCVD secondary prevention and most high-risk primary prevention patients per ACC/AHA guidance are started at 40–80 mg unless not tolerated.\n\n**Dose caps with interacting drugs (CYP3A4/OATP1B1 inhibition):**\n- **Max 20 mg daily:** clarithromycin, itraconazole, saquinavir + ritonavir, darunavir + ritonavir, fosamprenavir ± ritonavir, elbasvir/grazoprevir, letermovir.\n- **Max 40 mg daily:** nelfinavir.\n- Also consider lowest necessary dose with other strong CYP3A4 inhibitors (e.g., ketoconazole, posaconazole, voriconazole, erythromycin, grapefruit juice in large quantities), and with cyclosporine, tipranavir/ritonavir, gemfibrozil, or glecaprevir/pibrentasvir concomitant use is generally avoided. Use caution and consider dose limitation with colchicine, fibrates, niacin ≥1 g/day, and rifampin (administer simultaneously, not staggered).\n\n**Other practical points:** No dose adjustment is needed for renal impairment; atorvastatin is contraindicated in active liver disease/unexplained persistent transaminase elevations and in pregnancy/lactation. Obtain baseline hepatic transaminases; check CK if muscle symptoms occur. Counsel patients to report unexplained muscle pain, tenderness, or weakness, especially with fever or malaise.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2738,
+  "usage": {
+    "input_tokens": 1284,
+    "output_tokens": 17
+  }
+}

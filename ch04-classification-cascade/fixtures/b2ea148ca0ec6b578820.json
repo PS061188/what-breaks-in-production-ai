@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe judicious use of a cardioselective beta-receptor blocker may be considered, bearing in mind that such medication can produce bronchospasm. There is insufficient evidence to determine if dialysis is beneficial for overdosage of Albuterol Sulfate HFA.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Prominent features: (1) Mentions 'overdosage of Albuterol Sulfate HFA' explicitly; (2) Discusses management considerations for overdose with beta-blockers as potential treatment; (3) Addresses whether dialysis is beneficial in overdose scenario. Step 2 - Most plausible categories: (a) overdosage - the passage directly discusses overdosage management and treatment considerations, (b) drug_interactions - mentions beta-receptor blockers in context of albuterol use. Step 3 - Determination: The passage is clearly focused on overdosage management. It discusses what to do ('judicious use of cardioselective beta-receptor blocker may be considered') and explicitly evaluates a treatment modality (dialysis) in the context of overdose. While beta-blockers could be viewed as a drug interaction, the primary context here is managing an overdose situation, not concurrent use of two drugs in therapeutic dosing. The phrase 'overdosage of Albuterol Sulfate HFA' anchors this firmly in overdosage category. Step 4 - Confidence: HIGH (>90%). The text explicitly names 'overdosage' and discusses management approaches typical of overdosage sections.\",\"classification\":\"overdosage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"drug_interactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 4401,
+  "usage": {
+    "input_tokens": 915,
+    "output_tokens": 311
+  }
+}

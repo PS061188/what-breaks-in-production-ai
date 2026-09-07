@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Levothyroxine Sodium for pediatric patients?\n\nRESPONSE:\nThe recommended starting dose of levothyroxine sodium for pediatric patients with hypothyroidism is based on age and body weight:\n\n**Dosing by Age (per kg body weight per day):**\n- 0 to 3 months: 10-15 mcg/kg/day\n- 3 to 6 months: 8-10 mcg/kg/day\n- 6 to 12 months: 6-8 mcg/kg/day\n- 1 to 5 years: 5-6 mcg/kg/day\n- 6 to 12 years: 4-5 mcg/kg/day\n- Greater than 12 years (growth and puberty incomplete): 2-3 mcg/kg/day\n- Growth and puberty complete: 1.6 mcg/kg/day\n\n**Special Populations:**\n- **Cardiac failure risk (birth to 3 months):** Start at a lower dose and increase every 4-6 weeks based on clinical and laboratory response\n- **Hyperactivity risk:** Start at one-fourth the recommended full replacement dosage and increase weekly by one-fourth until reaching the full recommended dose\n\n**Monitoring and Titration:**\n- Dosage is titrated every 2 weeks based on serum TSH or free-T4 until the patient is clinically euthyroid\n- Assess adequacy by measuring both serum TSH and total or free-T4\n- Monitor at 2 and 4 weeks after initiation, 2 weeks after any dose change, then every 3-12 months following stabilization\n- Dosing must be individualized based on clinical response and laboratory parameters",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 679,
+    "output_tokens": 11
+  }
+}

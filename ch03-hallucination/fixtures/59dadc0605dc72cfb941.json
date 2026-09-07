@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Amoxicillin?\n\nRESPONSE:\nI'm not able to answer that from the material provided. The excerpt I have access to only covers the Indications and Usage (Section 1) and Dosage and Administration (Section 2) for amoxicillin/clavulanate potassium oral suspension, 600 mg/42.9 mg per 5 mL. It does not include Section 6 (Adverse Reactions), Section 5 (Warnings and Precautions), or the Contraindications, so I can't quote the labeled adverse reaction rates or the list of most common events.\n\nWhat the excerpt does mention in passing:\n- Gastrointestinal intolerance is a known concern — the label advises giving the dose at the start of a meal to minimize it (and this also may enhance clavulanate absorption).\n- Patients with hepatic impairment should be dosed with caution and have liver function monitored at regular intervals, which cross-references the Warnings and Precautions section (5.4).\n\nFor the actual list of most common adverse reactions and their frequencies, please refer to Section 6 (Adverse Reactions) of the full prescribing information for this product, or ask your pharmacist or prescriber. If a child taking this medication develops severe or bloody diarrhea, a rash, hives, swelling of the face/throat, difficulty breathing, or yellowing of the skin or eyes, seek medical attention promptly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 5631,
+  "usage": {
+    "input_tokens": 816,
+    "output_tokens": 16
+  }
+}

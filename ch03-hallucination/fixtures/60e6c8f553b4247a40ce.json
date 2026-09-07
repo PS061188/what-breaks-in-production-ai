@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Metformin Hydrochloride safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt you provided does not include information about use during pregnancy (no Pregnancy or Use in Specific Populations section was included). From the excerpt I can only say that metformin hydrochloride is indicated for type 2 diabetes and that renal function should be assessed before and during treatment. I cannot determine safety in pregnancy from this text. \n\nWhat you should do: do not stop or start medications without medical advice. Discuss with your obstetrician or diabetes clinician (or pharmacist); they can review the full prescribing information and your individual risks/benefits. If you want, I can look up the label’s Pregnancy/Use in Specific Populations section or summarize published guidance on metformin in pregnancy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 2457,
+  "usage": {
+    "input_tokens": 614,
+    "output_tokens": 16
+  }
+}

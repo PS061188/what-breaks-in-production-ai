@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Omeprazole safe to use during pregnancy?\n\nRESPONSE:\nThe label excerpt provided here doesn't include any pregnancy-specific information — it only covers the indication (frequent heartburn occurring 2 or more days a week) and the 14-day dosing course. So I can't confirm safety in pregnancy from this text.\n\nWhat I can tell you generally:\n\n- OTC omeprazole packaging carries a standard warning to ask a health professional before use if you are pregnant or breastfeeding. Self-treating heartburn during pregnancy with this product is not recommended without medical advice.\n- Pregnancy-related heartburn is very common, and clinicians often start with non-drug measures (smaller meals, avoiding trigger foods, not lying down after eating, elevating the head of the bed) and antacids or other first-line options before considering a proton pump inhibitor.\n- Omeprazole has been used in pregnancy when clearly needed, and available data have generally not shown a clear increase in major birth defects, but the decision should be individualized by your obstetric provider, who can weigh your symptoms against alternatives.\n\nAlso worth noting from the label: this product is for adults 18 and older, is taken once daily before eating in the morning for up to 14 days, may take 1–4 days for full effect, and shouldn't be used longer than 14 days or more often than every 4 months unless a doctor directs it.\n\nPlease check with your obstetrician, midwife, or pharmacist before starting omeprazole while pregnant or breastfeeding, and seek prompt medical advice if you have severe or worsening symptoms, trouble swallowing, vomiting, unexplained weight loss, or chest pain.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1604,
+  "usage": {
+    "input_tokens": 902,
+    "output_tokens": 17
+  }
+}

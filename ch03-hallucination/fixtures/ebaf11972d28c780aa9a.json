@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Furosemide for pediatric patients?\n\nRESPONSE:\n**Pediatric oral furosemide dosing (per label)**\n\n- **Initial dose:** 2 mg/kg body weight as a **single** dose.\n- **Titration:** If diuretic response is unsatisfactory, increase by **1 to 2 mg/kg** increments, given **no sooner than 6–8 hours** after the previous dose.\n- **Maximum:** Doses **greater than 6 mg/kg** are **not recommended**.\n- **Maintenance:** Adjust to the **minimum effective dose**; typically dosed once or twice daily depending on response and indication.\n\n**Practical points**\n- Onset of oral diuresis is within ~30–60 minutes, peaks at 1–2 hours, and lasts 6–8 hours; time doses to avoid nocturia (e.g., morning and early afternoon).\n- Oral bioavailability is variable (~50%, and reduced in decompensated heart failure or gut edema); if oral response is poor, consider IV dosing (roughly half the oral dose) or a different loop diuretic.\n- **Neonates/preterm infants:** clearance is markedly prolonged — extended dosing intervals (e.g., every 24 hours in preterm neonates) are commonly used, and chronic use is associated with nephrocalcinosis/nephrolithiasis and patent ductus arteriosus persistence in premature infants. Renal ultrasound monitoring is advised with prolonged therapy.\n- **Monitoring:** electrolytes (K⁺, Na⁺, Mg²⁺, Ca²⁺, chloride/bicarbonate), BUN/creatinine, volume status, weight and urine output; watch for hypokalemia, hypochloremic metabolic alkalosis, dehydration, and ototoxicity (especially with rapid IV administration, high doses, renal impairment, or concomitant aminoglycosides).\n- Potassium supplementation or a potassium-sparing agent may be needed; monitor growth in children on chronic therapy.\n- Oral solution is often preferred in young children for accurate dosing; protect solution from light.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1899,
+  "usage": {
+    "input_tokens": 1077,
+    "output_tokens": 17
+  }
+}

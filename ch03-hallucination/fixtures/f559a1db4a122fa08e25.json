@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Sertraline Hydrochloride for pediatric patients?\n\nRESPONSE:\nFor pediatric patients with obsessive-compulsive disorder (OCD), the only FDA-approved indication in children and adolescents:\n\n**Children (ages 6-12):** Initial dose of 25 mg once daily\n\n**Adolescents (ages 13-17):** Initial dose of 50 mg once daily\n\n**Dose adjustments:** Patients not responding to initial doses may benefit from dose increases up to a maximum of 200 mg/day. Dose changes should not occur at intervals of less than 1 week due to the 24-hour elimination half-life.\n\n**Important consideration:** For children with OCD, their generally lower body weights compared to adults should be taken into consideration when advancing the dose to avoid excess dosing.\n\nSertraline hydrochloride should be administered once daily, either in the morning or evening. Note that the label only provides dosing information for pediatric patients with OCD; pediatric dosing for other indications is not addressed in this label excerpt.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1581,
+  "usage": {
+    "input_tokens": 703,
+    "output_tokens": 17
+  }
+}

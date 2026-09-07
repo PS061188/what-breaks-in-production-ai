@@ -1,0 +1,187 @@
+<!-- ============================ WHAT THE BOOK SHOULD CHANGE ============================ -->
+<h2 class="part">G — What the book should change</h2>
+<h3 class="top">Nine chapters run. Most claims held. Some did not.</h3>
+
+<p class="lede">This section is the summary; the task list with reasons is a
+separate document. Everything here traces to a recorded run, and where a result
+is inside the noise floor it says so.</p>
+
+<h3>The finding that should reshape the book</h3>
+
+<div class="verdict">
+  <span class="label">Four of nine failures did not reproduce on a current model</span>
+  <p>Chapter 4 (classification cascade): 3 and 9 errors out of 96.<br>
+  Chapter 7 (edge input): <strong>144 out of 144 correct</strong>, zero injections
+  obeyed.<br>
+  Chapter 8 (routing and placement): 0% on three of four models.<br>
+  Chapter 10 (silent omissions): 55 of 55 items returned.</p>
+  <p>In every case the <em>mechanism</em> is real — a wrong label really does
+  cascade, a filled blank really is plausible. What did not hold is the implied
+  frequency on clean, structured input given to a current model.</p>
+</div>
+
+<p>That is not a weakness in the book. It is a more interesting book than the one
+currently written. "Here are nine things that break" is a list. <strong>"Here are
+nine mechanisms, four of which modern models have largely closed on clean input,
+and here is what that means for where you should actually spend"</strong> is an
+argument nobody else is making with numbers.</p>
+
+<p>The corollary is sharper still: <strong>on the failure that did <em>not</em>
+close — corrupted input — the stronger model is worse.</strong> 39% silent
+corruption on the small model, 68% on the strongest, 80% on GPT-5-mini. Upgrading
+does not help; it makes the counterfeit better.</p>
+
+<h3>Corrections that a reader would be hurt by</h3>
+
+<table>
+  <tr><th style="width:14%">Chapter</th><th style="width:36%">What is wrong</th><th>The fix</th></tr>
+  <tr><td><strong>6</strong></td>
+      <td><strong>The freshness filter as printed empties the result set</strong>
+      for 33% of drugs — <code>status == ACTIVE AND last_verified &gt; now() −
+      90d</code>. A document can be the newest in existence and older than ninety
+      days.</td>
+      <td>Drop the date clause, or make it a warning.
+      <strong>Chapter 3 gives the same fix without it and is correct — the two
+      chapters contradict each other.</strong></td></tr>
+  <tr><td><strong>9</strong></td>
+      <td>The quote-verification rule, applied to whole quotes, <strong>destroys
+      42 points of legitimate recall</strong> (96% → 54%) to buy 8 points of
+      fabrication catching.</td>
+      <td>Verify a bounded prefix — 80 characters holds recall at 95% — and say
+      why. Add that the window is job-specific.</td></tr>
+  <tr><td><strong>3</strong></td>
+      <td>The similarity check names a model and a threshold that
+      <strong>belong to different families of tool</strong>. "Below 0.4 cosine"
+      has no meaning against a cross-encoder.</td>
+      <td>Name the encoder type. Give the cross-encoder a sigmoid or give the
+      threshold to a bi-encoder.</td></tr>
+  <tr><td><strong>3</strong></td>
+      <td>The code example pins <code>model="gpt-4"</code> inside one vendor's
+      client — a superseded id, and the first line a reader will run.</td>
+      <td>Unpin it. Say the mechanism is the schema plus the check.</td></tr>
+  <tr><td><strong>7</strong></td>
+      <td><strong>The OOD embedding fix rejects non-English speakers at ~100%</strong>
+      — Hindi sits at cosine distance 0.995, the ceiling — while a genuinely
+      out-of-scope query sits at 0.272.</td>
+      <td>Add an explicit equity warning. The chapter opens with the Whisper
+      aphasia study; <strong>its own second fix reproduces that harm.</strong></td></tr>
+</table>
+
+<h3>The claim the book makes five times without knowing it</h3>
+
+<div class="headline">
+  Model self-assessment was measured unreliable <b>five independent ways</b>, in
+  five different chapters, by four different authors.
+</div>
+
+<table>
+  <tr><th style="width:14%">Chapter</th><th>What was measured</th></tr>
+  <tr><td>2</td><td>Confidence reported on <strong>83% of deliberately corrupted
+      documents</strong> — and at essentially the same rate as on clean ones, so
+      it carries no signal either way.</td></tr>
+  <tr><td>4</td><td><strong>LOW confidence never issued once in 192
+      classifications.</strong> 67–78% of errors arrived stamped HIGH.</td></tr>
+  <tr><td>7</td><td>The pre-filter said IN_SCOPE or AMBIGUOUS to every direct
+      injection. <strong>Never once ADVERSARIAL.</strong></td></tr>
+  <tr><td>8</td><td>The model named the wrong section for its own quotation
+      6–18% of the time.</td></tr>
+  <tr><td>10</td><td>Asked to count its own source, wrong on <strong>6 of 6
+      documents</strong> — once by more than three times, while its extraction was
+      perfect.</td></tr>
+</table>
+
+<p>Three chapters build a fix on exactly this signal: Chapter 4's confidence
+gating, Chapter 7's pre-filter, Chapter 8's confidence thresholding. <strong>All
+three should be demoted, and the finding deserves its own passage in Chapter 1 or
+the Field Toolkit</strong> — it is a cross-cutting property of these systems, not
+a detail of any one pattern.</p>
+
+<p>Chapter 4 already contains the sentence <em>"a classifier cannot be trusted to
+police its own confidence"</em> — and then makes that its first fix.</p>
+
+<h3>Fixes to promote</h3>
+
+<table>
+  <tr><th style="width:14%">Chapter</th><th style="width:34%">Fix</th><th>Why</th></tr>
+  <tr><td>3</td><td>Version-locked retrieval</td>
+      <td>Starkest result in the chapter — 83% of retrievals stale, 100% of
+      answers changed — for zero cost. Currently one paragraph.</td></tr>
+  <tr><td>4</td><td>Per-category F1 gate</td>
+      <td>The only fix of four that would have caught the chapter's own dominant
+      error before a user complained. Sits third. Costs no model calls.
+      <strong>And 7–12 examples per category was enough, not 200.</strong></td></tr>
+  <tr><td>5</td><td>The discard log</td>
+      <td>The strongest idea in the chapter and currently a clause.
+      Fifty-two recorded losses that were otherwise invisible.</td></tr>
+  <tr><td>7</td><td>Stratified evaluation</td>
+      <td>Listed last; the only fix in the chapter that produced information.</td></tr>
+  <tr><td>9</td><td>Section-provenance checking</td>
+      <td>Not in the book. Works where quote-verification cannot, at a measured
+      cost of ~24 points of recall.</td></tr>
+</table>
+
+<h3>Additions the runs argue for</h3>
+
+<ul>
+  <li><strong>A cross-reference between Chapters 3 and 9.</strong> All 14 of
+  Chapter 9's fabrications carried a genuine quotation — the failure is
+  misattribution, which is Chapter 3's source-tracking failure appearing inside
+  Chapter 9's defences. The book has both halves and never connects them.</li>
+  <li><strong>The cheapest-checks-first ordering, in Chapter 3.</strong> Chapter 9
+  already argues it. Chapter 3's most expensive fix is the one that most needs
+  it.</li>
+  <li><strong>A note that <code>status</code> is itself a snapshot with an
+  age.</strong> A correct filter over a stale index served a superseded document
+  every time.</li>
+  <li><strong>Narrow Chapter 6's truncation fix to mid-clause cuts.</strong>
+  Structural cuts are self-announcing — the model says the text is incomplete, and
+  boundary-aware truncation buys nothing.</li>
+  <li><strong>The token-budget trap, somewhere prominent.</strong> A budget sized
+  for a model that answers immediately truncates a model that thinks first, and
+  the symptom is malformed output rather than any message about budgets. It
+  happened three times here, to three model families.</li>
+</ul>
+
+<h3>Where I am uncertain, stated rather than smoothed</h3>
+
+<table>
+  <tr><th style="width:30%">Question</th><th>Why it is open</th></tr>
+  <tr><td><strong>Should Chapter 10 be rewritten?</strong></td>
+      <td>Its failure did not reproduce and two of four fixes are measuring the
+      model with itself. But the test covers short numeric items, not long prose
+      enumerations, which is where the chapter's own examples live.
+      <strong>Do not rewrite it on this evidence alone.</strong></td></tr>
+  <tr><td><strong>Chapter 8's 18% self-report figure</strong></td>
+      <td>Re-runs put it nearer 6–9%. The direction is solid, the magnitude is
+      not. It should appear as "some of the time, and you cannot tell which
+      times."</td></tr>
+  <tr><td><strong>Chapter 5's range-collapse null</strong></td>
+      <td>Committed at 7/11; re-runs gave 9, 8, 8. The null I defended may itself
+      be noise.</td></tr>
+  <tr><td><strong>The version corpus</strong></td>
+      <td>48 labels with no repeated identifier — different labelers' documents,
+      not revisions of one. The staleness is real; "superseded version" is doing
+      work the data does not fully support.</td></tr>
+  <tr><td><strong>Chapter 3's headline classifier</strong></td>
+      <td>The asserted/declined judgement comes from a second model whose accuracy
+      was never measured, because no ground truth for it exists. It produces the
+      biggest number in the report.</td></tr>
+</table>
+
+<h3>What has not been tested at all</h3>
+
+<ul>
+  <li><strong>OCR confidence scores</strong> (Ch 2) — the corpus was never
+  scanned, and simulating the signal would be inventing the evidence.</li>
+  <li><strong>Session isolation</strong> (Ch 6) — infrastructure; a mock proves
+  only the mock.</li>
+  <li><strong>Golden-set regression tests</strong> (Ch 5) — needs human hours, not
+  compute.</li>
+  <li><strong>The named commercial injection scanner</strong> (Ch 7) — the regex
+  that beat the model classifier was written by the same author as the payloads,
+  so it is not evidence about the defence the chapter recommends.</li>
+  <li><strong>Long prose enumerations</strong> (Ch 10) — the most valuable
+  follow-up left undone.</li>
+  <li><strong>Anything measured twice.</strong> Four chapters were re-sampled
+  during review; the rest are single runs.</li>
+</ul>

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nShort answer: the excerpt you've given me only covers the \"Uses\" and \"Directions\" sections, so it does not list any drug interactions. I can't cite interaction information from this label text.\n\nFor context, the full OTC omeprazole (delayed-release tablet) label normally carries interaction-related warnings such as:\n\n• \"Do not use if you are taking a prescription antiretroviral (HIV) medication\" — omeprazole can reduce absorption of some HIV drugs (e.g., atazanavir, rilpivirine, nelfinavir).\n• \"Ask a doctor or pharmacist before use if you are taking\" — warfarin (blood thinner), clopidogrel, cilostazol, diazepam, digoxin, tacrolimus, methotrexate, phenytoin, or drugs whose absorption depends on stomach acid (e.g., ketoconazole, itraconazole, iron salts), as well as rifampin or St. John's wort, which can lower omeprazole levels.\n\nBecause these specifics are not in the excerpt provided, please check the complete package insert/Drug Facts panel for your product, or ask your pharmacist or prescriber to review your full medication list — especially if you take a blood thinner, an HIV medication, or an anti-seizure or transplant medication.\n\nThis is general information, not a substitute for professional medical advice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2485,
+  "usage": {
+    "input_tokens": 811,
+    "output_tokens": 17
+  }
+}

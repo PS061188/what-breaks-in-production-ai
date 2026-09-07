@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Omeprazole for pediatric patients?\n\nRESPONSE:\nOmeprazole is recommended for use in adults 18 years and older. For children under 18 years of age, the label advises consulting a doctor, as heartburn in children may sometimes be caused by a serious condition. Therefore, there is no specified recommended dose for pediatric patients in this label, and use in children should be under medical supervision.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 1633,
+  "usage": {
+    "input_tokens": 490,
+    "output_tokens": 16
+  }
+}

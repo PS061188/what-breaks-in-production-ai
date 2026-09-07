@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Amoxicillin?\n\nRESPONSE:\nMost common adverse reactions with amoxicillin are gastrointestinal and hypersensitivity-related. Typical reactions you should counsel patients about: \n\n- Diarrhea (most frequent)\n- Nausea and vomiting\n- Abdominal pain\n- Rash (maculopapular, morbilliform); urticaria and pruritus\n- Candidal overgrowth (oral or vaginal yeast infection)\n\nLess common but important/serious reactions (stop drug and intervene): anaphylaxis/angioedema, severe cutaneous reactions (e.g., Stevens–Johnson syndrome/toxic epidermal necrolysis), drug-induced liver injury (cholestatic hepatitis), interstitial nephritis, and hematologic reactions (e.g., neutropenia, thrombocytopenia, hemolytic anemia). Also consider Clostridioides difficile–associated diarrhea with any antibiotic if diarrhea is severe or persistent.\n\nClinical actions: advise patients to stop and seek urgent care for signs of anaphylaxis or severe skin reaction; treat mild GI symptoms supportively and evaluate persistent or bloody diarrhea for C. difficile. Avoid amoxicillin in patients with a history of immediate-type penicillin allergy.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2077,
+  "usage": {
+    "input_tokens": 814,
+    "output_tokens": 17
+  }
+}

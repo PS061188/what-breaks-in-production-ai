@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\nAccording to the label, there is no single fixed starting dose for prednisone — the initial dosage generally ranges from **5 mg to 60 mg per day**, depending on the specific disease being treated.\n\nKey points from the labeling:\n\n- **Less severe conditions** usually respond to lower doses; **selected patients** may need higher initial doses.\n- Dosage requirements are **variable and must be individualized** based on the disease under treatment and the patient's response.\n- The initial dose should be maintained or adjusted until a satisfactory response is seen. If there is no satisfactory clinical response after a reasonable period, prednisone should be discontinued and other therapy considered.\n- Once a favorable response occurs, the dose should be tapered in small decrements at appropriate intervals to the lowest dose that maintains an adequate clinical response.\n- After long-term therapy, the drug should be **withdrawn gradually rather than abruptly**.\n\n**Special situation noted in the label:** For acute exacerbations of multiple sclerosis, daily doses of 200 mg (prednisolone equivalent; the dosage range is the same for prednisone and prednisolone) for one week, followed by 80 mg every other day for one month, have been shown to be effective.\n\nAn alternate-day therapy (ADT) regimen — twice the usual daily dose given every other morning — may be used for patients requiring long-term treatment, to reduce side effects such as HPA-axis suppression and growth suppression in children.\n\nThis information is from the drug label; your prescriber will determine the appropriate dose for your specific condition.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3914,
+  "usage": {
+    "input_tokens": 886,
+    "output_tokens": 17
+  }
+}

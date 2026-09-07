@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nDosage adjustments should be made to maintain patients on the lowest effective dose and patients should be periodically reassessed to determine the need for long-term treatment. Obsessive-Compulsive Disorder and Panic Disorder –It is generally agreed that OCD and Panic Disorder require several months or longer of sustained pharmacological therapy beyond response to initial treatment. Systematic evaluation of continuing Sertraline hydrochloride for periods of up to 28 weeks in patients with OCD and Panic Disorder who have responded while taking Sertraline hydrochloride during initial treatment phases of 24 to 52 weeks of treatment at a dose range of 50-200 mg/day has demonstrated a benefit of such maintenance treatment (see Clinical Trials under CLINICAL PHARMACOLOGY ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features:\\n(a) Discusses 'dosage adjustments' and 'lowest effective dose'\\n(b) Mentions specific dose ranges (50-200 mg/day) and treatment duration (24-52 weeks initial, up to 28 weeks maintenance)\\n(c) References specific conditions (OCD, Panic Disorder) and maintenance therapy protocols with clinical trial data\\n\\nStep 2: Most plausible categories:\\n- DOSAGE_AND_ADMINISTRATION: The passage explicitly addresses how dosing should be adjusted, the dose range for treatment, and duration of therapy across different phases\\n- INDICATIONS_AND_USAGE: The passage mentions OCD and Panic Disorder, which are conditions the drug treats\\n\\nStep 3: Classification decision:\\nWhile the passage does mention indications (OCD and Panic Disorder), the primary focus is on HOW to dose the medication - dosage adjustments, maintaining lowest effective dose, dose range (50-200 mg/day), and treatment duration protocols. The conditions are mentioned contextually to explain why maintenance therapy is needed, but the core content is prescriptive guidance about dosing strategy and dose ranges. This is quintessential dosage_and_administration content.\\n\\nStep 4: Confidence assessment:\\nHIGH confidence (>90%). The language is unambiguously about dosing strategy, dose ranges, duration of therapy phases, and dose adjustment principles - all core elements of dosage_and_administration. The alternative (indications) is present but secondary.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 5039,
+  "usage": {
+    "input_tokens": 1027,
+    "output_tokens": 393
+  }
+}

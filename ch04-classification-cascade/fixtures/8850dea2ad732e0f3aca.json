@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification of atorvastatin calcium tablets [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ]. Anti-Viral Medications In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin calcium tablets 20 mg once daily.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Recommended dose: 10 mg to 20 mg once daily (standard dosing) or 10 mg to 80 mg once daily (dosage range for pediatric patients 10 years and older with HoFH). Route: oral (tablets). Frequency: once daily. Special consideration: do not exceed 20 mg once daily in patients taking certain anti-viral medications (saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir, or letermovir).\"}",
+  "elapsed_ms": 1909,
+  "usage": {
+    "input_tokens": 510,
+    "output_tokens": 147
+  }
+}

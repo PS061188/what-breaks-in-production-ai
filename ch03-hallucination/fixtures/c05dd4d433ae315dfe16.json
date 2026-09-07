@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Albuterol Sulfate?\n\nRESPONSE:\nThe label excerpt provided does not include a drug interactions section. However, based on standard albuterol pharmacology, here are clinically important interactions to consider:\n\n**Major Interactions:**\n- **Beta-blockers** (including non-selective ones like propranolol): May reduce or block albuterol's bronchodilator effects\n- **MAOIs and tricyclic antidepressants**: Can potentiate cardiovascular effects (increased heart rate, blood pressure)\n- **Other sympathomimetics**: Additive cardiovascular and CNS stimulant effects\n\n**Moderate Interactions:**\n- **Potassium-depleting diuretics**: Albuterol can lower serum potassium; combined effect may be significant\n- **Anesthetics**: Some volatile anesthetics may increase sensitivity to albuterol's cardiac effects\n\n**Clinical Considerations:**\n- Albuterol can increase blood glucose and may affect diabetes control\n- Use caution in patients with coronary artery disease, arrhythmias, or hyperthyroidism due to cardiac effects\n\nFor a complete drug interaction profile, consult the full prescribing information or a comprehensive drug interaction database, as this label excerpt focuses only on indications and administration. Always review the patient's current medication list when prescribing albuterol to identify potential interactions specific to their situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1791,
+  "usage": {
+    "input_tokens": 825,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\ndibasic calcium phosphate dihydrate, hydroxypropyl cellulose, microcrystalline cellulose, magnesium stearate, opadry green (titanium dioxide, hypromellose 3cP, hypromellose 6cP, Macrogol/Peg 400, Polysorbate 80, D&C Yellow # 10 Aluminum Lake, and FD&C Blue # 2/Indigo Carmine Aluminum Lake for 25mg tablet), opadry light blue (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, FD&C Blue # 2/Indigo Carmine Aluminum Lake and Polysorbate 80 for 50 mg tablet), opadry yellow (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, Polysorbate 80, Iron Oxide Yellow, Iron oxide Red for 100mg tablet) and sodium starch glycolate. image\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Not provided in passage\\n\\nMolecular Formula: Not provided in passage\\n\\nInactive Ingredients: dibasic calcium phosphate dihydrate, hydroxypropyl cellulose, microcrystalline cellulose, magnesium stearate, opadry green (titanium dioxide, hypromellose 3cP, hypromellose 6cP, Macrogol/Peg 400, Polysorbate 80, D&C Yellow #10 Aluminum Lake, FD&C Blue #2/Indigo Carmine Aluminum Lake), opadry light blue (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, FD&C Blue #2/Indigo Carmine Aluminum Lake, Polysorbate 80), opadry yellow (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, Polysorbate 80, Iron Oxide Yellow, Iron Oxide Red), sodium starch glycolate\"}",
+  "elapsed_ms": 2062,
+  "usage": {
+    "input_tokens": 521,
+    "output_tokens": 274
+  }
+}

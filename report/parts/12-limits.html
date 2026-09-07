@@ -1,0 +1,123 @@
+<!-- ============================ LIMITS ============================ -->
+<h2 class="part">H — What this does not prove</h2>
+<h3 class="top">Stated here rather than discovered later</h3>
+
+<p class="lede">Every limit below is real and none of them are secret. They are
+set out because a report that only lists its strengths should not be believed —
+and because several of them were found by a reviewer whose whole job was to
+attack this work.</p>
+
+<h4>Nothing was measured twice, except where it says so</h4>
+
+<p>This is the biggest methodological gap. Sampling was left at the provider
+default, and four chapters were re-run three times each only during review. The
+spread is <strong>±1–2 cases per ~40 samples</strong>.</p>
+
+<p>Consequences, stated plainly: <strong>any effect of three cases or fewer in
+this report is inside the noise.</strong> That includes Chapter 8's placement
+result, Chapter 10's prompt regression, Chapter 6's truncation result
+(p = 0.12 by the author's own test), and Chapter 5's range-collapse null. They are
+reported because they are what happened, not because one run can distinguish them
+from zero.</p>
+
+<p>The large effects — Chapter 3's 69-point drop across four models, Chapter 2's
+corruption rates, Chapter 7's 26-point recall loss, Chapter 4's ensemble result —
+are far outside it.</p>
+
+<h4>One kind of document</h4>
+
+<p>FDA drug labels are structured, in English, professionally edited, and
+publicly checkable. Most production systems are fed something worse: scanned
+faxes, mixed languages, transcripts of people talking over each other.</p>
+
+<p>This cuts in a specific direction. <strong>A failure that appears at this rate
+on clean documents is unlikely to appear <em>less</em> often on messy ones</strong>
+— so the four chapters whose failures did not reproduce should be read as "did not
+reproduce <em>here</em>", not "does not happen".</p>
+
+<h4>Small samples</h4>
+
+<p>Twelve documents. Forty-eight opportunities to fabricate per experiment. Six
+documents in Chapter 10, six drugs in the retrieval work, thirty-three placements
+in Chapter 8. Enough to show a pattern and compare two approaches on identical
+inputs; <strong>not enough to attach a margin of error to any figure</strong>, and
+none is claimed.</p>
+
+<h4>Reference counts that are themselves imperfect</h4>
+
+<p>Several chapters derive ground truth from a pattern search, and review found
+all of them leaky: Chapter 10's counts about a third per-kilogram rate
+coefficients as doses and cannot see flattened tables; Chapter 6's reads kidney
+function thresholds as doses; Chapter 5's still reads a gene identifier as a
+numeric range.</p>
+
+<p><strong>They are lower bounds of reasonable quality, not gold standards.</strong>
+Where a chapter says "provably not in the text", read "not found by a pattern
+search that is known to miss things".</p>
+
+<h4>One judgement that is not derived</h4>
+
+<p>Chapter 3's headline — the asserted-versus-declined split that produces the
+69-point figure — comes from a second model's classification. It is pinned, it is
+recorded, and every judgement can be read. <strong>Its accuracy has never been
+measured, because no ground truth for it exists.</strong> It is the one place in
+this report where a number rests on a model's opinion.</p>
+
+<h4>A version corpus that is not quite a version chain</h4>
+
+<p>The 48 labels behind the retrieval work carry <strong>no repeated
+identifier</strong> — they are different labelers' documents for the same six
+drugs, not successive revisions of one document. Real dates, real staleness, real
+retrieval behaviour; but "superseded version" is doing work the data does not
+fully support. Chapters 3 and 6 both build on it.</p>
+
+<h4>Fixes that were never run</h4>
+
+<p>OCR confidence scoring, session isolation, golden-set regression tests, the
+named commercial injection scanner, and the retry-on-validation-error loop. Each
+is marked in its chapter with the reason. <strong>None of them should be cited as
+tested.</strong></p>
+
+<h4>What the cross-model sweep does and does not cover</h4>
+
+<p>It covers the headline metric of each chapter on four models. It does
+<strong>not</strong> cover every fix in every chapter, and three scripts failed on
+two models for budget reasons and are recorded as failures rather than estimated.</p>
+
+<h4>The repository is not as clean as the report implies</h4>
+
+<ul>
+  <li>About half the recorded runs on disk are orphaned by prompt edits.</li>
+  <li>Seven scripts need an installed package despite the "no installs" claim.</li>
+  <li>The run-everything command assumes a <code>python</code> that does not
+  exist on a stock modern Mac — it needs <code>python3</code>.</li>
+</ul>
+
+<h4>One thing that is not a limitation</h4>
+
+<p>The right answers are not open to dispute. In most AI evaluation the answer key
+is written by people and is the first thing an unhappy reader attacks. Here it is
+the documents' own missing sections: a question is unanswerable because the
+section that would answer it was never supplied; a box should be empty because the
+label does not have that section; a passage's true class is the section it was cut
+from.</p>
+
+<p>There is no annotation to argue with. <strong>That is the one methodological
+choice in this report I would defend without qualification</strong> — and it is
+the reason the worst bug found here was a filter that had accidentally become the
+answer key, rather than an answer key nobody could check.</p>
+
+<div class="footnote">
+  <p><strong>Reproducing this.</strong> All code, data and recordings are in the
+  companion repository. <code>python3 run_all.py</code> replays every experiment
+  from the recordings — free, no account, no API key, a few seconds.
+  <code>python3 run_all.py --live</code> re-runs everything against the models.</p>
+  <p><strong>Sources.</strong> Drug labels retrieved from the openFDA drug label
+  API (US Food and Drug Administration, public domain), August 2026. Prices are
+  the published rates at time of writing. Timings are from a single Apple laptop
+  with no GPU and should be read as orders of magnitude.</p>
+  <p><strong>Method.</strong> Nine chapters built by four authors working
+  independently, then audited by a fifth whose brief was to find what was wrong.
+  Fourteen bugs were found in the experiment code itself; five would have produced
+  false published numbers and one of those was published before it was caught.</p>
+</div>

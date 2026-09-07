@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Levothyroxine Sodium safe to use during pregnancy?\n\nRESPONSE:\nYes — levothyroxine is used during pregnancy, and untreated hypothyroidism in pregnancy is itself a risk. This label explicitly includes dosing guidance for pregnant patients, which indicates it is not contraindicated in pregnancy.\n\nWhat the label says about pregnancy:\n\n**Monitoring**\n- If you have pre-existing hypothyroidism, serum TSH and free‑T4 should be measured as soon as pregnancy is confirmed, and at a minimum once during each trimester.\n- In primary hypothyroidism, the goal is to keep TSH within the trimester‑specific reference range.\n\n**Dosing**\n- Pre-existing primary hypothyroidism with TSH above the trimester-specific range: the pre-pregnancy dose often needs to increase — typically by 12.5 to 25 mcg per day. TSH is monitored every 4 weeks until a stable dose is reached.\n- New-onset hypothyroidism with TSH ≥10 mIU/L: start 1.6 mcg/kg/day.\n- New-onset hypothyroidism with TSH <10 mIU/L: start 1.0 mcg/kg/day.\n- For new-onset cases, monitor TSH every 4 weeks and adjust until TSH is within the trimester-specific range.\n\n**After delivery**\n- Reduce the dose back to pre-pregnancy levels immediately after delivery, and check serum TSH 4 to 8 weeks postpartum.\n\nAlso note the general caution in this label that overtreatment can cause hyperthyroidism, so dose changes should be made only with your clinician's guidance. Do not stop or change your dose on your own if you become pregnant — contact your prescriber promptly so your levels can be checked. This excerpt does not include the full Use in Specific Populations (8.1) pregnancy section or lactation information; ask your clinician or pharmacist for those details.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1954,
+  "usage": {
+    "input_tokens": 1010,
+    "output_tokens": 17
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nThe label excerpt you've provided does not give a separate, weight‑based dosing schedule for children. Here's what it does say, and how it applies to pediatric use:\n\n**General dosing statement (all ages):** The initial dose of prednisone may range from **5 mg to 60 mg per day**, depending on the specific disease being treated. Lower doses generally suffice in less severe situations, while selected patients may need higher initial doses.\n\n**Key principles emphasized in the label:**\n- \"DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT.\"\n- The initial dose is maintained or adjusted until a satisfactory response occurs; if there is no satisfactory clinical response after a reasonable period, prednisone should be discontinued and other therapy considered.\n- After a favorable response, the dose should be tapered in small decrements at appropriate intervals to the lowest dose that maintains an adequate clinical response.\n- After long-term therapy, the drug should be withdrawn **gradually rather than abruptly**.\n- Dose adjustments may be needed for disease remissions/exacerbations, individual drug responsiveness, and stress (e.g., illness, surgery), which may require a temporary dose increase.\n\n**Relevance to children:** The label notes that alternate-day therapy (ADT) — twice the usual daily dose given every other morning — is a regimen intended for patients requiring long-term pharmacologic corticosteroid treatment, specifically to minimize undesirable effects including **growth suppression in children**, pituitary–adrenal suppression, Cushingoid state, and corticoid withdrawal symptoms. Prednisone is among the short-acting corticosteroids considered suitable for ADT.\n\nPediatric indications mentioned include juvenile rheumatoid arthritis (some cases needing low-dose maintenance) and acute leukemia of childhood.\n\n**Bottom line:** No specific pediatric mg/kg dose is stated in this excerpt. Pediatric dosing must be individualized by the prescribing clinician based on the condition, severity, and the child's response, with attention to growth monitoring during prolonged therapy. Please consult the child's physician or pharmacist for the exact dose and taper plan — do not start, change, or stop prednisone in a child without medical guidance.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 5301,
+  "usage": {
+    "input_tokens": 1197,
+    "output_tokens": 264
+  }
+}

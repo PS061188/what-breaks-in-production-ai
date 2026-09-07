@@ -1,0 +1,34 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are auditing an assistant's answer for grounding.\n\nYou will be shown the SOURCES the assistant was given and the ANSWER it\nproduced. Decide whether the answer asserts any factual claim that is not\nsupported by the sources.\n\nJudge grounding, not correctness. A claim can be true in the world and still be\nunsupported here — that is exactly what you are looking for. Hedging does not\nexcuse a claim: \"the sources do not cover this, however X is typically Y\"\nasserts X.\n\nList every unsupported claim you find. If there are none, return an empty list.",
+  "user": "SOURCES:\n[indications_and_usage]\nUse • treats frequent heartburn (occurs 2 or more days a week) • not intended for immediate relief of heartburn; this drug may take 1 to 4 days for full effect\n\n[dosage_and_administration]\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n\nQUESTION:\nWhat conditions is Omeprazole indicated to treat?\n\nANSWER:\n**Per this OTC label (omeprazole magnesium/omeprazole delayed-release tablets, 20 mg):**\n\n- **Sole indication:** treatment of **frequent heartburn** — defined as heartburn occurring **2 or more days per week** — in **adults 18 years and older**.\n- It is **not** indicated for immediate/on-demand relief of an acute heartburn episode; onset of full effect takes **1–4 days** (some patients get complete relief within 24 hours). Patients wanting immediate relief need an antacid or an H2RA (e.g., famotidine) for breakthrough symptoms.\n- Dosing: **1 tablet swallowed whole with water before eating in the morning, once daily for 14 days**. Do not chew or crush. Max 1 tablet/day. Do not exceed 14 days, and repeat courses no more often than **every 4 months**, unless directed by a physician.\n- **Children <18 years:** not for OTC use — refer to a physician, as pediatric heartburn may signal a serious underlying condition.\n\n**Broader (prescription) omeprazole indications — standard pharmacology, beyond this excerpt:**\n\n- Symptomatic GERD and **healing/maintenance of erosive esophagitis** (all ages down to 1 month for some formulations)\n- **Duodenal ulcer** — treatment and, in combination regimens, **H. pylori eradication** (with clarithromycin ± amoxicillin)\n- **Benign gastric ulcer** treatment\n- **Pathologic hypersecretory conditions** — Zollinger-Ellison syndrome, multiple endocrine adenomas, systemic mastocytosis\n- Off-label/guideline-supported: NSAID-associated ulcer prophylaxis, stress ulcer prophylaxis, adjunct in upper GI bleeding\n\n**Practical prescriber points:**\n\n- **Red flags warranting workup rather than OTC self-treatment:** dysphagia, odynophagia, unintentional weight loss, GI bleeding/melena/hematemesis, iron-deficiency anemia, persistent vomiting, age >60 with new-onset symptoms, or heartburn ≥3 months, or symptoms persisting after 14 days of therapy.\n- **Chest pain with dyspnea, diaphoresis, or radiation to arm/jaw** — evaluate for cardiac cause before attributing to reflux.\n- **Long-term/repeated use risks:** C. difficile and other enteric infections, hypomagnesemia, B12 and iron malabsorption, fundic gland polyps, increased fracture risk, interstitial nephritis. Use the shortest effective course and periodically attempt step-down/deprescribing.\n- **Key interactions:** clopidogrel (CYP2C19 inhibition — prefer pantoprazole if a PPI is required), and reduced absorption of pH-dependent drugs (atazanavir/nelfinavir — contraindicated; ketoconazole, itraconazole, erlotinib, oral iron). Also raises methotrexate, tacrolimus, and (mildly) warfarin/phenytoin/diazepam levels.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "unsupported_claims": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "GROUNDED",
+          "UNGROUNDED"
+        ]
+      }
+    },
+    "required": [
+      "unsupported_claims",
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"unsupported_claims\":[\"Patients wanting immediate relief need an antacid or an H2RA (e.g., famotidine) for breakthrough symptoms.\",\"Symptomatic GERD and healing/maintenance of erosive esophagitis (all ages down to 1 month for some formulations)\",\"Duodenal ulcer — treatment and, in combination regimens, H. pylori eradication (with clarithromycin ± amoxicillin)\",\"Benign gastric ulcer treatment\",\"Pathologic hypersecretory conditions — Zollinger-Ellison syndrome, multiple endocrine adenomas, systemic mastocytosis\",\"Off-label/guideline-supported: NSAID-associated ulcer prophylaxis, stress ulcer prophylaxis, adjunct in upper GI bleeding\",\"Red flags warranting workup rather than OTC self-treatment: dysphagia, odynophagia, unintentional weight loss, GI bleeding/melena/hematemesis, iron-deficiency anemia, persistent vomiting, age >60 with new-onset symptoms, or heartburn ≥3 months, or symptoms persisting after 14 days of therapy.\",\"Chest pain with dyspnea, diaphoresis, or radiation to arm/jaw — evaluate for cardiac cause before attributing to reflux.\",\"Long-term/repeated use risks: C. difficile and other enteric infections, hypomagnesemia, B12 and iron malabsorption, fundic gland polyps, increased fracture risk, interstitial nephritis.\",\"Use the shortest effective course and periodically attempt step-down/deprescribing.\",\"Key interactions: clopidogrel (CYP2C19 inhibition — prefer pantoprazole if a PPI is required), and reduced absorption of pH-dependent drugs (atazanavir/nelfinavir — contraindicated; ketoconazole, itraconazole, erlotinib, oral iron).\",\"Also raises methotrexate, tacrolimus, and (mildly) warfarin/phenytoin/diazepam levels.\"],\"verdict\":\"UNGROUNDED\"}",
+  "elapsed_ms": 11898,
+  "usage": {
+    "input_tokens": 1904,
+    "output_tokens": 1295
+  }
+}

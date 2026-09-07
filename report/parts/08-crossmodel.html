@@ -1,0 +1,183 @@
+<!-- ============================ CROSS-MODEL ============================ -->
+<h2 class="part">D — Does any of this hold on other models?</h2>
+<h3 class="top">The same experiments, four models, two providers</h3>
+
+<p class="lede">Every number so far came from one model. The obvious objection is
+that they are facts about that model rather than about the failure. So every
+chapter was re-run on three more — including one from a different company — with
+no change to any prompt, schema, or check.</p>
+
+<h4>What was run</h4>
+
+<table>
+  <tr><th style="width:26%">Model</th><th>Why it is in the sweep</th></tr>
+  <tr><td><strong>Claude Haiku 4.5</strong></td>
+      <td>The baseline for every number in this report. Small, fast, cheap.</td></tr>
+  <tr><td><strong>Claude Opus 5</strong></td>
+      <td>The strongest model in the same family. Tests whether "upgrade the
+      model" is a fix.</td></tr>
+  <tr><td><strong>GPT-5-mini</strong></td>
+      <td>A different company entirely. Tests whether any of this is
+      Anthropic-specific.</td></tr>
+  <tr><td><strong>GPT-4.1-mini</strong></td>
+      <td>A non-reasoning model, for contrast with GPT-5-mini.</td></tr>
+</table>
+
+<p><strong>Not one prompt or check changed between providers.</strong> The
+prompts are plain text and the schemas are ordinary JSON Schema; the only code
+that knew the difference was thirty lines of client setup. That is itself worth
+reporting — the chapters' advice is not vendor-specific.</p>
+
+<h4>The headline results</h4>
+
+<table>
+  <tr><th style="width:34%">Measure</th><th class="num">Haiku 4.5</th>
+      <th class="num">Opus 5</th><th class="num">GPT-5-mini</th><th class="num">GPT-4.1-mini</th></tr>
+  <tr><td><strong>Ch2</strong> silent corruption</td>
+      <td class="num">39%</td><td class="num"><strong>68%</strong></td>
+      <td class="num"><strong>80%</strong></td><td class="num">59%</td></tr>
+  <tr><td><strong>Ch2</strong> confident on damaged input</td>
+      <td class="num">83%</td><td class="num">85%</td>
+      <td class="num"><strong>100%</strong></td><td class="num">95%</td></tr>
+  <tr><td><strong>Ch3</strong> fabrication, soft-inference prompt</td>
+      <td class="num">92%</td><td class="num"><strong>100%</strong></td>
+      <td class="num">98%</td><td class="num">94%</td></tr>
+  <tr><td><strong>Ch3</strong> fabrication after the grounding fix</td>
+      <td class="num">23%</td><td class="num">31%</td>
+      <td class="num">29%</td><td class="num">25%</td></tr>
+  <tr><td><strong>Ch3</strong> recall after the fix</td>
+      <td class="num">88%</td><td class="num">92%</td>
+      <td class="num">96%</td><td class="num">100%</td></tr>
+  <tr><td><strong>Ch5</strong> values findable, verbatim prompt</td>
+      <td class="num">94%</td><td class="num">95%</td>
+      <td class="num">98%</td><td class="num">94%</td></tr>
+  <tr><td><strong>Ch8</strong> placement errors</td>
+      <td class="num">3%</td><td class="num">0%</td>
+      <td class="num">0%</td><td class="num">0%</td></tr>
+</table>
+
+<h3>Finding 1 — the stronger model is worse at the failure that matters most</h3>
+
+<div class="headline">
+  Silent corruption on damaged input: <b>39%</b> on the small model,
+  <b>68%</b> on the strongest one, <b>80%</b> on GPT-5-mini.
+</div>
+
+<p>This is the most consequential result in the sweep and it points the opposite
+way to most people's intuition.</p>
+
+<p>A stronger model is <em>better</em> at producing a fluent, plausible, complete
+answer from a corrupted document. That is the wrong capability here. The weaker
+model's answers on damaged input were more likely to be visibly odd; the stronger
+model's were more likely to look exactly like the correct ones. <strong>The
+better the model, the better the counterfeit.</strong></p>
+
+<p>And confidence tracks the same way in the wrong direction: <strong>GPT-5-mini
+reported itself confident on 100% of deliberately corrupted documents.</strong>
+Not 100% correct — 100% confident, on documents that had been mangled on
+purpose.</p>
+
+<div class="plain">
+  <span class="label">What this means for a reader planning an upgrade</span>
+  <p>"We will fix this when we move to a better model" is, for this class of
+  failure, exactly backwards. A stronger model raises the quality of output built
+  on bad input, which makes bad input harder to detect downstream, not easier.</p>
+  <p>The input gate — the free, model-free, pure-code check from Chapter 2 —
+  performed <strong>identically on all four models</strong>, because it never
+  looks at a model at all. That is the argument for code-side checks, stated as a
+  measurement rather than a preference.</p>
+</div>
+
+<h3>Finding 2 — the prompt fixes hold everywhere</h3>
+
+<p>Chapter 3's grounding template is the largest effect in the report, and it
+survives the change of model and the change of vendor:</p>
+
+<table>
+  <tr><th style="width:34%">Model</th><th class="num">Soft-inference prompt</th>
+      <th class="num">Grounding template</th><th class="num">Improvement</th></tr>
+  <tr><td>Claude Haiku 4.5</td><td class="num">92%</td><td class="num">23%</td><td class="num">−69 pts</td></tr>
+  <tr><td>Claude Opus 5</td><td class="num">100%</td><td class="num">31%</td><td class="num">−69 pts</td></tr>
+  <tr><td>GPT-5-mini</td><td class="num">98%</td><td class="num">29%</td><td class="num">−69 pts</td></tr>
+  <tr><td>GPT-4.1-mini</td><td class="num">94%</td><td class="num">25%</td><td class="num">−69 pts</td></tr>
+</table>
+
+<p><strong>Sixty-nine points, four times, across two companies.</strong> That is
+the most robust finding in this entire report — more robust than any single
+chapter's headline, because it reproduces on models that share no weights.</p>
+
+<p>Note also the top-left corner: <strong>Opus 5 fabricates on 100% of
+unanswerable questions</strong> given the helpful prompt. The strongest model in
+the sweep, asked helpfully, made something up every single time.</p>
+
+<h3>Finding 3 — the failures that did not reproduce, still do not</h3>
+
+<p>Chapter 8's placement errors: <strong>0% on three of four models</strong>, and
+the one non-zero result on Haiku was traced to a measurement artefact. That is
+about as clean a null as this project produced.</p>
+
+<h3>Finding 4 — the same budget bug, three times</h3>
+
+<p>The sweep broke three times in the same way, and it is worth reporting as a
+finding rather than an incident.</p>
+
+<table>
+  <tr><th style="width:30%">Model</th><th>What happened</th></tr>
+  <tr><td>Claude Opus 5</td><td>Reasons before answering; reasoning consumes the
+      output budget. Every call truncated.</td></tr>
+  <tr><td>Claude Sonnet 5</td><td>Same, discovered separately when it was used as
+      a classifier with a 64-token budget.</td></tr>
+  <tr><td>GPT-5-mini</td><td>Same, and it uses considerably more of the budget than
+      the Claude models — needed double the headroom.</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">This is what a model upgrade actually looks like</span>
+  <p>A token budget sized for a model that answers immediately truncates a model
+  that thinks first. <strong>The symptom is never a message about budgets.</strong>
+  It is malformed output — an unterminated string four thousand characters into a
+  response nobody is going to read.</p>
+  <p>Three model families, one mistake, three separate discoveries. Any team
+  swapping to a reasoning model will meet this, and the error message will not
+  mention the cause.</p>
+</div>
+
+<h4>What the sweep cost</h4>
+
+<table>
+  <tr><th style="width:52%">Item</th><th class="num">Value</th></tr>
+  <tr><td>Recorded runs across all models</td><td class="num">4,126</td></tr>
+  <tr><td>Haiku 4.5 · Sonnet 5 (classifier)</td><td class="num">1,647 · 1,438</td></tr>
+  <tr><td>Opus 5 · GPT-5-mini · GPT-4.1-mini</td><td class="num">358 · 351 · 332</td></tr>
+  <tr><td><strong>Total spend across the whole project</strong></td>
+      <td class="num"><strong>~$24</strong></td></tr>
+  <tr><td>Replaying all of it</td><td class="num">free, seconds</td></tr>
+</table>
+
+<h4>Three runs still failing</h4>
+
+<p>Three scripts hit the same budget ceiling on Opus 5 and GPT-4.1-mini and are
+recorded as failures rather than quietly dropped:
+<code>ch09/broken.py</code> on Opus 5, and <code>ch08/fixed.py</code> and
+<code>ch09/fixed.py</code> on GPT-4.1-mini. Their cells in the tables above are
+blank rather than estimated.</p>
+
+<h3>What the sweep changes about the rest of this report</h3>
+
+<table>
+  <tr><th style="width:44%">Claim</th><th>Status after the sweep</th></tr>
+  <tr><td>Grounding prompt reduces fabrication</td>
+      <td><strong>Confirmed on four models, two vendors.</strong> The strongest
+      claim in the report.</td></tr>
+  <tr><td>Damaged input causes silent corruption</td>
+      <td><strong>Confirmed and worse elsewhere</strong> — 39% was the mildest
+      result, not the typical one.</td></tr>
+  <tr><td>Self-reported confidence is unreliable</td>
+      <td><strong>Confirmed and worse</strong> — 100% confidence on corrupted input
+      from GPT-5-mini.</td></tr>
+  <tr><td>Placement errors (Ch 8)</td><td><strong>Null confirmed</strong> — 0% on
+      three of four models.</td></tr>
+  <tr><td>Everything else</td>
+      <td>Single-model results. The sweep covers the headline metrics, not every
+      fix in every chapter.</td></tr>
+</table>

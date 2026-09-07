@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nWarfarin sodium interacts with numerous drugs that can affect its anticoagulant effect, potentially increasing the risk of bleeding or thrombosis. Common interacting drugs include: \n\n1. Heparin and other anticoagulants: These can increase the INR and bleeding risk; close monitoring and overlap management are necessary.\n2. Antiplatelet agents such as aspirin (low-dose), nonsteroidal anti-inflammatory drugs (NSAIDs), and other drugs affecting platelet function: These increase bleeding risk.\n3. Certain antibiotics and antifungals: These can potentiate warfarin's effect by altering gut flora or hepatic metabolism.\n4. Drugs influencing cytochrome P450 enzymes (especially CYP2C9): Inducers (e.g., rifampin) may decrease warfarin effect; inhibitors (e.g., amiodarone, metronidazole) may increase it.\n5. Vitamin K containing supplements or foods: These can reduce warfarin efficacy.\n\nGiven warfarin's narrow therapeutic index and multiple potential interactions, monitor INR closely with initiation, discontinuation, or changes in concomitant medications. For detailed drug interaction information, consult specific references and the full prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2185,
+  "usage": {
+    "input_tokens": 808,
+    "output_tokens": 17
+  }
+}

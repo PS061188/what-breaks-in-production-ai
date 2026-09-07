@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Lisinopril?\n\nRESPONSE:\nShort answer: the excerpt you've given me (Indications and Usage, plus Dosage and Administration for lisinopril/hydrochlorothiazide) does not contain the Drug Interactions section, so I can't cite specific interactions from this label text. For a definitive list you'd need the \"Drug Interactions,\" \"Warnings,\" and \"Precautions\" sections of the full prescribing information.\n\nWhat the excerpt does hint at:\n- It repeatedly refers to WARNINGS for side effects, angioedema (higher incidence in Black patients), agranulocytosis risk with ACE inhibitors, and anaphylactoid reactions during membrane exposure (high-flux dialysis membranes/LDL apheresis) — that last one is essentially a device/procedure interaction warning.\n- It notes the potassium-related interplay between the two components: hydrochlorothiazide causes hypokalemia, while adding lisinopril blunts that potassium loss — which is why potassium supplements and potassium-sparing agents matter with this combination.\n\nGenerally recognized interactions for lisinopril-containing products (not from this excerpt — verify against the full label):\n- Potassium supplements, potassium-sparing diuretics (spironolactone, amiloride, triamterene, eplerenone), and potassium-containing salt substitutes — risk of hyperkalemia.\n- Other renin-angiotensin system blockers: aliskiren (contraindicated in diabetes; avoid with renal impairment) and ARBs — increased hypotension, hyperkalemia, renal impairment.\n- NSAIDs, including COX-2 inhibitors — reduced antihypertensive effect and risk of acute renal failure, especially in elderly, volume-depleted, or renally impaired patients.\n- Lithium — increased lithium levels/toxicity (both ACE inhibitors and thiazides contribute).\n- Diuretics/volume depletion and other antihypertensives — excessive first-dose hypotension.\n- mTOR inhibitors (sirolimus, everolimus), neprilysin inhibitors (sacubitril/valsartan — contraindicated, requires 36-hour washout), and DPP-4 inhibitors — increased angioedema risk.\n- Gold (injectable sodium aurothiomalate) — nitritoid reactions.\n- Antidiabetic agents (insulin, oral agents) — dose adjustment may be needed; thiazides can raise glucose while ACE inhibitors can lower it.\n\nPlease confirm with the complete prescribing information or a pharmacist before making therapy decisions, and let your prescriber know all medications and supplements you take.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1651,
+  "usage": {
+    "input_tokens": 1246,
+    "output_tokens": 17
+  }
+}

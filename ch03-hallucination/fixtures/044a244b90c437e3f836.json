@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Levothyroxine Sodium safe to use during pregnancy?\n\nRESPONSE:\nYes — levothyroxine is not only safe in pregnancy, it is essential. Thyroid hormone requirements rise in pregnancy, and untreated or under-treated maternal hypothyroidism is associated with miscarriage, pre-eclampsia, preterm birth, low birth weight, stillbirth, and impaired neurocognitive development in the child. Levothyroxine is a Pregnancy-category-equivalent \"no evidence of fetal harm\" drug: it is identical to endogenous T4, crosses the placenta only minimally, and has not been associated with teratogenicity. Therapy should never be stopped when pregnancy is discovered.\n\nKey practical points from the label and standard practice:\n\n**Pre-existing hypothyroidism**\n- Check serum TSH and free-T4 as soon as pregnancy is confirmed, and at minimum once each trimester.\n- Requirements typically increase by roughly 20–50% (often as early as weeks 4–6). Many clinicians pre-emptively advise increasing to about 9 doses per week (i.e., a double dose 2 days per week) as soon as pregnancy is confirmed, pending labs.\n- Per the label, if TSH is above the trimester-specific reference range, increase the dose by 12.5–25 mcg/day and recheck TSH every 4 weeks until stable and within the trimester-specific range.\n- Immediately after delivery, reduce back to the pre-pregnancy dose and recheck TSH 4–8 weeks postpartum.\n\n**New-onset hypothyroidism in pregnancy**\n- TSH ≥10 mIU/L: start 1.6 mcg/kg/day.\n- TSH <10 mIU/L: start 1.0 mcg/kg/day.\n- Monitor TSH every 4 weeks and titrate to the trimester-specific range.\n\n**Targets and monitoring**\n- Maintain TSH within the trimester-specific reference range (commonly ~0.1–2.5 mIU/L in the first trimester, up to ~3–3.5 mIU/L later, depending on assay/local ranges).\n- In secondary/tertiary hypothyroidism, TSH is not a valid guide — titrate to free-T4 in the upper half of the normal range.\n\n**Administration counseling**\n- Take once daily on an empty stomach, 30–60 minutes before breakfast, with a full glass of water.\n- Separate by at least 4 hours from prenatal vitamins, iron, calcium, and antacids — a very common cause of rising TSH in pregnancy.\n- Stop biotin-containing supplements at least 2 days before thyroid testing to avoid assay interference.\n- Hyperemesis or poor absorption can necessitate more frequent monitoring.\n\n**Breastfeeding:** Levothyroxine is compatible with lactation; only minimal amounts pass into breast milk and adequate maternal thyroid levels support normal milk production.\n\nThe main safety concern is over-treatment (iatrogenic thyrotoxicosis), which can contribute to maternal tachyarrhythmia and fetal complications — so titrate deliberately and monitor per the intervals above.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1614,
+  "usage": {
+    "input_tokens": 1427,
+    "output_tokens": 17
+  }
+}

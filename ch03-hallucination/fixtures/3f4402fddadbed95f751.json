@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Lisinopril?\n\nRESPONSE:\nI can only speak to what's in the label excerpt provided here — and unfortunately that excerpt doesn't include the ADVERSE REACTIONS section for lisinopril/hydrochlorothiazide. Here's what the available text does say:\n\n**From the excerpt (Dosage and Administration / Indications):**\n- Side effects attributable to the **lisinopril** component are described as \"generally rare and apparently independent of dose.\"\n- Side effects attributable to the **hydrochlorothiazide** component are a mix of dose-dependent effects — **primarily hypokalemia (low potassium)**, which is the more common type — and dose-independent effects such as **pancreatitis**, which are much less common. Notably, adding lisinopril blunted the hypokalemia normally seen with diuretics.\n- **Angioedema (head and neck swelling)** is specifically flagged: Black patients receiving ACE inhibitors have been reported to have a higher incidence of angioedema than non-Black patients (see the WARNINGS section).\n- **Agranulocytosis** has occurred with the ACE inhibitor captopril, particularly in patients with renal impairment or collagen vascular disease, and available data are insufficient to show lisinopril does not carry a similar risk.\n- In renal impairment, thiazides are less effective and this combination is not recommended when creatinine clearance is ≤30 mL/min/1.73 m².\n\n**Beyond this excerpt (general knowledge, not from the text provided):** ACE inhibitors like lisinopril are commonly associated with a persistent dry cough, dizziness, headache, fatigue, hypotension, and elevations in serum potassium and creatinine; ACE inhibitors are also contraindicated in pregnancy because of fetal toxicity.\n\nFor an accurate, complete list with frequencies, please consult the full ADVERSE REACTIONS, WARNINGS, and PRECAUTIONS sections of the product labeling, and discuss any symptoms with your prescriber or pharmacist. Seek emergency care for swelling of the face, lips, tongue, or throat, or difficulty breathing.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1843,
+  "usage": {
+    "input_tokens": 1079,
+    "output_tokens": 17
+  }
+}

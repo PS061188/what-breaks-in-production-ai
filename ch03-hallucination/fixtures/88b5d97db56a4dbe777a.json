@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Prednisone for pediatric patients?\n\nRESPONSE:\nThe product label does not provide specific pediatric dosing guidelines for prednisone. The label states that initial dosage may vary from 5 mg to 60 mg per day depending on the specific disease entity being treated, and emphasizes that 'DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT.'\n\nThe label does mention juvenile rheumatoid arthritis as an indication where 'selected cases may require low-dose maintenance therapy,' but no specific pediatric doses are provided.\n\nFor pediatric patients, you should:\n1. Consult standard pediatric drug references or dosing guidelines\n2. Consider weight-based dosing (typically 0.5-2 mg/kg/day depending on indication)\n3. Use the lowest effective dose\n4. Account for the specific disease being treated\n5. Monitor closely for growth suppression and other adverse effects\n\nThe label does note that alternate day therapy (ADT) may help minimize growth suppression in children compared to daily dosing. Any pediatric dosing should be individualized in consultation with appropriate clinical resources and the child's clinical status.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1723,
+  "usage": {
+    "input_tokens": 805,
+    "output_tokens": 17
+  }
+}

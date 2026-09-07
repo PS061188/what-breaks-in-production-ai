@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Omeprazole?\n\nRESPONSE:\nI should flag up front that the label excerpt you've given me only contains the \"Uses\" and \"Directions\" sections — it does not include the drug interaction warnings, so I can't cite specific interactions from this text. Here is general information, but please check the full package label (the \"Ask a doctor or pharmacist before use if you are taking\" section) or speak with a pharmacist.\n\nOTC omeprazole labels typically advise talking to a doctor or pharmacist before use if you are taking:\n\n- **Warfarin** (blood thinner) — bleeding risk may increase\n- **Clopidogrel** — omeprazole can reduce its anti-clotting effect\n- **Prescription antiretroviral (HIV) medicines** — e.g., atazanavir, nelfinavir, rilpivirine; absorption can be reduced\n- **Antifungals** — ketoconazole, itraconazole (need stomach acid for absorption)\n- **Diazepam** — levels may rise\n- **Digoxin** — levels may rise\n- **Phenytoin** — levels may rise\n- **Cilostazol**\n- **Methotrexate** (especially high-dose)\n- **Tacrolimus**\n- **Rifampin** and **St. John's wort** — can lower omeprazole levels\n- **Iron salts, mycophenolate mofetil, erlotinib and other pH-dependent drugs** — reduced absorption\n\nAlso note the labeled self-care limits: one tablet daily for 14 days, no more often than every 4 months unless a doctor directs otherwise. If you're on any prescription medication, confirm compatibility with your pharmacist before starting omeprazole.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3496,
+  "usage": {
+    "input_tokens": 913,
+    "output_tokens": 17
+  }
+}

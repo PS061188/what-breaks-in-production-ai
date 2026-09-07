@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Levothyroxine Sodium safe to use during pregnancy?\n\nRESPONSE:\nThe label indicates that levothyroxine sodium can be used during pregnancy for hypothyroidism management, but requires careful monitoring. Key guidance includes:\n\n**Pre-existing Hypothyroidism:**\n- Measure serum TSH and free-T4 as soon as pregnancy is confirmed\n- Monitor at minimum during each trimester\n- Maintain serum TSH in the trimester-specific reference range\n- Dosage typically increases during pregnancy by 12.5-25 mcg per day\n- Monitor TSH every 4 weeks until stable, then reduce to pre-pregnancy levels immediately after delivery\n- Monitor TSH 4-8 weeks postpartum\n\n**New Onset Hypothyroidism:**\n- TSH ≥10 mIU/L: start 1.6 mcg/kg/day\n- TSH <10 mIU/L: start 1.0 mcg/kg/day\n- Monitor TSH every 4 weeks and adjust dosage until within normal trimester-specific range\n\n**Important Note:** The label does not provide explicit safety data about adverse effects during pregnancy. However, appropriate thyroid hormone replacement is essential during pregnancy for both maternal health and fetal development. Close collaboration with obstetrics is recommended to ensure trimester-specific TSH targets are maintained. Patients should discuss pregnancy plans with their prescriber to optimize dosing before conception when possible.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1530,
+  "usage": {
+    "input_tokens": 863,
+    "output_tokens": 17
+  }
+}

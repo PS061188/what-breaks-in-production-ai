@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nIs Lisinopril safe to use during pregnancy?\n\nRESPONSE:\nNo — lisinopril/hydrochlorothiazide should not be used during pregnancy. Drugs that act directly on the renin–angiotensin system, such as the ACE inhibitor lisinopril, carry a boxed warning for fetal toxicity: when used in the second and third trimesters they can cause injury and even death to the developing fetus (reduced fetal renal function, oligohydramnios, fetal lung hypoplasia, skull hypoplasia, limb contractures, hypotension, anuria, and death). Hydrochlorothiazide use in pregnancy has also been associated with fetal or neonatal jaundice, thrombocytopenia, and other adverse effects, and thiazides are not appropriate for treating gestational edema/hypertension.\n\nPractical points:\n\n- If pregnancy is detected, the medication should be discontinued as soon as possible and an alternative antihypertensive appropriate for pregnancy should be started (this is a decision for the prescribing clinician).\n- Women of childbearing potential taking this combination should be counseled about these risks and should tell their clinician promptly if they become pregnant or are planning pregnancy.\n- Infants exposed in utero should be observed for hypotension, oliguria, and hyperkalemia.\n\nNote: the label excerpt provided here covers only the Indications and Dosage sections; the pregnancy information above comes from the Boxed Warning/Use in Specific Populations sections of the full prescribing information. Please consult the complete label and your healthcare provider for individualized advice.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1438,
+  "usage": {
+    "input_tokens": 880,
+    "output_tokens": 17
+  }
+}

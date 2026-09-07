@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the label excerpt provided, the specific drug interactions mentioned are:\n\n1. **Monoamine Oxidase Inhibitors (MAOIs)** - Intended for psychiatric disorders:\n   - At least 14 days must elapse between discontinuing an MAOI and starting sertraline hydrochloride\n   - At least 14 days must elapse after stopping sertraline hydrochloride before starting an MAOI\n\n2. **Linezolid** - Increased risk of serotonin syndrome; do not start sertraline hydrochloride in patients being treated with linezolid\n\n3. **Intravenous Methylene Blue** - Increased risk of serotonin syndrome; do not start sertraline hydrochloride in patients being treated with IV methylene blue\n\nThe label notes that if a patient already taking sertraline requires urgent treatment with linezolid or IV methylene blue, sertraline should be stopped promptly, and the patient should be monitored for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last dose of linezolid or methylene blue (whichever is first). Sertraline may resume 24 hours after the last dose of these agents.\n\nThe label also mentions that non-intravenous methylene blue (oral tablets or local injection) carries unclear risk, but clinicians should be aware of the possibility of serotonin syndrome symptoms.\n\nNote: The provided label excerpt does not include a comprehensive drug interactions section, so additional interactions may exist in the full prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1754,
+  "usage": {
+    "input_tokens": 880,
+    "output_tokens": 17
+  }
+}

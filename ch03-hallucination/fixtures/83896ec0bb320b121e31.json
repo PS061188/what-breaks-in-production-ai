@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Sertraline Hydrochloride?\n\nRESPONSE:\nThe recommended starting dose of Sertraline Hydrochloride varies by indication and patient population:\n\n**Adults:**\n- Major Depressive Disorder: 50 mg once daily\n- Obsessive-Compulsive Disorder: 50 mg once daily\n- Panic Disorder: 50 mg once daily\n- Posttraumatic Stress Disorder (PTSD): 50 mg once daily\n- Social Anxiety Disorder: 50 mg once daily\n- Premenstrual Dysphoric Disorder (PMDD): 50 mg/day (either daily throughout the menstrual cycle or limited to the luteal phase)\n\n**Pediatric Patients (for OCD only):**\n- Children (ages 6-12): 25 mg once daily\n- Adolescents (ages 13-17): 50 mg once daily\n\nFor all indications except PMDD, if patients do not respond to the initial dose, dose increases are typically made at intervals of at least 1 week (due to the 24-hour elimination half-life), up to maximum recommended doses (generally 200 mg/day for most indications). For PMDD, maximum doses are 150 mg/day for daily dosing or 100 mg/day for luteal phase dosing.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 582,
+    "output_tokens": 11
+  }
+}

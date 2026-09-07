@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Levothyroxine Sodium?\n\nRESPONSE:\nThe provided label excerpt does not contain the complete Drug Interactions section (Section 7). While the label references Drug Interactions multiple times (e.g., 'see Drug Interactions (7.1)' and '(7.9)'), the actual details about specific drugs that interact with levothyroxine sodium are not included in this excerpt.\n\nBased on the information provided, the label does mention:\n\n1. **Drugs known to interfere with levothyroxine sodium absorption** - Levothyroxine must be administered at least 4 hours before or after these drugs, though specific examples are not listed in this excerpt.\n\n2. **Biotin and biotin-containing supplements** - These can interfere with immunoassays for TSH, T4, and T3, resulting in erroneous test results. Patients should stop biotin supplements at least 2 days before assessing thyroid hormone levels.\n\n3. **Foods that decrease absorption** - Such as soybean-based infant formula, which should be avoided when administering levothyroxine.\n\nTo obtain a complete list of drug interactions with levothyroxine sodium, you would need to review the full Drug Interactions section (Section 7) of the complete prescribing information.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1456,
+  "usage": {
+    "input_tokens": 763,
+    "output_tokens": 17
+  }
+}

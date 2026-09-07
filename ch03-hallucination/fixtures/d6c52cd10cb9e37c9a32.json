@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Amoxicillin indicated to treat?\n\nRESPONSE:\nAccording to the label, amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with recurrent or persistent acute otitis media due to: 1) S. pneumoniae (with penicillin MICs less than or equal to 2 mcg/mL), 2) H. influenzae (including beta-lactamase-producing strains), or 3) M. catarrhalis (including beta-lactamase-producing strains). The infection must be characterized by antibacterial drug exposure for acute otitis media within the preceding 3 months, and either age 2 years or younger, or day care attendance. Additionally, the label notes that acute otitis media due to S. pneumoniae alone can be treated with amoxicillin.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1629,
+  "usage": {
+    "input_tokens": 666,
+    "output_tokens": 17
+  }
+}

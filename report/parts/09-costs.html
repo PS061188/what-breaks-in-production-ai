@@ -1,0 +1,163 @@
+<!-- ============================ COSTS ============================ -->
+<h2 class="part">E — What everything cost</h2>
+<h3 class="top">Two kinds of expense that behave completely differently</h3>
+
+<p class="lede">Some fixes cost money — you pay a provider every time one runs,
+forever. Others cost machine time and disk: a large one-off setup, then very
+little per request. Teams routinely price the wrong one.</p>
+
+<table>
+  <tr><th style="width:22%"></th><th>Money-cost fixes</th><th>Compute-cost fixes</th></tr>
+  <tr><td><strong>Examples</strong></td>
+      <td>a second AI as auditor; the completeness audit; a model pre-filter</td>
+      <td>similarity scoring; embedding provenance; the retrieval filter</td></tr>
+  <tr><td><strong>Setup</strong></td><td>none</td>
+      <td>a dependency, a 79–367 MB download, an index build</td></tr>
+  <tr><td><strong>Marginal cost</strong></td>
+      <td><strong>money, per call, forever</strong></td><td>CPU seconds; no fee</td></tr>
+  <tr><td><strong>Scales badly with</strong></td><td>request volume</td>
+      <td>document size × claim count</td></tr>
+  <tr><td><strong>Fails at scale by</strong></td><td>budget</td><td>latency and memory</td></tr>
+</table>
+
+<p>A team that dismisses the local fixes as "heavy" has usually only priced the
+setup. A team that waves through the API fixes as "cheap" has usually only priced
+one call.</p>
+
+<h3>Every fix, priced</h3>
+
+<table>
+  <tr><th style="width:34%">Fix</th><th class="num">Per 1,000 uses</th>
+      <th class="num">Added delay</th><th>Setup · scales with</th></tr>
+  <tr><td>Chapter prompt templates (all nine)</td><td class="num">$3.50–6.50</td>
+      <td class="num">none</td><td>none — replaces a call you were making</td></tr>
+  <tr><td>Pre-flight input gate (Ch 2)</td><td class="num"><strong>−$X</strong></td>
+      <td class="num">&lt;1 ms</td><td>none — <em>saves</em> calls</td></tr>
+  <tr><td>Unicode normalisation gate (Ch 2)</td><td class="num">$0</td>
+      <td class="num">&lt;1 ms</td><td>standard library</td></tr>
+  <tr><td>Dead-letter queue (Ch 2)</td><td class="num">$0</td><td class="num">none</td>
+      <td>a table and a reason column</td></tr>
+  <tr><td>Citation check (Ch 3)</td><td class="num">$0</td><td class="num">&lt;1 ms</td>
+      <td>none — an <code>if</code></td></tr>
+  <tr><td>Version-locked retrieval (Ch 3, 6)</td><td class="num">$0</td>
+      <td class="num"><strong>0 ms</strong></td><td>79 MB, 0.9 s index build</td></tr>
+  <tr><td>Similarity scoring (Ch 3)</td><td class="num">$0 API</td>
+      <td class="num">+0.23 s</td><td><strong>367 MB</strong>, 10 s load ·
+      <strong>claims × passages</strong></td></tr>
+  <tr><td>Normaliser + discard log (Ch 5)</td><td class="num">$0</td>
+      <td class="num">&lt;1 ms</td><td>none · fields per document</td></tr>
+  <tr><td>Storing the raw value beside it (Ch 5)</td><td class="num">$0</td>
+      <td class="num">none</td><td><strong>doubles one column</strong> — the
+      cheapest insurance in the book</td></tr>
+  <tr><td>Ensemble classifiers (Ch 4)</td><td class="num">2–3× the classification</td>
+      <td class="num">parallelisable</td><td>none</td></tr>
+  <tr><td>Per-category F1 gate (Ch 4)</td><td class="num">$0</td><td class="num">CI only</td>
+      <td>a labelled holdout — <strong>7–12 per category was enough</strong></td></tr>
+  <tr><td>Section-provenance check (Ch 9)</td><td class="num">$0</td>
+      <td class="num">&lt;1 ms</td><td>a dictionary</td></tr>
+  <tr><td>Null-rate monitoring (Ch 9)</td><td class="num">$0</td><td class="num">none</td>
+      <td>runs on your warehouse · needs a baseline period</td></tr>
+  <tr><td>Independent entity count (Ch 10)</td><td class="num">$0 with a pattern search</td>
+      <td class="num">&lt;1 ms</td><td>or a large download for a NER model</td></tr>
+  <tr><td>Freshness monitor (Ch 6)</td><td class="num">$0</td><td class="num">offline</td>
+      <td>index metadata</td></tr>
+  <tr><td>Model pre-filter (Ch 7)</td><td class="num">≈ the call it protects</td>
+      <td class="num">+1 round trip</td><td>none — <strong>doubles your calls</strong></td></tr>
+  <tr><td>Completeness audit call (Ch 10)</td><td class="num">high</td>
+      <td class="num">+seconds</td><td>none</td></tr>
+  <tr class="total"><td><strong>Second AI as auditor (Ch 3)</strong></td>
+      <td class="num"><strong>$41</strong></td><td class="num"><strong>+4.1 s</strong></td>
+      <td>none — every call, forever</td></tr>
+</table>
+
+<h3>The one number to remember</h3>
+
+<div class="headline">
+  Generating an answer costs about <b>$0.004</b>. Having a second AI audit it
+  costs about <b>$0.041</b> — <b>ten times the price of the thing being
+  checked</b>, plus four seconds.
+</div>
+
+<p>Run on every request, as Chapter 3 suggests, the audit becomes the largest
+line in the budget and the biggest contributor to latency. And at a 38%
+false-alarm rate, the queue it fills stops being read within a fortnight.</p>
+
+<p>Three ways to afford it: <strong>sample</strong> one in ten ($4.10 per
+thousand, keeps the monitor, loses the gate); <strong>gate it behind a free
+check</strong> and pay only for what that cannot clear (about a third here); or
+<strong>reserve it</strong> for output where a human reading a false alarm is
+acceptable.</p>
+
+<h3>The cost that is a multiplication, not an addition</h3>
+
+<p>Similarity scoring looks free and per request nearly is. But its work is
+<strong>claims × passages</strong>. A modest run produced 6,752 comparisons in
+seventeen seconds. Twenty claims against two hundred passages is four thousand
+comparisons <em>for one answer</em> — minutes of CPU.</p>
+
+<p>The lever is how you chunk your documents, not how fast your machine is.
+A GPU moves the constant and leaves the shape alone.</p>
+
+<h3>What the whole project cost</h3>
+
+<table>
+  <tr><th style="width:56%">Item</th><th class="num">Value</th></tr>
+  <tr><td>Failure patterns tested</td><td class="num">9 of 9</td></tr>
+  <tr><td>Prompts and engineering fixes measured</td><td class="num">40+</td></tr>
+  <tr><td>Recorded model runs</td><td class="num">4,126</td></tr>
+  <tr><td>Models · providers</td><td class="num">5 · 2</td></tr>
+  <tr><td><strong>Total spend</strong></td><td class="num"><strong>about $24</strong></td></tr>
+  <tr><td>Replaying every experiment in this report</td>
+      <td class="num"><strong>free, seconds</strong></td></tr>
+</table>
+
+<p>Twenty-four dollars. It is worth stating plainly, because the reason this work
+had not been done was never the cost.</p>
+
+<h3>Wall-clock, and the mistake that cost the most time</h3>
+
+<table>
+  <tr><th style="width:44%">Model</th><th class="num">Seconds per call</th><th class="num">Output tokens/s</th></tr>
+  <tr><td>Claude Haiku 4.5</td><td class="num">1.57</td><td class="num">51</td></tr>
+  <tr><td>Claude Sonnet 5</td><td class="num">4.12</td><td class="num">64</td></tr>
+  <tr><td>GPT-5-mini</td><td class="num">3.9</td><td class="num">—</td></tr>
+  <tr><td>GPT-4.1-mini</td><td class="num">1.9</td><td class="num">—</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Every call in this project was made one at a time, for hours</span>
+  <p>Chapter 3's baseline is 144 calls. Sequentially: about ten minutes. Eight at
+  a time: <strong>93 seconds.</strong> Same calls, same cost, same recordings, six
+  times faster.</p>
+  <p>Nothing about the work required them to be sequential — each question is
+  independent of every other. The only reason they were is that a
+  <code>for</code> loop is the obvious way to write it. That is worth a line in
+  any chapter about evaluation harnesses.</p>
+</div>
+
+<h3>What to tell a reader deciding what to run</h3>
+
+<p><strong>Always, regardless of scale — all free:</strong> the input gate;
+Unicode normalisation; a dead-letter queue with reasons; nullable schemas with no
+defaults; normalisation in code with a discard log; storing the raw value; the
+retrieval status filter; section-provenance checks; per-category evaluation;
+unit tests.</p>
+
+<p><strong>Cheap enough not to think about:</strong> the prompt changes. They
+replace a call you were already making.</p>
+
+<p><strong>Price before you commit:</strong> a second AI as auditor (the one fix
+that can cost more than the product it protects); similarity scoring (free per
+call, quadratic in what you feed it); any embedding fix (80–367 MB of weights, a
+cold start, and memory in every worker); a model pre-filter (doubles your calls
+and, on the evidence of Chapter 7, may catch nothing).</p>
+
+<div class="plain">
+  <span class="label">The pattern across all nine chapters</span>
+  <p>The fixes that worked best were the free ones. Not because cheap is better —
+  because <strong>a check you can write in ordinary code is a check you can test,
+  and a check you can test still works after the model changes underneath
+  you.</strong></p>
+  <p>The expensive fixes share a property: their behaviour is itself a model's
+  judgement. When that judgement is wrong, nothing tells you.</p>
+</div>

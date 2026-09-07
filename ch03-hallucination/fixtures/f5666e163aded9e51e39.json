@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Albuterol Sulfate for pediatric patients?\n\nRESPONSE:\nPer the label, the dosing for pediatric patients aged 4 years and older is the same as for adults:\n\n**For treatment or prevention of bronchospasm (acute episodes/symptoms) in reversible obstructive airway disease:**\n- 2 inhalations by oral inhalation every 4 to 6 hours\n- For some patients, 1 inhalation every 4 hours may be sufficient\n- More frequent administration or a greater number of inhalations is not recommended\n\n**For prevention of exercise-induced bronchospasm:**\n- 2 inhalations by oral inhalation 15 to 30 minutes before exercise\n\n**Important notes:**\n- This product is indicated only for patients aged 4 years and older; the excerpt provided does not give dosing for children under 4 years.\n- It is for oral inhalation only.\n- Priming is essential: release 4 sprays into the air away from the face (shaking well before each spray) before first use, if not used for more than 2 weeks, or if the inhaler has been dropped. Avoid spraying in the eyes.\n- Wash the actuator with warm water and let it air-dry completely at least once a week.\n\nChildren may need supervision or assistance with proper inhaler technique. If the patient needs more doses than usual or the medication becomes less effective, this may signal worsening asthma and should be discussed promptly with the prescribing clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1718,
+  "usage": {
+    "input_tokens": 831,
+    "output_tokens": 17
+  }
+}

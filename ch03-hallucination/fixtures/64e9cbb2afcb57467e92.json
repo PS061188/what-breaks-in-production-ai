@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Furosemide?\n\nRESPONSE:\nThe starting dose depends on what furosemide is being used for:\n\n**For edema (congestive heart failure, cirrhosis, renal disease/nephrotic syndrome):**\n- **Adults:** Usual initial dose is **20 to 80 mg as a single oral dose**. If needed, the same dose can be repeated 6–8 hours later, or the dose can be increased in increments of 20–40 mg, given no sooner than 6–8 hours after the previous dose, until the desired diuretic effect is achieved. The effective single dose is then given once or twice daily (e.g., 8 am and 2 pm). In clinically severe edematous states, the dose may be carefully titrated up to 600 mg/day; doses above 80 mg/day given for prolonged periods require careful clinical and laboratory monitoring.\n- **Pediatric patients:** Usual initial dose is **2 mg/kg body weight as a single dose**, which may be increased by 1–2 mg/kg no sooner than 6–8 hours after the previous dose. Doses greater than 6 mg/kg are not recommended; maintenance dosing should be adjusted to the minimum effective level.\n\n**For hypertension (adults):**\n- Usual initial dose is **80 mg per day, usually divided as 40 mg twice daily**, then adjusted according to response. When adding furosemide to other antihypertensives, reduce the dose of those agents by at least 50% to avoid an excessive drop in blood pressure.\n\n**Geriatric patients:** Dose selection should be cautious, usually starting at the low end of the dosing range.\n\nTherapy should always be individualized to the patient's response, using the minimal dose that maintains the desired effect. This information is from the label excerpt and is not a substitute for your prescriber's directions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2078,
+  "usage": {
+    "input_tokens": 960,
+    "output_tokens": 17
+  }
+}

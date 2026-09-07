@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nOther short-acting sympathomimetic aerosol bronchodilators should not be used concomitantly with albuterol. If additional adrenergic drugs are to be administered by any route, they should be used with caution to avoid deleterious cardiovascular effects. Beta-blockers: Use with caution. May block bronchodilatory effects of beta-agonists and produce severe bronchospasm. ( 7.1 ) Diuretics: Use with caution. Electrocardiographic changes and/or hypokalemia associated with non–potassium-sparing diuretics may worsen with concomitant beta-agonists. ( 7.2 ) Digoxin: May decrease serum digoxin levels. Consider monitoring digoxin levels. ( 7.3 ) Monoamine oxidase inhibitors and tricyclic antidepressants:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage discusses multiple drug-drug interactions with albuterol (a beta-agonist), including sympathomimetic aerosols, beta-blockers, diuretics, digoxin, and MAOIs/tricyclic antidepressants; (b) Each interaction is presented with clinical guidance on how to manage the interaction (e.g., 'Use with caution', monitoring recommendations); (c) The format uses parenthetical reference markers (7.1, 7.2, 7.3) typical of prescribing information sections.\\n\\nStep 2 - Most plausible categories: (a) drug_interactions is clearly the primary match - the entire passage is dedicated to describing how albuterol interacts with other medications and the clinical consequences. (b) dosage_and_administration could be a secondary consideration if this were about adjusting doses based on co-medications, but the passage focuses on warning about interactions rather than dosing adjustments.\\n\\nStep 3 - Classification decision: drug_interactions wins decisively. The passage explicitly discusses multiple concurrent medications, their effects when combined with albuterol, and clinical precautions. This is unambiguously the drug_interactions section of a prescribing label.\\n\\nStep 4 - Confidence assessment: This is a straightforward classification with HIGH confidence (>95%). The terminology, structure, and content are characteristic of the drug interactions section of prescribing information.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 4859,
+  "usage": {
+    "input_tokens": 1057,
+    "output_tokens": 372
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Metformin Hydrochloride?\n\nRESPONSE:\nI should be upfront: the label excerpt I was given only covers the Indications & Usage and Dosage & Administration sections for metformin hydrochloride tablets — it does not include the Adverse Reactions section, so I can't quote specific rates or wording from it.\n\nFor general reference (not from the provided excerpt), metformin's labeling typically lists gastrointestinal effects as the most common adverse reactions, including diarrhea, nausea/vomiting, flatulence, abdominal discomfort/pain, indigestion, and asthenia (weakness) or headache. These are often dose-related, tend to occur when starting or increasing the dose, and frequently improve over time — which is why the label advises taking doses with meals and titrating gradually (e.g., increases of 500 mg weekly).\n\nImportant safety issues that also appear in the full label include:\n- Lactic acidosis — a rare but serious, potentially fatal complication (the subject of a boxed warning), with risk increased by renal impairment, alcohol use, hepatic impairment, heart failure, and iodinated contrast procedures. This is why the excerpt emphasizes assessing eGFR before and during therapy, avoiding use below 30 mL/min/1.73 m², and holding the drug around certain contrast imaging procedures.\n- Vitamin B12 deficiency with long-term use.\n- Hypoglycemia, which is uncommon with metformin alone but more likely when combined with insulin or sulfonylureas.\n\nFor an authoritative list with incidence rates, please consult the Adverse Reactions (Section 6) of the complete prescribing information, and discuss any symptoms with your healthcare provider.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1758,
+  "usage": {
+    "input_tokens": 927,
+    "output_tokens": 17
+  }
+}

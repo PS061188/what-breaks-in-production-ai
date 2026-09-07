@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Furosemide?\n\nRESPONSE:\nIt depends on the indication:\n\n- Adults (edema): usual initial dose 20–80 mg orally as a single dose; may repeat or increase after 6–8 hours and titrate to response (can be given once or twice daily).\n- Adults (hypertension): usual initial total dose 80 mg, typically given as 40 mg twice daily, then adjusted by response.\n- Pediatric: usual initial oral dose 2 mg/kg as a single dose; may increase by 1–2 mg/kg no sooner than 6–8 hours; doses >6 mg/kg are not recommended.\n\nUse caution in geriatric patients (start at the low end of the range) and titrate to the minimal effective dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2396,
+  "usage": {
+    "input_tokens": 604,
+    "output_tokens": 17
+  }
+}

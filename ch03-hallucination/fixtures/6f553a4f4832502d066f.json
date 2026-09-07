@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Furosemide indicated to treat?\n\nRESPONSE:\n**FDA-approved indications for oral furosemide (tablets)**\n\n**1. Edema** — in adults and pediatric patients, for edema associated with:\n- Congestive heart failure\n- Cirrhosis of the liver\n- Renal disease, including the nephrotic syndrome\n\nFurosemide is particularly useful when an agent with greater diuretic potential is desired (e.g., when thiazides are inadequate, or when GFR is reduced — loop diuretics retain efficacy at eGFR <30 mL/min, where thiazides largely lose effect).\n\n**2. Hypertension** — in adults, alone or in combination with other antihypertensive agents. Note the label's caveat: hypertensive patients not adequately controlled with a thiazide will probably also not be adequately controlled with furosemide alone. In practice, furosemide is not a first-line antihypertensive (short duration of action, generally requires BID dosing); thiazide-type diuretics such as chlorthalidone or HCTZ are preferred unless there is coexisting volume overload, heart failure, or CKD with reduced GFR.\n\n**Practical dosing points**\n- *Edema, adults:* 20–80 mg as a single dose; may repeat the same dose or increase by 20–40 mg increments no sooner than 6–8 hours later. Once the effective single dose is found, give once or twice daily (e.g., 8 AM and 2 PM). May titrate up to 600 mg/day in severe edematous states. Intermittent dosing on 2–4 consecutive days per week can mobilize edema efficiently.\n- *Edema, pediatrics:* 2 mg/kg initially; increase by 1–2 mg/kg no sooner than 6–8 hours after the prior dose; do not exceed 6 mg/kg per dose. Titrate down to the minimum effective maintenance dose.\n- *Hypertension, adults:* 80 mg/day, usually 40 mg twice daily, then adjust. When adding furosemide to an existing regimen, reduce other antihypertensives by at least 50% to avoid an excessive BP drop; further reduction or discontinuation may be needed as BP falls.\n- *Geriatric patients:* start at the low end of the range for both indications.\n\n**Monitoring** (especially with doses >80 mg/day or prolonged therapy): electrolytes (K⁺, Na⁺, Mg²⁺, Ca²⁺), BUN/creatinine, CO₂, uric acid, glucose, and volume status/weight. Watch for hypokalemia, hypomagnesemia, hyponatremia, metabolic alkalosis, hypotension, dehydration, worsening azotemia, hyperuricemia/gout, hyperglycemia, and ototoxicity (dose- and rate-related, greater with rapid IV administration, renal impairment, or concomitant aminoglycosides). Avoid in anuria; use caution with sulfonamide hypersensitivity, hepatic encephalopathy risk in cirrhosis, and concurrent NSAIDs (blunted diuresis), lithium (raised levels), digoxin (hypokalemia-related toxicity), and other ototoxic/nephrotoxic drugs.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2141,
+  "usage": {
+    "input_tokens": 1444,
+    "output_tokens": 17
+  }
+}

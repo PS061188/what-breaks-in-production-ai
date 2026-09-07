@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Warfarin Sodium for pediatric patients?\n\nRESPONSE:\nThe provided Warfarin Sodium label excerpt does not give a specific recommended pediatric dose. It states that dosing must be individualized and adjusted by INR (determine INR daily on initiation until stable, then every 1–4 weeks) and that genotype and clinical factors (age, weight, concomitant drugs, comorbidities) should inform dosing. \n\nPractical clinical guidance (common practice, not from the excerpt):\n- Use weight‑based initial dosing with very close INR monitoring and specialist input. A commonly used initial range in children is about 0.1–0.2 mg/kg once daily (many centers use ~0.2 mg/kg/day), with typical maintenance dosing roughly 0.05–0.3 mg/kg/day depending on response. Doses are adjusted to achieve the target INR for the indication (usually INR 2.0–3.0 unless a different target is required).\n- Neonates/infants require special caution (different pharmacokinetics and vitamin K status); dosing and monitoring should be managed by pediatric hematology or an anticoagulation service.\n- Consider CYP2C9/VKORC1 genotype if available, drug interactions, dietary vitamin K, and the need to overlap with heparin when converting from parenteral anticoagulation (overlap 4–5 days until INR therapeutic).\n\nRecommendation: follow your institution’s pediatric anticoagulation protocol or consult pediatric hematology/pharmacy for a specific starting dose for an individual child. If you provide the child’s weight, age, indication and current meds, I can suggest a starting mg dose and monitoring plan to discuss with specialists.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1951,
+  "usage": {
+    "input_tokens": 930,
+    "output_tokens": 17
+  }
+}

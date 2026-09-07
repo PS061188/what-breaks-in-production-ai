@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Metformin Hydrochloride?\n\nRESPONSE:\n**Adults:** The recommended starting dose of metformin hydrochloride tablets is **500 mg orally twice a day, or 850 mg orally once a day, taken with meals.**\n\n- The dose can then be increased in increments of 500 mg weekly (or 850 mg every 2 weeks), based on blood sugar control and how well it is tolerated, up to a maximum of **2550 mg per day** in divided doses.\n- Doses above 2000 mg per day may be better tolerated when given three times a day with meals.\n\n**Pediatric patients 10 years of age and older:** The recommended starting dose is **500 mg orally twice a day with meals**, increased in 500 mg weekly increments up to a maximum of **2000 mg per day** given in two divided doses.\n\n**Important considerations before starting:** Kidney function (eGFR) should be assessed before initiation and periodically thereafter. Metformin is contraindicated if eGFR is below 30 mL/min/1.73 m², and starting metformin is not recommended if eGFR is between 30 and 45 mL/min/1.73 m².\n\nThis information is from the drug label; your prescriber will determine the dose that is right for your individual situation.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1611,
+  "usage": {
+    "input_tokens": 772,
+    "output_tokens": 17
+  }
+}

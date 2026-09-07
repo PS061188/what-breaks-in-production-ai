@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nThe recommended starting dose of Levothyroxine Sodium varies based on patient population and clinical condition: For adults with primary, secondary, or tertiary hypothyroidism, the full replacement dose is 1.6 mcg/kg/day, though some patients require a lower starting dose. For adults at risk for atrial fibrillation or with underlying cardiac disease, and for geriatric patients, a lower starting dose (less than 1.6 mcg/kg/day) is recommended. For pediatric patients, the starting dose depends on age: 10-15 mcg/kg/day for ages 0-3 months, 8-10 mcg/kg/day for ages 3-6 months, 6-8 mcg/kg/day for ages 6-12 months, 5-6 mcg/kg/day for ages 1-5 years, 4-5 mcg/kg/day for ages 6-12 years, 2-3 mcg/kg/day for ages greater than 12 years with incomplete growth and puberty, and 1.6 mcg/kg/day once growth and puberty are complete. For pregnant patients with new onset hypothyroidism, the starting dose is 1.6 mcg/kg/day if TSH is ≥10 mIU/L, or 1.0 mcg/kg/day if TSH is <10 mIU/L.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1566,
+  "usage": {
+    "input_tokens": 818,
+    "output_tokens": 17
+  }
+}

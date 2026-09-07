@@ -1,0 +1,27 @@
+{
+  "model": "claude-opus-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Prednisone?\n\nRESPONSE:\nPer the label, there is no single fixed starting dose — the initial dosage of prednisone ranges from 5 mg to 60 mg per day, depending on the specific disease being treated. Less severe conditions generally respond to lower doses, while selected patients may need higher initial doses. The label emphasizes that dosage requirements are variable and must be individualized based on the disease under treatment and the patient's response.\n\nKey points:\n- Maintain or adjust the initial dose until a satisfactory response is seen; if there is no satisfactory clinical response after a reasonable period, prednisone should be discontinued and other therapy considered.\n- After a favorable response, taper in small decrements at appropriate intervals to the lowest dose that maintains an adequate clinical response.\n- If the drug is stopped after long-term therapy, withdraw gradually rather than abruptly.\n- Special case — acute exacerbations of multiple sclerosis: 200 mg daily for one week, followed by 80 mg every other day for one month (dosage range is the same for prednisone and prednisolone).\n- Alternate-day therapy (ADT), giving twice the usual daily dose every other morning, may be used for patients needing long-term treatment to minimize side effects such as HPA suppression, Cushingoid state, and growth suppression in children.\n\nThis is general information from the label; the actual dose should be determined by the prescribing clinician.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "elapsed_ms": 2207,
+  "usage": {
+    "input_tokens": 830,
+    "output_tokens": 17
+  }
+}

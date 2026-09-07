@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Warfarin Sodium?\n\nRESPONSE:\nThe label excerpt provided identifies heparin as a significant drug interaction with warfarin sodium, noting that heparin increases the INR. However, the label specifically states that 'Warfarin sodium tablets have a narrow therapeutic range (index), and their action may be affected by factors such as other drugs and dietary vitamin K,' and directs clinicians to 'Perform additional INR tests when other warfarin products are interchanged with warfarin sodium tablets, as well as whenever other medications are initiated, discontinued, or taken irregularly.'\n\nThe label also references a Drug Interactions section (7) for more detailed information, which is not included in the excerpt provided.\n\nFor comprehensive drug interaction information, you should consult:\n1. The complete Drug Interactions section (Section 7) of the full prescribing information\n2. Standard pharmacy references (e.g., Lexicomp, Micromedex)\n3. Clinical pharmacology databases\n\nKey principles from the label: Warfarin has a narrow therapeutic index, so any medication change warrants INR monitoring. Common interacting classes include NSAIDs, antibiotics, antifungals, antiarrhythmics, statins, and other anticoagulants. The safest approach is to monitor INR more frequently whenever any medication is started, stopped, or dosed irregularly.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 575,
+    "output_tokens": 11
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nThe recommended dose of Gabapentin for pediatric patients depends on age:\n\n**Patients 3 to 11 years:**\n- Starting dose: 10-15 mg/kg/day given in three divided doses\n- Titrate upward over approximately 3 days to reach maintenance dose\n- **Patients 3-4 years:** Recommended maintenance dose is 40 mg/kg/day in three divided doses\n- **Patients 5-11 years:** Recommended maintenance dose is 25-35 mg/kg/day in three divided doses\n- Dosages up to 50 mg/kg/day have been well tolerated in long-term studies\n- Maximum time interval between doses should not exceed 12 hours\n\n**Patients 12 years and older:**\n- Starting dose: 300 mg three times daily\n- Recommended maintenance dose: 300-600 mg three times daily\n- Dosages up to 2400 mg/day well tolerated; up to 3600 mg/day administered short-term\n\n**Important note:** Renal function adjustment is needed for patients 12 years and older with renal impairment. The label notes that use in patients less than 12 years with compromised renal function has not been studied. Gabapentin capsules should be swallowed whole with water. Dose adjustments should be made gradually over at least 1 week if reducing, discontinuing, or substituting.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 611,
+    "output_tokens": 11
+  }
+}

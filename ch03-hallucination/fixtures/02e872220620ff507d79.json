@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Omeprazole for pediatric patients?\n\nRESPONSE:\nThis over‑the‑counter omeprazole product does not provide a pediatric dose. The label states it is only for adults 18 years of age and older, and that for \"children under 18 years of age: ask a doctor.\" The label also cautions that heartburn in children may sometimes be caused by a serious condition, so a child should be evaluated by a healthcare provider rather than self-treated with this product. (Prescription omeprazole formulations do have weight‑based pediatric dosing, but that must be determined and prescribed by a physician — it is not covered by this OTC label.) For adults, the OTC regimen is 1 tablet swallowed whole with a glass of water before eating in the morning, once daily for 14 days, not more than one tablet per day, with a repeat 14‑day course no more often than every 4 months unless directed by a doctor.)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"DECLINED\"}",
+  "elapsed_ms": 2286,
+  "usage": {
+    "input_tokens": 651,
+    "output_tokens": 16
+  }
+}

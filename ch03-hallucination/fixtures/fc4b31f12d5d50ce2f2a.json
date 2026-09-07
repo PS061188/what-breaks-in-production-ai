@@ -1,0 +1,26 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended starting dose of Levothyroxine Sodium?\n\nRESPONSE:\nThe recommended starting dose of levothyroxine sodium varies based on patient characteristics:\n\n**Adults with Primary Hypothyroidism:**\n- Full replacement dose: 1.6 mcg/kg/day (though some patients require a lower starting dose)\n- Titrate by 12.5-25 mcg increments every 4-6 weeks based on TSH or free-T4 levels\n\n**Adults at Risk for Cardiac Issues (atrial fibrillation or underlying cardiac disease):**\n- Lower starting dose (less than 1.6 mcg/kg/day)\n- Titrate more slowly every 6-8 weeks to avoid exacerbating cardiac symptoms\n\n**Geriatric Patients:**\n- Lower starting dose (less than 1.6 mcg/kg/day)\n\n**Pediatric Patients** (varies by age):\n- 0-3 months: 10-15 mcg/kg/day\n- 3-6 months: 8-10 mcg/kg/day\n- 6-12 months: 6-8 mcg/kg/day\n- 1-5 years: 5-6 mcg/kg/day\n- 6-12 years: 4-5 mcg/kg/day\n- >12 years (growth/puberty incomplete): 2-3 mcg/kg/day\n- Growth/puberty complete: 1.6 mcg/kg/day\n\n**Pregnant Patients with New-Onset Hypothyroidism:**\n- TSH ≥10 mIU/L: 1.6 mcg/kg/day\n- TSH <10 mIU/L: 1.0 mcg/kg/day\n\nAll dosing must be individualized based on clinical response and periodic laboratory monitoring.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\": \"ASSERTED\"}",
+  "usage": {
+    "input_tokens": 709,
+    "output_tokens": 11
+  }
+}

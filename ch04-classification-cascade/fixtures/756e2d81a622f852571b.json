@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSoybean flour, cottonseed meal, walnuts, and dietary fiber may bind and decrease the absorption of levothyroxine sodium from the gastrointestinal tract. Grapefruit juice may delay the absorption of levothyroxine and reduce its bioavailability. 7.10 Drug-Laboratory Test Interactions Thyroxine-binding Globulin (TBG) Consider changes in TBG concentration when interpreting T4 and T3 values. Measure and evaluate unbound (free) hormone and/or determine the free-T4 index (FT4I) in this circumstance. Pregnancy, infectious hepatitis, estrogens, estrogen-containing oral contraceptives, and acute intermittent porphyria increase TBG concentration. Nephrosis, severe hypoproteinemia, severe liver disease, acromegaly, androgens, and corticosteroids decrease TBG concentration.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features: (1) The passage discusses interactions between levothyroxine sodium and various food/dietary substances (soybean flour, cottonseed meal, walnuts, dietary fiber, grapefruit juice) that affect absorption and bioavailability. (2) It explicitly addresses drug-laboratory test interactions, specifically how levothyroxine affects thyroid hormone binding globulin (TBG) and interpretation of thyroid function tests. (3) The content includes clinical guidance on measuring free hormones and accounting for TBG changes in various medical conditions. Step 2 - Evaluating plausible categories: The two most plausible categories are (a) 'drug_interactions' - because the passage explicitly discusses how other substances (foods, medications) interact with levothyroxine to affect its absorption and bioavailability, and (b) 'adverse_reactions' - because it discusses effects on laboratory values and TBG concentration. Step 3 - Determining the winner: 'drug_interactions' is the clear winner. The passage is explicitly titled 'Drug-Laboratory Test Interactions' and systematically describes how dietary components (soybean flour, cottonseed meal, walnuts, grapefruit juice) and various medications/conditions (estrogens, corticosteroids, androgens) interact with levothyroxine's absorption and its effects on thyroid function tests. While the section on TBG could tangentially relate to adverse effects, it is presented as interaction guidance for clinical interpretation, not as an adverse reaction or side effect. Step 4 - Confidence assessment: This classification receives HIGH confidence (>90%) because the content explicitly states it is addressing drug-laboratory test interactions, and the entire passage focuses on how external substances and conditions interact with levothyroxine's absorption and effects on thyroid hormone measurements.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5307,
+  "usage": {
+    "input_tokens": 1068,
+    "output_tokens": 446
+  }
+}

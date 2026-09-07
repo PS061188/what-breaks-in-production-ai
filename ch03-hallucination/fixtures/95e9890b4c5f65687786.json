@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat are the most common adverse reactions to Warfarin Sodium?\n\nRESPONSE:\nI have to be upfront: the label excerpt I was given only includes the Indications and Usage and Dosage and Administration sections — it does not contain the Adverse Reactions section, so I can't quote specific adverse reaction data or frequencies from it.\n\nGenerally, for warfarin, the most commonly reported adverse reaction is bleeding (hemorrhage), which can occur at any site and ranges from minor bruising, nosebleeds, bleeding gums, blood in urine or stool, and heavy menstrual bleeding, to serious or fatal hemorrhage (e.g., gastrointestinal or intracranial). Warfarin carries a boxed warning about bleeding risk. Other adverse reactions described for warfarin products include tissue/skin necrosis and gangrene (usually early in therapy, sometimes associated with protein C or S deficiency), calciphylaxis, systemic cholesterol microembolization or \"purple toe\" syndrome, hypersensitivity/allergic reactions, hepatic injury, nausea, vomiting, abdominal pain, and rash.\n\nThe label excerpt does reinforce a related point: because warfarin has a narrow therapeutic index, anticoagulation must be carefully monitored with INR testing (daily after initiation until stable, then generally every 1 to 4 weeks), and an INR greater than 4 appears to provide no additional benefit in most patients while carrying a higher bleeding risk.\n\nFor a complete and accurate list with frequencies, please consult the Adverse Reactions, Boxed Warning, and Warnings and Precautions sections of the full prescribing information for the specific product, and discuss any symptoms with your prescriber or pharmacist. Seek urgent care for signs of serious bleeding such as severe headache, weakness or numbness, vomiting blood, black/tarry stools, or bleeding that won't stop.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1762,
+  "usage": {
+    "input_tokens": 997,
+    "output_tokens": 17
+  }
+}

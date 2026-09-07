@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Omeprazole indicated to treat?\n\nRESPONSE:\nBased on this over-the-counter label, omeprazole delayed-release tablets are indicated to treat **frequent heartburn** — defined as heartburn occurring on 2 or more days per week — in adults 18 years of age and older.\n\nImportant points from the label:\n\n- **Not for immediate relief.** It is not intended to relieve heartburn right away; it may take 1 to 4 days for the full effect, although some people get complete relief within 24 hours.\n- **Dosing:** One tablet swallowed whole (do not chew or crush) with a glass of water before eating in the morning, once daily (every 24 hours) for 14 days. Do not take more than 1 tablet per day.\n- **Course limits:** Do not use for more than 14 days unless directed by a doctor. A 14-day course may be repeated every 4 months; do not take more often than that unless a doctor directs.\n- **Children:** For anyone under 18 years of age, ask a doctor — heartburn in children may sometimes be caused by a serious condition.\n\nNote that this excerpt covers only the OTC (nonprescription) use. Prescription omeprazole products have additional indications (such as gastroesophageal reflux disease, ulcers, and other acid-related conditions) that are not described in this label.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2412,
+  "usage": {
+    "input_tokens": 786,
+    "output_tokens": 17
+  }
+}

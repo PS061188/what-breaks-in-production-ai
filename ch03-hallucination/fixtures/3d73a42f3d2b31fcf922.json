@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Lisinopril?\n\nRESPONSE:\nShort answer: the excerpt you've given me doesn't contain the Drug Interactions section, so I can't cite specific interactions from this label. The text provided only covers Indications and Usage and Dosage and Administration for lisinopril/hydrochlorothiazide.\n\nWhat the excerpt does hint at:\n- It repeatedly refers the reader to the WARNINGS section (e.g., for angioedema, agranulocytosis, and anaphylactoid reactions during membrane exposure/dialysis and during LDL apheresis or desensitization) — those warnings in the full label describe clinically important drug- and procedure-related interactions.\n- It notes that lisinopril blunts the hypokalemia normally caused by hydrochlorothiazide, reflecting the pharmacologic interaction between the two components on serum potassium.\n\nFor completeness, interactions commonly listed in the full prescribing information for lisinopril-containing products (not taken from the excerpt above) include: potassium supplements, potassium-sparing diuretics, and potassium-containing salt substitutes (hyperkalemia risk); aliskiren and other renin-angiotensin system blockers such as ARBs (hypotension, hyperkalemia, renal impairment — avoid in diabetes and use cautiously in renal impairment); NSAIDs including COX-2 inhibitors (reduced antihypertensive effect, renal deterioration, hyperkalemia); lithium (increased lithium levels/toxicity, especially with the thiazide); other diuretics and antihypertensives (excessive hypotension); mTOR inhibitors, neprilysin inhibitors such as sacubitril (contraindicated within 36 hours), and DPP-4 inhibitors (increased angioedema risk); gold (sodium aurothiomalate) injections (nitritoid reactions); and, for the hydrochlorothiazide component, digitalis glycosides, corticosteroids/ACTH, antidiabetic agents, cholestyramine/colestipol, skeletal muscle relaxants, and drugs that prolong the QT interval or cause electrolyte loss.\n\nPlease check the complete FDA-approved label (Drug Interactions, Warnings, and Precautions sections) or consult your pharmacist or prescriber before combining lisinopril/hydrochlorothiazide with any other medicine, including over-the-counter NSAIDs and potassium-containing salt substitutes.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 2367,
+  "usage": {
+    "input_tokens": 1177,
+    "output_tokens": 17
+  }
+}

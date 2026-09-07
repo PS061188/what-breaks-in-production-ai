@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat is the recommended dose of Gabapentin for pediatric patients?\n\nRESPONSE:\nThe recommended dose of Gabapentin for pediatric patients depends on age:\n\n**Patients 3 to 4 years of age:**\n- Starting dose: 10 to 15 mg/kg/day, given in three divided doses\n- Recommended maintenance dose: 40 mg/kg/day, given in three divided doses\n\n**Patients 5 to 11 years of age:**\n- Starting dose: 10 to 15 mg/kg/day, given in three divided doses\n- Recommended maintenance dose: 25 to 35 mg/kg/day, given in three divided doses\n\n**Patients 12 years of age and older:**\n- Starting dose: 300 mg three times daily\n- Recommended maintenance dose: 300 to 600 mg three times daily\n\nThe recommended maintenance dose is typically reached by upward titration over approximately 3 days. Dosages up to 50 mg/kg/day have been well tolerated in long-term clinical studies. The maximum time interval between doses should not exceed 12 hours.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1722,
+  "usage": {
+    "input_tokens": 712,
+    "output_tokens": 17
+  }
+}

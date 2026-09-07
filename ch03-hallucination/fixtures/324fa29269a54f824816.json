@@ -1,0 +1,27 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhat conditions is Omeprazole indicated to treat?\n\nRESPONSE:\n**Per this OTC label (omeprazole magnesium/omeprazole delayed-release tablets, 20 mg):**\n\n- **Sole indication:** treatment of **frequent heartburn** — defined as heartburn occurring **2 or more days per week** — in **adults 18 years and older**.\n- It is **not** indicated for immediate/on-demand relief of an acute heartburn episode; onset of full effect takes **1–4 days** (some patients get complete relief within 24 hours). Patients wanting immediate relief need an antacid or an H2RA (e.g., famotidine) for breakthrough symptoms.\n- Dosing: **1 tablet swallowed whole with water before eating in the morning, once daily for 14 days**. Do not chew or crush. Max 1 tablet/day. Do not exceed 14 days, and repeat courses no more often than **every 4 months**, unless directed by a physician.\n- **Children <18 years:** not for OTC use — refer to a physician, as pediatric heartburn may signal a serious underlying condition.\n\n**Broader (prescription) omeprazole indications — standard pharmacology, beyond this excerpt:**\n\n- Symptomatic GERD and **healing/maintenance of erosive esophagitis** (all ages down to 1 month for some formulations)\n- **Duodenal ulcer** — treatment and, in combination regimens, **H. pylori eradication** (with clarithromycin ± amoxicillin)\n- **Benign gastric ulcer** treatment\n- **Pathologic hypersecretory conditions** — Zollinger-Ellison syndrome, multiple endocrine adenomas, systemic mastocytosis\n- Off-label/guideline-supported: NSAID-associated ulcer prophylaxis, stress ulcer prophylaxis, adjunct in upper GI bleeding\n\n**Practical prescriber points:**\n\n- **Red flags warranting workup rather than OTC self-treatment:** dysphagia, odynophagia, unintentional weight loss, GI bleeding/melena/hematemesis, iron-deficiency anemia, persistent vomiting, age >60 with new-onset symptoms, or heartburn ≥3 months, or symptoms persisting after 14 days of therapy.\n- **Chest pain with dyspnea, diaphoresis, or radiation to arm/jaw** — evaluate for cardiac cause before attributing to reflux.\n- **Long-term/repeated use risks:** C. difficile and other enteric infections, hypomagnesemia, B12 and iron malabsorption, fundic gland polyps, increased fracture risk, interstitial nephritis. Use the shortest effective course and periodically attempt step-down/deprescribing.\n- **Key interactions:** clopidogrel (CYP2C19 inhibition — prefer pantoprazole if a PPI is required), and reduced absorption of pH-dependent drugs (atazanavir/nelfinavir — contraindicated; ketoconazole, itraconazole, erlotinib, oral iron). Also raises methotrexate, tacrolimus, and (mildly) warfarin/phenytoin/diazepam levels.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 3649,
+  "usage": {
+    "input_tokens": 1432,
+    "output_tokens": 17
+  }
+}
