@@ -1,5 +1,22 @@
 <!-- ============================ COSTS ============================ -->
 <h2 class="part">E — What everything cost</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part E &middot; Costs</span>
+<p class="oneline">Nobody publishes what a guardrail costs to run. This part does, for every fix in the book, in dollars per thousand documents and seconds of added latency &mdash; because several fixes that work are ones you would switch off within a fortnight once you saw the bill.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Measured</td><td>Token usage and wall-clock recorded on every call by the harness, then priced at published rates</td></tr><tr><td style="width:26%">Unit</td><td>Dollars per 1,000 documents, and seconds of latency added per request</td></tr><tr><td style="width:26%">Baseline</td><td>Generating one answer costs roughly $0.004</td></tr><tr><td style="width:26%">Covered</td><td>Every prompt and engineering fix that was implemented</td></tr><tr><td style="width:26%">Not covered</td><td>Engineering time, and the five fixes that could not be implemented as written</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Cheap deterministic checks</td><td><strong>Free, and can save money</strong></td><td class="num">Ch 2 gate avoided 37 calls</td><td class="num">certain</td></tr><tr><td>Prompt-level fixes</td><td>Effectively free</td><td class="num">longer prompt only</td><td class="num">certain</td></tr><tr><td>Embedding cross-check</td><td>Free after a 367 MB download</td><td class="num">claims &times; passages</td><td class="num">certain</td></tr><tr><td>LLM-as-judge</td><td><strong>~5&times; the answer it checks</strong></td><td class="num">$22 / 1,000 &middot; +4.1 s</td><td class="num">4 runs</td></tr><tr><td>Completeness audit</td><td><strong>87% of one run's bill</strong></td><td class="num">to find 2 real omissions</td><td class="num">1 run</td></tr></table>
+<h4>What to trust / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>The pricing method.</strong> Token counts come from the API responses themselves, recorded at the time.</li><li><span class='keep'>YES</span> — <strong>The order of magnitude.</strong> Deterministic checks are free; model-based checks cost multiples of the thing they check.</li><li><span class='drop'>NO</span> — <strong>The exact dollar figures as durable.</strong> Model prices change, and one of these was measured against a costlier judge before being re-run.</li><li><span class='drop'>NO</span> — <strong>Extrapolating latency linearly.</strong> Some costs are multiplications, not additions &mdash; see the claims-&times;-passages note.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Two of the fixes in this book save money and the rest spend it, and the ones that spend most detect least per dollar.</strong> Chapter 2's input gate avoided 37 model calls by refusing documents that should never have been processed. At the other end, a completeness audit consumed 87% of its run's bill to find two real omissions. A guardrail's cost is not a footnote to whether it works &mdash; a check nobody can afford to leave switched on has an effective recall of zero.</p>
+<h4>Where this is weakest</h4>
+<p>Prices are a snapshot, taken at one moment, at published rates, without volume discounts or caching. The relative ordering &mdash; free, cheap, multiples-of-generation &mdash; is what will survive; the absolute numbers will not.</p>
+</div>
+
 <h3 class="top">Two kinds of expense that behave completely differently</h3>
 
 <p class="lede">Some fixes cost money — you pay a provider every time one runs,

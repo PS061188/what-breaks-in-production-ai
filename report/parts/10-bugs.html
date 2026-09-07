@@ -1,5 +1,22 @@
 <!-- ============================ BUGS ============================ -->
 <h2 class="part">F — The experiments had bugs too</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part F &middot; Bugs in the experiments</span>
+<p class="oneline">Fourteen bugs were found in the measurement code itself. Five of them would have published a false number under this book's name. This part lists all of them and, more usefully, records how each was caught.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Scope</td><td>The harness, the scorers, and every chapter script &mdash; not the models</td></tr><tr><td style="width:26%">How found</td><td>Re-reading code, re-running with different arguments, comparing a claim against its denominator, and one case of reading a prompt aloud</td></tr><tr><td style="width:26%">Recorded</td><td>Each bug, what it would have published, and the mechanism that caught it</td></tr><tr><td style="width:26%">Preserved</td><td>The fixtures from the buggy runs are still committed, so the corrections are checkable</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Bugs found in the measurement code</td><td><strong>14</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Of which would have published a false finding</td><td><strong>5</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Circular experiment design</td><td>Ch 9 provenance</td><td class="num">&ldquo;29% &rarr; 0%&rdquo; was arithmetic</td><td class="num">decisive</td></tr><tr><td>Baseline that instructed the failure</td><td>Ch 3 and Ch 5</td><td class="num">57 of 63 pts misattributed</td><td class="num">decisive</td></tr><tr><td>A checker that read a gene variant as a dose</td><td>Ch 10</td><td class="num">1,639 g of warfarin</td><td class="num">decisive</td></tr><tr><td>A check that could not fire</td><td><code>repeat.py</code></td><td class="num">42 runs, 0 headlines parsed</td><td class="num">decisive</td></tr><tr><td>Noise floor</td><td>Systematic</td><td class="num">&plusmn;1&ndash;2 cases per ~40</td><td class="num">measured</td></tr></table>
+<h4>What to take / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>Every bug here is written down with what it would have published.</strong> That is the point of the part.</li><li><span class='keep'>YES</span> — <strong>The mechanisms that caught them</strong> &mdash; those transfer to your own evaluation code.</li><li><span class='drop'>NO</span> — <strong>Treating this as a complete list.</strong> It is the list of bugs that were <em>found</em>. The five that would have published false numbers were all found late, which is not encouraging about the ones still in here.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Not one of these was caught by a test.</strong> They were caught by re-reading code, by running something a second time, by checking a denominator, and once by a person reading a prompt aloud and noticing it said the quiet part explicitly. The most instructive is Chapter 10's: a regular expression read <code>VKORC1&minus;1639G</code> as a 1,639-gram dose, decided the model had missed it, and recorded the model's <em>correct</em> behaviour as a failure. A measurement error does not leave a gap in your data; it produces a confident, specific, false finding that somebody then acts on.</p>
+<h4>Where this is weakest</h4>
+<p>This part cannot tell you how many bugs remain. Five of fourteen were found only in the last stretch of the project, several by accident while doing something else, and the tool built specifically to catch unstable results shipped with a bug that made it report &ldquo;nothing moved&rdquo; for forty-two live runs.</p>
+</div>
+
 <h3 class="top">Fourteen of them, and how every single one was caught</h3>
 
 <p class="lede">This report criticises a book for shipping code that was never

@@ -1,20 +1,80 @@
-# What Breaks in Production AI — runnable chapters
+# What Breaks in Production AI — the experiments
 
-Companion code for *[What Breaks in Production AI](https://gumroad.com/)* by
-Prachi Sharma. Each chapter here is a failure the book describes, reproduced
-against real documents, with the book's fix applied and the difference measured.
+Companion code for *What Breaks in Production AI* by Prachi Sharma.
 
-Three chapters are implemented so far:
+The book gives nine failure patterns and, for each, a prompt and a set of
+engineering fixes. **This repository runs every one of them against real
+documents and measures what happens.** Several did not survive it. Those are
+marked here and corrected in the book, because a fix that sounds right and does
+not work is worth more to you than one more piece of untested advice.
 
-| chapter | the number it moves | broken | fixed |
-|---|---|---|---|
-| [3 — Hallucinations and confident fabrication](ch03-hallucination/) | fabrication rate on questions the sources cannot answer | 90% | **23%** |
-| [5 — Extraction and normalisation quality loss](ch05-extraction-normalisation/) | stored values still findable in the source | 64% | **94%** |
-| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fabrication rate on fields the document does not cover | 29% | **0%** |
+**Replaying costs nothing and needs no API key.** All 5,137 model responses are
+recorded and committed.
 
-Claude Haiku 4.5, 12 FDA drug labels. Each chapter reports more than one metric
-— including the ones that did not move — and [FINDINGS.md](FINDINGS.md) records
-four places where running the book's own code showed the book needs a change.
+```bash
+git clone https://github.com/PS061188/what-breaks-in-production-ai
+cd what-breaks-in-production-ai
+python3 run_all.py
+```
+
+## Five results worth your next two minutes
+
+**Requiring a source quote does not catch fabrication.** Asked to fill fields
+the document does not cover, the model invented values on 29% of them — and
+attached a genuine quote to every single fabrication. **14 of 14 passed a
+quote-existence check.** It does not invent quotations. It attaches real ones,
+lifted from elsewhere in the document, to values it made up.
+→ [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
+
+**The stronger model is worse at silent corruption.** Feed a damaged document to
+a weaker model and it garbles the answer visibly. Feed it to a better one and it
+reconstructs the damage fluently, producing a confident, clean, wrong answer.
+Silent corruption rose **39% → 68% → 80%** from Claude Haiku 4.5 to Opus 5 to
+GPT-5-mini. Upgrading the model made this failure harder to see, not rarer.
+→ [`ch02-input-integrity/`](ch02-input-integrity/)
+
+**A model cannot grade its own confidence.** Across 192 classifications it
+returned `LOW` **zero times**, and stamped two-thirds of its errors `HIGH`. Any
+guardrail of the form "route anything below HIGH to review" has nothing to act
+on.
+→ [`ch04-classification-cascade/`](ch04-classification-cascade/)
+
+**One clause caused almost the whole prompt effect.** The book blamed soft words
+— *relevant, typical, appropriate*. Measured, those are worth about 5 points and
+are not statistically significant. The clause *"drawing on standard pharmacology
+where the excerpt is thin"* is worth **57**, taking fabrication from 30% to 92%.
+The dangerous prompt is not the vague one; it is the one that grants permission.
+→ [`ch03-hallucination/`](ch03-hallucination/)
+
+**Eight of fourteen published figures fell outside the range their own code
+reproduces.** Nothing here was measured twice until late in the project. When it
+was, a reported null turned out to be a real effect, a fix's headline benefit
+disappeared against a fair baseline, and one fix turned out to make its target
+metric *worse*. That is why [`repeat.py`](repeat.py) exists.
+→ [`report/`](report/)
+
+Findings that contradict the book are in **[FINDINGS.md](FINDINGS.md)** rather
+than quietly fixed in one place. **[FIX_STATUS.md](FIX_STATUS.md)** rates every
+prompt and every fix. **[REVIEW.md](REVIEW.md)** is an adversarial read of the
+whole thing. **[report/](report/)** is a 108-page write-up with the corpus,
+settings, worked input/output samples, costs and limits for every experiment.
+
+## The nine chapters
+
+| chapter | what it measures | result |
+|---|---|---|
+| [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided |
+| [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **−69 pts** from the grounding prompt, across 4 models |
+| [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
+| [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges **worse** |
+| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone beats the book's six-rule protocol, **17% vs 30%** |
+| [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
+| [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
+| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **29% → 0%** with a section constraint |
+| [10 — Silent omissions](ch10-silent-omissions/) | items dropped without a signal | rare on numeric lists, **absent** on a 185-item prose enumeration |
+
+Claude Haiku 4.5 is the default; Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini
+appear in the cross-model comparisons.
 
 ## Run it without an API key
 
@@ -109,7 +169,7 @@ record what happened against the corpus you had.
 
 ## How the experiments are built
 
-Three rules, applied to all three chapters:
+Three rules, applied to all nine chapters:
 
 **The broken and fixed scripts return the same JSON schema.** The measured
 difference is attributable to the prompt and to the code around the call, not
@@ -145,18 +205,19 @@ chNN-*/fixtures/    recorded responses — every number in this repo is auditabl
 
 Fixtures are content-addressed on the request, so editing a prompt orphans the
 old recording rather than overwriting it. `python3 prune_fixtures.py --dry-run`
-lists the strays.
+lists the strays. It deliberately keeps any recording made under a non-default
+model: replaying with default arguments never touches those, so the cross-model
+evidence looks orphaned and would otherwise be deleted.
 
 ## Honest limits
 
-- **Three chapters, not nine.** The rest are coming.
-- **One model family.** Everything is recorded against Claude Haiku 4.5.
-  `--model` and `--live` are there so you can check whether the results hold
-  elsewhere; nobody has run that sweep for you.
+- **One model family for most of it.** Claude Haiku 4.5 is the default, and the
+  cross-model comparisons cover Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini.
+  Where a result is single-model, the chapter says so.
 - **One domain.** Drug labels are structured, English, and professionally
   edited. A failure that reproduces here may be worse on messier input, not
   better.
-- **Small samples.** Twelve documents. Enough to show a pattern, not enough to
+- **Small samples.** Usually twelve documents. Enough to show a pattern, not enough to
   put a confidence interval on it.
 - **The book's snippets are not copied verbatim.** Chapter 3's fix is written
   in the book with `instructor` + `openai`; here it uses the Anthropic SDK's

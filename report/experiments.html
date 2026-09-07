@@ -173,6 +173,43 @@ engineering fixes in exactly the order the chapter lists them.</p>
 </div>
 
 <!-- ============================ A ============================ -->
+<div class="summary">
+<span class="kicker">The whole report, in one page</span>
+<p class="oneline">A book of nine failure patterns, each with a prompt and a set of engineering fixes, none of which had ever been run. All of them were run, against 12 real FDA drug labels. <strong>The taxonomy held. Several of the fixes did not.</strong></p>
+
+<h4>The four findings that changed the book</h4>
+<table>
+<tr><th style="width:34%">Finding</th><th>Evidence</th></tr>
+<tr><td><strong>Requiring a source quote does not catch fabrication</strong></td>
+    <td><strong>14 of 14</strong> fabricated values carried a quote that really did appear in the document. The model does not invent quotations; it attaches genuine ones to values it invented.</td></tr>
+<tr><td><strong>A model cannot check its own work</strong></td>
+    <td>Measured five separate ways, in five chapters, independently: its confidence, its own source attribution, its own quote, its own item count, its own completeness. All five failed.</td></tr>
+<tr><td><strong>The stronger model is worse at the failure that matters most</strong></td>
+    <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 80%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
+<tr><td><strong>Nothing was measured twice until the end</strong></td>
+    <td>When it finally was, <strong>8 of 14</strong> published headline figures fell outside the range their own code reproduces.</td></tr>
+</table>
+
+<h4>What the fixes sorted into</h4>
+<p>Sorting every fix in the book by <em>who performs the check</em> separates the results almost perfectly, and this is the most useful thing in the report:</p>
+<table>
+<tr><th style="width:30%">Who checks</th><th>What happened</th></tr>
+<tr><td><strong>Code, outside the model</strong></td><td><span class="keep">WORKED</span> almost always, usually free, and returned an identical number on every run.</td></tr>
+<tr><td><strong>A second, different model</strong></td><td>Partly worked. <strong>5&ndash;10&times;</strong> the cost of what it checks, and the false-alarm rate moves between runs of an identical setup.</td></tr>
+<tr><td><strong>The model, about itself</strong></td><td><span class="drop">FAILED</span> every time it was tested.</td></tr>
+</table>
+
+<h4>How to read this report</h4>
+<ul>
+<li><strong>Every chapter and part opens with a box like this one.</strong> Read only those and you have the argument; the pages between them are the corpus, the settings, the worked input and output samples, the costs and the limits, for anyone who wants to check.</li>
+<li><strong>Numbers given as a range are the trustworthy ones.</strong> A single figure quoted to two digits is one sample, and this project learned the hard way what that is worth.</li>
+<li><strong>Negative results are published, not buried</strong> &mdash; including the ones that contradict the book and the ones that contradict earlier pages of this report.</li>
+</ul>
+
+<h4>The honest headline</h4>
+<p><strong>Four of the nine failures barely reproduced at all on clean, well-formed, professionally edited English documents.</strong> That is not a retraction. These failures are <em>rare, severe and silent</em>, and rare-plus-severe-plus-silent is the worst combination there is for detection: too infrequent to show up in testing, too damaging to absorb, too quiet to notice. The clearest single example in the whole project is two paediatric drug strengths dropped from a warning that three suspensions are not interchangeable &mdash; from one sentence, with nothing flagged, in an output that looked complete.</p>
+</div>
+
 <h2 class="part">A — Why this report exists</h2>
 <h3 class="top">A book full of code that had never been run</h3>
 
@@ -3068,6 +3105,23 @@ quarter of legitimate extractions, which the chapter should say.</p>
 
 <!-- ============================ CHAPTER 10 ============================ -->
 <h2 class="part">Chapter 10 — Silent omissions</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 10 &middot; Silent omissions</span>
+<p class="oneline">The model returns a list, the list looks complete, and two items are missing. Nothing errors and nothing is flagged, because a list always looks complete. This chapter has one fix that works, and it is the fix that makes the other three measurable at all.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code>, up to 12,000 characters &mdash; long enough that omission is a load failure rather than a reading one</td></tr><tr><td style="width:26%">Ground truth</td><td>A regular expression counts the dose figures in the source. No model involved on the checking side</td></tr><tr><td style="width:26%">Second corpus</td><td>Sertraline's ADVERSE REACTIONS section &mdash; 18,791 characters, <strong>185 distinct reactions</strong> derived from the label's own delimiters</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 extracting; Sonnet 5 auditing</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 1,500&ndash;4,000, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>3 live runs of the numeric experiment, 4 of the prose experiment</td></tr><tr><td style="width:26%">Cost</td><td>$0.02&ndash;0.18 per run; $1.39 for the prose experiment</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">2 of 55 figures</td><td class="num">3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">wrong on 6 of 6</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Works, expensively</td><td class="num">2 real of 8 flags, 87% of the bill</td><td class="num">1 run</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
+<h4>What to keep / What to drop</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the independent count.</strong> Free, no model, and the only thing that found the real omission. It is also what makes fixes 2, 3 and 4 measurable &mdash; without it this chapter has no findings at all.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, renamed.</strong> Describe it as <em>&ldquo;where I had to make a judgement&rdquo;</em> and use it as a review queue and as schema feedback.</li><li><span class='drop'>DROP</span> — <strong>Fix 2 in any form where the model supplies the count.</strong> Wrong on every document tested, always by overcounting &mdash; once claiming 41 items where 13 existed, while listing those 13 correctly.</li><li><span class='drop'>DROP</span> — <strong>Reading an empty &ldquo;not extracted&rdquo; list as a completeness claim.</strong> It was empty on the one document that actually failed.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Density beat length in every test.</strong> A 185-item prose enumeration came back complete, three runs out of four. The real failure was two paediatric strengths dropped from a <em>three-part sentence</em> &mdash; 200 mg and 400 mg lost from a warning that the three suspensions are not interchangeable. And the model's own &ldquo;what I did not extract&rdquo; field listed three careful, correct judgements about quantities of water, and said nothing about the two drug strengths it had just deleted. A model reports the decisions it made; an omission is precisely where no decision was made.</p>
+<h4>Where this is weakest</h4>
+<p>Six documents for the numeric experiment, one for the prose experiment. And Sertraline's list is well-formed and written to be enumerated &mdash; contract obligations are clauses a reader must first recognise as items, which is a different and untested case.</p>
+</div>
+
 <h3 class="top">The failure that did not happen</h3>
 
 <p class="lede">This chapter produced the most uncomfortable result in the
@@ -3724,6 +3778,23 @@ answer is negative:</p>
 
 <!-- ============================ CROSS-MODEL ============================ -->
 <h2 class="part">D — Does any of this hold on other models?</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part D &middot; Cross-model</span>
+<p class="oneline">Every result in this report was produced on one model. This part re-runs the load-bearing experiments on four models across two providers, to find out which findings are about <em>models</em> and which are about <em>this model</em>.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5, Claude Opus 5, Claude Sonnet 5, GPT-5-mini, GPT-4.1-mini</td></tr><tr><td style="width:26%">Providers</td><td>Anthropic and OpenAI, through the same harness, same schema, same corpus</td></tr><tr><td style="width:26%">Experiments re-run</td><td>Chapter 2 silent corruption, Chapter 3 grounding prompt, and the chapters whose failures did not reproduce</td></tr><tr><td style="width:26%">Method</td><td>Identical prompts and documents; only the model identifier changes. Structured outputs enforced on both providers</td></tr><tr><td style="width:26%">Settings</td><td>Reasoning models given explicit output headroom &mdash; see Finding 4</td></tr><tr><td style="width:26%">Cost</td><td>the largest single line in the project; see Part E</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;69 pts, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
+<h4>What to trust / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> A &minus;69-point effect that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Upgrading the model made one failure worse and left the others where they were.</strong> A stronger model reconstructs damaged input more fluently, so the wrong answer arrives better written and less detectable &mdash; 39% silent corruption on Haiku 4.5, 80% on GPT-5-mini. Everything that <em>did</em> improve came from the prompt and the code around the call, not from the model. That is the book's thesis, tested against the most obvious objection to it.</p>
+<h4>Where this is weakest</h4>
+<p>The cross-model runs are single runs. After the repeatability sweep found eight of fourteen figures outside their own reproducible range, every rate in this part should be read as one sample. The <em>orderings</em> are what this part establishes; the exact percentages are not.</p>
+</div>
+
 <h3 class="top">The same experiments, four models, two providers</h3>
 
 <p class="lede">Every number so far came from one model. The obvious objection is
@@ -3908,6 +3979,23 @@ blank rather than estimated.</p>
 
 <!-- ==================== THE REPRODUCIBILITY SWEEP ==================== -->
 <h2 class="part">The reproducibility sweep</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; The reproducibility sweep</span>
+<p class="oneline">The last experiment in the report, and the one that should change how the rest of it is read. Nothing here was measured twice until the end. When six chapters were finally run three times each, eight of fourteen published headline figures fell outside the range their own code reproduces.</p>
+<h4>How it was tested</h4>
+<table><tr><td style="width:26%">Scripts</td><td>14, across chapters 2, 6, 7, 8, 9 and 10; chapter 4 added afterwards under a hard cost ceiling</td></tr><tr><td style="width:26%">Runs</td><td>3 live runs each, 42 in total; chapters 3 and 5 already had 5</td></tr><tr><td style="width:26%">Method</td><td><code>repeat.py</code> runs a script N times and prints every headline across runs, flagging the ones that moved</td></tr><tr><td style="width:26%">Comparison</td><td>Each published figure against the range its own code now produces</td></tr><tr><td style="width:26%">Cost</td><td>$3.38 for the sweep, plus $3.40 lost to a bug in the harness itself</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Measures that moved</td><td><strong>20 of 53</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Measures that held</td><td>33 of 53</td><td class="num"><strong>every one deterministic</strong></td><td class="num">strong</td></tr><tr><td>Published figures outside their own range</td><td><strong>8 of 14</strong></td><td class="num">&mdash;</td><td class="num">strong</td></tr><tr><td>Ch 7 &mdash; failure reproduces</td><td>Published 0</td><td class="num">1, 1, 2 of 48</td><td class="num">changes a claim</td></tr><tr><td>Ch 2 &mdash; headline above its own range</td><td>Published 59%</td><td class="num">34&ndash;56% observed</td><td class="num">strong</td></tr><tr><td>Ch 4 &mdash; verdict holds</td><td>Published 91%</td><td class="num">92%, 91%</td><td class="num">stable</td></tr></table>
+<h4>What held / What did not</h4>
+<ul><li><span class='keep'>KEEP</span> — <strong>Every deterministic measure.</strong> All 33 that held involve no model call &mdash; the byte-level gate, the quote verifier, the freshness monitor, the rules engine.</li><li><span class='keep'>KEEP</span> — <strong>Chapter 4's &lsquo;did not reproduce&rsquo; verdict.</strong> Re-run, it held.</li><li><span class='drop'>DROP</span> — <strong>Chapter 7's &lsquo;zero&rsquo;.</strong> Never zero in three runs.</li><li><span class='drop'>DROP</span> — <strong>Any single-run figure quoted to two digits.</strong></li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Every measure that involves no model call was perfectly stable. Every measure that moved involved one.</strong> That is a cleaner statement of this book's argument than any percentage in it: the parts of the pipeline you can test are the parts that stay still. And the harness built to catch instability shipped with a bug that made it report &ldquo;nothing moved&rdquo; across 42 live runs, because its pattern matched zero lines &mdash; a check that cannot fire is indistinguishable from a check that passed.</p>
+<h4>Where this is weakest</h4>
+<p>&ldquo;Outside the range&rdquo; is not always sampling noise: several experiments had genuine bugs fixed between the published run and this sweep, and corrected code cannot be separated from variance after the fact. That is the argument, not a defence &mdash; a number recorded once, from code that later changed, cannot be audited.</p>
+</div>
 
 <h3 class="top">Every experiment, run three times, compared with what was published</h3>
 
@@ -4121,6 +4209,23 @@ it: the parts of the pipeline you can test are the parts that stay still.</p>
 
 <!-- ============================ COSTS ============================ -->
 <h2 class="part">E — What everything cost</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part E &middot; Costs</span>
+<p class="oneline">Nobody publishes what a guardrail costs to run. This part does, for every fix in the book, in dollars per thousand documents and seconds of added latency &mdash; because several fixes that work are ones you would switch off within a fortnight once you saw the bill.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Measured</td><td>Token usage and wall-clock recorded on every call by the harness, then priced at published rates</td></tr><tr><td style="width:26%">Unit</td><td>Dollars per 1,000 documents, and seconds of latency added per request</td></tr><tr><td style="width:26%">Baseline</td><td>Generating one answer costs roughly $0.004</td></tr><tr><td style="width:26%">Covered</td><td>Every prompt and engineering fix that was implemented</td></tr><tr><td style="width:26%">Not covered</td><td>Engineering time, and the five fixes that could not be implemented as written</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Cheap deterministic checks</td><td><strong>Free, and can save money</strong></td><td class="num">Ch 2 gate avoided 37 calls</td><td class="num">certain</td></tr><tr><td>Prompt-level fixes</td><td>Effectively free</td><td class="num">longer prompt only</td><td class="num">certain</td></tr><tr><td>Embedding cross-check</td><td>Free after a 367 MB download</td><td class="num">claims &times; passages</td><td class="num">certain</td></tr><tr><td>LLM-as-judge</td><td><strong>~5&times; the answer it checks</strong></td><td class="num">$22 / 1,000 &middot; +4.1 s</td><td class="num">4 runs</td></tr><tr><td>Completeness audit</td><td><strong>87% of one run's bill</strong></td><td class="num">to find 2 real omissions</td><td class="num">1 run</td></tr></table>
+<h4>What to trust / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>The pricing method.</strong> Token counts come from the API responses themselves, recorded at the time.</li><li><span class='keep'>YES</span> — <strong>The order of magnitude.</strong> Deterministic checks are free; model-based checks cost multiples of the thing they check.</li><li><span class='drop'>NO</span> — <strong>The exact dollar figures as durable.</strong> Model prices change, and one of these was measured against a costlier judge before being re-run.</li><li><span class='drop'>NO</span> — <strong>Extrapolating latency linearly.</strong> Some costs are multiplications, not additions &mdash; see the claims-&times;-passages note.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Two of the fixes in this book save money and the rest spend it, and the ones that spend most detect least per dollar.</strong> Chapter 2's input gate avoided 37 model calls by refusing documents that should never have been processed. At the other end, a completeness audit consumed 87% of its run's bill to find two real omissions. A guardrail's cost is not a footnote to whether it works &mdash; a check nobody can afford to leave switched on has an effective recall of zero.</p>
+<h4>Where this is weakest</h4>
+<p>Prices are a snapshot, taken at one moment, at published rates, without volume discounts or caching. The relative ordering &mdash; free, cheap, multiples-of-generation &mdash; is what will survive; the absolute numbers will not.</p>
+</div>
+
 <h3 class="top">Two kinds of expense that behave completely differently</h3>
 
 <p class="lede">Some fixes cost money — you pay a provider every time one runs,
@@ -4285,6 +4390,23 @@ and, on the evidence of Chapter 7, may catch nothing).</p>
 
 <!-- ============================ BUGS ============================ -->
 <h2 class="part">F — The experiments had bugs too</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part F &middot; Bugs in the experiments</span>
+<p class="oneline">Fourteen bugs were found in the measurement code itself. Five of them would have published a false number under this book's name. This part lists all of them and, more usefully, records how each was caught.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Scope</td><td>The harness, the scorers, and every chapter script &mdash; not the models</td></tr><tr><td style="width:26%">How found</td><td>Re-reading code, re-running with different arguments, comparing a claim against its denominator, and one case of reading a prompt aloud</td></tr><tr><td style="width:26%">Recorded</td><td>Each bug, what it would have published, and the mechanism that caught it</td></tr><tr><td style="width:26%">Preserved</td><td>The fixtures from the buggy runs are still committed, so the corrections are checkable</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Bugs found in the measurement code</td><td><strong>14</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Of which would have published a false finding</td><td><strong>5</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Circular experiment design</td><td>Ch 9 provenance</td><td class="num">&ldquo;29% &rarr; 0%&rdquo; was arithmetic</td><td class="num">decisive</td></tr><tr><td>Baseline that instructed the failure</td><td>Ch 3 and Ch 5</td><td class="num">57 of 63 pts misattributed</td><td class="num">decisive</td></tr><tr><td>A checker that read a gene variant as a dose</td><td>Ch 10</td><td class="num">1,639 g of warfarin</td><td class="num">decisive</td></tr><tr><td>A check that could not fire</td><td><code>repeat.py</code></td><td class="num">42 runs, 0 headlines parsed</td><td class="num">decisive</td></tr><tr><td>Noise floor</td><td>Systematic</td><td class="num">&plusmn;1&ndash;2 cases per ~40</td><td class="num">measured</td></tr></table>
+<h4>What to take / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>Every bug here is written down with what it would have published.</strong> That is the point of the part.</li><li><span class='keep'>YES</span> — <strong>The mechanisms that caught them</strong> &mdash; those transfer to your own evaluation code.</li><li><span class='drop'>NO</span> — <strong>Treating this as a complete list.</strong> It is the list of bugs that were <em>found</em>. The five that would have published false numbers were all found late, which is not encouraging about the ones still in here.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Not one of these was caught by a test.</strong> They were caught by re-reading code, by running something a second time, by checking a denominator, and once by a person reading a prompt aloud and noticing it said the quiet part explicitly. The most instructive is Chapter 10's: a regular expression read <code>VKORC1&minus;1639G</code> as a 1,639-gram dose, decided the model had missed it, and recorded the model's <em>correct</em> behaviour as a failure. A measurement error does not leave a gap in your data; it produces a confident, specific, false finding that somebody then acts on.</p>
+<h4>Where this is weakest</h4>
+<p>This part cannot tell you how many bugs remain. Five of fourteen were found only in the last stretch of the project, several by accident while doing something else, and the tool built specifically to catch unstable results shipped with a bug that made it report &ldquo;nothing moved&rdquo; for forty-two live runs.</p>
+</div>
+
 <h3 class="top">Fourteen of them, and how every single one was caught</h3>
 
 <p class="lede">This report criticises a book for shipping code that was never
@@ -4452,6 +4574,23 @@ whether anyone ever opens the raw output.</strong></p>
 
 <!-- ============================ WHAT THE BOOK SHOULD CHANGE ============================ -->
 <h2 class="part">G — What the book should change</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part G &middot; What the book should change</span>
+<p class="oneline">The nine chapters were run. The taxonomy held; the diagnosis held; several of the fixes did not. This part is the editorial consequence, ordered by how much a reader would be hurt by the current text.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Basis</td><td>Every experiment in Parts A&ndash;F, plus the repeatability sweep</td></tr><tr><td style="width:26%">Ordering</td><td>By harm to the reader, not by chapter number</td></tr><tr><td style="width:26%">Excluded</td><td>Anything resting on a single run that the sweep showed to be unstable</td></tr><tr><td style="width:26%">Companion</td><td>A separate task list gives the per-chapter edits; this part gives the argument</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>The failure taxonomy</td><td><strong>Holds &mdash; no change</strong></td><td class="num">9 of 9 patterns real</td><td class="num">strong</td></tr><tr><td>Self-assessment across chapters</td><td><strong>New cross-cutting finding</strong></td><td class="num">5 independent measurements</td><td class="num">strong</td></tr><tr><td>Two chapters contradicting each other</td><td>Ch 3 vs Ch 6</td><td class="num">the 90-day clause</td><td class="num">certain</td></tr><tr><td>A fix that reproduces the harm its chapter warns of</td><td>Ch 7 OOD</td><td class="num">Hindi at 0.995</td><td class="num">certain</td></tr><tr><td>Fixes listed first that cannot work</td><td>Ch 4, Ch 10</td><td class="num">0 of 192, 6 of 6</td><td class="num">certain</td></tr><tr><td>Frequency claims</td><td>Overstated on clean input</td><td class="num">4 of 9 barely reproduce</td><td class="num">confident</td></tr></table>
+<h4>What survives / What to change</h4>
+<ul><li><span class='keep'>YES</span> — <strong>The taxonomy, the diagnosis, and the writing.</strong> Nothing measured here touched them.</li><li><span class='keep'>YES</span> — <strong>The prompt-level fixes.</strong> They are cheap and they are where nearly all the measured benefit came from.</li><li><span class='drop'>NO</span> — <strong>Presenting four fixes per chapter as equally weighted options.</strong> They are not, and the evidence orders them.</li><li><span class='drop'>NO</span> — <strong>Any two-digit precision figure without a spread beside it.</strong></li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>The single change with the most leverage is not a correction, it is an addition.</strong> Five chapters independently measured that a model cannot assess its own work &mdash; its confidence, its own source attribution, its own quote, its own count. Stated once as a principle, that converts a scattered set of negative results into a rule that <em>predicts which fixes will fail before you build them</em>: checking done outside the model works, checking done by a different model partly works and costs multiples, and checking done by the model about itself does not work.</p>
+<h4>Where this is weakest</h4>
+<p>This part is one author's editorial judgement applied to measurements from one corpus, one domain and mostly one model. The measurements are reproducible; the conclusions drawn from them are arguable, and the places where they are most arguable are listed in Part H rather than defended here.</p>
+</div>
+
 <h3 class="top">Nine chapters run. Most claims held. Some did not.</h3>
 
 <p class="lede">This section is the summary; the task list with reasons is a
@@ -4640,6 +4779,33 @@ police its own confidence"</em> — and then makes that its first fix.</p>
 
 <!-- ============================ LIMITS ============================ -->
 <h2 class="part">H — What this does not prove</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part H &middot; Limits</span>
+<p class="oneline">Everything this report cannot tell you, listed in one place rather than left for a reviewer to find. If you intend to argue with a number in here, start on this page &mdash; the strongest objections are already on it.</p>
+<h4>The four that matter most</h4>
+<table>
+<tr><th style="width:30%">Limit</th><th>Why it constrains every result above</th></tr>
+<tr><td><strong>One document type</strong></td>
+    <td>FDA drug labels are structured, English, professionally edited and publicly available. That is close to the easiest input a production system ever sees. A failure that is rare here may be common on a scanned fax, a translated form, or a contract drafted by three law firms.</td></tr>
+<tr><td><strong>Small denominators</strong></td>
+    <td>Most chapters rest on 12 documents, and several rates have a denominator under ten. One case moves some of these figures by three points or more.</td></tr>
+<tr><td><strong>Mostly one model</strong></td>
+    <td>Claude Haiku 4.5 produced most of the numbers. The cross-model part covers four models, but only for the load-bearing experiments, and those runs are single runs.</td></tr>
+<tr><td><strong>Single runs, in places</strong></td>
+    <td>The repeatability sweep found <strong>8 of 14</strong> headline figures outside the range their own code reproduces. Every number not explicitly given as a range should be read as one sample.</td></tr>
+</table>
+<h4>What is <em>not</em> a limit</h4>
+<ul>
+<li><span class="keep">SOLID</span> — <strong>The ground truth.</strong> Nothing here was hand-labelled. A question is unanswerable because the section that would answer it was withheld; a field is unsupported because the label lacks that section. There is no annotator to disagree with.</li>
+<li><span class="keep">SOLID</span> — <strong>The recordings.</strong> All 5,137 model responses are committed. Every figure can be replayed for free, or contradicted.</li>
+<li><span class="keep">SOLID</span> — <strong>The deterministic scorers.</strong> Every measure that involves no model call returned an identical number in all three runs of the sweep.</li>
+</ul>
+<h4>The one thing to remember</h4>
+<p><strong>The strongest results here are the ones that reproduced across four models, and the weakest are the ones with a denominator under ten.</strong> Both kinds appear in this report, deliberately, and each is labelled. Where a result is weak it is published anyway with its weakness attached, because a null with an honest denominator is more useful than a confident number with a hidden one &mdash; and because half of what this project learned came from finding out that its own confident numbers would not reproduce.</p>
+<h4>The experiment that would change the most</h4>
+<p>Re-running the four chapters whose failures did not reproduce over the <em>corrupted</em> corpus from Chapter 2. Everything here used clean input, and the single most likely explanation for four of nine failures being rare is that the documents were too good. That would either confirm modern models have genuinely closed these failures, or show they closed them only for well-formed input &mdash; and either answer changes the book's central argument. It is about a day of work and a few dollars.</p>
+</div>
+
 <h3 class="top">Stated here rather than discovered later</h3>
 
 <p class="lede">Every limit below is real and none of them are secret. They are

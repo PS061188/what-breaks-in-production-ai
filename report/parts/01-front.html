@@ -58,6 +58,43 @@ engineering fixes in exactly the order the chapter lists them.</p>
 </div>
 
 <!-- ============================ A ============================ -->
+<div class="summary">
+<span class="kicker">The whole report, in one page</span>
+<p class="oneline">A book of nine failure patterns, each with a prompt and a set of engineering fixes, none of which had ever been run. All of them were run, against 12 real FDA drug labels. <strong>The taxonomy held. Several of the fixes did not.</strong></p>
+
+<h4>The four findings that changed the book</h4>
+<table>
+<tr><th style="width:34%">Finding</th><th>Evidence</th></tr>
+<tr><td><strong>Requiring a source quote does not catch fabrication</strong></td>
+    <td><strong>14 of 14</strong> fabricated values carried a quote that really did appear in the document. The model does not invent quotations; it attaches genuine ones to values it invented.</td></tr>
+<tr><td><strong>A model cannot check its own work</strong></td>
+    <td>Measured five separate ways, in five chapters, independently: its confidence, its own source attribution, its own quote, its own item count, its own completeness. All five failed.</td></tr>
+<tr><td><strong>The stronger model is worse at the failure that matters most</strong></td>
+    <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 80%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
+<tr><td><strong>Nothing was measured twice until the end</strong></td>
+    <td>When it finally was, <strong>8 of 14</strong> published headline figures fell outside the range their own code reproduces.</td></tr>
+</table>
+
+<h4>What the fixes sorted into</h4>
+<p>Sorting every fix in the book by <em>who performs the check</em> separates the results almost perfectly, and this is the most useful thing in the report:</p>
+<table>
+<tr><th style="width:30%">Who checks</th><th>What happened</th></tr>
+<tr><td><strong>Code, outside the model</strong></td><td><span class="keep">WORKED</span> almost always, usually free, and returned an identical number on every run.</td></tr>
+<tr><td><strong>A second, different model</strong></td><td>Partly worked. <strong>5&ndash;10&times;</strong> the cost of what it checks, and the false-alarm rate moves between runs of an identical setup.</td></tr>
+<tr><td><strong>The model, about itself</strong></td><td><span class="drop">FAILED</span> every time it was tested.</td></tr>
+</table>
+
+<h4>How to read this report</h4>
+<ul>
+<li><strong>Every chapter and part opens with a box like this one.</strong> Read only those and you have the argument; the pages between them are the corpus, the settings, the worked input and output samples, the costs and the limits, for anyone who wants to check.</li>
+<li><strong>Numbers given as a range are the trustworthy ones.</strong> A single figure quoted to two digits is one sample, and this project learned the hard way what that is worth.</li>
+<li><strong>Negative results are published, not buried</strong> &mdash; including the ones that contradict the book and the ones that contradict earlier pages of this report.</li>
+</ul>
+
+<h4>The honest headline</h4>
+<p><strong>Four of the nine failures barely reproduced at all on clean, well-formed, professionally edited English documents.</strong> That is not a retraction. These failures are <em>rare, severe and silent</em>, and rare-plus-severe-plus-silent is the worst combination there is for detection: too infrequent to show up in testing, too damaging to absorb, too quiet to notice. The clearest single example in the whole project is two paediatric drug strengths dropped from a warning that three suspensions are not interchangeable &mdash; from one sentence, with nothing flagged, in an output that looked complete.</p>
+</div>
+
 <h2 class="part">A — Why this report exists</h2>
 <h3 class="top">A book full of code that had never been run</h3>
 

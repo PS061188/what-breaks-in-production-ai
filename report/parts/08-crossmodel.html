@@ -1,5 +1,22 @@
 <!-- ============================ CROSS-MODEL ============================ -->
 <h2 class="part">D — Does any of this hold on other models?</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Part D &middot; Cross-model</span>
+<p class="oneline">Every result in this report was produced on one model. This part re-runs the load-bearing experiments on four models across two providers, to find out which findings are about <em>models</em> and which are about <em>this model</em>.</p>
+<h4>How it was done</h4>
+<table><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5, Claude Opus 5, Claude Sonnet 5, GPT-5-mini, GPT-4.1-mini</td></tr><tr><td style="width:26%">Providers</td><td>Anthropic and OpenAI, through the same harness, same schema, same corpus</td></tr><tr><td style="width:26%">Experiments re-run</td><td>Chapter 2 silent corruption, Chapter 3 grounding prompt, and the chapters whose failures did not reproduce</td></tr><tr><td style="width:26%">Method</td><td>Identical prompts and documents; only the model identifier changes. Structured outputs enforced on both providers</td></tr><tr><td style="width:26%">Settings</td><td>Reasoning models given explicit output headroom &mdash; see Finding 4</td></tr><tr><td style="width:26%">Cost</td><td>the largest single line in the project; see Part E</td></tr></table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;69 pts, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
+<h4>What to trust / What not to</h4>
+<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> A &minus;69-point effect that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
+<h4>The one thing to remember</h4>
+<p><strong>Upgrading the model made one failure worse and left the others where they were.</strong> A stronger model reconstructs damaged input more fluently, so the wrong answer arrives better written and less detectable &mdash; 39% silent corruption on Haiku 4.5, 80% on GPT-5-mini. Everything that <em>did</em> improve came from the prompt and the code around the call, not from the model. That is the book's thesis, tested against the most obvious objection to it.</p>
+<h4>Where this is weakest</h4>
+<p>The cross-model runs are single runs. After the repeatability sweep found eight of fourteen figures outside their own reproducible range, every rate in this part should be read as one sample. The <em>orderings</em> are what this part establishes; the exact percentages are not.</p>
+</div>
+
 <h3 class="top">The same experiments, four models, two providers</h3>
 
 <p class="lede">Every number so far came from one model. The obvious objection is
