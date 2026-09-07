@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin Hydrochloride Tablets The safety and effectiveness of metformin hydrochloride tablets for the treatment of type 2 diabetes mellitus have been established in pediatric patients 10 to 16 years old. Safety and effectiveness of metformin hydrochloride tablets have not been established in pediatric patients less than 10 years old. Use of metformin hydrochloride tablets in pediatric patients 10 to 16 years old for the treatment of type 2 di\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n1. The passage explicitly states 'safety and effectiveness of metformin hydrochloride tablets' in 'pediatric patients 10 to 16 years old'\\n2. It explicitly contrasts this with patients 'less than 10 years old' where safety and effectiveness 'have not been established'\\n3. The passage discusses age-stratified clinical evidence and indications specific to pediatric populations\\n\\nStep 2 - Considering most plausible categories:\\n- PEDIATRIC_USE: The passage directly addresses safety and effectiveness in defined pediatric age groups (10-16 years vs. <10 years), which is the core purpose of the pediatric_use section\\n- INDICATIONS_AND_USAGE: The passage mentions 'treatment of type 2 diabetes mellitus' which could indicate this is from an indications section, but the focus is entirely on age-specific pediatric populations rather than the indication itself\\n\\nStep 3 - Classification decision:\\nPEDIATRIC_USE is the clear winner. While the passage mentions the indication (type 2 diabetes), the dominant content is establishing what age groups of children can safely use this medication and whether effectiveness has been demonstrated in those groups. This is quintessentially pediatric-use information - it explains how the drug applies to children of different ages.\\n\\nStep 4 - Confidence assessment:\\nThe evidence is very strong (>90%). The passage uses explicit pediatric age classifications (10-16 years, <10 years) and directly addresses safety/effectiveness in these pediatric populations, which is the defining characteristic of pediatric_use sections in drug labeling.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 6120,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 419
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nhair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cer\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"hair loss, flushing, rash, decreased bone mineral density, menstrual irregularities, impaired fertility, seizures, pseudotumor cerebri\"}",
+  "elapsed_ms": 1292,
+  "usage": {
+    "input_tokens": 329,
+    "output_tokens": 43
+  }
+}

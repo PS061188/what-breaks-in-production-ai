@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIf after long-term therapy the drug is to be stopped, it is recommended that it be withdrawn gradually rather than abruptly. Multiple Sclerosis In the treatment of acute exacerbations of multiple sclerosis daily doses of 200 mg of prednisolone for a week followed by 80 mg every other day for 1 month have been shown to be effective. (Dosage range is the same for prednisone and prednisolone.) ADT ® (Alternate Day Therapy) ADT is a corticosteroid dosing regimen in which twice the usual daily dose of corticoid is administered every other morning. The purpose of this mode of therapy is to provide the patient requiring long-term pharmacologic dose treatment with the beneficial effects of corticoids while minimizing certain undesirable effects, including pituitary-adrenal suppression, the Cushingoid state, corticoid withdrawal symptoms, and growth suppression in children.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"For acute exacerbations of multiple sclerosis: 200 mg of prednisolone daily for one week, followed by 80 mg every other day for 1 month, administered orally. ADT (Alternate Day Therapy): Twice the usual daily dose administered every other morning.\"}",
+  "elapsed_ms": 2107,
+  "usage": {
+    "input_tokens": 480,
+    "output_tokens": 73
+  }
+}

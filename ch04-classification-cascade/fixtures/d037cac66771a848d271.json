@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe following adverse reactions are also discussed elsewhere in the 1abeling: Lactic Acidosis [ see Boxed Warning and Warnings and Precautions (5.1) ]. Vitamin B12 Deficiency [ see Warnings and Precautions (5.2) ]. Hypoglycemia [ see Warnings and Precautions (S.3) For metformin hydrochloride tablets, the most common adverse reactions (>5.0%) are diarrhea, nausea/vomiting, flatulence, asthenia, indigestion, abdominal discomfort, and headache. ( 6.1 ) To report SUSPECTED ADVERSE REACTIONS, contact Granu1es Pharmaceuticals Inc at 1-877-770-3183 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch 6.1 Clinical Studies Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the c1inical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Lactic Acidosis, Vitamin B12 Deficiency, Hypoglycemia, diarrhea, nausea/vomiting, flatulence, asthenia, indigestion, abdominal discomfort, headache\"}",
+  "elapsed_ms": 1420,
+  "usage": {
+    "input_tokens": 521,
+    "output_tokens": 64
+  }
+}

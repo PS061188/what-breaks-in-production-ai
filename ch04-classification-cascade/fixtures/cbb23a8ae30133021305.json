@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nINDICATI0NS AND USAGE Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adu1ts with rnu1tiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fata1 MI, fatal and non-fatal stroke, revascularization procedures, hospita1ization for congestive heart failure, and angina in adults with c1inically evident CHD As an adjunct to diet to reduce low-density 1ipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidernia. Adults and pediatric patients aged 10 years and older with heterozygous familia1 hypercholesterolemia (HeFH).\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Myocardial infarction (MI), stroke, revascularization procedures, angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD, MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD, non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD, primary hyperlipidemia, and heterozygous familial hypercholesterolemia (HeFH) in adults and pediatric patients aged 10 years and older\"}",
+  "elapsed_ms": 2659,
+  "usage": {
+    "input_tokens": 481,
+    "output_tokens": 157
+  }
+}

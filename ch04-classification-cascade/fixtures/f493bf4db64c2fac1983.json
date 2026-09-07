@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSee ful1 prescribing information for details regarding concornitant use of atorvastatin calcium with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis ( 2.5 , 7.1 ). Rifampin: May reduce atorvastatin plasma concentrations. Administer simultaneously with atorvastatin calcium ( 7.2 ). Oral Contraceptives: May increase plasma levels of norethindrone and ethinyl estradiol; consider this effect when selecting an oral contraceptive (7.3 ). Digoxin: May increase digoxin plasma levels; monitor patients appropriately ( 7.3 ). 7.1 Drug Interactions that may Increase the Risk of Myopathy and Rhabdornyolysis with Atorvastatin Calcium Atorvastatin is a substrate of CYP3A4 and transporters (e.g., OATP1B1/1B3, P-gp, or BCRP).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features: (1) The passage discusses multiple drug interactions with atorvastatin calcium, including rifampin, oral contraceptives, and digoxin. (2) It specifically addresses risk of myopathy and rhabdomyolysis associated with concurrent drug use. (3) It mentions CYP3A4 substrate and transporter interactions, which are pharmacokinetic mechanism details. Step 2 - Considering most plausible categories: The two most plausible categories are (a) 'drug_interactions' - because the passage explicitly lists multiple drug-drug interactions, their effects, and clinical management recommendations, and (b) 'adverse_reactions' - because myopathy and rhabdomyolysis are serious adverse reactions. Step 3 - Selecting the winning category: 'drug_interactions' is the clear winner because the primary content is about how atorvastatin interacts with other medications (rifampin reduces plasma concentrations, oral contraceptives increase hormone levels, digoxin levels increase) and how grapefruit juice affects it. While myopathy and rhabdomyolysis are mentioned, they are presented as consequences of drug interactions rather than as a standalone adverse reaction discussion. The passage references section 7 (drug interactions) and provides cross-references to interaction-specific subsections. Step 4 - Confidence assessment: This classification is HIGH confidence (>90%) because the passage explicitly labels itself as being from the 'Drug Interactions' section and focuses entirely on describing concurrent medication effects rather than cataloging adverse reactions independent of drug interactions.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 7789,
+  "usage": {
+    "input_tokens": 1100,
+    "output_tokens": 389
+  }
+}

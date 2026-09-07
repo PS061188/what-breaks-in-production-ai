@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\n4.2 Cholestatic Jaundice/Hepatic Dysfunction Amoxicil1in and davu1anate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is contraindicated in patients with a previous history of cholestatic jaundice/hepatic dysfunction associated with treatment with amoxicillin and clavulanate potassium.\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Amoxicillin and clavulanate potassium for oral suspension is contraindicated in patients with a previous history of cholestatic jaundice/hepatic dysfunction associated with treatment with amoxicillin and clavulanate potassium.\"}",
+  "elapsed_ms": 1862,
+  "usage": {
+    "input_tokens": 364,
+    "output_tokens": 66
+  }
+}

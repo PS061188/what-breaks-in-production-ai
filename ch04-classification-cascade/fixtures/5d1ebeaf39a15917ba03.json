@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nResurnption of warfarin sodium administration reverses the effect of vitamin K, and a therapeutic INR can again be obtained by careful dosage adjustment. If rapid re-anticoagulation is indicated, heparin may be preferable for initial therapy. Prothrombin cornplex concentrate (PCC), fresh frozen plasma, or activated Factor VII treatment may be considered if the requirement to reverse the effects of warfarin sodium is urgent. A risk of hepatitis and other viral diseases is associated with the use of blood products; PCC and activated Factor VII are also associated with an increased risk of thrornbosis. Therefore, these preparations should be used only in exceptional or life-threatening bleeding episodes secondary to warfarin sodium overdosage.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Discussion of management strategies for warfarin sodium reversal including resumption of warfarin, heparin initiation, and use of blood products; (2) Specific mention of urgent/emergency situations requiring rapid re-anticoagulation; (3) Risk assessment of different reversal agents including hepatitis risk and thrombosis risk. Step 2 - Most plausible categories: (a) 'overdosage' - the passage explicitly addresses reversal of warfarin sodium effects in emergency/life-threatening bleeding episodes, which is classic overdosage management; (b) 'adverse_reactions' - could relate to bleeding complications, but the passage focuses on therapeutic management rather than reaction description. Step 3 - Classification decision: This is clearly 'overdosage' because it discusses: signs/consequences requiring intervention (bleeding episodes), management strategies (warfarin resumption, heparin, PCC, FFP, Factor VII), and risk-benefit considerations for reversal agents. The phrase 'life-threatening bleeding episodes secondary to warfarin sodium overdosage' is explicitly stated. Step 4 - Confidence: HIGH (>90%) because the content directly addresses overdosage management with standard reversal strategies and explicitly mentions 'overdosage' in context of bleeding episodes.\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5852,
+  "usage": {
+    "input_tokens": 1014,
+    "output_tokens": 329
+  }
+}

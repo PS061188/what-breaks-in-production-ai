@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nChest pain, abdominal pain, syncope, chest discomfort, fever, trauma, virus infection. Cardiovascular: Palpitation, orthostatic hypotension. Digestive: Gastrointestinal cramps, dry mouth, constipation, heartburn. Musculoskeletal: Back pain, shoulder pain, knee pain, back strain, myalgia, foot pain. Nervous/Psychiatric: Decreased libido, vertigo, depression, somnolence. Respiratory: Common cold, nasal congestion, influenza, bronchitis, pharyngeal pain, dyspnea, pulmonary congestion, chronic sinusitis, allergic rhinitis, pharyngeal discomfort. Skin: Flushing, pruritus, skin inflammation, diaphoresis. Special Senses: Blurred vision, tinnitus, otalgia. Urogenital: Urinary tract infection. Angioedema:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(1) The passage is structured as an organized list of symptoms and conditions organized by body system (Cardiovascular, Digestive, Musculoskeletal, Nervous/Psychiatric, Respiratory, Skin, Special Senses, Urogenital).\\n(2) The conditions listed are presented as observed clinical events/complaints (palpitation, orthostatic hypotension, gastrointestinal cramps, back pain, depression, dyspnea, pruritus, blurred vision, urinary tract infection, angioedema).\\n(3) The passage begins with acute symptoms (chest pain, syncope, fever, trauma) followed by system-based organization of conditions.\\n\\nStep 2: Two most plausible categories:\\n(A) ADVERSE_REACTIONS: This appears to be a catalog of side effects and adverse events observed in patients taking a medication, organized by organ system - a standard format for documenting adverse reactions in drug labeling.\\n(B) INDICATIONS_AND_USAGE: Could theoretically be conditions the drug treats, but the presentation (organized by body system with diverse conditions) and the inclusion of clearly undesirable events (depression, constipation, angioedema) makes this implausible.\\n\\nStep 3: Winner and rationale:\\nADVERSE_REACTIONS wins decisively. The systematic organization by body system (Cardiovascular, Digestive, Musculoskeletal, Nervous/Psychiatric, Respiratory, Skin, Special Senses, Urogenital) with symptoms/conditions listed under each is the standard pharmaceutical labeling format for adverse reactions sections. The inclusion of conditions like \\\"decreased libido,\\\" \\\"depression,\\\" \\\"angioedema,\\\" and \\\"somnolence\\\" as undesired effects strongly indicates this is documenting harm rather than therapeutic intent. Indications_and_usage would present intended therapeutic targets, not this heterogeneous list of system-wide unwanted effects.\\n\\nStep 4: Confidence assessment:\\nThis is HIGH confidence (>90%). The document structure, organization by body system, and nature of the listed conditions all clearly align with adverse reactions documentation in pharmaceutical labeling.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 5916,
+  "usage": {
+    "input_tokens": 1072,
+    "output_tokens": 539
+  }
+}

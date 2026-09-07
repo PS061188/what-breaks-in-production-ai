@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nChanges in thyroid status may occur if barbiturates are added or withdrawn from patients being treated for hypothyroidism. Rifampin has been shown to accelerate the metabolism of levothyroxine. Table 8. Drugs That May Decrease Conversion of T4 to T3 Potential impact: Administration of these enzyme inhibitors decreases the peripheral conversion of T4 to T3, leading to decreased T3 levels. However, serum T4 levels are usually normal but may occasionally be slightly increased. Drug or Drug Class Effect Beta-adrenergic antagonists (e.g., Propranolol > 160 mg/day) In patients treated with large doses of propranolol (> 160 mg/day), T3 and T4 levels change, TSH levels remain normal, and patients are clinically euthyroid.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of drug interactions with thyroid medications, specifically how barbiturates, rifampin, and beta-adrenergic antagonists affect thyroid hormone metabolism; (2) Reference to T4/T3 conversion mechanisms and their clinical impact; (3) Specific dosage thresholds mentioned (propranolol >160 mg/day) and clinical outcomes. Step 2 - Most plausible categories: (a) drug_interactions is highly plausible because the passage explicitly discusses how multiple classes of drugs (barbiturates, rifampin, propranolol) interact with thyroid therapy and alter thyroid hormone levels; (b) dosage_and_administration could be considered due to the propranolol dosage threshold mentioned (>160 mg/day). Step 3 - Drug_interactions wins decisively: The core content is dedicated to explaining HOW other drugs affect levothyroxine metabolism and thyroid status, the mechanisms of interaction (enzyme inhibition, accelerated metabolism), and the clinical consequences of these interactions. While a specific dose is mentioned, the dose is cited as an example parameter affecting drug interaction magnitude, not as primary dosing guidance. This is fundamentally a drug interaction discussion. Step 4 - Confidence is HIGH because the passage explicitly uses terms like 'Drug Interactions' in a table header, discusses interaction mechanisms comprehensively, and the structure follows a classic drug interaction documentation format showing which drugs interact with thyroid therapy and what the expected effects are.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 6831,
+  "usage": {
+    "input_tokens": 1046,
+    "output_tokens": 374
+  }
+}

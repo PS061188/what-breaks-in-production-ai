@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAlbuterol Sulfate HFA Inhalation Aerosol is supplied in the following box of 1 as a pressurized aluminum canister fitted with a counter and supplied with a blue plastic actuator with a blue cap: NDC 80425-0359-01 18-g canister containing 200 actuations Each inhaler is packaged with a Patient Information leaflet. The blue actuator supplied with Albuterol Sulfate HFA should not be used with any other product canisters, and actuators from other products should not be used with an Albutero1 Sulfate HFA canister. Counter A1buterol Sulfate HFA has a counter attached to the canister. The counter starts at 204 and counts down each time a spray is released. The correct amount of medication in each actuation cannot be assured after the counter reads 000, even though the canister is not completely empty and will continue to operate.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Albuterol Sulfate HFA Inhalation Aerosol is supplied as a pressurized aluminum canister with a blue plastic actuator and blue cap. The canister size is 18-g containing 200 actuations. Packaging: Box of 1 canister (NDC 80425-0359-01). Each inhaler is packaged with a Patient Information leaflet.\"}",
+  "elapsed_ms": 2241,
+  "usage": {
+    "input_tokens": 483,
+    "output_tokens": 97
+  }
+}

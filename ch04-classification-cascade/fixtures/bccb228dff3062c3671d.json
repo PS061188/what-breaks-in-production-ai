@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nHypothyroidism Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression Levothyroxine sodium tablets are indicated in adult and pediatric patients, including neonates, as an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Limitations of Use Levothyroxine sodium tablets are not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients as there are no clinical benefits and\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"1. Primary hypothyroidism (thyroidal)\\n2. Secondary hypothyroidism (pituitary)\\n3. Tertiary hypothyroidism (hypothalamic)\\n4. Congenital hypothyroidism\\n5. Acquired hypothyroidism\\n6. Thyrotropin-dependent well-differentiated thyroid cancer (as adjunct to surgery and radioiodine therapy)\"}",
+  "elapsed_ms": 2286,
+  "usage": {
+    "input_tokens": 453,
+    "output_tokens": 100
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTable 1. Adverse Reactions with Albuterol Sulfate HFA with ≥3% Incidence and More Common than Placebo in Adult and Adolescent Subjects Adverse Reaction Percent of Subjects Albuterol Sulfate HFA (n = 202) % CFC 11/12-Propelled Albuterol Inhaler (n = 207) % Placebo HFA-134a (n = 201) % Ear, nose, and throat Throat irritation 10 6 7 Upper respiratory inflammation 5 5 2 Lower respiratory Viral respiratory infections 7 4 4 Cough 5 2 2 Musculoskeleta1 Musculoskeletal pain 5 5 4 Adverse reactions reported by <3% of the adult and adolescent subjects receiving albuterol sulfate HFA and by a greater proportion of subjects receiving albuterol sulfate HFA than receiving HFA-134a placebo inhaler and that have the potential to be related to albutero1 sulfate HFA include diarrhea, laryngitis, oropharyngeal edema, cough, lung disorders, tachycardia, and extrasystoles.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Throat irritation, upper respiratory inflammation, viral respiratory infections, cough, musculoskeletal pain, diarrhea, laryngitis, oropharyngeal edema, lung disorders, tachycardia, and extrasystoles\"}",
+  "elapsed_ms": 1912,
+  "usage": {
+    "input_tokens": 550,
+    "output_tokens": 62
+  }
+}

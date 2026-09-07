@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMeasure the total amount of water (see Table 2) to be added in two parts. Add approximately 2/3 of the total amount of water for reconstitution, replace cap and shake vigorous1y to suspend powder. Add remainder of the water (that had been measured), replace cap and again shake vigorously. Table 2: Volume of Water for Reconstituting Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL Bottle Size Amount of Water Required for Reconstitution 75 mL 68 mL 125 mL 108 mL 200 mL 170 mL ​​​​​​​​​​​​​​Each 5 mL will contain 600 mg of amoxicillin as the trihydrate, and 42.9 mg of clavulanic acid as the potassium salt. Shake oral suspension well before each use. Suspension must be refrigerated.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": null}",
+  "elapsed_ms": 1556,
+  "usage": {
+    "input_tokens": 509,
+    "output_tokens": 8
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThis drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug rnay be greater in patients with impaired renal function. Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection. Evaluation of the hypertensive patient should always include assessment of renal function. (See DOSAGE AND ADMINISTRATION.)\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Discussion of renal excretion and kidney function in elderly patients; (b) Warning about toxic reactions in patients with impaired renal function; (c) Cross-reference to DOSAGE AND ADMINISTRATION for dose adjustment guidance.\\n\\n2. Most plausible categories: (a) GERIATRIC_USE - The passage explicitly discusses elderly patients, decreased renal function in older populations, and care in dose selection for this demographic. (b) DOSAGE_AND_ADMINISTRATION - The passage mentions dose selection and cross-references that section, suggesting dosage modification may be needed.\\n\\n3. Classification decision: GERIATRIC_USE wins. While the passage references dosage adjustments, its primary focus is on the special consideration needed for elderly patients specifically due to age-related renal decline. The core message is about geriatric-specific risk factors and management considerations for this population, not general dosing instructions.\\n\\n4. Confidence: HIGH (>90%). The explicit mention of 'elderly patients' and age-related physiological changes (decreased renal function) in the context of drug safety makes this clearly geriatric-focused content. The alternative (dosage_and_administration) is only tangentially referenced.\", \"classification\": \"geriatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 5132,
+  "usage": {
+    "input_tokens": 940,
+    "output_tokens": 321
+  }
+}

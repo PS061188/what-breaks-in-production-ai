@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\n0VERDOSAGE The expected signs and symptoms with overdosage of albutero1 are those of excessive beta-adrenergic stimulation and/or occurrence or exaggeration of any of the signs and symptoms of beta-adrenergic stimulation (e.g., seizures, angina, hypertension or hypotension, tachycardia with rates up to 2O0 beats/min, arrhythmias, nervousness, headache, trernor, muscle cramps, dry mouth, palpitation, nausea, dizziness, fatigue, malaise, insomnia, hyperglycemia, hypokalemia, metabolic acidosis). As with all inhaled sympathomimetic medicines, cardiac arrest and even death may be associated with an overdose of Albuterol Sulfate HFA Inhalation Aerosol. Treatment consists of discontinuation of Albuterol Su1fate HFA together with appropriate symptomatic therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"overdosage\"}",
+  "elapsed_ms": 1315,
+  "usage": {
+    "input_tokens": 658,
+    "output_tokens": 11
+  }
+}

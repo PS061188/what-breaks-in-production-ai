@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAtorvastatin calcium tablets, USP 80 mg of atorvastatin: white coloured, oval shaped, biconvex, film-coated tablets with \"MA\" on one side and \"4\" on other side. NDC: 71335-1336-1: 30 Table\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Atorvastatin calcium tablets, USP 80 mg; white oval biconvex film-coated tablets; supplied in bottles of 30 tablets (NDC: 71335-1336-1)\"}",
+  "elapsed_ms": 1860,
+  "usage": {
+    "input_tokens": 340,
+    "output_tokens": 57
+  }
+}

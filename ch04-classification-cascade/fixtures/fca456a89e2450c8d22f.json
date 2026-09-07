@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIn the high-dose atorvastatin calcium group, there were more patients with serious adverse reactions (1.8%) and discontinuations due to adverse reactions (9.9%) as cornpared to the low-dose group (1.4%; 8.1%, respectively) during a median fo1low-up of 4.9 years. Persistent transaminase elevations (≥3 x ULN twice within 4 to10 days) occurred in 1.3% of individuals with atorvastatin 80 mg and in 0.2% of individuals with atorvastatin 10 rng. Elevations of CK (≥ 10 x ULN) were higher in the high-dose atorvastatin group (0.3%) compared to the low-dose atorvastatin group (0.1%). Stroke Prevention by Aggressive Reduction in Cholesterol Levels (SPARCL) In SPARCL, 4731 subjects (age range 21 to 92 years, 40% women;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Prominent features of this document:\\n- Quantitative comparison of safety outcomes between high-dose (80 mg) and low-dose (10 mg) atorvastatin\\n- Specific adverse reaction rates (serious adverse reactions, discontinuations due to adverse reactions)\\n- Laboratory abnormalities (transaminase elevations, CK elevations) with specific thresholds and percentages\\n- Time-frame data (median follow-up 4.9 years, 4-10 days for transaminase assessment)\\n- Clinical trial context (SPARCL study with patient demographics)\\n\\nStep 2: Two most plausible categories:\\n1. ADVERSE_REACTIONS: The passage extensively details side effects, safety outcomes, and laboratory abnormalities observed during treatment. Percentages of serious reactions, discontinuations, and specific lab abnormalities are classic adverse reaction reporting.\\n2. DOSAGE_AND_ADMINISTRATION: Could be considered because it compares two different doses, but the focus is not on how to administer the drug—rather on the consequences/safety profile of different doses.\\n\\nStep 3: Classification decision:\\nADVERSE_REACTIONS wins decisively. The entire passage is structured around reporting frequency and severity of adverse outcomes (serious reactions 1.8% vs 1.4%, discontinuations 9.9% vs 8.1%, transaminase elevations, CK elevations). This is textbook adverse reaction data—monitoring safety outcomes in clinical trials. Dosage_and_administration was ruled out because the passage does not instruct how to administer the drug; it merely reports comparative safety data at different dose levels.\\n\\nStep 4: Confidence assessment:\\nHIGH confidence (>90%). The content unambiguously focuses on adverse reaction reporting with quantitative safety data from a clinical trial. No significant ambiguity in classification.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 9047,
+  "usage": {
+    "input_tokens": 1100,
+    "output_tokens": 467
+  }
+}

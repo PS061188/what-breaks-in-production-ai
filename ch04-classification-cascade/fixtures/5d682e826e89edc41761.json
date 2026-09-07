@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nPrednisone is a glucocorticoid. Glucocorticoids are adrenocortical steroids, both naturally occurring and synthetic, which are readily absorbed from the gastrointestinal tract. Prednisone, USP is a white to partially white, crysta1line powder. It is very slightly soluble in water; slightly soluble in alcohol, chloroform, dioxane, and methanol. The chemical name for prednisone is 17,21-dihydroxypregna-1,4-dienne-3,11,20-trione. The structural formula is represented below: C 21 H 26 O 5 M.W. 358.44 Each tablet, for oral administration, contains 5, 10, or 20 mg of prednisone. Inactive Ingredients: PredniS0NE Tablets, USP contain the following inactive ingredients: lactose monohydrate, magnesium stearate, microcrystalline ce1lulose, pregelatinized starch, sodium starch glycolate and stearic acid (5 mg only). chem-pred.jpg\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features identification: (1) The passage provides the chemical name '17,21-dihydroxypregna-1,4-dienne-3,11,20-trione' and molecular formula 'C 21 H 26 O 5 M.W. 358.44'; (2) It describes physical properties: 'white to partially white, crystalline powder' with solubility characteristics; (3) It lists inactive ingredients: lactose monohydrate, magnesium stearate, microcrystalline cellulose, pregelatinized starch, sodium starch glycolate and stearic acid. Step 2 - Most plausible categories: (A) 'description' - this section contains chemical nomenclature, molecular weight, structural formula reference, physical appearance, solubility profile, and inactive ingredient composition. (B) 'how_supplied' - mentions tablet strengths (5, 10, or 20 mg) and route of administration (oral). Step 3 - Ruling: This is definitively 'description'. While the passage mentions tablet strengths and oral administration (elements of 'how_supplied'), the primary and dominant content focuses on chemical identity, structure, physical properties, and formulation composition - all hallmarks of the description section. The 'how_supplied' elements are minimal and subordinate. Step 4 - Confidence: HIGH (>90%). The classification is unambiguous; the passage is a textbook description section containing chemical characterization and formulation details.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 7384,
+  "usage": {
+    "input_tokens": 1120,
+    "output_tokens": 381
+  }
+}

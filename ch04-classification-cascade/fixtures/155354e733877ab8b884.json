@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTable 1: Adverse Reactions Occurring in ≥ 2% in Patients Atorvastatin Calcium- Treated with any Dose and Greater than Placebo Adverse Reaction % Placebo N=7311 % 10 mg N=3908 % 20 mg N=188 % 40 mg N=604 % 80 mg N=4055 % Any dose N=8755 Nasopharyngitis 8.2 12.9 5.3 7.0 4.2 8.3 Arthralgia 6.5 8.9 11.7 10.6 4.3 6.9 Diarrhea 6.3 7.3 6.4 14.1 5.2 6.8 Pain in extremity 5.9 8.5 3.7 9.3 3.1 6.0 Urinary tract infection 5.6 6.9 6.4 8.0 4.1 5.7 Dyspepsia 4.3 5.9 3.2 6.0 3.3 4.7 Nausea 3.5 3.7 3.7 7.1 3.8 4.0 Musculoskeletal pain 3.6 5.2 3.2 5.1 2.3 3.8 Muscle spasms 3.0 4.6 4.8 5.1 2.4 3.6 Myalgia 3.1 3.6 5.9 8.4 2.7 3.5 Insomnia 2.9 2.8 1.1 5.3 2.8 3.0 Pharyngolaryngeal pain 2.1 3.9 1.6 2.8 0.7 2.3 Other adverse reactions reported in placebo-controlled trials include:\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Nasopharyngitis, Arthralgia, Diarrhea, Pain in extremity, Urinary tract infection, Dyspepsia, Nausea, Musculoskeletal pain, Muscle spasms, Myalgia, Insomnia, Pharyngolaryngeal pain\"}",
+  "elapsed_ms": 2083,
+  "usage": {
+    "input_tokens": 736,
+    "output_tokens": 79
+  }
+}

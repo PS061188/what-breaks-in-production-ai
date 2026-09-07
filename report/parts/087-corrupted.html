@@ -1,0 +1,132 @@
+<!-- ==================== THE CORRUPTED-CORPUS TEST ==================== -->
+<h2 class="part">The corrupted-corpus test</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; Damaged input</span>
+<p class="oneline">Four of the nine failures barely reproduced, and the obvious objection was that FDA labels are unusually clean input. This part re-runs those four chapters over deliberately damaged documents. <strong>Three of them hold. One does not.</strong></p>
+
+<h4>How it was tested</h4>
+<table>
+<tr><td style="width:26%">Chapters</td><td>4, 7, 8 and 10 &mdash; the four whose failures did not reproduce on clean input</td></tr>
+<tr><td>Damage</td><td>Chapter 2's corruption, applied at load time to every section of every label, seeded on drug and section so a given (mode, drug, section) is byte-identical on every run</td></tr>
+<tr><td>Modes</td><td><strong>OCR confusion</strong> and <strong>truncation</strong>. The other two &mdash; lookalike letters, encoding damage &mdash; were skipped: Chapter 2 established a free byte-level check stops those 100% of the time, so they test nothing about these chapters</td></tr>
+<tr><td>Scoring</td><td>Unchanged. Each chapter keeps its own scorers; only the documents differ</td></tr>
+<tr><td>Model</td><td>Claude Haiku 4.5</td></tr>
+<tr><td>Runs</td><td>1 exploratory run per arm, then <strong>3 live runs of each arm</strong> for the two measures that appeared to move &mdash; including 3 live runs of the clean baseline</td></tr>
+<tr><td>Cost</td><td><strong>$2.42</strong></td></tr>
+</table>
+
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Chapter</th><th>Verdict on damaged input</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>4 &middot; Classification cascade</td><td>Unchanged</td><td class="num">91% &rarr; 92%</td><td class="num">p = 1.00</td></tr>
+<tr><td>7 &middot; Edge input</td><td>Unchanged, marginally better</td><td class="num">99% &rarr; 100%</td><td class="num">p = 0.50</td></tr>
+<tr><td>8 &middot; Routing and placement</td><td>Unchanged</td><td class="num">3,3,3 vs 8,2,3 of 33</td><td class="num">p = 0.50</td></tr>
+<tr><td><strong>10 &middot; Silent omissions</strong></td><td><strong>Materially worse</strong></td><td class="num"><strong>100% &rarr; 89%</strong></td><td class="num"><strong>p &lt; 0.00001</strong></td></tr>
+</table>
+
+<h4>The one thing to remember</h4>
+<p><strong>Damage does not make these failures general &mdash; it makes one of them appear.</strong> On clean documents the model returned every dose figure, in every run. On the same documents with scanning damage it silently dropped figures from a third of them, and the output still looked complete. Chapters 4, 7 and 8 were unmoved. The correct claim is not &ldquo;these failures are worse on messy input&rdquo; but <em>&ldquo;silent omission is, and the others are not&rdquo;</em>.</p>
+
+<h4>Where this is weakest</h4>
+<p>One model, one damage generator, and truncation turned out to be a weaker comparison than OCR because shortening documents drops some below the chapters' minimum-length filters &mdash; Chapter 4's denominator moved from 96 to 91, Chapter 10's from 55 figures to 36. Only the OCR arm supports a like-for-like comparison, so only the OCR arm carries the finding.</p>
+</div>
+
+<h3 class="top">The objection this part exists to answer</h3>
+
+<p class="lede">Four of nine failures barely reproduced. Every one of those runs used
+documents that were structured, English, professionally edited and published by a
+federal agency &mdash; close to the easiest input a production system ever sees.
+The obvious reply is that the corpus was too clean, and until now this report could
+not answer it.</p>
+
+<h4>The result</h4>
+
+<table>
+  <tr><th style="width:26%">Chapter</th><th>Measure</th>
+      <th class="num">Clean</th><th class="num">OCR-damaged</th><th class="num">p</th></tr>
+  <tr><td>4 &middot; Classification cascade</td><td>Classification accuracy, body passages</td>
+      <td class="num">91%</td><td class="num">92%</td><td class="num">1.00</td></tr>
+  <tr><td>7 &middot; Edge input</td><td>Aggregate correctness across all subclasses</td>
+      <td class="num">99%</td><td class="num"><strong>100%</strong></td><td class="num">0.50</td></tr>
+  <tr><td>8 &middot; Routing and placement</td><td>Wrong section named for its own quote</td>
+      <td class="num">3, 3, 3</td><td class="num">8, 2, 3</td><td class="num">0.50</td></tr>
+  <tr style="background:#f4efe6"><td><strong>10 &middot; Silent omissions</strong></td>
+      <td><strong>Dose figures returned</strong></td>
+      <td class="num"><strong>100%</strong><br><span style="color:#6a7681">55/55, 3 runs</span></td>
+      <td class="num"><strong>89%</strong><br><span style="color:#6a7681">87%, 87%, 94%</span></td>
+      <td class="num"><strong>0.0000035</strong></td></tr>
+  <tr style="background:#f4efe6"><td></td><td><strong>Documents with a silent drop</strong></td>
+      <td class="num"><strong>0 of 6</strong><br><span style="color:#6a7681">every run</span></td>
+      <td class="num"><strong>2 of 6</strong><br><span style="color:#6a7681">every run</span></td>
+      <td class="num"><strong>0.019</strong></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Perfect on clean input. A third of documents damaged on scanned input.</span>
+  <p>Chapter 10's model returned <strong>every single dose figure, in all three clean
+  runs</strong>. Over the same documents with scanning damage applied, it dropped
+  figures from <strong>two of six documents, in all three runs</strong>, and the
+  output still looked complete every time.</p>
+  <p>That is the chapter's failure, arriving exactly where the chapter says it
+  lives &mdash; and it is invisible on clean input.</p>
+</div>
+
+<h4>The correction this part had to make to itself</h4>
+
+<div class="plain">
+  <span class="label">The first pass got this exactly backwards</span>
+  <p>On the exploratory run, Chapter 8's <em>wrong section named for its own quote</em>
+  jumped from 3% to <strong>24%</strong> &mdash; an eight-fold rise at p = 0.027. It
+  was written up as the finding of the experiment, and Chapter 10's smaller movement
+  was set aside as probably noise.</p>
+  <p>Both calls were wrong, for the same reason. The clean figure of 1 in 33 came
+  from a <em>replayed fixture</em> &mdash; a single recorded sample. The damaged
+  figure of 8 in 33 was a single live sample. Running each three times:</p>
+  <pre>Chapter 8, wrong section named for its own quote (of 33)
+  clean, 3 live runs : 3, 3, 3
+  OCR,   3 live runs : 8, 2, 3        pooled p = 0.50</pre>
+  <p>The 24% was one outlier, and the 3% it was compared against was another, in the
+  opposite direction. <strong>There is no effect.</strong> Meanwhile Chapter 10,
+  measured the same way, turned out to be the strongest result in this part.</p>
+</div>
+
+<div class="verdict">
+  <span class="label">The transferable lesson, which is worth more than the result</span>
+  <p><strong>A comparison is only as good as the weaker of its two arms, and a
+  replayed fixture is one sample, not a ground truth.</strong></p>
+  <p>Nothing was wrong with the statistics. The p-value of 0.027 was correctly
+  computed on the numbers supplied. What was wrong was treating a recorded baseline
+  as fixed truth while the treatment arm was allowed to vary &mdash; which
+  guarantees that ordinary sampling noise on either side reads as signal.</p>
+  <p>Establishing this cost <strong>$0.21</strong>. Publishing the original version
+  would have put an eight-fold effect into a book, under a heading about the
+  importance of measuring twice.</p>
+</div>
+
+<h4>Why truncation is reported separately, and more weakly</h4>
+
+<p>Truncation shortens documents, and several chapters filter out sections below a
+minimum length. So the damaged arm does not contain the same population as the
+clean one: Chapter 4's denominator fell from 96 passages to 91, and Chapter 10's
+from 55 dose figures to 36. Comparing 53 of 55 against 35 of 36 is not a
+comparison.</p>
+
+<p>The OCR arm holds its denominators &mdash; 96, 48 and 33 unchanged &mdash; which
+is why it carries this part's conclusion and truncation does not. Truncation showed
+nothing moving in any chapter, but that is a weak null rather than a real one.</p>
+
+<h4>What this changes</h4>
+
+<p>The honest statement about the four non-reproducing failures is now narrower and
+better supported than either the original claim or the objection to it:</p>
+
+<ul>
+  <li><strong>Chapters 4, 7 and 8 do not get worse on damaged input.</strong> The
+  classification cascade, the edge-input defences and content placement all held.</li>
+  <li><strong>Chapter 10 does.</strong> Silent omission is invisible on clean
+  documents and appears reliably on scanned ones.</li>
+  <li>The instinct that "a failure that is rare here may be worse on messier input"
+  was <strong>right about one chapter in four</strong> &mdash; which is a more useful
+  thing to know than either the blanket warning or the blanket reassurance.</li>
+</ul>

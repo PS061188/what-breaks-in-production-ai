@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nOverdose of metformin hydrochloride has occurred, including ingestion of amounts greater than 50 grams. Hypoglycemia was reported in approximately 10% of cases, but no causal association with metformin has been established. Lactic acidosis has been\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Explicitly mentions 'Overdose of metformin hydrochloride' at the beginning; (b) Describes specific adverse outcomes like hypoglycemia and lactic acidosis in overdose scenarios; (c) Discusses ingestion amounts (>50 grams) and frequency of adverse events (10% of cases). Step 2 - Most plausible categories: (i) 'overdosage' - directly addresses what happens when excessive amounts are ingested, signs/symptoms, and incidence; (ii) 'adverse_reactions' - mentions hypoglycemia and lactic acidosis which are side effects. Step 3 - Winner: 'overdosage' clearly wins because the passage explicitly frames content within an overdose context ('Overdose of metformin...has occurred'), discusses ingestion amounts that constitute overdose (>50 grams), and is structured as guidance for overdose management/recognition. While hypoglycemia and lactic acidosis are mentioned, they are presented specifically as outcomes of overdose rather than typical adverse reactions from normal dosing. The alternative 'adverse_reactions' was ruled out because this passage is specifically about overdose scenarios, not normal therapeutic use side effects. Step 4 - Confidence: HIGH (>90%) - the opening sentence unambiguously identifies this as overdosage content, and the structure and content align perfectly with that category definition.\",\"classification\": \"overdosage\",\"confidence\": \"HIGH\",\"alternative_considered\": \"adverse_reactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 5441,
+  "usage": {
+    "input_tokens": 918,
+    "output_tokens": 350
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nWarfarin sodium tab1ets are a vitarnin K antagonist indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism ( 1 ) Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation and/or cardiac valve replacement ( l ) Reduction in the risk of death, recurrent myocardial infarction, and thromboembolic events such as stroke or systemic embolization after myocardial infarction ( 1 ) Limitations of Use Warfarin sodiurn tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage. ( 1 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"indications_and_usage\"}",
+  "elapsed_ms": 1192,
+  "usage": {
+    "input_tokens": 600,
+    "output_tokens": 14
+  }
+}

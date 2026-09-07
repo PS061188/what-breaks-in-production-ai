@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nThis dose provides 6.4 mg/kg/day of the clavulanic acid component. Table 1: General Dosage Guidelines for Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL in Pediatric Patients Body Weight (kg) Volume of Amoxicillin and Clavulanate Potassium for Oral Suspension, ​​​​​​​600 mg/42.9 mg per 5 mL providing 90 mg/kg/day 8 3 mL twice daily 12 4.5 mL twice daily 16 6 mL twice daily 20 7.5 mL twice daily 24 9 mL twice daily 28 10.5 mL twice daily 32 12 mL twice daily 36 13.5 mL twice daily 40 15 mL twice daily ​​​​​​​ Pediatric patients weighing greater than 40 kg : Experience with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL in this group is not available.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"dosage_and_administration\"}",
+  "elapsed_ms": 1279,
+  "usage": {
+    "input_tokens": 731,
+    "output_tokens": 14
+  }
+}

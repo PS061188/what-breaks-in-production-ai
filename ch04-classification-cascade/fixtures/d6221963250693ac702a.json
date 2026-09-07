@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMetformin hydrochloride tablets, USP contain the antihyperglycemic agent metformin, which is a biguanide, in the form of monohydrochloride. The chemical name of metformin hydrochloride is N,N- dimethylimidodicarbonimidic diamide hydrochloride. The structural formula is as shown below: Metformin hydrochloride, USP is a white to off-white crystalline compound with a molecular formula of C 4 H 11 N 5 • HCl and a molecular weight of 165.63. Metformin hydrochloride is\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: N,N-dimethylimidodicarbonimidic diamide hydrochloride\\nMolecular Formula: C4H11N5•HCl\\nMolecular Weight: 165.63\\nInactive Ingredients: Not specified in passage\"}",
+  "elapsed_ms": 2315,
+  "usage": {
+    "input_tokens": 412,
+    "output_tokens": 74
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodium is contraindicated in: Pregnancy Warfarin sodium is contraindicated in women who are pregnant except in pregnant women with mechanical heart valves, who are at high risk of thromboembolism [see Warnings and Precautions ( 5.7 ) and Use in Specific Populations ( 8.l )] . Warfarin sodium can cause feta1 harm when administered to a pregnant woman. Warfarin sodium exposure during pregnancy causes a recognized pattern of major congenital malforrnations (warfarin embryopathy and fetotoxicity), fatal fetal hemorrhage, and an increased risk of spontaneous abortion and fetal mortality. If warfarin sodium is used during pregnancy or if the patient becomes pregnant while taking this drug, the patient should be apprised of the potential hazard to a fetus [see Use in Specific Populations ( 8.1 )] .\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Pregnancy (except in pregnant women with mechanical heart valves who are at high risk of thromboembolism)\"}",
+  "elapsed_ms": 1618,
+  "usage": {
+    "input_tokens": 474,
+    "output_tokens": 32
+  }
+}

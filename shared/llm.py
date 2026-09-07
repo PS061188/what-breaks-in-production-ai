@@ -375,8 +375,42 @@ def map_parallel(fn, items, workers: int = 8):
 
 
 def load_labels() -> list:
+    """The corpus, optionally damaged first.
+
+    Setting CORRUPT_MODE applies Chapter 2's deterministic corruption to every
+    section of every label before any other chapter sees it. The point is to
+    answer the objection that hangs over four chapters of this project: their
+    failures barely reproduced, and the most likely explanation is that FDA
+    labels are unusually clean input. Every chapter keeps its own scoring — only
+    the documents change.
+
+    Corruption is seeded on the drug name and the section, so a given
+    (mode, drug, section) is byte-identical on every run and fixtures replay.
+    """
     path = Path(__file__).resolve().parent.parent / "data" / "labels.json"
-    return json.loads(path.read_text())["labels"]
+    labels = json.loads(path.read_text())["labels"]
+
+    mode = os.environ.get("CORRUPT_MODE")
+    if not mode or mode == "clean":
+        return labels
+
+    # ch02's directory name is not a valid module name, so load it by path.
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "_ch02_common",
+        Path(__file__).resolve().parent.parent / "ch02-input-integrity" / "common.py",
+    )
+    ch02 = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(ch02)
+
+    for label in labels:
+        drug = label.get("drug", "?")
+        for section, text in list(label.get("sections", {}).items()):
+            if not text:
+                continue
+            label["sections"][section] = ch02.corrupt(text, mode, f"{drug}:{section}")
+    return labels
 
 
 def base_args(description: str):

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodiurn tablets USP, 1 mg are available as pink, capsule-shaped, biconvex scored tablets, debossed with TV/1 on the scored side and 1712 on the other side containing 1 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0O93-1712-01) and 1000 (NDC 0093-1712-10) tablets. Warfarin sodiurn tablets USP, 2 mg are available as lavender, capsule-shaped, biconvex scored tablets, debossed with TV/2 on the scored side and 1713 on the other side containing 2 mg warfarin sodium, USP, packaged in bott1es of 10O (NDC 0093-1713-01) and 1O00 (NDC 0093-l713-10) tablets. Warfarin sodium tablets USP, 2.5 mg are available as green, capsule-shaped, biconvex scored tablets, debossed with TV/2 1 / 2 on the scored side and l714 on the other side containing 2.5 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1714-01) and 1000 (NDC 0093-1714-10) tablets.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium tablets USP available in three strengths: 1 mg (pink, scored tablets) packaged in bottles of 100 and 1000 tablets; 2 mg (lavender, scored tablets) packaged in bottles of 100 and 1000 tablets; 2.5 mg (green, scored tablets) packaged in bottles of 100 and 1000 tablets.\"}",
+  "elapsed_ms": 2289,
+  "usage": {
+    "input_tokens": 598,
+    "output_tokens": 100
+  }
+}

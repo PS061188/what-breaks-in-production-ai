@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nThe first trial involved 521 pediatric patients (3 months to 50 months) and the second trial involved 450 pediatric patients (3 months to 12 years). In the intent-to-treat population of the first trial of 521 patients, the most frequently reported adverse events were vomiting (7%), fever (6%), contact dermatitis (i.e., diaper rash) (6%), upper respiratory tract infection (4%), and diarrhea (4%). Protocol-defined diarrhea (i.e., 3 or more watery stools in one day or 2 watery stools per day for 2 consecutive days as recorded on diary cards) occurred in 13% of patients. The primary objective of the second study was to compare the safety of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL (90/6.4 mg/kg/day, divided every 12 hours) to amoxicillin and clavulanate potassium (45/6.4 mg/kg/day, divided every 12 hours) for ten days.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"pediatric_use\"}",
+  "elapsed_ms": 1205,
+  "usage": {
+    "input_tokens": 706,
+    "output_tokens": 12
+  }
+}

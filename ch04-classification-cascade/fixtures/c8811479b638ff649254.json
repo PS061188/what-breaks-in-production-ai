@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSertraline hydrochloride is a selective serotonin reuptake inhibitor (SSRI) for oral administration. It has a molecular weight of 342.7. Sertraline hydrochloride, USP has the following chemical name: (1S-cis)-4-(3,4-dichlorophenyl)-1,2,3,4-tetrahydro-N-methyl-1-naphthalenamine hydrochloride. The empirical formula C 17 H 17 NC l2 •HCl is represented by the following structural formula: Sertraline hydrochloride, USP is a white crystalline powder that is slightly soluble in water and isopropyl alcohol and sparingly soluble in ethanol. Sertraline tablets, USP are supplied for oral administration as scored tablets containing s\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage begins with identification of the drug as 'sertraline hydrochloride' and describes it as 'a selective serotonin reuptake inhibitor (SSRI)'; (b) It provides the molecular weight (342.7) and detailed chemical name with empirical formula; (c) It describes physical properties ('white crystalline powder', solubility characteristics) and pharmaceutical form ('tablets, USP').\\n\\n2. Two most plausible categories: (i) 'description' - This category covers chemical name, structure, formulation and inactive ingredients. The passage explicitly provides molecular weight, chemical nomenclature, empirical formula, structural formula reference, and physical/chemical properties. (ii) 'how_supplied' - This category addresses dosage forms, strengths, packaging and storage. The passage mentions 'tablets, USP' and begins to describe supply format, though this section appears incomplete.\\n\\n3. Winner: 'description' decisively wins. The core content is chemical and structural characterization: molecular weight, IUPAC chemical name, empirical formula, structural formula, and description of physical properties (appearance, solubility). The passage is clearly establishing what sertraline hydrochloride IS as a chemical and pharmaceutical entity. The 'how_supplied' mention is only incidental at the very end and incomplete ('supplied for oral administration as scored tablets containing s[incomplete]').\\n\\n4. Confidence: HIGH (>90%). The passage unmistakably contains the standard 'Description' section format found in drug labeling, with systematic presentation of chemical identity, molecular properties, and formulation characteristics. The incomplete trailing sentence does not diminish the clear primary classification.\",\"classification\": \"description\",\"confidence\": \"HIGH\",\"alternative_considered\": \"how_supplied\",\"requires_human_review\": false}",
+  "elapsed_ms": 6568,
+  "usage": {
+    "input_tokens": 1047,
+    "output_tokens": 414
+  }
+}

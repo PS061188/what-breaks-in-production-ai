@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nEdema Therapy shou1d be individualized according to patient response to gain maximal therapeutic response and to deterrnine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually deterrnined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). The dose of furosemide tablets may be carefully titrated up to 60O mg/day in patients with clinical1y severe edematous states.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"dosage_and_administration\"}",
+  "elapsed_ms": 1208,
+  "usage": {
+    "input_tokens": 644,
+    "output_tokens": 14
+  }
+}

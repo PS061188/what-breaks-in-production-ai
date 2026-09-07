@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThese data indicate that sertraline's extent of inhibition of P450 3A4 activity is not likely to be of clinical significance. Results of the interaction study with cisapride indicate that sertraline 200 mg (q.d.) induces the metabolism of cisapride (cisapride AUC and C max were reduced by about 35%). Drugs Metabolized by P450 2D6 – Many drugs effective in the treatment of major depressive disorder, e.g., the SSRIs, including sertraline, and most tricyclic antidepressant drugs effective in the treatment of major depressive disorder inhibit the biochemical activity of the drug metabolizing isozyme cytochrome P450 2D6 (debrisoquin hydroxylase), and, thus, may increase the plasma concentrations of co-administered drugs that are metabolized by P450 2D6.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"cisapride, drugs metabolized by P450 2D6, tricyclic antidepressants, SSRIs\"}",
+  "elapsed_ms": 1872,
+  "usage": {
+    "input_tokens": 465,
+    "output_tokens": 35
+  }
+}

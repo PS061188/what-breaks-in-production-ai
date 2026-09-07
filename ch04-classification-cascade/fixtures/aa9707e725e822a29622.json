@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nCONTRAINDICATI0NS Acute liver fai1ure or decompensated cirrhosis [see Warnings and Precautions (5.3) ] Hypersensitivity to atorvastatin or any excipients in atorvastatin calcium. Hypersensitivity reactions, including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis, have been reported [see Adverse Reactions (6.2) ]. Acute liver failure or decompensated cirrhosis ( 4 ). Hypersensitivity to atorvastatin or any excipient in atorvastatin calcium ( 4 ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features:\\n(1) The passage explicitly begins with 'CONTRAINDICATI0NS' (the section header, with apparent OCR typo).\\n(2) The content lists specific conditions where the drug must NOT be used: acute liver failure, decompensated cirrhosis, and hypersensitivity reactions.\\n(3) The structure includes cross-references to other sections (Warnings and Precautions, Adverse Reactions), which is typical of drug labeling.\\n\\nStep 2: Most plausible categories:\\n- CONTRAINDICATIONS: The section header explicitly states this is contraindications content. The passage lists absolute prohibitions for drug use (liver failure, hypersensitivity).\\n- ADVERSE_REACTIONS: While hypersensitivity reactions are mentioned, they are cited as reasons NOT to use the drug, not as observed side effects in treated patients.\\n\\nStep 3: Classification decision:\\nCONTRAINDICATIONS wins decisively. The section header explicitly identifies this content as contraindications. The content describes situations where atorvastatin is absolutely contraindicated (acute liver failure, decompensated cirrhosis, hypersensitivity). Although hypersensitivity reactions are mentioned, they are presented as the rationale for the contraindication, not as adverse reactions observed during treatment. The passage is clearly from the contraindications section of a drug label.\\n\\nStep 4: Confidence assessment:\\nHIGH confidence (>95%). The section header is explicit and unambiguous. The content directly matches the definition of contraindications (absolute prohibitions for drug use). No reasonable alternative interpretation exists.\", \"classification\": \"contraindications\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4749,
+  "usage": {
+    "input_tokens": 1023,
+    "output_tokens": 417
+  }
+}

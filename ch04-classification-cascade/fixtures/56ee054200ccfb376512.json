@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nTherapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical tria1s blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 rng/12.5 mg or lisinopril and hydrochlorothiazide tablets 2O mg/12.5 mg.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of combination therapy dosing with specific mg amounts (10mg/12.5mg and 20mg/12.5mg); (2) Explicit mention of 'Dose Titration Guided by Clinical Effect' as a section header; (3) Instructions about when to switch patients to combination therapy after monotherapy failure. Step 2 - Most plausible categories: (a) 'dosage_and_administration' - the passage explicitly discusses dose titration, specific dosage strengths, and when/how to administer the combination; (b) 'drug_interactions' - the passage mentions combining two drugs and their interactive effects on hypokalemia. Step 3 - Classification decision: 'dosage_and_administration' wins decisively. The core content is prescriptive guidance on dosing strategy (when to switch, what doses to use, how to titrate). While hypokalemia is mentioned, it's referenced only as context for why combination therapy can be beneficial - not as the primary focus. The section title explicitly references dose titration. Step 4 - Confidence: HIGH (>90%) because the passage is unambiguously about dosing decisions and administration strategy, with explicit dose values and titration guidance.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5822,
+  "usage": {
+    "input_tokens": 1035,
+    "output_tokens": 322
+  }
+}

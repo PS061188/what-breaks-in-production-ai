@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe total number of patients treated with Gabapentin in controlled clinical trials in patients with another condition was 336, of which 102 (30%) were 65 to 74 years of age, and 168 (50%) were 75 years of age and older. There was a larger treatment effect in patients 75 years of age and older compared with younger patients who received the same dosage. Since gabapentin is almost exclusively eliminated by renal excretion, the larger treatment effect observed in patients ≥75 years may be a consequence of increased gabapentin exposure for a given dose that results from an age-related decrease in renal function. However, other factors cannot be excluded. The types and incidence of adverse reactions were similar across age groups except for peripheral edema and ataxia, which tended to increase in incidence with\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage discusses a clinical trial population stratified by age, specifically comparing patients 65-74 years and 75+ years; (b) It addresses treatment effects and dosage considerations in older populations, noting 'larger treatment effect in patients 75 years of age and older'; (c) It explains the pharmacological basis for age-related differences (renal function decline) and notes adverse reactions that vary by age group (peripheral edema, ataxia). Step 2 - Most plausible categories: (1) geriatric_use - directly addresses safety, efficacy, and pharmacokinetics in patients ≥65 years; (2) adverse_reactions - mentions adverse reactions by age group. Step 3 - Classification decision: geriatric_use wins decisively. While adverse reactions are mentioned, they are secondary details supporting the primary focus on geriatric-specific efficacy, dosing considerations, and age-related pharmacokinetic changes. The passage is fundamentally about what is known about Gabapentin use in elderly patients (65+), including treatment effects, dose adjustments due to renal function, and age-related safety considerations. Step 4 - Confidence: HIGH (>90%). The passage explicitly compares treatment outcomes across age groups ≥65 years, discusses age-related pharmacokinetic factors, and is clearly from a geriatric use section of prescribing information.\", \"classification\": \"geriatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 6124,
+  "usage": {
+    "input_tokens": 1039,
+    "output_tokens": 358
+  }
+}

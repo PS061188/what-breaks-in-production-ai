@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nInquire whether patients are taking biotin or biotin-containing supplements. If so, advise thern to stop biotin supplementation at least 2 days before assessing TSH and/or T4 levels [see Dosage and Administration (2.4) and Drug Interactions (7.10) ]. The peak therapeutic effect of a given dose of levothyroxine sodium tablets may not be attained for 4 to 6 weeks. 2.3 Recomrnended Dosage and Titration Primary, Secondary, and Tertiary Hypothyroidism in Adults The recommended starting daily dosage of levothyroxine sodium tablets in adults with primary, secondary, or tertiary hypothyroidism is based on age and comorbid cardiac conditions, as described in Table 1. For patients at risk of atrial fibrillation or patients with underlying cardiac disease, start with a lower dosage and titrate the dosage more slowly to avoid exacerbation of cardiac symptoms.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"The recommended starting daily dosage of levothyroxine sodium tablets in adults with primary, secondary, or tertiary hypothyroidism is based on age and comorbid cardiac conditions as described in Table 1. For patients at risk of atrial fibrillation or patients with underlying cardiac disease, start with a lower dosage and titrate the dosage more slowly to avoid exacerbation of cardiac symptoms. Peak therapeutic effect may not be attained for 4 to 6 weeks.\"}",
+  "elapsed_ms": 2245,
+  "usage": {
+    "input_tokens": 492,
+    "output_tokens": 113
+  }
+}

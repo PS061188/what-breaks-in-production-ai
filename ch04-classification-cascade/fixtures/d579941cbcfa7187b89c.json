@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nElevated systolic or diastolic pressure causes increased cardiovascular risk, and the absolute risk increase per mmHg is greater at higher blood pressures, so that even modest reductions of severe hypertension can provide substantial benefit. Relative risk reduction from blood pressure reduction is similar across populations with varying absolute risk, so the absolute benefit is greater in patients who are at higher risk independent of their hypertension (for example, patients with diabetes or hyperlipidemia), and such patients would be expected to benefit from more aggressive treatment to a lower blood pressure goal. Some antihypertensive drugs have smaller blood pressure effects (as monotherapy) in black patients, and many antihypertensive drugs have additional approved indications and effects (e.g., on angina, heart fai1ure, or diabetic kidney disease).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage discusses blood pressure reduction and cardiovascular risk, which is fundamental to understanding when antihypertensive drugs are used; (2) It explains the rationale for treatment in different patient populations (those with diabetes, hyperlipidemia, higher risk); (3) It mentions that some drugs have additional approved indications beyond blood pressure control (angina, heart failure, diabetic kidney disease). Step 2 - Most plausible categories: (a) 'indications_and_usage' - The passage explains conditions for which antihypertensive therapy is indicated and discusses patient populations who benefit from treatment; (b) 'dosage_and_administration' - The passage mentions 'aggressive treatment to a lower blood pressure goal,' which could relate to dosing strategy. Step 3 - Classification decision: This passage is clearly about INDICATIONS AND USAGE. It explains the clinical rationale for using antihypertensive drugs (elevated blood pressure causing cardiovascular risk), identifies specific patient populations who are indicated for treatment (those with diabetes, hyperlipidemia, higher baseline risk), and notes that certain drugs have additional approved indications (angina, heart failure, diabetic kidney disease). While it mentions treatment intensity/goals, the primary focus is on WHO should receive treatment and WHY, which is definitional of indications. Step 4 - Confidence assessment: HIGH (>90%). The passage explicitly discusses indications for antihypertensive therapy, risk stratification for treatment decisions, and additional approved uses of certain agents. This is unambiguously indications-focused content from a prescribing information document.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 6777,
+  "usage": {
+    "input_tokens": 1031,
+    "output_tokens": 403
+  }
+}

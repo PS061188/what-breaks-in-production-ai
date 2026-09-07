@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFor oral inhalation only. ( 2 ) Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation every 4 to 6 hours. For some patients, l inhalation every 4 hours may be sufficient. ( 2.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. ( 2.2 ) Priming information: Prime Albuterol Sulfate HFA before using for the first tirne, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) This section explicitly begins with 'For oral inhalation only' and contains detailed dosing instructions; (2) It provides specific dosing frequencies ('every 4 to 6 hours', '15 to 30 minutes before exercise'); (3) It includes administration technique details ('2 inhalations', 'prime the inhaler', 'release 4 sprays'). Step 2 - Most plausible categories: (A) 'dosage_and_administration' is clearly the primary match - the entire passage is structured around HOW and WHEN to administer the medication with specific doses and intervals; (B) 'indications_and_usage' is a distant second because while it mentions 'treatment or prevention of bronchospasm' and 'exercise-induced bronchospasm', these are brief condition references serving mainly as context for the dosing instructions rather than the focus. Step 3 - Winner determination: 'dosage_and_administration' definitively wins because: the passage is organized by dosing subsections (2, 2.1, 2.2), provides quantitative dosing information (2 inhalations, every 4-6 hours, 15-30 minutes before exercise), includes route specifications ('oral inhalation'), patient population context (aged 4+ years), and detailed administration technique (priming procedures). The indications are mentioned only as context headings, not elaborated. Step 4 - Confidence: HIGH (>90%) - this is unambiguously a dosage and administration section with standard labeling structure and comprehensive dosing detail.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 7252,
+  "usage": {
+    "input_tokens": 1070,
+    "output_tokens": 408
+  }
+}

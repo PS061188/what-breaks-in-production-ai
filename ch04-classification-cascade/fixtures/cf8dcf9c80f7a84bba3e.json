@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nDrugs Affecting Glycemic Control Clinical Impact: Certain drugs tend to produce hyperglycemia and may lead to loss of glycemic control. Intervention: When such drugs are administered to a patient receiving metforrnin hydrochloride tablets, observe the patient closely for loss of blood glucose control. When such drugs are withdrawn from a patient receiving metformin hydrochloride tablets, observe the patient closely for hypoglycemia. Exarnples: Thiazides and other diuretics, corticosteroids, phenothiazines, thyroid products, estrogens, oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, and isoniazid. Carbonic anhydrase inhibitors may increase risk of lactic acidosis.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Thiazides, diuretics, corticosteroids, phenothiazines, thyroid products, estrogens, oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, isoniazid, carbonic anhydrase inhibitors\"}",
+  "elapsed_ms": 1980,
+  "usage": {
+    "input_tokens": 440,
+    "output_tokens": 72
+  }
+}

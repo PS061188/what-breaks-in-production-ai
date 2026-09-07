@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer Gabapentin three times a day using 300 mg or 400 mg capsules. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of Gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. PROMINENT FEATURES: (a) The passage specifies exact dose ranges and frequencies (300-600 mg three times daily, max 2400-3600 mg/day); (b) It provides administration instructions including frequency and spacing requirements (maximum 12 hours between doses); (c) It includes pediatric-specific dosing information with age-based calculations (10-15 mg/kg/day for ages 3-11, 40 mg/kg/day for ages 3-4).\\n\\n2. MOST PLAUSIBLE CATEGORIES: The two strongest candidates are (a) 'dosage_and_administration' - the entire passage is prescriptive guidance on how much drug to give and how often; (b) 'pediatric_use' - significant content addresses children ages 3-11. However, 'pediatric_use' is meant to describe what is known about a drug's safety/efficacy in children, not necessarily to prescribe dosing regimens.\\n\\n3. CLASSIFICATION DECISION: 'dosage_and_administration' is the clear winner. While the passage includes pediatric dosing, the primary purpose and structure is to convey dosing instructions for both adult and pediatric populations. The pediatric information is presented as part of the dosage guidance, not as commentary on pediatric safety/efficacy or special pediatric considerations. The language is directive and prescriptive throughout ('recommended maintenance dose', 'administer', 'maximum time between doses should not exceed').\\n\\n4. CONFIDENCE ASSESSMENT: HIGH (>90%). The passage is quintessentially dosage_and_administration content - it addresses dose amounts, frequency, routes, and timing. The inclusion of pediatric dosing does not shift it to 'pediatric_use' because the category structure indicates pediatric_use covers what is known about safety/efficacy in children, not prescriptive dosing tables.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 8526,
+  "usage": {
+    "input_tokens": 1075,
+    "output_tokens": 466
+  }
+}

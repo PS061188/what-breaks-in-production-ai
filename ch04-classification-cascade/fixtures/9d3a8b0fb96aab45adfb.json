@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThese data indicate that sertraline's extent of inhibition of P450 3A4 activity is not likely to be of clinical significance. Results of the interaction study with cisapride indicate that sertraline 200 mg (q.d.) induces the metabolism of cisapride (cisapride AUC and C max were reduced by about 35%). Drugs Metabolized by P450 2D6 – Many drugs effective in the treatment of major depressive disorder, e.g., the SSRIs, including sertraline, and most tricyclic antidepressant drugs effective in the treatment of major depressive disorder inhibit the biochemical activity of the drug metabolizing isozyme cytochrome P450 2D6 (debrisoquin hydroxylase), and, thus, may increase the plasma concentrations of co-administered drugs that are metabolized by P450 2D6.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features: (1) Detailed discussion of drug-drug interactions involving P450 enzyme systems (3A4 and 2D6), (2) Specific quantitative data about interaction effects (cisapride AUC/Cmax reduced by 35%), (3) Mechanism of interaction explained (inhibition of cytochrome P450 enzymes and effects on metabolism of co-administered drugs). Step 2 - Most plausible categories: (a) drug_interactions: This passage explicitly describes how sertraline affects the metabolism of other drugs through enzyme inhibition, a classic drug interaction topic. (b) adverse_reactions: Could potentially describe adverse effects, but the passage focuses on mechanism and altered drug metabolism, not patient symptoms. Step 3 - Classification decision: drug_interactions wins decisively. The passage explicitly discusses P450 enzyme inhibition, cisapride metabolism reduction, and the potential for increased plasma concentrations of co-administered drugs - all hallmark drug_interactions content. This is not describing adverse reactions in patients but rather the pharmacokinetic interaction mechanism itself. Step 4 - Confidence: HIGH (>90%). The language is unambiguous and directly addresses drug-drug interaction mechanisms, quantitative interaction data, and metabolic enzyme effects.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 6049,
+  "usage": {
+    "input_tokens": 1054,
+    "output_tokens": 316
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSertraline tablets, USP are available with each tablet containing sertraline hydrochloride, USP equivalent to 25 mg, 50 mg and 100 mg of sertraline. Sertraline 25 mg Tablets: Light Green film coated Modified oval biconvex tablets debossed with I on the left Side of bisect and G on the right Side of bisect on one Side and \"2l2\" on other NDC 63187-859-30 Bott1es of 30 NDC 63187-859-6O Bottles of 60 NDC 63187-859-90 Bottles of 90 Store at 20°C to 25°C (68°F to 77°F) [see USP Controlled Room Temperature]. Revised: 07/2016\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features:\\n(1) The passage explicitly lists tablet strengths (25 mg, 50 mg, 100 mg) of sertraline hydrochloride\\n(2) It provides detailed physical descriptions of tablets (light green, film coated, modified oval biconvex, debossed markings)\\n(3) It includes NDC numbers, package sizes (bottles of 30, 60, 90), and storage conditions (20-25°C)\\n\\nStep 2 - Most Plausible Categories:\\n- 'how_supplied' is highly plausible because the passage directly addresses dosage forms, strengths, packaging details (bottle counts), NDC codes, and storage requirements - all core elements of 'how supplied' sections\\n- 'description' is plausible because it includes physical characteristics of the tablets (color, shape, coating, markings), though it lacks chemical information like molecular formula or inactive ingredients typically found in description sections\\n\\nStep 3 - Classification Decision:\\n'how_supplied' is the clear winner. This passage is a canonical example of how_supplied content: it specifies all available strengths, describes the physical appearance for identification purposes, provides packaging information (bottle sizes with NDC numbers), and includes storage conditions. While 'description' might include some physical details, the emphasis on packaging details (NDC codes, bottle counts) and storage instructions is definitional for 'how_supplied' sections in pharmaceutical labeling.\\n\\nStep 4 - Confidence Assessment:\\nHIGH confidence (>90%). The passage contains multiple standard elements of 'how_supplied' sections and lacks the chemical/formulation details that would be primary in a 'description' section. The structure and content align precisely with regulatory expectations for how_supplied information.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 9006,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 438
+  }
+}

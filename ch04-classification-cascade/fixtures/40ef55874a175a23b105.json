@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAND ADMlNlSTRATION Postherpetic Neuralgia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilepsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose is 300 rng three tirnes daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Explicit dosing schedules with specific mg amounts and titration protocols; (2) Day-by-day dose progression (Day 1, Day 2, Day 3); (3) Age-stratified dosing guidance (patients 12+, patients 3-11, patients 3-4, patients 5-11); (4) Multiple indications mentioned (Postherpetic Neuralgia, Epilepsy with Partial Onset Seizures) with corresponding dose regimens. Step 2 - Most plausible categories: (a) 'dosage_and_administration' - The passage is almost entirely composed of dosing schedules, titration instructions, frequency of administration, and age-based dose adjustments; (b) 'pediatric_use' - While age-specific dosing is mentioned, this is secondary to the primary purpose of conveying administration instructions. Step 3 - Classification decision: 'dosage_and_administration' wins decisively. The passage's core content is instructional guidance on HOW MUCH to give, HOW OFTEN, and HOW TO TITRATE across patient populations. The pediatric dosing is included within the dosage_and_administration framework as age-stratified variations, not as a standalone pediatric-use discussion. Step 4 - Confidence: HIGH (>90%). The passage header explicitly states 'AND ADMlNlSTRATION' (dosage and administration), and nearly 100% of the content consists of dose amounts, schedules, and titration protocols with no discussion of pediatric safety concerns, efficacy, or special considerations unique to children.\",\"classification\": \"dosage_and_administration\",\"confidence\": \"HIGH\",\"alternative_considered\": \"pediatric_use\",\"requires_human_review\": false}",
+  "elapsed_ms": 8347,
+  "usage": {
+    "input_tokens": 1114,
+    "output_tokens": 411
+  }
+}

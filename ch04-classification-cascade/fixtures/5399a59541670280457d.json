@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTwo 4-week randomized, double-blind, placebo-controlled trials were conducted in 163 pediatric subjects aged from birth to 48 months with symptoms of bronchospasm associated with obstructive airway disease (presenting symptoms included: wheeze, cough, dyspnea, or chest tightness). Albuterol sulfate HFA or placebo HFA was delivered with either an AeroChamber Plus Valved Holding Chamber or an Optichamber Valved Holding Chamber with mask 3 times daily. In one trial, albuterol sulfate HFA 90 mcg (n = 26), albuterol sulfate HFA 180 mcg (n = 25), and placebo HFA (n = 26) were administered to children aged between 24 and 48 months. In the second trial, albuterol sulfate HFA 90 mcg (n = 29), albuterol sulfate HFA 180 mcg (n = 29), and placebo HFA (n = 28) were administered to children aged between birth and 24 months.\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Two 4-week randomized, double-blind, placebo-controlled trials were conducted in 163 pediatric subjects aged from birth to 48 months with symptoms of bronchospasm associated with obstructive airway disease. Albuterol sulfate HFA or placebo HFA was delivered via valved holding chamber with mask 3 times daily. One trial evaluated albuterol sulfate HFA 90 mcg and 180 mcg versus placebo in children aged 24-48 months (n=77 total). A second trial evaluated albuterol sulfate HFA 90 mcg and 180 mcg versus placebo in children aged birth to 24 months (n=86 total).\"}",
+  "elapsed_ms": 2762,
+  "usage": {
+    "input_tokens": 526,
+    "output_tokens": 170
+  }
+}

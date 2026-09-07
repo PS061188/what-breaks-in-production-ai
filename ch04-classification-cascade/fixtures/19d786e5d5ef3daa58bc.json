@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe signs and symptoms of overdosage are those of hyperthyroidism [see Warnings and Precautions (5) and Adverse Reactions (6) ] . In addition, confusion and disorientation may occur. Cerebral embolism, shock, coma, and death have been reported. Seizures occurred in a 3-year-old child ingesting 3.6 mg of levothyroxine. Symptoms may not necessa\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. PROMINENT FEATURES: (a) Explicit discussion of overdose signs/symptoms including hyperthyroidism, confusion, disorientation, cerebral embolism, shock, coma, death, and seizures; (b) Reference to a specific case of pediatric overdose (3-year-old ingesting 3.6 mg levothyroxine); (c) Cross-references to Warnings/Precautions and Adverse Reactions sections, typical of overdosage documentation structure. 2. TWO MOST PLAUSIBLE CATEGORIES: (a) 'overdosage' - The passage explicitly describes overdose manifestations, complications, and a case example of overdose toxicity. (b) 'adverse_reactions' - Could include severe adverse effects like seizures and coma, though these are presented specifically in the context of excessive dosing. 3. CLASSIFICATION DECISION: 'overdosage' wins decisively. The passage uses the phrase 'signs and symptoms of overdosage' as its opening, discusses overdose-specific sequelae (cerebral embolism, shock, coma, death), and includes a pediatric case of acute overdose ingestion. While seizures and coma appear in adverse reactions, their presentation here in the overdosage context with dose-specific case data (3.6 mg ingestion) confirms overdosage classification. 4. CONFIDENCE: HIGH (>90%). The evidence is unambiguous and the structure/language directly align with overdosage section conventions in FDA-approved product labeling.\",\"classification\":\"overdosage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 5518,
+  "usage": {
+    "input_tokens": 957,
+    "output_tokens": 375
+  }
+}

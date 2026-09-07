@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypotha1arnic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essentia1 for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Close1y monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'Levothyroxine sodium is indicated in patients from birth to less than 17 years of age' followed by specific disease conditions; (2) It lists two primary indications: replacement therapy for congenital/acquired hypothyroidism across three types (primary, secondary, tertiary) and adjunctive therapy for thyroid cancer management; (3) The passage emphasizes timing of therapy initiation and monitoring requirements specific to the pediatric population. Step 2 - Most plausible categories: (a) 'indications_and_usage' - The passage directly states what the drug is indicated for, listing the conditions and patient populations it treats; (b) 'pediatric_use' - The passage focuses heavily on pediatric patients (birth to <17 years) and emphasizes cognitive development concerns and monitoring in infants. Step 3 - Classification decision: While this passage does contain pediatric-specific information, it is fundamentally structured as an indications statement. The passage begins with 'is indicated' and lists the therapeutic purposes (replacement therapy, adjunct therapy), which is the core definition of indications_and_usage. The pediatric focus is contextual to when these indications apply, not a separate discussion of pediatric considerations, dosing adjustments, or pharmacology in children. The indications_and_usage category encompasses all patient populations and age groups for which a drug is approved. Step 4 - Confidence assessment: HIGH (>90%) - The passage is unmistakably structured as an indication statement with clear 'is indicated' language and enumerated therapeutic purposes. The pediatric context does not change the fundamental nature of what is being communicated - the approved uses of the drug in a specific age group.\",\"classification\":\"indications_and_usage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"pediatric_use\",\"requires_human_review\":false}",
+  "elapsed_ms": 5457,
+  "usage": {
+    "input_tokens": 1067,
+    "output_tokens": 425
+  }
+}

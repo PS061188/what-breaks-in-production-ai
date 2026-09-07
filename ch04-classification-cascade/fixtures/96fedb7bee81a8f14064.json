@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAdverse reactions associated with 1evothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, musde weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardia1 infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdomina1 cramps, e1evations in liver function tests Dermatologic:\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating, headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia, tremors, muscle weakness, muscle spasm, palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest, dyspnea, diarrhea, vomiting, abdominal cramps, elevations in liver function tests\"}",
+  "elapsed_ms": 2301,
+  "usage": {
+    "input_tokens": 471,
+    "output_tokens": 126
+  }
+}

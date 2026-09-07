@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe first trial involved 521 pediatric patients (3 months to 50 months) and the second trial involved 450 pediatric patients (3 months to 12 years). In the intent-to-treat population of the first trial of 521 patients, the most frequently reported adverse events were vomiting (7%), fever (6%), contact dermatitis (i.e., diaper rash) (6%), upper respiratory tract infection (4%), and diarrhea (4%). Protocol-defined diarrhea (i.e., 3 or more watery stools in one day or 2 watery stools per day for 2 consecutive days as recorded on diary cards) occurred in 13% of patients. The primary objective of the second study was to compare the safety of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL (90/6.4 mg/kg/day, divided every 12 hours) to amoxicillin and clavulanate potassium (45/6.4 mg/kg/day, divided every 12 hours) for ten days.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly discusses adverse events (vomiting, fever, contact dermatitis, upper respiratory tract infection, diarrhea) reported in pediatric trial populations; (2) It provides specific incidence rates for these adverse events (7%, 6%, 6%, 4%, 4%); (3) It mentions pediatric patients aged 3 months to 12 years in clinical trial contexts. Step 2 - Most plausible categories: (a) 'adverse_reactions' - the passage is fundamentally about adverse events observed in patients during trials, with explicit frequencies and types of reactions; (b) 'pediatric_use' - the passage does concern pediatric populations and their experience with the drug. Step 3 - Primary classification reasoning: While the passage involves pediatric patients, the primary content focus is clearly on documenting observed adverse events and their frequencies in these populations. The adverse_reactions category is specifically designed to capture 'side effects and reactions observed in patients.' The passage lists vomiting, fever, contact dermatitis, upper respiratory tract infection, and diarrhea with incidence data - this is classic adverse reaction reporting. The pediatric_use category would more appropriately cover guidance on how to use the drug in children, dosing adjustments, or specific considerations for pediatric populations, not adverse event reporting in pediatric trials. Step 4 - Confidence assessment: HIGH (>90%) - the passage unambiguously reports adverse events with frequencies from clinical trials. The language is characteristic of adverse reaction documentation rather than pediatric use guidance.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 8251,
+  "usage": {
+    "input_tokens": 1124,
+    "output_tokens": 388
+  }
+}

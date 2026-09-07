@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFor oral inhalation only. ( 2 ) Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation every 4 to 6 hours. For some patients, 1 inhalation every 4 hours may be sufficient. ( 2.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. ( 2.2 ) Priming information: Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. ( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Ass\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n(1) The passage contains specific dosing instructions: '2 inhalations by oral inhalation every 4 to 6 hours' and '1 inhalation every 4 hours'\\n(2) Routes of administration are explicitly stated: 'For oral inhalation only' and 'by oral inhalation'\\n(3) Patient population is specified with age criteria: 'adult and pediatric patients aged 4 years and older'\\n(4) Special procedural instructions are provided: priming instructions ('release 4 sprays into the air') and cleaning information ('wash the actuator with warm water')\\n(5) Treatment indications are mentioned: 'treatment or prevention of bronchospasm' and 'prevention of exercise-induced bronchospasm'\\n\\nStep 2 - Evaluating top two categories:\\n(A) dosage_and_administration: The passage is predominantly focused on HOW to administer (dose amount, frequency, route, priming/cleaning procedures). This is the core content.\\n(B) indications_and_usage: While indications are briefly mentioned (bronchospasm, exercise-induced bronchospasm), the primary focus and length of content addresses administration rather than comprehensive indication details.\\n\\nStep 3 - Determining winner:\\nThe passage is unmistakably dosage_and_administration. The bulk of the text provides specific dosing regimens (2 inhalations every 4-6 hours, 1 inhalation every 4 hours), route of administration (oral inhalation), patient populations (aged 4+), and detailed procedural instructions for proper use (priming, cleaning). While some indication information is present, it is minimal compared to the extensive administration guidance. The indications_and_usage category is ruled out because the passage does not comprehensively describe what conditions the drug treats—it only briefly mentions bronchospasm and exercise-induced bronchospasm without elaboration on efficacy, clinical use, or approved indications.\\n\\nStep 4 - Confidence assessment:\\nThis classification is HIGH confidence (>90%). The text structure, language, and content are definitively characteristic of dosage_and_administration sections in drug labeling. The presence of dose amounts, frequencies, routes, and procedural instructions leaves no reasonable doubt.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 11248,
+  "usage": {
+    "input_tokens": 1135,
+    "output_tokens": 568
+  }
+}

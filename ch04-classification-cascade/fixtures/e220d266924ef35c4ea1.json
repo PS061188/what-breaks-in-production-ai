@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine sodium tablets, USP contain no ingredients made from a gluten-containing grain (wheat, bar1ey, or rye). Table 9 provides a listing of the color additives by tablet strength: Tab1e 9. Levothyroxine Sodium Tablet Color Additives Strength (mcg) Color additive(s) 25 FD&C Yellow No. 6 Alurninum Lake 50 None 75 FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 2 Alurninurn Lake 88 FD&C Blue No. 2 Alurninum Lake, FD&C Yellow No. 5 Aluminum Lake 10O FD&C Yellow No. 5 Alurninum Lake, FD&C Yellow No. 6 Aluminum Lake 112 FD&C Red No. 40 Aluminum Lake, Carmine 125 FD&C Yellow No. 6 Aluminum Lake, FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 1 Alurninum Lake 137 FD&C Blue No. 1 Aluminum Lake 150 FD&C Blue No.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Three most prominent features: (a) The passage lists color additives for levothyroxine sodium tablets across multiple tablet strengths (25-150 mcg); (b) It specifies FD&C dyes and aluminum lake formulations for each strength; (c) It includes a note about gluten-free status. 2. Two most plausible categories: (a) 'how_supplied' - because this describes the physical characteristics, strengths, and formulations of the product as it is supplied to patients; (b) 'description' - because it provides information about ingredients and formulation composition. 3. The winner is 'how_supplied' because the passage specifically catalogs tablet strengths paired with their corresponding color additives in a table format, which is the classic structure for describing how a drug product is supplied (dosage forms, strengths, and distinguishing characteristics). The 'description' category is ruled out because while it mentions ingredients, the primary focus is not on the chemical nature or inactive ingredients in a general sense, but rather on the practical differentiation of product strengths by color coding. 4. Confidence is HIGH (>90%) because the passage unmistakably presents a strength-by-strength listing of tablet characteristics, which is definitional content for the 'how_supplied' section.\",\"classification\":\"how_supplied\",\"confidence\":\"HIGH\",\"alternative_considered\":\"description\",\"requires_human_review\":false}",
+  "elapsed_ms": 7101,
+  "usage": {
+    "input_tokens": 1149,
+    "output_tokens": 316
+  }
+}

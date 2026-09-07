@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nSertraline tablets, USP are available with each tablet containing sertraline hydrochloride, USP equivalent to 25 mg, 50 mg and 100 mg of sertraline. Sertraline 25 mg Tablets: Light Green film coated Modified oval biconvex tablets debossed with I on the left Side of bisect and G on the right Side of bisect on one Side and \"2l2\" on other NDC 63187-859-30 Bott1es of 30 NDC 63187-859-6O Bottles of 60 NDC 63187-859-90 Bottles of 90 Store at 20°C to 25°C (68°F to 77°F) [see USP Controlled Room Temperature]. Revised: 07/2016\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Sertraline tablets, USP are supplied in the following dosage forms and strengths:\\n\\n- Sertraline 25 mg tablets (Light Green film coated Modified oval biconvex tablets)\\n- Sertraline 50 mg tablets\\n- Sertraline 100 mg tablets\\n\\nPackage sizes for Sertraline 25 mg:\\n- NDC 63187-859-30: Bottles of 30\\n- NDC 63187-859-60: Bottles of 60\\n- NDC 63187-859-90: Bottles of 90\"}",
+  "elapsed_ms": 2118,
+  "usage": {
+    "input_tokens": 459,
+    "output_tokens": 148
+  }
+}

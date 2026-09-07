@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Adults 18 years and older: Swallow 1 tablet with a glass of water before eating in the morning, once daily (every 24 hours) for 14 days\"}",
+  "elapsed_ms": 1655,
+  "usage": {
+    "input_tokens": 371,
+    "output_tokens": 48
+  }
+}

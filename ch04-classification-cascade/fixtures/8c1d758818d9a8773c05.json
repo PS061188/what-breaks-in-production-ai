@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFurosemide Tablets, USP 80 mg: White-off white, round, scored, debossed \"3171\" over \"V\" on one side and plain on the reverse side, available as follows: • Bottles of 500: NDC 63629-1120-1 You may report side effects to So1co Healthcare US, LLC at 1-866-257-2597 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch . STORAGE Store at 20° to 25°C (68° to 77°F) [see USP Controlled Room Temperature]. Protect from light. Dispense in well-closed, light-resistant containers. Exposure to light might cause a slight disco1oration. Discolored tablets should not be dispensed.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Specific physical description of tablet appearance (white-off white, round, scored, debossed markings), (b) NDC number and packaging information (Bottles of 500), (c) Storage instructions (temperature, light protection, container requirements). Step 2 - Most plausible categories: (1) 'how_supplied' - the passage explicitly describes dosage form, strength, appearance, NDC number, and packaging quantity; (2) 'description' - provides some physical characteristics of the tablet. Step 3 - Classification winner: 'how_supplied' decisively wins. The passage contains the canonical elements of how_supplied sections: specific tablet appearance (color, shape, scoring, imprint), strength (80 mg), packaging configuration (Bottles of 500), NDC number, storage conditions, and container specifications. While there is a physical description of the tablet, this is subordinate to and part of the how_supplied information. The storage instructions are a standard component of how_supplied. There is no chemical composition, structure, or inactive ingredients list that would characterize a 'description' section. Step 4 - Confidence: HIGH (>90%). The passage unmistakably contains how_supplied information with multiple confirming elements (NDC, bottle size, tablet appearance, storage/dispensing instructions).\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 4326,
+  "usage": {
+    "input_tokens": 1043,
+    "output_tokens": 334
+  }
+}

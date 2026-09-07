@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWarfarin sodiurn tablets USP, 6 mg are available as teal, capsule-shaped, biconvex scored tablets, debossed with TV/6 on the scored side and 1718 on the other side containing 6 mg warfarin sodium, USP, packaged in bottles of 1O0 (NDC 0093-l718-01) tablets. Warfarin sodium tablets USP, 7.5 mg are available as yellow, capsule-shaped, biconvex scored tablets, debossed with TV/7 1 / 2 on the scored side and 1719 on the other side containing 7.5 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1723-01) tablets. Warfarin sodium tablets USP, 10 mg are available as white, capsule-shaped, biconvex scored tablets, debossed with TV/10 on the scored side and 1720 on the other side containing 10 mg warfarin sodium, USP, packaged in bottles of 100 (NDC O093-1720-01) tablets.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Multiple dosage strengths are explicitly listed (6 mg, 7.5 mg, 10 mg); (2) Physical descriptions of tablets are provided (teal/capsule-shaped, yellow/capsule-shaped, white/capsule-shaped); (3) Specific packaging information is given (bottles of 100, with NDC numbers); (4) Tablet identifiers/debossing information is detailed (TV/6, 1718, etc.).\\n\\nStep 2 - Most plausible categories: (A) 'how_supplied' - This section typically describes dosage forms, strengths, packaging, and storage conditions, which directly matches the content here. (B) 'description' - While descriptions of physical form are included, the primary focus is on commercial availability and packaging rather than chemical composition or formulation details.\\n\\nStep 3 - Winner determination: 'how_supplied' is clearly the correct classification. This passage systematically describes how warfarin sodium is supplied to the market: available strengths (6, 7.5, 10 mg), physical appearance of each strength (color, shape, markings), packaging details (bottles of 100), and NDC numbers for identification. This matches the defining characteristics of 'how_supplied' sections in labeling.\\n\\nStep 4 - Confidence assessment: The content is unambiguously focused on commercial supply and packaging information with no clinical, pharmacological, or safety content. This is a textbook example of 'how_supplied' material. Confidence: HIGH (>95%).\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 7858,
+  "usage": {
+    "input_tokens": 1128,
+    "output_tokens": 397
+  }
+}

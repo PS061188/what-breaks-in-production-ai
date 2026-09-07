@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAlbuterol Sulfate HFA is a beta 2 -adrenergic agonist indicated for: Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. ( 1.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Prominent features - (1) The text begins with 'Albuterol Sulfate HFA is a beta 2-adrenergic agonist' which describes the drug's pharmacological class; (2) The phrase 'indicated for:' followed by specific clinical conditions signals this is listing approved uses; (3) Mentions 'Treatment or prevention of bronchospasm' and 'Prevention of exercise-induced bronchospasm' - these are disease states the drug treats, not how to administer it or what side effects occur. Step 2: Most plausible categories are (A) 'indications_and_usage' - the text explicitly uses the word 'indicated for' and lists clinical conditions the drug treats; (B) 'description' - the passage does start with a description of the drug as a beta-2 agonist, but this is only a brief lead-in before the indications are listed. Step 3: 'Indications_and_usage' wins because the primary content and structure of the passage is listing approved therapeutic uses (bronchospasm treatment/prevention, exercise-induced bronchospasm prevention). The initial classification statement is merely context. The passage explicitly states 'indicated for:' which is the hallmark of the indications section. Step 4: Confidence is HIGH (>90%) because the evidence is clear and unambiguous - the passage uses standard indications-labeling language with explicit 'indicated for' language followed by approved clinical uses.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 5400,
+  "usage": {
+    "input_tokens": 942,
+    "output_tokens": 372
+  }
+}

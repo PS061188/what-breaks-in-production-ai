@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets are contraindicated in patients who are hypersensitive to any component of this product and in patients with a history of angioederna related to previous treatment with an angiotensin converting enzyme inhibitor and in patients with hereditary or idiopathic angioedema. Because of the hydrochlorothiazide component, this product is contraindicated in patients with anuria or hypersensitivity to other sulfonamide-derived drugs. Lisinopril and hydrochlorothiazide tablets are contraindicated in combination with a neprilysin inhibitor (e.g., sacubitril). Do not administer lisinopril and hydrochlorothiazide tablets within 36 hours of switching to or frorn sacubitril/valsartan, a neprilysin inhibitor (see WARNINGS ). Do not coadminister aliskiren with lisinopril and hydrochlorothiazide tablets in patients with diabetes.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The passage explicitly lists situations where the drug 'is contraindicated' (appears multiple times)\\n2. It enumerates specific patient populations and conditions where use must be avoided: hypersensitivity, angioedema history, anuria, sulfonamide hypersensitivity, etc.\\n3. It specifies drug combinations that must not be used together (neprilysin inhibitors, aliskiren in diabetics)\\n\\nStep 2 - Two most plausible categories:\\n- CONTRAINDICATIONS: This passage is the textbook definition of contraindications - it lists absolute situations where the drug must not be used, patient populations to avoid, and incompatible drug combinations.\\n- DRUG_INTERACTIONS: While drug combinations are mentioned (sacubitril/valsartan, aliskiren), the primary framing is prohibitive (do not coadminister) rather than descriptive of interaction mechanisms or effects.\\n\\nStep 3 - Classification decision:\\nCONTRAINDICATIONS wins decisively because:\\n- The language is explicitly prohibitive ('contraindicated', 'must not', 'do not')\\n- The focus is on absolute contraindications rather than describing what happens if drugs are combined\\n- Drug incompatibilities are presented as contraindications, not as managed interactions\\n- The passage addresses patient populations and conditions to avoid, which is the core definition of contraindications\\n\\nStep 4 - Confidence assessment:\\nHIGH confidence (>95%) - The language, structure, and content are unmistakably characteristic of a contraindications section from a prescribing label. There is no ambiguity in the intent or classification.\", \"classification\": \"contraindications\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 8018,
+  "usage": {
+    "input_tokens": 1083,
+    "output_tokens": 431
+  }
+}

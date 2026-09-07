@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nDoses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level. Hypertension Therapy should be individualized according to the patient's response to gain maximal therapeutic response and to determine the minimal dose needed to maintain the therapeutic response. Adults: The usual initial dose of furosemide tablets for hypertension is 80 mg, usually divided into 40 mg twice a day. Dosage should then be adjusted according to response. If response is not satisfactory, add other antihypertensive agents. Changes in blood pressure must be carefully monitored when furosemide tablets are used with other antihypertensive drugs, especially during initial therapy.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Adults: Initial dose of 80 mg furosemide tablets for hypertension, usually divided into 40 mg twice a day, adjusted according to response. Pediatric patients: Doses greater than 6 mg/kg body weight are not recommended; maintenance dose should be adjusted to minimum effective level. Route: Oral (tablets). Frequency: Twice daily or as adjusted based on patient response.\"}",
+  "elapsed_ms": 1808,
+  "usage": {
+    "input_tokens": 432,
+    "output_tokens": 95
+  }
+}

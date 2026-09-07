@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine sodium tablets are not indicated for treatment of hypothyroidisrn during the recovery phase of subacute thyroiditis. Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients, including neonates, for: Hypothyroidism: As replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. (1) Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression: As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. (1) Limitations of Use: Not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients Not indicated for treatrnent of hypothyroidism during the recovery phase of subacute thyroiditis\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients' followed by specific clinical conditions; (2) It lists two primary indications: hypothyroidism replacement therapy and TSH suppression as adjunct therapy; (3) It includes 'Limitations of Use' section clarifying what the drug is NOT indicated for. Step 2 - Most plausible categories: (a) 'indications_and_usage' - the passage clearly enumerates approved uses and explicitly states what conditions it treats or doesn't treat; (b) 'description' - could apply since it identifies the active ingredient as L-thyroxine (T4), but this is secondary to the main focus. Step 3 - Classification determination: The passage is unambiguously structured as an indications section, with the pattern of stating populations (adult and pediatric patients including neonates), approved conditions (hypothyroidism, TSH suppression), detailed reasoning for each indication, and explicit limitations of use. The description of the active ingredient is minimal and only serves to identify the drug, not to characterize its chemical structure or formulation. This is definitively 'indications_and_usage' content. Step 4 - Confidence: The language is explicit and follows standard FDA labeling structure for the indications section. No ambiguity exists regarding whether this is an indications statement versus other categories. Confidence is HIGH (>95%).\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 7109,
+  "usage": {
+    "input_tokens": 1082,
+    "output_tokens": 379
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets are indicated for the treatment of hypertension, to lower blood pressure. Lowering blood pressure lowers the risk of fatal and non-fatal cardiovascular events, primarily strokes and myocardial infarctions. These benefits have been seen in controlled trials of antihypertensive drugs from a wide variety of pharmacologic classes inc1uding lisinopril and hydrochlorothiazide. Control of high blood pressure should be part of comprehensive cardiovascular risk management, including, as appropriate, lipid control, diabetes managernent, antithrombotic therapy, smoking cessation, exercise, and lirnited sodium intake. Many patients will require more than l drug to achieve b1ood pressure goals.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly states 'are indicated for the treatment of hypertension, to lower blood pressure'; (b) It describes the therapeutic benefits and clinical outcomes (reducing risk of strokes and myocardial infarctions); (c) It discusses when this drug should be used as part of comprehensive cardiovascular management, including indications that many patients need multiple drugs. Step 2 - Most plausible categories: (a) indications_and_usage - The text directly states what conditions the drug is indicated for and the clinical benefits achieved; (b) dosage_and_administration - Could be considered if the passage contained information about how much to give or how often, but it does not. Step 3 - Winner and ruling out: 'indications_and_usage' clearly wins because the entire passage is dedicated to stating the approved therapeutic uses (hypertension treatment), the mechanism of benefit (blood pressure lowering reduces cardiovascular events), and the clinical context in which it should be used. This is the textbook definition of the indications_and_usage section. 'dosage_and_administration' is ruled out because there is no dosage information, frequency, route of administration, or titration guidance. Step 4 - Confidence assessment: HIGH (>90%) because the passage is unambiguous and squarely addresses approved indications with clear therapeutic claims and benefits.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 6475,
+  "usage": {
+    "input_tokens": 1022,
+    "output_tokens": 351
+  }
+}

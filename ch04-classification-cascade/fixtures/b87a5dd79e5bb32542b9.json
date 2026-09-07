@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\ni.e., the obsessions or compulsions cause marked distress, are time-consuming, or significantly interfere with social or occupational functioning. The efficacy of Sertraline hydrochloride was established in 12-week trials with obsessive-compulsive outpatients having diagnoses of obsessive-compulsive disorder as defined according to DSM-III or DSM-III-R criteria (see Clinical Trials under CLINICAL PHARMACOLOGY ). Obsessive-compulsive disorder is characterized by recurrent and persistent ideas, thoughts, impulses, or images (obsessions) that are ego-dystonic and/or repetitive, purposeful, and intentional behaviors (compulsions) that are recognized by the person as excessive or unreasonable. The efficacy of Sertraline hydrochloride in maintaining a response, in patients with OCD who responded during a 52-week treatment phase while taking Sertraline hydrochloride and were then observed for relapse during a period of up to 28 weeks, was demonstrated in a placebo-controlled trial (see Clinical Trials under CLINICAL PHARMACOLOGY ).\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Obsessive-compulsive disorder (OCD)\"}",
+  "elapsed_ms": 1633,
+  "usage": {
+    "input_tokens": 511,
+    "output_tokens": 20
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIn premature infants furosemide may precipitate nephrocalcinosis/nephrolithiasis. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity who have been treated chronically with furosemide. Monitor renal function, and renal ultrasonography should be considered, in pediatric patients receiving furosemide. If furosemide is administered to premature infants during the fir\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Specific discussion of furosemide use in premature infants and children under 4 years; (b) Mention of serious adverse effects (nephrocalcinosis/nephrolithiasis) associated with this population; (c) Monitoring recommendations and clinical guidance for pediatric patients. Step 2 - Most plausible categories: (i) 'pediatric_use' - directly addresses a specific age group (premature infants, children <4 years) and provides safety/monitoring guidance; (ii) 'adverse_reactions' - discusses nephrocalcinosis/nephrolithiasis as side effects. Step 3 - Classification decision: This passage is best classified as 'pediatric_use' because while adverse reactions are mentioned, the primary focus is on how furosemide is specifically used, monitored, and what risks exist in the pediatric population (premature infants and young children). The passage is providing pediatric-specific prescribing information, not a general adverse reaction listing. The emphasis on monitoring renal function and ultrasonography in pediatric patients, rather than clinical presentation of the adverse event itself, confirms this is pediatric guidance. Step 4 - Confidence: HIGH (>90%) because the passage explicitly focuses on pediatric populations and pediatric-specific monitoring, which is the defining characteristic of the pediatric_use category.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4694,
+  "usage": {
+    "input_tokens": 965,
+    "output_tokens": 347
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\n[indications_and_usage]\nINDICATIONS Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2. Rheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in: Psoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3. Collagen Diseases During an exacerbation or as maintenance therapy in selected cases of: Systemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5. Allergic States Control of severe or incapacitating allergic conditions intractable to adeq\n\n[contraindications]\nCONTRAINDICATIONS Systemic fungal infe\n\n[adverse_reactions]\nADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\":{\"value\":\"Endocrine disorders (adrenocortical insufficiency, congenital adrenal hyperplasia, hypercalcemia associated with cancer, nonsuppurative thyroiditis), rheumatic disorders (rheumatoid arthritis, ankylosing spondylitis, bursitis, gouty arthritis, osteoarthritis), collagen diseases (systemic lupus erythematosus, dermatomyositis, acute rheumatic carditis), dermatologic diseases (pemphigus, bullous dermatitis herpetiformis, erythema multiforme, mycosis fungoides, severe psoriasis), and severe allergic conditions\",\"source_quote\":\"Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders...2. Rheumatic Disorders...3. Collagen Diseases...4. Dermatologic Diseases...5. Allergic States Control of severe or incapacitating allergic conditions\",\"source_section\":\"INDICATIONS\"},\"who_must_not_take_it\":{\"value\":\"Patients with systemic fungal infections\",\"source_quote\":\"Systemic fungal infe\",\"source_section\":\"CONTRAINDICATIONS\"},\"side_effects\":{\"value\":\"Fluid and electrolyte disturbances (sodium retention, fluid retention, congestive heart failure, potassium loss, hypokalemic alkalosis, hypertension), musculoskeletal effects (muscle weakness, steroid myopathy, osteoporosis, tendon rupture, vertebral compression fractures, aseptic necrosis), gastrointestinal effects (peptic ulcer with perforation and hemorrhage, pancreatitis, ulcerative esophagitis), and dermatologic effects (impaired wound healing, thin fragile skin, petechiae, ecchymoses, facial erythema)\",\"source_quote\":\"Fluid and Electrolyte Disturbances Sodium retention Fluid retention...Musculoskeletal Muscle weakness Steroid myopathy...Gastrointestinal Peptic ulcer with possible perforation and hemorrhage...Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses\",\"source_section\":\"ADVERSE REACTIONS\"}}",
+  "elapsed_ms": 10822,
+  "usage": {
+    "input_tokens": 1188,
+    "output_tokens": 522
+  }
+}

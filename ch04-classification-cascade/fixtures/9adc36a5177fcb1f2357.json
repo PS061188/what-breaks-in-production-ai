@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nAmoxicillin and c1avulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with: Recurrent or persistent acute otitis media due to S. pneumoniae (penici1lin MICs less than or equal to 2 mcg/rnL), H. influenzae (including beta-lactarnase-producing strains), or M. catarrhalis (induding beta-lactamase-producing strains) characterized by the following risk factors: Antibacterial drug exposure for acute otitis media within the preceding 3 months, and either of the following: 1) age 2 years, or younger or 2) day care attendance [see Microbiology (12.4) ] . Limitations of Use Amoxicillin and clavulanate potassium for oral suspension, 60O mg/42.9 mg per 5 mL is not indicated for the treatment of acute otitis media due to S.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"indications_and_usage\"}",
+  "elapsed_ms": 1834,
+  "usage": {
+    "input_tokens": 699,
+    "output_tokens": 14
+  }
+}

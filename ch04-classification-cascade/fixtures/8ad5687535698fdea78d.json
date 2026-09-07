@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodium tablets USP, 3 mg are available as tan, capsule-shaped, biconvex scored tablets, debossed with TV/3 on the scored side and 1715 on the other side containing 3 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1715-01) tablets. Warfarin sodium tablets USP, 4 mg are available as blue, capsule-shaped, biconvex scored tablets, debossed with TV/4 on the scored side and 1716 on the other side containing 4 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1716-01) and\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium tablets USP are supplied in the following strengths and package sizes: 3 mg tablets in bottles of 100 (NDC 0093-1715-01) and 4 mg tablets in bottles of 100 (NDC 0093-1716-01).\"}",
+  "elapsed_ms": 1582,
+  "usage": {
+    "input_tokens": 441,
+    "output_tokens": 74
+  }
+}

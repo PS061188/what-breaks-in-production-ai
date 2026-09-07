@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nAdminister once daily, preferably on an empty stomach, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours before or after drugs that are known to interfere with absorption. (2.1) Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption. (2.1) Advise patients to stop biotin and biotin-containing supplements at least 2 days before assessing TSH and/or T4 leve1s. (2.2) Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. Peak therapeutic effect may not be attained for 4 to 6 weeks. (2.2) See full prescribing information for dosing in specific patient populations.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"dosage_and_administration\"}",
+  "elapsed_ms": 963,
+  "usage": {
+    "input_tokens": 630,
+    "output_tokens": 14
+  }
+}

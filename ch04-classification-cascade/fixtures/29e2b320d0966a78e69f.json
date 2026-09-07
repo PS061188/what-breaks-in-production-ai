@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOther short-acting sympathomimetic aerosol bronchodilators should not be used concomitantly with albuterol. If additional adrenergic drugs are to be administered by any route, they should be used with caution to avoid deleterious cardiovascular effects. Beta-blockers: Use with caution. May block bronchodi1atory effects of beta-agonists and produce severe bronchospasm. ( 7.1 ) Diuretics: Use with caution. Electrocardiographic changes and/or hypokalemia associated with non–potassium-sparing diuretics may worsen with concornitant beta-agonists. ( 7.2 ) Digoxin: May decrease serum digoxin 1eve1s. Consider rnonitoring digoxin levels. ( 7.3 ) Monoamine oxidase inhibitors and tricyclic antidepressants:\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"other short-acting sympathomimetic aerosol bronchodilators, adrenergic drugs, beta-blockers, diuretics, non-potassium-sparing diuretics, digoxin, monoamine oxidase inhibitors, tricyclic antidepressants\"}",
+  "elapsed_ms": 1949,
+  "usage": {
+    "input_tokens": 477,
+    "output_tokens": 71
+  }
+}

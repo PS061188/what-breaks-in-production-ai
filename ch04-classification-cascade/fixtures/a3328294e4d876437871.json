@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the overdose_protocol stage of a drug-label processing\npipeline. The passage below has already been classified as overdosage\n(signs of overdose and how to manage one).\n\nState how an overdose of this drug presents and how it should be managed.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nLisinopril can be removed by hemodialysis. (See WARNINGS, Anaphylactoid reaction during membrane exposure .) Hydrochlorothiazide Oral administration of a single ora1 dose of 10 g/kg to mice and rats was not lethal. The most common signs and symptoms observed are those caused by electrolyte depletion (hypokalemia, hypochloremia, hyponatremia) and dehydration resulting from excessive diuresis. If digitalis has also been administered, hypokalemia may accentuate cardiac arrhythmias.\n</passage>",
+  "user": "Run the overdose_protocol stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Overdose of this drug combination presents with signs and symptoms caused by electrolyte depletion (hypokalemia, hypochloremia, hyponatremia) and dehydration resulting from excessive diuresis. If digitalis has also been administered, hypokalemia may accentuate cardiac arrhythmias. Management includes hemodialysis, which can remove lisinopril from the body.\"}",
+  "elapsed_ms": 2062,
+  "usage": {
+    "input_tokens": 404,
+    "output_tokens": 98
+  }
+}

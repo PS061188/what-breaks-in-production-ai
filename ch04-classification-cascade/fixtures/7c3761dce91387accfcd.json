@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nImmune system disorders: hypersensitivity/allergic reactions (inc1uding urticaria and anaphylactic reactions) Vascular disorders: vasculitis Hepatobiliary disorders: hepatitis, elevated liver enzyrnes. Cholestatic hepatitis has been associated with concomitant administration of warfarin sodium and tidopidine. Gastrointestinal disorders: nausea, vomiting, diarrhea, taste perversion, abdominal pain, flatulence, bloating Skin disorders: rash, dermatitis (including bullous eruptions), pruritus, alopecia Respiratory disorders: tracheal or tracheobronchial calcification General disorders: chills Most common adverse reactions to warfarin sodium are fatal and nonfatal hemorrhage from any tissue or organ. ( 6 ) To report SUSPECTED ADVERSE REACTIONS, contact Teva at 1-888-838-2872 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n1. The passage lists multiple organ system categories with associated adverse effects (immune system, vascular, hepatobiliary, gastrointestinal, skin, respiratory, general).\\n2. Each category contains specific side effects and unwanted reactions observed in patients (e.g., urticaria, anaphylactic reactions, vasculitis, hepatitis, nausea, rash, tracheal calcification).\\n3. The passage explicitly states 'Most common adverse reactions to warfarin sodium are fatal and nonfatal hemorrhage' and provides contact information for reporting suspected adverse reactions to the FDA and manufacturer.\\n\\nStep 2 - Most plausible categories:\\n- adverse_reactions: This passage is clearly documenting side effects, unwanted effects, and reactions observed in patients taking warfarin sodium. The systematic listing by organ system and the explicit mention of 'adverse reactions' strongly support this classification.\\n- drug_interactions: While cholestatic hepatitis is mentioned 'in association with concomitant administration of warfarin sodium and ticlopidine,' this is only a single mention in a much larger list of patient-observed adverse effects. This is not primarily about drug interactions.\\n\\nStep 3 - Classification decision:\\nThe passage is definitively adverse_reactions. The entire content is organized as a systematic catalog of unwanted effects observed in patients (hypersensitivity reactions, hepatitis, gastrointestinal symptoms, skin manifestations, etc.). The single mention of drug interaction with ticlopidine is incidental context for one particular adverse reaction. The closing statement about hemorrhage and FDA reporting instructions confirms this is an adverse reactions section.\\n\\nStep 4 - Confidence:\\nThis classification is HIGH confidence (>90%). The content, structure, language, and explicit reference to 'adverse reactions' and FDA adverse event reporting all unambiguously indicate this is an adverse reactions section of a drug label.\",\"classification\": \"adverse_reactions\",\"confidence\": \"HIGH\",\"alternative_considered\": \"drug_interactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 9579,
+  "usage": {
+    "input_tokens": 1091,
+    "output_tokens": 465
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nGemfibrozil may cause myopathy when given alone. The risk of myopathy and rhabdomyolysis is increased with concomitant use of cyclosporine or gemfibrozil with atorvastatin. Intervention: Concomitant use of cyclosporine or gemfibrozil with atorvastatin is not recommended. Anti-Viral Medications Clinical Impact: Atorvastatin plasma levels were significantly increased with concomitant administration of atorvastatin with many anti-viral medications, which are inhibitors of CYP3A4 and/or transporters (e.g., BCRP, OATP1B1/1B3, P-gp, MRP2, and/or OAT2) [see Clinical Pharmacology (12.3) ]. Cases of myopathy and rhabdomyolysis have been reported with concomitant use of ledipasvir plus sofosbuvir with atorvastatin.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"gemfibrozil, cyclosporine, atorvastatin, anti-viral medications, ledipasvir, sofosbuvir\"}",
+  "elapsed_ms": 1639,
+  "usage": {
+    "input_tokens": 499,
+    "output_tokens": 41
+  }
+}

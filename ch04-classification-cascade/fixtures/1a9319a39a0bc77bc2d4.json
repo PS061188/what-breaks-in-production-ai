@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third tria1, albuterol sulfate HFA was eva1uated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albutero1 sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached rnasks.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": null}",
+  "elapsed_ms": 1967,
+  "usage": {
+    "input_tokens": 488,
+    "output_tokens": 8
+  }
+}

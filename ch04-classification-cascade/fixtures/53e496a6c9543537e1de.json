@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nLisinopril and hydrochlorothiazide tablets are contraindicated in patients who are hypersensitive to any component of this product and in patients with a history of angioederna related to previous treatment with an angiotensin converting enzyme inhibitor and in patients with hereditary or idiopathic angioedema. Because of the hydrochlorothiazide component, this product is contraindicated in patients with anuria or hypersensitivity to other sulfonamide-derived drugs. Lisinopril and hydrochlorothiazide tablets are contraindicated in combination with a neprilysin inhibitor (e.g., sacubitril). Do not administer lisinopril and hydrochlorothiazide tablets within 36 hours of switching to or frorn sacubitril/valsartan, a neprilysin inhibitor (see WARNINGS ). Do not coadminister aliskiren with lisinopril and hydrochlorothiazide tablets in patients with diabetes.\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Lisinopril and hydrochlorothiazide tablets are contraindicated in: (1) patients hypersensitive to any component of the product; (2) patients with a history of angioedema related to previous treatment with an angiotensin converting enzyme inhibitor; (3) patients with hereditary or idiopathic angioedema; (4) patients with anuria; (5) patients with hypersensitivity to other sulfonamide-derived drugs; (6) combination with a neprilysin inhibitor (e.g., sacubitril); (7) administration within 36 hours of switching to or from sacubitril/valsartan; (8) coadministration of aliskiren in patients with diabetes.\"}",
+  "elapsed_ms": 2689,
+  "usage": {
+    "input_tokens": 497,
+    "output_tokens": 177
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFurosemide is a diuretic which is an anthranilic acid derivative. Furosemide Tablets for oral administration contain furosemide as the active ingredient and the following inactive ingredients: corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP. Chemically, it is 4-chloro-N-furfury1-5-sulfamoylanthranilic acid. Furosemide is available as white-off white tablets for oral administration in dosage strengths of 20, 40 and 80 mg. Furosemide is a white to off-white odorless crystalline powder. It is practically insoluble in water, sparingly soluble in alcohol, free1y soluble in dilute a1kali solutions and insoluble in dilute acids. The structural formula is as follows: Tested by USP Dissolution Test 1. This is an image of the structura1 formula for furosemide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Detailed chemical description including chemical name '4-chloro-N-furfury1-5-sulfamoylanthranilic acid' and classification as 'anthranilic acid derivative'; (2) Specific inactive ingredients listed (corn starch, lactose monohydrate, magnesium stearate, pregelatinized starch, talc); (3) Physical and chemical properties described (white to off-white crystalline powder, solubility characteristics, structural formula reference). Step 2 - Most plausible categories: (a) 'description' - because this passage focuses on chemical composition, formulation components, physical properties, and molecular structure; (b) 'how_supplied' - because dosage forms and strengths (20, 40, 80 mg tablets) are mentioned. Step 3 - Winner determination: 'description' is the clear winner. While dosage strengths are mentioned, the passage is predominantly devoted to characterizing the drug substance itself (chemical name, derivative classification, inactive ingredients, physical/chemical properties, solubility profile, and structural formula). This is classic 'description' section content. 'how_supplied' would focus more heavily on packaging, storage conditions, and availability formats rather than formulation composition and molecular characterization. Step 4 - Confidence: HIGH (>90%). The extensive chemical and formulation detail is unmistakably characteristic of a description section, with minimal ambiguity.\",\"classification\":\"description\",\"confidence\":\"HIGH\",\"alternative_considered\":\"how_supplied\",\"requires_human_review\":false}",
+  "elapsed_ms": 7003,
+  "usage": {
+    "input_tokens": 1098,
+    "output_tokens": 360
+  }
+}

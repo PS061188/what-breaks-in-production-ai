@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nGabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatri\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Most prominent features: (a) The text explicitly states 'are indicated for' followed by specific conditions - postherpetic neuralgia and partial onset seizures; (b) It specifies patient populations (adults and pediatric); (c) It mentions 'adjunctive therapy' indicating a specific therapeutic role. 2. Most plausible categories: (a) 'indications_and_usage' - the passage directly states what conditions the drug is approved to treat, which is the defining content of this section. (b) 'dosage_and_administration' - could potentially contain some indication information, but the passage lacks any information about amounts, frequencies, or routes of administration. 3. Winner and rationale: 'indications_and_usage' is clearly the correct classification. The passage uses the standard pharmaceutical labeling language 'indicated for' and lists approved therapeutic uses. The alternative 'dosage_and_administration' is ruled out because there is zero dosing information present - no doses, frequencies, durations, or routes mentioned. 4. Confidence: HIGH (>90%) - This is a textbook example of indications and usage language from FDA labeling. The 'indicated for' phrasing combined with specific approved conditions makes this unambiguous.\",\"classification\":\"indications_and_usage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"dosage_and_administration\",\"requires_human_review\":false}",
+  "elapsed_ms": 4921,
+  "usage": {
+    "input_tokens": 907,
+    "output_tokens": 315
+  }
+}

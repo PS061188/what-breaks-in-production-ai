@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\n10.1 Signs and Symptoms Bleeding (e.g., appearance of blood in stools or urine, hematuria, excessive menstrual bleeding, melena, petechiae, excessive bruising or persistent oozing from superficial injuries, unexplained fall in hemoglobin) is a manifestation of excessive anticoagulation. 10.2 Treatment The treatment of excessive anticoagulation is based on the level of the INR, the presence or absence of b1eeding, and dinical circumstances. Reversal of warfarin sodium anticoagulation may be obtained by discontinuing warfarin sodium therapy and, if necessary, by administration of oral or parenteral vitamin K 1 . The use of vitamin K 1 reduces response to subsequent warfarin sodium therapy and patients may return to a pretreatment thrombotic status following the rapid reversal of a prolonged INR.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Key features: (1) The passage begins with 'Signs and Symptoms' describing manifestations of excessive anticoagulation (bleeding symptoms); (2) Section 10.2 explicitly titled 'Treatment' describes management of overdose with specific interventions (discontinuing therapy, vitamin K1 administration); (3) Context discusses INR levels and warfarin reversal. Step 2 - Most plausible categories: (a) 'overdosage' - the structure (10.1 signs/symptoms, 10.2 treatment), the focus on excessive anticoagulation management, and mention of reversal therapy all align with overdosage sections; (b) 'adverse_reactions' - bleeding symptoms are listed, which could be side effects. Step 3 - Winner determination: This is clearly 'overdosage' because: the section explicitly addresses treatment of 'excessive anticoagulation' (overdose state), provides specific management protocols (discontinue drug, administer antidote), and discusses reversal strategies. Adverse reactions would describe expected side effects in normal use, not overdose management. The numbering (10.1/10.2) and structure matches typical overdosage section format. Step 4 - Confidence: HIGH (>90%) because the content explicitly discusses overdose signs, symptoms, and treatment protocols with specific interventions and monitoring parameters.\",\"classification\":\"overdosage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 4973,
+  "usage": {
+    "input_tokens": 1055,
+    "output_tokens": 336
+  }
+}

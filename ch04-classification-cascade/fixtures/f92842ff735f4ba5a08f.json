@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nHow Supplied The color of the dry powder for Amoxicillin and clavulanate potassium for oral suspension, USP, 600 mg/42.9 mg per 5 mL is white to off-white powder. Each 5 mL of reconstituted orange-flavored suspension contains 600 mg amoxicillin trihydrate and 42.9 mg clavulanic acid as the potassium sa\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage begins with 'How Supplied' as a clear header; (2) It describes physical characteristics of a dry powder formulation (white to off-white color); (3) It specifies dosage form details (oral suspension), strengths (600 mg/42.9 mg per 5 mL), and composition (amoxicillin trihydrate and clavulanic acid potassium salt). Step 2 - Most plausible categories: (a) 'how_supplied' is the leading candidate because the section explicitly starts with this heading and discusses formulation, appearance, packaging details, and strength specifications; (b) 'description' is secondary because while it mentions chemical composition and formulation, the primary focus is on supply/packaging information rather than detailed chemical structure or inactive ingredients. Step 3 - Winner determination: 'how_supplied' clearly wins because the passage is explicitly labeled as such and focuses on how the drug product is provided to users (dosage form, color, strength per volume, flavor). 'description' was ruled out because although composition is mentioned, the context and organization align with supply/availability rather than detailed pharmaceutical description. Step 4 - Confidence: HIGH (>90%) because the section header explicitly identifies this content and the information is unambiguously characteristic of how_supplied material.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 5481,
+  "usage": {
+    "input_tokens": 958,
+    "output_tokens": 336
+  }
+}

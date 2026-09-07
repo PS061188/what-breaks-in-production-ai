@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nINDICATI0NS AND USAGE Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adu1ts with rnu1tiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fata1 MI, fatal and non-fatal stroke, revascularization procedures, hospita1ization for congestive heart failure, and angina in adults with c1inically evident CHD As an adjunct to diet to reduce low-density 1ipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidernia. Adults and pediatric patients aged 10 years and older with heterozygous familia1 hypercholesterolemia (HeFH).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"indications_and_usage\"}",
+  "elapsed_ms": 1178,
+  "usage": {
+    "input_tokens": 655,
+    "output_tokens": 14
+  }
+}

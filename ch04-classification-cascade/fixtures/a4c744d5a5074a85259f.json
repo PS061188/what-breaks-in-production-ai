@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTherapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titrat\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"hypokalemia\"}",
+  "elapsed_ms": 1471,
+  "usage": {
+    "input_tokens": 355,
+    "output_tokens": 12
+  }
+}

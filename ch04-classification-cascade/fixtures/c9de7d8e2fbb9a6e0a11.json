@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThis dose provides 6.4 mg/kg/day of the clavulanic acid component. Table 1: General Dosage Guidelines for Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL in Pediatric Patients Body Weight (kg) Volume of Amoxicillin and Clavulanate Potassium for Oral Suspension, ​​​​​​​600 mg/42.9 mg per 5 mL providing 90 mg/kg/day 8 3 mL twice daily 12 4.5 mL twice daily 16 6 mL twice daily 20 7.5 mL twice daily 24 9 mL twice daily 28 10.5 mL twice daily 32 12 mL twice daily 36 13.5 mL twice daily 40 15 mL twice daily ​​​​​​​ Pediatric patients weighing greater than 40 kg : Experience with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL in this group is not available.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Three prominent features: (1) Contains a detailed dosing table with body weight-based calculations in kg; (2) Specifies volume measurements (mL) and frequency (twice daily); (3) Explicitly addresses pediatric patients with age/weight-specific guidance and notes limitations for patients >40kg. Step 2 - Most plausible categories: (a) 'dosage_and_administration' - the passage directly provides how much drug to give (volume in mL), how often (twice daily), and organized by patient weight; (b) 'pediatric_use' - the passage is explicitly about pediatric dosing. Step 3 - Classification decision: This is 'dosage_and_administration' because the primary content is the specific dosing regimen (volumes and frequencies), not general information about pediatric safety/experience. While the content is organized by pediatric weight, the substance is dosage instructions. The pediatric_use category would cover broader topics like safety data, efficacy in children, or special considerations - not the mechanics of how to dose. Step 4 - Confidence: HIGH (>90%) because the passage contains classic dosage_and_administration elements: dosing table, volumes, frequency, and weight-based calculations. The pediatric context is incidental to the primary purpose of instructing on dosing.\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"pediatric_use\",\"requires_human_review\":false}",
+  "elapsed_ms": 7588,
+  "usage": {
+    "input_tokens": 1149,
+    "output_tokens": 330
+  }
+}

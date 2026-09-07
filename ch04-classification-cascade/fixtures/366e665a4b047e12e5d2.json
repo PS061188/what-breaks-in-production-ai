@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nN=153 placebo social anxiety disorder). (2) The luteal phase and daily dosing PMDD trials were not designed for making direct comparisons between the two dosing regimens. Therefore, a comparison between the two dosing regimens of the PMDD trials of incidence rates shown in Table 2 should be avoided. Percentage of Patients Reporting Event Major Depressive Disorder/Other* OCD Panic Disorder PTSD Body System/Adverse Event Sertraline (N=861) Placebo (N=853) Sertraline (N=533) Placebo (N=373) Sertraline (N=430) Placebo (N=275) Sertraline (N=374) Placebo (N=376) Autonomic Nervous System Disorders Ejaculation Failure (1) 7 <1 17 2 19 1 11 1 Mouth Dry 16 9 14 9 15 10 11 6 Sweating Increased 8 3 6 1 5 1 4 2 Center.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features: (a) This passage presents tabular data comparing adverse events between sertraline and placebo across multiple disorder indications (MDD, OCD, Panic Disorder, PTSD, PMDD); (b) The data is organized by body system and specific adverse events (Ejaculation Failure, Dry Mouth, Increased Sweating) with percentage incidence rates; (c) There is explicit discussion of trial design methodology and comparisons between dosing regimens. Step 2 - Most Plausible Categories: (1) 'adverse_reactions' - The entire passage is structured as a systematic reporting of adverse events observed in clinical trials, with direct comparison of event incidence between drug and placebo arms. (2) 'description' - Could theoretically relate to drug profile, but the passage contains no chemical, structural, formulation, or ingredient information. Step 3 - Classification Decision: 'adverse_reactions' clearly wins. This is definitional adverse reaction content: observed side effects in patient populations presented in tabular format across multiple indications. The passage explicitly discusses specific adverse events and their frequencies. 'Description' is definitively ruled out as there is zero descriptive pharmacological content. Step 4 - Confidence Assessment: HIGH confidence (>90%). The content is unambiguously adverse reaction data with clear formatting as an adverse event table from clinical trial results. The alternative consideration was merely to ensure thoroughness, but the classification is straightforward.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 7983,
+  "usage": {
+    "input_tokens": 1108,
+    "output_tokens": 365
+  }
+}

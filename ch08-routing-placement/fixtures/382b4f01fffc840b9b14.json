@@ -1,0 +1,82 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\n[indications_and_usage]\n1 INDICATI0NS AND USAGE Atorvastatin calcium tablets are indicated: To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adu1ts with rnu1tiple risk factors for coronary heart disease (CHD) but without clinically evident CHD MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD Non-fata1 MI, fatal and non-fatal stroke, revascularization procedures, hospita1ization for congestive heart failure, and angina in adults with c1inically evident CHD As an adjunct to diet to reduce low-density 1ipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidernia. Adults and pediatric patients aged 10 years and older with heterozygous familia1 hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailab1e, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia Atorvastatin calcium tablets are an HMG-CoA reductase inhibitor (statin) indicated ( 1 ): To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinica1ly evident CHD. MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD. Non-fatal MI, fatal and non-fatal stroke, revascularization procedures, hospitalization for congestive heart failure, and angina in adults with clinically evident CHD. As an adjunct to diet to reduce low-density lipoprotein (LDL-C) in: Adults with primary hyperlipidemia. Adults and pediatric patients aged 10 years and older with heterozygous familia1 hypercholesterolemia (HeFH). As an adjunct to other LDL-C-lowering therapies to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia. As an adjunct to diet for the treatment of adults with: Primary dysbetaliproteinemia. Hypertriglyceridemia.\n\n[contraindications]\n4 CONTRAINDICATI0NS Acute liver fai1ure or decompensated cirrhosis [see Warnings and Precautions (5.3) ] Hypersensitivity to atorvastatin or any excipients in atorvastatin calcium. Hypersensitivity reactions, including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis, have been reported [see Adverse Reactions (6.2) ]. Acute liver failure or decompensated cirrhosis ( 4 ). Hypersensitivity to atorvastatin or any excipient in atorvastatin calcium ( 4 ).\n\n[adverse_reactions]\n6 ADVERSE REACTIONS The following important adverse reactions are described below and elsewhere in the 1abeling: Myopathy and Rhabdomyolysis [see Warnings and Precautions (5.1) ] Immune-Mediated Necrotizing Myopathy [see Warnings and Precautions (5.2) ] Hepatic Dysfunction [see Wamings and Precautions (5.3) ] Increases in HbA1c and Fasting Serum G1ucose Levels [see Warnings and Precautions (5.4) ] Most common adverse reactions (incidence ≥5%) are nasopharyngitis, arthralgia, diarrhea, pain in extremity, and urinary tract infection ( 6.1 ). To report SUSPECTED ADVERSE REACTIONS, contact Novadoz Pharmaceuticals LLC at 1-855-668-2369 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, the adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the c1inical trials of another drug and may not reflect the rates observed in practice. In the atorvastatin calcium placebo-controlled clinical trial database of 16,066 patients (8755 atorvastatin ca1cium vs. 7311 placebo; age range 10 to 93 years, 39% women, 91% White, 3% Black, 2% Asian, 4% other) with a median treatment duration of 53 weeks, the most common adverse reactions in patients treated with atorvastatin ca1cium that led to treatment discontinuation and occurred at a rate greater than placebo were: myalgia (0.7%), diarrhea (0.5%), nausea (0.4%), a1anine aminotransferase increase (0.4%), and hepatic enzyme increase (0.4%). Table 1 summarizes adverse reactions reported in ≥ 2% and at a rate greater than placebo in patients treated with atorvastatin ca1cium (n=8755), from seventeen placebo-controlled trials. Table 1: Adverse Reactions Occurring in ≥ 2% in Patients Atorvastatin Ca1cium- Treated with any Dose and Greater than Placebo Adverse Reaction % Placebo N=7311 % 1O mg N=3908 % 20 rng N=188 % 40 mg N=604 % 80 mg N=4055 % Any dose N=8755 Nasopharyngitis 8.2 12.9 5.3 7.0 4.2 8.3 Arthralgia 6.5 8.9 11.7 10.6 4.3 6.9 Diarrhea 6.3 7.3 6.4 14.1 5.2 6.8 Pain in extremity 5.9 8.5 3.7 9.3 3.1 6.0 Urinary tract infection S.6 6.9 6.4 8.O 4.1 5.7 Dyspepsia 4.3 5.9 3.2 6.0 3.3 4.7\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\": {\"value\": \"Atorvastatin calcium is indicated to reduce the risk of myocardial infarction, stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease; MI and stroke in adults with type 2 diabetes; non-fatal MI and stroke in adults with clinically evident CHD. It is also used as an adjunct to diet to reduce LDL-C in adults with primary hyperlipidemia, heterozygous familial hypercholesterolemia, homozygous familial hypercholesterolemia, primary dysbetalipoproteinemia, and hypertriglyceridemia.\", \"source_quote\": \"To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD)... As an adjunct to diet to reduce low-density lipoprotein cholesterol (LDL-C) in: Adults with primary hyperlipidemia...\", \"source_section\": \"INDICATIONS AND USAGE\"}, \"who_must_not_take_it\": {\"value\": \"Patients with acute liver failure or decompensated cirrhosis, and patients with hypersensitivity to atorvastatin or any excipients in atorvastatin calcium. Hypersensitivity reactions including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis have been reported.\", \"source_quote\": \"Acute liver failure or decompensated cirrhosis... Hypersensitivity to atorvastatin or any excipient in atorvastatin calcium. Hypersensitivity reactions, including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis, have been reported.\", \"source_section\": \"CONTRAINDICATIONS\"}, \"side_effects\": {\"value\": \"Most common adverse reactions with incidence ≥5% are nasopharyngitis, arthralgia, diarrhea, pain in extremity, and urinary tract infection. Other notable adverse reactions include myopathy, rhabdomyolysis, immune-mediated necrotizing myopathy, hepatic dysfunction, and increases in HbA1c and fasting serum glucose levels. Additional adverse reactions ≥2% include dyspepsia.\", \"source_quote\": \"Most common adverse reactions (incidence ≥5%) are nasopharyngitis, arthralgia, diarrhea, pain in extremity, and urinary tract infection... Myopathy and Rhabdomyolysis... Immune-Mediated Necrotizing Myopathy... Hepatic Dysfunction... Increases in HbA1c and Fasting Serum Glucose Levels.\", \"source_section\": \"ADVERSE REACTIONS\"}}",
+  "elapsed_ms": 18185,
+  "usage": {
+    "input_tokens": 2201,
+    "output_tokens": 681
+  }
+}

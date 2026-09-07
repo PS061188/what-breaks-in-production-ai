@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe active component of Albuterol Sulfate HFA is albuterol sulfate, USP, the racemic form of albuterol and a relatively selective beta 2 -adrenergic bronchodilator. A1buterol sulfate has the chemical name α 1 -[( tert -butylamino)methyl]-4-hydroxy- m -xylene-α, α′-diol sulfate (2:1)(salt) and the following chemical structure: Albuterol sulfate is a white crystalline powder with a molecular weight of 576.7, and the empirical formula is (C 13 H 21 NO 3 ) 2 •H 2 SO 4 . It is soluble in water and slight1y soluble in ethanol. The World Health Organization recommended name for albuterol base is salbutamol. Albuterol Sulfate HFA is a blue plastic inhaler with a blue cap containing a pressurized metered-dose aerosol canister fitted with a counter.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features:\\n1. Detailed chemical nomenclature and structure information (α1-[(tert-butylamino)methyl]-4-hydroxy-m-xylene-α,α′-diol sulfate)\\n2. Physical/chemical properties (white crystalline powder, molecular weight 576.7, solubility characteristics)\\n3. Formulation and packaging details (blue plastic inhaler, metered-dose aerosol canister with counter)\\n\\nStep 2 - Most plausible categories:\\n- DESCRIPTION: This passage extensively characterizes the chemical identity, structure, physical properties, and formulation of albuterol sulfate, which are hallmarks of a description section.\\n- HOW_SUPPLIED: The passage mentions packaging (blue plastic inhaler, canister) and could fit this category, but the emphasis is clearly on chemical characterization rather than dosage forms and strengths.\\n\\nStep 3 - Classification decision:\\nDESCRIPTION wins decisively. The core content is chemical nomenclature, molecular weight, empirical formula, solubility data, and the WHO-recommended name. These are defining characteristics of a Description section in pharmaceutical labeling. The packaging information is incidental to the primary focus on chemical/physical characterization. How_supplied would emphasize dosage strengths, available formulations, quantities, and storage conditions more prominently.\\n\\nStep 4 - Confidence assessment:\\nHIGH confidence (>90%). The passage is quintessentially descriptive pharmaceutical text with minimal ambiguity. The chemical structure, molecular properties, and formulation composition are unambiguously part of the Description category.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 7691,
+  "usage": {
+    "input_tokens": 1098,
+    "output_tokens": 411
+  }
+}

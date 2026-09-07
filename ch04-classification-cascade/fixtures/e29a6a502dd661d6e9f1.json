@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodium tablets, USP contain warfarin sodium, an anticoagulant that acts by inhibiting vitamin K-dependent coagulation factors. The chemical name of warfarin sodium is 3-(α-acetonylbenzyl)-4-hydroxycoumarin sodium salt, which is a racemic mixture of the R - and S -enantiorners. Crystalline warfarin sodium is an isopropanol clathrate. Its structural formula may be represented as follows: C 19 H 15 NaO 4 M.W. 330.31 Crystalline warfarin sodium occurs as a white, odorless, crystal1ine powder that is discolored by light. It is very soluble in water, freely soluble in alcohol, and very slightly soluble in chloroform and ether. Each tablet, for oral administration, contains 1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg, 6 mg, 7.5 mg or 10 mg warfarin sodium, USP.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: 3-(α-acetonylbenzyl)-4-hydroxycoumarin sodium salt\\n\\nMolecular Formula: C19H15NaO4\\nMolecular Weight: 330.31\\n\\nInactive Ingredients: Not specified in the passage\"}",
+  "elapsed_ms": 1560,
+  "usage": {
+    "input_tokens": 515,
+    "output_tokens": 76
+  }
+}

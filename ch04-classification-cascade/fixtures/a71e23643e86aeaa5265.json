@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\n1l DESCRIPTION Amoxicillin and clavu1anate potassium for oral suspension, USP is an oral antibacterial combination consisting of the semisynthetic antibacterial amoxicillin and the beta-1actamase inhibitor, clavulanate potassium (the potassium salt of clavulanic acid). Amoxicillin is an analog of ampici1lin, derived from the basic penicillin nudeus, 6-aminopenicillanic acid. Chemically, arnoxicillin is (2 S ,5 R, 6 R )-6-[( R )-(-)-2-amino-2-( p -hydroxyphenyl)acetamido]-3,3-dimethy1-7-oxo-4-thia-1-azabicyclo[3.2.0] heptane-2-carboxylic acid trihydrate and may be represented structurally as: C l6 H 19 N 3 O 5 S • 3H 2 O M.W. 419.46 Clavulanic acid is produced by the fermentation of Streptomyces c1avuligerus .\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Amoxicillin is (2S,5R,6R)-6-[(R)-(-)-2-amino-2-(p-hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid trihydrate. Clavulanic acid is produced by fermentation of Streptomyces clavuligerus. Molecular Formula: C16H19N3O5S • 3H2O (Amoxicillin trihydrate), M.W. 419.46. Inactive Ingredients: Not specified in passage.\"}",
+  "elapsed_ms": 2700,
+  "usage": {
+    "input_tokens": 547,
+    "output_tokens": 173
+  }
+}

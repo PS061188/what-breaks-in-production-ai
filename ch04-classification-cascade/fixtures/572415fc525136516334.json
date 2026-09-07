@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWarfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces [see Warnings and Precautions ( 5.8 )] Bleeding tendencies associated with: − Active ulceration or overt bleeding of the gastrointestinal, genitourinary, or respiratory tract − Central nervous system hemorrhage − Cerebra1 aneurysms, dissecting aorta − Pericarditis and pericardial effusions − Bacterial endocarditis Threatened abortion, eclampsia, and preeclarnpsia Unsupervised patients with conditions associated with potential high level of non-compliance Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding Hypersensitivity to warfarin or to any other components of this product (e.g., anaphylaxis) [see Adverse Reactions ( 6 )] Major regional or lumbar block anesthesia Malignant hypertension Pregnancy, except in women with mechanical heart valves ( 4 , 5.7 , 8.1 ) Hemorrhagic tendencies or b1ood dyscrasias ( 4 ) Recent or contemplated surgery of the centra1 nervous system (CNS) or eye, or traumatic surgery resulting in large open surfaces ( 4 , 5.8 ) Bleeding tendencies associated with certain conditions ( 4 ) Threatened abortion, eclarnpsia, and preeclampsia ( 4 ) Unsupervised patients with potential high leve1s of non-cornpliance ( 4 ) Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontro1lable bleeding ( 4 ) Hypersensitivity to warfarin or any component of the product ( 4 ) Major regional or lumbar block anesthesia ( 4 ) Malignant hypertension ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly lists clinical conditions prefaced by 'contraindicated in patients with:', (b) Multiple absolute prohibitions are enumerated (hemorrhagic tendencies, recent CNS surgery, active bleeding, pregnancy, etc.), (c) Cross-references to section 4 indicate this is from a formal prescribing information contraindications section. Step 2 - Most plausible categories: (a) 'contraindications' - the passage uses the exact term 'contraindicated' and enumerates situations where warfarin must not be used; (b) 'warnings_and_precautions' (not an available option) would be the alternative if these were cautionary rather than absolute, but the language is clearly prohibitive. Step 3 - Winner: 'contraindications' wins decisively. The passage is structured as a direct contraindications list with medical conditions in which warfarin sodium must not be administered. The phrasing 'is contraindicated in patients with' is the canonical language for this section type in prescribing information. Step 4 - Confidence: HIGH (>90%). This is unambiguous contraindications language with clear structural markers and explicit medical exclusions.\",\"classification\":\"contraindications\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 7471,
+  "usage": {
+    "input_tokens": 1317,
+    "output_tokens": 308
+  }
+}

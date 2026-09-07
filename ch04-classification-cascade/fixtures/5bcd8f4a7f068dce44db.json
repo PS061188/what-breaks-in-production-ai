@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypotha1arnic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essentia1 for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Close1y monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"pediatric_use\"}",
+  "elapsed_ms": 1003,
+  "usage": {
+    "input_tokens": 649,
+    "output_tokens": 12
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril Hypotension - Patients on Diuretic Therapy: Patients on diuretics, and especially those in whom diuretic therapy was recently instituted, may occasionally experience an excessive reduction of blood pressure after initiation of therapy with lisinopril. The possibility of hypotensive effects with lisinopril can be minimized by either discontinuing the diuretic or increasing the salt intake prior to initiation of treatment with lisinopril. If it is necessary to continue the diuretic, initiate therapy with 1isinopril at a dose of 5 mg daily, and provide c1ose medical supervision after the initial dose for at least two hours and until blood pressure has stabi1ized for at least an additional hour.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three prominent features: (1) The passage explicitly discusses dose initiation (5 mg daily) and specific dosing instructions for a particular patient population; (2) It provides guidance on when to start the medication and monitoring requirements ('at least two hours' and 'until blood pressure has stabilized'); (3) It addresses precautions and management strategies (discontinuing diuretic, increasing salt intake, close supervision). Step 2 - Two most plausible categories: (a) 'dosage_and_administration' - The passage specifies a starting dose (5 mg daily) and includes administration timing with monitoring instructions; (b) 'drug_interactions' - The passage discusses the interaction between lisinopril and diuretics, which could be classified as a drug-drug interaction. Step 3 - Classification decision: 'dosage_and_administration' is the primary category because the core content is prescriptive guidance on HOW to administer the drug (initiation dose, timing, and supervision protocol). While diuretic interaction is mentioned, the main instructional focus is on the dosing regimen for this specific patient population. The drug_interactions category would be more appropriate if the passage focused on the mechanism or general occurrence of the interaction; here it focuses on the management strategy (which dose to use, how to monitor). Step 4 - Confidence assessment: This is HIGH (>90%) because the passage directly addresses dosage initiation and administration procedures with specific numeric values and monitoring protocols, which are hallmark features of dosage_and_administration sections.\",\"classification\": \"dosage_and_administration\",\"confidence\": \"HIGH\",\"alternative_considered\": \"drug_interactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 6534,
+  "usage": {
+    "input_tokens": 1023,
+    "output_tokens": 379
+  }
+}

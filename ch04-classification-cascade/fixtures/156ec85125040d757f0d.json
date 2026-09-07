@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces [see Warnings and Precautions ( 5.8 )] Bleeding tendencies associated with: − A\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias; Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces; Bleeding tendencies associated with conditions listed\"}",
+  "elapsed_ms": 2007,
+  "usage": {
+    "input_tokens": 343,
+    "output_tokens": 65
+  }
+}

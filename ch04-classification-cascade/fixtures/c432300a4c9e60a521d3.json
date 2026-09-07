@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe more potent warfarin S -enantiomer is metabolized by CYP2C9 while the R -enantiomer is metabolized by CYP1A2 and 3A4. Inhibitors of CYP2C9, 1A2, and/or 3A4 have the potential to increase the effect (increase INR) of warfarin by increasing the exposure of warfarin. Inducers of CYP2C9, 1A2, and/or 3A4 have the potential to decrease the effect (decrease INR) of warfarin by decreasing the exposure of warfarin. Examples of inhibitors and inducers of CYP2C9, 1A2, and 3A4 are below in Table 2 ; however, this list should not be considered all-inclusive. Consult the labeling of all concurrently used drugs to obtain further information about CYP450 interaction potential. The CYP450 inhibition and induction potential should be considered when starting, stopping, or changing dose of concomitant medications.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"CYP2C9 inhibitors, CYP1A2 inhibitors, CYP3A4 inhibitors, CYP2C9 inducers, CYP1A2 inducers, CYP3A4 inducers\"}",
+  "elapsed_ms": 1949,
+  "usage": {
+    "input_tokens": 519,
+    "output_tokens": 70
+  }
+}

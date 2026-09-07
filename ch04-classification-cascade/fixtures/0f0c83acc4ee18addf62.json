@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nHuman Experience – Of 1,027 cases of overdose involving sertraline hydrochloride worldwide, alone or with other drugs, there were 72 deaths (circa 1999). Among 634 overdoses in which sertraline hydrochloride was the only drug ingested, 8 resulted in fatal outcome, 75 completely recovered, and 27 patients experienced sequelae after overdosage to include alopecia, decreased libido, diarrhea, ejaculation disorder, fatigue, insomnia, somnolence and serotonin syndrome. The remaining 524 cases had an unknown outcome. The most common signs and symptoms associated with non-fatal sertraline hydrochloride overdosage were somnolence, vomiting, tachycardia, nausea, dizziness, agitation and tremor. The largest known ingestion was 13.5 grams in a patient who took sertraline hydrochloride alone and subsequently recovered. However, another patient who took 2.5 grams of sertraline hydrochloride alone experienced a fatal outcome. Other important adverse events reported with sertraline hydrochloride overdose (single or multi\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"overdosage\"}",
+  "elapsed_ms": 1079,
+  "usage": {
+    "input_tokens": 704,
+    "output_tokens": 11
+  }
+}

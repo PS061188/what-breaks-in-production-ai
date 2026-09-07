@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine Sodium Tablets Dosing Guidelines for Hypothyroidism in Pediatric Patients Age Starting Daily Dosage Per Kg Body Weight* 0 to 3 months 10 to 15 mcg/kg/day 3 to 6 months 8 to 10 mcg/kg/day 6 to 12 months 6 to 8 mcg/kg/day 1 to 5 years 5 to 6 mcg/kg/day 6 to 12 years 4 to 5 mcg/kg/day Greater than 12 years but growth and puberty incomplete 2 to 3 mcg/kg/day Growth and puberty complete 1.6 mcg/kg/day *Adjust dosage based on clinical response and laboratory parameters [see Dosage and Administration (2.4) and Use in Specific Populations (8.4) ] . Pediatric Patients from Birth to 3 Months of Age at Risk for Cardiac Failure Start at a lower starting dosage and increase the dosage every 4 to 6 weeks as needed based on clinical and laboratory response.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage provides specific dosing schedules organized by pediatric age groups (0-3 months through >12 years). (2) It includes dosage amounts in mcg/kg/day with clear numerical parameters for each age bracket. (3) It contains guidance on adjustment protocols and special considerations for cardiac risk in infants. Step 2 - Most plausible categories: (a) 'dosage_and_administration' - this is clearly prescriptive dosing information with specific amounts, frequencies, and adjustment guidance; (b) 'pediatric_use' - the content is specifically about pediatric patients and their dosing needs. Step 3 - Classification decision: 'dosage_and_administration' wins. While the passage is about pediatrics, it is fundamentally instructing on HOW MUCH and HOW OFTEN to give the drug (the core definition of dosage_and_administration). The 'pediatric_use' category is typically reserved for safety/efficacy data and special considerations unique to children, whereas this is a prescriptive dosing table that happens to apply to pediatric patients. The dosing regimens, adjustment schedules, and special monitoring instructions for cardiac risk are dosage administration content. Step 4 - Confidence: HIGH (>90%) because the passage unambiguously contains dosing schedules with amounts and adjustment protocols, which is definitional for dosage_and_administration.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 4557,
+  "usage": {
+    "input_tokens": 1130,
+    "output_tokens": 362
+  }
+}

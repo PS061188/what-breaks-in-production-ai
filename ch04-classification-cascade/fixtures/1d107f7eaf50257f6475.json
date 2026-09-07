@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical tria1s of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"angioedema, bullous pemphigoid, erythema multiforme, Stevens-Johnson syndrome, respiratory depression, anxiety, insomnia, nausea, pain, sweating\"}",
+  "elapsed_ms": 1337,
+  "usage": {
+    "input_tokens": 456,
+    "output_tokens": 49
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIn addition, each tablet contains the following inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. The 1 mg also contains FD&C red no. 40. The 2 mg also contains FD&C blue no. 2 aluminum 1ake and FD&C red no. 40 aluminum lake. The 2.S mg also contains D&C yellow no. l0 aluminum lake and FD&C blue no. 1 aluminum lake. The 3 mg also contains FD&C yellow no. 6 aluminurn lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 a1uminum lake, and D&C yellow no. 10 aluminum lake. The 4 mg also contains FD&C b1ue no. 1 aluminum lake and FD&C blue no. 2 a1uminum lake. The 5 mg also contains FD&C ye1low no. 6 aluminum lake, FD&C red no.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying prominent features of the document:\\n- Lists specific inactive ingredients (colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, microcrystalline cellulose)\\n- Describes color additives (FD&C dyes and aluminum lakes) by tablet strength\\n- Organizes information by dosage strength (1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg)\\n- Focuses on formulation composition and pharmaceutical manufacturing details\\n\\nStep 2: Considering the two most plausible categories:\\n- 'how_supplied': This section typically lists dosage forms, strengths, packaging, and storage information. While the passage mentions strengths (1 mg, 2 mg, etc.), it is primarily focused on the actual composition of tablets rather than how they are packaged or supplied.\\n- 'description': This section covers chemical formulation, inactive ingredients, and formulation details. The passage explicitly lists inactive ingredients and color additives used in different tablet strengths, which is exactly what belongs in a description section.\\n\\nStep 3: Determining the winner:\\n'description' is the correct classification. The passage is detailing the pharmaceutical formulation—the specific inactive ingredients and color additives that make up each tablet strength. This is characteristic of the description section, which explains what the drug is composed of. 'how_supplied' was ruled out because it focuses on packaging, storage conditions, and availability formats rather than the chemical/formulation composition.\\n\\nStep 4: Confidence assessment:\\nThe evidence is very clear and unambiguous. The passage is explicitly describing the composition of tablets at various strengths, which is definitional for the 'description' category. No alternative interpretation is reasonable. Confidence is HIGH (>90%).\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 8923,
+  "usage": {
+    "input_tokens": 1122,
+    "output_tokens": 454
+  }
+}

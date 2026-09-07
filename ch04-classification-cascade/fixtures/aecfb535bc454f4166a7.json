@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated. In situations of less severity lower doses wil1 generally suffice while in selected patients higher initial doses rnay be required. The initial dosage should be rnaintained or adjusted unti1 a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, prednisone should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Explicit dosage ranges given (5-60 mg per day), (2) Clear administration guidance tied to disease severity and individual response, (3) Instructions on dose adjustment and when to discontinue. Step 2 - Most plausible categories: (a) dosage_and_administration - the passage directly addresses how much to give and how to adjust doses; (b) indications_and_usage - mentions 'disease entity being treated' but does not specify which diseases. Step 3 - Winner determination: This is definitively dosage_and_administration because the core content is prescriptive dosing guidance (initial amounts, maintenance, adjustment criteria, and discontinuation rules). While diseases are referenced, the passage provides no actual indication/usage information - it only notes that dosing varies by disease without naming any. The indications_and_usage category would enumerate specific approved conditions; this does not. Step 4 - Confidence: The language unambiguously focuses on 'dosage requirements,' 'dosage...should be maintained or adjusted,' and individualized dosing protocols. This is textbook dosage_and_administration content. Confidence is HIGH (>95%).\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"indications_and_usage\",\"requires_human_review\":false}",
+  "elapsed_ms": 6555,
+  "usage": {
+    "input_tokens": 1019,
+    "output_tokens": 303
+  }
+}

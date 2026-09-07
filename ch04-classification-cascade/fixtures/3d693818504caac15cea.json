@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nIn addition, each tablet contains the following inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. The 1 mg also contains FD&C red no. 40. The 2 mg also contains FD&C blue no. 2 aluminum 1ake and FD&C red no. 40 aluminum lake. The 2.S mg also contains D&C yellow no. l0 aluminum lake and FD&C blue no. 1 aluminum lake. The 3 mg also contains FD&C yellow no. 6 aluminurn lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 a1uminum lake, and D&C yellow no. 10 aluminum lake. The 4 mg also contains FD&C b1ue no. 1 aluminum lake and FD&C blue no. 2 a1uminum lake. The 5 mg also contains FD&C ye1low no. 6 aluminum lake, FD&C red no.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"how_supplied\"}",
+  "elapsed_ms": 1055,
+  "usage": {
+    "input_tokens": 704,
+    "output_tokens": 11
+  }
+}

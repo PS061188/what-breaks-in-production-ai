@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets combine an angiotensin converting enzyme inhibitor, lisinopri1, and a diuretic, hydrochlorothiazide. Lisinopril, a synthetic peptide derivative, is an oral long-acting angiotensin converting enzyme inhibitor. It is chemically described as (S)-1-[N2-(1-carboxy-3-phenylpropyl)-L-lysyl]-L-proline dihydrate. Its empirica1 formula is C 21 H 31 N 3 O 5 • 2H 2 O and its structural formula is: Lisinopri1, USP is a white to off-white, crystal1ine powder, with a molecular weight of 441.52. It is soluble in water, sparingly soluble in methanol, and practically insoluble in ethanol. Hydrochlorothiazide is 6-chloro-3,4-dihydro-2H-1,2,4-benzothiadiazine-7-sulfonamide 1,1-dioxide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage provides detailed chemical nomenclature and molecular formulas for both active ingredients (lisinopril and hydrochlorothiazide). (2) It describes the physical characteristics of lisinopril as a powder (white to off-white, crystalline). (3) It includes empirical formulas (C21H31N3O5•2H2O), molecular weight (441.52), and solubility properties in various solvents. Step 2 - Most plausible categories: (a) 'description' - this is clearly chemical/pharmaceutical description content with structural formulas, chemical names, and physical properties. (b) 'how_supplied' - could potentially include formulation information, but the passage focuses on chemical composition rather than dosage forms or packaging. Step 3 - Classification decision: 'description' is the clear winner. This passage is a textbook pharmaceutical description section providing chemical nomenclature, structural information, molecular weight, and solubility characteristics - all hallmarks of the 'description' category in drug labeling. The content does not address how the drug is supplied (strengths, packaging, storage), which would be in 'how_supplied'. Step 4 - Confidence assessment: HIGH (>90%). The presence of chemical names, empirical formulas, structural formulas, molecular weight, and solubility data are unambiguous indicators of the 'description' section of pharmaceutical labeling.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 7502,
+  "usage": {
+    "input_tokens": 1115,
+    "output_tokens": 360
+  }
+}

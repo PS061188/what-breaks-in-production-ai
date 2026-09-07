@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAdditionally, the fol1owing adverse reactions were reported in ≥l % to ≤5% of metformin hydrochloride tablets treated patients and were more commonly reported with metformin hydrochloride tablets than placebo: abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, nail disorder, rash, sweating increased, taste disorder, chest discomfort, chills, flu syndrome, flushing, palpitation. In metformin hydroch1oride tablets clinical tria1s of 29-week duration, a decrease to subnormal levels of previously normal serum vitamin B 12 leve1s was observed in approximately 7% of patients. Pediatric Patients In clinical trials with metformin hydrochloride tablets in pediatric patients with type 2 diabetes mellitus, the profile of adverse reactions was similar to that observed in adu1ts.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly lists adverse reactions with specific frequency data ('≥1% to ≤5%'), including abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, etc.; (b) It reports a specific safety finding about vitamin B12 level decreases observed in 7% of patients; (c) It includes a subsection on pediatric patients describing adverse reaction profiles in children. Step 2 - Most plausible categories: (i) 'adverse_reactions' is most plausible because the entire passage is structured around reporting side effects and safety observations from clinical trials; (ii) 'pediatric_use' is second most plausible because the final paragraph explicitly addresses pediatric patients, though it only briefly compares their adverse reaction profile to adults rather than providing substantive pediatric-specific guidance. Step 3 - Classification decision: 'adverse_reactions' wins decisively because the dominant content (first two paragraphs) focuses exclusively on enumerating side effects with frequency data and safety signals (vitamin B12 depletion). The pediatric section is subordinate and merely notes that adverse reactions in children are similar to adults without providing pediatric-specific dosing, contraindications, or management guidance that would characterize true 'pediatric_use' content. Step 4 - Confidence: HIGH (>90%) because the passage's primary purpose is clearly adverse reaction reporting, with clear drug safety signals and frequency data typical of adverse_reactions sections in prescribing information.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 7179,
+  "usage": {
+    "input_tokens": 1062,
+    "output_tokens": 381
+  }
+}

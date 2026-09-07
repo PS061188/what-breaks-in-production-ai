@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nPrednisone is a glucocorticoid. Glucocorticoids are adrenocortical steroids, both naturally occurring and synthetic, which are readily absorbed from the gastrointestinal tract. Prednisone, USP is a white to partially white, crysta1line powder. It is very slightly soluble in water; slightly soluble in alcohol, chloroform, dioxane, and methanol. The chemical name for prednisone is 17,21-dihydroxypregna-1,4-dienne-3,11,20-trione. The structural formula is represented below: C 21 H 26 O 5 M.W. 358.44 Each tablet, for oral administration, contains 5, 10, or 20 mg of prednisone. Inactive Ingredients: PredniS0NE Tablets, USP contain the following inactive ingredients: lactose monohydrate, magnesium stearate, microcrystalline ce1lulose, pregelatinized starch, sodium starch glycolate and stearic acid (5 mg only). chem-pred.jpg\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"description\"}",
+  "elapsed_ms": 1294,
+  "usage": {
+    "input_tokens": 702,
+    "output_tokens": 9
+  }
+}

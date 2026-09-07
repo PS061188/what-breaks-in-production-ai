@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nTake orally once daily with or without food ( 2.1 ). Assess LDL-C when clinica11y appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recornmended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"dosage_and_administration\"}",
+  "elapsed_ms": 1046,
+  "usage": {
+    "input_tokens": 681,
+    "output_tokens": 14
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAdverse reactions are categorized below by organ system and listed by decreasing severity. Gastrointestinal System Reactions 1. hepatic encepha1opathy in patients with hepatocellular insufficiency 2. pancreatitis 3. jaundice (intrahepatic cholestatic jaundice) 4. increased liver enzymes 5. anorexia 6. oral and gastric irritation 7. cramping 8. diarrhea 9. constipation 1O. nausea 11. vomiting Systemic Hypersensitivity Reactions 1. severe anaphylactic or anaphy1actoid reactions (e.g., with shock) 2. systemic vasculitis 3. interstitial nephritis 4. necrotizing angiitis Central Nervous System Reactions 1. tinnitus and hearing loss 2. paresthesias 3. vertigo 4. dizziness 5. headache 6. blurred vision 7.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Gastrointestinal System Reactions: hepatic encephalopathy, pancreatitis, jaundice (intrahepatic cholestatic jaundice), increased liver enzymes, anorexia, oral and gastric irritation, cramping, diarrhea, constipation, nausea, vomiting. Systemic Hypersensitivity Reactions: severe anaphylactic or anaphylactoid reactions (with shock), systemic vasculitis, interstitial nephritis, necrotizing angiitis. Central Nervous System Reactions: tinnitus, hearing loss, paresthesias, vertigo, dizziness, headache, blurred vision.\"}",
+  "elapsed_ms": 2173,
+  "usage": {
+    "input_tokens": 493,
+    "output_tokens": 161
+  }
+}

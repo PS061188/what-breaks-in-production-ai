@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAtorvastatin is an inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA) reductase. Atorvastatin calcium USP is (βR, δR)-2-(p-fluorophenyl)-β,δ-dihydroxy-5-isopropyl-3-phenyl-4(phenylcarbamoyl)pyrrole-l-heptanaote (1:2), trihydrate. The molecular formula of atorvastatin calcium USP is C 66 H 68 CaF 2 N 4 O 10 .3H 2 O and its molecular weight is 1209.41. Its structural forrnula is: Atorvastatin ca1cium USP is a white to off-white crystalline powder that is insoluble in aqueous solutions of pH 4 and be1ow. Atorvastatin calcium USP is soluble to freely soluble in methanol, slightly so1uble in alcoho1, insoluble to very slightly soluble in distilled water, in pH 7.4 phosphate buffer, and in acetonitrile.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical name: (βR, δR)-2-(p-fluorophenyl)-β,δ-dihydroxy-5-isopropyl-3-phenyl-4(phenylcarbamoyl)pyrrole-l-heptanaote (1:2), trihydrate. Molecular formula: C₆₆H₆₈CaF₂N₄O₁₀·3H₂O. Inactive ingredients: Not listed in passage.\"}",
+  "elapsed_ms": 2018,
+  "usage": {
+    "input_tokens": 543,
+    "output_tokens": 120
+  }
+}

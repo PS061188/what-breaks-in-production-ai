@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIt is a beta-lactam structurally related to the penicil1ins and possesses the ability to inactivate a wide variety of beta-1actamases by blocking the active sites of these enzymes. Clavulanic acid is particularly active against the clinically important plasmid-mediated beta-1actamases frequently responsible for transferred drug resistance to penicillins and cephalosporins. Chemically, clavulanate potassium is potassium ( Z )-(2 R ,5 R )-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicydo[3.2.0]-heptane-2-carboxylate and may be represented structurally as: C 8 H 8 KNO 5 M.W. 237.25 Following constitution, each 5 mL of oral suspension contains 600 mg of amoxicillin as the trihydrate and 42.9 mg of clavu1anic acid (equivalent to 51.1 mg of clavulanate potassium).\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Clavulanate potassium - potassium (Z)-(2R,5R)-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicyclo[3.2.0]-heptane-2-carboxylate; Amoxicillin trihydrate\\n\\nMolecular Formula: C8H8KNO5 (for clavulanate potassium)\\n\\nInactive Ingredients: Not specified in passage\"}",
+  "elapsed_ms": 2621,
+  "usage": {
+    "input_tokens": 520,
+    "output_tokens": 131
+  }
+}

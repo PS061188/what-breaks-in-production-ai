@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nTable 3 presents clinically significant drug interactions with metformin hydrochloride tablets. Table 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets Carbonic Anhydrase Inhibitors Clinical Impact: Carbonic anhydrase inhibitors frequently cause a decrease in serum bicarbonate and induce non-anion gap, hyperchloremic metabolic acidosis. Concomitant use of these drugs with metformin hydrochloride tablets may increase the risk for lactic acidosis. Intervention: Consider more frequent monitoring of these patients. Examples: Topiramate, zonisamide, acetazolamide or dichlorphenamide. Drugs that Reduce metformin hydrochloride tablet Clearance Clinical Impact: Concomitant use of drugs that interfere with common renal tubular transport systems involved in the renal elimination of metformin (e.g., organic cationic transporter-2 [OCT2] / multidrug and toxin extrusion [MATE] inhibitors) could increase systemic exposure to metformin and may increase the risk for lactic acidosis [ see Clinical Pharmacology (12.3) ]. Intervention: Consider the benefits and risks of concomitant use with metformin hydrochloride tablets. Examples: Ranolazine, vandetanib, dolutegravir, and cimetidine. Alcohol Clinical Impact: Alcohol is known to poten\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage is explicitly labeled 'Table 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets'; (b) It presents multiple drug classes (carbonic anhydrase inhibitors, OCT2/MATE inhibitors, alcohol) with their clinical impacts when combined with metformin; (c) It includes specific monitoring and intervention recommendations for each interaction.\\n\\nStep 2 - Most plausible categories: (1) 'drug_interactions' - The passage directly describes interactions between metformin and other medications/substances, their mechanisms, clinical impacts, and management strategies. (2) 'adverse_reactions' - One might consider this if the focus were solely on adverse effects experienced by patients, but the passage explicitly frames these as drug-drug interactions rather than direct adverse reactions.\\n\\nStep 3 - Classification decision: 'drug_interactions' decisively wins. The passage is a structured table explicitly documenting concurrent medication interactions, their clinical consequences, and clinical management guidance. This is the definition of the drug_interactions category. The alternative 'adverse_reactions' is ruled out because the effects described (lactic acidosis risk, reduced clearance) are conditional on concomitant use with other drugs, not intrinsic adverse reactions from metformin alone.\\n\\nStep 4 - Confidence: HIGH (>95%). The evidence is unambiguous - the passage is labeled as a drug interactions table, uses standard drug interaction presentation format, and discusses concurrent medication effects.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 8971,
+  "usage": {
+    "input_tokens": 1190,
+    "output_tokens": 379
+  }
+}

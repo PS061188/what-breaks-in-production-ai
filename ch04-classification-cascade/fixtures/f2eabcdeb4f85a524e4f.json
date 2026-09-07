@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nAmoxicillin and clavulanate potassium for oral suspension, USP is an oral antibacterial combination consisting of the semisynthetic antibacterial amoxicillin and the beta-lactamase inhibitor, clavulanate potassium (the potassium salt of clavulanic acid). Amoxicillin is an analog of ampicillin, derived from the basic penicillin nucleus, 6-aminopenicillanic acid. Chemically, amoxicillin is (2 S ,5 R, 6 R )-6-[( R )-(-)-2-amino-2-( p -hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0] heptane-2-carboxylic acid trihydrate and may be represented structurally as: C 16 H 19 N 3 O 5 S • 3H 2 O M.W. 419.46 Clavulanic acid is produced by the fermentation of Streptomyces clavuligerus . It is a beta-lactam structurally related to the penicillins and possesses the ability to inactivate a wide variety of beta-lactamases by blocking the active sites of these enzymes. Clavulanic ac\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"description\"}",
+  "elapsed_ms": 972,
+  "usage": {
+    "input_tokens": 766,
+    "output_tokens": 9
+  }
+}

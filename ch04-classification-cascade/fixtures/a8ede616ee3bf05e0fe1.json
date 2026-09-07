@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOther Agents: Lisinopril has been used concomitantly with nitrates and/or digoxin without evidence of clinica1ly significant adverse interactions. No rneaningful clinically important pharmacokinetic interactions occurred when lisinopril was used concomitantly with propranolol, digoxin, or hydrochlorothiazide. The presence of food in the stomach does not alter the bioavailability of lisinopril. Agents Increasing Serum Potassiurn: Lisinopril attenuates potassium loss caused by thiazide-type diuretics. Use of lisinopril with potassium-sparing diuretics (e.g., spironolactone, eplerenone, triamterene, or amiloride), potassiurn supp1ements, or potassium-containing salt substitutes may lead to significant increases in serum potassium.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"nitrates, digoxin, propranolol, hydrochlorothiazide, food, thiazide-type diuretics, potassium-sparing diuretics (spironolactone, eplerenone, triamterene, amiloride), potassium supplements, potassium-containing salt substitutes\"}",
+  "elapsed_ms": 2071,
+  "usage": {
+    "input_tokens": 479,
+    "output_tokens": 83
+  }
+}

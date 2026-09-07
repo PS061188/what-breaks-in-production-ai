@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIts empirical formula is C 7 H 8 ClN 3 O 4 S 2 and its structural formula is: Hydrochlorothiazide, USP is a white, or practically white, crysta1line powder with a molecular weight of 297.73, which is slight1y soluble in water, but freely soluble in sodium hydroxide solution. Lisinopri1 and hydrochlorothiazide tablets, USP are available for oral use in three tablet combinations of lisinopril with hydrochlorothiazide: lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg containing 10 mg lisinopril and 12.5 mg hydrochlorothiazide; 1isinopril and hydrochlorothiazide tablets 20 mg/12.5 mg containing 2O rng lisinopril and 12.5 mg hydrochlorothiazide; and, lisinopril and hydrochlorothiazide tablets 20 mg/25 mg containing 2O mg lisinopril and 25 mg hydrochlorothiazide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Chemical empirical formula C7H8ClN3O4S2 and molecular weight 297.73 provided; (2) Physical description of active ingredient as 'white, or practically white, crystalline powder'; (3) Tablet formulations listed with specific strength combinations (10mg/12.5mg, 20mg/12.5mg, 20mg/25mg) and composition details. Step 2 - Most plausible categories: (a) 'description' - includes chemical name, molecular structure, physical properties, and formulation details; (b) 'how_supplied' - lists available tablet strengths and combinations. Step 3 - Ruling: This passage is primarily a 'description' section. While it does mention tablet strengths that appear in 'how_supplied', the focus and content are dominated by chemical/structural information (empirical formula, molecular weight, solubility properties, physical appearance) and inactive ingredient composition, which are definitional elements of the Description section. The how_supplied category typically emphasizes packaging, storage conditions, and availability details, which are absent here. Step 4 - Confidence: HIGH (>90%) - the presence of empirical formula, molecular weight, solubility data, and physical description strongly aligns with standard Description sections in pharmaceutical labeling.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"how_supplied\", \"requires_human_review\": false}",
+  "elapsed_ms": 7096,
+  "usage": {
+    "input_tokens": 1126,
+    "output_tokens": 333
+  }
+}

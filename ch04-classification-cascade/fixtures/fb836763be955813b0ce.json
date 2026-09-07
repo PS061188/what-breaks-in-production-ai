@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nFurosemide binding to albumin rnay be reduced in elderly patients. Furosemide is predominantly excreted unchanged in the urine. The renal clearance of furosemide after intravenous administration in older healthy male subjects (60 to 7O years of age) is statistically significantly smaller than in younger healthy ma1e subjects (20 to 35 years of age). The initia1 diuretic effect of furosemide in older subjects is decreased relative to younger subjects (see PRECAUTIONS: Geriatric Use ). Geriatric Use Controlled clinical studies of furosemide did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients.\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Furosemide binding to albumin may be reduced in elderly patients. The renal clearance of furosemide after intravenous administration in older healthy male subjects (60 to 70 years of age) is statistically significantly smaller than in younger healthy male subjects (20 to 35 years of age). The initial diuretic effect of furosemide in older subjects is decreased relative to younger subjects. Controlled clinical studies of furosemide did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients.\"}",
+  "elapsed_ms": 2383,
+  "usage": {
+    "input_tokens": 459,
+    "output_tokens": 148
+  }
+}

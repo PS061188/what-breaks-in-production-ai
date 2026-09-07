@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe more potent warfarin S -enantiomer is metabolized by CYP2C9 while the R -enantiomer is metabolized by CYP1A2 and 3A4. Inhibitors of CYP2C9, 1A2, and/or 3A4 have the potential to increase the effect (increase INR) of warfarin by increasing the exposure of warfarin. Inducers of CYP2C9, 1A2, and/or 3A4 have the potential to decrease the effect (decrease INR) of warfarin by decreasing the exposure of warfarin. Examples of inhibitors and inducers of CYP2C9, 1A2, and 3A4 are below in Table 2 ; however, this list should not be considered all-inclusive. Consult the labeling of all concurrently used drugs to obtain further information about CYP450 interaction potential. The CYP450 inhibition and induction potential should be considered when starting, stopping, or changing dose of concomitant medications.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Discussion of warfarin metabolism via specific CYP450 enzyme pathways (CYP2C9, CYP1A2, CYP3A4); (b) Explicit discussion of how inhibitors and inducers of these enzymes affect warfarin's pharmacological effect (INR changes); (c) Provides guidance on clinical management when starting, stopping, or changing concurrent medications. Step 2 - Most plausible categories: (1) 'drug_interactions' - The passage explicitly describes how other drugs (inhibitors and inducers) interact with warfarin, affecting its efficacy and INR levels; (2) 'dosage_and_administration' - Could be considered since it mentions dose changes of concomitant medications, but this is clearly secondary to the interaction discussion. Step 3 - Classification decision: 'drug_interactions' is definitively correct. The passage's primary content is mechanistic explanation of drug-drug interactions via CYP450 pathways and their clinical consequences. While dosage adjustment is mentioned, it is contextual guidance arising from the interaction mechanism, not the primary focus. The passage explicitly states interaction potential and provides management guidance. Step 4 - Confidence: HIGH (>90%) - The language is unambiguously focused on drug interactions: 'potential to increase/decrease the effect', 'inhibitors', 'inducers', 'interaction potential'. This is textbook drug interactions content.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 6581,
+  "usage": {
+    "input_tokens": 1108,
+    "output_tokens": 372
+  }
+}

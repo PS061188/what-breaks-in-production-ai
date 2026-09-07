@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nGabapentin Capsules USP 3OO mg capsules: Hard gelatin capsules with yellow opaque body with carame1 opaque cap, imprinted with “AHD” on cap and “300” on body in black ink and filled with white to off-white powder. NDC: 71335-1093-8: 40 Capsules in a B0TTLE NDC: 71335-1093-1: 9O Capsules in a BOTTLE NDC: 71335-lO93-2: 28 Capsules in a BOTTLE NDC: 71335-1093-3: 58 Capsules in a BOTTLE NDC: 71335-1093-4: 30 Capsules in a BOTTLE NDC: 71335-1093-5: 60 Capsules in a BOTTLE NDC: 71335-1093-6: 120 Capsules in a BOTTLE NDC: 71335-1093-7: 180 Capsules in a BOTTLE Store at 20° to 25° C (68° to 77° F); excursions permitted to 1S° to 3O°C (59° to B6°F). [See USP Controlled Room Temperature] Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Gabapentin Capsules USP 300 mg hard gelatin capsules (yellow opaque body with caramel opaque cap). Available in the following package sizes: 40 capsules (NDC: 71335-1093-8), 90 capsules (NDC: 71335-1093-1), 28 capsules (NDC: 71335-1093-2), 58 capsules (NDC: 71335-1093-3), 30 capsules (NDC: 71335-1093-4), 60 capsules (NDC: 71335-1093-5), 120 capsules (NDC: 71335-1093-6), and 180 capsules (NDC: 71335-1093-7) in bottles.\"}",
+  "elapsed_ms": 2707,
+  "usage": {
+    "input_tokens": 595,
+    "output_tokens": 194
+  }
+}

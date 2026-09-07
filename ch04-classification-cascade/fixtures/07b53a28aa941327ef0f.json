@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nGabapentin Capsules USP 300 mg capsules: Hard gelatin capsules with yellow opaque body with caramel opaque cap, imprinted with “AHD” on cap and “300” on body in black ink and filled with white to off-white powder. NDC: 71335-1093-8: 40 Capsules in a BOTTLE NDC: 71335-1093-1: 90 Capsules in a BOTTLE NDC: 71335-1093-2:\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Gabapentin Capsules USP 300 mg: Hard gelatin capsules (yellow opaque body with caramel opaque cap). Supplied in: NDC 71335-1093-8 (40 capsules per bottle), NDC 71335-1093-1 (90 capsules per bottle), NDC 71335-1093-2 (package size incomplete in passage)\"}",
+  "elapsed_ms": 2298,
+  "usage": {
+    "input_tokens": 390,
+    "output_tokens": 100
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nWarfarin sodiurn tablets USP, 6 mg are available as teal, capsule-shaped, biconvex scored tablets, debossed with TV/6 on the scored side and 1718 on the other side containing 6 mg warfarin sodium, USP, packaged in bottles of 1O0 (NDC 0093-l718-01) tablets. Warfarin sodium tablets USP, 7.5 mg are available as yellow, capsule-shaped, biconvex scored tablets, debossed with TV/7 1 / 2 on the scored side and 1719 on the other side containing 7.5 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1723-01) tablets. Warfarin sodium tablets USP, 10 mg are available as white, capsule-shaped, biconvex scored tablets, debossed with TV/10 on the scored side and 1720 on the other side containing 10 mg warfarin sodium, USP, packaged in bottles of 100 (NDC O093-1720-01) tablets.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Warfarin sodium tablets USP available in three strengths: 6 mg (teal, capsule-shaped, biconvex scored tablets, debossed TV/6 and 1718), 7.5 mg (yellow, capsule-shaped, biconvex scored tablets, debossed TV/7 1/2 and 1719), and 10 mg (white, capsule-shaped, biconvex scored tablets, debossed TV/10 and 1720). All packaged in bottles of 100 tablets.\"}",
+  "elapsed_ms": 2144,
+  "usage": {
+    "input_tokens": 542,
+    "output_tokens": 134
+  }
+}

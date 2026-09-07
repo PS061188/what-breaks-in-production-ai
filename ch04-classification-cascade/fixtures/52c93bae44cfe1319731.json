@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe safety and effectiveness of atorvastatin calcium as an adjunct to diet to reduce LDL-C have been established pediatric patients 10 years of age and older with HeFH. Use of atorvastatin calcium for this indication is based on a double-blind, placebo-controlled clinical trial in 187 pediatric patients 10 years of age and older with HeFH. In this limited controlled trial, there was no significant effect on growth or sexual maturation in the boys or girls, or on menstrual cycle length in gi\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Prominent features of this document:\\n(a) Discusses safety and effectiveness of atorvastatin calcium in pediatric patients specifically aged 10 years and older\\n(b) References a double-blind, placebo-controlled clinical trial with 187 pediatric patients\\n(c) Evaluates effects on growth, sexual maturation, and menstrual cycle length in children\\n\\nStep 2: Two most plausible categories:\\n- pediatric_use: The passage explicitly focuses on pediatric patients, their safety profile, and developmental effects (growth, sexual maturation, menstrual cycles). This is the core subject matter.\\n- adverse_reactions: One could argue this discusses safety outcomes and potential side effects observed in the pediatric population.\\n\\nStep 3: Winner determination:\\nThe primary focus is clearly pediatric_use. While adverse reactions are mentioned (no significant effects on growth/maturation), the passage is fundamentally about establishing the safety and effectiveness of the drug specifically in the pediatric population aged 10 and older. The context is explicitly pediatric clinical trial data. The mention of growth and sexual maturation effects is presented as reassuring data FOR pediatric use rather than as adverse reactions being catalogued.\\n\\nStep 4: Confidence assessment:\\nThis is HIGH confidence (>90%). The passage explicitly states it is discussing pediatric patients and references a pediatric clinical trial. The language 'pediatric patients 10 years of age and older' appears twice, making the categorization unambiguous.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4860,
+  "usage": {
+    "input_tokens": 976,
+    "output_tokens": 375
+  }
+}

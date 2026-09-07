@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTherapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical tria1s blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 rng/12.5 mg or lisinopril and hydrochlorothiazide tablets 2O mg/12.5 mg.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Switch to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or 20 mg/12.5 mg for patients whose blood pressure is not adequately controlled with monotherapy. Dose titration guided by clinical effect.\"}",
+  "elapsed_ms": 2131,
+  "usage": {
+    "input_tokens": 450,
+    "output_tokens": 67
+  }
+}

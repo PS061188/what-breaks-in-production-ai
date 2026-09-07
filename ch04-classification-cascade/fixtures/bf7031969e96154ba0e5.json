@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third tria1, albuterol sulfate HFA was eva1uated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albutero1 sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached rnasks.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"pediatric_use\"}",
+  "elapsed_ms": 1004,
+  "usage": {
+    "input_tokens": 655,
+    "output_tokens": 12
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nChanges in thyroid status may occur if barbiturates are added or withdrawn from patients being treated for hypothyroidism. Rifampin has been shown to accelerate the metabolism of levothyroxine. Table 8. Drugs That May Decrease Conversion of T4 to T3 Potential impact: Administration of these enzyme inhibitors decreases the peripheral conversion of T4 to T3, leading to decreased T3 levels. However, serum T4 levels are usually normal but may occasionally be slightly increased. Drug or Drug Class Effect Beta-adrenergic antagonists (e.g., Propranolol > 160 mg/day) In patients treated with large doses of propranolol (> 160 mg/day), T3 and T4 levels change, TSH levels remain normal, and patients are clinically euthyroid.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"barbiturates, rifampin, levothyroxine, beta-adrenergic antagonists (propranolol)\"}",
+  "elapsed_ms": 1884,
+  "usage": {
+    "input_tokens": 457,
+    "output_tokens": 36
+  }
+}

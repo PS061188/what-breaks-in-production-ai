@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nFurosemide may increase the ototoxic potential of arninoglycoside antibiotics, especially in the presence of impaired renal function. Except in life-threatening situations, avoid this combination. Furosemide should not be used concomitantly with ethacrynic acid because of the possibility of ototoxicity. Patients receiving high doses of salicylates concomitant1y with furosemide, as in rheumatic disease, may experience salicylate toxicity at lower doses because of competitive renal excretory sites. There is a risk of ototoxic effects if cisplatin and furosemide are given concomitantly. In addition, nephrotoxicity of nephrotoxic drugs such as cisplatin may be enhanced if furosemide is not given in lower doses and with positive fluid balance when used to achieve forced diuresis during cisplatin treatment.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"aminoglycoside antibiotics, ethacrynic acid, salicylates, cisplatin\"}",
+  "elapsed_ms": 1308,
+  "usage": {
+    "input_tokens": 469,
+    "output_tokens": 30
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe safety and effectiveness of albuterol sulfate HFA for treatment or prevention of bronchospasm and for prevention of exercised-induced bronchospasm in pediatric patients aged 4 years and older have been established. Use of albuterol sulfate HFA for this indication is supported by evidence from adequate and well-controlled studies of two 12-week clinical trials in subjects aged 12 years and older with asthma and one 2-week c1inical trial in subjects aged 4 to 11 years with asthma [see Adverse Reactions ( 6.1 ), Clinical Studies ( 14.1 )] . The safety and effectiveness of albuterol sulfate HFA in pediatric patients younger than 4 years have not been established. Three trials have been conducted to evaluate the safety and efficacy of albuterol sulfate HFA in subjects younger than 4 years and the findings are described below.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Explicit discussion of safety and effectiveness in pediatric populations aged 4 years and older, with clinical trial data in children aged 4-11 years and 12+ years; (2) Specific mention that safety/effectiveness in children younger than 4 years has NOT been established; (3) References to clinical studies evaluating pediatric use and adverse reactions. Step 2 - Most plausible categories: (a) 'pediatric_use' - the passage is entirely focused on pediatric populations, age stratification, and clinical trial evidence in children; (b) 'indications_and_usage' - mentions treatment/prevention of bronchospasm, but this is secondary to the pediatric focus. Step 3 - Determination: 'pediatric_use' wins decisively. The passage's primary purpose is to document what is known about albuterol's safety and effectiveness specifically in pediatric age groups, including age cutoffs (4 years, 4-11 years, 12+ years) and trial descriptions in children. While the indication (bronchospasm treatment/prevention) is mentioned, it is not the main focus - the pediatric safety/efficacy evidence is. The passage explicitly uses the phrase 'pediatric patients' multiple times and structures information around age groups. Step 4 - Confidence: HIGH (>90%). The document is unmistakably organized around pediatric population data and explicitly labels sections relating to pediatric use and clinical trials in children.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 6858,
+  "usage": {
+    "input_tokens": 1064,
+    "output_tokens": 376
+  }
+}

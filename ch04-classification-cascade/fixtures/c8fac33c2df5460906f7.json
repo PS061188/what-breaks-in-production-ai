@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTake orally once daily with or without food ( 2.1 ). Assess LDL-C when clinica11y appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recornmended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ).\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Take orally once daily with or without food. Adults: Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric patients aged 10 years and older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily. Pediatric patients aged 10 years and older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily.\"}",
+  "elapsed_ms": 2211,
+  "usage": {
+    "input_tokens": 514,
+    "output_tokens": 168
+  }
+}

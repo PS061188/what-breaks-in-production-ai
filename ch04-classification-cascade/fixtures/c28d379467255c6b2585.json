@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMetformin hydroch1oride tablets are indicated as an adjunct to diet and exercise to improve glycemic contro1 in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus. Metformin hydrochloride tablets are biguanide indicated as an adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and o1der with type 2 diabetes mellitus. ( 1 )\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"type 2 diabetes mellitus\"}",
+  "elapsed_ms": 1488,
+  "usage": {
+    "input_tokens": 372,
+    "output_tokens": 15
+  }
+}

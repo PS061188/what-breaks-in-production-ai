@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWarfarin sodiurn tablets USP, 1 mg are available as pink, capsule-shaped, biconvex scored tablets, debossed with TV/1 on the scored side and 1712 on the other side containing 1 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0O93-1712-01) and 1000 (NDC 0093-1712-10) tablets. Warfarin sodiurn tablets USP, 2 mg are available as lavender, capsule-shaped, biconvex scored tablets, debossed with TV/2 on the scored side and 1713 on the other side containing 2 mg warfarin sodium, USP, packaged in bott1es of 10O (NDC 0093-1713-01) and 1O00 (NDC 0093-l713-10) tablets. Warfarin sodium tablets USP, 2.5 mg are available as green, capsule-shaped, biconvex scored tablets, debossed with TV/2 1 / 2 on the scored side and l714 on the other side containing 2.5 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1714-01) and 1000 (NDC 0093-1714-10) tablets.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly describes physical characteristics of tablets including shape, color, and markings (pink capsule-shaped, lavender, green, biconvex scored tablets with specific debossing). (2) It specifies multiple dosage strengths (1 mg, 2 mg, 2.5 mg) for the same drug. (3) It provides packaging information including bottle sizes (100 and 1000 tablets) and NDC numbers for each strength and package configuration. Step 2 - Most plausible categories: (A) 'how_supplied' - this section details dosage forms, strengths, packaging, and NDC codes, which are core elements of how_supplied sections in drug labeling. (B) 'description' - while the passage does describe the appearance of tablets, it goes beyond simple physical description to include packaging details and NDC numbers, which are not typically found in description sections. Step 3 - Winner and rationale: 'how_supplied' is the clear winner. The passage systematically enumerates each available strength, provides precise physical identifiers (tablet appearance, debossing), specifies package sizes, and includes NDC codes - all hallmarks of a how_supplied section. The 'description' category typically covers chemical composition, inactive ingredients, and formulation details, none of which appear here. Step 4 - Confidence assessment: This is a straightforward how_supplied section with no ambiguity. The structural format, content elements (strengths, packaging sizes, NDC codes, physical appearance), and completeness all unambiguously point to how_supplied. Confidence is HIGH (>90%).\",\"classification\": \"how_supplied\",\"confidence\": \"HIGH\",\"alternative_considered\": \"description\",\"requires_human_review\": false}",
+  "elapsed_ms": 9062,
+  "usage": {
+    "input_tokens": 1184,
+    "output_tokens": 402
+  }
+}

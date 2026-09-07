@@ -834,3 +834,44 @@ recorded it moving 100 / 83 / 100 across three runs. 83% is now the reproducible
 
 This mattered for publication: the README promises replaying costs nothing and needs no
 key, and this script broke that promise half the time for anyone who cloned the repo.
+
+## The corrupted-corpus test (Aug 2026) — the objection, answered
+
+Four failures barely reproduced, and the standing objection was that FDA labels are
+unusually clean. Chapters 4, 7, 8 and 10 re-run over Chapter 2's damage, applied at
+load time via `CORRUPT_MODE`, seeded on drug+section so replay is deterministic.
+**$2.42 total.**
+
+| ch | measure | clean | OCR-damaged | p |
+|---|---|---|---|---|
+| 4 | classification accuracy | 91% | 92% | 1.00 |
+| 7 | aggregate correctness | 99% | **100%** | 0.50 |
+| 8 | wrong section for own quote | 3, 3, 3 /33 | 8, 2, 3 /33 | 0.50 |
+| **10** | **dose figures returned** | **55/55 x3** | **46/53, 46/53, 50/53** | **0.0000035** |
+| **10** | **docs with a silent drop** | **0/6 x3** | **2/6 x3** | **0.019** |
+
+**Three of four hold. Chapter 10 does not.** On clean documents the model returned
+every dose figure in every run; on the same documents with scanning damage it
+dropped figures from a third of them, and the output looked complete either way.
+
+### The correction this experiment had to make to itself
+
+The exploratory pass reported ch08 moving 3% -> 24%, p = 0.027, and wrote it up as
+the headline. **It does not exist.** The clean figure came from a *replayed
+fixture* — one recorded sample — and the damaged figure was one live sample. Three
+live runs of each gave clean 3,3,3 and OCR 8,2,3: pooled p = 0.50. The 24% was an
+outlier and the 1/33 it was compared against was another, in the opposite
+direction. Meanwhile ch10, dismissed as noise at p = 0.09, is the strongest result
+in the part.
+
+**A comparison is only as good as the weaker of its two arms, and a replayed
+fixture is one sample, not a ground truth.** Holding a recorded baseline fixed
+while the treatment arm varies guarantees noise reads as signal. Cost to catch:
+$0.21.
+
+### Method note
+
+Truncation is reported separately and weakly: shortening documents drops sections
+below the chapters' minimum-length filters, so denominators move (ch04 96->91,
+ch10 55->36 figures). Only the OCR arm holds denominators constant and only it
+supports the conclusion.

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nDosage adjustments should be made to maintain patients on the lowest effective dose and patients should be periodically reassessed to determine the need for 1ong-term treatment. Obsessive-Compulsive Disorder and Panic Disorder –It is generally agreed that OCD and Panic Disorder require severa1 months or longer of sustained pharmacological therapy beyond response to initial treatment. Systematic evaluation of continuing Sertraline hydrochloride for periods of up to 28 weeks in patients with OCD and Panic Disorder who have responded while taking Sertraline hydrochloride during initial treatment phases of 24 to 52 weeks of treatment at a dose range of 50-200 mg/day has demonstrated a benefit of such maintenance treatment (see Clinical Tria1s under CLINICAL PHARMACOLOGY ).\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Dose range of 50-200 mg/day for OCD and Panic Disorder, with treatment duration of 24 to 52 weeks initial treatment phase followed by maintenance treatment for up to 28 weeks or longer. Route of administration not specified in passage.\"}",
+  "elapsed_ms": 1779,
+  "usage": {
+    "input_tokens": 451,
+    "output_tokens": 66
+  }
+}

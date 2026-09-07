@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAmoxicillin and clavulanate potassium for oral suspension, USP is an oral antibacterial combination consisting of the semisynthetic antibacterial amoxicillin and the beta-lactamase inhibitor, clavulanate potassium (the potassium salt of clavulanic acid). Amoxicillin is an analog of ampicillin, derived from the basic penicillin nucleus, 6-aminopenicillanic acid. Chemically, amoxicillin is (2 S ,5 R, 6 R )-6-[( R )-(-)-2-amino-2-( p -hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0] heptane-2-carboxylic acid trihydrate and may be represented structurally as: C 16 H 19 N 3 O 5 S • 3H 2 O M.W. 419.46 Clavulanic acid is produced by the fermentation of Streptomyces clavuligerus . It is a beta-lactam structurally related to the penicillins and possesses the ability to inactivate a wide variety of beta-lactamases by blocking the active sites of these enzymes. Clavulanic ac\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: Amoxicillin - (2S,5R,6R)-6-[(R)-(-)-2-amino-2-(p-hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid trihydrate; Clavulanate potassium (potassium salt of clavulanic acid, produced by fermentation of Streptomyces clavuligerus). Molecular Formula: Amoxicillin C16H19N3O5S•3H2O (M.W. 419.46). Inactive Ingredients: Not specified in passage.\"}",
+  "elapsed_ms": 2914,
+  "usage": {
+    "input_tokens": 590,
+    "output_tokens": 182
+  }
+}

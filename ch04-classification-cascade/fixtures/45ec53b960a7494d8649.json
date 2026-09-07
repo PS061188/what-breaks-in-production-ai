@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMetformin hydrochloride tablets are contraindicated in patients with: Severe renal impairment (eGFR below 30 mL/min/1.73 m 2 ) [ see Warnings and Precautions (5.1) ]. Hypersensitivity to metformin. Acute or chr\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Severe renal impairment (eGFR below 30 mL/min/1.73 m2); Hypersensitivity to metformin; Acute or chronic conditions (incomplete list in passage)\"}",
+  "elapsed_ms": 1314,
+  "usage": {
+    "input_tokens": 348,
+    "output_tokens": 58
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe active component of Albuterol Sulfate HFA is albuterol sulfate, USP, the racemic form of albuterol and a relatively selective beta 2 -adrenergic bronchodilator. A1buterol sulfate has the chemical name α 1 -[( tert -butylamino)methyl]-4-hydroxy- m -xylene-α, α′-diol sulfate (2:1)(salt) and the following chemical structure: Albuterol sulfate is a white crystalline powder with a molecular weight of 576.7, and the empirical formula is (C 13 H 21 NO 3 ) 2 •H 2 SO 4 . It is soluble in water and slight1y soluble in ethanol. The World Health Organization recommended name for albuterol base is salbutamol. Albuterol Sulfate HFA is a blue plastic inhaler with a blue cap containing a pressurized metered-dose aerosol canister fitted with a counter.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: α1-[(tert-butylamino)methyl]-4-hydroxy-m-xylene-α,α′-diol sulfate (2:1)(salt)\\n\\nMolecular Formula: (C13H21NO3)2•H2SO4\\n\\nInactive Ingredients: Not specified in the passage\"}",
+  "elapsed_ms": 1693,
+  "usage": {
+    "input_tokens": 504,
+    "output_tokens": 89
+  }
+}

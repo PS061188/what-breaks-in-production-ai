@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nFurosemide has a tendency to antagonize the skeletal muscle relaxing effect of tubocurarine and may potentiate the action of succinylcholine. Lithium generally should not be given with diuretics because they reduce lithium's renal clearance and add a high risk of lithium toxicity. Furosemide combined with angiotensin converting enzyme inhibitors or angiotensin II receptor blockers may lead to severe hypotension and deterioration in renal function, including renal failure. An interruption or reduction in the dosage of furosemide, angiotensin converting enzyme inhibitors, or angiotensin receptor blockers may be necessary. Potentiation occurs with ganglionic or peripheral adrenergic blocking drugs.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"tubocurarine, succinylcholine, lithium, angiotensin converting enzyme inhibitors, angiotensin II receptor blockers, ganglionic blocking drugs, peripheral adrenergic blocking drugs\"}",
+  "elapsed_ms": 2165,
+  "usage": {
+    "input_tokens": 435,
+    "output_tokens": 53
+  }
+}

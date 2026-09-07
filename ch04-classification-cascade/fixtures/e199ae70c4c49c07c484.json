@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin hydroch1oride tablets are indicated as an adjunct to diet and exercise to improve glycemic contro1 in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus. Metformin hydrochloride tablets are biguanide indicated as an adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and o1der with type 2 diabetes mellitus. ( 1 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'indicated as an adjunct to diet and exercise to improve glycemic control' which is the definition of indication; (2) It specifies the patient populations (adults and pediatric patients 10+ years) for which the drug is indicated; (3) The condition being treated is explicitly named: 'type 2 diabetes mellitus'. Step 2 - Most plausible categories: (a) 'indications_and_usage' - the passage directly lists what conditions the drug is approved to treat and in which populations; (b) 'pediatric_use' - the passage does mention pediatric patients, but this is secondary to the primary indication statement. Step 3 - Winner determination: 'indications_and_usage' is the clear winner. The passage is fundamentally stating the approved therapeutic uses and the populations for which it is indicated. While pediatric information is present, it appears as part of the indication statement rather than as detailed pediatric-specific guidance. The alternative 'pediatric_use' would be more appropriate if the passage focused on age-specific dosing, safety, or efficacy data unique to children, but here pediatric mention is incidental to the main indication. Step 4 - Confidence: HIGH (>90%). The language 'are indicated' is explicit regulatory language for indications, and the structure perfectly matches the indications_and_usage category. Despite the repetitive text and OCR-like errors (hydroch1oride, contro1, o1der), the classification intent is unmistakable.\",\"classification\":\"indications_and_usage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"pediatric_use\",\"requires_human_review\":false}",
+  "elapsed_ms": 4842,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 385
+  }
+}

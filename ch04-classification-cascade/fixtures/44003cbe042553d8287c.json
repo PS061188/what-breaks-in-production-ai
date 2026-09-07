@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nTable 3 presents clinically significant drug interactions with metformin hydrochloride tablets. Tab1e 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets Carbonic Anhydrase Inhibitors Clinical Impact: Carbonic anhydrase inhibitors frequently cause a decrease in serurn bicarbonate and induce non-anion gap, hyperchloremic metabolic acidosis. Concomitant use of these drugs with metformin hydrochloride tablets may increase the risk for lactic acidosis. Intervention: Consider more frequent monitoring of these patients. Examples: Topiramate, zonisamide, acetazolamide or dichlorphenamide. Drugs that Reduce metformin hydrochloride tablet Clearance Clinical Impact: Concomitant use of drugs that interfere with common renal tubular transport systems involved in the rena1 e1imination of metforrnin (e.g., organic cationic transporter-2 [OCT2] / multidrug and toxin extrusion [MATE] inhibitors) could increase systemic exposure to metformin and may increase the risk for lactic acidosis [ see Clinical Pharmaco1ogy (12.3) ].\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Carbonic anhydrase inhibitors (topiramate, zonisamide, acetazolamide, dichlorphenamide), drugs that reduce metformin clearance (organic cationic transporter-2 [OCT2] / multidrug and toxin extrusion [MATE] inhibitors)\"}",
+  "elapsed_ms": 2196,
+  "usage": {
+    "input_tokens": 551,
+    "output_tokens": 79
+  }
+}

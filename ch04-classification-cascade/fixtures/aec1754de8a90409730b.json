@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer Gabapentin three times a day using 300 mg or 400 mg capsules. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of Gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Recommended maintenance dose: 300 mg to 600 mg three times a day (up to 2400 mg/day well tolerated, up to 3600 mg/day administered in some patients). Route: Oral using 300 mg or 400 mg capsules. Maximum time between doses should not exceed 12 hours. Pediatric (3-11 years): Starting dose 10-15 mg/kg/day in three divided doses, titrated over approximately 3 days. Maintenance dose for ages 3-4 years: 40 mg/kg/day in three divided doses.\"}",
+  "elapsed_ms": 2759,
+  "usage": {
+    "input_tokens": 490,
+    "output_tokens": 144
+  }
+}

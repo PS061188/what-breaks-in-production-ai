@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nClosely monitor INR if a concomitant drug is a CYP2C9, 1A2, and/or 3A4 inhibitor or inducer. Table 2: Examples of CYP450 Interactions with Warfarin Enzyme Inhibitors Inducers CYP2C9 amiodarone, capecitabine, cotrimoxazole, etravirine, fluconazole, fluvastatin, fluvoxamine, metronidazole, miconazole, oxandrolone, sulfinpyrazone, tigecycline, voriconazole, zafirlukast aprepitant, bosentan, carbamazepine, phenobarbital, rifampin CYP1A2 acyclovir, allopurinol, caffeine, cimetidine, ciprofloxacin, disulfiram, enoxacin, famotidine, f1uvoxamine, methoxsalen, mexiletine, norfloxacin, oral contraceptives, phenylpropanolamine, propafenone, propranolol, terbinafine, thiabendazole, ticlopidine, verapamil, zileuton montelukast, moricizine, orneprazole, phenobarbital, phenytoin, cigarette smoking CYP3A4 alprazolam, amiodarone, amlodipine, amprenavir, aprepitant, atorvastatin, atazanavir, bicalutamide, cilostazol, cimetidine, ciprofloxacin, c1arithromycin, conivaptan, cyclosporine, darunavir/ritonavir, diltiazem, erythromycin, fluconazole, fluoxetine, fluvoxamine, fosamprenavir, imatinib, indinavir, isoniazid, itraconazole, ketoconazole, lopinavir/ritonavir, nefazodone, nelfinavir, ni1otinib, oral contraceptives, posaconazo1e, ranitidine, ranolazine, ritonavir, saquinavir, telithromycin, tipranavir, voriconazole, zileuton arrnodafinil, arnprenavir, aprepitant, bosentan, carbamazepine, efavirenz, etravirine, modafinil, nafcillin, phenytoin, pioglitazone, prednisone, rifampin, rufinamide 7.3 Drugs that Increase Bleeding Risk Examples of drugs known to increase the risk of bleeding are presented in Table 3 .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage explicitly discusses CYP450 enzyme interactions with warfarin, organized in a table format showing inhibitors and inducers; (b) It emphasizes the need to monitor INR when concomitant drugs affect these enzymes; (c) It lists extensive drug-drug interaction examples categorized by cytochrome P450 enzyme type (CYP2C9, CYP1A2, CYP3A4).\\n\\n2. Two most plausible categories: (a) drug_interactions - The entire passage focuses on how other drugs affect warfarin metabolism through CYP450 enzyme pathways, with detailed tables of interacting drugs. (b) dosage_and_administration - One could argue the INR monitoring instruction relates to dosing guidance, but the bulk of content is clearly about interactions rather than dose recommendations.\\n\\n3. Classification decision: drug_interactions wins decisively. The passage explicitly addresses drug-drug interactions, enzyme inhibition/induction effects, and provides comprehensive tables of medications that interact with warfarin. While INR monitoring is mentioned, it is contextual to understanding the interaction risk, not primary dosing guidance. The dosage_and_administration category would cover dose amounts and schedules, not interaction monitoring.\\n\\n4. Confidence: HIGH (>90%). The content is unambiguously focused on drug interactions with clear organizational structure (enzyme types, inhibitors vs. inducers, specific drug lists). This is quintessential drug_interactions material.\", \"classification\": \"drug_interactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 9980,
+  "usage": {
+    "input_tokens": 1509,
+    "output_tokens": 380
+  }
+}

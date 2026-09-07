@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAlbuterol Sulfate HFA is a beta 2 -adrenergic agonist indicated for: Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. ( 1.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older.\"}",
+  "elapsed_ms": 1575,
+  "usage": {
+    "input_tokens": 350,
+    "output_tokens": 62
+  }
+}

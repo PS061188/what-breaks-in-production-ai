@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIn genera1, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal or cardiac function, and of concomitant disease or other drug therapy. This drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug may be greater in patients with impaired renal function. Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection and it may be useful to monitor renal function (see PRECAUTIONS: General and DOSAGE AND ADMINISTRATION ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usua1ly starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Geriatric Patients: In general, dose selection and dose adjustment for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Most prominent features: (a) The passage explicitly uses the term 'elderly patient' and 'Geriatric Patients' multiple times; (b) It discusses dose selection specifically for this population, recommending 'cautious' approach and 'low end of the dosing range'; (c) It mentions considerations unique to elderly patients such as decreased hepatic, renal, or cardiac function and the need to monitor renal function.\\n\\n2. Most plausible categories: (a) geriatric_use - This is clearly the primary focus, discussing how dosing and management differ for patients 65+; (b) dosage_and_administration - While dosing is mentioned, the context is specifically about geriatric dosing modifications, not general dosing guidance.\\n\\n3. Classification winner: geriatric_use definitively wins. The passage is not providing general dosage and administration instructions; rather, it is specifically addressing the special considerations and dose modifications needed in elderly patients. The repeated emphasis on 'elderly patient' and 'Geriatric Patients,' combined with discussion of age-related physiological changes (decreased renal/hepatic/cardiac function) that necessitate dosing adjustments, makes this unambiguously a geriatric_use section.\\n\\n4. Confidence: HIGH (>90%). The language is unequivocal and the category alignment is clear and explicit.\",\"classification\":\"geriatric_use\",\"confidence\":\"HIGH\",\"alternative_considered\":\"dosage_and_administration\",\"requires_human_review\":false}",
+  "elapsed_ms": 6793,
+  "usage": {
+    "input_tokens": 1087,
+    "output_tokens": 345
+  }
+}

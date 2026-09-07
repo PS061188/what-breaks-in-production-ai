@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nThese data indicate that sertraline's extent of inhibition of P450 3A4 activity is not likely to be of clinical significance. Results of the interaction study with cisapride indicate that sertraline 200 mg (q.d.) induces the metabolism of cisapride (cisapride AUC and C max were reduced by about 35%). Drugs Metabolized by P450 2D6 – Many drugs effective in the treatment of major depressive disorder, e.g., the SSRIs, including sertraline, and most tricyclic antidepressant drugs effective in the treatment of major depressive disorder inhibit the biochemical activity of the drug metabolizing isozyme cytochrome P450 2D6 (debrisoquin hydroxylase), and, thus, may increase the plasma concentrations of co-administered drugs that are metabolized by P450 2D6.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"drug_interactions\"}",
+  "elapsed_ms": 1201,
+  "usage": {
+    "input_tokens": 636,
+    "output_tokens": 11
+  }
+}

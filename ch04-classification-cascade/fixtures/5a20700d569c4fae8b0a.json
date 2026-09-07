@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSee full prescribing information for atorvastatin calcium tablets dosage modifications due to drug interactions ( 2.5 ). 2.1 Important Dosage Information Take atorvastatin calcium tablets orally once daily at any time of the day, with or without food. Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust the dosage if necessary. 2.2 Recommended Dosage in Adult Patients The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Prominent features: (1) Contains explicit dosing instructions ('Take atorvastatin calcium tablets orally once daily'); (2) Specifies timing of administration ('at any time of the day, with or without food'); (3) Includes monitoring guidance ('Assess LDL-C when clinically appropriate, as early as 4 weeks'); (4) References starting dosage amounts ('10 mg to 20'). Step 2 - Most plausible categories: (a) dosage_and_administration - contains route of administration, frequency, timing with food, dosage amounts, and monitoring intervals; (b) indications_and_usage - less likely despite LDL-C mention, as the passage doesn't discuss what conditions are treated. Step 3 - Winner: dosage_and_administration wins decisively. The passage is structured as dosing guidance with section labels '2.1 Important Dosage Information' and '2.2 Recommended Dosage in Adult Patients'. This is clearly instructional content about how to administer the drug, when to take it, and what doses to use. Step 4 - Confidence: HIGH (>90%). The section numbers, heading structure, and content uniformly point to dosage/administration guidance with minimal ambiguity.\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"indications_and_usage\",\"requires_human_review\":false}",
+  "elapsed_ms": 4707,
+  "usage": {
+    "input_tokens": 991,
+    "output_tokens": 326
+  }
+}

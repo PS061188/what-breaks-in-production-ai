@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFurosemide Tablets, USP 80 mg: White-off white, round, scored, debossed \"3171\" over \"V\" on one side and plain on the reverse side, available as follows: • Bottles of 500: NDC 63629-1120-1 You may report side effects to Solco Healthcare US, LLC at\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features: (1) Specific dosage strength mentioned (80 mg), (2) Physical appearance of the tablet described (white-off white, round, scored, debossed with specific markings), (3) Packaging information provided (bottles of 500 with NDC number). Step 2: Two most plausible categories are 'how_supplied' and 'description'. 'How_supplied' typically includes dosage forms, strengths, packaging, and storage information - all of which are present here. 'Description' typically includes chemical name, structure, formulation, and inactive ingredients - none of which are present. Step 3: 'How_supplied' is the clear winner. The passage explicitly provides the dosage form (tablets), strength (80 mg), physical characteristics for identification purposes (appearance, markings), and packaging details (bottles of 500, NDC number). While inactive ingredients are not listed, the core elements of how a drug product is supplied are all present. Step 4: This is a HIGH confidence classification as the passage matches the canonical elements of how_supplied sections in drug labeling.\",\"classification\": \"how_supplied\",\"confidence\": \"HIGH\",\"alternative_considered\": \"description\",\"requires_human_review\": false}",
+  "elapsed_ms": 4174,
+  "usage": {
+    "input_tokens": 937,
+    "output_tokens": 281
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nEach canister contains a microcrystalline suspension of albuterol sulfate in propellant HFA‑134a (l,l,l,2‑tetrafluoroethane). It contains no other excipients. After prirning, each actuation of the inhaler delivers 120 mcg of albuterol sulfate, USP in 75 mg of suspension from the valve and 108 mcg of albuterol sulfate, USP from the mouthpiece (equivalent to 90 mcg of a1buterol base from the mouthpiece). Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. Avoid spraying in eyes. Albuterol Sulfate chemical structure\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Detailed description of the microcrystalline suspension formulation with specific propellant (HFA-134a) and lack of excipients; (2) Precise dosage delivery specifications (120 mcg from valve, 108 mcg from mouthpiece, 90 mcg albuterol base); (3) Priming instructions with specific frequency requirements and safety warnings (avoid eyes, shake before use). Step 2 - Most plausible categories: (a) 'how_supplied' - addresses formulation, dosage forms, and packaging details; (b) 'dosage_and_administration' - discusses how to use the drug including priming procedures. Step 3 - Classification decision: While priming instructions touch on administration, the primary focus is on the pharmaceutical formulation itself (microcrystalline suspension, propellant composition, delivered dose per actuation, and product specifications). The passage emphasizes what the product contains and how much is delivered per dose, which is characteristic of 'how_supplied' content. The priming information is presented as a product characteristic rather than clinical dosing guidance. However, the priming and delivery instructions could reasonably fit 'dosage_and_administration.' The balance of content (formulation, suspension type, propellant, delivered dose specifications, and safety precautions for use) aligns more closely with 'how_supplied.' Step 4 - Confidence assessment: The passage clearly describes the pharmaceutical formulation and delivery specifications, but also includes usage instructions that blur the line between product description and administration guidance. This creates moderate uncertainty between two valid interpretations.\",\"classification\": \"how_supplied\",\"confidence\": \"MEDIUM\",\"alternative_considered\": \"dosage_and_administration\",\"requires_human_review\": true}",
+  "elapsed_ms": 7508,
+  "usage": {
+    "input_tokens": 1084,
+    "output_tokens": 402
+  }
+}

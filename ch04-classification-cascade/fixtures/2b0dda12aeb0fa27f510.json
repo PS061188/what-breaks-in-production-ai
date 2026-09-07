@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nAtorvastatin is an inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA) reductase. Atorvastatin calcium USP is (βR, δR)-2-(p-fluorophenyl)-β,δ-dihydroxy-5-isopropyl-3-phenyl-4(phenylcarbamoyl)pyrrole-l-heptanaote (1:2), trihydrate. The molecular formula of atorvastatin calcium USP is C 66 H 68 CaF 2 N 4 O 10 .3H 2 O and its molecular weight is 1209.41. Its structural formula is: Atorvastatin calcium USP is a white to off-white crystalline powder that is insoluble in aqueous solutions of pH 4 and below. Atorvastatin calcium U\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"description\"}",
+  "elapsed_ms": 969,
+  "usage": {
+    "input_tokens": 657,
+    "output_tokens": 9
+  }
+}

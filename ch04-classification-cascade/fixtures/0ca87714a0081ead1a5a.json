@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nSafety and effectiveness of Gabapentin in the management of postherpetic neuralgia in pediatric patients have not been established. Safety and effectiveness as adjunctive therapy in the treatment of partia1 seizures in pediatric patients below the age of 3 years has not been established [see Clinical Studies (14.2)] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly addresses pediatric patient populations, stating 'in pediatric patients'; (2) It discusses 'Safety and effectiveness' which is language typical of clinical guidance sections; (3) It mentions specific conditions (postherpetic neuralgia and partial seizures) and notes that evidence 'has not been established' in children under 3 years. Step 2 - Most plausible categories: (a) pediatric_use - This passage directly discusses what is known about use in children, which is the defining characteristic of this category. (b) indications_and_usage - While it mentions conditions (postherpetic neuralgia, partial seizures), it does not establish approved uses but rather notes lack of evidence in pediatric populations. Step 3 - Classification decision: The passage wins for pediatric_use because it is explicitly addressing safety and effectiveness information specific to pediatric populations, noting gaps in clinical data for children. It is not describing approved indications but rather limitations of pediatric data. The indications_and_usage category is ruled out because the passage is not establishing or describing approved uses, but rather disclaiming insufficient evidence in a specific population. Step 4 - Confidence: HIGH (>90%). The language 'in pediatric patients' and focus on age-specific safety/effectiveness data is unambiguously within the pediatric_use category.\", \"classification\": \"pediatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 5218,
+  "usage": {
+    "input_tokens": 928,
+    "output_tokens": 348
+  }
+}

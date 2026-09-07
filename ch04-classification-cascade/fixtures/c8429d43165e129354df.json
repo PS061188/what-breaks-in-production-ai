@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nNeonates with a history of in utero exposure to lisinopril and hydrochlorothiazide tablets: If oliguria or hypotension occurs, direct attention toward support of blood pressure and renal perfusion. Exchange transfusions or dialysis may be required as a me\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Neonates with in utero exposure to lisinopril and hydrochlorothiazide tablets may experience oliguria or hypotension. Management includes support of blood pressure and renal perfusion, with exchange transfusions or dialysis potentially required as treatment measures.\"}",
+  "elapsed_ms": 2104,
+  "usage": {
+    "input_tokens": 330,
+    "output_tokens": 66
+  }
+}

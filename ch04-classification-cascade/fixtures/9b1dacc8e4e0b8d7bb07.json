@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin hydrochloride tablets are contraindicated in patients with an estimated g1omerular filtration rate (eGFR) below 30 rnL/minute/1.73 m 2 . Initiation of metformin hydrochloride tablets in patients with an eGFR between 30 to 45 mL/minute/1.73 m 2 is not recommended. In patients taking metformin hydrochloride tablets whose eGFR 1ater falls below 45 mL/min/1.73 m 2 , assess the benefit risk of continuing therapy. Discontinue metformin hydrochloride tablets if the patient’s eGFR later falls below 30 mL/minute/1.73 rn 2 [ see Warnings and Precautions (5.1) ] . 2.4 Discontinuation for Iodinated Contrast Irnaging Procedures Discontinue metformin hydrochloride tab1ets at the time of, or prior to, an iodinated contrast imaging procedure in patients with an eGFR between 30 and 60 mL/min/1.73 m 2 ;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(a) Specific kidney function thresholds (eGFR values: <30, 30-45, 30-60 mL/min/1.73 m²) that determine medication use\\n(b) Clear statements about when the drug is 'contraindicated' and when it 'is not recommended'\\n(c) Instructions about discontinuation and assessment of therapy based on renal function\\n\\nStep 2: Two most plausible categories:\\n(1) CONTRAINDICATIONS: The passage explicitly uses the word 'contraindicated' and describes situations where the drug must not be used (eGFR <30) or should not be initiated (eGFR 30-45). This is definitional contraindication language.\\n(2) DOSAGE_AND_ADMINISTRATION: The passage discusses conditions under which therapy is managed (discontinued, assessed, continued), which could be interpreted as dosing/administration guidance.\\n\\nStep 3: Classification decision:\\nCONTRAINDICATIONS wins clearly. The passage explicitly states 'contraindicated in patients with eGFR below 30' and 'initiation...is not recommended' at eGFR 30-45. These are absolute or relative contraindications based on renal function—defining situations in which the drug must not be used. Dosage_and_administration would cover how much to give and by what route for appropriate patients, not when to avoid the drug entirely.\\n\\nStep 4: Confidence score: HIGH (>90%). The language is unambiguous and uses the word 'contraindicated' directly. The structure clearly delineates safety restrictions rather than dosing instructions.\", \"classification\": \"contraindications\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 8980,
+  "usage": {
+    "input_tokens": 1135,
+    "output_tokens": 432
+  }
+}

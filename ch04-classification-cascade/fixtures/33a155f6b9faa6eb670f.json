@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAtorvastatin is an inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA) reductase. Atorvastatin calcium USP is (βR, δR)-2-(p-fluorophenyl)-β,δ-dihydroxy-5-isopropyl-3-phenyl-4(phenylcarbamoyl)pyrrole-l-heptanaote (1:2), trihydrate. The molecular formula of atorvastatin calcium USP is C 66 H 68 CaF 2 N 4 O 10 .3H 2 O and its molecular weight is 1209.41. Its structural formula is: Atorvastatin calcium USP is a white to off-white crystalline powder that is insoluble in aqueous solutions of pH 4 and below. Atorvastatin calcium U\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Chemical identification with IUPAC nomenclature and molecular formula provided; (b) Mechanism of action explicitly stated (HMG-CoA reductase inhibitor); (c) Physical and chemical properties described (white crystalline powder, insolubility characteristics, molecular weight).\\n\\n2. Two most plausible categories: (a) 'description' - this section typically contains chemical name, structure, formulation, and inactive ingredients; (b) 'how_supplied' - while this can include physical form, it primarily focuses on dosage forms, strengths, packaging, and storage.\\n\\n3. Classification decision: 'description' is the clear winner. The passage provides detailed chemical nomenclature, molecular formula, molecular weight, structural information, and physical/chemical properties - all hallmarks of the Description section of a drug label. The 'how_supplied' category is ruled out because there is no mention of dosage strengths, packaging formats, container types, or storage conditions - the defining elements of that section.\\n\\n4. Confidence: HIGH (>90%). The content directly matches textbook Description section formatting found in standard pharmaceutical labeling. The systematic inclusion of IUPAC name, molecular formula, molecular weight, and physical appearance is characteristic and unambiguous.\",\"classification\": \"description\",\"confidence\": \"HIGH\",\"alternative_considered\": \"how_supplied\",\"requires_human_review\": false}",
+  "elapsed_ms": 6201,
+  "usage": {
+    "input_tokens": 1075,
+    "output_tokens": 321
+  }
+}

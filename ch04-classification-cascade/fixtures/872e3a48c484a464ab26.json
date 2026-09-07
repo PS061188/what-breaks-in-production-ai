@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAtorvastatin calcium tablets, USP 80 mg of atorvastatin: white coloured, oval shaped, biconvex, film-coated tablets with \"MA\" on one side and \"4\" on other side. NDC: 7133S-1336-1: 30 Tab1ets in a B0TTLE NDC: 71335-1336-2: 6O Tablets in a BOTTLE NDC: 71335-1336-3: 90 Tablets in a BOTTLE NDC: 71335-1336-4: 180 Tablets in a BOTTLE Store at controlled room temperature 20º to 25ºC (68º to 77ºF). Repackaged/Re1abeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Atorvastatin calcium tablets, USP 80 mg. Package sizes: 30 tablets in a bottle (NDC 7133S-1336-1), 60 tablets in a bottle (NDC 71335-1336-2), 90 tablets in a bottle (NDC 71335-1336-3), 180 tablets in a bottle (NDC 71335-1336-4).\"}",
+  "elapsed_ms": 1695,
+  "usage": {
+    "input_tokens": 465,
+    "output_tokens": 104
+  }
+}

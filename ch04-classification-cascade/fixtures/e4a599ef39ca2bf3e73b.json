@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the pediatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as pediatric_use\n(what is known about use in children).\n\nState what is known about the use of this drug in pediatric patients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe safety and effectiveness of atorvastatin calcium as an adjunct to diet to reduce LDL-C have been established pediatric patients 10 years of age and older with HeFH. Use of atorvastatin calciurn for this indication is based on a double-blind, placebo-controlled clinical trial in 187 pediatric patients 10 years of age and older with HeFH. In this limited controlled trial, there was no significant effect on growth or sexua1 maturation in the boys or girls, or on menstrual cycle length in girls. The safety and effectiveness of atorvastatin calcium as an adjunct to other LDL-C-1owering therapies to reduce LDL-C have been established pediatric patients 10 years of age and older with HoFH. Use of atorvastatin calcium for this indication is based on a trial without a concurrent control group in 8 pediatric patients l0 years of age and older with HoFH [see Clinical Studies (14) ].\n</passage>",
+  "user": "Run the pediatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Atorvastatin calcium is established as safe and effective in pediatric patients 10 years of age and older for reducing LDL-C as an adjunct to diet in those with heterozygous familial hypercholesterolemia (HeFH) and as an adjunct to other LDL-C-lowering therapies in those with homozygous familial hypercholesterolemia (HoFH). Safety data from a double-blind, placebo-controlled trial of 187 pediatric patients 10 years and older with HeFH showed no significant effects on growth, sexual maturation in boys and girls, or menstrual cycle length in girls. Effectiveness in HoFH is based on a non-controlled trial of 8 pediatric patients 10 years and older.\"}",
+  "elapsed_ms": 3061,
+  "usage": {
+    "input_tokens": 499,
+    "output_tokens": 187
+  }
+}

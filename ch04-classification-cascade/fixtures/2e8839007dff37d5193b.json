@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypotha1arnic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essentia1 for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Close1y monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Primary hypothyroidism (thyroidal), secondary hypothyroidism (pituitary), tertiary hypothyroidism (hypothalamic), congenital hypothyroidism, acquired hypothyroidism, thyrotropin-dependent well-differentiated thyroid cancer (as an adjunct to surgery and radioiodine therapy)\"}",
+  "elapsed_ms": 2017,
+  "usage": {
+    "input_tokens": 475,
+    "output_tokens": 80
+  }
+}

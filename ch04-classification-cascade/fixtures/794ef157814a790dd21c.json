@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Dosing frequency specified as 'once a day (every 24 hours), every day for 14 days'; (b) Administration route and timing: 'swallow 1 tablet with a glass of water before eating in the morning'; (c) Age restriction: 'adults 18 years of age and older'. 2. Most plausible categories: (a) 'dosage_and_administration' - this clearly contains how much (1 tablet), how often (once daily), duration (14 days), route (swallow with water), and timing (morning, before eating); (b) 'indications_and_usage' - the passage mentions symptom relief but this is secondary to the dosing instructions. 3. Winner and rationale: 'dosage_and_administration' wins decisively because the entire passage is structured around HOW to take the medication (route, frequency, timing, duration, age restriction), which is the core definition of dosage and administration. The brief mention of 'relief of symptoms' is incidental context, not the focus. 4. Confidence: HIGH (>90%) because the passage is unambiguously instructional in nature with no contradictory elements or ambiguous phrasing related to the core classification criteria.\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"indications_and_usage\",\"requires_human_review\":false}",
+  "elapsed_ms": 4708,
+  "usage": {
+    "input_tokens": 956,
+    "output_tokens": 325
+  }
+}

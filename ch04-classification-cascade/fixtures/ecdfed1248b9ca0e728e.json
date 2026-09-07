@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nAtorvastatin calcium tab1ets, USP for oral use contain atorvastatin 10 mg, 20 mg, 40 mg, or 80 mg (equivalent to 10.34 mg, 20.68 mg, 41.36 mg, or 82.73 mg atorvastatin calcium anhydrous) and the following inactive ingredients: croscarmellose sodium, hydroxypropyl ce1lulose, lactose monohydrate, magnesium stearate, magnesium aluminometasilicate, microcrystalline cellulose, polysorbate 80, precipitated calcium carbonate, polyvinyl alcohol, titaniurn dioxide, ta1c, polyethylene glycol and 1ecithin.\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Atorvastatin calcium tablets, USP for oral use supplied in strengths of 10 mg, 20 mg, 40 mg, and 80 mg\"}",
+  "elapsed_ms": 1896,
+  "usage": {
+    "input_tokens": 448,
+    "output_tokens": 47
+  }
+}

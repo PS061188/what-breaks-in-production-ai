@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin hydroch1oride tablets are contraindicated in patients with: Severe renal impairment (eGFR below 30 mL/min/1.73 m 2 ) [ see Warnings and Precautions (5.1) ]. Hypersensitivity to metforrnin. Acute or chronic metabo1ic acidosis, including diabetic ketoacidosis, with or without corna. Severe renal impairment (eGFR be1ow 30 mL/min/1.73 m 2 ) ( 4 , 5.1 ) Hypersensitivity to rnetformin ( 4 ) Acute or chronic metabolic acidosis, including diabetic ketoacidosis, with or without coma. ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The passage explicitly lists clinical situations where the drug 'is contraindicated in patients with'\\n2. Specific conditions are enumerated: severe renal impairment, hypersensitivity, metabolic acidosis\\n3. Each item references warning/precaution sections and includes medical criteria (eGFR values, clinical states)\\n\\nStep 2 - Two most plausible categories:\\n1. CONTRAINDICATIONS: The passage uses the explicit phrase 'contraindicated in patients with' and lists absolute use restrictions. This is the defining characteristic of contraindications sections in prescribing information.\\n2. ADVERSE_REACTIONS: Could theoretically relate to serious conditions, but adverse reactions describe unwanted effects that occur during use, not absolute pre-treatment exclusions.\\n\\nStep 3 - Classification decision:\\nCONTRAINDICATIONS wins decisively. The passage uses explicit contraindication language ('contraindicated in'), lists absolute exclusion criteria that must be checked before prescribing, and provides medical parameters for determining contraindication status. Adverse reactions describe what happens during treatment; contraindications describe who should never receive the drug.\\n\\nStep 4 - Confidence assessment:\\nHIGH confidence (>95%). The language is unambiguous and follows standard prescribing information format for contraindications sections. There is no meaningful alternative interpretation.\", \"classification\": \"contraindications\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 6884,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 359
+  }
+}

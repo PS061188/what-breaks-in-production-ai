@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nThe safety data described below reflects exposure to albuterol sulfate HFA in 248 subjects treated with albuterol sulfate HFA in 3 placebo-controlled clinical trials of 2 to 12 weeks’ duration. The data from adults and adolescents is based upon 2 clinical trials in which 202 subjects with asthma aged 12 years and older were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 12 weeks’ duration. The adult/adolescent population was 92 female, 110 male and 163 white, 19 black, 18 Hispanic, 2 other. The data from pediatric subjects are based upon 1 clinical trial in which 46 subjects with asthma aged 4 to 11 years were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 2 weeks’ duration.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 937,
+  "usage": {
+    "input_tokens": 654,
+    "output_tokens": 11
+  }
+}

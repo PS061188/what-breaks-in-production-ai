@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nPediatric Patients aged 3 months to 12 years weighing less than or equal to 40 kg: 90 mg/kg/day divided every 12 hours, administered for 10 days. ( 2 ) 2.1 Important Administration Instructions To minimize the potential for gastrointestinal intolerance, amoxicillin and c1avu1anate potassium for oral suspension, 600 mg/42.9 mg per 5 mL should be taken at the start of a meal. Absorption of davulanate potassium may be enhanced when amoxicillin and clavulanate potassium for ora1 suspension, 600 rng/42.9 mg per 5 mL is administered at the start of a mea1. 2.2 Dosage in Pediatric Patients Pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended dose of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is 90 rng/kg/day divided every 12 hours, administered for 10 days (see Table 1 as a general example guideline for attainment of this dosage).\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Pediatric patients aged 3 months to 12 years weighing ≤40 kg: 90 mg/kg/day divided every 12 hours for 10 days, administered orally at the start of a meal\"}",
+  "elapsed_ms": 2022,
+  "usage": {
+    "input_tokens": 596,
+    "output_tokens": 60
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nPatients not responding to an initial dose of 25 or 50 mg/day may benefit from dose increases up to a maximum of 200 mg/day. For children with OCD, their generally lower body weights compared to adults should be taken into consideration in advancing the dose, in order to avoid excess dosing. Given the 24 hour elimination half-life of Sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Sertraline hydrochloride should be administered once daily, either in the morning or evening. Maintenance/Continuation/Extended Treatment Major Depressive Disorder –It is generally agreed that acute episodes of major depressive disorder require several months or longer of sustained pharmacologic therapy beyond response to the acute episode.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Initial dose: 25 or 50 mg/day; Maximum dose: 200 mg/day; Frequency: Once daily; Route: Oral (not specified in passage, but implied); Special consideration: In children, dose adjustments should account for lower body weight; Dose changes should not occur more frequently than 1 week intervals; Timing: May be given in the morning or evening\"}",
+  "elapsed_ms": 2276,
+  "usage": {
+    "input_tokens": 439,
+    "output_tokens": 93
+  }
+}

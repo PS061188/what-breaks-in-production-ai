@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nCollagen Diseases During an exacerbation or as maintenance therapy in selected cases of: Systemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5. Allergic States Control of severe or incapacitating allergic conditions intractable to adeq\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The text lists specific medical conditions organized by category (Collagen Diseases, Dermatologic Diseases, Allergic States)\\n2. It uses phrases like 'exacerbation or as maintenance therapy' and 'intractable to adequate' (therapy), indicating therapeutic use\\n3. The conditions listed (systemic lupus erythematosus, pemphigus, bullous dermatitis, severe psoriasis, allergic conditions) are disease states being treated\\n\\nStep 2 - Two most plausible categories:\\n1. Indications and Usage: This lists specific disease conditions for which the drug is approved or indicated. The format and content directly enumerate what conditions the drug treats.\\n2. Adverse Reactions: Could theoretically be a list of side effects, but the language 'therapy in selected cases' and 'control of' clearly indicates these are CONDITIONS BEING TREATED, not reactions experienced.\\n\\nStep 3 - Classification winner:\\nIndications and Usage wins decisively. The passage explicitly identifies approved therapeutic uses - specific diseases and conditions for which the drug is indicated as treatment. The organizational structure (by disease category), the phrase 'maintenance therapy in selected cases', and the focus on treatable conditions all point unambiguously to this section of a prescribing label.\\n\\nStep 4 - Confidence: HIGH (>95%). The content unmistakably describes indications rather than any other category. There is no ambiguity about the purpose of listing these conditions.\", \"classification\": \"indications_and_usage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5512,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 386
+  }
+}

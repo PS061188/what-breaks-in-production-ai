@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMetformin Hydrochloride Tablets In a U.S. clinical trial of metformin hydrochloride tablets in patients with type 2 diabetes mellitus, a total of 141 patients received metformin hydrochloride tablets up to 2550 mg per day. Adverse reactions reported in greater than 5% of metformin hydrochloride tablets treated patients and that were more common than in placebo-treated patients, are listed in Table 1. Table 1: Adverse Reactions fro\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying prominent features:\\n- Explicit mention of 'Adverse reactions reported in greater than 5% of metformin hydrochloride tablets treated patients'\\n- Reference to Table 1 containing adverse reactions data\\n- Clinical trial context with patient population and dosing information\\n- Comparison between metformin-treated and placebo-treated groups\\n\\nStep 2: Considering most plausible categories:\\n- adverse_reactions: The passage explicitly states 'Adverse reactions reported' and lists them in a table comparing treated vs. placebo groups. This is the defining characteristic of the adverse_reactions section.\\n- dosage_and_administration: While dosing information is mentioned ('up to 2550 mg per day'), this is secondary context for the clinical trial rather than the primary focus.\\n\\nStep 3: Determining winner:\\nThe passage clearly focuses on adverse reactions with explicit language ('Adverse reactions reported in greater than 5% of...') and references a table dedicated to adverse reactions. The dosing mentioned is contextual information about the trial, not prescriptive dosing guidance. adverse_reactions wins decisively.\\n\\nStep 4: Confidence assessment:\\nThe classification is very clear with explicit adverse_reactions language and tabular presentation of side effects. This is unambiguously adverse_reactions content, warranting HIGH confidence (>90%).\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": false}",
+  "elapsed_ms": 5227,
+  "usage": {
+    "input_tokens": 972,
+    "output_tokens": 346
+  }
+}

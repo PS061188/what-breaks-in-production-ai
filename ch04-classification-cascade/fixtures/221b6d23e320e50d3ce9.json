@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nOf the total number of atorvastatin calcium -treated patients in clinical trials, 15,813 (40%) were ≥65 years old and 2,800 (7%) were ≥75 years old. No overall differences in safety or effectiveness were observed between these patients and younger patients. Advanced age (≥65 years) is a risk factor for atorvastatin calcium -ass\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Prominent features of this document:\\n- Discussion of patient age groups (≥65 years old, ≥75 years old) in clinical trials\\n- Comparison of safety and effectiveness between elderly and younger patients\\n- Statement about advanced age as a risk factor for atorvastatin calcium\\n\\nStep 2: Most plausible categories:\\n- GERIATRIC_USE: The passage explicitly focuses on patients 65 years and older, discussing trial enrollment numbers, safety/effectiveness comparisons in elderly populations, and age as a risk factor. This is the primary indicator.\\n- ADVERSE_REACTIONS: Could be considered since risk factors and safety are mentioned, but the passage is not describing specific adverse reactions or side effects—rather, it's contextualizing use in an age group.\\n\\nStep 3: Classification decision:\\nGERIATRIC_USE is clearly the correct category. The entire passage is dedicated to discussing atorvastatin use specifically in elderly patients (those ≥65 years), providing trial data specific to this population, and noting that advanced age is a risk factor. This is quintessential geriatric use information rather than general adverse reaction reporting.\\n\\nStep 4: Confidence score:\\nHIGH (>90%). The passage is unambiguously about geriatric populations and their response to the drug, with explicit age cutoffs and comparative safety/effectiveness data for elderly patients.\", \"classification\": \"geriatric_use\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 5126,
+  "usage": {
+    "input_tokens": 946,
+    "output_tokens": 359
+  }
+}

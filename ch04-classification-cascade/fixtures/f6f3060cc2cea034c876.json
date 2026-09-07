@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe principal signs and symptoms of overdose with furosemide are dehydration, blood volume reduction, hypotension, electrolyte imbalance, hypokalemia and hypochloremic alkalosis, and are extensions of its diuretic action. The acute toxicity of furosemide has been determined in mice, rats and dogs. In all three, the oral LD 50 exceeded 1000 mg/kg body weight, while the intravenous LD 50 ranged from 300 to 680 mg/kg. The acute intraga\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly discusses 'signs and symptoms of overdose' with furosemide, listing dehydration, blood volume reduction, hypotension, electrolyte imbalance, hypokalemia, and hypochloremic alkalosis. (b) It provides LD50 data in animal models (mice, rats, dogs) with specific dosing ranges (oral LD50 >1000 mg/kg, IV LD50 300-680 mg/kg). (c) The passage is cut off mid-sentence but clearly focuses on toxicity measurements and dose-response data. Step 2 - Most plausible categories: (1) 'overdosage' - this is the most obvious fit given the explicit mention of 'overdose' and clinical manifestations of toxicity. (2) 'adverse_reactions' - could potentially fit as it describes pathological outcomes, but the context is specifically overdose toxicity rather than adverse reactions at therapeutic doses. Step 3 - Winner determination: 'overdosage' clearly wins. The passage explicitly states 'signs and symptoms of overdose' and provides animal toxicity data (LD50 values), which is classic overdosage section content. Adverse reactions would describe side effects seen at normal dosing; this is specifically about toxicity at excessive doses. Step 4 - Confidence: HIGH (>90%). The text uses the word 'overdose' directly, provides characteristic overdose manifestations, and includes LD50 animal toxicity data which is standard overdosage section material. No ambiguity here.\",\"classification\": \"overdosage\",\"confidence\": \"HIGH\",\"alternative_considered\": \"adverse_reactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 5449,
+  "usage": {
+    "input_tokens": 981,
+    "output_tokens": 391
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIn premature infants furosemide may precipitate nephrocalcinosis/nephrolithiasis. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity who have been treated chronically with furosemide. Monitor renal function, and renal ultrasonography should be considered, in pediatric patients receiving furosemide. If furosemide is administered to premature infants during the fir\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"nephrocalcinosis, nephrolithiasis\"}",
+  "elapsed_ms": 1539,
+  "usage": {
+    "input_tokens": 372,
+    "output_tokens": 19
+  }
+}

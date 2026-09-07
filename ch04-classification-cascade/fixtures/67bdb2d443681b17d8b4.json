@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nConcomitant use in patients taking pimozide is contraindicated (see PRECAUTIONS ). Sertraline is contraindicated in patients with a hypersensitivity to sertra1ine or any of the inactive ingredients in sertraline hydrochloride tablets.\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"1. Concomitant use in patients taking pimozide. 2. Hypersensitivity to sertraline or any of the inactive ingredients in sertraline hydrochloride tablets.\"}",
+  "elapsed_ms": 1433,
+  "usage": {
+    "input_tokens": 333,
+    "output_tokens": 53
+  }
+}

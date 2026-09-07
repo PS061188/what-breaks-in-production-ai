@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third tria1, albuterol sulfate HFA was eva1uated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albutero1 sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached rnasks.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Clinical trial data comparing albuterol sulfate HFA at different doses (90 mcg, 180 mcg, 360 mcg) and placebo; (b) Pediatric population focus, including subjects younger than 24 months; (c) Measurement of asthma symptom scores as the primary outcome metric, with treatment efficacy evaluation over 4-week periods.\\n\\n2. Most plausible categories: (i) 'dosage_and_administration' - the passage extensively discusses specific doses (90 mcg, 180 mcg, 360 mcg), delivery methods (AeroChamber Plus Valved Holding Chamber), and administration to specific age groups. (ii) 'pediatric_use' - the passage explicitly focuses on pediatric subjects, including those younger than 24 months, and evaluates treatment in this population.\\n\\n3. Primary classification decision: This passage is primarily 'dosage_and_administration' rather than 'pediatric_use'. While pediatric subjects are involved, the core content focuses on dose comparisons, specific mcg amounts, delivery devices/chambers, and dosing regimens (4-week treatment periods). The passage is presenting dosing trials and dose characterization studies. Although pediatric use is mentioned, the passage's main function is to document what doses were tested and how they were delivered, which is the essence of dosage_and_administration. 'Pediatric_use' would be more appropriate if the passage discussed safety considerations, developmental concerns, or special monitoring in children - instead it treats pediatric subjects as the test population for general dose evaluation.\\n\\n4. Confidence assessment: MEDIUM (75%). The passage clearly relates to dosage information through dose specifications and delivery methods, but the heavy emphasis on pediatric subjects and the clinical trial context create some ambiguity. The passage could reasonably be categorized as either dosage_and_administration or pediatric_use depending on the emphasis given to age versus dose details.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"MEDIUM\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": true}",
+  "elapsed_ms": 9000,
+  "usage": {
+    "input_tokens": 1073,
+    "output_tokens": 489
+  }
+}

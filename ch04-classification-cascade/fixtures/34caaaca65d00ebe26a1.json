@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAdverse reactions are categorized below by organ system and listed by decreasing severity. Gastrointestinal System Reactions 1. hepatic encephalopathy in patients with hepatocellular insufficiency 2. pancreatitis 3. jaundice (intrahepatic cholestatic jaundice) 4. increased liver enzymes 5. anorexia 6. oral and gastric irritation 7. cramping 8. diarrhea 9. constipation 10. nausea 11. vomiting Systemic Hypersensitivity Reactions 1. severe anaphylactic or anaphylactoid reactions (e.g., with shock) 2. systemic vasculitis 3. interstitial nephritis 4. necrotizing angiitis Central Nervous System Reactions 1. tinnitus and hearing loss 2. paresthesias 3. vertigo 4. dizziness 5. headache 6. blurred vision 7. xanthopsia Hematolo\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) Document is explicitly organized as 'Adverse reactions are categorized below by organ system' with enumerated lists of side effects; (2) Content includes systematic categorization by organ systems (Gastrointestinal, Systemic Hypersensitivity, Central Nervous System) with severity ordering; (3) Listed items are all negative patient outcomes (hepatic encephalopathy, pancreatitis, anaphylaxis, tinnitus, etc.) rather than beneficial therapeutic effects.\\n\\nStep 2 - Most plausible categories: (a) 'adverse_reactions' - the passage is explicitly labeled as adverse reactions and lists side effects by organ system, which is the defining characteristic of adverse reaction documentation; (b) 'description' - less likely, as description typically covers chemical composition and formulation, not clinical safety outcomes.\\n\\nStep 3 - Winner and rationale: 'adverse_reactions' wins decisively. The passage opens with 'Adverse reactions are categorized below...' making the intent explicit. The content systematically documents unwanted drug effects organized by physiological system and severity - this is the standard format for adverse reaction sections in pharmaceutical labeling. The alternative 'description' would cover inactive ingredients and chemical properties, which are completely absent here.\\n\\nStep 4 - Confidence: HIGH (>95%). The classification is unambiguous - the document explicitly identifies itself as an adverse reactions section and maintains that format throughout with no contradictory signals.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 7219,
+  "usage": {
+    "input_tokens": 1091,
+    "output_tokens": 369
+  }
+}

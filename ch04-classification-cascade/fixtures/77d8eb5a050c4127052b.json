@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMajor Depressive Disorder – Sertraline hydrochloride is indicated for the treatment of major depressive disorder in adults. The efficacy of Sertraline hydrochloride in the treatment of a major depressive episode was established in six to eight week controlled trials of adult outpatients whose diagnoses corresponded most closely to the DSM-III category of major depressive disorder (see Clinica1 Trials under CLINICAL PHARMACOLOGY ). A major depressive episode implies a prominent and relatively persistent depressed or dysphoric mood that usua1ly interferes with daily functioning (nearly every day for at least 2 weeks); it should include at least 4 of the fo1lowing 8 syrnptoms: change in appetite, change in sleep, psychomotor agitation or retardation, loss of interest in usual activities or decrease in sexual drive, increased fatigue, feelings of gui1t or worthlessness, slowed thinking or impaired concentration, and a suicide attempt or suicidal ideation.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Major Depressive Disorder\"}",
+  "elapsed_ms": 1551,
+  "usage": {
+    "input_tokens": 487,
+    "output_tokens": 14
+  }
+}

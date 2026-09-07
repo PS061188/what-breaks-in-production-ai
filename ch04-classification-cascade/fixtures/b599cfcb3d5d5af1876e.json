@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nhair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrua1 irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone cornplete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n(1) Extensive listing of side effects and reactions across multiple organ systems (hair loss, flushing, rash, decreased bone mineral density, menstrual irregularities, seizures, pseudotumor cerebri, slipped capital femoral epiphysis, craniosynostosis, hypersensitivity reactions)\\n(2) Specific mention of adverse reactions in pediatric patients with warnings about overtreatment consequences\\n(3) Focus on undesired effects observed during levothyroxine therapy rather than therapeutic use, dosing guidance, or drug formulation\\n\\nStep 2 - Most plausible categories:\\n(1) adverse_reactions - The passage predominantly catalogs side effects and adverse events across different patient populations and organ systems. This is the core purpose of this content.\\n(2) pediatric_use - The passage includes a subsection \\\"Adverse Reactions in Pediatric Patients\\\" with specific information about pseudotumor cerebri, slipped capital femoral epiphysis, and risks from overtreatment in children. However, this is secondary to the broader adverse reactions focus.\\n\\nStep 3 - Classification winner:\\nadverse_reactions wins decisively. While the passage does contain pediatric-specific information, the primary content structure and intent is documenting adverse reactions across all populations. The pediatric section is a subsection providing specialized adverse reaction information for that population, not a general discussion of pediatric use considerations.\\n\\nStep 4 - Confidence: HIGH (>90%). The passage is unmistakably organized as an adverse reactions section with clear listing of side effects, system-by-system categorization, and explicit labeling of pediatric adverse reactions.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 6716,
+  "usage": {
+    "input_tokens": 1034,
+    "output_tokens": 420
+  }
+}

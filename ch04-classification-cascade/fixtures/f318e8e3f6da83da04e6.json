@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIn particular, some evidence suggests that selective serotonin reuptake inhibitors (SSRIs) can cause such untoward sexual experiences. Reliab1e estimates of the incidence and severity of untoward experiences involving sexual desire, performance and satisfaction are difficult to obtain, however, in part because patients and physicians may be reluctant to discuss them. Accordingly, estimates of the incidence of untoward sexual experience and performance cited in product labeling, are likely to underestimate their actual incidence. Table 5 below displays the incidence of sexual side effects reported by at least 2% of patients taking Sertraline hydrochloride in placebo-controlled trials. TABLE 5 *Denominator used was for male patients only (N=1118 Sertraline hydrochloride;\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"sexual side effects including untoward sexual experiences involving sexual desire, performance and satisfaction\"}",
+  "elapsed_ms": 1406,
+  "usage": {
+    "input_tokens": 439,
+    "output_tokens": 24
+  }
+}

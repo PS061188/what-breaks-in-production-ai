@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nSertraline hydrochloride is a selective serotonin reuptake inhibitor (SSRI) for oral administration. It has a molecular weight of 342.7. Sertraline hydrochloride, USP has the following chemical name: (1S-cis)-4-(3,4-dichlorophenyl)-1,2,3,4-tetrahydro-N-methyl-1-naphthalenamine hydrochloride. The empirical formula C 17 H 17 NC l2 •HCl is represented by the following structural formula: Sertraline hydrochloride, USP is a white crystalline powder that is slightly soluble in water and isopropyl alcohol and sparingly soluble in ethanol. Sertraline tablets, USP are supplied for oral administration as scored tablets containing s\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: (1S-cis)-4-(3,4-dichlorophenyl)-1,2,3,4-tetrahydro-N-methyl-1-naphthalenamine hydrochloride\\n\\nMolecular Formula: C17H17NCl2•HCl\\n\\nInactive Ingredients: Not specified in the provided passage (text is incomplete)\"}",
+  "elapsed_ms": 2340,
+  "usage": {
+    "input_tokens": 453,
+    "output_tokens": 100
+  }
+}

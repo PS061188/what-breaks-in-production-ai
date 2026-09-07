@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets USP, 10 mg/12.5 mg are white to off-white, round tablets, imprinted with ‘H150’ on one side and plain on the other side. NDC 6O760-S86-90 Bottle of 90 tablets Storage Store at 20°C-25°C (68°F-77°F); excursions permitted to 15°C-30°C (59°F-86°F) [see USP Controlled Room Temperature]. Protect from excessive light and humidity. Dispense in a well-closed container, if product package is subdivided.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Specific dosage form description (white to off-white, round tablets with imprint 'H150'), (b) NDC number and bottle quantity (NDC 60760-S86-90, Bottle of 90 tablets), (c) Storage instructions (20°C-25°C with excursion range and environmental protection requirements).\\n\\n2. Two most plausible categories: (a) 'how_supplied' - this section typically describes dosage forms, strengths, package sizes, NDC numbers, and storage conditions; (b) 'description' - which could include physical tablet appearance and inactive ingredients, though typically describes chemical composition more than packaging/NDC.\\n\\n3. Winner and rationale: 'how_supplied' is the clear winner. The passage explicitly provides: specific strength (10 mg/12.5 mg), tablet appearance (white to off-white, round), imprint identifier (H150), NDC number, package size (90 tablets), and detailed storage requirements. These are definitional elements of the 'how_supplied' section in pharmaceutical labeling. The 'description' category, while it does mention formulation, is more focused on chemical name, molecular structure, and inactive ingredient composition - none of which are present here.\\n\\n4. Confidence: HIGH (>90%). This passage contains multiple canonical elements of 'how_supplied' labeling with clear NDC, dosage form, strength, and storage information. No ambiguity or conflicting signals present.\", \"classification\": \"how_supplied\", \"confidence\": \"HIGH\", \"alternative_considered\": \"description\", \"requires_human_review\": false}",
+  "elapsed_ms": 5314,
+  "usage": {
+    "input_tokens": 1007,
+    "output_tokens": 378
+  }
+}

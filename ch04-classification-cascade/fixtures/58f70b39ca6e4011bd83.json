@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the packaging_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as how_supplied\n(dosage forms, strengths, packaging and storage).\n\nState the dosage forms, strengths and package sizes this drug is supplied in.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nHow Supplied The color of the dry powder for Amoxicillin and clavulanate potassium for oral suspension, USP, 600 mg/42.9 mg per 5 mL is white to off-white powder. Each 5 mL of reconstituted orange-flavored suspension contains 600 mg amoxicillin trihydrate and 42.9 mg clavulanic acid as the potassium sa\n</passage>",
+  "user": "Run the packaging_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Dosage form: Oral suspension (dry powder for reconstitution), 600 mg/42.9 mg per 5 mL. The passage does not contain information about specific package sizes.\"}",
+  "elapsed_ms": 1345,
+  "usage": {
+    "input_tokens": 372,
+    "output_tokens": 52
+  }
+}

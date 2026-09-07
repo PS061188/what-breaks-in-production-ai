@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLevothyroxine sodium tablets, USP is L-thyroxine (T4) and contains synthetic crysta1line L-3,3’,5,5’-tetraiodothyronine sodium salt. Synthetic T4 is chemical1y identical to that produced in the human thyroid gland. Levothyroxine (T4) sodium has an empirica1 formula of C 15 H 1O I 4 N NaO 4 • H 2 O, molecular weight of 798.86 (anhydrous), and structural forrnula as shown: Levothyroxine sodium tablets, USP for oral administration are supplied in the following strengths: 25 mcg, 50 mcg, 75 mcg, 88 mcg, 100 mcg, 112 mcg, 125 mcg, 137 rncg, 150 mcg, 175 mcg, 200 mcg, and 300 mcg. Each levothyroxine sodium tablet contains the inactive ingredients microcrystalline sodiurn, light magnesium oxide, sodium starch glycolate and sodium stearyl fumarate.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features of this passage: (a) Identifies the active ingredient as synthetic levothyroxine sodium (L-thyroxine/T4) with chemical formula and molecular weight provided; (b) Lists specific tablet strengths ranging from 25 mcg to 300 mcg; (c) Enumerates inactive ingredients (microcrystalline cellulose, magnesium oxide, sodium starch glycolate, sodium stearyl fumarate). Step 2 - Most plausible categories: (i) 'description' - the passage provides chemical identity, empirical formula, molecular weight, and structural information about the active ingredient, which are hallmarks of a Description section; (ii) 'how_supplied' - the passage lists available tablet strengths and ingredients, which typically appear in How Supplied sections. Step 3 - Primary classification decision: This passage is best classified as 'description'. While it does mention available strengths, the predominant content focuses on the chemical and pharmaceutical characterization: the chemical name (L-thyroxine, T4), the synthetic nature and identity to endogenous hormone, the empirical formula (C15H10I4NNaO4•H2O), molecular weight (798.86 anhydrous), and inactive ingredients. This is classic Description section content. The 'how_supplied' alternative was considered because strengths are listed, but how_supplied sections typically emphasize packaging, storage, and availability in a more condensed format without detailed chemical characterization. Step 4 - Confidence: HIGH (>90%). The chemical identity, formula, molecular weight, and ingredient list are definitional markers of the Description category in pharmaceutical labeling.\",\"classification\": \"description\",\"confidence\": \"HIGH\",\"alternative_considered\": \"how_supplied\",\"requires_human_review\": false}",
+  "elapsed_ms": 8350,
+  "usage": {
+    "input_tokens": 1131,
+    "output_tokens": 408
+  }
+}

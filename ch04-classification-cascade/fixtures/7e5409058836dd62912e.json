@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nCollagen Diseases During an exacerbation or as maintenance therapy in selected cases of: Systemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5. Allergic States Control of severe or incapacitating allergic conditions intractable to adeq\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Systemic lupus erythematosus, Systemic dermatomyositis (polymyositis), Acute rheumatic carditis, Pemphigus, Bullous dermatitis herpetiformis, Severe erythema multiforme (Stevens-Johnson syndrome), Exfoliative dermatitis, Mycosis fungoides, Severe psoriasis, Severe seborrheic dermatitis, Severe or incapacitating allergic conditions\"}",
+  "elapsed_ms": 2358,
+  "usage": {
+    "input_tokens": 407,
+    "output_tokens": 115
+  }
+}

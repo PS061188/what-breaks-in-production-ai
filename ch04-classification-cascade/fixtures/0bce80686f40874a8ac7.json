@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril can be removed by hemodialysis. (See WARNINGS, Anaphylactoid reaction during membrane exposure .) Hydrochlorothiazide Oral administration of a single ora1 dose of 10 g/kg to mice and rats was not lethal. The most common signs and symptoms observed are those caused by electrolyte depletion (hypokalemia, hypochloremia, hyponatremia) and dehydration resulting from excessive diuresis. If digitalis has also been administered, hypokalemia may accentuate cardiac arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of removal via hemodialysis, (2) Description of signs/symptoms of overdose including electrolyte depletion and dehydration, (3) Warning about interaction with digitalis in overdose context. Step 2 - Most plausible categories: (a) Overdosage - the passage explicitly discusses management of overdose (hemodialysis removal), lethal dose testing, and overdose symptoms; (b) Drug_interactions - mentions digitalis interaction with hypokalemia. Step 3 - Overdosage wins because: The passage's primary focus is on overdose management (hemodialysis as a treatment modality), signs/symptoms of overdose (electrolyte depletion, excessive diuresis), and LD50 data (10 g/kg). The digitalis mention is secondary context explaining why hypokalemia is particularly dangerous in overdose. Drug_interactions would be the alternative, but the digitalis mention is framed within the overdose scenario, not as a general drug-drug interaction section. Step 4 - Confidence: HIGH (>90%) - The structure, content, and explicit mention of hemodialysis as a removal method, combined with overdose symptomatology and lethal dose studies, strongly align with overdosage section content.\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4871,
+  "usage": {
+    "input_tokens": 990,
+    "output_tokens": 330
+  }
+}

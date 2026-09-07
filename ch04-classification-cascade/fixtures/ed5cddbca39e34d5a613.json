@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nPatients not responding to an initial dose of 25 or 50 mg/day may benefit from dose increases up to a maximum of 200 mg/day. For children with OCD, their generally lower body weights compared to adults should be taken into consideration in advancing the dose, in order to avoid excess dosing. Given the 24 hour elimination half-life of Sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Sertraline hydrochloride should be administered once daily, either in the morning or evening. Maintenance/Continuation/Extended Treatment Major Depressive Disorder –It is generally agreed that acute episodes of major depressive disorder require several months or longer of sustained pharmacologic therapy beyond response to the acute episode.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Specific dosing information including initial doses (25-50 mg/day), maximum dose (200 mg/day), and dosing intervals (1 week minimum); (2) Route of administration details (once daily, morning or evening); (3) Special population consideration (children with OCD requiring dose adjustment for lower body weights). Step 2 - Most plausible categories: (a) 'dosage_and_administration' - the passage explicitly covers dose ranges, frequency, timing, and special dosing considerations; (b) 'pediatric_use' - the passage mentions children with OCD and body weight considerations. Step 3 - Winner determination: 'dosage_and_administration' is the clear winner because the primary content is prescribing guidance (initial dose, maximum dose, frequency, administration timing, dose adjustment intervals). The pediatric mention is secondary context used to inform dosing decisions rather than being the main subject. The passage does not discuss efficacy, safety profile, or developmental considerations specific to pediatric use. Step 4 - Confidence: HIGH (>90%) because the passage is unambiguously focused on how to administer the medication, including specific dose amounts, frequencies, and adjustment protocols.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"pediatric_use\", \"requires_human_review\": false}",
+  "elapsed_ms": 5718,
+  "usage": {
+    "input_tokens": 1024,
+    "output_tokens": 317
+  }
+}

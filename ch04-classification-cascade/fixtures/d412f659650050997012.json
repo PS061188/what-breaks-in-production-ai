@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nLisinopril monotherapy is an effective treatrnent of hypertension in once-dai1y doses of 10 mg to 80 mg, while hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to S0 mg per day. In clinica1 trials of lisinopril/hydrochlorothiazide combination therapy using 1isinopril doses of 10 mg to 80 rng and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive response rates generally increased with increasing dose of either component. The side effects (see WARNINGS ) of lisinopril are generally rare and apparent1y independent of dose; those of hydrochlorothiazide are a mixture of dose-dependent phenomena (primarily hypokalemia) and dose-independent phenomena (e.g., pancreatitis), the former much more common than the latter.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Specific dosage ranges provided for lisinopril (10-80 mg once-daily) and hydrochlorothiazide (12.5-50 mg daily), (2) Discussion of dose-response relationships in combination therapy, (3) Characterization of side effects as dose-dependent vs dose-independent phenomena. Step 2 - Most plausible categories: (a) dosage_and_administration - clearly discusses dosing regimens, dose ranges, and frequency; (b) adverse_reactions - mentions side effects and their dose-dependency. Step 3 - Classification decision: While adverse_reactions is mentioned, the primary focus is on dosing information (amounts, frequencies, dose-response relationships in clinical trials). The adverse_reactions content is secondary and primarily references elsewhere (see WARNINGS). The passage is fundamentally organized around 'how much to give' and 'how often,' which is the core definition of dosage_and_administration. Step 4 - Confidence: HIGH (>90%) because the passage explicitly states dosage ranges, frequencies (once-daily), and discusses dose-response in clinical trials - all hallmarks of dosage_and_administration section.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 7049,
+  "usage": {
+    "input_tokens": 1071,
+    "output_tokens": 310
+  }
+}

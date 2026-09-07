@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nFurosemide may increase the ototoxic potential of arninoglycoside antibiotics, especially in the presence of impaired renal function. Except in life-threatening situations, avoid this combination. Furosemide should not be used concomitantly with ethacrynic acid because of the possibility of ototoxicity. Patients receiving high doses of salicylates concomitant1y with furosemide, as in rheumatic disease, may experience salicylate toxicity at lower doses because of competitive renal excretory sites. There is a risk of ototoxic effects if cisplatin and furosemide are given concomitantly. In addition, nephrotoxicity of nephrotoxic drugs such as cisplatin may be enhanced if furosemide is not given in lower doses and with positive fluid balance when used to achieve forced diuresis during cisplatin treatment.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features identification: (1) The passage discusses multiple drug-drug interactions with furosemide (aminoglycoside antibiotics, ethacrynic acid, salicylates, cisplatin); (2) Specific mechanisms are described (ototoxic potential, competitive renal excretory sites, nephrotoxicity enhancement); (3) Clinical warnings and management guidance are provided ('avoid this combination', 'lower doses and positive fluid balance'). Step 2 - Category plausibility: The two most plausible categories are: (a) drug_interactions - this passage explicitly addresses how furosemide interacts with other medications and their combined effects; (b) adverse_reactions - one could argue ototoxicity and nephrotoxicity are adverse reactions. Step 3 - Category selection: Drug_interactions is the clear winner. The passage is structured around the interaction between furosemide and OTHER agents (aminoglycosides, ethacrynic acid, salicylates, cisplatin), not about furosemide's direct adverse reactions. The focus is on COMBINED effects when drugs are used together, management strategies for co-administration, and warnings about concurrent use. Adverse_reactions would cover side effects of furosemide alone; this is explicitly about what happens when combined with other drugs. Step 4 - Confidence assessment: This is unambiguously a drug_interactions section with clear language like 'concomitantly', 'combination', 'given together', and specific interaction warnings. Confidence is HIGH (>95%).\",\"classification\":\"drug_interactions\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 6859,
+  "usage": {
+    "input_tokens": 1058,
+    "output_tokens": 375
+  }
+}

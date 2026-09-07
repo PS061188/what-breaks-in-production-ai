@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nTherapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titrat\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage discusses side effects of lisinopril and hydrochlorothiazide combination therapy, specifically mentioning hypokalemia and dose-independent side effects. (2) It addresses clinical trial findings about how lisinopril affects diuretic-induced hypokalemia. (3) It provides guidance on when to initiate combination therapy - after monotherapy failure. Step 2 - Most plausible categories: (1) 'adverse_reactions' - the passage explicitly discusses side effects and dose-independent adverse effects of the drug combination. (2) 'dosage_and_administration' - the passage provides dosing guidance about when to begin combination therapy and mentions 'Dose Titrat' (appears to be cut off). Step 3 - Winner determination: While the passage does contain some guidance about therapy initiation sequencing, the primary focus is on describing and characterizing adverse effects (hypokalemia, dose-independent side effects) observed with the drug combination. The dosage guidance is minimal and incomplete (the text is cut off mid-word). The emphasis on clinical trial findings about side effect profiles is characteristic of adverse_reactions documentation. Step 4 - Confidence assessment: This is clearly focused on adverse reactions/side effects (HIGH confidence = >90%), though there is a secondary dosing element present. The cut-off text and mixed content suggests some ambiguity, bringing confidence to MEDIUM range (70-90%) due to the incomplete nature and dual elements.\", \"classification\": \"adverse_reactions\", \"confidence\": \"MEDIUM\", \"alternative_considered\": \"dosage_and_administration\", \"requires_human_review\": true}",
+  "elapsed_ms": 4986,
+  "usage": {
+    "input_tokens": 948,
+    "output_tokens": 372
+  }
+}

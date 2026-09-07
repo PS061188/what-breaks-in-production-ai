@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAmoxicillin and clavulanate potassium for oral suspension, USP is an oral antibacterial combination consisting of the semisynthetic antibacterial amoxicillin and the beta-lactamase inhibitor, clavulanate potassium (the potassium salt of clavulanic acid). Amoxicillin is an analog of ampicillin, derived from the basic penicillin nucleus, 6-aminopenicillanic acid. Chemically, amoxicillin is (2 S ,5 R, 6 R )-6-[( R )-(-)-2-amino-2-( p -hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0] heptane-2-carboxylic acid trihydrate and may be represented structurally as: C 16 H 19 N 3 O 5 S • 3H 2 O M.W. 419.46 Clavulanic acid is produced by the fermentation of Streptomyces clavuligerus . It is a beta-lactam structurally related to the penicillins and possesses the ability to inactivate a wide variety of beta-lactamases by blocking the active sites of these enzymes. Clavulanic ac\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage begins with identifying the drug as 'amoxicillin and clavulanate potassium for oral suspension, USP' and describes it as 'an oral antibacterial combination'; (2) It provides detailed chemical descriptions including molecular formulas (C16H19N3O5S•3H2O), molecular weight (419.46), structural classification ('semisynthetic antibacterial', 'analog of ampicillin', 'derived from 6-aminopenicillanic acid'), and (3) It explains the mechanism and origin of clavulanic acid, including its fermentation source and beta-lactamase inhibition mechanism.\\n\\nStep 2 - Most plausible categories: (A) 'description' - This is the strongest candidate because the passage provides chemical name, molecular formula, structural information, inactive ingredient identification (clavulanate potassium), and manufacturing details. (B) 'indications_and_usage' - A weaker candidate because while the passage mentions it is 'antibacterial', it does not specify which conditions it treats or provide clinical indications.\\n\\nStep 3 - Winner and rationale: 'description' wins decisively. The entire passage is structured to provide pharmaceutical description information: chemical nomenclature, molecular weight, structural formulas, fermentation origin of components, and mechanism of action at the chemical level. There are zero mentions of therapeutic indications, dosing, contraindications, adverse events, or clinical use. The passage explicitly defines what the drug IS (formulation, chemical composition, structure), not what it DOES clinically.\\n\\nStep 4 - Confidence: HIGH (>90%). The content is unambiguously descriptive in nature with no competing interpretations warranted.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 9837,
+  "usage": {
+    "input_tokens": 1184,
+    "output_tokens": 442
+  }
+}

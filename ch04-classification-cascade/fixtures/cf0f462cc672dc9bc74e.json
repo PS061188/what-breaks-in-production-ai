@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nIn addition, each tablet contains the following inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. The 1 mg also contains FD&C red no. 40. The 2 mg also contains FD&C blue no. 2 aluminum 1ake and FD&C red no. 40 aluminum lake. The 2.S mg also contains D&C yellow no. l0 aluminum lake and FD&C blue no. 1 aluminum lake. The 3 mg also contains FD&C yellow no. 6 aluminurn lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 a1uminum lake, and D&C yellow no. 10 aluminum lake. The 4 mg also contains FD&C b1ue no. 1 aluminum lake and FD&C blue no. 2 a1uminum lake. The 5 mg also contains FD&C ye1low no. 6 aluminum lake, FD&C red no.\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\":\"Inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, microcrystalline cellulose, and various FD&C and D&C colorants (FD&C red no. 40, FD&C blue no. 2 aluminum lake, FD&C red no. 40 aluminum lake, D&C yellow no. 10 aluminum lake, FD&C blue no. 1 aluminum lake, FD&C yellow no. 6 aluminum lake) depending on tablet strength. Chemical name and molecular formula: not provided in passage.\"}",
+  "elapsed_ms": 2238,
+  "usage": {
+    "input_tokens": 528,
+    "output_tokens": 150
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIt is a beta-lactam structurally related to the penicil1ins and possesses the ability to inactivate a wide variety of beta-1actamases by blocking the active sites of these enzymes. Clavulanic acid is particularly active against the clinically important plasmid-mediated beta-1actamases frequently responsible for transferred drug resistance to penicillins and cephalosporins. Chemically, clavulanate potassium is potassium ( Z )-(2 R ,5 R )-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicydo[3.2.0]-heptane-2-carboxylate and may be represented structurally as: C 8 H 8 KNO 5 M.W. 237.25 Following constitution, each 5 mL of oral suspension contains 600 mg of amoxicillin as the trihydrate and 42.9 mg of clavu1anic acid (equivalent to 51.1 mg of clavulanate potassium).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of chemical structure and beta-lactam classification; (2) Explanation of mechanism - blocking beta-lactamase active sites; (3) Specific chemical formula (C8H8KNO5), molecular weight (237.25), and formulation composition (600mg amoxicillin + 42.9mg clavulanic acid per 5mL suspension).\\n\\nStep 2 - Most plausible categories: (a) 'description' - This passage focuses on chemical identity, structural properties, formulation composition, and inactive/active ingredient specifications; (b) 'drug_interactions' - The text discusses how clavulanic acid interacts with beta-lactamases, which could relate to drug interactions.\\n\\nStep 3 - Winner determination: 'description' is clearly correct. The passage provides: chemical name (clavulanate potassium with full IUPAC nomenclature), chemical structure (represented as C8H8KNO5), molecular weight, pharmacological class (beta-lactam), and specific formulation details (amounts per 5mL suspension). This matches the definition of 'description' perfectly - chemical name, structure, formulation and inactive ingredients. 'drug_interactions' is ruled out because the text describes the drug's mechanism of action against beta-lactamases as part of its pharmacological profile, not interactions with other drugs or foods.\\n\\nStep 4 - Confidence: HIGH (>90%). The passage is unambiguously descriptive material with no dosing instructions, clinical indications, adverse effects, or other competing content.\", \"classification\": \"description\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 8087,
+  "usage": {
+    "input_tokens": 1114,
+    "output_tokens": 402
+  }
+}

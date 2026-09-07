@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe antihypertensive effect of ACE inhibitors, including lisinopril, may be attenuated by NSAIDs. Dual Blockade of the Renin-Angiotensin System (RAS): Dual blockade of the RAS with angiotensin receptor blockers, ACE inhibitors, or direct renin inhibitors (such as aliskiren) is associated with increased risk of hypotension, syncope, hyperkalemia, and changes in renal function (including acute renal failure) compared to monotherapy. The VA NEPHRON trial enrolled 1448 patients with type 2 diabetes, elevated urinary-albumin-to-creatinine ratio, and decreased estimated glomerular filtration rate (GFR 30 to 89.9 ml/min), randomized them to lisinopril or placebo on a background of losartan therapy and followed them for a median of 2.2 years.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"NSAIDs, angiotensin receptor blockers, direct renin inhibitors (aliskiren), losartan\"}",
+  "elapsed_ms": 1340,
+  "usage": {
+    "input_tokens": 480,
+    "output_tokens": 34
+  }
+}

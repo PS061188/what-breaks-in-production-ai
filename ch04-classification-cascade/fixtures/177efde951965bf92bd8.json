@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nThe antihypertensive effect of ACE inhibitors, including lisinopril, may be attenuated by NSAIDs. Dual Blockade of the Renin-Angiotensin System (RAS): Dual blockade of the RAS with angiotensin receptor blockers, ACE inhibitors, or direct renin inhibitors (such as aliskiren) is associated with increased risk of hypotension, syncope, hyperkalemia, and changes in renal function (including acute renal failure) compared to monotherapy. The VA NEPHRON trial enrolled 1448 patients with type 2 diabetes, elevated urinary-albumin-to-creatinine ratio, and decreased estimated glomerular filtration rate (GFR 30 to 89.9 ml/min), randomized them to lisinopril or placebo on a background of losartan therapy and followed them for a median of 2.2 years.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"drug_interactions\"}",
+  "elapsed_ms": 1182,
+  "usage": {
+    "input_tokens": 651,
+    "output_tokens": 11
+  }
+}

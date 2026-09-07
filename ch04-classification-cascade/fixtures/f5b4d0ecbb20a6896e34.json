@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nDoses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level. Hypertension Therapy should be individualized according to the patient's response to gain maximal therapeutic response and to determine the minimal dose needed to maintain the therapeutic response. Adults: The usual initial dose of furosemide tablets for hypertension is 80 mg, usually divided into 40 mg twice a day. Dosage should then be adjusted according to response. If response is not satisfactory, add other antihypertensive agents. Changes in blood pressure must be carefully monitored when furosemide tablets are used with other antihypertensive drugs, especially during initial therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Most prominent features are (1) explicit dosing amounts in mg/kg and specific mg doses, (2) instructions for dose adjustment and titration based on patient response, (3) guidance on combining with other drugs and monitoring during initial therapy. Step 2: The two most plausible categories are (a) dosage_and_administration - because the passage contains dose amounts, frequency, route adjustments, and therapeutic monitoring instructions, and (b) drug_interactions - because the passage mentions using furosemide with other antihypertensive agents and monitoring changes. Step 3: dosage_and_administration wins because the primary content is prescribing information about how much to give (80 mg initial, 40 mg twice daily, doses >6 mg/kg not recommended), how to adjust doses based on response, and maintenance dosing guidance. While drug interactions are mentioned, they are secondary to the main focus on dose selection and adjustment. The guidance to monitor blood pressure with other antihypertensives is contextual information supporting dose management rather than the core subject. Step 4: Confidence is HIGH (>90%) because the passage is almost entirely about dosing strategy, adjustment protocols, and therapeutic dosing guidance with very clear quantitative information.\",\"classification\": \"dosage_and_administration\",\"confidence\": \"HIGH\",\"alternative_considered\": \"drug_interactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 5258,
+  "usage": {
+    "input_tokens": 1017,
+    "output_tokens": 309
+  }
+}

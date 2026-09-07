@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nage greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. In patients with non-valvular AF that is persistent or paroxysmal and at an intermediate risk of ischemic stroke (i.e., having 1 of the following risk factors: age greater than 75 years, moderately or severely impaired left ventricular systolic function and/or heart failure, history of hypertension, or diabetes mellitus), long-term anticoagulation with warfarin is recommended. For patients with AF and mitral stenosis, long-term anticoagulation with warfarin is recommended. For patients with AF and prosthetic heart valves, long-term anticoagulation with warfarin is recommended;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"indications_and_usage\"}",
+  "elapsed_ms": 944,
+  "usage": {
+    "input_tokens": 634,
+    "output_tokens": 14
+  }
+}

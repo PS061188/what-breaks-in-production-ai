@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the indication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as indications_and_usage\n(the conditions the drug is approved to treat).\n\nList every condition this drug is indicated to treat.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nFurosemide tablets are particularly usefu1 when an agent with greater diuretic potential is desired. Hypertension Oral furosemide may be used in adults for the treatment of hypertension alone or in combination with other antihypertensive agents. Hypertensive patients who cannot be adequately controlled with thiazides wi1l probably also not be adequately controlled with furosemide alone.\n</passage>",
+  "user": "Run the indication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Hypertension\"}",
+  "elapsed_ms": 1561,
+  "usage": {
+    "input_tokens": 355,
+    "output_tokens": 12
+  }
+}

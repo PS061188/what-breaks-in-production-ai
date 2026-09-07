@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the geriatric_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as geriatric_use\n(what is known about use in patients 65 and older).\n\nState what is known about the use of this drug in patients 65 and older.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nOf the total number of patients receiving warfarin sodium in controlled clinical trials for which data were available for analysis, 1885 patients (24.4%) were 65 years and older, while 185 patients (2.4%) were 75 years and older. No overall differences in effectiveness or safety were observed between these patients and younger patients, but greater sensitivity of sorne older individuals cannot be ruled out. Patients 60 years or older appear to exhibit greater than expected INR response to the anticoagulant effects of warfarin [see Clinical Pharmacology ( 12.3 )] . Warfarin sodium is contraindicated in any unsupervised patient with senility. Conduct more frequent monitoring for bleeding with administration of warfarin sodium to elderly patients in any situation or with any physical condition where added risk of hemorrhage is present. Consider lower initiation and rnaintenance doses of warfarin sodiurn in elderly patients [see Dosage and Administration ( 2.2 , 2.3 )] .\n</passage>",
+  "user": "Run the geriatric_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"In controlled clinical trials, 1885 patients (24.4%) aged 65 years and older and 185 patients (2.4%) aged 75 years and older received warfarin sodium. No overall differences in effectiveness or safety were observed compared to younger patients, though greater sensitivity in some older individuals cannot be ruled out. Patients 60 years or older show greater than expected INR response to warfarin's anticoagulant effects. Warfarin sodium is contraindicated in any unsupervised patient with senility. More frequent monitoring for bleeding is recommended in elderly patients, especially when there is added risk of hemorrhage. Lower initiation and maintenance doses should be considered in elderly patients.\"}",
+  "elapsed_ms": 2741,
+  "usage": {
+    "input_tokens": 507,
+    "output_tokens": 160
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the interaction_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as drug_interactions\n(effects of taking this drug alongside other drugs or foods).\n\nList every drug, food or substance that interacts with this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nSoybean flour, cottonseed meal, walnuts, and dietary fiber may bind and decrease the absorption of levothyroxine sodium from the gastrointestina1 tract. Grapefruit juice may delay the absorption of levothyroxine and reduce its bioavailability. 7.10 Drug-Laboratory Test Interactions Thyroxine-binding Globulin (TBG) Consider changes in TBG concentration when interpreting T4 and T3 values. Measure and evaluate unbound (free) hormone and/or determine the free-T4 index (FT4I) in this circumstance. Pregnancy, infectious hepatitis, estrogens, estrogen-containing oral contraceptives, and acute intermittent porphyria increase TBG concentration. Nephrosis, severe hypoproteinemia, severe liver disease, acromegaly, androgens, and corticosteroids decrease TBG concentration.\n</passage>",
+  "user": "Run the interaction_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"soybean flour, cottonseed meal, walnuts, dietary fiber, grapefruit juice, estrogens, estrogen-containing oral contraceptives, androgens, corticosteroids\"}",
+  "elapsed_ms": 1552,
+  "usage": {
+    "input_tokens": 481,
+    "output_tokens": 51
+  }
+}

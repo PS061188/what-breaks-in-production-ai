@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThere was a dose-related increase of liver adenomas in male mice receiving sertraline at 10-40 mg/kg (0.25-1.0 times the MRHD on a mg/m 2 basis). No increase was seen in female mice or in rats of either sex receiving the same treatrnents, nor was there an increase in hepatocellular carcinomas. Liver adenornas have a variable rate of spontaneous occurrence in the CD-1 mouse and are of unknown significance to hurnans. There was an increase in follicular adenomas of the thyroid in female rats receiving sertraline at 40 mg/kg (2 times the MRHD on a mg/m 2 basis); this was not accompanied by thyroid hyperplasia. While there was an increase in uterine adenocarcinornas in rats receiving sertraline at 10-40 mg/kg (O.5-2.O times the MRHD on a mg/m 2 basis) compared to placebo controls, this effect was not c1early drug related.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) This passage discusses dose-related tumor findings in animal studies (liver adenomas in male mice, thyroid follicular adenomas in female rats, uterine adenocarcinomas in rats); (2) It compares findings across different animal models and sexes; (3) It contextualizes the significance of findings (e.g., 'unknown significance to humans,' 'not clearly drug related'). Step 2 - Most plausible categories: (a) 'adverse_reactions' - tumor formation in animals could be reported as a safety concern; (b) 'description' - this could be preclinical characterization data. Step 3 - Classification decision: While adverse_reactions might initially seem plausible, this passage is specifically preclinical animal toxicology data used to characterize the drug's safety profile during development, not clinical adverse reactions observed in patients. However, preclinical safety findings are typically reported in the 'adverse_reactions' section of labeling when they have relevance to human risk. This passage reads as nonclinical safety data that would appear in the 'Description' or 'Nonclinical Toxicology' subsection, or potentially as part of an 'adverse_reactions' preclinical findings discussion. Given standard pharmaceutical labeling structure, tumor findings from animal studies are most commonly presented in a 'Description' or preliminary safety section, but can appear in adverse_reactions when reporting all known safety signals. The language and format ('dose-related increase,' specific mg/kg doses, species/sex comparisons) is characteristic of nonclinical toxicology reporting, which is part of the drug description/characterization. Step 4 - Confidence assessment: The passage is clearly preclinical toxicology data, but its placement in actual labeling can vary. It's most likely 'description' (nonclinical toxicology subsection) but could appear in 'adverse_reactions' as preclinical safety findings. This ambiguity warrants MEDIUM confidence.\", \"classification\": \"description\", \"confidence\": \"MEDIUM\", \"alternative_considered\": \"adverse_reactions\", \"requires_human_review\": true}",
+  "elapsed_ms": 9702,
+  "usage": {
+    "input_tokens": 1099,
+    "output_tokens": 486
+  }
+}

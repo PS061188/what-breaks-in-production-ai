@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nN=153 placebo social anxiety disorder). (2) The luteal phase and daily dosing PMDD trials were not designed for making direct comparisons between the two dosing regimens. Therefore, a comparison between the two dosing regimens of the PMDD trials of incidence rates shown in Table 2 should be avoided. Percentage of Patients Reporting Event Major Depressive Disorder/Other* OCD Panic Disorder PTSD Body System/Adverse Event Sertraline (N=861) Placebo (N=853) Sertraline (N=533) Placebo (N=373) Sertraline (N=430) Placebo (N=275) Sertraline (N=374) Placebo (N=376) Autonomic Nervous System Disorders Ejaculation Failure (1) 7 <1 17 2 19 1 11 1 Mouth Dry 16 9 14 9 15 10 11 6 Sweating Increased 8 3 6 1 5 1 4 2 Center.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 1198,
+  "usage": {
+    "input_tokens": 690,
+    "output_tokens": 11
+  }
+}

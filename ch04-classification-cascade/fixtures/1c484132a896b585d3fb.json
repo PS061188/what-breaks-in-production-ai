@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of atorvastatin calcium tablets are 1O mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification of atorvastatin calcium tablets [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ]. Anti-Viral Medications In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosarnprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin ca1cium tablets 20 mg once daily.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage explicitly discusses dosage amounts (10 mg, 20 mg, 80 mg) and frequency ('once daily'); (b) It addresses dosage modifications based on drug interactions with specific anti-viral medications; (c) It includes a separate subsection for pediatric dosing (2.4) and drug interaction-related dosage modifications (2.5).\\n\\nStep 2 - Most plausible categories: (a) 'dosage_and_administration' - The passage is fundamentally about how much to give, how often, and how to adjust doses based on interactions. This is the core definition of this category. (b) 'drug_interactions' - While drug interactions are mentioned, they are discussed only in the context of dosage modification, not as standalone interaction effects or mechanisms.\\n\\nStep 3 - Classification decision: 'dosage_and_administration' wins decisively. The passage is structured as dosing guidance (sections 2.4 and 2.5), specifies doses in mg and frequency ('once daily'), and addresses how to modify those doses. The drug interactions are mentioned only as a reason for dose adjustment, not as the primary focus. This is clearly instructional content about administration, not a detailed discussion of interaction mechanisms or outcomes.\\n\\nStep 4 - Confidence: HIGH (>90%). The section numbering (2.4, 2.5), the explicit dosage tables, and the straightforward presentation of 'recommended starting dosage' and 'dosage range' are unambiguous markers of dosage_and_administration content.\", \"classification\": \"dosage_and_administration\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 7751,
+  "usage": {
+    "input_tokens": 1098,
+    "output_tokens": 402
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nAdverse reactions associated with 1evothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, musde weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardia1 infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdomina1 cramps, e1evations in liver function tests Dermatologic:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 1178,
+  "usage": {
+    "input_tokens": 646,
+    "output_tokens": 11
+  }
+}

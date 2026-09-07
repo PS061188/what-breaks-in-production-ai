@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the contraindication_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as contraindications\n(situations in which the drug must not be used at all).\n\nList every situation in which this drug must not be used.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nMetformin hydrochloride tablets are contraindicated in patients with an estimated g1omerular filtration rate (eGFR) below 30 rnL/minute/1.73 m 2 . Initiation of metformin hydrochloride tablets in patients with an eGFR between 30 to 45 mL/minute/1.73 m 2 is not recommended. In patients taking metformin hydrochloride tablets whose eGFR 1ater falls below 45 mL/min/1.73 m 2 , assess the benefit risk of continuing therapy. Discontinue metformin hydrochloride tablets if the patient’s eGFR later falls below 30 mL/minute/1.73 rn 2 [ see Warnings and Precautions (5.1) ] . 2.4 Discontinuation for Iodinated Contrast Irnaging Procedures Discontinue metformin hydrochloride tab1ets at the time of, or prior to, an iodinated contrast imaging procedure in patients with an eGFR between 30 and 60 mL/min/1.73 m 2 ;\n</passage>",
+  "user": "Run the contraindication_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Metformin hydrochloride tablets are contraindicated in patients with an estimated glomerular filtration rate (eGFR) below 30 mL/minute/1.73 m2.\"}",
+  "elapsed_ms": 1856,
+  "usage": {
+    "input_tokens": 549,
+    "output_tokens": 54
+  }
+}

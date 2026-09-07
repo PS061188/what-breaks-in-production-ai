@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nCrystalluria, in some cases 1eading to renal failure, has also been reported after amoxicillin overdosage in adult and pediatric patients. In case of overdosage, adequate fluid intake and diuresis should be maintained to reduce the risk of amoxicillin crystalluria. Renal impairment appears to be reversible with cessation of drug administration. High blood levels rnay occur more readily in patients with irnpaired renal function because of decreased renal clearance of both amoxicillin and clavulanate. Both amoxicillin and clavulanate are removed from the circulation by hemodialysis [see Dosage and Administration (2) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of crystalluria and renal failure following amoxicillin overdosage; (2) Management recommendations including fluid intake and diuresis to reduce crystalluria risk; (3) Information about renal clearance and hemodialysis as treatment. Step 2 - Most plausible categories: (a) 'overdosage' - the passage explicitly discusses overdosage signs (crystalluria, renal failure) and management (fluid intake, diuresis, hemodialysis); (b) 'drug_interactions' - discusses renal impairment and clearance, but this is contextual rather than primary. Step 3 - Classification winner: 'overdosage' clearly wins because the passage is fundamentally about what happens when too much amoxicillin is given (overdosage) and how to manage it. The discussion of renal clearance and hemodialysis is presented as treatment for overdose, not as drug interaction information. Step 4 - Confidence assessment: This is a clear match to the overdosage category with explicit language about 'overdosage,' clinical signs (crystalluria, renal failure), and management strategies (fluid intake, diuresis, hemodialysis). Confidence is HIGH (>90%).\", \"classification\": \"overdosage\", \"confidence\": \"HIGH\", \"alternative_considered\": \"drug_interactions\", \"requires_human_review\": false}",
+  "elapsed_ms": 4714,
+  "usage": {
+    "input_tokens": 1014,
+    "output_tokens": 323
+  }
+}

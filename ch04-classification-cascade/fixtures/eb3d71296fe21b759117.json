@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThere were no clinically important differences between men and women in the types and incidence of adverse reactions. Because there were few patients whose race was reported as other than white, there are insufficient data to support a statement regarding the distribution of adverse reactions by race. Epilepsy with Partial Onset Seizures (Adjunctive Therapy) The most common adverse reactions with Gabapentin in combination with other antiepileptic drugs in patients >12 years of age, not seen at an equivalent frequency among placebo-treated patients, were somnolence, dizziness, ataxia, fatigue, and nystagmus. The most common adverse reactions with gabapentin in combination with other antiepileptic drugs in pediatric patients 3 to 12 years of age, not seen at an equal frequency among placebo-treated patients, were viral infection, fever, nausea and/or vomiting, somnolence, and hostility [see Warnings and Precautions (5.8) ].\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"somnolence, dizziness, ataxia, fatigue, nystagmus, viral infection, fever, nausea, vomiting, hostility\"}",
+  "elapsed_ms": 1637,
+  "usage": {
+    "input_tokens": 487,
+    "output_tokens": 44
+  }
+}

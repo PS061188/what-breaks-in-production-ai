@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nChest pain, abdominal pain, syncope, chest discomfort, fever, trauma, virus infection. Cardiovascular: Palpitation, orthostatic hypotension. Digestive: Gastrointestinal cramps, dry mouth, constipation, heartburn. Musculoskeletal: Back pain, shoulder pain, knee pain, back strain, myalgia, foot pain. Nervous/Psychiatric: Decreased libido, vertigo, depression, somnolence. Respiratory: Common cold, nasal congestion, influenza, bronchitis, pharyngeal pain, dyspnea, pulmonary congestion, chronic sinusitis, allergic rhinitis, pharyngeal discomfort. Skin: Flushing, pruritus, skin inflammation, diaphoresis. Special Senses: Blurred vision, tinnitus, otalgia. Urogenital: Urinary tract infection. Angioedema:\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chest pain, abdominal pain, syncope, chest discomfort, fever, trauma, virus infection, palpitation, orthostatic hypotension, gastrointestinal cramps, dry mouth, constipation, heartburn, back pain, shoulder pain, knee pain, back strain, myalgia, foot pain, decreased libido, vertigo, depression, somnolence, common cold, nasal congestion, influenza, bronchitis, pharyngeal pain, dyspnea, pulmonary congestion, chronic sinusitis, allergic rhinitis, pharyngeal discomfort, flushing, pruritus, skin inflammation, diaphoresis, blurred vision, tinnitus, otalgia, urinary tract infection, angioedema\"}",
+  "elapsed_ms": 2830,
+  "usage": {
+    "input_tokens": 479,
+    "output_tokens": 179
+  }
+}

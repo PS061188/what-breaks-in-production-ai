@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the composition_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as description\n(chemical name, structure, formulation and inactive ingredients).\n\nState the chemical name, molecular formula and inactive ingredients.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nPrednisone is a glucocorticoid. Glucocorticoids are adrenocortical steroids, both naturally occurring and synthetic, which are readily absorbed from the gastrointestinal tract. Prednisone, USP is a white to partially white, crysta1line powder. It is very slightly soluble in water; slightly soluble in alcohol, chloroform, dioxane, and methanol. The chemical name for prednisone is 17,21-dihydroxypregna-1,4-dienne-3,11,20-trione. The structural formula is represented below: C 21 H 26 O 5 M.W. 358.44 Each tablet, for oral administration, contains 5, 10, or 20 mg of prednisone. Inactive Ingredients: PredniS0NE Tablets, USP contain the following inactive ingredients: lactose monohydrate, magnesium stearate, microcrystalline ce1lulose, pregelatinized starch, sodium starch glycolate and stearic acid (5 mg only). chem-pred.jpg\n</passage>",
+  "user": "Run the composition_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Chemical Name: 17,21-dihydroxypregna-1,4-dienne-3,11,20-trione\\n\\nMolecular Formula: C21H26O5\\n\\nMolecular Weight: 358.44\\n\\nInactive Ingredients: lactose monohydrate, magnesium stearate, microcrystalline cellulose, pregelatinized starch, sodium starch glycolate, and stearic acid (5 mg tablets only)\"}",
+  "elapsed_ms": 2619,
+  "usage": {
+    "input_tokens": 526,
+    "output_tokens": 128
+  }
+}

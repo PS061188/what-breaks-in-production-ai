@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated. In situations of less severity lower doses wil1 generally suffice while in selected patients higher initial doses rnay be required. The initial dosage should be rnaintained or adjusted unti1 a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, prednisone should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT .\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Initial dosage of prednisone: 5 mg to 60 mg per day orally, depending on the specific disease entity being treated. Lower doses generally suffice for less severe conditions; higher initial doses may be required for selected patients. Dosage should be maintained or adjusted until satisfactory response is noted. Dosage requirements are variable and must be individualized based on the disease being treated and patient response.\"}",
+  "elapsed_ms": 3234,
+  "usage": {
+    "input_tokens": 434,
+    "output_tokens": 96
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nMajor Depressive Disorder – Sertraline hydrochloride is indicated for the treatment of major depressive disorder in adults. The efficacy of Sertraline hydrochloride in the treatment of a major depressive episode was established in six to eight week controlled trials of adult outpatients whose diagnoses corresponded most closely to the DSM-III category of major depressive disorder (see Clinica1 Trials under CLINICAL PHARMACOLOGY ). A major depressive episode implies a prominent and relatively persistent depressed or dysphoric mood that usua1ly interferes with daily functioning (nearly every day for at least 2 weeks); it should include at least 4 of the fo1lowing 8 syrnptoms: change in appetite, change in sleep, psychomotor agitation or retardation, loss of interest in usual activities or decrease in sexual drive, increased fatigue, feelings of gui1t or worthlessness, slowed thinking or impaired concentration, and a suicide attempt or suicidal ideation.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"STEP 1 - Three most prominent features:\\n1. Explicitly states drug is 'indicated for the treatment of major depressive disorder in adults'\\n2. Describes the condition being treated (major depressive episode with specific DSM-III criteria)\\n3. References controlled clinical trials establishing efficacy for this specific indication\\n\\nSTEP 2 - Most plausible categories:\\n- indications_and_usage: This passage directly states what the drug is approved to treat and provides clinical context for that indication. References clinical trials and diagnostic criteria.\\n- adverse_reactions: Not applicable - no side effects or adverse events are mentioned\\n\\nSTEP 3 - Classification decision:\\n'indications_and_usage' clearly wins. The entire passage is devoted to stating the approved use ('indicated for the treatment of...'), the patient population (adults), and the clinical basis for that indication (controlled trials, diagnostic criteria). This is textbook indications_and_usage content. There is no mention of adverse effects, dosing, contraindications, or any other category.\\n\\nSTEP 4 - Confidence assessment:\\nHIGH confidence (>90%). The language is unambiguous ('is indicated for'), the section structure follows standard prescribing information format, and there is no plausible alternative classification. This is a clear, direct statement of drug indications.\",\"classification\":\"indications_and_usage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 6576,
+  "usage": {
+    "input_tokens": 1079,
+    "output_tokens": 338
+  }
+}

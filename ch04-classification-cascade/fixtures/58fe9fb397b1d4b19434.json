@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nWhen culture and susceptibility information are available, they should be considered in selecting or modifying antibacterial therapy. In the absence of such data, local epidemiology and susceptibility patterns may contribute to the empiric selection of therapy. Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 rng per 5 mL is a cornbination of amoxicillin, a penicillin-class antibacterial and clavu1anate potassium, a beta-lactamase inhibitor, indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equa1 to 40 kg with Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of culture/susceptibility information and empiric selection of therapy; (2) Specific drug formulation details (600 mg/42.9 mg per 5 mL oral suspension); (3) Clear statement of indication: 'indicated for the treatment of pediatric patients aged 3 months to 12 years...with Recurrent or persistent acute otitis media.' Step 2 - Most plausible categories: (a) 'indications_and_usage' - the passage explicitly states the drug is 'indicated for the treatment of' a specific condition in a specific population; (b) 'description' - the passage includes formulation details (600 mg/42.9 mg per 5 mL combination). Step 3 - Classification decision: 'indications_and_usage' wins clearly. While formulation details are mentioned, they are secondary to the primary purpose of this passage, which is to establish what the drug is indicated for (pediatric acute otitis media due to specific organisms). The passage explicitly uses the word 'indicated' which is the hallmark language of indications sections. Step 4 - Confidence: HIGH (>90%). The passage unambiguously states the indication for use with specific patient populations and organisms. This is textbook indications_and_usage language.\",\"classification\": \"indications_and_usage\",\"confidence\": \"HIGH\",\"alternative_considered\": \"description\",\"requires_human_review\": false}",
+  "elapsed_ms": 5951,
+  "usage": {
+    "input_tokens": 1054,
+    "output_tokens": 335
+  }
+}

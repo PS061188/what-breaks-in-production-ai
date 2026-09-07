@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe principal signs and symptoms of overdose with furosemide are dehydration, blood volume reduction, hypotension, electrolyte imbalance, hypokalemia and hypochloremic alkalosis, and are extensions of its diuretic action. The acute toxicity of furosemide has been determined in mice, rats and dogs. In all three, the oral LD 50 exceeded 1O00 mg/kg body weight, while the intravenous LD 50 ranged from 300 to 680 mg/kg. The acute intragastric toxicity in neonatal rats is 7 to lO times that of adult rats. The concentration of furosemide in biological fluids associated with toxicity or death is not known. Treatment of overdosage is supportive and consists of replacement of excessive fluid and electrolyte losses.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) Discussion of 'signs and symptoms of overdose' including dehydration, hypotension, electrolyte imbalance; (2) LD50 values provided for multiple animal models (mice, rats, dogs) with oral and intravenous routes; (3) Treatment approach described as 'supportive' with fluid and electrolyte replacement. Step 2 - Most plausible categories: (a) 'overdosage' - the passage explicitly addresses overdose presentation, animal toxicity data, and management; (b) 'adverse_reactions' - could describe side effects, but the context is specifically overdose scenarios, not normal therapeutic use. Step 3 - Classification decision: This clearly belongs in 'overdosage' because it systematically describes overdose signs/symptoms, provides toxicological data (LD50 values), discusses dose-response relationships, and outlines overdose management. While adverse reactions might include some overlapping symptoms, this passage is specifically framed within a toxicology/overdose context with animal model data and overdose-specific management guidance. Step 4 - Confidence: HIGH (>90%) - the passage explicitly uses 'overdose' terminology, provides LD50 data characteristic of overdosage sections, and addresses management of overdose specifically rather than normal adverse effects.\",\"classification\":\"overdosage\",\"confidence\":\"HIGH\",\"alternative_considered\":\"adverse_reactions\",\"requires_human_review\":false}",
+  "elapsed_ms": 6128,
+  "usage": {
+    "input_tokens": 1046,
+    "output_tokens": 330
+  }
+}

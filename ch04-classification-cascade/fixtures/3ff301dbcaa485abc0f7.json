@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the dosing_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as dosage_and_administration\n(how much to give, how often, and by what route).\n\nState the recommended dose, frequency and route of administration.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThis dose provides 6.4 mg/kg/day of the clavulanic acid component. Table 1: General Dosage Guidelines for Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL in Pediatric Patients Body Weight (kg) Volume of Amoxicillin and Clavulanate Potassium for Oral Suspension, ​​​​​​​600 mg/42.9 mg per 5 mL providing 90 mg/kg/day 8 3 mL twice daily 12 4.5 mL twice daily 16 6 mL twice daily 20 7.5 mL twice daily 24 9 mL twice daily 28 10.5 mL twice daily 32 12 mL twice daily 36 13.5 mL twice daily 40 15 mL twice daily ​​​​​​​ Pediatric patients weighing greater than 40 kg : Experience with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL in this group is not available.\n</passage>",
+  "user": "Run the dosing_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL: Dose is 90 mg/kg/day administered twice daily (providing 6.4 mg/kg/day of clavulanic acid). Dosing by body weight: 8 kg: 3 mL twice daily; 12 kg: 4.5 mL twice daily; 16 kg: 6 mL twice daily; 20 kg: 7.5 mL twice daily; 24 kg: 9 mL twice daily; 28 kg: 10.5 mL twice daily; 32 kg: 12 mL twice daily; 36 kg: 13.5 mL twice daily; 40 kg: 15 mL twice daily. For pediatric patients weighing greater than 40 kg, experience with this formulation is not available. Route: Oral (suspension).\"}",
+  "elapsed_ms": 3569,
+  "usage": {
+    "input_tokens": 564,
+    "output_tokens": 242
+  }
+}

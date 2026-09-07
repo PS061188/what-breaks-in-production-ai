@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nRecovery time for normal HPA activity is variable depending upon the dose and duration of treatrnent. During this time the patient is vulnerable to any stressful situation. Although it has been shown that there is considerably less adrenal suppression fo1lowing a single morning dose of prednisolone (10 mg) as opposed to a quarter of that dose administered every 6 hours, there is evidence that sorne suppressive effect on adrenal activity may be carried over into the following day when pharmacologic doses are used. Further, it has been shown that a single dose of certain corticosteroids will produce adrenocortical suppression for two or more days. Other corticoids, including methylprednisolone, hydrocortisone, prednisone, and prednisolone, are considered to be short acting (producing adrenocortical suppression for 1¼ to 1½ days fo1lowing a single dose) and thus are recommended for alternate day therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features: (a) This passage discusses HPA axis recovery and adrenal suppression timelines with specific corticosteroids; (b) It compares dosing regimens (single morning dose vs. every 6 hours) and their suppressive effects; (c) It recommends alternate day therapy based on duration of suppression for specific drugs (methylprednisolone, hydrocortisone, prednisone, prednisolone). Step 2 - Most plausible categories: (1) 'dosage_and_administration' - the passage discusses dosing schedules, timing, frequency, and recommends alternate day therapy; (2) 'adverse_reactions' - the passage describes adrenal suppression as an effect. Step 3 - Winner determination: This is clearly dosage_and_administration. While adrenal suppression could be considered an adverse reaction, the primary purpose of this passage is prescriptive guidance on HOW to dose these medications (single morning dose vs. divided doses, alternate day therapy recommendations) and the pharmacokinetic reasoning behind dosing choices. The focus is on dosing strategy and scheduling, not cataloging side effects. Step 4 - Confidence: HIGH (>90%). The language is explicitly instructional about dosing regimens and therapeutic scheduling recommendations, which is the core definition of dosage_and_administration.\",\"classification\": \"dosage_and_administration\",\"confidence\": \"HIGH\",\"alternative_considered\": \"adverse_reactions\",\"requires_human_review\": false}",
+  "elapsed_ms": 6108,
+  "usage": {
+    "input_tokens": 1072,
+    "output_tokens": 341
+  }
+}

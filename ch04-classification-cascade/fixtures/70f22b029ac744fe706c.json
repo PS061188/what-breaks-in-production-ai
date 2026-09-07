@@ -1,0 +1,35 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier in a drug-label processing\npipeline. Assign the passage to exactly one category.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nReturn the category name.",
+  "user": "<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical tria1s of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      }
+    },
+    "required": [
+      "classification"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"classification\": \"adverse_reactions\"}",
+  "elapsed_ms": 1332,
+  "usage": {
+    "input_tokens": 631,
+    "output_tokens": 11
+  }
+}

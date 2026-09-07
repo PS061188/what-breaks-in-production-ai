@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nAdu1t Dosage for metformin hydrochloride tablets: Starting dose: 500 mg orally twice a day or 850 mg once a day, with meals ( 2.1 ) Increase the dose in increments of 500 mg weekly or 8S0 mg every 2 weeks, up to a maximum dose of 2550 mg per day, given in divided doses ( 2.l ) Doses above 20OO mg may be better tolerated given 3 times a day with meals ( 2.1 ) Pediatric Dosage for metformin hydrochloride tablets: Starting dose: 500 mg orally twice a day, with meals ( 2.2 ) Increase dosage in increments of 500 mg weekly up to a maximum of 2O00 mg per day, given in divided doses twice daily ( 2.2 ) Rena1 Impairment: Prior to initiation, assess renal function with estimated glomerular filtration rate (eGFR) ( 2.3 ) Do not use in patients with eGFR below 30 mL/minute/1.73 m 2 ( 2.3 ) Initiation is not recommended in patients with eGFR between 3O to 45 mL/minute/1.73 m 2 ( 2.3 ) Assess risk/benefit of continuing if eGFR falls below 45 mL/minute/1.73 m 2 ( 2.3 ) Discontinue if eGFR falls below 30 mL/minute/1.73 m 2 ( 2.3 ) 2.1 Adult Dosage Metformin Hydrochloride Tablets The recommended starting dose of rnetformin hydroch1oride tablets are 500 mg orally twice a day or 850 mg once a day, given with meals.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage contains specific dosing instructions with numerical values (500 mg, 850 mg, 2550 mg maximum), frequency (twice daily, once daily, three times daily), and route of administration (orally); (b) Detailed dose escalation protocols are provided (increments of 500 mg weekly or 850 mg every 2 weeks); (c) Special dosing populations are addressed (pediatric dosage, renal impairment considerations with eGFR thresholds). Step 2 - Most plausible categories: (1) dosage_and_administration - the passage is explicitly structured around how much to give, how often, and by what route, with adult and pediatric-specific regimens; (2) pediatric_use - there is a pediatric dosage section, though this is only one subsection within a larger dosing document. Step 3 - Classification decision: dosage_and_administration wins decisively. While pediatric dosing is mentioned, the document's primary purpose is to communicate dosing information across multiple populations (adults, pediatric, renal-impaired patients). The pediatric content is presented as part of a comprehensive dosing section, not as a standalone discussion of pediatric-specific safety or efficacy considerations. Step 4 - Confidence assessment: HIGH (>90%). The document's structure, content focus, and explicit reference markers (2.1, 2.2, 2.3) clearly align with standard dosage and administration sections of prescribing information.\",\"classification\": \"dosage_and_administration\",\"confidence\": \"HIGH\",\"alternative_considered\": \"pediatric_use\",\"requires_human_review\": false}",
+  "elapsed_ms": 9836,
+  "usage": {
+    "input_tokens": 1304,
+    "output_tokens": 382
+  }
+}

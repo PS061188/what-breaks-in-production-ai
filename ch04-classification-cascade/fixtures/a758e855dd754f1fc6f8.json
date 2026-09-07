@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nDirections • for adults 18 years of age and o1der • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of syrnptoms within 24 hours 14-Day Course of Treatment • swal1ow 1 tab1et with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days un1ess directed by your doctor • swal1ow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Specific dosing instructions: 'once a day (every 24 hours), every day for 14 days' with detailed timing ('swallow 1 tablet with a glass of water before eating in the morning'); (2) Administration method and formulation details: 'swallow whole. Do not chew or crush tablets'; (3) Dosage restrictions and repeated course protocol: 'do not take more than 1 tablet a day', 'do not use for more than 14 days', and 'repeat every 4 months'. Step 2 - Most plausible categories: (a) dosage_and_administration - contains complete instructions on how much to give (1 tablet), how often (once daily), when (before eating in the morning), for how long (14 days), and how to administer (swallow whole, not chewed/crushed); (b) how_supplied - might describe the tablet form and packaging. Step 3 - Classification decision: dosage_and_administration wins decisively. The passage is entirely composed of patient directions for taking the medication, including dose quantity, frequency, duration, route of administration, method of ingestion, and repeated dosing protocols. This is the classic structure of a dosage_and_administration section. The how_supplied category describes availability, packaging, and storage - none of which are present here. Step 4 - Confidence assessment: HIGH (>90%). The content is unambiguously focused on how to administer the medication to patients, with zero information about indications, contraindications, adverse reactions, drug interactions, overdosage management, chemical description, or age-specific use guidelines beyond the single mention that children under 18 should ask a doctor (which is supportive of dosage instructions rather than a separate pediatric_use section).\",\"classification\":\"dosage_and_administration\",\"confidence\":\"HIGH\",\"alternative_considered\":\"how_supplied\",\"requires_human_review\":false}",
+  "elapsed_ms": 7731,
+  "usage": {
+    "input_tokens": 1090,
+    "output_tokens": 443
+  }
+}

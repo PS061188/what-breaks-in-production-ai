@@ -1,0 +1,30 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are the adverse_event_extraction stage of a drug-label processing\npipeline. The passage below has already been classified as adverse_reactions\n(side effects and reactions observed in patients).\n\nList every adverse reaction reported for this drug.\n\nIf the passage does not contain that information, return null for value.\n\n<passage>\nThe first trial involved 521 pediatric patients (3 months to 50 months) and the second trial involved 450 pediatric patients (3 months to 12 years). In the intent-to-treat population of the first trial of 521 patients, the most frequently reported adverse events were vomiting (7%), fever (6%), contact dermatitis (i.e., diaper rash) (6%), upper respiratory tract infection (4%), and diarrhea (4%). Protocol-defined diarrhea (i.e., 3 or more watery stools in one day or 2 watery stools per day for 2 consecutive days as recorded on diary cards) occurred in 13% of patients. The primary objective of the second study was to compare the safety of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL (90/6.4 mg/kg/day, divided every 12 hours) to amoxicillin and clavulanate potassium (45/6.4 mg/kg/day, divided every 12 hours) for ten days.\n</passage>",
+  "user": "Run the adverse_event_extraction stage on this passage.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "value": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "value"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"value\": \"vomiting, fever, contact dermatitis (diaper rash), upper respiratory tract infection, diarrhea, protocol-defined diarrhea\"}",
+  "elapsed_ms": 1745,
+  "usage": {
+    "input_tokens": 531,
+    "output_tokens": 41
+  }
+}

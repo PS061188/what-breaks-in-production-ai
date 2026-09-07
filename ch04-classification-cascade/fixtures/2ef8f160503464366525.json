@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nIn particular, some evidence suggests that selective serotonin reuptake inhibitors (SSRIs) can cause such untoward sexual experiences. Reliab1e estimates of the incidence and severity of untoward experiences involving sexual desire, performance and satisfaction are difficult to obtain, however, in part because patients and physicians may be reluctant to discuss them. Accordingly, estimates of the incidence of untoward sexual experience and performance cited in product labeling, are likely to underestimate their actual incidence. Table 5 below displays the incidence of sexual side effects reported by at least 2% of patients taking Sertraline hydrochloride in placebo-controlled trials. TABLE 5 *Denominator used was for male patients only (N=1118 Sertraline hydrochloride;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) Discussion of sexual side effects/adverse experiences associated with SSRIs and specifically Sertraline hydrochloride; (b) Reference to incidence data from placebo-controlled trials; (c) Acknowledgment of underreporting challenges and a table presenting sexual side effect incidence rates at ≥2% occurrence.\\n\\n2. Two most plausible categories: (a) adverse_reactions - because the passage explicitly discusses untoward sexual experiences, side effects, and provides incidence data from clinical trials; (b) indications_and_usage - because it mentions what SSRIs can cause, though this is clearly about unwanted effects rather than approved uses.\\n\\n3. Classification winner and rationale: adverse_reactions wins decisively. The passage is explicitly documenting sexual side effects observed in patients taking Sertraline hydrochloride during placebo-controlled trials. It presents incidence data in table form, discusses the prevalence of these untoward effects, and addresses challenges in measuring them. This is textbook adverse_reactions content - describing negative effects experienced by patients. indications_and_usage is clearly ruled out because the passage is not describing what the drug treats, but rather unwanted effects that occur during treatment.\\n\\n4. Confidence assessment: HIGH (>90%). The language is unambiguous - 'untoward experiences,' 'sexual side effects,' 'incidence...reported by patients,' and a data table all clearly signal adverse reactions documentation. There is no meaningful ambiguity here.\", \"classification\": \"adverse_reactions\", \"confidence\": \"HIGH\", \"alternative_considered\": \"indications_and_usage\", \"requires_human_review\": false}",
+  "elapsed_ms": 6465,
+  "usage": {
+    "input_tokens": 1032,
+    "output_tokens": 379
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate\nto extraction, routing, and downstream processing - so accuracy and honest\nuncertainty are required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nCHAIN-OF-THOUGHT REQUIRED:\nBefore stating your classification:\n1. List the 3 most prominent features of this document that inform classification.\n2. Consider which 2 categories are most plausible and why.\n3. State which one wins and why the other was ruled out.\n4. Assign a confidence score: HIGH (>90%), MEDIUM (70-90%), LOW (<70%)\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"confidence\": \"HIGH | MEDIUM | LOW\",\n  \"alternative_considered\": \"<second most likely category>\",\n  \"requires_human_review\": <true if confidence is LOW or MEDIUM>\n}\n\nIMPORTANT: If confidence is LOW or MEDIUM, set requires_human_review to true.\nDo not force a classification when the evidence is weak.",
+  "user": "<passage>\nThe safety data described below reflects exposure to albuterol sulfate HFA in 248 subjects treated with albuterol sulfate HFA in 3 placebo-controlled clinical trials of 2 to 12 weeks’ duration. The data from adults and adolescents is based upon 2 clinical trials in which 202 subjects with asthma aged 12 years and older were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 12 weeks’ duration. The adult/adolescent population was 92 female, 110 male and 163 white, 19 black, 18 Hispanic, 2 other. The data from pediatric subjects are based upon 1 clinical trial in which 46 subjects with asthma aged 4 to 11 years were treated with albuterol sulfate HFA 2 inhalations 4 times daily for 2 weeks’ duration.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "alternative_considered": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "requires_human_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "confidence",
+      "alternative_considered",
+      "requires_human_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) This passage explicitly discusses 'safety data' and clinical trial exposure across multiple patient populations; (2) It describes adverse event monitoring in controlled trials with specific dosing regimens (2 inhalations 4 times daily); (3) It breaks down the safety database by demographic characteristics (age groups, gender, race) and trial duration. Step 2 - Most plausible categories: (a) adverse_reactions - the passage discusses safety data collection from clinical trials, which is the foundation for identifying adverse reactions; (b) dosage_and_administration - the passage mentions specific dosing (2 inhalations 4 times daily). Step 3 - Analysis: While dosing information is mentioned, it serves only as context for the safety data collection. The primary purpose of this passage is to establish the safety database and describe what safety data was collected across different populations. The passage is not prescribing how to use the drug but rather describing the clinical trial context in which safety (adverse event) data was gathered. This is characteristic of the preamble to an adverse_reactions section. Step 4 - Confidence: HIGH (>90%). The language 'safety data described below' and focus on trial exposure in different populations is unmistakably the introduction to adverse reactions reporting.\",\"classification\": \"adverse_reactions\",\"confidence\": \"HIGH\",\"alternative_considered\": \"dosage_and_administration\",\"requires_human_review\": false}",
+  "elapsed_ms": 5897,
+  "usage": {
+    "input_tokens": 1072,
+    "output_tokens": 323
+  }
+}
