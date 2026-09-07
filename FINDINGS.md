@@ -875,3 +875,58 @@ Truncation is reported separately and weakly: shortening documents drops section
 below the chapters' minimum-length filters, so denominators move (ch04 96->91,
 ch10 55->36 figures). Only the OCR arm holds denominators constant and only it
 supports the conclusion.
+
+## Real OCR (Aug 2026) — Chapter 2's fix 2 finally testable, and it fails
+
+The corpus was typeset, rendered at 105 DPI, degraded (greyscale, blur 1.0, JPEG
+q28), and read back with **Apple Vision** via `ocrmac`. Real engine, real damage,
+real confidence numbers. Build it with `.venv-ocr/bin/python make_ocr_corpus.py`;
+use it with `CORRUPT_MODE=real_ocr`. **$0.21 of model calls; OCR is local.**
+
+Corpus-wide word accuracy: **85.5%** across 840 lines. Roughly 1 word in 7 wrong.
+
+### Fix 2 cannot work on this engine
+
+**0 of 840 lines reported a confidence below 1.000.** Not one. Including a
+document at **60.6% word accuracy** — two words in five wrong — which also passed
+the byte-level gate. Both of the chapter's checks for scanning damage looked at
+that document and said it was fine.
+
+This is the **sixth** independent measurement that self-reported confidence
+carries no signal, and the first from something that is not a language model.
+
+Caveat that must travel with it: Apple Vision pins confidence at 1.0 in normal
+operation. Tesseract emits varying per-character confidence and may support the
+fix as written. The claim is *"this is a property of your engine, check before you
+build on it"* — not *"OCR confidence never works"*.
+
+### Fix 1 (byte-level gate) on genuine OCR damage
+
+**5 of 12** documents flagged. The misses are exactly as chapter 2 predicts: OCR
+errors are made of ordinary letters and leave no trace in the bytes.
+
+### What real OCR did to the doses
+
+| document | change |
+|---|---|
+| Lisinopril | `10 mg to 80 mg` -> `10 mg to **50** mg` |
+| Furosemide | `80 mg,` -> `**50** mg.` |
+| Furosemide | invented `0 mg`, `50 mg` |
+| Amoxicillin | invented `9 mg`, `429 mg`, `7777272600 mg` |
+| Lisinopril | invented `5 mg` |
+| Warfarin | **lost** `1639 g` — the VKORC1 gene-variant false positive, destroyed by scanning |
+
+`7777272600 mg` any validator catches. `50 mg` is a valid lisinopril dose and a
+valid furosemide dose, and nothing downstream can tell the document said 80.
+
+### Effect on the chapters (3 live runs each)
+
+| measure | clean | simulated OCR | **real OCR** |
+|---|---|---|---|
+| ch10 dose figures returned | 100% x3 | 87, 87, 94% | 91, 91, 88% |
+| **ch10 docs with a silent drop** | **0/6 x3** | 2/6 x3 | **4/7 x3** |
+| ch02 silent corruption rate | — | — | 42, 44, 53% |
+| ch02 model reported itself confident | — | — | 81, 83, 83% |
+
+**Real OCR damage is worse than the simulation.** The synthetic corruption used
+elsewhere in this report was, if anything, too gentle.

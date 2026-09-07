@@ -1,0 +1,176 @@
+<!-- ==================== REAL OCR ==================== -->
+<h2 class="part">Real OCR, and the fix that could never be tested</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; Real OCR</span>
+<p class="oneline">Chapter 2's second engineering fix &mdash; carry OCR confidence scores downstream and treat low-confidence regions as suspect &mdash; has been marked <em>&ldquo;not implemented as written&rdquo;</em> for this entire project, because the corpus was never scanned. This part scans it. <strong>The fix now has data, and on this engine it cannot work.</strong></p>
+
+<h4>How it was done</h4>
+<table>
+<tr><td style="width:26%">Corpus</td><td>The same 12 FDA labels, <code>dosage_and_administration</code>, typeset onto pages and rendered at 105 DPI</td></tr>
+<tr><td>Degradation</td><td>Greyscale, Gaussian blur 1.0, JPEG quality 28 &mdash; chosen by sweeping until word accuracy landed near a plausible mid-quality office scan</td></tr>
+<tr><td>OCR engine</td><td><strong>Apple Vision</strong>, via <code>ocrmac</code>. A real, current, widely deployed commercial engine &mdash; not a simulation</td></tr>
+<tr><td>Result</td><td><strong>85.5% word accuracy</strong> across 840 recognised lines. Roughly one word in seven is wrong</td></tr>
+<tr><td>Runs</td><td>3 live runs of Chapter 10 and Chapter 2 over the OCR'd corpus; the gate comparison is pure code and deterministic</td></tr>
+<tr><td>Cost</td><td>OCR is local and free; <strong>$0.21</strong> of model calls</td></tr>
+</table>
+
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td><strong>Fix 2 &mdash; OCR confidence</strong></td><td><strong>Cannot work on this engine</strong></td><td class="num"><strong>0 of 840 lines</strong> below 1.000</td><td class="num">decisive</td></tr>
+<tr><td>Fix 1 &mdash; byte-level gate</td><td>Catches under half</td><td class="num">5 of 12 documents</td><td class="num">deterministic</td></tr>
+<tr><td>Ch 10 &mdash; silent omission</td><td><strong>Much worse</strong></td><td class="num">0% &rarr; <strong>57%</strong> of documents</td><td class="num">3 runs, identical</td></tr>
+<tr><td>Ch 2 &mdash; silent corruption</td><td>Reproduces</td><td class="num">42%, 44%, 53%</td><td class="num">3 runs</td></tr>
+<tr><td>OCR inventing doses</td><td><strong>Yes</strong></td><td class="num">4 documents</td><td class="num">deterministic</td></tr>
+</table>
+
+<h4>The one thing to remember</h4>
+<p><strong>A document at 60.6% word accuracy &mdash; two words in five wrong &mdash; passed the byte-level gate and reported OCR confidence of 1.000.</strong> Both of the checks Chapter 2 offers for scanning damage looked at that document and said it was fine. The fix that was supposed to catch what the cheap check misses reported maximum confidence on every line of every document, while the engine was getting one word in seven wrong.</p>
+
+<h4>Where this is weakest</h4>
+<p><strong>One engine.</strong> Apple Vision reports a confidence that is pinned at 1.0 in normal operation; Tesseract emits genuinely varying per-character confidence and might well support the fix as written. The honest claim is not <em>&ldquo;OCR confidence never works&rdquo;</em> but <em>&ldquo;it is a property of your engine, it is not guaranteed, and you must check before you build on it.&rdquo;</em> One degradation profile, one document type, 12 documents.</p>
+</div>
+
+<h3 class="top">Why this experiment had to wait</h3>
+
+<p class="lede">Every other part of this report could use the corpus as it came. This
+one could not: FDA labels are born-digital text, so there was nothing to scan and
+no confidence numbers to carry. Simulating them would have meant generating the
+exact signal the fix depends on and then demonstrating that a fix which reads that
+signal works &mdash; which proves nothing except that the simulation was
+consistent.</p>
+
+<p>So the corpus was put through a real scanner path instead: typeset onto pages,
+rendered, degraded the way a scan and a fax queue degrade a page, and read back
+with a commercial OCR engine. What comes out is genuinely damaged text with the
+engine's own confidence attached &mdash; the input the fix was always supposed to
+have.</p>
+
+<h4>What the OCR did to the documents</h4>
+
+<table>
+  <tr><th style="width:26%">Document</th><th class="num">Word accuracy</th>
+      <th class="num">Lowest OCR confidence</th><th>Byte-level gate</th></tr>
+  <tr><td>Prednisone</td><td class="num">96.4%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Furosemide</td><td class="num">95.9%</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Gabapentin</td><td class="num">93.5%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Albuterol</td><td class="num">92.8%</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Lisinopril</td><td class="num">92.4%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Warfarin</td><td class="num">89.5%</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Omeprazole</td><td class="num">87.8%</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Metformin</td><td class="num">87.0%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Amoxicillin</td><td class="num">83.5%</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Sertraline</td><td class="num">79.9%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Levothyroxine</td><td class="num">77.6%</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Atorvastatin</strong></td>
+      <td class="num"><strong>60.6%</strong></td><td class="num"><strong>1.000</strong></td>
+      <td><strong>passes &mdash; looks fine</strong></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Read the last row</span>
+  <p>Two words in five are wrong in that document. <strong>Both of this chapter's
+  checks for scanning damage examined it and passed it.</strong> The byte-level
+  gate saw ordinary English letters, because that is what OCR errors are made of.
+  The confidence check saw 1.000, because that is what this engine reports.</p>
+</div>
+
+<h4>Fix 2, measured at last</h4>
+
+<div class="headline">
+  <b>0 of 840</b> recognised lines reported a confidence below 1.000, across a
+  corpus the same engine was reading at <b>85.5%</b> word accuracy.
+</div>
+
+<p>The fix says: carry the confidence numbers downstream and treat low-confidence
+regions as suspect. There are no low-confidence regions. There is no threshold you
+could set that would flag anything, because every value is the maximum value. A
+pipeline built exactly as the chapter describes would pass every one of these
+documents through untouched.</p>
+
+<p>This is the <strong>sixth</strong> independent measurement in this project that
+a component's self-reported confidence carries no information about whether it was
+right &mdash; and the first from something that is not a language model. The
+principle turns out not to be about language models at all.</p>
+
+<h4>What the OCR did to the doses, which is the part that matters</h4>
+
+<p>Word accuracy is an abstraction. Here is what it means on this corpus.</p>
+
+<pre>Lisinopril     "...doses of 10 mg to 80 mg..."   ->   "...doses of 10 mg to 50 mg..."
+Furosemide     "...80 mg,..."                    ->   "...50 mg."
+Lisinopril     "lisinopril 80"                   ->   "Isinopril S0"
+Furosemide     "8"                               ->   "&"</pre>
+
+<p>The last two are visible damage: <code>S0</code> and <code>&amp;</code> are not
+doses, and a downstream parser would either reject them or fail to match. <strong>The
+first two are invisible.</strong> 50 mg is a perfectly valid lisinopril dose and a
+perfectly valid furosemide dose. Nothing downstream can tell that the document said
+80.</p>
+
+<p>Real OCR also <em>invented</em> dose figures that appear nowhere in the source:</p>
+
+<table>
+  <tr><th style="width:26%">Document</th><th>Dose figures present after OCR that were not in the original</th></tr>
+  <tr><td>Furosemide</td><td><code>0 mg</code>, <code>50 mg</code></td></tr>
+  <tr><td>Amoxicillin</td><td><code>9 mg</code>, <code>429 mg</code>, <code>7777272600 mg</code></td></tr>
+  <tr><td>Lisinopril</td><td><code>5 mg</code></td></tr>
+</table>
+
+<p><code>7777272600 mg</code> is obvious nonsense and any validator would catch it.
+<code>0 mg</code>, <code>5 mg</code> and <code>50 mg</code> are not. They are
+plausible doses, in the right units, in a clinical document, and they were created
+by a scanner.</p>
+
+<div class="plain">
+  <span class="label">An accidental result worth recording</span>
+  <p>The OCR pass also <em>removed</em> one figure: <code>1639 g</code> from the
+  Warfarin label. That was the false positive documented in Chapter 10 &mdash; the
+  gene variant <code>VKORC1&minus;1639G</code> that a regular expression read as a
+  1,639-gram dose. Scanning the document destroyed the string that caused it.</p>
+  <p>This is not a fix. It is a reminder that damage and correction are the same
+  operation seen from different sides, and that a measurement apparatus tuned on
+  clean documents will behave differently on real ones.</p>
+</div>
+
+<h4>What it did to the chapters</h4>
+
+<table>
+  <tr><th style="width:34%">Measure</th><th class="num">Clean</th>
+      <th class="num">Simulated OCR</th><th class="num">Real OCR</th></tr>
+  <tr><td>Ch 10 &mdash; dose figures returned</td>
+      <td class="num">100%, 100%, 100%</td><td class="num">87%, 87%, 94%</td>
+      <td class="num">91%, 91%, 88%</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Ch 10 &mdash; documents with a silent drop</strong></td>
+      <td class="num"><strong>0 of 6</strong></td><td class="num">2 of 6</td>
+      <td class="num"><strong>4 of 7</strong> &mdash; every run</td></tr>
+  <tr><td>Ch 2 &mdash; silent corruption rate</td>
+      <td class="num">&mdash;</td><td class="num">&mdash;</td>
+      <td class="num">42%, 44%, 53%</td></tr>
+  <tr><td>Ch 2 &mdash; model reported itself confident</td>
+      <td class="num">&mdash;</td><td class="num">&mdash;</td>
+      <td class="num">81%, 83%, 83%</td></tr>
+</table>
+
+<p><strong>Real OCR damage is worse than the simulation was.</strong> Chapter 10's
+silent omission affected <strong>57% of documents on every run</strong>, against
+33% under simulated damage and 0% on clean text. The synthetic corruption used
+elsewhere in this report was, if anything, too gentle.</p>
+
+<h4>What to do with this</h4>
+
+<ul>
+  <li><strong>Do not build on OCR confidence without checking that your engine
+  emits one.</strong> Apple Vision reports 1.000 in normal operation. Tesseract
+  emits genuinely varying per-character confidence and may well support the fix as
+  written. The fix is not wrong; it is <em>conditional</em>, and the chapter states
+  it unconditionally.</li>
+  <li><strong>Verify against the source, not against a confidence score.</strong>
+  The only check here that would have caught <code>80 mg &rarr; 50 mg</code> is one
+  that compares the extracted value against a second reading of the same
+  document.</li>
+  <li><strong>Range-validate every numeric field.</strong> It costs nothing and it
+  catches <code>7777272600 mg</code> and <code>0 mg</code>, which are the invented
+  values most likely to reach a database.</li>
+</ul>

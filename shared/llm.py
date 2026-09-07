@@ -394,6 +394,25 @@ def load_labels() -> list:
     if not mode or mode == "clean":
         return labels
 
+    # Real OCR, not simulated. data/labels_ocr.json holds the corpus after it was
+    # typeset, rendered, degraded like a scan, and read back by Apple Vision.
+    # Only dosage_and_administration was rendered, so chapters that need other
+    # sections cannot use this mode.
+    if mode == "real_ocr":
+        ocr_path = Path(__file__).resolve().parent.parent / "data" / "labels_ocr.json"
+        if not ocr_path.is_file():
+            raise SystemExit(
+                "CORRUPT_MODE=real_ocr needs data/labels_ocr.json.\n"
+                "  Build it with: .venv-ocr/bin/python make_ocr_corpus.py"
+            )
+        by_drug = {d["drug"]: d["ocr_text"]
+                   for d in json.loads(ocr_path.read_text())["documents"]}
+        for label in labels:
+            text = by_drug.get(label.get("drug"))
+            if text:
+                label["sections"]["dosage_and_administration"] = text
+        return labels
+
     # ch02's directory name is not a valid module name, so load it by path.
     import importlib.util
 
