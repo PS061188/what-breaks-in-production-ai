@@ -1,0 +1,50 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Completeness is your primary quality\nmetric. Missing data is worse than null data - at least null is honest.\n\nCOMPLETENESS PROTOCOL:\n\nStep 1 - INVENTORY (do this before extracting anything):\nRead the entire document and count the total number of dose amounts it contains.\nRecord that count as \"inventory_count\".\n\nStep 2 - EXTRACT all dose amounts.\n\nStep 3 - COMPLETENESS SELF-CHECK:\nVerify: extracted_count == inventory_count\nIf the counts mismatch:\n  - State by how many you are short\n  - Re-read the document specifically for dose amounts\n  - Add the missing items\n  - If still short, flag it in \"warnings\"\n\nStep 4 - OUTPUT including completeness_check.\n\n<text>\nDOSAGE AND ADMINISTRATION Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg, while hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day. In clinical trials of lisinopril/hydrochlorothiazide combination therapy using lisinopril doses of 10 mg to 80 mg and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive response rates generally increased with increasing dose of either component. The side effects (see WARNINGS ) of lisinopril are generally rare and apparently independent of dose; those of hydrochlorothiazide are a mixture of dose-dependent phenomena (primarily hypokalemia) and dose-independent phenomena (e.g., pancreatitis), the former much more common than the latter. Therapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg. Further increases of either or both components could depend on clinical response. The hydrochlorothiazide dose should generally not be increased until 2-3 weeks have elapsed. Patients whose blood pressures are adequately controlled with 25 mg of daily hydrochlorothiazide, but who experience significant potassium loss with this regimen, may achieve similar or greater blood pressure control with less potassium loss if they are switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg. Dosage higher than lisinopril 80 mg and hydrochlorothiazide 50 mg should not be used. Replacement Therapy The combination may be substituted for the titrated individual components. Use in Renal Impairment The usual regimens of therapy with lisinopril and hydrochlorothiazide tablets need not be adjusted as long as the patient's creatinine clearance is greater than 30 mL/min/1.73 m 2 (serum creatinine approximately less than or equal to 3 mg/dL or 265 μmol/L).\n</text>",
+  "user": "Run the protocol and return the result.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "inventory_count": {
+        "type": "integer"
+      },
+      "doses": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "completeness_check": {
+        "type": "object",
+        "properties": {
+          "all_counts_match": {
+            "type": "boolean"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "all_counts_match",
+          "warnings"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "inventory_count",
+      "doses",
+      "completeness_check"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"inventory_count\": 13, \"doses\": [\"10 mg to 80 mg\", \"12.5 mg to 50 mg per day\", \"10 mg to 80 mg\", \"6.25 mg to 50 mg\", \"10 mg/12.5 mg\", \"20 mg/12.5 mg\", \"25 mg\", \"10 mg/12.5 mg\", \"80 mg\", \"50 mg\", \"30 mL/min/1.73 m2\", \"3 mg/dL\", \"265 μmol/L\"], \"completeness_check\": {\"all_counts_match\": true, \"warnings\": []}}",
+  "elapsed_ms": 3961,
+  "usage": {
+    "input_tokens": 1151,
+    "output_tokens": 160
+  }
+}

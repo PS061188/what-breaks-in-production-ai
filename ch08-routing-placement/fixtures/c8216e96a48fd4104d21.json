@@ -1,0 +1,147 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an intake processor. Extract and route data to the correct\nfields. Field confusion causes downstream errors - precision is required.\n\nFIELD DEFINITIONS (apply these before extracting):\n  - \"what_it_treats\": the conditions the drug is INDICATED for. Keywords:\n    \"indicated for\", \"treatment of\", \"management of\"\n  - \"who_must_not_take_it\": the conditions that FORBID the drug. Keywords:\n    \"contraindicated\", \"should not be used\", \"do not administer\"\n  - \"side_effects\": the reactions the drug CAUSES. Keywords: \"adverse\n    reactions\", \"commonly reported\", \"observed in trials\"\n\nDISAMBIGUATION PROTOCOL:\nIf the role of any passage is unclear:\n  1. Quote the exact text where it appears\n  2. State which contextual keywords indicate its role\n  3. State your confidence: HIGH / MEDIUM / LOW\n  4. If LOW confidence for any field: set \"requires_review\": true\n\nPLACEMENT SELF-CHECK:\nAfter populating all fields, verify:\n  - Are what_it_treats and who_must_not_take_it different? If identical, flag it.\n  - Does side_effects describe reactions rather than indications?\n\n<label>\n[indications_and_usage]\nINDICATIONS Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2. Rheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in: Psoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3. Collagen Diseases During an exacerbation or as maintenance therapy in selected cases of: Systemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5. Allergic States Control of severe or incapacitating allergic conditions intractable to adequate trials of conventional treatment: Seasonal or perennial allergic rhinitis Bronchial asthma Contact dermatitis Atopic dermatitis Serum sickness Drug hypersensitivity reactions 6. Ophthalmic Diseases Severe acute and chronic allergic and inflammatory processes involving the eye and its adnexa such as: Allergic corneal marginal ulcers Herpes zoster ophthalmicus Anterior segment inflammation Diffuse posterior uveitis and choroiditis Sympathetic ophthalmia Allergic conjunctivitis Keratitis Chorioretinitis Optic neuritis Iritis and iridocyclitis 7. Respiratory Diseases Symptomatic sarcoidosis Loeffler’s syndrome not manageable by other means Berylliosis Fulminating or disseminated pulmonary tuberculosis when used concurrently with appropriate antituberculous chemotherapy Aspiration pneumoniti\n\n[contraindications]\nCONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\n\n[adverse_reactions]\nADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\n</label>",
+  "user": "Extract the three fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section",
+          "placement_confidence"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section",
+          "placement_confidence"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section",
+          "placement_confidence"
+        ],
+        "additionalProperties": false
+      },
+      "requires_review": {
+        "type": "boolean"
+      },
+      "review_reason": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects",
+      "requires_review",
+      "review_reason"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\":{\"value\":\"Endocrine disorders (primary/secondary adrenocortical insufficiency, congenital adrenal hyperplasia, hypercalcemia associated with cancer, nonsuppurative thyroiditis); Rheumatic disorders (psoriatic arthritis, rheumatoid arthritis, ankylosing spondylitis, acute bursitis, tenosynovitis, gouty arthritis, osteoarthritis, epicondylitis); Collagen diseases (systemic lupus erythematosus, dermatomyositis, acute rheumatic carditis); Dermatologic diseases (pemphigus, bullous dermatitis herpetiformis, erythema multiforme, exfoliative dermatitis, mycosis fungoides, severe psoriasis, seborrheic dermatitis); Allergic states (allergic rhinitis, bronchial asthma, contact dermatitis, atopic dermatitis, serum sickness, drug hypersensitivity); Ophthalmic diseases (allergic corneal ulcers, herpes zoster ophthalmicus, uveitis, sympathetic ophthalmia, keratitis, optic neuritis, iritis); Respiratory diseases (sarcoidosis, Loeffler's syndrome, berylliosis, tuberculosis, aspiration pneumonitis)\",\"source_quote\":\"Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders...7. Respiratory Diseases\",\"source_section\":\"[indications_and_usage]\",\"placement_confidence\":\"HIGH\"},\"who_must_not_take_it\":{\"value\":\"Systemic fungal infections; Known hypersensitivity to components\",\"source_quote\":\"Systemic fungal infections and known hypersensitivity to components.\",\"source_section\":\"[contraindications]\",\"placement_confidence\":\"HIGH\"},\"side_effects\":{\"value\":\"Fluid/electrolyte disturbances (sodium retention, fluid retention, hypokalemia, hypertension); Musculoskeletal (muscle weakness, steroid myopathy, osteoporosis, tendon rupture, aseptic necrosis, pathologic fractures); Gastrointestinal (peptic ulcer, pancreatitis, esophagitis); Dermatologic (impaired wound healing, thin skin, petechiae, facial erythema); Metabolic (negative nitrogen balance); Neurological (increased intracranial pressure, convulsions, vertigo, headache); Endocrine (menstrual irregularities, Cushingoid state, growth suppression, diabetes manifestations); Ophthalmic (cataracts, increased intraocular pressure, glaucoma, exophthalmos); Allergic reactions (urticaria, anaphylaxis)\",\"source_quote\":\"Fluid and Electrolyte Disturbances Sodium retention Fluid retention...Urticaria and other allergic, anaphylactic or hypersensitivity reactions\",\"source_section\":\"[adverse_reactions]\",\"placement_confidence\":\"HIGH\"},\"requires_review\":false,\"review_reason\":null}",
+  "elapsed_ms": 17571,
+  "usage": {
+    "input_tokens": 2133,
+    "output_tokens": 716
+  }
+}

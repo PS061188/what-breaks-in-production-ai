@@ -4731,6 +4731,216 @@ elsewhere in this report was, if anything, too gentle.</p>
   values most likely to reach a database.</li>
 </ul>
 
+<!-- ==================== THE PROMPTS ==================== -->
+<h2 class="part">Every prompt in the book, checked</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; The nine prompts</span>
+<p class="oneline">Each chapter gives a prompt template. This part establishes which were actually executed, runs the ones that were not, and asks what the nine have in common. <strong>The answer is sharp: every instruction that constrains what the model may assert works; every instruction that asks the model to grade itself is inert.</strong></p>
+
+<h4>Which prompts had been run</h4>
+<table>
+<tr><th style="width:26%">Chapter</th><th>Status</th><th class="num" style="width:26%">Result</th></tr>
+<tr><td>2 &middot; Input integrity</td><td><strong>Was never run</strong> — run here</td><td class="num">flags 95%, gates 0%</td></tr>
+<tr><td>3 &middot; Hallucination</td><td>Run, domain-adapted</td><td class="num"><strong>&minus;69 pts</strong></td></tr>
+<tr><td>4 &middot; Classification</td><td>Run, as <code>BOOK_SYSTEM</code></td><td class="num">6 pts worse than one line</td></tr>
+<tr><td>5 &middot; Extraction</td><td>Run, domain-adapted</td><td class="num">1 of 3 measures</td></tr>
+<tr><td>6 &middot; State mismatch</td><td>Run</td><td class="num">beaten by 1 of its 6 rules</td></tr>
+<tr><td>7 &middot; Edge input</td><td>Run, domain-transposed</td><td class="num">works</td></tr>
+<tr><td>8 &middot; Routing</td><td><strong>Was never run</strong> — run here</td><td class="num">no gain; flagged 0 errors</td></tr>
+<tr><td>9 &middot; Sparse fields</td><td>Run</td><td class="num"><strong>29% &rarr; 0%</strong></td></tr>
+<tr><td>10 &middot; Silent omissions</td><td><strong>Was never run</strong> — run here</td><td class="num"><strong>worse than a plain instruction</strong></td></tr>
+</table>
+
+<h4>The one thing to remember</h4>
+<p>Sort the nine prompts by what they <em>ask the model to do</em> and the results separate completely. <strong>Prompts that restrict what may be asserted &mdash; only from the sources, only from this section, null is a correct answer &mdash; produced every large gain in this book. Prompts that ask the model to assess its own work &mdash; rate your confidence, count your own output, decide whether to abort &mdash; produced nothing at all, in four chapters, across 400-odd assessments.</strong></p>
+
+<h4>Where this is weakest</h4>
+<p>Three prompts could not be run verbatim because their chapters are written around a domain this corpus does not contain &mdash; shipping addresses, support tickets, contract dates. Those were transposed onto drug labels, keeping the structure and changing the nouns, which is a judgement call and is marked wherever it applies. One model, one corpus.</p>
+</div>
+
+<h3 class="top">An audit that had to correct itself</h3>
+
+<p class="lede">The question was simple: has each chapter's prompt actually been
+run? The first pass compared each book prompt against the repository's prompts by
+text similarity and reported <strong>four</strong> as never executed. Three of
+those four were wrong.</p>
+
+<table>
+  <tr><th style="width:26%">Chapter</th><th class="num">Similarity</th><th>First verdict</th><th>Truth</th></tr>
+  <tr><td>4 &middot; Classification</td><td class="num">0.02</td><td>never run</td>
+      <td><strong>Run</strong> as <code>BOOK_SYSTEM</code> — the score collapsed because the corpus's category list is injected into the prompt</td></tr>
+  <tr><td>7 &middot; Edge input</td><td class="num">0.17</td><td>never run</td>
+      <td><strong>Run</strong> — the A/B/C/D classification and the robustness rules are all there, in a different domain's vocabulary</td></tr>
+  <tr><td>5 &middot; Extraction</td><td class="num">0.37</td><td>partial</td>
+      <td><strong>Run</strong> — dates and names swapped for frequency and duration, because the corpus has doses and no dates</td></tr>
+  <tr style="background:#f4efe6"><td><strong>8 &middot; Routing</strong></td><td class="num">0.03</td>
+      <td>never run</td><td><strong>Correct — genuinely never run</strong></td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">Why the metric failed, since it is the same mistake as the rest of this report</span>
+  <p>Text similarity between two prompts measures <em>vocabulary</em>, and a
+  domain transposition changes every noun while preserving every instruction.
+  Chapter 7's prompt classifies support tickets in the book and drug questions in
+  the repository; the four categories, the response for each, and the robustness
+  rules are identical. Similarity: 0.17.</p>
+  <p><strong>The check was answering a different question from the one asked</strong>
+  &mdash; exactly what <code>langdetect</code> did two parts ago, and exactly what
+  every self-assessment field in this book does. A measurement that is easy to
+  compute is not the same as the one you wanted.</p>
+</div>
+
+<h3>The three that had genuinely never been run</h3>
+
+<h4>Chapter 2 — the protocol notices everything and stops nothing</h4>
+
+<table>
+  <tr><th style="width:44%">Measure</th><th class="num">Result</th><th class="num">Runs</th></tr>
+  <tr><td>Damaged documents flagged as not CLEAN</td><td class="num"><strong>95%</strong></td><td class="num">3, identical</td></tr>
+  <tr><td>Of those, scanning damage</td><td class="num"><strong>12 of 12</strong></td><td class="num">vs the code gate's 6</td></tr>
+  <tr><td><strong>Damaged documents it refused to extract from</strong></td><td class="num"><strong>0 of 41</strong></td><td class="num">3, identical</td></tr>
+  <tr><td><code>confidence_to_proceed</code> = LOW</td><td class="num"><strong>0 of 159</strong></td><td class="num">3, identical</td></tr>
+</table>
+
+<p>The best detector in the chapter, and an abort step that is unreachable code.</p>
+
+<h4>Chapter 8 — the disambiguation machinery grades itself HIGH and flags nothing</h4>
+
+<table>
+  <tr><th style="width:44%">Measure</th><th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Run 3</th></tr>
+  <tr><td>Placement error rate</td><td class="num">3%</td><td class="num">3%</td><td class="num">0%</td></tr>
+  <tr><td>Fields graded HIGH placement confidence</td><td class="num">97%</td><td class="num">97%</td><td class="num">97%</td></tr>
+  <tr><td><code>requires_review</code> set</td><td class="num">0 of 11</td><td class="num">1 of 11</td><td class="num">0 of 11</td></tr>
+  <tr><td><strong>Misplaced fields the machinery flagged</strong></td>
+      <td class="num"><strong>0 of 1</strong></td><td class="num"><strong>0 of 1</strong></td><td class="num">&mdash;</td></tr>
+</table>
+
+<p>No improvement on the plain prompt, which also scores 0&ndash;3%. And on the
+one field that <em>was</em> misplaced, the model rated its placement HIGH and left
+<code>requires_review</code> false. The chapter is right that a model's account of
+its own sourcing cannot be trusted &mdash; its own prompt is an instance of the
+thing it warns about.</p>
+
+<h4>Chapter 10 — the protocol makes extraction worse</h4>
+
+<table>
+  <tr><th style="width:44%">Measure</th><th class="num">Plain instruction</th><th class="num">The book's protocol</th></tr>
+  <tr><td>Dose figures returned</td><td class="num"><strong>96%</strong></td>
+      <td class="num"><strong>84%, 71%, 80%</strong></td></tr>
+  <tr><td>Documents with a silent drop</td><td class="num">17%</td><td class="num">33%, 50%, 50%</td></tr>
+  <tr><td><strong>Step 1 inventory count correct</strong></td><td class="num">&mdash;</td>
+      <td class="num"><strong>0 of 18</strong></td></tr>
+  <tr><td>Short documents the self-check caught</td><td class="num">&mdash;</td>
+      <td class="num">0 of 2, 1 of 3, 2 of 3</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">A protocol built on a number the model cannot produce</span>
+  <p>Step 1 asks the model to count the items in the document. It was wrong on
+  <strong>every document, in every run &mdash; 18 out of 18</strong>, claiming 47
+  where 13 existed and 32 where there were 11. Steps 2, 3 and 4 all compare
+  against that number.</p>
+  <p>The result is worse than saying nothing: <strong>78% of dose figures returned
+  on average, against 96% for a one-line instruction and 100% on clean input.</strong>
+  The self-check fires on documents that are complete and stays quiet on documents
+  that are short.</p>
+</div>
+
+<h3>What the nine prompts have in common</h3>
+
+<p>Sorting them by what they ask the model to <em>do</em> separates the results
+completely, and it is the most useful thing in this part.</p>
+
+<table>
+  <tr><th style="width:34%">What the instruction asks</th><th>Examples</th><th class="num">Outcome</th></tr>
+  <tr style="background:#f0f5f0"><td><strong>Restrict what may be asserted</strong></td>
+      <td>Ch 3: only assert what appears in the sources; declining is a correct
+      outcome.<br>Ch 9: return null; a null field is a correct answer.<br>
+      Ch 6: the document's status must be ACTIVE.<br>
+      Ch 2: scan for these four specific corruption signals.</td>
+      <td class="num"><strong>&minus;69 pts<br>29% &rarr; 0%<br>67% &rarr; 17%<br>95% flagged</strong></td></tr>
+  <tr style="background:#faf0f0"><td><strong>Ask the model to assess itself</strong></td>
+      <td>Ch 2: <code>confidence_to_proceed</code>.<br>
+      Ch 4: <code>confidence</code> + <code>requires_human_review</code>.<br>
+      Ch 8: <code>placement_confidence</code> + <code>requires_review</code>.<br>
+      Ch 10: count your own source, then check yourself against it.</td>
+      <td class="num"><strong>LOW 0 of 159<br>LOW 0 of 192<br>97% HIGH, 0 caught<br>0 of 18 correct</strong></td></tr>
+</table>
+
+<div class="headline">
+  Across four chapters and more than <b>400</b> self-assessments, a model asked to
+  grade its own work returned the lowest grade <b>zero</b> times.
+</div>
+
+<p>The two categories also differ in something more basic than accuracy.
+<strong>A restriction changes what the model is permitted to output. A
+self-assessment adds a field to the output and changes nothing else.</strong> The
+first is enforceable by the code that reads the response; the second is a claim
+the model makes about a claim, and the outer claim is no more reliable than the
+inner one.</p>
+
+<h3>The prompt this evidence supports</h3>
+
+<p>What follows is not a tenth template. It is the four moves that produced every
+measured gain in this book, and the two that produced none, stated once.</p>
+
+<pre>WHAT TO PUT IN
+──────────────
+1. Name what the answer must come from, and forbid everything else.
+     "Every claim must trace to the text below. You may not use prior
+      knowledge to fill gaps."
+   Chapter 3: -69 points, across four models and two providers.
+
+2. Say that refusing is a correct outcome, in those words.
+     "If the text does not cover this, return null. A null field is a
+      correct answer, not a failure."
+   Chapter 9: fabrication 29% -> 0%. This is the single cheapest line
+   in the book, and the one most often missing.
+
+3. Constrain each field to its own source, in code the model never sees.
+     Keep the field-to-section mapping in your own code and reject a
+     value whose quote is found outside it.
+   Chapter 9: 0% fabrication. Chapter 8: the reason its fix works at all.
+
+4. Ask for the specific signals you care about, not a general judgement.
+     "Scan for: characters that are not ASCII letters; words with digits
+      welded into them; text that ends mid-sentence."
+   Chapter 2: 95% of damaged documents flagged, including 12 of 12
+   scanning errors that a byte-level check cannot see.
+
+WHAT TO LEAVE OUT
+─────────────────
+5. Do not ask the model to grade its confidence.
+   LOW was returned 0 times in 159 assessments (ch 2) and 0 times in
+   192 classifications (ch 4). 97% of fields were graded HIGH in ch 8,
+   including the one that was misplaced. Any branch conditioned on this
+   is unreachable code.
+
+6. Do not ask the model to count, then check itself against its count.
+   The count was wrong on 18 of 18 documents, and the protocol built on
+   it returned 78% of the items a one-line instruction returned 96% of.
+   Count in your own code and compare.
+
+WHERE THE DECISION LIVES
+────────────────────────
+   A prompt can reliably tell you what it noticed. It cannot reliably
+   decide what to do about it. Chapter 2's protocol flagged 95% of
+   damaged documents and refused to stop on any of them.
+
+   So: let the prompt report, and let your code decide. Branch on the
+   grade it returns, never on the confidence it assigns itself.</pre>
+
+<div class="plain">
+  <span class="label">The limits of that template</span>
+  <p>It is drawn from nine prompts on one corpus, one document type and mostly one
+  model. Point 5 is the best-evidenced &mdash; four chapters, 400-plus
+  assessments, three models &mdash; and point 3 rests on the smallest denominator
+  in the set. The ordering of the two categories is what this part establishes;
+  the exact figures beside each line are what the chapters establish, with their
+  own denominators and caveats attached.</p>
+</div>
+
 <!-- ============================ COSTS ============================ -->
 <h2 class="part">E — What everything cost</h2>
 <div class="summary">

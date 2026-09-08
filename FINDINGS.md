@@ -1020,3 +1020,56 @@ quality grade, not on the model's confidence in itself.
 Two clean runs at `max_tokens=700`, then a mid-JSON cutoff: some damaged documents
 produce a long `corruption_signals` list. Fourth token-budget overflow in this
 project and the third defect to survive its first two runs.
+
+## Every prompt in the book, audited and run (Sep 2026)
+
+### The audit corrected itself
+
+A text-similarity pass reported four prompts as never executed. **Three of those
+were wrong** — similarity measures vocabulary, and a domain transposition changes
+every noun while preserving every instruction.
+
+| ch | similarity | first verdict | truth |
+|---|---|---|---|
+| 4 | 0.02 | never run | **run** as `BOOK_SYSTEM`; score collapsed on the injected category list |
+| 7 | 0.17 | never run | **run**; A/B/C/D + robustness rules present, different domain |
+| 5 | 0.37 | partial | **run**; dates/names swapped for frequency/duration |
+| 8 | 0.03 | never run | **correct — genuinely never run** |
+
+The metric answered a different question from the one asked, which is the same
+failure as `langdetect` and as every self-assessment field in the book.
+
+### The three genuinely untested prompts, now run
+
+**ch02** (3 runs, identical): flags 95% of damaged documents — 12/12 on scanning
+damage vs the code gate's 6/12 — and refuses to extract from **0 of 41**.
+`confidence_to_proceed` = LOW **0 of 159**.
+
+**ch08** (3 runs): placement error 3%, 3%, 0% — no gain on the plain prompt.
+**97% of fields graded HIGH every run**, and the machinery flagged **0 of the
+misplaced fields**.
+
+**ch10** (3 runs): the COMPLETENESS PROTOCOL returns **84%, 71%, 80%** of dose
+figures against **96%** for a one-line instruction and 100% on clean input. Step 1
+asks the model to count the items; it was wrong on **18 of 18** documents, once
+claiming 47 where 13 existed. Every later step compares against that number.
+
+### The finding across all nine
+
+| what the instruction asks | outcome |
+|---|---|
+| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **−69 pts, 29%→0%, 67%→17%, 95% flagged** |
+| **ask the model to assess itself** (ch2 confidence_to_proceed, ch4 confidence, ch8 placement_confidence, ch10 self-count) | **LOW 0/159, LOW 0/192, 97% HIGH and 0 caught, 0/18 correct** |
+
+**Across four chapters and 400+ self-assessments, a model asked to grade its own
+work returned the lowest grade zero times.**
+
+The deeper difference: a restriction changes what the model may output and is
+enforceable by the code reading the response. A self-assessment adds a field and
+changes nothing — it is a claim about a claim, no more reliable than the inner one.
+
+**Recommended shape:** let the prompt *report*, let your code *decide*. Branch on
+the grade returned, never on the confidence the model assigns itself. Full template
+in the report, part "Every prompt in the book, checked".
+
+New scripts: `ch08-routing-placement/book_prompt.py`, `ch10-silent-omissions/book_prompt.py`.
