@@ -63,7 +63,7 @@ settings, worked input/output samples, costs and limits for every experiment.
 
 | chapter | what it measures | result |
 |---|---|---|
-| [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided |
+| [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided — but the four checks the book *prescribed* catch **37%** |
 | [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **−69 pts** from the grounding prompt, across 4 models |
 | [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
 | [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges **worse** |

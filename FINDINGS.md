@@ -930,3 +930,47 @@ valid furosemide dose, and nothing downstream can tell the document said 80.
 
 **Real OCR damage is worse than the simulation.** The synthetic corruption used
 elsewhere in this report was, if anything, too gentle.
+
+## Chapter 2's prescribed pre-flight checks, measured (Sep 2026)
+
+The 85% catch rate was attributed to the section "Pre-flight input validation
+before any LLM call". **That section prescribes four checks; the implementation
+ran a different five.** Only the length floor overlaps. So the four were built
+separately and run over the same 53 cases — pure code, no model calls, entropy
+band calibrated on the clean documents only. `ch02-input-integrity/book_checks.py`.
+
+| prescribed check | damaged caught | clean rejected |
+|---|---|---|
+| 1 language sanity (`langdetect`) | **0 of 41** | 0 |
+| 2 character entropy | **0 of 41** | 0 |
+| 3 token count bounds | 37% (15/41) | 8% |
+| 4 required field presence | n/a — raw text has no fields | — |
+| **all three testable, together** | **37%** | 8% |
+| **the five actually built** | **85%** | 17% |
+
+By damage type, the prescribed checks catch: truncation 100% (token bounds alone),
+and 0–20% of everything else. The built gate: mojibake 100%, homoglyphs 100%,
+truncation 100%, OCR 50%.
+
+### Why the two nulls happen
+
+Both libraries work correctly; they cannot see this damage.
+
+- **`langdetect` returned English at 0.99999 confidence** on a document carrying 65
+  Cyrillic characters. It is right — the document *is* in English. Whether it is
+  corrupted is a different question.
+- **Entropy fails by construction.** Homoglyph substitution swaps one symbol for
+  another of the same frequency, so the distribution's shape does not move.
+  Damaged documents measured 4.66–4.81 bits/char against a clean band of
+  4.15–4.91. **Corruption that preserves the statistics of the original is
+  invisible to statistical checks.**
+
+### A prediction on record, wrong twice
+
+Before running it, the expectation was that langdetect would fire on the homoglyph
+documents and that entropy would roughly match the mojibake regex. Both caught
+nothing. The reasoning behind the prediction is the reasoning printed in the
+chapter, and it is wrong for the same reason in both cases.
+
+**Consequence:** the chapter now prints the five checks that earned the 85%, with
+per-check catch rates, and explains what langdetect and entropy are actually for.

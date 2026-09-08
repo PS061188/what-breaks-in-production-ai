@@ -740,6 +740,118 @@ later.</p>
       <td><strong>Works</strong> — turns a rejection into a diagnosis</td></tr>
 </table>
 
+<h4>Fix 1, as the chapter actually prescribes it</h4>
+
+<p>The gate measured above is <strong>not the gate the chapter describes.</strong>
+The chapter names four checks; the implementation ran five, and only two of them
+overlap. The 85% belongs to what was built, so the chapter's own advice needed its
+own number.</p>
+
+<table>
+  <tr><th style="width:34%">What the chapter prescribes</th><th>What was implemented</th></tr>
+  <tr><td>1 &middot; Language sanity via <code>langdetect</code></td><td><em>never run</em></td></tr>
+  <tr><td>2 &middot; Character-level entropy</td><td><em>never run</em> &mdash; a non-ASCII ratio and a mojibake regex were used instead, which are related but not the same statistic</td></tr>
+  <tr><td>3 &middot; Token count bounds</td><td>approximated by a character-length floor</td></tr>
+  <tr><td>4 &middot; Required field presence (Pydantic)</td><td><em>never run</em></td></tr>
+  <tr><td>&mdash;</td><td><strong>ends mid-sentence</strong> &mdash; not in the chapter</td></tr>
+  <tr><td>&mdash;</td><td><strong>alphanumeric-mixed tokens</strong> &mdash; not in the chapter, and the only check in either set that sees OCR damage</td></tr>
+</table>
+
+<p>So the four prescribed checks were implemented separately and run over the same
+53 cases. No model calls, deterministic, and the entropy band was calibrated on the
+<em>clean</em> documents only &mdash; choosing it after seeing the damaged ones
+would be fitting the check to the answer.</p>
+
+<h4>The result</h4>
+
+<table>
+  <tr><th style="width:44%">Check</th><th class="num">Damaged caught</th>
+      <th class="num">Clean wrongly rejected</th></tr>
+  <tr><td>1 &middot; Language sanity (<code>langdetect</code>)</td>
+      <td class="num"><strong>0%</strong> &mdash; 0 of 41</td><td class="num">0%</td></tr>
+  <tr><td>2 &middot; Character entropy</td>
+      <td class="num"><strong>0%</strong> &mdash; 0 of 41</td><td class="num">0%</td></tr>
+  <tr><td>3 &middot; Token count bounds</td>
+      <td class="num">37% &mdash; 15 of 41</td><td class="num">8%</td></tr>
+  <tr><td><strong>All three together</strong></td>
+      <td class="num"><strong>37%</strong></td><td class="num">8%</td></tr>
+  <tr style="background:#f4efe6"><td><strong>The gate this project actually built</strong></td>
+      <td class="num"><strong>85%</strong></td><td class="num">17%</td></tr>
+</table>
+
+<p>Check 4, required field presence, is <strong>not applicable here</strong>.
+Pydantic field validation guards a structured payload; the input in this chapter is
+raw document text with no fields that could be absent. It is sound advice for
+API-shaped inputs and it cannot be scored on this corpus.</p>
+
+<h4>Which damage each prescribed check can see</h4>
+
+<table>
+  <tr><th style="width:36%">Check</th><th class="num">Mojibake</th><th class="num">OCR</th>
+      <th class="num">Truncated</th><th class="num">Homoglyphs</th></tr>
+  <tr><td>Language sanity</td><td class="num">0/5</td><td class="num">0/12</td>
+      <td class="num">0/12</td><td class="num">0/12</td></tr>
+  <tr><td>Character entropy</td><td class="num">0/5</td><td class="num">0/12</td>
+      <td class="num">0/12</td><td class="num">0/12</td></tr>
+  <tr><td>Token count bounds</td><td class="num">20%</td><td class="num">8%</td>
+      <td class="num"><strong>100%</strong></td><td class="num">8%</td></tr>
+  <tr style="background:#f4efe6"><td><strong>The gate actually built</strong></td>
+      <td class="num"><strong>100%</strong></td><td class="num">50%</td>
+      <td class="num"><strong>100%</strong></td><td class="num"><strong>100%</strong></td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Two of the three testable checks catch nothing at all</span>
+  <p>Not &ldquo;little&rdquo;. <strong>Zero of forty-one, each.</strong> And token
+  count bounds turns out to be a truncation detector wearing a general-purpose
+  name: 100% of truncation, and almost nothing else, which is unsurprising once
+  said aloud because length is all it looks at.</p>
+</div>
+
+<h4>Why the two nulls happen, which matters more than the nulls</h4>
+
+<p>Both checks are working correctly. They cannot see this damage, for different
+and instructive reasons.</p>
+
+<p><strong>Language detection answers a different question.</strong> On a document
+carrying 65 Cyrillic characters, <code>langdetect</code> returned English with a
+confidence of <strong>0.99999</strong>. It is right. The document <em>is</em> in
+English &mdash; it is also corrupted, and that is not the question the library was
+asked. A homoglyph substituted into <em>administration</em> leaves a token that is
+still overwhelmingly English-shaped, and 65 characters in 1,800 do not move an
+n-gram model.</p>
+
+<p><strong>Entropy is the wrong statistic, by construction.</strong> Homoglyph
+substitution replaces one symbol with another of the same frequency: the shape of
+the character distribution is untouched, only the alphabet changed. Measured
+entropy on the damaged documents &mdash; 4.66, 4.72, 4.81 &mdash; sits inside the
+clean band of 4.15 to 4.91 every time. Entropy measures how <em>surprising</em> a
+distribution is, not whether its symbols belong.</p>
+
+<div class="plain">
+  <span class="label">A prediction made before running this, and wrong twice</span>
+  <p>The expectation on record was that <code>langdetect</code> would fire on the
+  homoglyph documents and nothing else, and that entropy would do roughly what the
+  mojibake regex already does. Neither happened: both caught nothing at all. The
+  reasoning behind the prediction &mdash; that non-Latin characters look like a
+  different language, and that mangled encoding looks statistically random &mdash;
+  is exactly the reasoning in the chapter, and it is wrong for the same reason in
+  both cases. <strong>Corruption that preserves the statistics of the original is
+  invisible to statistical checks.</strong></p>
+</div>
+
+<h4>What this means for the chapter</h4>
+
+<p>A reader who implements the four checks as written gets <strong>37%</strong>,
+and effectively only truncation detection. A reader who implements what this
+project actually built gets <strong>85%</strong>. The whole difference is three
+checks the chapter does not mention: ends-mid-sentence, a non-ASCII ratio, and
+alphanumeric-mixed tokens &mdash; the last being the only check in either set that
+sees OCR damage.</p>
+
+<p><strong>The 85% headline therefore belongs to the second list, not the first</strong>,
+and the chapter should print the list that earned it.</p>
+
 <h4>Fix 2 — OCR confidence scores, explained</h4>
 
 <p><strong>What OCR is.</strong> When a document arrives as a scan or a
