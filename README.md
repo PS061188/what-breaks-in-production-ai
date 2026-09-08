@@ -249,6 +249,156 @@ evidence looks orphaned and would otherwise be deleted.
   native structured outputs, which enforces the same contract. Each chapter
   README notes where it diverges and why.
 
+## Where the numbers come from
+
+Every figure quoted in the book has an experiment ID. Each one below names what
+was measured, what it found, and where the code lives. **IDs are stable; page
+numbers are not**, which is why the book cites these rather than a page.
+
+### Experiment 2.1
+
+**Does damaged input change the answer, silently?**  
+39% of damaged documents changed the answer with no error raised  
+Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 2.2
+
+**Does a pure-code gate before the model help?**  
+85% of damaged documents stopped, 37 model calls avoided  
+Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 2.3
+
+**The four pre-flight checks the book prescribes**  
+langdetect 0/41, entropy 0/41, token bounds 37%  
+Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 2.4
+
+**The chapter's prompt template, run**  
+flags 95%, aborts 0 of 41, LOW returned 0 of 159  
+Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 2.5
+
+**Real OCR, and the confidence scores it emits**  
+85.5% word accuracy; 0 of 840 lines below confidence 1.000  
+Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 3.1
+
+**Does prompt wording change the fabrication rate?**  
+30% plain, 35% soft words, 92% with a permission clause  
+Code: [`ch03-hallucination/`](ch03-hallucination/)
+
+### Experiment 3.2
+
+**Does the grounding template reduce it?**  
+-69 points, across four models and two providers  
+Code: [`ch03-hallucination/`](ch03-hallucination/)
+
+### Experiment 3.3
+
+**The four engineering fixes**  
+cross-encoder at 0.3: 85% caught, 12% false alarms  
+Code: [`ch03-hallucination/`](ch03-hallucination/)
+
+### Experiment 4.1
+
+**One wrong label, and every step after it**  
+LOW never issued in 192 classifications; ensemble is stable, not just accurate  
+Code: [`ch04-classification-cascade/`](ch04-classification-cascade/)
+
+### Experiment 5.1
+
+**What does 'extract into clean values' cost?**  
+auditability 66%->93%; qualifiers unchanged; ranges worse  
+Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
+
+### Experiment 5.2
+
+**Normalisation in code, and what it records**  
+52 recorded losses, each naming a specific dropped value  
+Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
+
+### Experiment 6.1
+
+**The answer is right about something no longer true**  
+status rule alone 17%, the book's six-rule protocol 30%  
+Code: [`ch06-state-mismatch/`](ch06-state-mismatch/)
+
+### Experiment 7.1
+
+**The failure that did not happen, and the fix that harmed**  
+Hindi rejected at cosine 0.995; 24 legitimate queries destroyed  
+Code: [`ch07-edge-input/`](ch07-edge-input/)
+
+### Experiment 8.1
+
+**Does content end up in the wrong box?**  
+0 real placement errors in 33  
+Code: [`ch08-routing-placement/`](ch08-routing-placement/)
+
+### Experiment 8.2
+
+**The model's account of its own sourcing**  
+wrong section named 3-15% across runs; 97% graded HIGH  
+Code: [`ch08-routing-placement/`](ch08-routing-placement/)
+
+### Experiment 9.1
+
+**How often does an empty box get filled?**  
+29% of unsupported fields filled anyway  
+Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
+
+### Experiment 9.2
+
+**The fix, and the mistake in how it was tested**  
+all 14 fabrications carried a real quote  
+Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
+
+### Experiment 9.3
+
+**The same fix on a corpus where it can fail**  
+0% fabrication, 76% recall  
+Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
+
+### Experiment 10.1
+
+**Does the model drop items from a long list?**  
+185 of 185 returned in one call; long lists are not where this fails  
+Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
+
+### Experiment 10.2
+
+**Do the chapter's fixes help?**  
+independent count works; self-count wrong on 6 of 6  
+Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
+
+### Experiment C.1
+
+**The same failures over deliberately damaged input**  
+three of four chapters unchanged; silent omission 0/6 -> 4/7  
+Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
+
+### Experiment R.1
+
+**Every experiment run three times**  
+8 of 14 published figures outside their own reproducible range  
+Write-up: [`report/`](report/)
+
+### Experiment P.1
+
+**Every prompt in the book, audited and run**  
+restrictions produced every gain; self-assessments produced none  
+Write-up: [`report/`](report/)
+
+### Experiment X.1
+
+**The same experiments on four models, two providers**  
+silent corruption 39% -> 80% as the model gets stronger  
+Write-up: [`report/`](report/)
+
 ## Licence
 
 Code: MIT. Data: public domain (US FDA). The book is not.
