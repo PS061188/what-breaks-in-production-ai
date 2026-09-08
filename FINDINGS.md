@@ -1073,3 +1073,24 @@ the grade returned, never on the confidence the model assigns itself. Full templ
 in the report, part "Every prompt in the book, checked".
 
 New scripts: `ch08-routing-placement/book_prompt.py`, `ch10-silent-omissions/book_prompt.py`.
+
+## A layout bug worth recording (Sep 2026)
+
+Adding one table to the manuscript collapsed the PDF from 186 pages to **107**,
+with body text rendering at 6.66pt instead of 10pt. Nothing was lost — Chrome was
+shrink-to-fitting the *entire document*.
+
+Cause: the book's stylesheet carries `td:first-child { white-space: nowrap; }`,
+because its tables are designed with a short label in column one. A full sentence
+in that cell becomes one unbreakable line wider than the page, and Chrome scales
+everything down to make it fit.
+
+Two things worth carrying:
+
+- **The failure was global and silent.** A local mistake in one cell changed the
+  type size of all 186 pages. Nothing errored; the build reported success.
+- **Tag balance and character counts both passed.** The HTML was valid and larger
+  than before. The only way to catch it was to render and count pages.
+
+Added to the checks: after any manuscript edit, verify the page count and the body
+font size, not just that the build completed.

@@ -59,6 +59,31 @@ prompt and every fix. **[REVIEW.md](REVIEW.md)** is an adversarial read of the
 whole thing. **[report/](report/)** is a 108-page write-up with the corpus,
 settings, worked input/output samples, costs and limits for every experiment.
 
+## What actually goes in a prompt
+
+Every prompt template in the book was run against the same documents. Sorted by
+**what they ask the model to do**, the results separate completely.
+
+| The instruction asks for | Outcome |
+|---|---|
+| **A restriction on what may be asserted** — *only from the sources* · *null is a correct answer* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **−69 pts** fabrication, **29% → 0%**, **67% → 17%**, **95% flagged** |
+| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Nothing, in four chapters.** Lowest grade returned **0 times in 400+ assessments**. 97% of fields graded HIGH, including wrong ones. Self-count wrong **18 of 18** |
+
+A restriction changes what the model may output, and the code reading the response
+can enforce it. A self-assessment adds a field and changes nothing else — it is a
+claim about a claim, no more reliable than the inner one.
+
+**A prompt can tell you reliably what it noticed. It cannot tell you reliably what
+to do about it.** Chapter 2's protocol flagged 95% of damaged documents and refused
+to stop on a single one, because the step that stops was conditioned on a
+confidence grade the model never issued.
+
+**Let the prompt report. Let your code decide.** Branch on the grade returned as
+data; never on the confidence the model assigns itself.
+
+Full template, with the numbers behind each line, in
+[`report/`](report/) under *Every prompt in the book, checked*.
+
 ## The nine chapters
 
 | chapter | what it measures | result |
