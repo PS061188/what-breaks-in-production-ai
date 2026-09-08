@@ -288,6 +288,92 @@ later.</p>
       <td><strong>Works</strong> — turns a rejection into a diagnosis</td></tr>
 </table>
 
+<h4>The chapter's prompt template, run at last</h4>
+
+<p>The baseline measured earlier in this chapter uses a plain extraction
+instruction &mdash; a demonstration of the failure, not the chapter's fix. The
+chapter's actual prompt is an <strong>INPUT QUALITY PROTOCOL</strong>: the model
+inspects its own input for corruption signals, reports a quality grade and a
+confidence-to-proceed, and <em>aborts</em> rather than extract from a document it
+judges severely corrupted. It had never been run.</p>
+
+<p>Three live runs over the same 53 cases returned <strong>identical numbers every
+time</strong>.</p>
+
+<table>
+  <tr><th style="width:24%">Damage</th><th class="num">Flagged as not CLEAN</th>
+      <th class="num">Aborted</th><th class="num">Said LOW confidence</th></tr>
+  <tr><td>Lookalike letters</td><td class="num"><strong>100%</strong> (12/12)</td>
+      <td class="num">0%</td><td class="num">0%</td></tr>
+  <tr><td>Encoding damage</td><td class="num"><strong>100%</strong> (5/5)</td>
+      <td class="num">0%</td><td class="num">0%</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Scanning damage</strong></td>
+      <td class="num"><strong>100%</strong> (12/12)</td>
+      <td class="num">0%</td><td class="num">0%</td></tr>
+  <tr><td>Truncation</td><td class="num">83% (10/12)</td>
+      <td class="num">0%</td><td class="num">0%</td></tr>
+  <tr><td><strong>All damaged</strong></td><td class="num"><strong>95%</strong> (39/41)</td>
+      <td class="num"><strong>0%</strong> (0/41)</td><td class="num"><strong>0%</strong> (0/53)</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">The prompt is a better detector than the code gate, and not a gate at all</span>
+  <p><strong>95% flagged, against the code gate's 85%</strong> &mdash; and on
+  scanning damage it caught <strong>12 of 12 where the gate caught 6</strong>. It
+  also cost fewer false alarms: 8% of clean documents against the gate's 17%. On
+  detection, the chapter's prompt beats the chapter's code.</p>
+  <p><strong>And it refused to extract from nothing at all.</strong> Step 3 fires
+  only on <code>SEVERELY_CORRUPTED</code> or <code>LOW</code> confidence. Across
+  159 assessments over three runs, the model never once issued either. It noticed
+  the damage, described the damage, and then extracted from the damaged document
+  anyway.</p>
+</div>
+
+<h4>The self-assessment finding, arriving for the seventh time</h4>
+
+<div class="headline">
+  <b>0 of 159</b> assessments returned <code>confidence_to_proceed: LOW</code>.
+</div>
+
+<p>This is the same three-level self-report that returned <code>LOW</code> zero
+times in 192 classifications in Chapter 4, and the same construct that carried no
+information about input quality in this chapter's own baseline. <strong>A grade a
+model assigns to its own readiness is not a control surface.</strong> Any step
+conditioned on it &mdash; here, the entire abort mechanism &mdash; is unreachable
+code.</p>
+
+<h4>Prompt and gate are complementary, which is the useful result</h4>
+
+<table>
+  <tr><th style="width:40%">Caught by</th><th class="num">Damaged documents</th></tr>
+  <tr><td>Both</td><td class="num">33</td></tr>
+  <tr><td><strong>Prompt only</strong></td><td class="num"><strong>6</strong></td></tr>
+  <tr><td><strong>Code gate only</strong></td><td class="num"><strong>2</strong></td></tr>
+  <tr><td>Neither</td><td class="num"><strong>0</strong></td></tr>
+</table>
+
+<p><strong>Together they catch all 41.</strong> They fail on different things: the
+gate is blind to scanning damage because OCR errors are ordinary letters, and the
+prompt missed two truncations that the gate's length check caught immediately.</p>
+
+<p>So the ordering that follows from the evidence is: <strong>run the free code
+gate first</strong> &mdash; it stops 85% for no model call and no latency &mdash;
+<strong>and use the prompt on what survives it</strong>, where it will catch the
+scanning damage nothing cheap can see. What neither should do is <em>decide</em>:
+the abort step never fired, so the refusal has to live in your code, keyed on the
+quality grade the model returns rather than on the confidence it assigns itself.</p>
+
+<div class="plain">
+  <span class="label">A bug in this experiment, found on the third run</span>
+  <p>The first two runs completed cleanly at <code>max_tokens=700</code>. The
+  third died: on some damaged documents the model returns a long
+  <code>corruption_signals</code> list and the response is cut off mid-JSON.</p>
+  <p>Intermittent, invisible for two runs, and it would have produced a missing
+  result rather than a wrong one &mdash; but it is the fourth token-budget
+  overflow in this project, and the third time a defect survived its first two
+  runs. The numbers above are three clean runs at 1,400.</p>
+</div>
+
 <h4>Fix 1, as the chapter actually prescribes it</h4>
 
 <p>The gate measured above is <strong>not the gate the chapter describes.</strong>

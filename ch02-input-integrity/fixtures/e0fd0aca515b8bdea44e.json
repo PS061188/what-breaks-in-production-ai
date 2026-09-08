@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\n2 DOSAGE AND ADMINISTRATION For oral inhalation only. ( 2 ) Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation every 4 to 6 hours. For some patients, 1 inhalation every 4 hours may be sufficient. ( 2.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. ( 2.2 ) Priming information: Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before eac\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\":\"DEGRADED\",\"corruption_signals\":[\"Text truncation: final sentence ends mid-word ('eac' instead of 'each')\",\"Incomplete instruction: priming procedure cuts off abruptly\"],\"confidence_to_proceed\":\"MEDIUM\",\"status\":\"PROCEEDED\",\"starting_dose\":\"2 inhalations by oral inhalation every 4 to 6 hours (or 1 inhalation every 4 hours for some patients) for treatment or prevention of bronchospasm in patients aged 4 years and older\"}",
+  "elapsed_ms": 2010,
+  "usage": {
+    "input_tokens": 945,
+    "output_tokens": 125
+  }
+}

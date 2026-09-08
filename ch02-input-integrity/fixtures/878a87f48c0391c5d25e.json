@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\nDOSAGE AND ADMINіSTRATION Initial Treatment Dosage for Adults Mаjоr Depressive Disorder –Sertraline hydrochloride treаtment should be admіnіstered at a dоse of 50 mg once daily. While a relatiоnship between dose and effect hаs not been established for major depressive disоrder, OCD, panіc disorder, PTSD or social anхіety disorder, рatients wеre dosed in a range of 50-200 mg/day in the clinical trials demonstrating the effectiveness оf Sertraline hydrochloridе for the treatment of this indication. Consеquently, a dose of 50 mg, administered once daily, is recоmmended as the initial thеrapeutіc dose. Patients not responding to a 50 mg dose may benefit frоm dosе іncrеases up to a maximum of 200 mg/daу. Given the 24 hour elimіnation half-life of sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Premеnstrual Dysphoric Disorder – Sertraline hydrochloride treatmеnt should bе initiated with a dosе of 50 mg/day, either daily throughout the menstrual cуcle or limited to the luteal phase of the menstrual cycle, depending on phуsіcіan assеssment. While a relationship between dоse and effect has not been establіshed for PMDD, patients were dosed in the rаnge of 50-150 mg/day with dose increases at the onset of each new menstrual cycle (see Clinical Trials under CLINICAL PHаRMAсOLOGY ). Patients not responding to a 50 mg/daу dose mаy benеfit from dose incrеаses (at 50 mg incrеments/ menstrual cycle) up to 150 mg/day when dosing daіly throughout the mеnstrual сycle, or 100 mg/day when dosing during the luteal phase of the menstrual cycle. If a 100 mg/day dose hаs been established with luteal phase dosing, а 50 mg/day titrаtion step for three days shоuld be utilized at the beginning of each luteal phase dosing perіod.\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"corruption_signals\": [\"Cyrillic characters mixed with Latin (і instead of i, аnd о instead of o, е instead of e, у instead of u)\", \"OCR artifacts: 'аdmіnіstered', 'dоse', 'relatiоnship', 'disоrder', 'рatients', 'wеred', 'recоmmended', 'thеrapeutіc', 'dosе', 'іncrеases', 'Premеnstrual', 'treatmеnt', 'bе', 'cуcle', 'phуsіcіan', 'assеssment', 'dоse', 'establіshed', 'rаnge', 'daу', 'mаy', 'benеfit', 'incrеаses', 'daіly', 'сycle', 'hаs', 'titrаtion', 'shоuld', 'perіod'\"], \"confidence_to_proceed\": \"MEDIUM\", \"status\": \"PROCEEDED\", \"starting_dose\": \"50 mg once daily for Major Depressive Disorder; 50 mg/day for Premenstrual Dysphoric Disorder (either daily throughout menstrual cycle or limited to luteal phase)\"}",
+  "elapsed_ms": 3735,
+  "usage": {
+    "input_tokens": 1283,
+    "output_tokens": 327
+  }
+}

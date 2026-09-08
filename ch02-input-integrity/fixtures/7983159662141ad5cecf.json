@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\nDOSAGE AND ADMINISTRATION The initial dosage of prednіsone may vary from 5 mg to 60 mg of prednisоne per daу deрending on thе specific disease entity being treated. In sіtuations of less severity lower doses will generally suffiсe whіle in seleсted patients higher initial doses may be required. The initial dosage should be maintained or adjusted until a satіsfactory response is noted. If after a reasonable period of time therе is a lack of satisfactory clinіcal response, prednisоne should be discontinued and the рatient trаnsferred to other appropriate therapy. IT SHOULD BE еMPHASіZED THAT DоSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THе BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT . After a favorable response is noted, the propеr maintenancе dosage should be determined by decreasing the initial drug dosage in smаll decrements at approрriate time intervals until the lowest dosage which will maintain an adequate сlinical responsе is reached. It shоuld be kept in mind that constant monitoring is neеded in rеgard to drug dosage. Included in the situations which may make dosage adjustments necessаrу are chаnges in сlіnical status secоndary to remissions or exаcerbations in the disease proсess, the patient’s іndividual drug rеsponsiveness, and the effect of patient exposure to strеssful situations not directlу related to thе disease entity under trеatment; in this latter sіtuation it may be necessary to increase the dosagе of prednisone fоr a period of time consistent with the patіent’s сondition. If after long-term theraру the drug is to be stoрped, it is recommended that it be withdrawn gradually rather than abruptly.\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"corruption_signals\": [\"Character substitution: 'prednіsone' with Cyrillic і\", \"Character substitution: 'prednisоne' with Cyrillic о\", \"Character substitution: 'daу' with Cyrillic у\", \"Character substitution: 'deрending' with Cyrillic р\", \"Character substitution: 'thе' with Cyrillic е\", \"Character substitution: 'sіtuations' with Cyrillic і\", \"Character substitution: 'suffiсe' with Cyrillic с\", \"Character substitution: 'whіle' with Cyrillic і\", \"Character substitution: 'seleсted' with Cyrillic с\", \"Character substitution: 'satіsfactory' with Cyrillic і\", \"Character substitution: 'clinіcal' with Cyrillic і\", \"Character substitution: 'prednisоne' with Cyrillic о\", \"Character substitution: 'рatient' with Cyrillic р\", \"Character substitution: 'trаnsferred' with Cyrillic а\", \"Character substitution: 'еMPHASіZED' with Cyrillic е and і\", \"Character substitution: 'DоSAGE' with Cyrillic о\", \"Character substitution: 'THе' with Cyrillic е\", \"Character substitution: 'propеr' with Cyrillic е\", \"Character substitution: 'maintenancе' with Cyrillic е\", \"Character substitution: 'smаll' with Cyrillic а\", \"Character substitution: 'approрriate' with Cyrillic р\", \"Character substitution: 'сlinical' with Cyrillic с\", \"Character substitution: 'responsе' with Cyrillic е\", \"Character substitution: 'shоuld' with Cyrillic о\", \"Character substitution: 'neеded' with Cyrillic е\", \"Character substitution: 'rеgard' with Cyrillic е\", \"Character substitution: 'necessаrу' with Cyrillic а\", \"Character substitution: 'chаnges' with Cyrillic а\", \"Character substitution: 'сlіnical' with Cyrillic с and і\", \"Character substitution: 'secоndary' with Cyrillic о\", \"Character substitution: 'exаcerbations' with Cyrillic а\", \"Character substitution: 'proсess' with Cyrillic с\", \"Character substitution: 'іndividual' with Cyrillic і\", \"Character substitution: 'rеsponsiveness' with Cyrillic е\", \"Character substitution: 'strеssful' with Cyrillic е\", \"Character substitution: 'directlу' with Cyrillic у\", \"Character substitution: 'thе' with Cyrillic е\", \"Character substitution: 'trеatment' with Cyrillic е\", \"Character substitution: 'sіtuation' with Cyrillic і\", \"Character substitution: 'dosagе' with Cyrillic е\", \"Character substitution: 'fоr' with Cyrillic о\", \"Character substitution: 'patіent's' with Cyrillic і\", \"Character substitution: 'сondition' with Cyrillic с\", \"Character substitution: 'theraру' with Cyrillic р\", \"Character substitution: 'stoрped' with Cyrillic р\"], \"confidence_to_proceed\": \"MEDIUM\", \"status\": \"PROCEEDED\", \"starting_dose\": \"5 mg to 60 mg of prednisone per day\"}",
+  "elapsed_ms": 7396,
+  "usage": {
+    "input_tokens": 1164,
+    "output_tokens": 904
+  }
+}

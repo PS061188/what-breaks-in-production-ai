@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\n2 DOSAGE AND ADMlNlSTRATION Postherрetic Neuralgia (2.1) Dose can be titrated up as needed to a dose оf 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times а day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilеpsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose іs 300 mg three tіmes daily; mаy be titrated uр to 600 mg three tіmes daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, gіvеn in thrеe divided doses; recommended dose in pаtients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommеnded dose in patients 5 to 11 years of age is 25 tо 35 mg/kg/day, gіven in three dividеd doses. The recommended dose is reached by upward titration over a periоd of approximately 3 days Dose should be adjusted in patiеnts with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosagе for Pоstherpetic Nеuralgiа In adults with postherpetic neurаlgia, Gabapentin may bе initiated on Day 1 as a single 300 mg dose, on Day 2 аs 600 mg/day (300 mg twо times a dаy), and on Day 3 as 900 mg/daу (300 mg three times a dаy). The dose can subsequentlу be titrated up аs needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In cliniсal studіes, efficаcy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in thеse clinical studies, the additіоnal benefit of usіng doses greater than 1800 mg/day was not demonstrated 2.2 Dosage fоr Epilepsy with Partial Onset Seizures Patients 12 years of age and above The stаrting dose is 300 mg three times a dаy. Thе recommеnded maintenance dose оf Gabapentin is 300 mg to 600 mg three times a daу.\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\":\"DEGRADED\",\"corruption_signals\":[\"Cyrillic character 'р' substituted for 'r' in 'Postherрetic'\",\"Cyrillic character 'о' substituted for 'o' in multiple words like 'оf', 'pоstherpetic'\",\"Cyrillic character 'а' substituted for 'a' in words like 'а day', 'mаy', 'pаtients'\",\"Cyrillic character 'і' substituted for 'i' in 'іs', 'tіmes', 'gіvеn'\",\"Cyrillic character 'е' substituted for 'e' in 'thrеe', 'pеriоd', 'studіes'\",\"OCR/encoding artifacts with mixed Cyrillic and Latin characters throughout\",\"Inconsistent spacing and character substitutions suggesting encoding corruption\"],\"confidence_to_proceed\":\"MEDIUM\",\"status\":\"PROCEEDED\",\"starting_dose\":\"300 mg (single dose on Day 1 for Postherpetic Neuralgia; 300 mg three times daily for Epilepsy in patients 12 years and older)\"}",
+  "elapsed_ms": 7401,
+  "usage": {
+    "input_tokens": 1363,
+    "output_tokens": 282
+  }
+}

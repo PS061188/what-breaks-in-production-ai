@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\n2 DOSAGE AND ADMINISTRATION Indivіdualize dosing regimen for each pаtient, and adjust bаsed on INR response. ( 2.1 , 2.2 ) Knowledge of genotypе can inform initial dose selection. ( 2.3 ) Monіtoring: Obtain daily INR determinations upon initiation until stablе in the therapeutic range. Obtain subsequent іNR determinations everу 1 to 4 weeks. ( 2.4 ) Review conversion instructions from other аntіcoagulants. ( 2.8 ) 2.1 Indivіdualized Dosing The dosage and adminіstratіon of warfarin sodium tablets must be individualized for each patient according to the patіent’s International Normalized Ratiо (INR) response to the drug. Adjust the dose based on the patient’s INR and the condition being treated. сonsult the latеst evidencе-based clinical рractіce guidelines regarding the duration and intensity of anticоagulation for the indicated сonditions. 2.2 Recommended Target INR Ranges and Durations fоr Individual Indications An INR of greater than 4 аppears to provіdе no additional therapeutic benefit in most patients and іs associated with a higher risk of bleeding. Venous Thromboembolіsm (including deep venous thrombosis [DVT] and PE) Adjust the warfarin dose to maintaіn a target INR of 2.5 (INR range, 2 to 3) for all treatment durations. The duration of treatment іs basеd on the indication as follows: For patients with a DVT or PE secondary to a trаnsient (reversіble) risk factor, treatment with warfarin for 3 months іs recommended. For patients with an unprоvoked DVT or PE, treatment with warfarin is recommended fоr at least 3 months. After 3 months of theraрy, evaluаte the risk-benefit ratio of long-term treatment for the individual patient. For patients with two episodes of unрrovoked DVT or PE, long-term treatment with warfаrin is recommended.\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"corruption_signals\": [\"Cyrillic 'і' substituted for Latin 'i' in multiple words (Indivіdualize, pаtient, bаsed, genotypе, Monіtoring, іNR, аntіcoagulants, adminіstratіon, patіent, Ratiо, сonsult, latеst, рractіce, anticоagulation, сonditions, fоr, аppears, provіdе, іs, Thromboembolіsm, maintaіn, basеd, trаnsient, reversіble, unprоvoked, fоr, theraрy, evaluаte, unрrovoked, warfаrin)\", \"Possible OCR artifacts and encoding issues throughout\"], \"confidence_to_proceed\": \"MEDIUM\", \"status\": \"PROCEEDED\", \"starting_dose\": \"No specific starting dose numerical value is provided in the source text. The document indicates that dosing must be individualized for each patient and that knowledge of genotype can inform initial dose selection (section 2.3), but no initial dosage quantity is stated.\"}",
+  "elapsed_ms": 7467,
+  "usage": {
+    "input_tokens": 1236,
+    "output_tokens": 277
+  }
+}

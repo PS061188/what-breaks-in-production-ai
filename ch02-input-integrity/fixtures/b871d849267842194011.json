@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\n2 DOSаGE AND ADMINISTRATION Take orally onсe daily with or without food ( 2.1 ). Assess LDL-C whеn clinicаlly appropriate, as early as 4 weeks after inіtiating аtorvastatіn calсium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recommended stаrting dosage is 10 or 20 mg once daily; dosаge range is 10 mg to 80 mg оnce daily. Patients requiring LDL-C reduction >45% may start аt 40 mg once daіly. Pediatric Patients Aged 10 уears оf аge and оlder with HeFH: Recommended starting dosage is 10 mg once daily; dosаge range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years оf Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once dailу; dosage range is 10 to 80 mg once dаily ( 2.4 ). See full prescribing information for atorvastatin calсium tablets dosage modifications due to drug interactions ( 2.5 ). 2.1 Importаnt Dosage Information Take atorvastatin calcium tablets orally once daily at any time of the dаy, with or withоut food. Assess LDL-C when cliniсally approрriate, as early as 4 weeks after initiаting atorvastatin calcium tаblets, and adjust the dosage if necessary. 2.2 Recommended Dosage in Adult Pаtiеnts The recommended starting dosage of atorvastatin calcіum tablets are 10 mg to 20 mg once daily. The dosаge rangе is 10 mg to 80 mg once daily. Patients whо rеquire reduction in LDL-C greatеr than 45% may be started at 40 mg once dаily. 2.3 Reсommended Dosage in Pediatric Patients 10 Years of Age and Older with HeFH The recommendеd starting dosage of atorvastatin calcium tablets are 10 mg once dаily. The dosage range is 10 mg to 20 mg oncе daily. 2.4 Recommended Dosage in Pеdiatric Patіents 10 Years of Age and Older with HоFH The recоmmended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily.\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"corruption_signals\": [\"Cyrillic characters mixed with Latin (DOSаGE, onсe, whеn, calсium, аtorvastatіn, оnce, уears, оf, аge, dailу, dаily, withоut, cliniсally, approрriate, initiаting, tаblets, Pаtiеnts, calcіum, rangе, whо, rеquire, greatеr, dаily, Reсommended, dаily, oncе, Pеdiatric, Patіents, HоFH, recоmmended)\", \"Multiple spacing and character encoding inconsistencies throughout\"], \"confidence_to_proceed\": \"MEDIUM\", \"status\": \"PROCEEDED\", \"starting_dose\": \"10 mg or 20 mg once daily for adults; 10 mg once daily for pediatric patients aged 10 years and older with HeFH; 10 mg to 20 mg once daily for pediatric patients aged 10 years and older with HoFH\"}",
+  "elapsed_ms": 7012,
+  "usage": {
+    "input_tokens": 1358,
+    "output_tokens": 260
+  }
+}

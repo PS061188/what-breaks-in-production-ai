@@ -1,0 +1,59 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data, you MUST\nperform an input quality check.\n\nINPUT QUALITY PROTOCOL:\nStep 1 - Scan the input for these corruption signals:\n  - Sequences of garbled characters (e.g., \"???\", \"####\", encoding artifacts)\n  - Words that are clearly OCR artifacts (\"rn\" where \"m\" is expected, \"0\" for \"O\")\n  - Truncation: text that ends mid-sentence, missing closing brackets, or field\n    values that cut off abruptly\n  - Required fields that are entirely absent from the input\n\nStep 2 - Report your quality assessment BEFORE extraction:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"corruption_signals\": [\"list each signal found, or empty array if none\"],\n  \"missing_required_fields\": [\"field names that appear absent\"],\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\"\n}\n\nStep 3 - If input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW:\nDo NOT attempt extraction. Return:\n{ \"status\": \"EXTRACTION_ABORTED\", \"reason\": \"<specific reason>\" }\n\nStep 4 - If proceeding, extract the starting dose. For any field where the source\ntext is ambiguous due to corruption, annotate with:\n  \"field_confidence\": \"LOW\", \"raw_source\": \"<exact corrupted text>\"\n\n<text>\n2 DOSAGE AND ADMINISTRATION Administеr once daily, рreferably on an empty stomaсh, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours bеfore or after drugs that are known to interfere with absorption. (2.1) Evaluate thе need for dose adjustments when regularlу administering within one hour of certain foods that may affect absоrption. (2.1) Advise pаtients to stop bіotin and biotin-containing supplements at least 2 days beforе assessing TSH and/or T4 levels. (2.2) Starting dose depends on a variеty of factors, includіng age, body weight, cardiovascular status, and concomitant mediсations. Peak therарeutic effect may not be attained fоr 4 to 6 weeks. (2.2) See full prescribing informаtiоn for dоsing in specifіc patient populatіons. (2.3) Adequacy of theraрy determined with periodiс monitoring of TSH and/оr T4 as well аs clinical status. (2.4) 2.1 Importаnt Administration Instructiоns Administer levothуrоxine sodium tablets as а single dаily dose, on an empty stomach, оne-half to one hour befоre breakfast with а full glаss of watеr to avoid choking or gаgging [see Adverse Reactіons (6) ]. Administer levоthyroxine sоdium tаblets at lеast 4 hours before or after drugs known to interfere with levothyroxinе sodium absorption [see Drug Interactions (7.1) ]. Evaluate the need for dоsage adjustmеnts when regularly admіnistering wіthіn one hour оf cеrtain foods that may аffect levothyroxine sodium tablets absorption [see Dosagе аnd аdministration (2.2 and 2.3) , Drug Interactions (7.9), and Clinical Pharmacology (12.3) ].\n</text>",
+  "user": "Report the input quality, then the starting dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "corruption_signals": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "PROCEEDED",
+          "EXTRACTION_ABORTED"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "corruption_signals",
+      "confidence_to_proceed",
+      "status",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\":\"DEGRADED\",\"corruption_signals\":[\"Cyrillic character 'е' substituted for 'e' in multiple words (Administеr, рreferably, stomaсh, bеfore, thе, regularlу, absоrption, pаtients, bіotin, beforе, variеty, includіng, mediсations, therарeutic, fоr, informаtiоn, dоsing, specifіc, populatіons, theraрy, аs, Importаnt, Instructiоns, levothуrоxine, dаily, оne-half, befоre, а, glаss, watеr, Reactіons, levоthyroxine, sоdium, tаblets, lеast, levothyroxinе, dоsage, adjustmеnts, admіnistering, wіthіn, оf, cеrtain, аffect, аnd, аdministration)\"],\"confidence_to_proceed\":\"MEDIUM\",\"status\":\"PROCEEDED\",\"starting_dose\":\"Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. The specific starting dose is not numerically defined in the provided text; dosing is individualized based on patient-specific factors as noted in section 2.2 and requires reference to full prescribing information for specific patient populations (section 2.3).\"}",
+  "elapsed_ms": 9195,
+  "usage": {
+    "input_tokens": 1233,
+    "output_tokens": 362
+  }
+}

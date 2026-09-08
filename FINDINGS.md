@@ -974,3 +974,49 @@ chapter, and it is wrong for the same reason in both cases.
 
 **Consequence:** the chapter now prints the five checks that earned the 85%, with
 per-check catch rates, and explains what langdetect and entropy are actually for.
+
+## Chapter 2's prompt template, run at last (Sep 2026)
+
+The chapter's INPUT QUALITY PROTOCOL had never been executed — the baseline used a
+plain extraction instruction, which is a demonstration of the failure, not the
+chapter's fix. `ch02-input-integrity/book_prompt.py`. **3 live runs, identical
+numbers every time. ~$0.30.**
+
+| damage | flagged not CLEAN | aborted | said LOW |
+|---|---|---|---|
+| lookalike letters | 100% (12/12) | 0% | 0% |
+| encoding damage | 100% (5/5) | 0% | 0% |
+| **scanning damage** | **100% (12/12)** | 0% | 0% |
+| truncation | 83% (10/12) | 0% | 0% |
+| **all damaged** | **95% (39/41)** | **0% (0/41)** | **0% (0/53)** |
+
+**The prompt out-detects the code gate.** 95% vs 85%, and on scanning damage 12/12
+vs 6/12 — the damage class the gate is worst at. It also costs fewer false alarms:
+8% of clean documents vs 17%.
+
+**And it gates nothing.** Step 3 fires only on SEVERELY_CORRUPTED or LOW
+confidence. Across 159 assessments the model issued neither, ever. It noticed the
+damage, described it, and extracted from the damaged document anyway.
+
+**Seventh confirmation of the self-assessment finding.** `confidence_to_proceed`
+returned LOW 0 of 159 times — the same three-level self-report that returned LOW
+0 of 192 times in ch04. Any step conditioned on it is unreachable code.
+
+### The two are complementary
+
+| caught by | n |
+|---|---|
+| both | 33 |
+| prompt only | 6 |
+| code gate only | 2 |
+| **neither** | **0** |
+
+Together: 41 of 41. Run the free gate first (85%, no model call), then the prompt
+on what survives — but put the refusal in your own code, keyed on the returned
+quality grade, not on the model's confidence in itself.
+
+### A bug found on the third run
+
+Two clean runs at `max_tokens=700`, then a mid-JSON cutoff: some damaged documents
+produce a long `corruption_signals` list. Fourth token-budget overflow in this
+project and the third defect to survive its first two runs.
