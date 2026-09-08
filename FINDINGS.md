@@ -1094,3 +1094,35 @@ Two things worth carrying:
 
 Added to the checks: after any manuscript edit, verify the page count and the body
 font size, not just that the build completed.
+
+## Prompts rewritten to ship working, not annotated (Sep 2026)
+
+Editorial correction, on Prachi's direction: an engineering fix can be listed with
+"this is the standard advice and it does not work" beside it. **A prompt cannot.**
+A reader copies a prompt; they do not copy a caveat. So each template is now the
+version that measured well, with the removed part described *after* it as
+"here is what I tried, here is what it did, try it yourself".
+
+| ch | removed from the prompt | why |
+|---|---|---|
+| 2 | `confidence_to_proceed`, the Step 3 abort | LOW 0/159; aborted 0/41 |
+| 4 | `confidence`, `requires_human_review` | LOW 0/192; gate caught 2 of 9 errors while holding 3 correct |
+| 8 | `placement_confidence`, `requires_review`, disambiguation protocol | 97% graded HIGH incl. the misplaced field; no accuracy gain |
+| 10 | the whole inventory/self-count protocol | 78% mean vs 96% for a one-line instruction; self-count wrong 18/18 |
+
+What each prompt kept is what measured: ch2's corruption-signal scan (95%, 12/12 on
+OCR damage), ch4's `runner_up` (holds the true category 89–100% of the time),
+ch8's FIELD DEFINITIONS + verbatim quote, ch10's `not_extracted` (11 items, all
+correct judgements).
+
+Each section now also states **where the prompt works and where it does not** —
+ch2 is for prose not structured payloads and costs a call per input; ch8 needs
+fields with distinct linguistic markers; ch10 needs enumerable items and someone
+who will actually read the queue.
+
+### A sequencing error worth recording
+
+The chapters run **Prompt template → Engineering fixes**. My first pass at ch2
+referenced "the code gate" inside the prompt section — a forward reference to
+something 3,700 characters later that the reader has not met. Fixed. When editing
+a chapter, check that every reference points backwards.
