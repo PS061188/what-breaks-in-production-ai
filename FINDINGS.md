@@ -1126,3 +1126,19 @@ The chapters run **Prompt template → Engineering fixes**. My first pass at ch2
 referenced "the code gate" inside the prompt section — a forward reference to
 something 3,700 characters later that the reader has not met. Fixed. When editing
 a chapter, check that every reference points backwards.
+
+## Chapter 7's prompt isolated from its OOD fix (Sep 2026)
+
+`fixed.py --no-ood --live`, 3 runs, to attribute the chapter-7 regression correctly.
+
+| configuration | aggregate correct | legitimate queries answered |
+|---|---|---|
+| baseline (no fix) | 99-100% (143-144/144) | 100% |
+| **prompt only** | **144, 144, 143 of 144** | **48, 48, 47 of 48** |
+| prompt + OOD gate | 83% (120/144) | 50% (24/48) |
+
+**The prompt is the best-performing in the book. The entire regression is the
+out-of-distribution gate**, which rejects a well-formed Hindi question at cosine
+0.995 and takes 24 legitimate queries with it. Previously these were conflated,
+and ch7's fixed arm was reported as "the fix is a regression" without saying which
+fix.
