@@ -47,7 +47,18 @@ QUALIFIER_STEMS = [
     "in response",
 ]
 
-RANGE_RE = re.compile(r"\d+(?:\.\d+)?\s*(?:mg|mcg|g|ml|units)?\s*(?:to|-|–|—)\s*\d+", re.I)
+# A dose range: two figures with a dose unit attached to at least one of them.
+# The unit is required. Without it the pattern also matched INR target ranges
+# ("range, 2 to 3"), dosing intervals ("every 4 to 6 hours"), ages ("ages 6-12")
+# and time-to-effect ("1 to 4 days") — on three of the twelve labels every match
+# was one of those, so the document was recorded as containing a dose range it
+# does not contain, and an extraction that correctly carried no range was scored
+# as having lost one.
+RANGE_RE = re.compile(
+    r"\d+(?:\.\d+)?\s*(?:mg|mcg|g|ml|units?)\s*(?:to|-|–|—)\s*\d+"
+    r"|\d+(?:\.\d+)?\s*(?:to|-|–|—)\s*\d+(?:\.\d+)?\s*(?:mg|mcg|g|ml|units?)\b",
+    re.I,
+)
 
 # Both scripts return this shape. Holding the schema constant means the measured
 # difference is attributable to the prompt and to what runs after the call —

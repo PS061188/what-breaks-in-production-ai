@@ -8,9 +8,9 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;69 pts, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
+<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;81 pts or better, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
 <h4>What to trust / What not to</h4>
-<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> A &minus;69-point effect that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
+<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> An effect of at least &minus;81 points that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>Upgrading the model made one failure worse and left the others where they were.</strong> A stronger model reconstructs damaged input more fluently, so the wrong answer arrives better written and less detectable &mdash; 39% silent corruption on Haiku 4.5, 80% on GPT-5-mini. Everything that <em>did</em> improve came from the prompt and the code around the call, not from the model. That is the book's thesis, tested against the most obvious objection to it.</p>
 <h4>Where this is weakest</h4>
@@ -113,10 +113,10 @@ survives the change of model and the change of vendor:</p>
 <table>
   <tr><th style="width:34%">Model</th><th class="num">Soft-inference prompt</th>
       <th class="num">Grounding template</th><th class="num">Improvement</th></tr>
-  <tr><td>Claude Haiku 4.5</td><td class="num">92%</td><td class="num">23%</td><td class="num">−69 pts</td></tr>
-  <tr><td>Claude Opus 5</td><td class="num">100%</td><td class="num">31%</td><td class="num">−69 pts</td></tr>
-  <tr><td>GPT-5-mini</td><td class="num">98%</td><td class="num">29%</td><td class="num">−69 pts</td></tr>
-  <tr><td>GPT-4.1-mini</td><td class="num">94%</td><td class="num">25%</td><td class="num">−69 pts</td></tr>
+  <tr><td>Claude Haiku 4.5</td><td class="num">89%</td><td class="num">8%</td><td class="num">−81 pts</td></tr>
+  <tr><td>Claude Opus 5</td><td class="num">100%</td><td class="num">11%</td><td class="num">−89 pts</td></tr>
+  <tr><td>GPT-5-mini</td><td class="num">97–100%</td><td class="num">8%</td><td class="num">−89 to −92 pts</td></tr>
+  <tr><td>GPT-4.1-mini</td><td class="num">92–100%</td><td class="num">6%</td><td class="num">−86 to −94 pts</td></tr>
 </table>
 
 <p><strong>Sixty-nine points, four times, across two companies.</strong> That is

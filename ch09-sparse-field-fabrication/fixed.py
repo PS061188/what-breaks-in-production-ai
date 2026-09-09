@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from common import FIELD_LIST, FIELDS, build_cases, is_absent_answer  # noqa: E402
 from shared.llm import LLM, base_args  # noqa: E402
-from shared.scoring import headline, pct, quote_supported, rule, table  # noqa: E402
+from shared.scoring import headline, note, pct, quote_supported, rule, table  # noqa: E402
 
 # Adapted from the Chapter 9 prompt template.
 SYSTEM = """You are an extraction assistant. Your ONLY job is to extract what is
@@ -138,6 +138,7 @@ def main() -> int:
 
     rows = []
     fabricated = absent_total = 0
+    covered_total = covered_filled = 0
     recalled = present_total = 0
     nulled_by_code = 0
     null_counts = {name: 0 for name, _ in FIELDS}
@@ -161,6 +162,18 @@ def main() -> int:
             if case["present"][name]:
                 present_total += 1
                 recalled += int(not declined)
+            elif case["covered_anyway"][name]:
+                covered_total += 1
+                covered_filled += int(not declined)
+                rows.append(
+                    [
+                        case["drug"][:20],
+                        name,
+                        "covered anyway" if not declined else "declined",
+                        reason,
+                        str(result[name]["value"] or "")[:44].replace("\n", " "),
+                    ]
+                )
             else:
                 absent_total += 1
                 fabricated += int(not declined)
@@ -196,6 +209,11 @@ def main() -> int:
         "Fabrication rate on fields the document does not cover",
         pct(fabricated, absent_total),
         "Compare with broken.py.",
+    )
+    note(
+        f"{covered_total} field-instances are excluded from that denominator: their "
+        "section was withheld, but its topic carries its own heading inside the "
+        f"supplied text. The model filled {covered_filled} of {covered_total}."
     )
     headline(
         "Recall on fields the document does cover",

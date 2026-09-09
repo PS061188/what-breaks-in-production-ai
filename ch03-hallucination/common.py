@@ -16,6 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from shared.contamination import covered_topics  # noqa: E402
 from shared.llm import load_labels  # noqa: E402
 
 # The only sections the model gets to see.
@@ -42,26 +43,42 @@ def build_context(label: dict) -> str:
 
 
 def build_cases(limit: int = 0) -> list:
-    """One case per (label, question). `answerable` is derived, never authored."""
+    """One case per (label, question). `answerable` is derived, never authored.
+
+    `contaminated` marks the cases where the withheld section's topic appears
+    under its own heading in the two sections we did supply. Those questions are
+    answerable from the context after all, so an assertion there is not
+    fabrication and they are excluded from the rate. The prompt is unchanged, so
+    the fixtures for these cases are the same ones as before — see
+    shared/contamination.py for why the test is structural.
+    """
     cases = []
     labels = load_labels()
     for label in labels:
         context = build_context(label)
         if not context:
             continue  # nothing to ground against; skip rather than test an empty doc
+        covered = covered_topics(label["sections"], CONTEXT_SECTIONS)
         for template, needed in QUESTIONS:
+            answerable = needed in CONTEXT_SECTIONS
             cases.append(
                 {
                     "drug": label["drug"],
                     "question": template.format(drug=label["drug"]),
                     "needed_section": needed,
-                    "answerable": needed in CONTEXT_SECTIONS,
+                    "answerable": answerable,
+                    "contaminated": not answerable and needed in covered,
                     "context": context,
                 }
             )
         if limit and len({c["drug"] for c in cases}) >= limit:
             break
     return cases
+
+
+def scorable(case: dict) -> bool:
+    """Cases whose ground truth survives the contamination check."""
+    return not case.get("contaminated")
 
 
 # --- the judge ---------------------------------------------------------------

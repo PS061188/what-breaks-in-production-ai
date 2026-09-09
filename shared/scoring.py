@@ -122,6 +122,13 @@ def headline(metric: str, value: str, note: str = "") -> None:
     print(line)
 
 
+def note(text: str) -> None:
+    """A wrapped explanatory line under a table. Not a headline; repeat.py ignores it."""
+    import textwrap
+
+    print("\n" + textwrap.fill(text, 78, initial_indent="   ", subsequent_indent="   "))
+
+
 def pct(numerator: int, denominator: int) -> str:
     if denominator == 0:
         return "n/a"

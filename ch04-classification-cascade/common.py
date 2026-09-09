@@ -258,6 +258,13 @@ def build_cases(limit: int = 0, position: str = "first") -> list:
                     # nobody wrote it down.
                     "true_category": category,
                     "passage": pieces[index][:2400],
+                    # Checked, and it does not bite: old-format labels nest
+                    # pediatric_use, geriatric_use and drug_interactions inside
+                    # precautions, so seven of these passages sit under two
+                    # headings at once. `precautions` is not one of the ten
+                    # categories the model may choose, so it can never be given
+                    # as an answer, and no passage here appears verbatim under a
+                    # second selectable category. The ground truth is single-valued.
                 }
             )
     return cases

@@ -157,7 +157,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
   <div><span class="n">8</span> Routing and placement errors
     <span class="sub">Did not reproduce · but produced the finding that corrected Chapter 9</span></div>
   <div><span class="n">9</span> Sparse field fabrication
-    <span class="sub">29% fabrication · and the worst mistake in this report, corrected · 4 fixes</span></div>
+    <span class="sub">11% fabrication · and the worst mistake in this report, corrected · 4 fixes</span></div>
   <div><span class="n">10</span> Silent omissions
     <span class="sub">55 of 55 returned · the fixes made it worse · 4 fixes</span></div>
   <div><span class="n">D</span> Does any of this hold on other models?
@@ -1163,11 +1163,11 @@ should be stated as "prevents by refusing" rather than "improves".</p>
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Soft vocabulary alone</td><td>Weakly supported</td><td class="num">+5 pts, sign p = 0.125</td><td class="num">weak</td></tr><tr><td>Explicit permission clause</td><td><strong>Confirmed</strong></td><td class="num">30% &rarr; 92%</td><td class="num">decisive</td></tr><tr><td>Grounding template</td><td><strong>Works</strong></td><td class="num">&minus;69 pts, 4 models</td><td class="num">strongest in book</td></tr><tr><td>1 &middot; Citation enforcement</td><td>Did nothing here</td><td class="num">0 of 48</td><td class="num">&mdash;</td></tr><tr><td>2 &middot; Similarity check</td><td><strong>Works &mdash; retune to 0.3</strong></td><td class="num">85% caught / 12% false</td><td class="num">strong</td></tr><tr><td>3 &middot; Second-AI auditor</td><td>Works, with a caveat</td><td class="num">91% caught / 20% false / $22</td><td class="num">strong</td></tr><tr><td>4 &middot; Version-locked retrieval</td><td><strong>Works</strong></td><td class="num">83% of retrievals stale</td><td class="num">strong</td></tr>
+<tr><td>Soft vocabulary alone</td><td>Weakly supported</td><td class="num">+3 pts, inside noise</td><td class="num">weak</td></tr><tr><td>Explicit permission clause</td><td><strong>Confirmed</strong></td><td class="num">11% &rarr; 89%</td><td class="num">decisive</td></tr><tr><td>Grounding template</td><td><strong>Works</strong></td><td class="num">&minus;81 pts or better, 4 models</td><td class="num">strongest in book</td></tr><tr><td>1 &middot; Citation enforcement</td><td>Did nothing here</td><td class="num">0 of 48</td><td class="num">&mdash;</td></tr><tr><td>2 &middot; Similarity check</td><td><strong>Works &mdash; retune to 0.3</strong></td><td class="num">85% caught / 12% false</td><td class="num">strong</td></tr><tr><td>3 &middot; Second-AI auditor</td><td>Works, with a caveat</td><td class="num">91% caught / 20% false / $22</td><td class="num">strong</td></tr><tr><td>4 &middot; Version-locked retrieval</td><td><strong>Works</strong></td><td class="num">83% of retrievals stale</td><td class="num">strong</td></tr>
 </table>
 
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The grounding template.</strong> &minus;69 points across four models and two providers. The cheapest change in the book and the largest effect.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2 at threshold 0.3</strong> &mdash; 85% caught for 3 false alarms in 24, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, version-locked retrieval.</strong> One clause, $0, and 83% of retrieved passages were superseded without it.</li><li><span class='drop'>DROP</span> — <strong>Blaming soft adjectives.</strong> <em>Relevant, complete, useful</em> are worth ~5 points and are not statistically significant. The chapter attributes 63 to them.</li><li><span class='drop'>DROP</span> — <strong>The printed threshold 0.4 with a cross-encoder.</strong> That model returns an unbounded logit, not a cosine &mdash; the pairing is invalid, and 0.3 beats 0.4 anyway.</li><li><span class='drop'>DROP</span> — <strong>Running the LLM judge on every request.</strong> $22 per 1,000, no threshold to tune, and the false-alarm rate swings 17&ndash;25% run to run.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>The grounding template.</strong> At least &minus;81 points across four models and two providers. The cheapest change in the book and the largest effect.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2 at threshold 0.3</strong> &mdash; 85% caught for 3 false alarms in 24, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, version-locked retrieval.</strong> One clause, $0, and 83% of retrieved passages were superseded without it.</li><li><span class='drop'>DROP</span> — <strong>Blaming soft adjectives.</strong> <em>Relevant, complete, useful</em> are worth ~5 points and are not statistically significant. The chapter attributes 63 to them; measured, they are worth 3.</li><li><span class='drop'>DROP</span> — <strong>The printed threshold 0.4 with a cross-encoder.</strong> That model returns an unbounded logit, not a cosine &mdash; the pairing is invalid, and 0.3 beats 0.4 anyway.</li><li><span class='drop'>DROP</span> — <strong>Running the LLM judge on every request.</strong> $22 per 1,000, no threshold to tune, and the false-alarm rate swings 17&ndash;25% run to run.</li></ul>
 
 <h4>The one thing to remember</h4>
 <p><strong>The danger is not vague wording, it is permission.</strong> Fabrication went from 30% to 92% on one clause: <em>&ldquo;drawing on the label excerpt below and on standard pharmacology where the excerpt is thin.&rdquo;</em> That sentence arrives in real prompts as a well-meaning fix after someone complains the assistant is unhelpful. Readers can grep their prompts for it; they cannot grep for vibes.</p>
@@ -1940,9 +1940,9 @@ nothing.</p>
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Capture prompt &mdash; auditability</td><td><strong>Works</strong></td><td class="num">66% &rarr; 93%, 5 of 5 runs</td><td class="num">strong</td></tr><tr><td>Capture prompt &mdash; qualifiers</td><td><strong>Does not work</strong></td><td class="num">38% vs 39%</td><td class="num">null, clean</td></tr><tr><td>Capture prompt &mdash; ranges</td><td><strong>Actively worse</strong></td><td class="num">85% &rarr; 65%, lost 5 of 5</td><td class="num">strong</td></tr><tr><td>1 &middot; Validators</td><td>Works, partly untested</td><td class="num">doses and frequencies only</td><td class="num">structural</td></tr><tr><td>2 &middot; Retry loop</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>3 &middot; Discard log</td><td><strong>Works</strong></td><td class="num">52 recorded losses</td><td class="num">strong</td></tr><tr><td>4 &middot; Golden set</td><td>Not implemented as written</td><td class="num">no labelled set</td><td class="num">&mdash;</td></tr></table>
+<tr><td>Capture prompt &mdash; auditability</td><td><strong>Works</strong></td><td class="num">66% &rarr; 93%, 5 of 5 runs</td><td class="num">strong</td></tr><tr><td>Capture prompt &mdash; qualifiers</td><td><strong>Does not work</strong></td><td class="num">38% vs 39%</td><td class="num">null, clean</td></tr><tr><td>Capture prompt &mdash; ranges</td><td>Level, on a corrected denominator</td><td class="num">5 of 8 vs 5 of 8</td><td class="num">one run</td></tr><tr><td>1 &middot; Validators</td><td>Works, partly untested</td><td class="num">doses and frequencies only</td><td class="num">structural</td></tr><tr><td>2 &middot; Retry loop</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>3 &middot; Discard log</td><td><strong>Works</strong></td><td class="num">40 recorded losses</td><td class="num">strong</td></tr><tr><td>4 &middot; Golden set</td><td>Not implemented as written</td><td class="num">no labelled set</td><td class="num">&mdash;</td></tr></table>
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The separation, for auditability only.</strong> 66% &rarr; 93% of values still findable in the source, ahead in every run. That is the real result.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the discard log.</strong> 52 rows, each naming a specific thing the conversion could not carry, on a specific field, in a specific document.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;29% &rarr; 45% qualifier retention.&rdquo;</strong> Against a fair baseline it is 38% vs 39% &mdash; nothing. The gain was the fix repairing damage the baseline prompt caused itself.</li><li><span class='drop'>DROP</span> — <strong>Any claim that the fix preserves ranges.</strong> It preserves fewer than a prompt that says nothing about ranges &mdash; behind in all five runs, spreads not overlapping.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;52 versus 0&rdquo;.</strong> The zero is a definition: the baseline never ran the converter.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>The separation, for auditability only.</strong> 66% &rarr; 93% of values still findable in the source, ahead in every run. That is the real result.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the discard log.</strong> 40 rows, each naming a specific thing the conversion could not carry, on a specific field, in a specific document.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;29% &rarr; 45% qualifier retention.&rdquo;</strong> Against a fair baseline it is 38% vs 39% &mdash; nothing. The gain was the fix repairing damage the baseline prompt caused itself.</li><li><span class='drop'>DROP</span> — <strong>The claim that the capture prompt loses ranges.</strong> Withdrawn. The 11-document denominator included three labels with no dose range at all &mdash; an INR band, a dosing interval, a time-to-effect. Corrected to 8, plain and capture prompt are level at 5 of 8; the arm that loses ranges is normalising inside the model call, at 2 of 8. One run.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;52 versus 0&rdquo;.</strong> The zero is a definition: the baseline never ran the converter.</li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>Two of the three measures have source-derived denominators, and those two show no benefit and one harm.</strong> The single measure showing a large benefit is the one whose denominator the model chooses &mdash; and it swung 54 to 77 across identical runs. In a book about measurement, that ordering deserves saying out loud.</p>
 <h4>Where this is weakest</h4>
@@ -3006,7 +3006,7 @@ non-English speakers almost perfectly.</p>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
 <tr><td>The failure itself</td><td><strong>Reproduces</strong></td><td class="num">29%, ±1 case over 4 runs</td><td class="num">strong</td></tr><tr><td>Prompt template</td><td><strong>Works</strong></td><td class="num">declined on 3 of 4 field types</td><td class="num">strong</td></tr><tr><td>1 &middot; Optional, no defaults</td><td>Works &mdash; prerequisite</td><td class="num">not separable</td><td class="num">structural</td></tr><tr><td>2 &middot; Quote verification</td><td><strong>Cannot work here</strong></td><td class="num">0 of 14 caught</td><td class="num">decisive</td></tr><tr><td>2b &middot; Section constraint</td><td><strong>Works</strong></td><td class="num">0% fabrication, 76% recall</td><td class="num">small n</td></tr><tr><td>3 &middot; Null-rate monitoring</td><td><strong>Works as a monitor</strong></td><td class="num">separates completely</td><td class="num">strong</td></tr><tr><td>4 &middot; Embedding provenance</td><td><strong>Cannot work here</strong></td><td class="num">0.85 vs 0.55</td><td class="num">decisive</td></tr></table>
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The prompt template.</strong> Declining unprompted on 3 of 4 field types is the cheapest win available.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2b, the section constraint</strong> &mdash; each field filled only from its own named section. 0% fabrication.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, null-rate monitoring.</strong> It separates fabricating from declining configurations completely, and costs nothing.</li><li><span class='drop'>DROP</span> — <strong>Fix 2, quote verification, as a fabrication check.</strong> <strong>All 14 fabrications carried a quote that really was in the document.</strong> The model does not invent quotes; it attaches real ones to invented values. 0 of 14 caught.</li><li><span class='drop'>DROP</span> — <strong>Fix 4, embedding provenance.</strong> A fabricated value scored 0.85 similarity against the document; a genuine one 0.55. The signal runs backwards.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>The prompt template.</strong> Declining unprompted on 3 of 4 field types is the cheapest win available.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2b, the section constraint</strong> &mdash; each field filled only from its own named section. 0% fabrication.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, null-rate monitoring.</strong> It separates fabricating from declining configurations completely, and costs nothing.</li><li><span class='drop'>DROP</span> — <strong>Fix 2, quote verification, as a fabrication check.</strong> <strong>All 4 fabrications carried a quote that really was in the document.</strong> The model does not invent quotes; it attaches real ones to invented values. 0 of 4 caught.</li><li><span class='drop'>DROP</span> — <strong>Fix 4, embedding provenance.</strong> A fabricated value scored 0.85 similarity against the document; a genuine one 0.55. The signal runs backwards.</li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>The fabrications came with real quotes.</strong> Fourteen of fourteen. This is the finding that should reshape the chapter: a citation check confirms a quote exists, not that it supports the value attached to it. Every &ldquo;require a source quote&rdquo; recommendation in the industry rests on an assumption this measured and broke.</p>
 <h4>Where this is weakest</h4>
@@ -3097,7 +3097,7 @@ It went looking, found real text that mentions children, and filed it under
 children's dosing with an accurate citation attached.</p>
 
 <div class="headline">
-  <b>All 14 fabricated values carried a quotation that is genuinely in the
+  <b>All 4 fabricated values carried a quotation that is genuinely in the
   document.</b> Not one was an invented quotation.
 </div>
 
@@ -3984,9 +3984,9 @@ answer is negative:</p>
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;69 pts, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
+<tr><td>Silent corruption</td><td><strong>Gets worse on better models</strong></td><td class="num">39% &rarr; 68% &rarr; 80%</td><td class="num">strong</td></tr><tr><td>Grounding prompt</td><td><strong>Holds everywhere</strong></td><td class="num">&minus;81 pts or better, all 4 models</td><td class="num">strongest in report</td></tr><tr><td>Failures that did not reproduce</td><td>Still do not</td><td class="num">consistent across models</td><td class="num">strong</td></tr><tr><td>Reasoning token budgets</td><td>Same bug, three times</td><td class="num">3 models</td><td class="num">procedural</td></tr></table>
 <h4>What to trust / What not to</h4>
-<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> A &minus;69-point effect that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
+<ul><li><span class='keep'>YES</span> — <strong>The grounding prompt.</strong> An effect of at least &minus;81 points that reproduces across four models and two companies is not a quirk of one vendor's tuning. This is the most portable finding in the project.</li><li><span class='keep'>YES</span> — <strong>The direction of the corruption result.</strong> Three models, same ordering.</li><li><span class='drop'>NO</span> — <strong>Any exact rate as a property of &lsquo;models&rsquo;.</strong> The rates move substantially between models even where the direction holds.</li><li><span class='drop'>NO</span> — <strong>Assuming an upgrade improves safety.</strong> On the failure that matters most here it does the opposite.</li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>Upgrading the model made one failure worse and left the others where they were.</strong> A stronger model reconstructs damaged input more fluently, so the wrong answer arrives better written and less detectable &mdash; 39% silent corruption on Haiku 4.5, 80% on GPT-5-mini. Everything that <em>did</em> improve came from the prompt and the code around the call, not from the model. That is the book's thesis, tested against the most obvious objection to it.</p>
 <h4>Where this is weakest</h4>
@@ -4089,10 +4089,10 @@ survives the change of model and the change of vendor:</p>
 <table>
   <tr><th style="width:34%">Model</th><th class="num">Soft-inference prompt</th>
       <th class="num">Grounding template</th><th class="num">Improvement</th></tr>
-  <tr><td>Claude Haiku 4.5</td><td class="num">92%</td><td class="num">23%</td><td class="num">−69 pts</td></tr>
-  <tr><td>Claude Opus 5</td><td class="num">100%</td><td class="num">31%</td><td class="num">−69 pts</td></tr>
-  <tr><td>GPT-5-mini</td><td class="num">98%</td><td class="num">29%</td><td class="num">−69 pts</td></tr>
-  <tr><td>GPT-4.1-mini</td><td class="num">94%</td><td class="num">25%</td><td class="num">−69 pts</td></tr>
+  <tr><td>Claude Haiku 4.5</td><td class="num">89%</td><td class="num">8%</td><td class="num">−81 pts</td></tr>
+  <tr><td>Claude Opus 5</td><td class="num">100%</td><td class="num">11%</td><td class="num">−89 pts</td></tr>
+  <tr><td>GPT-5-mini</td><td class="num">97–100%</td><td class="num">8%</td><td class="num">−89 to −92 pts</td></tr>
+  <tr><td>GPT-4.1-mini</td><td class="num">92–100%</td><td class="num">6%</td><td class="num">−86 to −94 pts</td></tr>
 </table>
 
 <p><strong>Sixty-nine points, four times, across two companies.</strong> That is
@@ -4742,13 +4742,13 @@ elsewhere in this report was, if anything, too gentle.</p>
 <table>
 <tr><th style="width:26%">Chapter</th><th>Status</th><th class="num" style="width:26%">Result</th></tr>
 <tr><td>2 &middot; Input integrity</td><td><strong>Was never run</strong> — run here</td><td class="num">flags 95%, gates 0%</td></tr>
-<tr><td>3 &middot; Hallucination</td><td>Run, domain-adapted</td><td class="num"><strong>&minus;69 pts</strong></td></tr>
+<tr><td>3 &middot; Hallucination</td><td>Run, domain-adapted</td><td class="num"><strong>&minus;81 pts or better</strong></td></tr>
 <tr><td>4 &middot; Classification</td><td>Run, as <code>BOOK_SYSTEM</code></td><td class="num">6 pts worse than one line</td></tr>
 <tr><td>5 &middot; Extraction</td><td>Run, domain-adapted</td><td class="num">1 of 3 measures</td></tr>
 <tr><td>6 &middot; State mismatch</td><td>Run</td><td class="num">beaten by 1 of its 6 rules</td></tr>
 <tr><td>7 &middot; Edge input</td><td>Run, domain-transposed</td><td class="num">works</td></tr>
 <tr><td>8 &middot; Routing</td><td><strong>Was never run</strong> — run here</td><td class="num">no gain; flagged 0 errors</td></tr>
-<tr><td>9 &middot; Sparse fields</td><td>Run</td><td class="num"><strong>29% &rarr; 0%</strong></td></tr>
+<tr><td>9 &middot; Sparse fields</td><td>Run</td><td class="num"><strong>11% &rarr; 0%</strong></td></tr>
 <tr><td>10 &middot; Silent omissions</td><td><strong>Was never run</strong> — run here</td><td class="num"><strong>worse than a plain instruction</strong></td></tr>
 </table>
 
@@ -4859,7 +4859,7 @@ completely, and it is the most useful thing in this part.</p>
       outcome.<br>Ch 9: return null; a null field is a correct answer.<br>
       Ch 6: the document's status must be ACTIVE.<br>
       Ch 2: scan for these four specific corruption signals.</td>
-      <td class="num"><strong>&minus;69 pts<br>29% &rarr; 0%<br>67% &rarr; 17%<br>95% flagged</strong></td></tr>
+      <td class="num"><strong>&minus;81 pts or better<br>11% &rarr; 0%<br>67% &rarr; 17%<br>95% flagged</strong></td></tr>
   <tr style="background:#faf0f0"><td><strong>Ask the model to assess itself</strong></td>
       <td>Ch 2: <code>confidence_to_proceed</code>.<br>
       Ch 4: <code>confidence</code> + <code>requires_human_review</code>.<br>
@@ -4890,12 +4890,12 @@ measured gain in this book, and the two that produced none, stated once.</p>
 1. Name what the answer must come from, and forbid everything else.
      "Every claim must trace to the text below. You may not use prior
       knowledge to fill gaps."
-   Chapter 3: -69 points, across four models and two providers.
+   Chapter 3: at least -81 points, across four models and two providers.
 
 2. Say that refusing is a correct outcome, in those words.
      "If the text does not cover this, return null. A null field is a
       correct answer, not a failure."
-   Chapter 9: fabrication 29% -> 0%. This is the single cheapest line
+   Chapter 9: fabrication 11% -> 0%. This is the single cheapest line
    in the book, and the one most often missing.
 
 3. Constrain each field to its own source, in code the model never sees.
@@ -4939,6 +4939,43 @@ WHERE THE DECISION LIVES
   in the set. The ordering of the two categories is what this part establishes;
   the exact figures beside each line are what the chapters establish, with their
   own denominators and caveats attached.</p>
+</div>
+
+<!-- ==================== THE GROUND-TRUTH AUDIT ==================== -->
+<h2 class="part">The ground-truth audit</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; The ground-truth audit</span>
+<p class="oneline">Every chapter derives its ground truth from the corpus rather than from hand annotation, which is the reason to trust it. This part checks whether the derivation is sound. In two chapters it was not: twelve questions scored as unanswerable were answerable from the text the model was given, and four published rates were too high.</p>
+<h4>How it was tested</h4>
+<table>
+<tr><td style="width:26%">Scope</td><td>All nine chapters, every scorer that decides what the correct answer is</td></tr>
+<tr><td style="width:26%">Method</td><td>Corpus arithmetic only. No model calls, no API spend</td></tr>
+<tr><td style="width:26%">The test</td><td>Structural: does the supplied text carry an explicit subsection heading naming the topic that was supposedly withheld? Code in <code>shared/contamination.py</code></td></tr>
+<tr><td style="width:26%">Re-measurement</td><td>Cases excluded, prompts unchanged, so every run replays from the committed fixtures</td></tr>
+<tr><td style="width:26%">Cost</td><td>$0</td></tr>
+</table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Ch 3, 9 &mdash; withheld topic present anyway</td><td><strong>Contaminated</strong></td><td class="num">12 of 48 pairs</td><td class="num">decisive</td></tr>
+<tr><td>Ch 3 &mdash; baseline fabrication</td><td>Published too high</td><td class="num">30% &rarr; <strong>11%</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 3 &mdash; grounding template</td><td><strong>Larger than published</strong></td><td class="num">&minus;69 &rarr; <strong>&minus;81 or better</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 9 &mdash; fields filled with no source</td><td>Published too high</td><td class="num">29% &rarr; <strong>11%</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 5 &mdash; dose-range counter</td><td><strong>Counted non-doses</strong></td><td class="num">3 of 12 documents</td><td class="num">reverses a verdict</td></tr>
+<tr><td>Ch 4, 8, 10</td><td>Audited, clean</td><td class="num">&mdash;</td><td class="num">no change</td></tr>
+</table>
+<h4>What held / What did not</h4>
+<ul>
+<li><span class='keep'>KEEP</span> &mdash; <strong>Every direction in chapters 3 and 9.</strong> The corrections all run the same way: the baselines were inflated, so the gap prompt design accounts for is wider than published, not narrower.</li>
+<li><span class='keep'>KEEP</span> &mdash; <strong>Corpus-derived ground truth as a method.</strong> The defect was found by reading the corpus, in an afternoon, at no cost. A hand-annotated set with the same fault would have needed the annotators back.</li>
+<li><span class='drop'>DROP</span> &mdash; <strong>&ldquo;Unanswerable by construction&rdquo; as a phrase.</strong> Withholding a section does not withhold a topic. The document decides that, and on real labels it decides against you.</li>
+<li><span class='drop'>DROP</span> &mdash; <strong>Chapter 5&rsquo;s range verdict.</strong> Plain and capture prompt are level on a corrected denominator.</li>
+</ul>
+<h4>The one thing to remember</h4>
+<p><strong>Three times in this project the model was recorded as failing when it was reading the document correctly</strong> &mdash; the zero-width spaces it was right to ignore, the <code>DEGRADED</code> grade that was the accurate one, and now twelve questions it was right to answer. Every one inflated a failure rate the book then reported. <strong>Check what your ground truth calls wrong before you trust what it calls right</strong>, because a scorer that is mistaken in the pessimistic direction produces publishable findings and no error message.</p>
+<h4>Where this is weakest</h4>
+<p>The contamination test is deliberately narrow &mdash; an explicit heading, nothing else &mdash; so the excluded set is a floor and the corrected rates are themselves upper bounds. Omeprazole&rsquo;s over-the-counter label says <em>children under 18 years of age: ask a doctor</em> with no heading above it, and is not caught. The Chapter 5 correction is a single run: identical prompts collapse to one cached fixture, so the five-run spread cannot be recomputed without paying for it again.</p>
 </div>
 
 <!-- ============================ COSTS ============================ -->

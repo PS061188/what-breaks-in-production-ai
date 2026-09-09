@@ -9,13 +9,13 @@
 <table>
 <tr><th style="width:26%">Chapter</th><th>Status</th><th class="num" style="width:26%">Result</th></tr>
 <tr><td>2 &middot; Input integrity</td><td><strong>Was never run</strong> — run here</td><td class="num">flags 95%, gates 0%</td></tr>
-<tr><td>3 &middot; Hallucination</td><td>Run, domain-adapted</td><td class="num"><strong>&minus;69 pts</strong></td></tr>
+<tr><td>3 &middot; Hallucination</td><td>Run, domain-adapted</td><td class="num"><strong>&minus;81 pts or better</strong></td></tr>
 <tr><td>4 &middot; Classification</td><td>Run, as <code>BOOK_SYSTEM</code></td><td class="num">6 pts worse than one line</td></tr>
 <tr><td>5 &middot; Extraction</td><td>Run, domain-adapted</td><td class="num">1 of 3 measures</td></tr>
 <tr><td>6 &middot; State mismatch</td><td>Run</td><td class="num">beaten by 1 of its 6 rules</td></tr>
 <tr><td>7 &middot; Edge input</td><td>Run, domain-transposed</td><td class="num">works</td></tr>
 <tr><td>8 &middot; Routing</td><td><strong>Was never run</strong> — run here</td><td class="num">no gain; flagged 0 errors</td></tr>
-<tr><td>9 &middot; Sparse fields</td><td>Run</td><td class="num"><strong>29% &rarr; 0%</strong></td></tr>
+<tr><td>9 &middot; Sparse fields</td><td>Run</td><td class="num"><strong>11% &rarr; 0%</strong></td></tr>
 <tr><td>10 &middot; Silent omissions</td><td><strong>Was never run</strong> — run here</td><td class="num"><strong>worse than a plain instruction</strong></td></tr>
 </table>
 
@@ -126,7 +126,7 @@ completely, and it is the most useful thing in this part.</p>
       outcome.<br>Ch 9: return null; a null field is a correct answer.<br>
       Ch 6: the document's status must be ACTIVE.<br>
       Ch 2: scan for these four specific corruption signals.</td>
-      <td class="num"><strong>&minus;69 pts<br>29% &rarr; 0%<br>67% &rarr; 17%<br>95% flagged</strong></td></tr>
+      <td class="num"><strong>&minus;81 pts or better<br>11% &rarr; 0%<br>67% &rarr; 17%<br>95% flagged</strong></td></tr>
   <tr style="background:#faf0f0"><td><strong>Ask the model to assess itself</strong></td>
       <td>Ch 2: <code>confidence_to_proceed</code>.<br>
       Ch 4: <code>confidence</code> + <code>requires_human_review</code>.<br>
@@ -157,12 +157,12 @@ measured gain in this book, and the two that produced none, stated once.</p>
 1. Name what the answer must come from, and forbid everything else.
      "Every claim must trace to the text below. You may not use prior
       knowledge to fill gaps."
-   Chapter 3: -69 points, across four models and two providers.
+   Chapter 3: at least -81 points, across four models and two providers.
 
 2. Say that refusing is a correct outcome, in those words.
      "If the text does not cover this, return null. A null field is a
       correct answer, not a failure."
-   Chapter 9: fabrication 29% -> 0%. This is the single cheapest line
+   Chapter 9: fabrication 11% -> 0%. This is the single cheapest line
    in the book, and the one most often missing.
 
 3. Constrain each field to its own source, in code the model never sees.

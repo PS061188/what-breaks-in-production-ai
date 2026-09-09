@@ -28,8 +28,8 @@ print today.
 | **2** | damaged inputs stopped at the gate | — | **85%** (35/41) | model-free, stable across three models |
 | **2** | clean inputs wrongly rejected | — | 17% (2/12) | *[noise]* — both are artefacts |
 | **2** | model calls avoided | 0 | **37** | |
-| **3** | fabrication rate, soft-inference prompt | **92%** (44/48) | **23%** (11/48) | the repo's strongest result |
-| **3** | fabrication rate, neutral prompt | 29% (14/48) | — | baseline |
+| **3** | fabrication rate, soft-inference prompt | **89%** (32/36) | **8%** (3/36) | the repo's strongest result — see §G |
+| **3** | fabrication rate, neutral prompt | 11% (4/36) | — | baseline — see §G |
 | **3** | fabrication rate, **soft words only** (no permission clause) | **38%** (18/48) | — | **p = 0.52 vs neutral — the chapter's named adjectives had no measurable effect** |
 | **3** | answered when the sources did cover it | 96% (23/24) neutral · 100% (24/24) soft | 88% (21/24) | the fix costs 3 answerable questions |
 | **4** | classification accuracy, opening passages | 97% (93/96) | 100% (95/**95**) | denominator changes — §9 |
@@ -47,7 +47,7 @@ print today.
 | **7** | legitimate queries answered | 100% (48/48) | **46%** (22/48) | |
 | **8** | placement error rate | 3% (1/33) | 3% (1/33) | *[noise]*, and the 1 is a checker bug — §3 |
 | **8** | model named the wrong section for its own quote | 18% (6/33) | 3% (1/33) | **0/33 real** — §3 |
-| **9** | fabrication on fields with no source content | 29% (14/48) | **0%** (0/48) | forced by construction — §1 |
+| **9** | fabrication on fields with no source content | 11% (4/37) | **0%** (0/37) | forced by construction — §1; see §G |
 | **9** | recall on fields the document does cover | 96% (23/24) | 92% (22/24) | *[noise]* — but it did move |
 | **9** | fabrications whose quote IS in the document | **100%** (14/14) | — | the finding |
 | **10** | dose figures returned | 100% (55/55) | 96% (53/55) | *[noise]*; the failure does not reproduce |
@@ -546,7 +546,7 @@ direction, not statistically established. About 57 belong to a clause the chapte
 never discusses.** The chapter must be rewritten to
 blame explicit permission rather than soft vocabulary — see Task 3.2.
 
-The −69-point grounding-template result across four models is unaffected.
+The grounding-template result across four models is unaffected in direction and larger once §G is applied: at least −81 points on every model.
 
 Limits: n=48 detects only large effects, so this is no evidence of a difference,
 not evidence of none. One model, one run.
@@ -1058,7 +1058,7 @@ claiming 47 where 13 existed. Every later step compares against that number.
 
 | what the instruction asks | outcome |
 |---|---|
-| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **−69 pts, 29%→0%, 67%→17%, 95% flagged** |
+| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **at least −81 pts, 11%→0%, 67%→17%, 95% flagged** |
 | **ask the model to assess itself** (ch2 confidence_to_proceed, ch4 confidence, ch8 placement_confidence, ch10 self-count) | **LOW 0/159, LOW 0/192, 97% HIGH and 0 caught, 0/18 correct** |
 
 **Across four chapters and 400+ self-assessments, a model asked to grade its own
@@ -1177,3 +1177,94 @@ condition on the bottom of a scale the model reserves for catastrophe.**
 Side effect worth noting: removing the consequence made the model *more*
 confident — HIGH went from 14 of 53 to 31-36 of 53. With nothing riding on the
 grade, it grades itself higher.
+
+---
+
+## §G — Correction: the ground truth itself (Sep 2026)
+
+Chapters 3 and 9 both derive ground truth by withholding sections: supply two of a
+label's sections, ask about six, treat the four withheld as unanswerable. That is
+only sound if the two supplied sections say nothing about the withheld topics.
+
+They sometimes do. Levothyroxine's `dosage_and_administration` carries a paediatric
+dosing table under its own heading (*"0 to 3 months, 10 to 15 mcg/kg/day"*) and
+explicit pregnancy guidance (*"measure serum TSH and free-T4 as soon as pregnancy
+is confirmed"*). A model answering those questions is reading the document. It was
+being scored as fabricating.
+
+`shared/contamination.py` excludes those cases on a structural test — an explicit
+subsection heading naming the withheld topic, found in the supplied text. No model,
+no reading for meaning. The test is deliberately narrow, so the excluded set is a
+floor: Omeprazole's OTC label says *"children under 18 years of age: ask a doctor"*
+without a heading, and is not caught. Corrections below are therefore conservative.
+
+**12 of 48 (label, withheld-topic) pairs are contaminated**, across 7 of 12 labels.
+
+| figure | published | corrected |
+|---|---|---|
+| 3.1 plain prompt | 30% (14/48) | **11%** (4/36) |
+| 3.1 soft vocabulary | 35% | **14%** (5/36) |
+| 3.1 permission clause | 92% (44/48) | **89%** (32/36) |
+| 3.2 grounding template, Haiku 4.5 | 23% (11/48) | **8%** (3/36) |
+| 9.1 fields filled, no source | 29% (14/48) | **11%** (4/37) |
+| 9.2 fabrications carrying a real quote | 14 of 14 | **4 of 4** |
+
+Cross-model, Experiment 3.2. Baselines were at or near ceiling in the recorded
+sweep, so removing 12 cases bounds them tightly; `fixed.py` was replayed directly.
+
+| model | baseline (corrected) | fixed | drop |
+|---|---|---|---|
+| Claude Haiku 4.5 | 89% | 8% | −81 |
+| Claude Opus 5 | 100% | 11% | −89 |
+| GPT-5-mini | 97–100% | 8% | −89 to −92 |
+| GPT-4.1-mini | 92–100% | 6% | −86 to −94 |
+
+**The published −69 becomes at least −81 on every model.** Every correction runs the
+same way: the baselines were inflated by cases that were never unanswerable, so the
+gaps the book attributes to prompt design are wider than published, not narrower.
+
+**One reversal, not a strengthening.** Chapter 9's `fixed.py` reaches 0% fabrication
+partly by refusing to answer questions it could answer: it filled **0 of the 11**
+field-instances the supplied text does cover. That is the circularity `fixed_noncircular.py`
+was written to expose, now visible in the original arm's own numbers.
+
+### Chapters audited and cleared
+
+- **Chapter 4.** `precautions` nests `pediatric_use`, `geriatric_use` and
+  `drug_interactions` in old-format labels, so 7 of 96 passages sit under two
+  headings at once. `precautions` is not one of the ten selectable categories, and
+  no passage appears verbatim under a second selectable one. Ground truth is
+  single-valued. No change.
+- **Chapter 8.** 6 of 442 sentences appear in more than one of the three sections,
+  all drug-name boilerplate. The reported result was 0 placement errors; ambiguity
+  here can only manufacture errors, so it manufactured none. No change.
+- **Chapter 10.** One spurious figure in 55 — `3 mg/dL` serum creatinine read as a
+  3 mg dose. The result was 185 of 185 returned, so it produced no false omission.
+  No change.
+- **Chapters 2, 6, 7.** Ground truth is structural throughout — damage the harness
+  injected, timestamps, cosine distances — never an interpretation of text. Not
+  exposed to this class of error.
+
+### Chapter 5 — the same shape, a different mechanism
+
+`RANGE_RE` required no dose unit, so it matched INR target bands (*"range, 2 to 3"*),
+dosing intervals (*"every 4 to 6 hours"*), ages (*"ages 6-12"*) and time-to-effect
+(*"1 to 4 days"*). On Warfarin, Albuterol and Omeprazole **every** match was one of
+those: three of twelve documents were recorded as containing a dose range they do
+not contain, and an extraction that correctly carried no range was scored as having
+lost one.
+
+Corrected, single run each, denominator 8 rather than 11:
+
+| arm | ranges preserved |
+|---|---|
+| plain instruction | 5 of 8 |
+| normalise inside the prompt | **2 of 8** |
+| capture prompt + code normaliser | 5 of 8 |
+
+**This reverses a published DROP.** The finding was *"the capture prompt preserves
+fewer ranges than a prompt that says nothing"* — 85% vs 65%, behind in all 5 runs.
+On the corrected denominator the two are level. What does lose ranges is
+normalising inside the model call, which is the practice the chapter argues
+against. The five-run spread cannot be recomputed — identical prompts collapse to
+one cached fixture — so this is one run and should be re-run before it is relied on.

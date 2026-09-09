@@ -14,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from shared.contamination import covered_topics  # noqa: E402
 from shared.llm import load_labels  # noqa: E402
 from shared.scoring import normalise_ws  # noqa: E402
 
@@ -129,6 +130,17 @@ def build_cases(limit: int = 0) -> list:
                 "section_texts": section_texts(label),
                 # Derived from the label itself. Nothing here was hand-labelled.
                 "present": {name: (section in CONTEXT_SECTIONS) for name, section in FIELDS},
+                # Fields whose section was withheld but whose topic carries its
+                # own heading inside the supplied text. Filling those is reading,
+                # not fabricating, so they are recorded and not scored. See
+                # shared/contamination.py.
+                "covered_anyway": {
+                    name: (
+                        section not in CONTEXT_SECTIONS
+                        and section in covered_topics(label["sections"], CONTEXT_SECTIONS)
+                    )
+                    for name, section in FIELDS
+                },
             }
         )
         if limit and len(cases) >= limit:

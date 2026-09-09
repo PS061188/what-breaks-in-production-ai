@@ -1,0 +1,36 @@
+<!-- ==================== THE GROUND-TRUTH AUDIT ==================== -->
+<h2 class="part">The ground-truth audit</h2>
+
+<div class="summary">
+<span class="kicker">At a glance &middot; The ground-truth audit</span>
+<p class="oneline">Every chapter derives its ground truth from the corpus rather than from hand annotation, which is the reason to trust it. This part checks whether the derivation is sound. In two chapters it was not: twelve questions scored as unanswerable were answerable from the text the model was given, and four published rates were too high.</p>
+<h4>How it was tested</h4>
+<table>
+<tr><td style="width:26%">Scope</td><td>All nine chapters, every scorer that decides what the correct answer is</td></tr>
+<tr><td style="width:26%">Method</td><td>Corpus arithmetic only. No model calls, no API spend</td></tr>
+<tr><td style="width:26%">The test</td><td>Structural: does the supplied text carry an explicit subsection heading naming the topic that was supposedly withheld? Code in <code>shared/contamination.py</code></td></tr>
+<tr><td style="width:26%">Re-measurement</td><td>Cases excluded, prompts unchanged, so every run replays from the committed fixtures</td></tr>
+<tr><td style="width:26%">Cost</td><td>$0</td></tr>
+</table>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
+<tr><td>Ch 3, 9 &mdash; withheld topic present anyway</td><td><strong>Contaminated</strong></td><td class="num">12 of 48 pairs</td><td class="num">decisive</td></tr>
+<tr><td>Ch 3 &mdash; baseline fabrication</td><td>Published too high</td><td class="num">30% &rarr; <strong>11%</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 3 &mdash; grounding template</td><td><strong>Larger than published</strong></td><td class="num">&minus;69 &rarr; <strong>&minus;81 or better</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 9 &mdash; fields filled with no source</td><td>Published too high</td><td class="num">29% &rarr; <strong>11%</strong></td><td class="num">strong</td></tr>
+<tr><td>Ch 5 &mdash; dose-range counter</td><td><strong>Counted non-doses</strong></td><td class="num">3 of 12 documents</td><td class="num">reverses a verdict</td></tr>
+<tr><td>Ch 4, 8, 10</td><td>Audited, clean</td><td class="num">&mdash;</td><td class="num">no change</td></tr>
+</table>
+<h4>What held / What did not</h4>
+<ul>
+<li><span class='keep'>KEEP</span> &mdash; <strong>Every direction in chapters 3 and 9.</strong> The corrections all run the same way: the baselines were inflated, so the gap prompt design accounts for is wider than published, not narrower.</li>
+<li><span class='keep'>KEEP</span> &mdash; <strong>Corpus-derived ground truth as a method.</strong> The defect was found by reading the corpus, in an afternoon, at no cost. A hand-annotated set with the same fault would have needed the annotators back.</li>
+<li><span class='drop'>DROP</span> &mdash; <strong>&ldquo;Unanswerable by construction&rdquo; as a phrase.</strong> Withholding a section does not withhold a topic. The document decides that, and on real labels it decides against you.</li>
+<li><span class='drop'>DROP</span> &mdash; <strong>Chapter 5&rsquo;s range verdict.</strong> Plain and capture prompt are level on a corrected denominator.</li>
+</ul>
+<h4>The one thing to remember</h4>
+<p><strong>Three times in this project the model was recorded as failing when it was reading the document correctly</strong> &mdash; the zero-width spaces it was right to ignore, the <code>DEGRADED</code> grade that was the accurate one, and now twelve questions it was right to answer. Every one inflated a failure rate the book then reported. <strong>Check what your ground truth calls wrong before you trust what it calls right</strong>, because a scorer that is mistaken in the pessimistic direction produces publishable findings and no error message.</p>
+<h4>Where this is weakest</h4>
+<p>The contamination test is deliberately narrow &mdash; an explicit heading, nothing else &mdash; so the excluded set is a floor and the corrected rates are themselves upper bounds. Omeprazole&rsquo;s over-the-counter label says <em>children under 18 years of age: ask a doctor</em> with no heading above it, and is not caught. The Chapter 5 correction is a single run: identical prompts collapse to one cached fixture, so the five-run spread cannot be recomputed without paying for it again.</p>
+</div>

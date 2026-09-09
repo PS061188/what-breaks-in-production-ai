@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from common import FIELD_LIST, FIELDS, build_cases, is_absent_answer  # noqa: E402
 from shared.llm import LLM, base_args  # noqa: E402
-from shared.scoring import headline, pct, quote_supported, rule, table  # noqa: E402
+from shared.scoring import headline, note, pct, quote_supported, rule, table  # noqa: E402
 
 SYSTEM = """You are a clinical data extraction assistant. Extract the requested
 fields from the drug label below into the schema. Include a short source_quote
@@ -59,6 +59,7 @@ def main() -> int:
     fabricated = absent_total = 0
     recalled = present_total = 0
     invented_quotes = 0
+    covered_total = covered_filled = 0
 
     for case in cases:
         result = llm.json(
@@ -76,6 +77,10 @@ def main() -> int:
                 present_total += 1
                 recalled += int(not declined)
                 outcome = "extracted" if not declined else "MISSED"
+            elif case["covered_anyway"][name]:
+                covered_total += 1
+                covered_filled += int(not declined)
+                outcome = "covered anyway" if not declined else "declined"
             else:
                 absent_total += 1
                 if not declined:
@@ -112,6 +117,12 @@ def main() -> int:
         "really there, in a section that does not support the field it was "
         "attached to. Asking for a quote does not stop this, and neither does "
         "checking that the quote exists.",
+    )
+    note(
+        f"{covered_total} field-instances are excluded from that denominator: their "
+        "section was withheld, but its topic carries its own heading inside the two "
+        "sections supplied, so a value there is grounded. The model filled "
+        f"{covered_filled} of {covered_total}."
     )
     headline("Recall on fields the document does cover", pct(recalled, present_total))
     llm.report()

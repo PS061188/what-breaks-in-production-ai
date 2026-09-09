@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from common import build_cases  # noqa: E402
 from shared.llm import LLM, base_args  # noqa: E402
-from shared.scoring import headline, pct, quote_supported, rule, table  # noqa: E402
+from shared.scoring import headline, note, pct, quote_supported, rule, table  # noqa: E402
 
 # Adapted from the Chapter 3 prompt template. The wording is the book's; the
 # citation shape is bound to the schema below so the model cannot cite loosely.
@@ -109,6 +109,7 @@ def main() -> int:
     answerable = 0
     rejected_by_code = 0
     flagged_claims = 0
+    contaminated = contaminated_answered = 0
 
     for case in cases:
         result = llm.json(
@@ -127,15 +128,22 @@ def main() -> int:
         if case["answerable"]:
             answerable += 1
             answered_ok += int(answer is not None)
+            available = "in context"
+        elif case["contaminated"]:
+            # Answerable from the supplied text after all. Recorded, not scored.
+            contaminated += 1
+            contaminated_answered += int(answer is not None)
+            available = "COVERED anyway"
         else:
             unanswerable += 1
             fabricated += int(answer is not None)
+            available = "NOT in context"
 
         rows.append(
             [
                 case["drug"][:22],
                 case["needed_section"],
-                "in context" if case["answerable"] else "NOT in context",
+                available,
                 reason,
                 len(result["citations"]),
             ]
@@ -149,6 +157,12 @@ def main() -> int:
         pct(fabricated, unanswerable),
         "Compare with broken.py. The remainder, if any, is what the prompt did not "
         "catch and the citation check could not reject.",
+    )
+    note(
+        f"{contaminated} questions are excluded from that denominator: the withheld "
+        "section's topic carries its own heading inside the supplied text, so an "
+        f"answer there is grounded, not fabricated. The model answered "
+        f"{contaminated_answered} of {contaminated} of them."
     )
     headline("Answered correctly when the sources did cover it", pct(answered_ok, answerable),
              "Watch this one. A grounding fix that also stops answering answerable "
