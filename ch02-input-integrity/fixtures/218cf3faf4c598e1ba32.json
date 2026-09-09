@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nIf input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW, do NOT\nattempt extraction: return null for starting_dose and stop.\n\n<text>\n2 DOSAGE AND ADMINISTRаTION Pediatric Pаtіents agеd 3 months to 12 years weighіng less than or equаl to 40 kg: 90 mg/kg/day divided every 12 hours, administered for 10 days. ( 2 ) 2.1 Important Administration Instructions To minimize the potential for gаstrointestinal intolerance, amoхicillіn and clavulanate рotassium for oral suspensiоn, 600 mg/42.9 mg per 5 mL should be takеn at the start of a meal. Absorptіon of сlavulаnate potassium mаy be enhanced when amoхicіllin and clavulanate potassium fоr oral suspension, 600 mg/42.9 mg per 5 mL is administered at the start of a meal. 2.2 Dosage іn Pediаtric Patients Pеdiatric patients aged 3 months to 12 years weighing less than or equal to 40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended dose of amoxicillin and clavulanatе potassium fоr oral suspensіon, 600 mg/42.9 mg per 5 mL is 90 mg/kg/daу divided every 12 hours, administered for 10 days (see Table 1 as а general example guideline for attaіnment of this dosage). This dose provides 6.4 mg/kg/dаy of thе clavulanic acid comрonеnt. Table 1: General Dosage Guidelines for Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL in Pediatric Patients Body Weight (kg) Volume of Amoxicillin and Clavulanate Potassium fоr оral Suspension, ​​​​​​​600 mg/42.9 mg per 5 mL providing 90 mg/kg/day 8 3 mL twice dailу 12 4.5 mL twice daily 16 6 mL twice daily 20 7.5 mL twice dailу 24 9 mL twіce daily 28 10.5 mL twice daily 32 12 mL twice daily 36 13.5 mL twice daily 40 15 mL twice daily ​​​​​​​ рediatric patіents weіghing greater than 40 kg : Experience with аmoxicillіn and clavulanate potassium for оral suspensiоn, 600 mg/42.9 mg pеr 5 mL in this group is not available.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"MEDIUM\", \"starting_dose\": \"90 mg/kg/day divided every 12 hours for 10 days\"}",
+  "elapsed_ms": 1571,
+  "usage": {
+    "input_tokens": 1162,
+    "output_tokens": 49
+  }
+}

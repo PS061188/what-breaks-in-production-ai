@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nIf input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW, do NOT\nattempt extraction: return null for starting_dose and stop.\n\n<text>\nDOSAGE AND ADMINISTRATION Edema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose unti1 the desired diuretic effect has been obtained. The individually determined single dose shou1d then be given once or twice daily (e.g., at 8 arn and 2 pm). The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states. Edema may be most efficiently and safely rnobilized by giving furosernide tablets on 2 to 4 consecutive days each week. When doses exceeding 80 mg/day are given for prolonged periods, careful clinical observation and laboratory monitoring are particu1arly advisable (see PRECAUTIONS: Laboratory Tests ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Pediatric Patients: The usual initia1 dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"MEDIUM\", \"starting_dose\": \"20 to 80 mg\"}",
+  "elapsed_ms": 1777,
+  "usage": {
+    "input_tokens": 916,
+    "output_tokens": 38
+  }
+}

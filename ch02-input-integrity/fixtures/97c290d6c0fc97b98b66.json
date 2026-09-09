@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nIf input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW, do NOT\nattempt extraction: return null for starting_dose and stop.\n\n<text>\nDOSAGE AND ADMINISTRATION Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg, whіle hydrochlorothiazide monotherapy іs effective іn doses of 12.5 mg to 50 mg per day. іn clinical triаls of lisinopril/hydrochlorothiazide сombination therapy using lisinоpril dosеs of 10 mg to 80 mg and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive respоnse rates generally increased with inсreasing dose of either component. The side effects (see WARNINGS ) of lisinоpril are generаlly rare and apparently independent of dose; those of hydrochlorothiazide are a mixture of dosе-dependent phenomena (prіmarily hypokalemia) and dose-independent рhenomena (e.g., pancreatitіs), the former much more common than the latter. Therapy with any combination of lisinopril and hydrochlorothiazіde will be аssociatеd with both sets of dоse-indеpendent side effects, but addition of lisinopril in clinical trіals blunted the hуpokalemia nоrmally seen with diuretics. To minimize dosе-independent side effects, it is usually appropriate to begіn combination therаpy only аfter a patient has failed to achiеve the desired effect with monotherapy. Dose Titrаtion Guіded by Clinical Effect A patient whosе blood рressure is nоt adequatelу controlled with either lisinopril or hydrоchlоrothiazide mоnotherapy may be switched to lisinopril and hydrоchlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrосhlorothiazide tablets 20 mg/12.5 mg. Further increаses of either or both cоmponents could depend on clinical response. The hydrochlorothiazide dose should generally not be increasеd until 2-3 weeks have elаpsed.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"MEDIUM\", \"starting_dose\": \"10 mg to 80 mg\"}",
+  "elapsed_ms": 2074,
+  "usage": {
+    "input_tokens": 973,
+    "output_tokens": 39
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nGrade the document on its own terms. Extract the dose in every case regardless\nof the grade you assign; the grade is recorded, not acted on.\n\n<text>\n2 DOSAGE & ADMINISTRATIоN Adult Dosage for metformin hydrochloride tаblets: Starting dоse: 500 mg orally twice a day or 850 mg once a day, with meals ( 2.1 ) Increase the dose in increments of 500 mg weekly or 850 mg every 2 weeks, up to a mаximum dose оf 2550 mg per day, given in divided doses ( 2.1 ) Doses above 2000 mg may be better tolerated gіven 3 times a day with meals ( 2.1 ) Pеdiatric Dosаge fоr metformin hydrochloride tablets: Startіng dose: 500 mg orally twice a daу, with meals ( 2.2 ) іncreasе dosage in increments of 500 mg weekly up to a maximum of 2000 mg per day, given in divіded doses twice daіly ( 2.2 ) Renal Impairment: Priоr to іnitiation, аssess renal function with estimated glomerular fіltration rate (eGFR) ( 2.3 ) Do not use in patients with eGFR bеlow 30 mL/minute/1.73 m 2 ( 2.3 ) Initiatіon is not recommended in patients with eGFR betwеen 30 to 45 mL/minute/1.73 m 2 ( 2.3 ) Assess risk/benefit of continuing if eGFR falls below 45 mL/mіnute/1.73 m 2 ( 2.3 ) Dіscontinue if eGFR falls below 30 mL/minute/1.73 m 2 ( 2.3 ) 2.1 Adult Dosage Mеtfоrmin Hydrochloridе Tablets The recommended starting dose of mеtfоrmin hydrochloride tablets are 500 mg orally twice a dаy оr 850 mg once a day, given with meals. Increase the dose in increments of 500 mg weekly or 850 mg every 2 weeks on the basis of glycemic control and tolerability, up to a maximum dose of 2550 mg per day, given in divided doses. Doses above 2000 mg may be better tolеrated given 3 times a day with meals. 2.2 Pediatric Dosаge for metformin hydrochloride tablets The recommended starting dose of metformin hydrochloride tablets for pediatric pаtients 10 years of аge and older is 500 mg orally twice a day, givеn with meals.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\":\"DEGRADED\",\"confidence_to_proceed\":\"MEDIUM\",\"starting_dose\":\"500 mg orally twice a day or 850 mg once a day\"}",
+  "elapsed_ms": 1951,
+  "usage": {
+    "input_tokens": 1119,
+    "output_tokens": 42
+  }
+}

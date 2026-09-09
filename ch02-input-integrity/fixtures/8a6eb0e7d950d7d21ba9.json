@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nGrade the document on its own terms. Extract the dose in every case regardless\nof the grade you assign; the grade is recorded, not acted on.\n\n<text>\nDOSAGE AND ADMINISTRATION The initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated. In situations of less severity lower doses will generally suffice while in se1ected patients higher initial doses may be required. The initial dosage should be maintained or adjusted until a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, prednisone should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT . After a favorable response is noted, the proper maintenance dosage should be determined by decreasing the initial drug dosage in small decrements at appropriate time intervals until the lowest dosage which will maintain an adequate clinical response is reached. It should be kept in mind that constant monitoring is needed in regard to drug dosage. Included in the situations which may rnake dosage adjustments necessary are changes in clinical status secondary to remissions or exacerbations in the disease process, the patient’s individual drug responsiveness, and the effect of patient exposure to stressful situations not directly related to the disease entity under treatment; in this latter situation it rnay be necessary to increase the dosage of prednisone for a period of time consistent with the patient’s condition. If after long-terrn therapy the drug is to be stopped, it is recommended that it be withdrawn gradually rather than abruptly.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"HIGH\", \"starting_dose\": \"5 mg to 60 mg of prednisone per day\"}",
+  "elapsed_ms": 1822,
+  "usage": {
+    "input_tokens": 808,
+    "output_tokens": 45
+  }
+}

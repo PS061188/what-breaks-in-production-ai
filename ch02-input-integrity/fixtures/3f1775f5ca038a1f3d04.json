@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nGrade the document on its own terms. Extract the dose in every case regardless\nof the grade you assign; the grade is recorded, not acted on.\n\n<text>\n2 DOSAGE AND ADMlNlSTRATION Postherpetic Neura1gia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Sing1e 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two tirnes a day) Day 3: 900 mg/day (i.e., 3O0 mg three tirnes a day) Epi1epsy with Partial 0nset Seizures (2.2) Patients l2 years of age and older: starting dose is 300 mg three tirnes daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neura1gia, Gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (3O0 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In c1inical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated 2.2 Dosage for Epi1epsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 300 mg three times a day. The recommended maintenance dose of Gabapentin is 300 mg to 600 mg three times a day.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"HIGH\", \"starting_dose\": \"300 mg\"}",
+  "elapsed_ms": 1809,
+  "usage": {
+    "input_tokens": 1044,
+    "output_tokens": 33
+  }
+}

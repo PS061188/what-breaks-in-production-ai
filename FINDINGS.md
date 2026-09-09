@@ -1142,3 +1142,38 @@ out-of-distribution gate**, which rejects a well-formed Hindi question at cosine
 0.995 and takes 24 legitimate queries with it. Previously these were conflated,
 and ch7's fixed arm was reported as "the fix is a regression" without saying which
 fix.
+
+## Why the bottom grade is never issued (Sep 2026) — a correction
+
+Chapter 2 recorded `LOW` 0/53 and `SEVERELY_CORRUPTED` 0/53 and concluded the
+abort branch was "unreachable". That was an observation dressed as an
+explanation, and the explanation was wrong. `ch02-input-integrity/why_no_low.py`,
+3 runs each:
+
+| condition | CLEAN/DEGRADED/SEVERE | HIGH/MED/LOW | bottom grades |
+|---|---|---|---|
+| A grade + abort consequence | 13/40/0 | 14/39/0 | **0, 0, 0** |
+| B grade only, consequence removed | 13/40/0 | 31-36/17-22/0 | **0, 0, 0** |
+| C genuinely destroyed input | 3/36/2 | 3/32/6 | **10, 7, 8** |
+
+**Arm B kills the leading hypothesis.** I assumed the model avoided the bottom
+grade because that grade meant abandoning the job. Delete the abort instruction
+entirely and it still never issues it. It was not dodging the consequence.
+
+**Arm C shows the grade is reachable.** Discard 90% of a document and mojibake
+the rest and the same prompt returns SEVERELY_CORRUPTED and LOW readily.
+
+**So DEGRADED was the correct grade on damaged-but-readable documents.** The model
+could still find the dose. It judged accurately and I recorded its accuracy as a
+failure — the same error as the zero-width spaces.
+
+**The real finding, which is sharper:** the abort fires only on documents that are
+obviously destroyed, and those are exactly the ones a free byte-level check
+already catches. The dangerous document is damaged enough to change the answer
+and not damaged enough to look damaged; on those the model correctly says
+DEGRADED and the stop condition correctly does not fire. **Do not put a stop
+condition on the bottom of a scale the model reserves for catastrophe.**
+
+Side effect worth noting: removing the consequence made the model *more*
+confident — HIGH went from 14 of 53 to 31-36 of 53. With nothing riding on the
+grade, it grades itself higher.

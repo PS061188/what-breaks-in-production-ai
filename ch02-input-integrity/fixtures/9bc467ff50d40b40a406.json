@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nIf input_quality is SEVERELY_CORRUPTED or confidence_to_proceed is LOW, do NOT\nattempt extraction: return null for starting_dose and stop.\n\n<text>\n2 DOSAGE AND ADMINISTRATION Administеr once daily, рreferably on an empty stomaсh, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours bеfore or after drugs that are known to interfere with absorption. (2.1) Evaluate thе need for dose adjustments when regularlу administering within one hour of certain foods that may affect absоrption. (2.1) Advise pаtients to stop bіotin and biotin-containing supplements at least 2 days beforе assessing TSH and/or T4 levels. (2.2) Starting dose depends on a variеty of factors, includіng age, body weight, cardiovascular status, and concomitant mediсations. Peak therарeutic effect may not be attained fоr 4 to 6 weeks. (2.2) See full prescribing informаtiоn for dоsing in specifіc patient populatіons. (2.3) Adequacy of theraрy determined with periodiс monitoring of TSH and/оr T4 as well аs clinical status. (2.4) 2.1 Importаnt Administration Instructiоns Administer levothуrоxine sodium tablets as а single dаily dose, on an empty stomach, оne-half to one hour befоre breakfast with а full glаss of watеr to avoid choking or gаgging [see Adverse Reactіons (6) ]. Administer levоthyroxine sоdium tаblets at lеast 4 hours before or after drugs known to interfere with levothyroxinе sodium absorption [see Drug Interactions (7.1) ]. Evaluate the need for dоsage adjustmеnts when regularly admіnistering wіthіn one hour оf cеrtain foods that may аffect levothyroxine sodium tablets absorption [see Dosagе аnd аdministration (2.2 and 2.3) , Drug Interactions (7.9), and Clinical Pharmacology (12.3) ].\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"MEDIUM\", \"starting_dose\": null}",
+  "elapsed_ms": 1726,
+  "usage": {
+    "input_tokens": 974,
+    "output_tokens": 31
+  }
+}

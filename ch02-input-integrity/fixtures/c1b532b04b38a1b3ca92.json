@@ -1,0 +1,44 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are an extraction engine. Before extracting any data you must\ninspect the input and report its condition.\n\nScan for corruption signals: characters that do not belong in an English\ndocument, garbled sequences indicating an encoding fault, words with digits\nwelded into them or letter pairs a scanner confuses, and text that stops\nmid-sentence.\n\nThen return:\n{\n  \"input_quality\": \"CLEAN | DEGRADED | SEVERELY_CORRUPTED\",\n  \"confidence_to_proceed\": \"HIGH | MEDIUM | LOW\",\n  \"starting_dose\": \"<the starting dose, or null>\"\n}\n\nGrade the document on its own terms. Extract the dose in every case regardless\nof the grade you assign; the grade is recorded, not acted on.\n\n<text>\nDOSAGE AND ADMINіSTRATION Initial Treatment Dosage for Adults Mаjоr Depressive Disorder –Sertraline hydrochloride treаtment should be admіnіstered at a dоse of 50 mg once daily. While a relatiоnship between dose and effect hаs not been established for major depressive disоrder, OCD, panіc disorder, PTSD or social anхіety disorder, рatients wеre dosed in a range of 50-200 mg/day in the clinical trials demonstrating the effectiveness оf Sertraline hydrochloridе for the treatment of this indication. Consеquently, a dose of 50 mg, administered once daily, is recоmmended as the initial thеrapeutіc dose. Patients not responding to a 50 mg dose may benefit frоm dosе іncrеases up to a maximum of 200 mg/daу. Given the 24 hour elimіnation half-life of sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week. Premеnstrual Dysphoric Disorder – Sertraline hydrochloride treatmеnt should bе initiated with a dosе of 50 mg/day, either daily throughout the menstrual cуcle or limited to the luteal phase of the menstrual cycle, depending on phуsіcіan assеssment. While a relationship between dоse and effect has not been establіshed for PMDD, patients were dosed in the rаnge of 50-150 mg/day with dose increases at the onset of each new menstrual cycle (see Clinical Trials under CLINICAL PHаRMAсOLOGY ). Patients not responding to a 50 mg/daу dose mаy benеfit from dose incrеаses (at 50 mg incrеments/ menstrual cycle) up to 150 mg/day when dosing daіly throughout the mеnstrual сycle, or 100 mg/day when dosing during the luteal phase of the menstrual cycle. If a 100 mg/day dose hаs been established with luteal phase dosing, а 50 mg/day titrаtion step for three days shоuld be utilized at the beginning of each luteal phase dosing perіod.\n</text>",
+  "user": "Report the condition, then the dose.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input_quality": {
+        "type": "string",
+        "enum": [
+          "CLEAN",
+          "DEGRADED",
+          "SEVERELY_CORRUPTED"
+        ]
+      },
+      "confidence_to_proceed": {
+        "type": "string",
+        "enum": [
+          "HIGH",
+          "MEDIUM",
+          "LOW"
+        ]
+      },
+      "starting_dose": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "input_quality",
+      "confidence_to_proceed",
+      "starting_dose"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"input_quality\": \"DEGRADED\", \"confidence_to_proceed\": \"MEDIUM\", \"starting_dose\": \"50 mg once daily\"}",
+  "elapsed_ms": 2157,
+  "usage": {
+    "input_tokens": 1020,
+    "output_tokens": 36
+  }
+}
