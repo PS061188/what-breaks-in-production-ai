@@ -34,7 +34,7 @@ GPT-5-mini. Upgrading the model made this failure harder to see, not rarer.
 → [`ch02-input-integrity/`](ch02-input-integrity/)
 
 **A model cannot grade its own confidence.** Across 192 classifications it
-returned `LOW` **zero times**, and stamped two-thirds of its errors `HIGH`. Any
+returned `LOW` **zero times**, and stamped 80% to 100% of its errors `HIGH`. Any
 guardrail of the form "route anything below HIGH to review" has nothing to act
 on.
 → [`ch04-classification-cascade/`](ch04-classification-cascade/)
@@ -92,7 +92,7 @@ Full template, with the numbers behind each line, in
 | [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −81 pts** from the grounding prompt, across 4 models |
 | [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
 | [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges level |
-| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone beats the book's six-rule protocol, **17% vs 30%** |
+| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone beats the book's six-rule protocol, **17% vs 33%** |
 | [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
 | [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
 | [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **11% → 0%** with a section constraint |
@@ -324,7 +324,7 @@ Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 ### Experiment 6.1
 
 **The answer is right about something no longer true**  
-status rule alone 17%, the book's six-rule protocol 30%  
+status rule alone 17%, the book's six-rule protocol 33%  
 Code: [`ch06-state-mismatch/`](ch06-state-mismatch/)
 
 ### Experiment 7.1

@@ -662,7 +662,7 @@ re-recorded. The new numbers did not match, so it was run four times fresh
 | 2 | 90% (43) | 21% (5) | $22 |
 | 3 | 92% (44) | 17% (4) | $22 |
 | 4 | 90% (43) | 25% (6) | $22 |
-| **mean** | **91%** | **20%** | **$22** |
+| **mean** | **90%** | **25%** | **$22** |
 | *published* | *85%* | *38%* | *$41* |
 
 The published 38% is outside the fresh spread and does not reproduce. The $41 was
@@ -1111,7 +1111,7 @@ version that measured well, with the removed part described *after* it as
 | 10 | the whole inventory/self-count protocol | 78% mean vs 96% for a one-line instruction; self-count wrong 18/18 |
 
 What each prompt kept is what measured: ch2's corruption-signal scan (95%, 12/12 on
-OCR damage), ch4's `runner_up` (holds the true category 89–100% of the time),
+OCR damage), ch4's `runner_up` (holds the true category 67–100% of the time),
 ch8's FIELD DEFINITIONS + verbatim quote, ch10's `not_extracted` (11 items, all
 correct judgements).
 
