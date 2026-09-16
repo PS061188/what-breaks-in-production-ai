@@ -20,8 +20,8 @@ python3 run_all.py
 ## Five results worth your next two minutes
 
 **Requiring a source quote does not catch fabrication.** Asked to fill fields
-the document does not cover, the model invented values on 11% of them — and
-attached a genuine quote to every single fabrication. **4 of 4 passed a
+the document does not cover, the model invented values on 6% of them — and
+attached a genuine quote to every single fabrication. **2 of 2 passed a
 quote-existence check.** It does not invent quotations. It attaches real ones,
 lifted from elsewhere in the document, to values it made up.
 → [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
@@ -66,7 +66,7 @@ Every prompt template in the book was run against the same documents. Sorted by
 
 | The instruction asks for | Outcome |
 |---|---|
-| **A restriction on what may be asserted** — *only from the sources* · *null is a correct answer* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −81 pts** fabrication, **11% → 0%**, **67% → 17%**, **95% flagged** |
+| **A restriction on what may be asserted** — *only from the sources* · *null is a correct answer* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −85 pts** fabrication, **6% → 0%**, **67% → 17%**, **95% flagged** |
 | **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Nothing, in four chapters.** Lowest grade returned **0 times in 400+ assessments**. 97% of fields graded HIGH, including wrong ones. Self-count wrong **18 of 18** |
 
 A restriction changes what the model may output, and the code reading the response
@@ -89,13 +89,13 @@ Full template, with the numbers behind each line, in
 | chapter | what it measures | result |
 |---|---|---|
 | [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided — but the four checks the book *prescribed* catch **37%** |
-| [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −81 pts** from the grounding prompt, across 4 models |
+| [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −85 pts** from the grounding prompt, across 4 models |
 | [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
 | [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges level |
 | [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone beats the book's six-rule protocol, **17% vs 33%** |
 | [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
 | [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
-| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **11% → 0%** with a section constraint |
+| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **6% → 0%** with a section constraint |
 | [10 — Silent omissions](ch10-silent-omissions/) | items dropped without a signal | rare on numeric lists, **absent** on a 185-item prose enumeration |
 
 Claude Haiku 4.5 is the default; Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini
@@ -288,13 +288,13 @@ Code: [`ch02-input-integrity/`](ch02-input-integrity/)
 ### Experiment 3.1
 
 **Does prompt wording change the fabrication rate?**  
-11% plain, 14% soft words, 89% with a permission clause  
+6% plain, 9% soft words, 88% with a permission clause  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
 
 ### Experiment 3.2
 
 **Does the grounding template reduce it?**  
-at least -81 points, across four models and two providers  
+at least -85 points, across four models and two providers  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
 
 ### Experiment 3.3
@@ -302,6 +302,18 @@ Code: [`ch03-hallucination/`](ch03-hallucination/)
 **The four engineering fixes**  
 cross-encoder at 0.3: 85% caught, 12% false alarms  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
+
+### Experiment 3.4
+
+**Does asking the same question five times expose fabrication?**
+catches 2 of 34 unanswerable questions a single draw called safe; misses the 1 that fabricates identically every draw
+Code: [`ch03-hallucination/probe_selfconsistency.py`](ch03-hallucination/probe_selfconsistency.py)
+
+### Experiment 3.5
+
+**Do the model's own token probabilities separate invented answers from real ones?**
+fabricated −0.30 / −0.39 / −0.34 vs correct −0.08 / −0.10 / −0.08, three complete runs (1, 3, 4) on GPT-4.1-mini; a cut between −0.18 and −0.21 catches every fabrication, flags 1–3 of 24 correct answers — and 15–19 of 22–27 correct refusals. Run 2 (8 fabrications) lacks a refusal count and its answers were overwritten; see FINDINGS §H. Not measurable on Claude: the API returns no token probabilities
+Code: [`ch03-hallucination/probe_logprobs.py`](ch03-hallucination/probe_logprobs.py)
 
 ### Experiment 4.1
 
@@ -319,6 +331,12 @@ Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 
 **Normalisation in code, and what it records**  
 40 recorded losses, each naming a specific dropped value  
+Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
+
+### Experiment 5.3
+
+**Retries, and a model swap, on the captured values**  
+117 of 376 values unparseable, retries fixed 8; Sonnet 5 and GPT-4.1-mini store Haiku's value on 54% and 65% of fields  
 Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 
 ### Experiment 6.1
@@ -348,13 +366,13 @@ Code: [`ch08-routing-placement/`](ch08-routing-placement/)
 ### Experiment 9.1
 
 **How often does an empty box get filled?**  
-11% of unsupported fields filled anyway  
+6% of unsupported fields filled anyway  
 Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 ### Experiment 9.2
 
 **The fix, and the mistake in how it was tested**  
-all 4 fabrications carried a real quote  
+both fabrications carried a real quote  
 Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 ### Experiment 9.3
@@ -402,7 +420,7 @@ Write-up: [`report/`](report/)
 ### Experiment G.1
 
 **Is the ground truth actually true?**
-12 of 48 "unanswerable" questions were answerable; 4 published rates were too high
+14 of 48 "unanswerable" questions were answerable; 4 published rates were too high
 Code: [`shared/contamination.py`](shared/contamination.py)
 
 Chapters 3 and 9 derive their ground truth the same way: supply two sections of a
@@ -413,17 +431,25 @@ carries a full paediatric dosing table under its own heading, and the paediatric
 question was being scored as unanswerable.
 
 The test is structural: an explicit subsection heading naming the withheld topic,
-found inside the supplied text. No model, no reading for meaning. It is
+found inside the supplied text — plus one prose rule, a dosing line addressed to
+children by age and ending in a colon. No model, no reading for meaning. It is
 deliberately narrow, so the contaminated set is a floor and the corrections below
 are conservative.
 
+Two of the fourteen were found by the model rather than the regex. In Experiment 3.5
+the two "fabrications" with the highest token probability in the whole set — higher
+than the average correct answer — were Metformin and Albuterol pediatric dosing.
+Both are answered in the supplied text: one under a heading that reads "Pediatric
+Dosage" rather than "Pediatric Use", one in a labelled dosing line. The detector
+now catches both; the rates below are recounted on the remaining thirty-four.
+
 | figure | published | corrected |
 |---|---|---|
-| 3.1 fabrication, plain prompt | 30% (14/48) | **11%** (4/36) |
-| 3.1 fabrication, soft vocabulary | 35% | **14%** (5/36) |
-| 3.1 fabrication, permission clause | 92% | **89%** (32/36) |
-| 3.2 grounding template | −69 pts | **at least −81 pts**, all four models |
-| 9.1 fields filled with no source | 29% (14/48) | **11%** (4/37) |
+| 3.1 fabrication, plain prompt | 30% (14/48) | **6%** (2/34) |
+| 3.1 fabrication, soft vocabulary | 35% | **9%** (3/34) |
+| 3.1 fabrication, permission clause | 92% | **88%** (30/34) |
+| 3.2 grounding template | −69 pts | **at least −85 pts**, all four models |
+| 9.1 fields filled with no source | 29% (14/48) | **6%** (2/35) |
 
 Every correction moves in the same direction: the *baselines* were inflated, so the
 gaps the book attributes to prompt design are wider than published, not narrower.
