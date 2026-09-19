@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSertraline tablets, USP are available with each tablet containing sertraline hydrochloride, USP equivalent to 25 mg, 50 mg and 100 mg of sertraline. Sertraline 25 mg Tablets: Light Green film coated Modified oval biconvex tablets debossed with I on the left Side of bisect and G on the right Side of bisect on one Side and \"212\" on other NDC 63187-859-30 Bottles of 30 NDC 63187-859-60 Bottles of 60 NDC 63187-859-90 Bottles of 90 Store at 20°C to 25°C (68°F to 77°F) [see USP Controlled Room Temperature]. Revised: 07/2016\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1: Most prominent features of this document:\\n(1) Specific dosage forms and strengths listed (25 mg, 50 mg, 100 mg tablets)\\n(2) Physical descriptions of tablets (light green, film coated, modified oval biconvex, debossed markings)\\n(3) NDC numbers and packaging information (bottles of 30, 60, 90)\\n(4) Storage conditions (20°C to 25°C)\\n\\nStep 2: Two most plausible categories:\\n(A) 'how_supplied': This document explicitly lists dosage forms (tablets), strengths (25/50/100 mg), physical characteristics (color, shape, imprints), packaging sizes (bottles of 30/60/90), NDC numbers, and storage conditions. All of these are textbook elements of the 'how_supplied' section.\\n(B) 'description': While 'description' can include formulation information, the passage focuses on commercial/pharmaceutical supply details (NDC codes, bottle quantities, storage) rather than chemical composition, inactive ingredients, or the drug's molecular structure.\\n\\nStep 3: 'how_supplied' wins decisively. The document is organized exactly as a 'how_supplied' section would be—it catalogs the commercial presentations of the product including strengths, package types, package sizes, NDC codes, and storage instructions. The 'description' category would be primarily concerned with the chemical identity and formulation composition (e.g., 'sertraline hydrochloride USP, an SSRI with the structure...' and listing inactive ingredients). This document contains none of that analytical/chemical information.\",\"classification\":\"how_supplied\",\"runner_up\":\"description\",\"ruled_out_because\":\"The document focuses entirely on commercial supply information (NDC numbers, bottle counts, packaging configurations, storage conditions) rather than chemical composition, molecular structure, or inactive ingredients, which would be the emphasis of a 'description' section.\"}",
+  "elapsed_ms": 6161,
+  "usage": {
+    "input_tokens": 977,
+    "output_tokens": 447
+  },
+  "logprobs": null
+}

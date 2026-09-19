@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nEdema Furosemide tablets are indicated in adults and pediatric patients for the treatment of edema associated with congestive heart failure, cirrhosis of the liver, and renal disease, including the nephrotic syndrome. Furosemide tablets are particularly useful when an agent with greater diuretic potential is desired. Hypertension Oral furosemide may be used in adults for the treatment of hypertension alone or in combination with other antihypertensive agents. Hypertensive patients who cannot be adequately controlled with thiazides will probably also not be adequately controlled with furosemide alone. Edema Furosemide tablets are indicated in adults and pediatric patients for the treatment of edema associated with congestive heart failure, cirrhosis of the liver, and renal disease, including the nephrotic syndrome.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n(1) The passage explicitly lists conditions for which the drug is approved: 'indicated in adults and pediatric patients for the treatment of edema associated with congestive heart failure, cirrhosis of the liver, and renal disease'\\n(2) It specifies therapeutic uses: treatment of hypertension, alone or in combination with other agents\\n(3) It discusses patient populations and comparative efficacy: 'Hypertensive patients who cannot be adequately controlled with thiazides will probably also not be adequately controlled with furosemide alone'\\n\\nStep 2 - Two most plausible categories:\\n(1) 'indications_and_usage' is most plausible because the passage is structured around describing what conditions the drug is approved to treat (edema in heart failure, cirrhosis, renal disease; hypertension). This is the core function of an indications section.\\n(2) 'drug_interactions' could be considered because the passage mentions combination with other antihypertensive agents and comparison with thiazides, suggesting interaction/comparative information.\\n\\nStep 3 - Decision:\\n'indications_and_usage' wins decisively. The passage does not describe how furosemide interacts with other drugs in the pharmacological sense (pharmacokinetics, safety concerns, efficacy modifications). Rather, it states that furosemide may be used 'in combination with other antihypertensive agents' as a therapeutic strategy - this is information about when to use the drug, not how it interacts. The mention of thiazides is a clinical comparison, not an interaction. The entire structure and content is devoted to describing approved uses/indications.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"While the passage mentions use in combination with other agents and compares to thiazides, it does not describe pharmacological interactions, contraindications to concurrent use, or safety modifications when used together. These are indications for combination therapy, not drug interaction information.\"}",
+  "elapsed_ms": 5015,
+  "usage": {
+    "input_tokens": 979,
+    "output_tokens": 469
+  },
+  "logprobs": null
+}

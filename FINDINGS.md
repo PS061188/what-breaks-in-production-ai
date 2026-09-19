@@ -28,8 +28,8 @@ print today.
 | **2** | damaged inputs stopped at the gate | — | **85%** (35/41) | model-free, stable across three models |
 | **2** | clean inputs wrongly rejected | — | 17% (2/12) | *[noise]* — both are artefacts |
 | **2** | model calls avoided | 0 | **37** | |
-| **3** | fabrication rate, soft-inference prompt | **89%** (32/36) | **8%** (3/36) | the repo's strongest result — see §G |
-| **3** | fabrication rate, neutral prompt | 11% (4/36) | — | baseline — see §G |
+| **3** | fabrication rate, soft-inference prompt | **88%** (30/34) | **3%** (1/34) | the repo's strongest result — see §G |
+| **3** | fabrication rate, neutral prompt | 6% (2/34) | — | baseline — see §G |
 | **3** | fabrication rate, **soft words only** (no permission clause) | **38%** (18/48) | — | **p = 0.52 vs neutral — the chapter's named adjectives had no measurable effect** |
 | **3** | answered when the sources did cover it | 96% (23/24) neutral · 100% (24/24) soft | 88% (21/24) | the fix costs 3 answerable questions |
 | **4** | classification accuracy, opening passages | 97% (93/96) | 100% (95/**95**) | denominator changes — §9 |
@@ -47,7 +47,7 @@ print today.
 | **7** | legitimate queries answered | 100% (48/48) | **46%** (22/48) | |
 | **8** | placement error rate | 3% (1/33) | 3% (1/33) | *[noise]*, and the 1 is a checker bug — §3 |
 | **8** | model named the wrong section for its own quote | 18% (6/33) | 3% (1/33) | **0/33 real** — §3 |
-| **9** | fabrication on fields with no source content | 11% (4/37) | **0%** (0/37) | forced by construction — §1; see §G |
+| **9** | fabrication on fields with no source content | 6% (2/35) | **0%** (0/35) | forced by construction — §1; see §G |
 | **9** | recall on fields the document does cover | 96% (23/24) | 92% (22/24) | *[noise]* — but it did move |
 | **9** | fabrications whose quote IS in the document | **100%** (14/14) | — | the finding |
 | **10** | dose figures returned | 100% (55/55) | 96% (53/55) | *[noise]*; the failure does not reproduce |
@@ -546,7 +546,7 @@ direction, not statistically established. About 57 belong to a clause the chapte
 never discusses.** The chapter must be rewritten to
 blame explicit permission rather than soft vocabulary — see Task 3.2.
 
-The grounding-template result across four models is unaffected in direction and larger once §G is applied: at least −81 points on every model.
+The grounding-template result across four models is unaffected in direction and larger once §G is applied: at least −85 points on every model.
 
 Limits: n=48 detects only large effects, so this is no evidence of a difference,
 not evidence of none. One model, one run.
@@ -1058,7 +1058,7 @@ claiming 47 where 13 existed. Every later step compares against that number.
 
 | what the instruction asks | outcome |
 |---|---|
-| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **at least −81 pts, 11%→0%, 67%→17%, 95% flagged** |
+| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **at least −85 pts, 6%→0%, 67%→17%, 95% flagged** |
 | **ask the model to assess itself** (ch2 confidence_to_proceed, ch4 confidence, ch8 placement_confidence, ch10 self-count) | **LOW 0/159, LOW 0/192, 97% HIGH and 0 caught, 0/18 correct** |
 
 **Across four chapters and 400+ self-assessments, a model asked to grade its own
@@ -1198,28 +1198,28 @@ no reading for meaning. The test is deliberately narrow, so the excluded set is 
 floor: Omeprazole's OTC label says *"children under 18 years of age: ask a doctor"*
 without a heading, and is not caught. Corrections below are therefore conservative.
 
-**12 of 48 (label, withheld-topic) pairs are contaminated**, across 7 of 12 labels.
+**14 of 48 (label, withheld-topic) pairs are contaminated**, across 9 of 12 labels.
 
 | figure | published | corrected |
 |---|---|---|
-| 3.1 plain prompt | 30% (14/48) | **11%** (4/36) |
-| 3.1 soft vocabulary | 35% | **14%** (5/36) |
-| 3.1 permission clause | 92% (44/48) | **89%** (32/36) |
-| 3.2 grounding template, Haiku 4.5 | 23% (11/48) | **8%** (3/36) |
-| 9.1 fields filled, no source | 29% (14/48) | **11%** (4/37) |
-| 9.2 fabrications carrying a real quote | 14 of 14 | **4 of 4** |
+| 3.1 plain prompt | 30% (14/48) | **6%** (2/34) |
+| 3.1 soft vocabulary | 35% | **9%** (3/34) |
+| 3.1 permission clause | 92% (44/48) | **88%** (30/34) |
+| 3.2 grounding template, Haiku 4.5 | 23% (11/48) | **3%** (1/34) |
+| 9.1 fields filled, no source | 29% (14/48) | **6%** (2/35) |
+| 9.2 fabrications carrying a real quote | 14 of 14 | **2 of 2** |
 
 Cross-model, Experiment 3.2. Baselines were at or near ceiling in the recorded
 sweep, so removing 12 cases bounds them tightly; `fixed.py` was replayed directly.
 
 | model | baseline (corrected) | fixed | drop |
 |---|---|---|---|
-| Claude Haiku 4.5 | 89% | 8% | −81 |
-| Claude Opus 5 | 100% | 11% | −89 |
-| GPT-5-mini | 97–100% | 8% | −89 to −92 |
-| GPT-4.1-mini | 92–100% | 6% | −86 to −94 |
+| Claude Haiku 4.5 | 88% | 3% | −85 |
+| Claude Opus 5 | 100% | 6% | −94 |
+| GPT-5-mini | 97–100% | 3% | −94 to −97 |
+| GPT-4.1-mini | 91–100% | 0% | −91 to −100 |
 
-**The published −69 becomes at least −81 on every model.** Every correction runs the
+**The published −69 becomes at least −85 on every model.** Every correction runs the
 same way: the baselines were inflated by cases that were never unanswerable, so the
 gaps the book attributes to prompt design are wider than published, not narrower.
 
@@ -1268,3 +1268,229 @@ On the corrected denominator the two are level. What does lose ranges is
 normalising inside the model call, which is the practice the chapter argues
 against. The five-run spread cannot be recomputed — identical prompts collapse to
 one cached fixture — so this is one run and should be re-run before it is relied on.
+
+---
+
+## §H — Without a source: self-consistency and token probabilities (Sep 2026)
+
+Every Chapter 3 fix compares the answer to a supplied document. These two
+probes measure what is usually proposed when there is none, on the chapter's
+own corpus so the signal can be scored against known ground truth.
+
+**Self-consistency** — `probe_selfconsistency.py`, plain instruction, five draws
+per question, Claude Haiku 4.5, 34 unanswerable + 24 answerable, $0.91 + judge.
+
+| unanswerable questions (34) | n |
+|---|---|
+| declined on every draw | 31 |
+| split — fabricated on some draws, declined on others | 2 |
+| fabricated on every draw | 1 |
+
+Catches 2 of 34 that a single draw called safe. Misses the 1 that invents the
+same thing five times. In both split cases every draw opened with the identical
+correct sentence; the flip was whether an outside-knowledge sentence followed.
+A facts-disagree check would not have fired; the decline/assert flip did.
+
+**Token log-probabilities** — `probe_logprobs.py`, GPT-4.1-mini (Claude's API
+returns none), plain instruction, answer tokens only (JSON scaffolding
+stripped), 3 runs, ~$0.05 + judge each.
+
+| run | fabricated n, mean | correct n, mean | best cut | caught | correct flagged | declines flagged |
+|---|---|---|---|---|---|---|
+| 1 | 7, −0.295 | 24, −0.083 | −0.21 | 7/7 | 1/24 | 19/27 |
+| 2 | 8, −0.345 | 24, −0.098 | −0.19 | 7/8 | 1/24 | — |
+| 3 | 12, −0.387 | 24, −0.099 | −0.20 | 12/12 | 3/24 | 15/22 |
+
+The separation between fabricated and correct holds in every run and the cut
+lands in the same place. But correct declines sit at about −0.25, inside the
+flagged region: the signal separates *confident answers* from *everything
+unsure*, and fabrications share the second bucket with refusals. Usable for
+routing to review; not a fabrication detector alone. Note the fabrication count
+itself moved 7 → 8 → 12 across identical runs — the same instability §R found.
+
+**Run 4 (13 Sep 2026), and why the book shows runs 1, 3 and 4.** Run 2's
+"declines flagged" was never computed — the script did not print it, and runs 1
+and 3 were hand-counted from the per-question table. The probe also had no
+`--sample` flag, so each `--live` run overwrote the previous fixtures; run 2's
+answers are gone and the count cannot be recovered. Fixed both: `--sample N`
+now folds a run index into the fixture key, and the best-cut line prints the
+decline count. Run 4 recorded with `--sample 4` (~$0.05 + judge):
+
+| run | fabricated n, mean | correct n, mean | best cut | caught | correct flagged | declines flagged |
+|---|---|---|---|---|---|---|
+| 4 | 8, −0.335 | 24, −0.084 | −0.18 | 8/8 | 3/24 | 17/26 |
+
+Run 4 also exposed a harness bug: OpenAI returns `-9999.0` as a placeholder for a
+token it has no probability for, and one such token (` Usage`, in a Warfarin
+pregnancy decline) dragged that answer's mean to −208 and the decline group's
+mean to −8.3. `answer_tokens()` now drops the placeholder. Runs 1–3 replay
+unchanged after the fix. The book's table shows runs 1, 3 and 4 — the three
+runs with every column recorded.
+
+**What it found about the ground truth.** In run 1, two "fabrications" scored
+−0.024 and −0.033 — the two most certain answers in the group. Both were
+contamination the §G detector had missed (Metformin: heading reads "Pediatric
+Dosage"; Albuterol: a labelled dosing line, not a heading). Verified against the
+corpus, added to the detector, all §G figures recounted on 34. The model's own
+probabilities flagged the two questions the ground truth had wrong.
+
+Harness change: `LLM.complete()` takes `sample=` (folded into the cache key, so
+repeated draws get their own fixtures instead of replaying one) and
+`logprobs=` (OpenAI only; the Anthropic path refuses rather than returning
+nothing).
+
+## Chapter 4's shipped prompt, measured as its own arm (13 Sep 2026)
+
+`ch04-classification-cascade/shipped_prompt.py --live`, 3 runs, both positions,
+$2.56. The book's template was only ever measured with `confidence` and
+`requires_human_review` still in it; the shipped version drops both and keeps
+the reasoning steps, `runner_up` and `ruled_out_because`.
+
+| prompt | opening | body | errors where runner_up = true |
+|---|---|---|---|
+| one-line (replayed) | 100% (96/96) | 96% (92/96) | — |
+| full template (replayed) | 98% (94/96) | 90% (86/96) | 2/2, 9/10 |
+| shipped, run 1 | 97% (93/96) | 94% (90/96) | 3/3, 5/6 |
+| shipped, run 2 | 98% (94/96) | 92% (88/96) | 2/2, 6/8 |
+| shipped, run 3 | 99% (95/96) | 91% (87/96) | 1/1, 7/9 |
+
+Dropping the confidence fields recovered 1–4 body-passage points but the
+template still trails the one-line prompt by 1–3 (opening) and 2–5 (body).
+`runner_up` held the true category on 6/6 opening and 18/23 body errors. The
+book's "What this prompt does" now prints this table; the ensemble item carries
+the caveat that its gain comes from outvoting the weakest member.
+
+## Chapter 4 fix 2, run as the chapter describes it: three systems, not three prompts (14 Sep 2026)
+
+`ch04-classification-cascade/model_ensemble.py --live`. Members: Haiku 4.5 with the
+shipped template, GPT-4.1-mini with the one-line prompt, `facebook/bart-large-mnli`
+zero-shot on CPU. Majority vote; all-three-disagree goes to review. 3 runs each
+position. ~$2 per run set on Haiku (the fixture key did not replay across scripts,
+so Haiku re-sampled — twice; noted, not fixed), $0.11 on GPT-4.1-mini, $0 for bart.
+
+| | Haiku shipped | GPT-4.1-mini one-line | bart zero-shot | ensemble shipped acc | to review | wrong shipped |
+|---|---|---|---|---|---|---|
+| opening | 99/99/97 | 97/97/99 | 59 | 99/99/98 | 2/2/0 | 1/1/2 |
+| body | 93/93/93 | 96/96/94 | 59 | 96/96/94 | 1/2/1 | 4/4/6 |
+
+bart scored 41% with bare category names as labels and 59% with the category
+descriptions (`ZS_LABELS=descriptions`); the table uses 59%. All three members
+agreed on 57–60% of passages. **The real ensemble matches its best single member
+and does not beat it.** The published prompt-ensemble figure (97–100%, bit-identical
+reruns) was two strong prompts outvoting the weakest; it does not describe a
+model ensemble and the book no longer prints it as one. The disagreement lane
+sent 0–2 of 96 to review, and that lane is now presented as the working form of
+fix 3 (confidence-gated routing), which is folded into fix 2 in the manuscript.
+Chapter 4's fixes are reordered by result: F1 gate, audit trail, ensemble.
+
+## Chapter 5, three follow-ups (15 Sep 2026) — `ch05-extraction-normalisation/more_experiments.py`
+
+$1.13 total (Haiku $0.77, Sonnet 5 $0.35, GPT-4.1-mini $0.01).
+
+**A. Five runs each, corrected range counter.**
+
+| prompt | ranges kept (of 8) | qualifiers kept | values findable (values returned) |
+|---|---|---|---|
+| plain | 4,5,5,4,5 | 42,37,34,39,34% | 71,58,68,59,63% (59–63) |
+| normalise inside the prompt | 3,3,4,2,1 | 18,26,21,24,21% | 61,59,59,68,62% (61–74) |
+| capture | 5,5,5,5,5 | 39,34,50,39,32% | 92,92,96,94,92% (72–80) |
+
+Ranges: capture 5/8 every run, plain 4–5, one-prompt 1–4 — the §G single-run
+reading holds. Qualifiers: capture vs plain no consistent difference (ahead 1,
+behind 3, level 1); the one-prompt version keeps ≤26%. Findable: capture never
+below 92%, plain never above 71%. The capture prompt returned *more* values
+(72–80) than plain (59–63), so its findable gain is not a denominator effect.
+
+**B. Retries.** 376 dose/frequency values from the capture prompt; 117 (31%)
+unparseable by `normalise.py`. Feedback retries fixed 5 + 3 + 0 = 8. The other
+109 are absences ("not specified", "adjust if necessary", tapering prose), not
+formats. Retries fix formats; they cannot supply a number the label lacks.
+
+**C. Model swap.** Capture prompt once on Sonnet 5 and GPT-4.1-mini vs the Haiku
+run: same normalised value per field 45–67% (Sonnet) and 42–83% (GPT); 3 and 2
+fields missing. Raw-value agreement 8–67%. The golden-set item's previously
+unsourced claim ("format regressions after model updates") now has a measurement.
+
+**Pipeline diff (recorded runs, no cost).** Same normaliser over both pipelines'
+outputs, 45 dose/frequency fields in both: 8 same; 13 one-prompt lost the unit
+("80", "1"); 1 one-prompt invented a maximum (Prednisone 60 mg); 4 numbers
+disagree; 19 neither parseable (no dose in the label). 6 fields only one-prompt,
+3 only capture.
+
+---
+
+## 17. Chapter 6 — the context-integrity block, measured (16 Sep 2026)
+
+Built the three failures the block names and ran status-only vs status+block,
+5 runs × 6 drugs, Haiku 4.5, `ch06-state-mismatch/fix_integrity.py`. $0.46.
+
+- Wrong drug's ACTIVE label in context: its dose used **0/30** either way.
+- Two ACTIVE labels that disagree (doses doubled by code): conflict reported
+  **30/30** either way — the schema has a `conflict` field, so credit the schema.
+  Without the block the model gives both doses 25/30 and the doubled one alone
+  3/30 (1,1,1,0,0); with it, no dose 22/30 (4,5,4,5,4), doubled-alone 0.
+- Correction in conversation: corrected value used 27/30 → 30/30; the
+  corrected-away value never.
+
+The block prevents none of the mistakes it names on this model; it changes the
+post-conflict behaviour to refusal. Manuscript bullet rewritten with these
+numbers; earlier text said "nothing measured here says they help".
+
+---
+
+## 18. Chapter 6 — no prompt substitutes for a status field (17 Sep 2026)
+
+`ch06-state-mismatch/fix_nostatus.py`, 60 calls, $0.19. Date-only headers,
+neutral vs "newest wins". Superseded label used 20/30 in both arms, identical
+per run. 15/15 where the current label was not retrieved (3 of 6 drugs): the
+prompt cannot know. 5/15 where it was: all Sertraline, whose newest retrieved
+label has no starting-dose text, so the model answered from the older label
+that did and said so. "Relied on newest" 9/30 → 25/30: the rule moved the
+citation, not the answer. As-of date 30/30 in both arms — schema field.
+Manuscript: Prompt 6-2 added under "When there is no status field" with these
+results; fix 1 gains "derive the flag at ingest".
+
+---
+
+## 19. Chapter 6 — the newest-date monitor, finally run (17 Sep 2026)
+
+Fix 2 recommended it without measuring it. `fix_monitoring_date.py`, no model
+calls: arrival recall 32/40 vs overlap's 20/40, 0/1,381 false alarms; the extra
+12 are new labels entering a not-yet-full top-3 (overlap detects displacement,
+not arrival). As a stall alarm: healthy gaps 1–274 weeks (median 24), so
+"stops advancing" fires 35/24/19/6 times in healthy operation at 4/13/26/52-week
+windows. Manuscript fix 2 rewritten: use the date as the arrival detector, do
+not use it as a stall alarm, detect stalls at ingestion. Also corrected a
+sentence claiming the overlap monitor reads dates; it reads IDs only.
+
+---
+
+## 20. Chapter 6 — scenario 3 measured (17 Sep 2026)
+
+`fix_memory.py`, 90 calls, $0.08. Memory alone disagrees with the current label
+for 2/6 drugs every run. With the document in context and told to follow it:
+0/30 non-label doses; changed-document arm: document won 18/30, memory 0/30,
+6 withheld, 6 undecidable (doubled value coincides with a real value — a
+scoring limit of the doubling trick, noted). Manuscript: scenario 3 gets a
+measured paragraph; the chapter previously had no fix and no number for it.
+
+---
+
+## 21. Chapter 6 — scenario 2, the model's half (17 Sep 2026)
+
+`fix_reconcile.py`, 90 calls, $0.15. Told: new-only 28/30, stale 0. Not told:
+25/30, stale 0, 3 withheld. Noted a change 30/30 both — schema field. The
+reconciliation is easy once the re-read has happened; fix 7's value is entirely
+the re-read. Production rate of the gap is not measurable here and the chapter
+now says so. Manuscript: fix 7 gains "Measured here, the model's half"; fix 9
+(scenario 3) added; scenario bullets updated.
+
+---
+
+## 22. Two Chapter 6 fixes moved to Chapter 2 (19 Sep 2026)
+
+History truncation and session isolation are input failures, not timing failures: a context cut mid-sentence is
+partial input, another customer's data in the context is contaminated input. Both now sit in Chapter 2 as fixes 7
+and 8 with their issue described there; the tenant figure is Figure 2-3. Chapter 6 keeps a brief fix 3 for the
+write side (check the destination belongs to the customer). Chapter 6 fixes renumbered 1–8. Code stays in
+`ch06-state-mismatch/`.

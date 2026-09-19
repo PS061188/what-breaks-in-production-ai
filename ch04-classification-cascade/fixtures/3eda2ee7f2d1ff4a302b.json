@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets are indicated for the treatment of hypertension, to lower blood pressure. Lowering blood pressure lowers the risk of fatal and non-fatal cardiovascular events, primarily strokes and myocardial infarctions. These benefits have been seen in controlled trials of antihypertensive drugs from a wide variety of pharmacologic classes including lisinopril and hydrochlorothiazide. Control of high blood pressure should be part of comprehensive cardiovascular risk management, including, as appropriate, lipid control, diabetes management, antithrombotic therapy, smoking cessation, exercise, and limited sodium intake. Many patients will require more than 1 drug to achieve blood pressure goals.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'are indicated for the treatment of hypertension' with clear therapeutic conditions listed (hypertension, lowering blood pressure); (2) It describes the clinical benefits and rationale for use (reducing risk of strokes and myocardial infarctions); (3) It discusses that 'Control of high blood pressure should be part of comprehensive cardiovascular risk management' with supporting therapeutic context. Step 2 - Most plausible categories: (a) 'indications_and_usage' - This section typically describes what conditions the drug treats and the evidence/benefits supporting its use. The passage fits this pattern exactly, stating what the drug is 'indicated for', the conditions it treats, and the clinical benefits observed. (b) 'dosage_and_administration' - This could be considered since it mentions 'Many patients will require more than 1 drug', but this is a general statement about therapy, not dosing instructions (amount, frequency, route). Step 3 - Winner and ruling out: 'indications_and_usage' clearly wins. The passage opens with 'are indicated for the treatment of' which is the defining language of indication statements. It specifies the diseases/conditions to be treated (hypertension, prevention of cardiovascular events) and provides the clinical rationale. 'Dosage_and_administration' is ruled out because there is no actual dosing information—no mention of tablets per dose, frequency, titration, or route of administration beyond the form type 'tablets'.\",\"classification\":\"indications_and_usage\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"While the passage mentions 'tablets' as a form and that 'many patients will require more than 1 drug', it contains no actual dosing information such as specific doses, frequencies, routes, or administration instructions. Dosage_and_administration sections contain 'how much to give, how often, and by what route'—none of which are specified here.\"}",
+  "elapsed_ms": 6649,
+  "usage": {
+    "input_tokens": 951,
+    "output_tokens": 455
+  },
+  "logprobs": null
+}

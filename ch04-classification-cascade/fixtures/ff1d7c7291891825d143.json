@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWhen doses exceeding 80 mg/day are given for prolonged periods, careful clinical observation and laboratory monitoring are particularly advisable (see PRECAUTIONS: Laboratory Tests ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) Specific dosing information for pediatric patients including initial dose (2 mg/kg), titration schedule (1-2 mg/kg increments), timing (6-8 hours apart), and maximum dose (not exceeding 6 mg/kg); (b) Explicit guidance for geriatric patients including cautious dose selection and starting at low end of dosing range; (c) Monitoring recommendations for high doses over prolonged periods. 2. Two most plausible categories: (i) 'dosage_and_administration' - this section provides specific dosing regimens, administration routes, frequency, and titration instructions across different populations; (ii) 'geriatric_use' and 'pediatric_use' - the passage contains distinct subsections labeled 'Geriatric Patients' and 'Pediatric Patients' with population-specific guidance. However, the pediatric and geriatric sections are embedded within broader dosing instructions rather than being standalone discussions of how the drug behaves or is studied in these populations. 3. The clear winner is 'dosage_and_administration' because the primary content is prescriptive dosing information (specific mg/kg amounts, timing, routes, and titration protocols) across patient populations. While geriatric and pediatric considerations are mentioned, they are presented as dosing modifications rather than discussions of use patterns, safety profiles, or clinical experience specific to these populations. The geriatric and pediatric guidance is fundamentally about 'how much and when to give' rather than distinct information about outcomes or safety in these groups.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"Although the passage includes a 'Pediatric Patients' subsection with specific dosing, the content is primarily prescriptive dosing guidance (amounts, frequency, titration) rather than a discussion of pediatric-specific clinical experience, safety data, efficacy, or special considerations unique to children. It is presented as part of the overall dosage regimen rather than as independent pediatric use information.\"}",
+  "elapsed_ms": 5864,
+  "usage": {
+    "input_tokens": 975,
+    "output_tokens": 475
+  },
+  "logprobs": null
+}

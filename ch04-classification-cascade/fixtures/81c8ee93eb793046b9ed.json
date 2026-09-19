@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPediatric Patients aged 3 months to 12 years weighing less than or equal to 40 kg: 90 mg/kg/day divided every 12 hours, administered for 10 days. ( 2 ) 2.1 Important Administration Instructions To minimize the potential for gastrointestinal intolerance, amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL should be taken at the start of a meal. Absorption of clavulanate potassium may be enhanced when amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is administered at the start of a meal. 2.2 Dosage in Pediatric Patients Pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended dose of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is 90 mg/kg/day divided every 12 hours, administered for 10 days (see Table 1 as a general example guideline for attainment of this dosage).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The three most prominent features of this document are: (1) It provides specific dosing information for pediatric patients aged 3 months to 12 years weighing ≤40 kg at 90 mg/kg/day divided every 12 hours for 10 days; (2) It includes administration instructions emphasizing taking the medication at the start of a meal to minimize GI intolerance and enhance absorption; (3) It specifies the formulation as an oral suspension with exact strength (600 mg/42.9 mg per 5 mL). The two most plausible categories are: (a) 'pediatric_use' - because the section is explicitly labeled and focused on pediatric patients, their weight ranges, and age-specific considerations; (b) 'dosage_and_administration' - because it provides detailed dosing instructions, frequency, duration, and administration guidance including meal timing and route. The dosage_and_administration category wins because while this passage does discuss pediatric patients, it is fundamentally a dosage and administration section as evidenced by: the section numbering (2.1, 2.2) indicating it falls under dosage instructions, the inclusion of both adult-context introduction (section 2) and specific administration instructions applicable to dosing, and the emphasis on how much, how often, for how long, and with respect to meals - all core dosage_and_administration elements. The pediatric_use category is ruled out because pediatric_use sections typically discuss safety, efficacy, pharmacokinetics specific to children, and clinical trial data in pediatric populations, whereas this passage is simply the pediatric portion of the standard dosage and administration guidance.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"While the passage focuses on pediatric patients, it is located within and functions as part of the dosage_and_administration section (sections 2.1-2.2). The content is instruction-focused (specific mg/kg/day, dosing interval, meal timing) rather than discussing safety, efficacy, or clinical evidence in pediatric populations, which would be characteristic of a pediatric_use section.\"}",
+  "elapsed_ms": 8961,
+  "usage": {
+    "input_tokens": 1111,
+    "output_tokens": 490
+  },
+  "logprobs": null
+}

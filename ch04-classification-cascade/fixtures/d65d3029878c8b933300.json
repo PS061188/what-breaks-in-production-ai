@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\n4.2 Cholestatic Jaundice/Hepatic Dysfunction Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is contraindicated in patients with a previous history of cholestatic jaundice/hepatic dysfunction associated with treatment with amoxicillin and clavulanate potassium.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Prominent features: (1) The passage explicitly uses the word 'contraindicated', which is the defining language of the contraindications section; (2) It specifies a previous medical condition (cholestatic jaundice/hepatic dysfunction) that is the trigger for this contraindication; (3) It clearly states when the drug 'must not' be used - specifically in patients with this history. Step 2 - Most plausible categories: 'Contraindications' is the clear primary candidate because the passage directly states the drug is 'contraindicated' in a specific patient population, which is the definitional content of a contraindications section. 'Adverse reactions' is the runner-up because cholestatic jaundice and hepatic dysfunction are indeed adverse reactions that can occur with this drug; however, this passage is not describing adverse reactions that occurred during normal use - it is using a previously-observed adverse reaction as a basis for a contraindication in future patients. Step 3 - Winner vs. runner-up: 'Contraindications' wins decisively. The passage explicitly labels this as a contraindication and is instructing clinicians on which patients must not receive the drug, rather than describing what adverse reactions patients experienced. The runner-up is ruled out because the passage is forward-looking guidance on who should not receive the drug, not a retrospective report of observed side effects.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While cholestatic jaundice and hepatic dysfunction are adverse reactions, this passage uses them as the basis for a contraindication statement ('is contraindicated'), providing guidance on which patients must not receive the drug. It is instructing on contraindications, not documenting adverse reactions observed in clinical use.\"}",
+  "elapsed_ms": 6010,
+  "usage": {
+    "input_tokens": 886,
+    "output_tokens": 409
+  },
+  "logprobs": null
+}

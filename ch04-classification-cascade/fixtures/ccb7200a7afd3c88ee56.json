@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nNo specific antidotes for atorvastatin are known. Contact Poison Control (1-800-222-1222) for latest recommendations. Due to extensive drug binding to plasma proteins, hemodialysis is not expected to significantly enhance atorvastatin clearance.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying prominent features:\\n1. The passage explicitly discusses what to do in case of overdose (contact Poison Control)\\n2. It states there are no specific antidotes for atorvastatin\\n3. It addresses management approaches (hemodialysis) and their expected effectiveness for overdose scenarios\\n\\nStep 2: Two most plausible categories:\\n- 'overdosage' is most plausible because the passage directly addresses overdose management, antidote availability, and treatment options like hemodialysis\\n- 'adverse_reactions' is runner-up because the passage discusses negative outcomes and suggests toxicity concerns, though it does not describe clinical side effects but rather overdose management\\n\\nStep 3: Classification decision:\\n'overdosage' wins definitively. The passage is specifically structured around overdose management protocol (calling Poison Control), antidote availability, and therapeutic clearance approaches in overdose scenarios. While adverse_reactions involves negative effects from normal dosing, this passage is explicitly about excessive exposure and overdose-specific interventions. The mention of hemodialysis as a potential (but ineffective) clearance method is a classic overdosage management consideration, not an adverse reaction discussion.\",\"classification\":\"overdosage\",\"runner_up\":\"adverse_reactions\",\"ruled_out_because\":\"This passage is specifically about overdose management (antidotes, Poison Control contact, hemodialysis efficacy) rather than adverse reactions from normal therapeutic use. The context of overdose and toxicity management is the defining feature that excludes adverse_reactions.\"}",
+  "elapsed_ms": 6236,
+  "usage": {
+    "input_tokens": 852,
+    "output_tokens": 357
+  },
+  "logprobs": null
+}

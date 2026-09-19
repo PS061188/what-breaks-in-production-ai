@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium tablets, USP contain warfarin sodium, an anticoagulant that acts by inhibiting vitamin K-dependent coagulation factors. The chemical name of warfarin sodium is 3-(α-acetonylbenzyl)-4-hydroxycoumarin sodium salt, which is a racemic mixture of the R - and S -enantiomers. Crystalline warfarin sodium is an isopropanol clathrate. Its structural formula may be represented as follows: C 19 H 15 NaO 4 M.W. 330.31 Crystalline warfarin sodium occurs as a white, odorless, crystalline powder that is discolored by light. It is very soluble in water, freely soluble in alcohol, and very slightly soluble in chloroform and ether. Each tablet, for oral administration, contains 1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg, 6 mg, 7.5 mg or 10 mg warfarin sodium, USP.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"PROMINENT FEATURES: (1) The passage begins with chemical nomenclature and description of warfarin sodium including its mechanism of action (inhibits vitamin K-dependent coagulation factors), chemical name, molecular formula, and structural details. (2) Physical/chemical properties are extensively detailed: appearance ('white, odorless, crystalline powder'), solubility characteristics in various solvents (very soluble in water, freely soluble in alcohol, etc.), and composition (isopropanol clathrate, racemic mixture of enantiomers). (3) The passage specifies pharmaceutical form and available strengths: tablets for oral administration in 1mg, 2mg, 2.5mg, 3mg, 4mg, 5mg, 6mg, 7.5mg, and 10mg doses.\\n\\nMOST PLAUSIBLE CATEGORIES: (1) Description - This category covers 'chemical name, structure, formulation and inactive ingredients.' The passage extensively discusses the chemical nomenclature, structural formula with molecular weight, physical and chemical properties, and pharmaceutical form. All hallmarks of a description section. (2) How_supplied - This category covers 'dosage forms, strengths, packaging and storage.' The passage does list the available tablet strengths and oral administration form, which could suggest how_supplied.\\n\\nWHICH WINS AND WHY: Description is the correct classification. While the passage does mention available strengths (which relates to 'how_supplied'), the overwhelming focus is on chemical characterization, structural details, physical properties, and solubility—the core content of a description section. The strengths are mentioned parenthetically ('Each tablet...contains 1 mg, 2 mg...10 mg') as part of formulation details rather than as the primary purpose. The detailed chemistry and physical properties discussion is definitional of the description category. How_supplied is ruled out because the passage lacks packaging information, storage instructions, or emphasis on product presentation/procurement—it focuses on what the drug is, not how it is packaged or dispensed.\",\"classification\":\"description\",\"runner_up\":\"how_supplied\",\"ruled_out_because\":\"While the passage mentions available tablet strengths, the dominant content is chemical nomenclature, structural formula, physical/chemical properties, and solubility characteristics—all core to 'description.' The how_supplied category would emphasize packaging details, storage conditions, and procurement formats, none of which are present. The strengths are mentioned as part of formulation composition, not packaging/supply information.\"}",
+  "elapsed_ms": 11669,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 560
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAllergic corneal marginal ulcers Herpes zoster ophthalmicus Anterior segment inflammation Diffuse posterior uveitis and choroiditis Sympathetic ophthalmia Allergic conjunctivitis Keratitis Chorioretinitis Optic neuritis Iritis and iridocyclitis 7. Respiratory Diseases Symptomatic sarcoidosis Loeffler’s syndrome not manageable by other means Berylliosis Fulminating or disseminated pulmonary tuberculosis when used concurrently with appropriate antituberculous chemotherapy Aspiration pneumonitis 8. Hematologic Disorders Idiopathic thrombocytopenic purpura in adults Secondary thrombocytopenia in adults Acquired (autoimmune) hemolytic anemia Erythroblastopenia (RBC anemia) Congenital (erythroid) hypoplastic anemia 9.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. THREE MOST PROMINENT FEATURES: (a) The document lists multiple disease conditions organized by body system/category (ophthalmologic, respiratory, hematologic), (b) Each condition listed is a disorder that a drug is approved to treat, (c) The format is a bulleted/numbered list of approved uses without dosing instructions, administration routes, or mechanism details.\\n\\n2. TWO MOST PLAUSIBLE CATEGORIES: (a) 'indications_and_usage' - This is the primary category for FDA-approved conditions a drug treats. The document explicitly enumerates approved therapeutic indications across multiple organ systems (allergic corneal ulcers, sarcoidosis, thrombocytopenia, etc.), which is the hallmark of an indications section. (b) 'description' - Could plausibly contain condition-related information about what the drug is used for, though descriptions typically focus on chemical composition, inactive ingredients, and formulation rather than therapeutic indications.\\n\\n3. DECISION: 'indications_and_usage' clearly wins. The document is structured as a direct enumeration of approved medical conditions without any reference to chemical composition, ingredients, formulation, route of administration, or dosage amounts. The systematic listing of diseases from different therapeutic areas (ophthalmology, respiratory, hematology) is the definitive structure of an indications and usage section, not a description section.\",\"classification\":\"indications_and_usage\",\"runner_up\":\"description\",\"ruled_out_because\":\"The document lists approved therapeutic conditions and diseases to be treated, which is the core content of indications_and_usage sections. A description section would focus on chemical identity, structural formula, inactive ingredients, and formulation characteristics—none of which appear in this passage.\"}",
+  "elapsed_ms": 5471,
+  "usage": {
+    "input_tokens": 1007,
+    "output_tokens": 393
+  },
+  "logprobs": null
+}

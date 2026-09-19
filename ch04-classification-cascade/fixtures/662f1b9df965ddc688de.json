@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPrednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2. Rheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in: Psoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The document explicitly states 'Prednisone tablets are indicated in the following conditions:' with a numbered list; (b) It provides medical conditions organized by disease category (Endocrine Disorders, Rheumatic Disorders); (c) It specifies clinical scenarios where the drug is used, including notes on therapeutic approach (e.g., 'adjunctive therapy for short-term administration'). Step 2 - Most plausible categories: (a) Indications_and_usage - This is the classic format and language of an indications section. The phrase 'are indicated in the following conditions' is the definitive marker used in prescribing information to describe approved uses. The list directly enumerates diseases and conditions for which the drug is approved. (b) Description - Could be considered because the passage begins with product identification ('Prednisone tablets'), but description sections focus on chemical properties, formulation, inactive ingredients, and structure, not therapeutic uses. Step 3 - Classification decision: Indications_and_usage wins decisively. The document uses the exact statutory language ('indicated in') and structure of an indications section. It lists medical conditions for treatment, not chemical or formulation details. The runner-up (description) is ruled out because the passage contains zero information about chemical structure, inactive ingredients, formulation composition, or pharmaceutical properties—all core elements of a description section.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"description\", \"ruled_out_because\": \"Description sections detail chemical properties, formulation, and inactive ingredients. This passage contains only medical conditions for which the drug is approved, using the explicit language 'indicated in the following conditions:' which is diagnostic of an indications section.\"}",
+  "elapsed_ms": 5130,
+  "usage": {
+    "input_tokens": 1027,
+    "output_tokens": 396
+  },
+  "logprobs": null
+}

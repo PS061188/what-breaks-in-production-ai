@@ -77,3 +77,7 @@ lossy ICD-10 mapping row.
 `data/labels.json` — FDA drug labels from the openFDA API (public domain).
 Dosing text is truncated to 3,500 characters per drug so every document in the
 experiment is the same size.
+
+## Follow-ups (15 Sep 2026)
+
+`python more_experiments.py` — five runs per prompt with the corrected range counter, feedback retries on unparseable values, and the capture prompt on three models. Results in `../FINDINGS.md`.

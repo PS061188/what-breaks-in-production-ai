@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAlbuterol Sulfate HFA is contraindicated in patients with a history of hypersensitivity to any of the ingredients [see Warnings and Precautions ( 5.6 ), Description ( 11 )] . Hypersensitivity to any ingredient. ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'contraindicated in patients with a history of hypersensitivity' which is the defining language of contraindications; (2) It lists specific patient populations for whom the drug must NOT be used; (3) It references section 4, which is the standard numbering convention for contraindications in FDA labeling. Step 2 - Most plausible categories: (a) Contraindications - the word 'contraindicated' appears directly, and the passage describes situations where the drug must not be used, which is the core definition of this category. (b) Adverse_reactions - one might initially consider this since hypersensitivity/allergic reactions are adverse events, but this passage is not describing reactions that occurred in patients; rather, it is describing conditions that must be identified beforehand to avoid administering the drug. Step 3 - Classification decision: Contraindications wins decisively. The passage uses the term 'contraindicated' explicitly and describes pre-treatment screening criteria to identify patients who should NOT receive the drug. Adverse_reactions is ruled out because it documents observed side effects in patients who took the drug, whereas this passage identifies conditions that prevent use in the first place.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While hypersensitivity is an adverse reaction, this passage describes it as a contraindication—a condition requiring pre-treatment identification to prevent drug administration—not as an adverse reaction observed during clinical use. The explicit use of 'contraindicated' language and section 4 numbering confirm this is contraindications material.\"}",
+  "elapsed_ms": 5274,
+  "usage": {
+    "input_tokens": 862,
+    "output_tokens": 394
+  },
+  "logprobs": null
+}

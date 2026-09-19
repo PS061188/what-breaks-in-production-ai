@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTwo patients in the group treated with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL and one patient in the group treated with amoxicillin and clavulanate potassium were withdrawn due to diarrhea. 6.2 Postmarketing Experience The following adverse reactions have been identified during postmarketing use of amoxicillin and clavulanate potassium products, including amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL. Because these reactions are reported voluntarily from a population of unknown size, it is not always possible to reliably estimate their frequency or establish a causal relationship to drug exposure. Gastrointestinal:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Most prominent features of this document:\\n- Reports withdrawal of patients due to specific side effect (diarrhea)\\n- Discusses postmarketing surveillance data and adverse reactions identified during postmarketing use\\n- Lists adverse reaction categories (Gastrointestinal specified) with acknowledgment of limitations in causal inference from voluntary reporting\\n\\nStep 2: Two most plausible categories:\\n- ADVERSE_REACTIONS: This passage explicitly discusses adverse reactions identified during postmarketing use, provides examples of specific adverse events (diarrhea causing withdrawals), and begins to categorize adverse reactions by body system (Gastrointestinal). The section heading \\\"6.2 Postmarketing Experience\\\" and discussion of adverse reactions reported voluntarily clearly mark this as adverse reactions content.\\n- HOW_SUPPLIED: The passage includes specific dosage form and strength information (600 mg/42.9 mg per 5 mL oral suspension), which could suggest supply/formulation details. However, this information is only mentioned incidentally as context for identifying which patient group experienced the adverse event, not as the primary focus.\\n\\nStep 3: Classification decision:\\nADVERSE_REACTIONS is the clear winner. The entire passage is structured around reporting adverse reactions from postmarketing surveillance, explaining the limitations of voluntary reporting, and beginning to categorize observed adverse effects. The dosage form information is merely contextual detail used to identify which treatment group reported the diarrhea. The primary content, purpose, and structure all center on adverse reactions, not on supply information.\",\"classification\": \"adverse_reactions\",\"runner_up\": \"how_supplied\",\"ruled_out_because\": \"While the passage includes specific dosage form information (600 mg/42.9 mg per 5 mL), this is incidental context for identifying patient groups. The entire passage structure, content focus, and explicit section heading on postmarketing adverse reactions clearly establish this as adverse reaction reporting, not supply/formulation documentation.\"}",
+  "elapsed_ms": 6501,
+  "usage": {
+    "input_tokens": 982,
+    "output_tokens": 445
+  },
+  "logprobs": null
+}

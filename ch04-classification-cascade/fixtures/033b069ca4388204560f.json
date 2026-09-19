@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nDuring its premarketing assessment, multiple doses of sertraline hydrochloride were administered to over 4000 adult subjects as of February 18, 2000. The conditions and duration of exposure to sertraline hydrochloride varied greatly, and included (in overlapping categories) clinical pharmacology studies, open and double-blind studies, uncontrolled and controlled studies, inpatient and outpatient studies, fixed-dose and titration studies, and studies for multiple indications, including major depressive disorder and PMDD. Untoward events associated with this exposure were recorded by clinical investigators using terminology of their own choosing. Consequently, it is not possible to provide a meaningful estimate of the proportion of individuals experiencing adverse events without first grouping similar types of untoward events into a smaller number of standardized event categories.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) This passage discusses adverse events and untoward events recorded during premarketing clinical trials; (2) It explicitly states 'Untoward events associated with this exposure were recorded' and discusses grouping adverse events into categories; (3) The context involves systematic collection of safety data from over 4000 subjects across multiple study types. Step 2 - Most plausible categories: (a) 'adverse_reactions' - This passage is clearly discussing adverse events, untoward effects, and the challenges in categorizing and reporting them from clinical trials. This is the core purpose of adverse reaction sections in labeling. (b) 'description' - Could potentially fit as background descriptive information about the premarketing assessment process, but this is secondary context rather than the main focus. Step 3 - Decision: 'adverse_reactions' wins decisively. The passage's primary and explicit content is about documenting, recording, and categorizing adverse events and untoward effects from clinical trials - this is the quintessential subject matter of an adverse reactions section. The mention of study types and patient numbers is context for how adverse reaction data was gathered, not a description of the drug formulation, structure, or composition. 'Description' is ruled out because while there is some meta-information about the trials, the passage contains no chemical information, formulation details, inactive ingredients, or structural data that would characterize a drug description section.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage provides background context about premarketing assessment, it contains no chemical composition, formulation details, inactive ingredients, or structural information. The core and explicit focus is on collecting and categorizing adverse events during clinical trials, which is definitional to adverse_reactions sections.\"}",
+  "elapsed_ms": 6245,
+  "usage": {
+    "input_tokens": 971,
+    "output_tokens": 401
+  },
+  "logprobs": null
+}

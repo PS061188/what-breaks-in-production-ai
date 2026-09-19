@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nClinical studies of Gabapentin in epilepsy did not include sufficient numbers of subjects aged 65 and over to determine whether they responded differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy. This drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug may be greater in patients with impaired renal function.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Direct focus on elderly patients aged 65 and over, with explicit mention of clinical study composition in this age group; (2) Discussion of dose selection considerations specific to elderly patients, including starting at low end of dosing range; (3) Warnings about renal function and its relevance to elderly populations. Step 2 - Two most plausible categories: (a) 'geriatric_use' - The passage explicitly addresses elderly patients (65+), clinical study data in this population, and special dosing considerations for this age group. (b) 'dosage_and_administration' - The passage mentions dose selection, starting at low end of dosing range, and how to dose elderly patients. Step 3 - Determination: 'geriatric_use' is the clear winner. While dosage information is present, the passage is fundamentally structured around geriatric considerations: it discusses clinical trial composition in elderly subjects, whether elderly respond differently, and provides geriatric-specific guidance. The dosing discussion is secondary and framed entirely within the context of elderly patient management, not general dosage and administration instructions. The passage exists specifically to inform prescribers about geriatric use of Gabapentin.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"Although dosing information is mentioned, the passage is explicitly framed around geriatric considerations (aged 65 and over, elderly patient dose selection, age-related physiological differences). The dosing guidance is secondary and only provided in the context of elderly patient management, making geriatric_use the primary category.\"}",
+  "elapsed_ms": 4774,
+  "usage": {
+    "input_tokens": 933,
+    "output_tokens": 376
+  },
+  "logprobs": null
+}

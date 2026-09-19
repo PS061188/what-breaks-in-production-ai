@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIndividualize dosing regimen for each patient, and adjust based on INR response. ( 2.1 , 2.2 ) Knowledge of genotype can inform initial dose selection. ( 2.3 ) Monitoring: Obtain daily INR determinations upon initiation until stable in the therapeutic range. Obtain subsequent INR determinations every 1 to 4 weeks. ( 2.4 ) Review conversion instructions from other anticoagulants. ( 2.8 ) 2.1 Individualized Dosing The dosage and administration of warfarin sodium tablets must be individualized for each patient according to the patient’s International Normalized Ratio (INR) response to the drug. Adjust the dose based on the patient’s INR and the condition being treated. Consult the latest evidence-based clinical practice guidelines regarding the duration and intensity of anticoagulation for the indicated conditions.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying the three most prominent features:\\n1. The passage explicitly discusses 'dosing regimen' and states 'dosage and administration of warfarin sodium tablets must be individualized for each patient'\\n2. It provides specific instructions on how to dose: 'adjust based on INR response' and details monitoring frequency (daily initially, then every 1-4 weeks)\\n3. It includes procedural guidance on implementation: 'Individualize dosing regimen for each patient', 'Review conversion instructions from other anticoagulants', and references to genotype-informed initial dose selection\\n\\nStep 2 - The two most plausible categories:\\n1. 'dosage_and_administration' - This is the core content. The passage explicitly states dosage amounts must be individualized, provides adjustment criteria (INR response), specifies monitoring schedules (daily initially, then 1-4 weeks), and discusses conversion from other anticoagulants. This is quintessential dosage_and_administration material.\\n2. 'drug_interactions' - The passage mentions 'Review conversion instructions from other anticoagulants', which could suggest interaction information. However, this is merely about transitioning between drugs, not about concurrent use or pharmacological interactions.\\n\\nStep 3 - Decision:\\n'dosage_and_administration' wins decisively. The entire passage is focused on HOW MUCH to give (individualized doses), WHEN to monitor (daily then 1-4 weeks), and HOW to adjust (based on INR response). The mention of converting from other anticoagulants is procedural guidance for dosing initiation, not interaction information. Drug_interactions would address what happens when warfarin is taken WITH other drugs simultaneously, which is not the subject here.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"While conversion from other anticoagulants is mentioned, this is part of dosing procedure and initiation strategy, not information about concurrent use or pharmacological interactions with other drugs. The passage focuses entirely on warfarin dosing individualization and INR-based adjustment, which is core dosage_and_administration content.\"}",
+  "elapsed_ms": 5934,
+  "usage": {
+    "input_tokens": 995,
+    "output_tokens": 503
+  },
+  "logprobs": null
+}

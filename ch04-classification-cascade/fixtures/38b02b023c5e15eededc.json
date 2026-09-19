@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHistory of a serious hypersensitivity reaction (e.g., anaphylaxis or Stevens-Johnson syndrome) to amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL or any other beta-lactams (e.g., penicillins or cephalosporins). ( 4.1 ) History of cholestatic jaundice/hepatic dysfunction associated with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL. ( 4.2 ) 4.1 Serious Hypersensitivity Reactions Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is contraindicated in patients with a history of serious hypersensitivity reactions (e.g., anaphylaxis or Stevens-Johnson syndrome) to amoxicillin, clavulanate, or to other beta-lactam antibacterial drugs (e.g., penicillins and cephalosporins).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'is contraindicated in patients with a history of serious hypersensitivity reactions'; (2) Specific contraindications are listed including anaphylaxis and Stevens-Johnson syndrome; (3) The passage is structured with numbered subsections (4.1, 4.2) that organize contraindicated conditions. Step 2 - Most plausible categories: (a) 'contraindications' - The document directly uses the word 'contraindicated' multiple times and lists situations where the drug must not be used (history of serious hypersensitivity reactions, cholestatic jaundice/hepatic dysfunction). (b) 'adverse_reactions' - The document mentions serious reactions like anaphylaxis and Stevens-Johnson syndrome, which are types of adverse reactions patients can experience. Step 3 - Classification decision: 'contraindications' wins because the passage is explicitly structured around contraindications (conditions that preclude use), not observations of reactions that occurred during treatment. The key distinction is that these are pre-existing conditions in the patient's history that make the drug inappropriate to use, not side effects observed when the drug is administered. The phrase 'is contraindicated' and the context of 'history of' makes clear these are absolute precautions against use, not adverse reactions experienced during therapy.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While the passage mentions serious reactions like anaphylaxis and Stevens-Johnson syndrome, these are cited as contraindications based on prior history—reasons the drug should not be used—rather than as adverse reactions observed during treatment. Adverse reactions would document what happens when the drug is given; contraindications document situations where it should not be given at all.\"}",
+  "elapsed_ms": 4659,
+  "usage": {
+    "input_tokens": 1061,
+    "output_tokens": 406
+  },
+  "logprobs": null
+}

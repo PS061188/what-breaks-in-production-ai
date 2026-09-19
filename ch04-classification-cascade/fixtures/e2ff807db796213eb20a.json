@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\n( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm) Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation repeated every 4 to 6 hours; in some patients, 1 inhalation every 4 hours may be sufficient. More frequent administration or a greater number of inhalations is not recommended. 2.2 Recommended Dosage for Prevention of Exercise-Induced Bronchospasm Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. 2.3 Administration Information Albuterol Sulfate HFA should be administered by the orally inhaled route only.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Contains specific dosing instructions including '2 inhalations by oral inhalation repeated every 4 to 6 hours'; (2) Specifies route of administration ('by oral inhalation', 'orally inhaled route only'); (3) Provides different dosing regimens for different clinical scenarios (acute bronchospasm vs. exercise-induced bronchospasm prevention) and includes age-based recommendations (4 years and older). Step 2 - Two most plausible categories: (a) 'dosage_and_administration' - This is the strongest match because the passage explicitly states recommended dosages (2 inhalations), frequency (every 4-6 hours, 15-30 minutes before exercise), route of administration (oral inhalation), and administration requirements (cleaning information, route specification). This is canonical dosage_and_administration content. (b) 'indications_and_usage' - This is plausible as a runner-up because the passage mentions two clinical indications: 'Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm)' and 'Prevention of Exercise-Induced Bronchospasm', which appear to be indications for use. However, the passage emphasizes HOW to give the drug far more than WHY to give it. Step 3 - Decision: 'dosage_and_administration' wins decisively. While indications are mentioned (bronchospasm, exercise-induced bronchospasm), the overwhelming content is prescriptive dosing guidance: specific quantities (2 inhalations), frequencies (every 4-6 hours, 15-30 minutes pre-exercise), route (oral inhalation), administration technique, and maintenance instructions (cleaning). This is the defining structure of a dosage_and_administration section, not an indications section, which would typically elaborate on the conditions themselves, their clinical presentation, and patient populations beyond just naming them as section headers.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"While 'Bronchospasm' and 'Exercise-Induced Bronchospasm' are named as clinical conditions, the passage provides minimal elaboration on these indications themselves. Instead, the content is dominated by prescriptive dosing details: specific inhalation counts, dosing intervals, timing relative to exercise, route specification, age thresholds, and device maintenance instructions. These are the core elements of dosage_and_administration guidance, not indications_and_usage, which would focus on describing the conditions, their clinical features, and the therapeutic benefit of the drug in treating them.\"}",
+  "elapsed_ms": 8844,
+  "usage": {
+    "input_tokens": 1018,
+    "output_tokens": 611
+  },
+  "logprobs": null
+}

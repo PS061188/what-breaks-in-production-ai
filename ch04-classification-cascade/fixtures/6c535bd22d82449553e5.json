@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nEdema Therapy should be individualized according to patient response to gain maximal therapeutic response and to determine the minimal dose needed to maintain that response. Adults: The usual initial dose of furosemide tablets is 20 to 80 mg given as a single dose. Ordinarily a prompt diuresis ensues. If needed, the same dose can be administered 6 to 8 hours later or the dose may be increased. The dose may be raised by 20 or 40 mg and given not sooner than 6 to 8 hours after the previous dose until the desired diuretic effect has been obtained. The individually determined single dose should then be given once or twice daily (e.g., at 8 am and 2 pm). The dose of furosemide tablets may be carefully titrated up to 600 mg/day in patients with clinically severe edematous states.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - Specific dosing instructions for adults (20-80 mg initial dose)\\n   - Titration schedule with time intervals (6-8 hours between doses)\\n   - Maximum daily dose information (up to 600 mg/day)\\n\\n2. Two most plausible categories:\\n   - DOSAGE_AND_ADMINISTRATION: This passage directly addresses how much furosemide to give (20-80 mg), how often (6-8 hours apart, then once or twice daily), the titration protocol (increase by 20-40 mg increments), and maximum daily dose (600 mg). This is textbook dosage information.\\n   - INDICATIONS_AND_USAGE: The passage mentions 'Edema Therapy' at the beginning and discusses treating 'edematous states,' which could suggest this is about the condition being treated. However, the passage does not explain what edema is, why the drug treats it, or list approved uses—it only mentions edema as context for the dosing regimen.\\n\\n3. Classification decision:\\n   DOSAGE_AND_ADMINISTRATION wins decisively. The entire substantive content is devoted to dosing details: initial doses, timing intervals, dose escalation protocols, frequency of administration, and maximum limits. The mention of 'Edema Therapy' and 'edematous states' is merely the clinical context identifying which patients receive these specific doses, not a statement of indications. The passage contains no discussion of why furosemide works, what conditions it treats, or its approval status—all hallmarks of indications_and_usage sections. The runner-up (indications_and_usage) is ruled out because the passage provides zero characterization of the therapeutic indication beyond naming it as context for the dosing protocol.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"indications_and_usage\",\"ruled_out_because\": \"While 'Edema Therapy' appears in the opening, the passage contains no actual discussion of indications: no explanation of what edema is, what conditions warrant treatment, or the drug's approved uses. The mention of edema is merely contextual framing for the dosing regimen. The entire substantive content focuses exclusively on doses, titration schedules, timing intervals, and maximum daily amounts—all dosage_and_administration elements.\"}",
+  "elapsed_ms": 7100,
+  "usage": {
+    "input_tokens": 991,
+    "output_tokens": 534
+  },
+  "logprobs": null
+}

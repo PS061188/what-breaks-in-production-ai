@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe inhaler should be discarded when the counter reads 000. Contents Under Pressure Do not puncture. Do not use or store near heat or open flame. Exposure to temperatures above 120°F may cause bursting. Never throw canister into fire or incinerator. Storage Store at room temperature between 68°F and 77°F (20°C and 25°C); excursions permitted from 59°F to 86°F (15°C to 30°C) [See USP Controlled Room Temperature]. Store the inhaler with the mouthpiece down. For best results, the inhaler should be at room temperature before use.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features:\\n(1) Instructions on when to discard the inhaler (counter reads 000) - a practical handling directive\\n(2) Pressure warnings and safety precautions (do not puncture, heat/flame exposure risks, temperature thresholds) - storage and safety requirements\\n(3) Detailed storage temperature ranges (68-77°F with permitted excursions, room temperature requirements before use) - specific storage conditions\\n\\nStep 2: Two most plausible categories:\\n(a) 'how_supplied': This category covers dosage forms, packaging, and storage. The passage explicitly addresses storage conditions, temperature ranges, and handling of the inhaler form itself.\\n(b) 'dosage_and_administration': While this typically covers how to give/use the drug, it can include practical usage instructions such as preparation and storage relevant to proper administration.\\n\\nStep 3: Classification decision:\\n'how_supplied' wins decisively. The passage is entirely focused on the physical product (the inhaler as supplied), its packaging (pressurized canister), storage conditions (temperature ranges in USP format), handling precautions (pressure warnings, disposal instructions), and when to discard it. There is no information about dose amounts, frequency of administration, route of administration, or how to actually use the drug therapeutically. The content is purely about the physical supply form and its proper maintenance, not about clinical administration.\", \"classification\": \"how_supplied\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"The passage contains zero information about dosing, frequency, route of administration, or how to administer the drug. It focuses exclusively on the physical product form (inhaler canister), storage environment, handling precautions, and disposal - all hallmarks of 'how_supplied' rather than the clinical/procedural aspects of 'dosage_and_administration'.\"}",
+  "elapsed_ms": 6511,
+  "usage": {
+    "input_tokens": 936,
+    "output_tokens": 437
+  },
+  "logprobs": null
+}

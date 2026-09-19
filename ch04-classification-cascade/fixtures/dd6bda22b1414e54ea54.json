@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin hydrochloride tablets, USP contain the antihyperglycemic agent metformin, which is a biguanide, in the form of monohydrochloride. The chemical name of metformin hydrochloride is N,N- dimethylimidodicarbonimidic diamide hydrochloride. The structural formula is as shown below: Metformin hydrochloride, USP is a white to off-white crystalline compound with a molecular formula of C 4 H 11 N 5 • HCl and a molecular weight of 165.63. Metformin hydrochloride is freely soluble in water, slightly soluble in alcohol, practically insoluble in acetone and in methylene chloride. The pKa of metformin is 12.4. The pH of a 1% aqueous solution of metformin hydrochloride is 6.68. Metformin hydrochloride tablets, USP contain 500 mg, 850 mg, or 1000 mg of metformin hydrochloride.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three prominent features of this document:\\n1. Detailed chemical identification: the document provides the chemical name (N,N-dimethylimidodicarbonimidic diamide hydrochloride), drug class (biguanide, antihyperglycemic agent), and structural information\\n2. Physical/chemical properties: molecular formula (C4H11N5•HCl), molecular weight (165.63), solubility characteristics, pKa (12.4), and pH of aqueous solution (6.68)\\n3. Tablet strengths: explicitly states that metformin hydrochloride tablets are available in 500 mg, 850 mg, or 1000 mg formulations\\n\\nStep 2: Two most plausible categories:\\n- Description: This is the standard section for providing chemical composition, molecular structure, formulation details, and physicochemical properties of a drug. The passage contains detailed chemical nomenclature, structural formula reference, and solubility data—all classic description elements.\\n- How_supplied: This category covers dosage forms, strengths, and packaging information. The document mentions tablet strengths (500 mg, 850 mg, 1000 mg), which directly falls under how_supplied. However, the bulk of the content is dedicated to chemical properties rather than packaging/storage.\\n\\nStep 3: Winner and rationale:\\nThe classification is clearly description. While the document does conclude with strength information typical of how_supplied, the overwhelming majority of the passage (chemical name, structural formula, physicochemical properties like solubility, pKa, pH, appearance) is definitional content characteristic of the description section. The how_supplied section would typically focus on packaging details, container types, and storage instructions—none of which are present here. The strength information appears incidental to the chemical characterization, making this fundamentally a description document.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the document mentions tablet strengths (500 mg, 850 mg, 1000 mg) which are typically in how_supplied sections, the document lacks the defining elements of how_supplied such as packaging information, container types, or storage instructions. The bulk of the content—chemical name, molecular formula, structural properties, solubility, pKa, pH, appearance—are all characteristic of description sections. The strength information appears incidental to the primary purpose of chemically characterizing the drug substance.\"}",
+  "elapsed_ms": 6497,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 558
+  },
+  "logprobs": null
+}

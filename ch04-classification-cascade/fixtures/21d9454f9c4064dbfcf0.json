@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin hydrochloride tablets, USP contain the antihyperglycemic agent metformin, which is a biguanide, in the form of monohydrochloride. The chemical name of metformin hydrochloride is N,N- dimethylimidodicarbonimidic diamide hydrochloride. The structural formula is as shown below: Metformin hydrochloride, USP is a white to off-white crystalline compound with a molecular formula of C 4 H 11 N 5 • HCl and a molecular weight of 165.63. Metformin hydrochloride is freely soluble in water, slightly soluble in alcohol, practically insoluble in acetone and in methylene chloride. The pKa of metformin is 12.4. The pH of a 1% aqueous solution of metformin hydrochloride is 6.68. Metformin hydrochloride tablets, USP contain 500 mg, 850 mg, or 1000 mg of metformin hydrochloride.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n(1) The passage provides the chemical name: 'N,N-dimethylimidodicarbonimidic diamide hydrochloride'\\n(2) It describes physical/chemical properties: white crystalline compound, molecular formula C4H11N5•HCl, molecular weight 165.63, solubility characteristics, pKa, and pH of solution\\n(3) It specifies available tablet strengths: 500 mg, 850 mg, or 1000 mg of metformin hydrochloride\\n\\nStep 2 - Two most plausible categories:\\n(A) DESCRIPTION: This category covers 'chemical name, structure, formulation and inactive ingredients.' The passage explicitly provides the chemical name, structural information (implied), and chemical/physical properties that are hallmarks of drug descriptions in prescribing information.\\n(B) HOW_SUPPLIED: This category covers 'dosage forms, strengths, packaging and storage.' The passage does mention available tablet strengths (500 mg, 850 mg, 1000 mg), which is core information for how_supplied sections.\\n\\nStep 3 - Determination:\\nDESCRIPTION wins decisively. While the passage does mention strengths, the overwhelming focus is on chemical characterization: the chemical name, structural formula reference, molecular formula, molecular weight, solubility properties, pKa, and pH. These are signature elements of a Description section. The how_supplied section typically emphasizes packaging details (e.g., 'available in bottles of 30 tablets'), storage conditions, and a summary listing of strengths, but does not usually delve into molecular properties, solubility, pKa, or pH of solutions. The technical depth here is definitively descriptive in nature.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage mentions available tablet strengths (500 mg, 850 mg, 1000 mg), which is typical for how_supplied sections, the document is overwhelmingly focused on chemical and physical characterization: chemical name, molecular formula, molecular weight, solubility data, pKa, and pH. These properties are signature elements of a drug description section, not how_supplied, which typically emphasizes packaging, storage, and strength availability without the technical depth of chemical properties.\"}",
+  "elapsed_ms": 6064,
+  "usage": {
+    "input_tokens": 1045,
+    "output_tokens": 545
+  },
+  "logprobs": null
+}

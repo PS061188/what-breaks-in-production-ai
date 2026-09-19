@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe dosage range is 10 mg to 20 mg once daily. 2.4 Recommended Dosage in Pediatric Patients 10 Years of Age and Older with HoFH The recommended starting dosage of atorvastatin calcium tablets are 10 mg to 20 mg once daily. The dosage range is 10 mg to 80 mg once daily. 2.5 Dosage Modifications Due to Drug Interactions Concomitant use of atorvastatin calcium tablets with the following drugs requires dosage modification of atorvastatin calcium tablets [see Warnings and Precautions (5.1) and Drug Interactions (7.1) ]. Anti-Viral Medications In patients taking saquinavir plus ritonavir, darunavir plus ritonavir, fosamprenavir, fosamprenavir plus ritonavir, elbasvir plus grazoprevir or letermovir, do not exceed atorvastatin calcium tablets 20 mg once daily.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Explicit dosage amounts stated ('10 mg to 20 mg once daily', '10 mg to 80 mg once daily'); (2) Clear dosing instructions for specific patient populations ('Pediatric Patients 10 Years of Age and Older'); (3) Dosage modification guidance based on drug interactions with specific medications (saquinavir, ritonavir, darunavir, etc.). Step 2 - Two most plausible categories: (a) 'dosage_and_administration' - this section is entirely about how much drug to give, how often to administer it, and specific modifications based on clinical context. The repeated use of 'dosage', 'recommended', and specific dose amounts (mg once daily) are hallmarks of this category. (b) 'drug_interactions' - the passage does mention concomitant use with other drugs and references section 7.1 on Drug Interactions; however, the primary focus is not on the pharmacological effects of the interaction or side effects from combined use, but rather on the numerical dosage adjustment required due to those interactions. Step 3 - Decision: 'dosage_and_administration' wins decisively. While drug interactions are mentioned as the reason for dosage modification, the actual content and purpose of this passage is to communicate dosage amounts, frequencies, patient populations, and modification thresholds (e.g., 'do not exceed 20 mg'). The drug interactions are merely the clinical context triggering the dosage adjustment, not the focus of the passage itself. The ruled_out_because addresses that drug_interactions would be appropriate only if the passage discussed the nature of the interactions or their clinical consequences; instead it only uses them as justification for dose changes.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"Although specific drug interactions are mentioned as the reason for dosage modification, the passage's primary content and purpose is communicating dosage amounts, frequencies, and numerical dose adjustments (e.g., 'do not exceed 20 mg'). The drug interactions serve as clinical context for the dosage decisions, not as the subject matter itself. A drug_interactions classification would be appropriate if the passage explained what happens when these drugs are combined or characterized the nature of the interaction; it does not.\"}",
+  "elapsed_ms": 9082,
+  "usage": {
+    "input_tokens": 1032,
+    "output_tokens": 531
+  },
+  "logprobs": null
+}

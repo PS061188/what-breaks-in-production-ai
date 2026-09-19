@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium tablets are a vitamin K antagonist indicated for: Prophylaxis and treatment of venous thrombosis and its extension, pulmonary embolism ( 1 ) Prophylaxis and treatment of thromboembolic complications associated with atrial fibrillation and/or cardiac valve replacement ( 1 ) Reduction in the risk of death, recurrent myocardial infarction, and thromboembolic events such as stroke or systemic embolization after myocardial infarction ( 1 ) Limitations of Use Warfarin sodium tablets have no direct effect on an established thrombus, nor does it reverse ischemic tissue damage. ( 1 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'indicated for' followed by three specific clinical conditions, which is the defining language of indications; (2) It mentions therapeutic uses including 'prophylaxis and treatment' of various thrombotic conditions; (3) There is a 'Limitations of Use' section clarifying what the drug does NOT do, which is typical of indications sections. Step 2 - Most plausible categories: (a) 'indications_and_usage' - the passage directly lists the approved uses of warfarin with indication language ('indicated for'); (b) 'description' - could apply since warfarin is identified as 'a vitamin K antagonist,' which is a mechanism description. Step 3 - Winner determination: 'indications_and_usage' wins clearly. The core content is the enumerated list of therapeutic indications (venous thrombosis, pulmonary embolism, atrial fibrillation complications, myocardial infarction risk reduction). The phrase 'indicated for' is canonical language for the indications section. While the passage does include a brief mechanism descriptor ('vitamin K antagonist'), this is secondary context used only to introduce the actual indication list. The 'Limitations of Use' subsection further confirms this is indications material, as such limitations are typically part of that section. Description would focus on chemical structure, inactive ingredients, and formulation details, none of which appear here.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"description\", \"ruled_out_because\": \"While warfarin is identified as a 'vitamin K antagonist,' this is merely introductory mechanism language. The passage's primary and overwhelming content is the explicit list of approved therapeutic uses introduced by 'indicated for,' along with limitations of use—all core indications material. Description would require detailed information about chemical structure, inactive ingredients, formulation, or dosage forms, which are absent.\"}",
+  "elapsed_ms": 5625,
+  "usage": {
+    "input_tokens": 950,
+    "output_tokens": 438
+  },
+  "logprobs": null
+}

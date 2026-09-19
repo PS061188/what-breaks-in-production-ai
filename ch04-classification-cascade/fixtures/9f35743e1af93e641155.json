@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nGabapentin Capsules, USP are indicated for: Management of postherpetic neuralgia in adults Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy Gabapentin Capsules, USP are indicated for Postherpetic neuralgia in adults (1) Adjunctive therapy in the treatment of partial onset seizures, with and without secondary generalization, in adults and pediatric patients 3 years and older with epilepsy (1)\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage states 'Gabapentin Capsules, USP are indicated for' followed by specific conditions; (2) It lists two distinct therapeutic uses: postherpetic neuralgia in adults and adjunctive seizure treatment; (3) It specifies patient populations for each indication (adults for neuralgia, adults and pediatric 3+ years for seizures). Step 2 - Two most plausible categories: (a) 'indications_and_usage' - This is the canonical section in drug labeling that specifies what conditions a drug is approved to treat. The passage explicitly uses the term 'indicated for' which is the standard language introducing indications. (b) 'pediatric_use' - The passage does mention pediatric patients aged 3 years and older, but this is merely specifying an age-restricted population for one of the indications, not describing what is known about pediatric use in detail or providing pediatric-specific safety/efficacy data. Step 3 - Winner and rationale: 'indications_and_usage' clearly wins. The entire passage is structured as a list of approved therapeutic uses with their associated patient populations. This is definitional content for the indications section. The mention of pediatric patients is incidental to stating the indication (seizure adjunctive therapy is approved in this age group), not a discussion of pediatric-specific considerations, contraindications, or dosing modifications. 'Pediatric_use' is ruled out because it merely references an age group within an indication statement rather than providing pediatric-specific guidance or information.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"The passage lists approved therapeutic uses with 'indicated for' language, which is definitional for indications_and_usage. The mention of pediatric patients aged 3+ is simply specifying an eligible population for one indication, not providing pediatric-specific safety, efficacy, dosing, or other guidance that would characterize the pediatric_use category.\"}",
+  "elapsed_ms": 6612,
+  "usage": {
+    "input_tokens": 921,
+    "output_tokens": 470
+  },
+  "logprobs": null
+}

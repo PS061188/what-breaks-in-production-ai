@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWhen culture and susceptibility information are available, they should be considered in selecting or modifying antibacterial therapy. In the absence of such data, local epidemiology and susceptibility patterns may contribute to the empiric selection of therapy. Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is a combination of amoxicillin, a penicillin-class antibacterial and clavulanate potassium, a beta-lactamase inhibitor, indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) The passage specifies a drug formulation (amoxicillin and clavulanate potassium oral suspension at 600 mg/42.9 mg per 5 mL), (2) It explicitly states the indication ('indicated for the treatment of pediatric patients aged 3 months to 12 years... with Recurrent or persistent acute otitis media'), (3) It mentions patient population parameters (age range, weight limit). Step 2 - Most plausible categories: (a) 'indications_and_usage' - The passage directly states the indication for the drug using 'indicated for the treatment of' language, which is textbook indications_and_usage content. (b) 'dosage_and_administration' - The passage specifies a formulation strength (600 mg/42.9 mg per 5 mL), which relates to dosage form, and mentions a patient population (3 months to 12 years, ≤40 kg), which could be dosage context. Step 3 - Winning category: This is 'indications_and_usage'. The passage uses the standard language pattern for indications: 'indicated for the treatment of [specific conditions]' with the bacteria and resistance patterns specified. While the passage does mention formulation strength, it does so only as context to introduce which population gets this particular formulation. The primary content is what the drug is indicated to treat, not how much to give or how often to administer it. 'Dosage_and_administration' would typically include frequency, route details, and specific dosing schedules, which are absent here.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"Although the passage mentions a specific formulation strength (600 mg/42.9 mg per 5 mL) and patient population descriptors, it lacks the key elements of dosage_and_administration: there is no frequency of administration, no detailed dosing schedule, and no instructions on how to use the drug. The formulation strength is mentioned only to contextualize which indication applies to which patient subset. The passage's primary purpose is to state what condition the drug treats ('indicated for the treatment of... acute otitis media'), making indications_and_usage the clear primary classification.\"}",
+  "elapsed_ms": 7048,
+  "usage": {
+    "input_tokens": 985,
+    "output_tokens": 534
+  },
+  "logprobs": null
+}

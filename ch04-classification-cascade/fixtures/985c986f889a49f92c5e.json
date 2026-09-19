@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPhenytoin In a single (400 mg) and multiple dose (400 mg three times a day) study of Gabapentin in epileptic patients (N=8) maintained on phenytoin monotherapy for at least 2 months, gabapentin had no effect on the steady-state trough plasma concentrations of phenytoin and phenytoin had no effect on gabapentin pharmacokinetics. Carbamazepine Steady-state trough plasma carbamazepine and carbamazepine 10, 11 epoxide concentrations were not affected by concomitant gabapentin (400 mg three times a day; N=12) administration. Likewise, gabapentin pharmacokinetics were unaltered by carbamazepine administration. Valproic Acid The mean steady-state trough serum valproic acid concentrations prior to and during concomitant gabapentin administration (400 mg three times a day;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying the three most prominent features:\\n1. The passage discusses interactions between Gabapentin and other antiepileptic drugs (phenytoin, carbamazepine, valproic acid)\\n2. It presents pharmacokinetic data showing how concomitant administration affects plasma concentrations\\n3. It reports the results of drug interaction studies with specific dosing regimens and patient populations\\n\\nStep 2 - Naming the two most plausible categories:\\n\\nCategory 1: Drug_interactions - This passage directly addresses how Gabapentin interacts with other medications (phenytoin, carbamazepine, valproic acid), examining effects on steady-state plasma concentrations and pharmacokinetics. It presents study data showing no significant interactions between these drugs.\\n\\nCategory 2: Dosage_and_administration - The passage includes dosing information (400 mg single dose, 400 mg three times a day, specific patient populations like epileptic patients maintained on monotherapy). However, this information is presented only as context for the interaction studies, not as prescriptive dosing guidance.\\n\\nStep 3 - Determining the winner:\\nDrug_interactions is the clear winner. The entire passage is devoted to explaining how Gabapentin's pharmacokinetics and effect on other drugs' concentrations are altered (or not altered) by concomitant use. The dosing information is merely the experimental design, not the primary message. The passage answers the central question of drug interaction studies: \\\"What happens when you take this drug with other drugs?\\\"\\n\\nRuled out because: Dosage_and_administration focuses on how to properly administer a drug to a patient. While doses are mentioned, they serve as parameters of the drug interaction study design, not as clinical dosing recommendations for practitioners. The passage's purpose is to report interaction findings, not to guide dosing decisions.\", \"classification\": \"drug_interactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dosing information appears in the passage (400 mg single and multiple dose regimens), it is presented solely as study parameters to investigate drug interactions, not as clinical guidance on how to administer Gabapentin. The passage's central purpose is to report pharmacokinetic effects of concurrent drug use, which is definitional for drug_interactions, not dosage_and_administration.\"}",
+  "elapsed_ms": 7417,
+  "usage": {
+    "input_tokens": 1008,
+    "output_tokens": 540
+  },
+  "logprobs": null
+}

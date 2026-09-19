@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in <retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 00b266d9-ac4a-e931-e063-6294a90a6a0b | last_updated: 20260602 | status: ACTIVE | version: 20260602]\nDOSAGE AND ADMINISTRATION Lisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg, while hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day. In clinical trials of lisinopril/hydrochlorothiazide combination therapy using lisinopril doses of 10 mg to 80 mg and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive response rates generally increased with increasing dose of either component. The side effects (see WARNINGS ) of lisinopril are generally rare and apparently independent of dose; those of hydrochlorothiazide are a mixture of dose-dependent phenomena (primarily hypokalemia) and dose-independent phenomena (e.g., pancreatitis), the former much more common than the latter. Therapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg. Further increases of either or both components could depend on clinical response. The hydrochlorothiazide dose should generally not be increased until 2-3 weeks have elapsed. Patients whose blood pressures are adequately controlled with 25 mg of daily hydrochlorothiazide, but who experience significant potassium loss with this regimen, may achieve similar or greater blood pressure control with less potassium loss if they are switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg. Dosage higher than lisinopril 80 mg and hydrochlorothiazide 50 mg should not be used. Replacement Therapy The combination may be substituted for the titrated individual components. Use in Renal Impairment The usual regimens of therapy with lisinopril and hydrochlorothiazide tablets need not be adjusted as long as the patient's creatinine clearance is greater than 30 mL/min/1.73 m 2 (serum creatinine approximately less than or equal to 3 mg/dL or 265 μmol/L). In patients with more severe renal impairment, loop \n\n---\n\n[doc_id: 03d9ce02-0559-494c-a53d-de9b9a64b606 | last_updated: 20260611 | status: ACTIVE | version: 20260611]\nDOSAGE AND ADMINISTRATION General Considerations Dosage of glipizide and metformin hydrochloride tablets must be individualized on the basis of both effectiveness and tolerance while not exceeding the maximum recommended daily dose of 20 mg glipizide/2000 mg metformin. Glipizide and metformin hydrochloride tablets should be given with meals and should be initiated at a low dose, with gradual dose escalation as described below, in order to avoid hypoglycemia (largely due to glipizide), reduce GI side effects (largely due to metformin), and permit determination of the minimum effective dose for adequate control of blood glucose for the individual patient. With initial treatment and during dose titration, appropriate blood glucose monitoring should be used to determine the therapeutic response to glipizide and metformin hydrochloride tablets and to identify the minimum effective dose for the patient. Thereafter, HbA 1c should be measured at intervals of approximately 3 months to assess the effectiveness of therapy. The therapeutic goal in all patients with type 2 diabetes is to decrease FPG, PPG, and HbA 1c to normal or as near normal as possible. Ideally, the response to therapy should be evaluated using HbA 1c , which is a better indicator of long-term glycemic control than FPG alone. No studies have been performed specifically examining the safety and efficacy of switching to glipizide and metformin hydrochloride tablet therapy in patients taking concomitant glipizide (or other sulfonylurea) plus metformin. Changes in glycemic control may occur in such patients, with either hyperglycemia or hypoglycemia possible. Any change in therapy of type 2 diabetes should be undertaken with care and appropriate monitoring. When colesevelam is coadministered with glipizide ER, maximum plasma concentration and total exposure to glipizide is reduced. Therefore, glipizide and metformin hydrochloride tablets should be administered at least 4 hours prior to colesevelam. Glipizide and Metformin Hydrochloride Tablets in Patients with Inadequate Glycemic Control on Diet and Exercise Alone For patients with type 2 diabetes whose hyperglycemia cannot be satisfactorily managed with diet and exercise alone, the recommended starting dose of glipizide and metformin hydrochloride tablets is 2.5 mg/250 mg once a day with a meal. For patients whose FPG is 280 mg/dL to 320 mg/dL a starting dose of glipizide and metformin hydrochloride tablets, 2.5 mg/500 mg twice daily should be conside\n</retrieved_context>",
+  "user": "What is the recommended starting dose of Lisinopril?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"00b266d9-ac4a-e931-e063-6294a90a6a0b\"], \"starting_dose\": \"10 mg once daily\", \"conflict\": null}",
+  "elapsed_ms": 2728,
+  "usage": {
+    "input_tokens": 1853,
+    "output_tokens": 55
+  },
+  "logprobs": null
+}

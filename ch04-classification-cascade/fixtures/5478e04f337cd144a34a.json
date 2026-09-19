@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIts empirical formula is C 7 H 8 ClN 3 O 4 S 2 and its structural formula is: Hydrochlorothiazide, USP is a white, or practically white, crystalline powder with a molecular weight of 297.73, which is slightly soluble in water, but freely soluble in sodium hydroxide solution. Lisinopril and hydrochlorothiazide tablets, USP are available for oral use in three tablet combinations of lisinopril with hydrochlorothiazide: lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg containing 10 mg lisinopril and 12.5 mg hydrochlorothiazide; lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg containing 20 mg lisinopril and 12.5 mg hydrochlorothiazide; and, lisinopril and hydrochlorothiazide tablets 20 mg/25 mg containing 20 mg lisinopril and 25 mg hydrochlorothiazide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"This passage contains three prominent features: (1) Chemical and structural information about hydrochlorothiazide, including its empirical formula (C7H8ClN3O4S2) and molecular weight (297.73); (2) Physical/pharmaceutical properties describing it as a white crystalline powder with solubility characteristics; (3) Detailed listing of available dosage forms and tablet combinations with specific strengths (10mg/12.5mg, 20mg/12.5mg, and 20mg/25mg). The two most plausible categories are: (a) 'description' - this section provides the chemical name, empirical formula, structural formula, physical appearance, molecular weight, and solubility information which are core elements of drug description; (b) 'how_supplied' - the passage lists available tablet combinations, strengths, and forms. The deciding factor is that the primary and dominant content is the chemical and physical characterization of the active ingredients (especially hydrochlorothiazide's formula, appearance, and solubility), which is the essence of 'description.' While the passage does mention how the product is supplied, the supply information is secondary and incomplete (no mention of packaging size, storage conditions, or NDC codes). The chemical and pharmaceutical property details are the focus and purpose of this section.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"Although the passage lists available tablet combinations and strengths, the dominant content is the chemical characterization (empirical formula, structural formula, molecular weight, physical appearance, solubility properties) of the drug substance, which is definitional for 'description.' The 'how_supplied' information is ancillary and lacks typical supply details like packaging quantities and storage conditions.\"}",
+  "elapsed_ms": 7342,
+  "usage": {
+    "input_tokens": 1054,
+    "output_tokens": 392
+  },
+  "logprobs": null
+}

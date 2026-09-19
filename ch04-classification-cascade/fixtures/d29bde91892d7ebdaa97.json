@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIn particular, some evidence suggests that selective serotonin reuptake inhibitors (SSRIs) can cause such untoward sexual experiences. Reliable estimates of the incidence and severity of untoward experiences involving sexual desire, performance and satisfaction are difficult to obtain, however, in part because patients and physicians may be reluctant to discuss them. Accordingly, estimates of the incidence of untoward sexual experience and performance cited in product labeling, are likely to underestimate their actual incidence. Table 5 below displays the incidence of sexual side effects reported by at least 2% of patients taking Sertraline hydrochloride in placebo-controlled trials. TABLE 5 *Denominator used was for male patients only (N=1118 Sertraline hydrochloride;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1: Three prominent features of this document:\\n(1) Discussion of sexual dysfunction as an untoward effect of SSRIs, specifically mentioning sertraline hydrochloride\\n(2) Reference to 'Table 5' displaying incidence of sexual side effects reported by patients in placebo-controlled trials\\n(3) Quantitative data on adverse events (at least 2% of patients experiencing sexual side effects)\\n\\nStep 2: Two most plausible categories:\\n- adverse_reactions: This passage explicitly discusses untoward experiences (sexual dysfunction) observed in patients taking the drug, provides incidence data from clinical trials, and presents a table of side effects. This is classic adverse reaction content.\\n- drug_interactions: Could be considered if the passage were discussing how SSRIs interact with other substances to produce sexual dysfunction, but the passage does not mention concurrent drugs or foods, only the direct effect of the SSRI itself on patients.\\n\\nStep 3: Classification decision:\\nThe winning category is adverse_reactions. The passage is unambiguously describing side effects (sexual dysfunction) observed in patients during clinical trials, providing incidence rates and acknowledging the difficulty in capturing true prevalence of these adverse events. The presence of 'Table 5' documenting incidence of sexual side effects in placebo-controlled trials is definitive for adverse_reactions classification. Drug_interactions is ruled out because there is no mention of concurrent use with other drugs or foods—the sexual effects are presented as direct consequences of sertraline treatment itself.\",\"classification\":\"adverse_reactions\",\"runner_up\":\"drug_interactions\",\"ruled_out_because\":\"The passage discusses sexual dysfunction as a direct adverse reaction to sertraline, not as an effect resulting from interaction with other drugs or foods. The absence of any concurrent substance mention and the focus on incidence rates from controlled trials make this clearly an adverse_reactions classification rather than drug_interactions.\"}",
+  "elapsed_ms": 5106,
+  "usage": {
+    "input_tokens": 966,
+    "output_tokens": 420
+  },
+  "logprobs": null
+}

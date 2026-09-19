@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The passage contains several key indicators: (1) It lists specific adverse reactions including angioedema, bullous pemphigoid, erythema multiforme, Stevens-Johnson syndrome, respiratory depression, anxiety, insomnia, nausea, pain, and sweating. (2) It explicitly references a section number (6.1 Clinical Trials Experience) which is the standard FDA label section for adverse reactions. (3) It discusses postmarketing reports of adverse events and reactions following discontinuation. The two most plausible categories are: (1) 'adverse_reactions' - This is the most direct fit because the entire passage is enumerating and discussing side effects, undesirable outcomes, and clinical trial safety data. The section heading 'Clinical Trials Experience' under section 6 is the standard FDA location for adverse reactions reporting. (2) 'overdosage' - This could theoretically apply since respiratory depression and severe reactions are mentioned, but the passage is not discussing overdose specifically, toxicity thresholds, or overdose management. Instead, it covers reactions observed in normal clinical trials and postmarketing surveillance. The passage specifically states it is about adverse reaction rates from clinical trials, not overdose scenarios. Adverse_reactions clearly wins because the content explicitly enumerates side effects (angioedema, Stevens-Johnson syndrome, respiratory depression, anxiety, insomnia, nausea, pain, sweating) and discusses their frequency in clinical trials. The overdosage category is ruled out because there is no discussion of excessive dosing, overdose management, specific toxic doses, or treatment of overdose.\",\"classification\":\"adverse_reactions\",\"runner_up\":\"overdosage\",\"ruled_out_because\":\"The passage discusses adverse reactions observed in clinical trials and postmarketing surveillance, not overdose scenarios. There is no mention of excessive dosing, overdose management, toxic dose thresholds, or treatment of overdose. The section explicitly references 'Clinical Trials Experience' which is the standard FDA label section for adverse reactions reporting.\"}",
+  "elapsed_ms": 6336,
+  "usage": {
+    "input_tokens": 983,
+    "output_tokens": 443
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Specific dosing instructions including frequency ('once a day every 24 hours'), duration ('every day for 14 days'), and route ('swallow 1 tablet with a glass of water before eating in the morning'); (2) Clear administration method details ('swallow whole. Do not chew or crush tablets'); (3) Dosing constraints and limitations ('do not take more than 1 tablet a day', 'do not use for more than 14 days unless directed by your doctor', repeated course spacing 'every 4 months'). Step 2 - Two most plausible categories: (a) 'dosage_and_administration' - This passage is entirely comprised of how much to take (1 tablet), how often (once daily), for how long (14 days), by what route (swallow with water before eating), special administration notes (don't chew/crush), and frequency of repeated courses (every 4 months). This is the canonical content of dosage and administration sections. (b) 'indications_and_usage' - While there is a passing reference to 'Heartburn' and 'complete relief of symptoms', the passage does not establish indications; it only assumes the reader knows what condition is being treated and focuses entirely on how to administer the drug. Step 3 - Winner and ruling: 'dosage_and_administration' wins decisively. The runner-up 'indications_and_usage' is ruled out because the passage contains no actual indication statements, approved uses, or therapeutic purposes - it merely mentions 'heartburn' in the context of telling parents to ask a doctor about pediatric use, not as a stated indication for the product itself. The entire substantive content is unambiguously dosing and administration guidance.\",\"classification\":\"dosage_and_administration\",\"runner_up\":\"indications_and_usage\",\"ruled_out_because\":\"While 'heartburn' is mentioned, it appears only in a pediatric warning ('Heartburn in children may sometimes be caused by a serious condition'), not as a stated indication for the product. The passage contains zero indication/usage statements and is entirely devoted to dosing schedules, administration methods, route, frequency, duration, and dosing limitations.\"}",
+  "elapsed_ms": 7100,
+  "usage": {
+    "input_tokens": 1011,
+    "output_tokens": 507
+  },
+  "logprobs": null
+}

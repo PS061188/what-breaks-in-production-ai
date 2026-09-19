@@ -345,6 +345,36 @@ Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 status rule alone 17%, the book's six-rule protocol 33%  
 Code: [`ch06-state-mismatch/`](ch06-state-mismatch/)
 
+### Experiment 6.2
+
+**Does the context-integrity block do anything?**  
+wrong-drug dose used 0/30 with or without it; conflict reported 30/30 either way (the schema has a field for it); the block turns "both doses" into "no dose" in 22/30; correction in conversation used 27/30 → 30/30  
+Code: [`ch06-state-mismatch/fix_integrity.py`](ch06-state-mismatch/fix_integrity.py)
+
+### Experiment 6.3
+
+**Can a prompt cope with no status field at all?**  
+"newest wins" rule vs neutral, headers carry a date only: superseded label used 20/30 in both arms (4,4,4,4,4); 15/15 where the current label was not retrieved; the one retrieved-and-wrong drug's newest label has no starting dose, so the model used the older one that did; "relied on newest" 9/30 → 25/30 changed what it reported, not what it answered  
+Code: [`ch06-state-mismatch/fix_nostatus.py`](ch06-state-mismatch/fix_nostatus.py)
+
+### Experiment 6.4
+
+**The freshness monitor the book recommends instead of top-k overlap**  
+newest last_verified among top-3: catches 32/40 new-label weeks (overlap monitor: 20/40), 0/1,381 false alarms; but as a stall alarm it fires 35, 24, 19 and 6 times in healthy operation at 4-, 13-, 26- and 52-week windows — healthy gaps between advances run 1 to 274 weeks, median 24  
+Code: [`ch06-state-mismatch/fix_monitoring_date.py`](ch06-state-mismatch/fix_monitoring_date.py)
+
+### Experiment 6.5
+
+**Scenario 3: the world moved inside the model**  
+memory alone disagreed with the current label for 2 of 6 drugs every run (Prednisone, Sertraline); with the current label in context, 0/30 answers stated a dose the label does not; with a label whose doses had been changed by code, the document won 18/30, memory won 0/30, 6 withheld, 6 undecidable (doubled dose equals a real one)  
+Code: [`ch06-state-mismatch/fix_memory.py`](ch06-state-mismatch/fix_memory.py)
+
+### Experiment 6.6
+
+**Scenario 2, the model's half: reconciling a draft with a record that changed**  
+draft from the original label, finalised against a label with every dose doubled: told of the change, new dose only 28/30, stale 0/30; not told, 25/30, stale 0/30, 3 withheld; "noted a change" 30/30 either way (schema field). Everything depends on the re-read having happened  
+Code: [`ch06-state-mismatch/fix_reconcile.py`](ch06-state-mismatch/fix_reconcile.py)
+
 ### Experiment 7.1
 
 **The failure that did not happen, and the fix that harmed**  

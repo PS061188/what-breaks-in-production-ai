@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nInitial Treatment Dosage for Adults Major Depressive Disorder –Sertraline hydrochloride treatment should be administered at a dose of 50 mg once daily. While a relationship between dose and effect has not been established for major depressive disorder, OCD, panic disorder, PTSD or social anxiety disorder, patients were dosed in a range of 50-200 mg/day in the clinical trials demonstrating the effectiveness of Sertraline hydrochloride for the treatment of this indication. Consequently, a dose of 50 mg, administered once daily, is recommended as the initial therapeutic dose. Patients not responding to a 50 mg dose may benefit from dose increases up to a maximum of 200 mg/day. Given the 24 hour elimination half-life of sertraline hydrochloride, dose changes should not occur at intervals of less than 1 week.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features: (1) Explicitly states 'Initial Treatment Dosage for Adults' in the heading; (2) Provides specific dose recommendations: 50 mg once daily as initial dose, with titration up to 200 mg/day; (3) Includes timing and interval guidance ('24 hour elimination half-life', 'dose changes should not occur at intervals of less than 1 week'). Step 2 - Most Plausible Categories: (a) 'dosage_and_administration' - This passage directly addresses how much to give (50-200 mg/day), how often (once daily), and when to adjust doses (1-week intervals). It is quintessentially dosing guidance. (b) 'indications_and_usage' - While the passage mentions conditions treated (MDD, OCD, panic disorder, PTSD, social anxiety disorder), it is subordinate context; the primary focus is on dosing parameters for those conditions, not on establishing when the drug should be used. Step 3 - Winner and Ruling: 'dosage_and_administration' wins decisively. The passage is structured as dosing instructions with specific numerical values, frequency, and adjustment protocols. The mention of indications is merely the clinical context in which these doses apply, not a description of the conditions themselves or approval for use. The runner-up is ruled out because the passage does not establish or argue for the conditions the drug treats; it assumes that context and provides only dosing details.\",\"classification\":\"dosage_and_administration\",\"runner_up\":\"indications_and_usage\",\"ruled_out_because\":\"While the passage mentions conditions like major depressive disorder and OCD, it does not describe or justify indications for use. Instead, it assumes these are approved indications and focuses exclusively on how much to dose and how to titrate, which is the core function of dosage_and_administration.\"}",
+  "elapsed_ms": 5552,
+  "usage": {
+    "input_tokens": 986,
+    "output_tokens": 436
+  },
+  "logprobs": null
+}

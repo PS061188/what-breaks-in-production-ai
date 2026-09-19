@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nDosage adjustments should be made to maintain patients on the lowest effective dose and patients should be periodically reassessed to determine the need for long-term treatment. Obsessive-Compulsive Disorder and Panic Disorder –It is generally agreed that OCD and Panic Disorder require several months or longer of sustained pharmacological therapy beyond response to initial treatment. Systematic evaluation of continuing Sertraline hydrochloride for periods of up to 28 weeks in patients with OCD and Panic Disorder who have responded while taking Sertraline hydrochloride during initial treatment phases of 24 to 52 weeks of treatment at a dose range of 50-200 mg/day has demonstrated a benefit of such maintenance treatment (see Clinical Trials under CLINICAL PHARMACOLOGY ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Discussion of 'dosage adjustments' and maintaining patients on 'lowest effective dose'; (b) Specification of dose ranges ('50-200 mg/day') and treatment duration ('24 to 52 weeks'); (c) Reference to clinical evaluation periods and maintenance treatment protocols. Step 2 - Most plausible categories: (1) 'dosage_and_administration' - The passage explicitly discusses dose adjustments, dose ranges, and duration of therapy, which are core elements of how to administer the drug. (2) 'indications_and_usage' - The passage mentions OCD and Panic Disorder (conditions being treated), though this is secondary to the dosing information. Step 3 - Decision: While OCD and Panic Disorder are mentioned, they serve as context for the dosing recommendations rather than being the primary focus. The passage is fundamentally about how to manage dosing over time (adjustments, maintenance, lowest effective dose), not about what conditions warrant treatment initiation. The specific numerical dose ranges and treatment duration periods are hallmark dosage_and_administration content.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"Although OCD and Panic Disorder are named, they appear incidentally as context for the dosing protocol rather than as the main subject. The passage does not describe why these conditions require treatment, but rather prescribes how to dose and maintain treatment once initiated. The emphasis on 'dose range,' 'adjustments,' 'maintenance treatment,' and specific week/mg parameters is definitively dosage_and_administration language.\"}",
+  "elapsed_ms": 5721,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 378
+  },
+  "logprobs": null
+}

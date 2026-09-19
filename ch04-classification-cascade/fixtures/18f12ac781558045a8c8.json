@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHemodialysis 125 150 200 250 350 Creatinine clearance (CLCr) is diffcult to measure in outpatients. In patients with stable renal function, creatinine clearance can be reasonably well estimated using the equation of Cockcroft and Gault: The use of Gabapentin in patients less than 12 years of age with compromised renal function has not been studied. 2.4 Dosage in Elderly Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection, and dose should be adjusted based on creatinine clearance values in these patients. 2.5 Administration Information Administer Gabapentin orally with or without food. Gabapentin capsules should be swallowed whole with water.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Explicit mention of dose adjustments based on creatinine clearance values and a hemodialysis clearance table showing dose modifications across different renal function levels; (2) Specific guidance on elderly patients with decreased renal function requiring dose selection based on creatinine clearance; (3) Administration information specifying oral route and capsule handling instructions.\\n\\nStep 2 - Two most plausible categories: (a) 'dosage_and_administration' - The passage directly addresses how much drug to give (dose adjustments via a clearance table), how often (implicitly through clearance-based dosing), special populations requiring dose modification (elderly, renal impairment), and administration route/method (oral, swallow whole). (b) 'geriatric_use' - The passage includes a dedicated section (2.4) on elderly patients and their increased likelihood of decreased renal function requiring special dosing considerations.\\n\\nStep 3 - Determining the winner: While geriatric_use is mentioned, the primary content is dosage guidance. The passage is fundamentally about HOW TO DOSE the medication in specific populations (renal impairment, elderly, pediatric age groups) and HOW TO ADMINISTER it (route and method). The elderly section is a subsection within dosage adjustment guidance, not a comprehensive discussion of geriatric pharmacology or outcomes. The hemodialysis clearance table and Cockcroft-Gault dosing instructions are core dosage_and_administration content.\\n\\nRuled out: geriatric_use is ruled out because while elderly patients are mentioned, the focus is not on age-specific safety or efficacy data, but rather on dose adjustment methodology that happens to apply to elderly patients due to their renal function status. The content is primarily prescriptive dosing guidance, not descriptive geriatric use information.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"geriatric_use\",\"ruled_out_because\": \"Although the passage includes a section on elderly patients, it is fundamentally about dose adjustment methodology and administration instructions rather than characterizing geriatric use, safety, or efficacy. The elderly section is a dosing subsection, not standalone geriatric pharmacology content.\"}",
+  "elapsed_ms": 7370,
+  "usage": {
+    "input_tokens": 976,
+    "output_tokens": 513
+  },
+  "logprobs": null
+}

@@ -2,6 +2,11 @@
 
 > The model answered correctly. The thing it read had stopped being true.
 
+> **Manuscript note, 19 Sep 2026.** The book now presents two of this folder's fixes in Chapter 2, because
+> neither is a timing failure: history truncation (`broken.py` / `fixed.py`) is Chapter 2's fix 7, "cut long
+> input at a sentence or heading boundary", and session isolation is Chapter 2's fix 8, with a brief pointer
+> left in Chapter 6 for the write side. The code and fixtures stay in this folder so recorded runs keep replaying.
+
 ## What this measures
 
 Chapter 6 lives in the integration layer, so none of its four fixes is a prompt
@@ -14,15 +19,25 @@ one nobody had tested: **conversation history truncation**.
 | `broken.py` / `fixed.py` | 3 — history management with semantic boundary detection | naive character cut vs boundary-aware cut, at the same budget |
 | `fix_freshness.py` | 1 — metadata-filtered retrieval with freshness scoring | the book's filter as literally written, freshness ranking, and a filter whose flag is stale |
 | `fix_monitoring.py` | 2 — retrieval freshness monitoring | 398 weekly runs, alert at 70% top-k overlap. No model calls |
+| `fix_monitoring_date.py` | 2 — the newest-date alternative the chapter recommends | same 398 weeks; arrival recall vs the overlap monitor, and how often "stops advancing" fires when nothing is wrong |
 | `fix_prompt.py` | the chapter's prompt template | the staleness protocol vs a neutral prompt, on honestly-labelled stale documents |
 | — | 4 — session isolation at the infrastructure layer | **not implemented as written.** See below |
+| `fix_nostatus.py` | a prompt for corpora with no status field ("newest wins") | unfiltered top-3 with date-only headers, neutral vs newest-wins, split by whether the current label was retrieved |
+| `fix_reconcile.py` | scenario 2, the model's half — finalising a draft against a changed record | told vs not told, 5 runs; the code half (re-read + compare) is by construction |
+| `fix_memory.py` | scenario 3 — the model's own training is stale | memory alone vs the current label vs a label the world moved away from, 5 runs |
+| `fix_integrity.py` | the prompt's CONTEXT INTEGRITY CHECK block | three built failures (wrong drug, conflicting documents, corrected conversation), status-only prompt with vs without the block, 5 runs |
 
 ```bash
 python broken.py         # naive truncation
 python fixed.py          # boundary-aware truncation
 python fix_freshness.py
 python fix_monitoring.py # no API key needed, no fixtures, ~3s
+python fix_monitoring_date.py # same, ~4s
 python fix_prompt.py
+python fix_integrity.py   # 180 calls live, $0.46; replays free
+python fix_nostatus.py    # 60 calls live, $0.19; replays free
+python fix_memory.py      # 90 calls live, $0.08; replays free
+python fix_reconcile.py   # 90 calls live, $0.15; replays free
 ```
 
 All of it replays from `fixtures/` for free. `--live` re-records.
@@ -337,3 +352,116 @@ drug is ACTIVE; the rest are genuine superseded versions. Rebuild with
 
 `data/labels.json` — 12 labels with named sections; the dosing sections are what
 Fix 3 truncates.
+
+## The context-integrity block, tested on the failures it names (Sep 2026)
+
+`fix_prompt.py` could not show the last block of the prompt doing anything,
+because its test set never contained the failures the block describes. So
+`fix_integrity.py` builds each one and runs the status-only prompt with and
+without the block, five runs, six drugs, Claude Haiku 4.5. Scoring is dose-value
+set arithmetic as elsewhere in the chapter.
+
+| probe | without the block | with the block |
+|---|---|---|
+| A. another drug's ACTIVE label in the context — answer used its dose | 0/30 (0,0,0,0,0) | 0/30 (0,0,0,0,0) |
+| B. two ACTIVE labels, second with every dose doubled — conflict reported | 30/30 | 30/30 |
+| B. — gave both doses | 25/30 (5,5,5,5,5) | 8/30 (2,1,2,1,2) |
+| B. — gave the doubled dose alone | 3/30 (1,1,1,0,0) | 0/30 |
+| B. — gave no dose | 2/30 (0,0,0,1,1) | 22/30 (4,5,4,5,4) |
+| C. dose corrected in a later conversation turn — used the corrected value | 27/30 (6,6,5,4,6) | 30/30 (6,6,6,6,6) |
+| C. — used the corrected-away value | 0/30 | 0/30 |
+
+**Read it as:** the model made none of the three mistakes without the block, so
+the block prevented nothing. Its one measurable effect is on what happens after
+a conflict is noticed: withhold the dose rather than list both. Two caveats.
+The output schema carries a `conflict` field in both arms, which is itself an
+invitation to report one — that is why the status-only arm reports 30/30. And
+probe B's conflict is synthetic (doses doubled by code); the corpus has no two
+ACTIVE labels that genuinely disagree on a starting dose.
+
+## A prompt with no status field: "newest wins" (Sep 2026)
+
+Prompt 6-1 reads a `status` flag most corpora do not have. `fix_nostatus.py`
+hands the model the same unfiltered top-3 with headers carrying a doc_id and a
+date only, and compares a neutral prompt with one that says: group documents by
+subject, rely only on the newest, say which you relied on and its date, and do
+not claim currency beyond that date. 5 runs, 6 drugs, Haiku 4.5.
+
+| | neutral | newest wins |
+|---|---|---|
+| used a superseded label, all drugs | 20/30 (4,4,4,4,4) | 20/30 (4,4,4,4,4) |
+| — where the current label was NOT in the top-3 (3 drugs) | 15/15 | 15/15 |
+| — where the current label WAS in the top-3 (3 drugs) | 5/15 | 5/15 |
+| relied on the newest document it was given | 9/30 | 25/30 |
+| stated an as-of date matching the document it relied on | 30/30 | 30/30 |
+
+**Read it as:** a prompt can only choose among what it was handed. For three of
+six drugs the current label was never retrieved, and both prompts answered from
+a superseded one every time — no wording can know a newer document exists
+outside the context. The 5/15 in the other bucket is one drug, Sertraline: its
+newest retrieved label carries no starting dose, so the model used the older
+label that did, in all five runs, under a rule that told it not to, and reported
+that it had. The rule changed what the model said it relied on, not the dose it
+gave. The as-of date is a schema field in both arms, which is why both score
+30/30. What survives: ask for the source document and its date as structured
+output, and derive the flag at ingest instead of asking the prompt to.
+
+## The newest-date monitor, measured (Sep 2026)
+
+The chapter's fix 2 ends by recommending a different monitor from the one it
+measured: track the newest `last_verified` among the documents each canonical
+query returns, and alert when it stops advancing. `fix_monitoring_date.py` runs
+it over the same 398 weeks and the same top-3.
+
+| | top-k overlap (fix_monitoring.py) | newest date (this script) |
+|---|---|---|
+| new-label weeks caught, of 40 | 20 | 32 |
+| false alarms in 1,381 quiet weeks | 0 | 0 |
+
+The 12 extra catches are weeks where a new label entered a top-3 that was not
+yet full, so nothing was displaced and overlap stayed at 100%. Overlap detects
+displacement; the date detects arrival. The 8 remaining misses are shared: the
+new label was not in the top-3 at all, which no retrieval-side monitor can see.
+
+**As a stall alarm it does not work on this corpus.** Healthy gaps between
+one advance and the next run from 1 to 274 weeks, median 24. "Stops advancing"
+therefore fires during normal operation: 35 times at a 4-week window, 24 at 13,
+19 at 26, 6 at 52 — and a real stall stays invisible for the whole window. An
+ingestion stall has to be detected at the ingestion pipeline (last successful
+ingest), not by watching retrieval results.
+
+## Scenario 3: memory against the document (Sep 2026)
+
+`fix_memory.py`, three arms, six drugs, five runs, Haiku 4.5.
+
+| arm | result |
+|---|---|
+| memory only, no document | answer contained a dose the current label states: 20/30 (4,4,4,4,4); stated a dose the label does not: 10/30 (2,2,2,2,2) — Prednisone every run (memory says 5–10 mg), Sertraline every run (memory says 50 mg; the current label excerpt carries no starting dose) |
+| current label in context, "follow the document" | in label 25/30; stated a dose not in the label 0/30; no dose 5/30 — Sertraline every run, correctly, since the document has none |
+| label with every dose doubled by code | document won 18/30 (3,4,4,3,4); memory won 0/30; no dose 6/30; undecidable 6/30 — Furosemide "40 to 80 mg" and Lisinopril "20 mg" are doubled values that coincide with real ones, so the scoring cannot tell which side they came from |
+
+**Read it as:** put the current document in front of the model and tell it to
+follow the document, and memory never overrode it in this test. Without a
+document, memory disagreed with the current label for two drugs in six, every
+run. "Not in label" is not the same as wrong — for Sertraline the label excerpt
+simply lacks a starting dose — so the honest claim is disagreement with the
+document, not error.
+
+## Scenario 2, the model's half (Sep 2026)
+
+`fix_reconcile.py`. For each drug a draft answer is generated from the real
+label; the "record" then changes (every dose doubled by code); the draft and the
+changed record go back to the model for finalising. 6 drugs, 5 runs.
+
+| probe | new dose only | stale dose only | withheld | noted a change |
+|---|---|---|---|---|
+| told the record changed | 28/30 (4,6,6,6,6) | 0/30 | 0/30 | 30/30 |
+| not told | 25/30 (4,6,4,5,6) | 0/30 | 3/30 | 30/30 |
+
+The remaining 2 per probe are undecidable: a doubled dose that equals a real
+one. **Read it as:** once the current record is in front of it, the model
+reconciles; it never wrote the stale dose through, told or not. The "noted a
+change" column is a schema field in both probes. The half that cannot be
+measured here is how often the record moves in the gap — production telemetry —
+and the half that needs no measurement is a model that was never handed the
+current record, which cannot notice anything.

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFollowing overdosage, patients have experienced primarily gastrointestinal symptoms including stomach and abdominal pain, vomiting, and diarrhea. Rash, hyperactivity, or drowsiness have also been observed in a small number of patients. In the case of overdosage, discontinue amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL, treat symptomatically, and institute supportive measures as required. If the overdosage is very recent and there is no contraindication, an attempt at emesis or other means of removal of drug from the stomach may be performed. A prospective study of 51 pediatric patients at a poison control center suggested that overdosages of less than 250 mg/kg of amoxicillin are not associated with significant clinical symptoms and do not require gastric emptying.1 Interstitial nephritis resulting in oliguric renal failure has been reported in a small number of patients after overdosage with amoxicillin.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n1. The passage explicitly discusses overdosage symptoms and management (gastrointestinal symptoms, rash, hyperactivity, drowsiness)\\n2. It provides treatment recommendations for overdose cases (discontinue drug, treat symptomatically, supportive measures, gastric emptying considerations)\\n3. It includes clinical data from a poison control center study regarding safe dosage thresholds and potential serious complications (interstitial nephritis)\\n\\nStep 2 - Evaluating top two plausible categories:\\n- OVERDOSAGE: This is the primary focus. The passage explicitly addresses what happens after overdosage, symptoms observed, management strategies, and clinical evidence about overdose thresholds. The opening phrase 'Following overdosage' and the structure detailing symptoms and treatment responses are characteristic of overdosage sections.\\n- ADVERSE_REACTIONS: While some symptoms mentioned (rash, hyperactivity, drowsiness) could appear in adverse reactions, the context is distinctly about excessive dosing scenarios, not routine adverse effects from normal therapeutic use. The mention of interstitial nephritis is framed as an overdose-related complication, not a standard adverse reaction.\\n\\nStep 3 - Determining the winner:\\nOVERDOSAGE wins decisively. The passage is structured as a complete overdosage section with: (1) presentation of overdose symptoms, (2) management instructions, (3) specific dosage thresholds from clinical studies, and (4) serious complications from excessive exposure. The language 'Following overdosage,' 'in the case of overdosage,' and 'after overdosage' makes the category unambiguous. While some individual symptoms could exist in adverse reactions, the entire narrative is about what to do when too much drug is taken, which is the definition of the overdosage category.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"Although rash, hyperactivity, and drowsiness are symptoms that could appear in adverse_reactions, the entire passage is contextualized within overdose scenarios (repeated use of 'overdosage,' 'overdose,' treatment protocols for excessive intake). Adverse_reactions would discuss side effects occurring at therapeutic or normal exposure levels, whereas this passage specifically addresses pathology resulting from excessive dosing and includes poison control center data on dosage thresholds.\"}",
+  "elapsed_ms": 6518,
+  "usage": {
+    "input_tokens": 1030,
+    "output_tokens": 542
+  },
+  "logprobs": null
+}

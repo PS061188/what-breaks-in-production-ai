@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdminister once daily, preferably on an empty stomach, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours before or after drugs that are known to interfere with absorption. (2.1) Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption. (2.1) Advise patients to stop biotin and biotin-containing supplements at least 2 days before assessing TSH and/or T4 levels. (2.2) Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. Peak therapeutic effect may not be attained for 4 to 6 weeks. (2.2) See full prescribing information for dosing in specific patient populations.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Most prominent features: (a) Specific timing instructions for administration (once daily, empty stomach, one-half to one hour before breakfast with full glass of water); (b) Drug interaction guidance (at least 4 hours before/after interfering drugs, timing with foods affecting absorption); (c) Dosing parameters and factors affecting dose (age, body weight, cardiovascular status, concomitant medications, 4-6 week onset). 2. Two most plausible categories: (a) DOSAGE_AND_ADMINISTRATION - The passage overwhelmingly contains instructions on how much to give (starting dose depends on factors), how often (once daily), by what route (oral with water), and when/how to administer (empty stomach, timing relative to meals and other drugs). This is the core content. (b) DRUG_INTERACTIONS - The passage includes guidance about biotin supplements interfering with lab tests and drugs interfering with absorption. However, this is secondary content supporting the administration instructions rather than being the primary focus. 3. Ruling: DOSAGE_AND_ADMINISTRATION wins decisively. The passage is almost entirely composed of administration technique (timing, food state, hydration), dosing logic (factors determining starting dose), and temporal relationships governing medication timing. The drug interaction elements (4-hour separation, biotin timing for labs) are presented as constraints within the dosage/administration framework, not as a comprehensive discussion of drug interactions. The biotin guidance is framed as part of proper administration protocol, not as an independent interaction section.\",\"classification\":\"dosage_and_administration\",\"runner_up\":\"drug_interactions\",\"ruled_out_because\":\"While the passage contains drug interaction elements (timing relative to interfering drugs, biotin supplements affecting TSH/T4 measurement), these are presented as secondary considerations that inform administration technique rather than as the primary focus. The passage is predominantly about how, when, and under what conditions to administer the drug, with interaction guidance serving an auxiliary role in execution of those instructions.\"}",
+  "elapsed_ms": 6954,
+  "usage": {
+    "input_tokens": 982,
+    "output_tokens": 445
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe principal signs and symptoms of overdose with furosemide are dehydration, blood volume reduction, hypotension, electrolyte imbalance, hypokalemia and hypochloremic alkalosis, and are extensions of its diuretic action. The acute toxicity of furosemide has been determined in mice, rats and dogs. In all three, the oral LD 50 exceeded 1000 mg/kg body weight, while the intravenous LD 50 ranged from 300 to 680 mg/kg. The acute intragastric toxicity in neonatal rats is 7 to 10 times that of adult rats. The concentration of furosemide in biological fluids associated with toxicity or death is not known. Treatment of overdosage is supportive and consists of replacement of excessive fluid and electrolyte losses.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The document describes signs and symptoms of overdose (dehydration, blood volume reduction, hypotension, electrolyte imbalance), presents animal toxicity data (LD50 values in mice, rats, and dogs), and discusses treatment approaches (supportive care, fluid and electrolyte replacement). The primary focus is clearly on what happens when too much furosemide is taken and how to manage it. The three most prominent features are: (1) enumeration of overdose signs and symptoms; (2) presentation of acute toxicity data from animal studies; (3) discussion of treatment management for overdose. The two most plausible categories are overdosage and adverse_reactions. Overdosage is most plausible because the passage explicitly addresses 'overdose,' discusses toxicity thresholds (LD50 values), and provides management strategy for excess intake. Adverse_reactions could apply because dehydration, electrolyte imbalance, and hypotension could be considered side effects, but the passage is specifically contextualized as overdose phenomena and toxicity data rather than typical adverse reactions observed in normal therapeutic use. The passage uses language like 'Treatment of overdosage' and presents LD50 data, which are classic overdosage section content. Adverse reactions would typically describe effects occurring at therapeutic or supratherapeutic doses during normal use, not toxicity thresholds in animal models and overdose management strategies.\",\"classification\":\"overdosage\",\"runner_up\":\"adverse_reactions\",\"ruled_out_because\":\"While some of the signs (dehydration, electrolyte imbalance) could theoretically appear in adverse_reactions, this passage is explicitly framed as overdosage content: it opens with 'overdose with furosemide,' presents LD50 toxicity data from animal studies, and concludes with 'Treatment of overdosage.' The focus on toxicity thresholds and overdose management strategy rather than effects during therapeutic use definitively classifies this as overdosage rather than adverse reactions.\"}",
+  "elapsed_ms": 6799,
+  "usage": {
+    "input_tokens": 983,
+    "output_tokens": 444
+  },
+  "logprobs": null
+}

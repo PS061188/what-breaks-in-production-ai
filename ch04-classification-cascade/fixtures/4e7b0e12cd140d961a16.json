@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nBecause of the increased prevalence of cardiovascular disease among the elderly, initiate levothyroxine sodium at less than the full replacement dose [see Dosage and Administration (2.3) and Warnings and Precautions (5.2) ] . Atrial arrhythmias can occur in elderly patients. Atrial fibrillation is the most common of the arrhythmias observed with levothyroxine overtreatment in the elderly.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Three prominent features inform classification: (1) The passage explicitly addresses elderly patients and age-related considerations ('increased prevalence of cardiovascular disease among the elderly', 'in elderly patients'); (2) It specifies dosing guidance tailored to this population ('initiate levothyroxine sodium at less than the full replacement dose'); (3) It references specific safety concerns in the elderly (atrial arrhythmias, atrial fibrillation from overtreatment). The two most plausible categories are: (a) GERIATRIC_USE - This passage is specifically about how levothyroxine is used in the elderly population, discussing age-specific dosing adjustments and age-specific adverse reactions. (b) DOSAGE_AND_ADMINISTRATION - The passage does include dosing information ('initiate levothyroxine sodium at less than the full replacement dose'). However, the dosage information is not standalone guidance; it exists entirely in the context of geriatric considerations. The passage is not primarily about how to dose the drug in general populations—it is specifically about how to dose it in elderly patients due to their particular risk profile. The geriatric-specific framing (repeated references to elderly patients, elderly-specific adverse reactions) makes this fundamentally a geriatric_use discussion that includes dosage as a supporting detail rather than a dosage_and_administration section covering general dosing practices.\",\"classification\":\"geriatric_use\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"While dosing information is present ('less than the full replacement dose'), it is presented exclusively in the context of elderly patient management. The passage's primary purpose is to explain geriatric-specific considerations (age-related cardiovascular prevalence, elderly-specific arrhythmia risks) rather to provide general dosage and administration guidance. The dosing recommendation is subordinate to the geriatric clinical context.\"}",
+  "elapsed_ms": 5470,
+  "usage": {
+    "input_tokens": 896,
+    "output_tokens": 426
+  },
+  "logprobs": null
+}

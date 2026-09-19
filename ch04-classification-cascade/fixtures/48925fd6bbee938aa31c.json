@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTable 3 presents clinically significant drug interactions with metformin hydrochloride tablets. Table 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets Carbonic Anhydrase Inhibitors Clinical Impact: Carbonic anhydrase inhibitors frequently cause a decrease in serum bicarbonate and induce non-anion gap, hyperchloremic metabolic acidosis. Concomitant use of these drugs with metformin hydrochloride tablets may increase the risk for lactic acidosis. Intervention: Consider more frequent monitoring of these patients. Examples: Topiramate, zonisamide, acetazolamide or dichlorphenamide. Drugs that Reduce metformin hydrochloride tablet Clearance Clinical Impact: Concomitant use of drugs that interfere with common renal tubular transport systems involved in the renal elimination of metformin (e.g., organic cationic transporter-2 [OCT2] / multidrug and toxin extrusion [MATE] inhibitors) could increase systemic exposure to metformin and may increase the risk for lactic acidosis [ see Clinical Pharmacology (12.3) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features of this document:\\n1. Structured table format presenting interactions between metformin and other drugs\\n2. Discussion of specific drug classes (carbonic anhydrase inhibitors, OCT2/MATE inhibitors) and their mechanisms of interaction with metformin\\n3. Clinical impacts described (increased lactic acidosis risk) and interventions recommended (monitoring frequency)\\n\\nStep 2 - Most plausible categories:\\n- Drug_interactions: This is explicitly a table about 'Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets.' The entire passage discusses how other drugs interact with metformin, what the clinical impact is, and what interventions should be taken. This is the prototypical drug_interactions section.\\n- Adverse_reactions: One might consider this if the focus were on side effects of metformin itself. However, the side effects mentioned (lactic acidosis) are consequences of drug interactions, not direct adverse reactions to metformin alone. The passage is not describing adverse reactions that patients experience from metformin; it's describing how co-administration with other drugs increases risk.\\n\\nStep 3 - Ruling out:\\nThe document is unambiguously about drug interactions. It explicitly identifies interacting drugs, explains mechanisms (renal tubular transport interference, bicarbonate reduction), and provides clinical guidance for managing these interactions. While adverse reactions are mentioned as a potential consequence, the primary purpose and structure is educational about interactions themselves, not a catalog of adverse reactions. The ruled-out category is clearly adverse_reactions because the focus is on drug-drug interactions rather than direct drug effects.\",\"classification\": \"drug_interactions\",\"runner_up\": \"adverse_reactions\",\"ruled_out_because\": \"While lactic acidosis is mentioned, it is presented as a consequence of drug interactions rather than as a primary adverse reaction profile. The document structure, table format, and content are explicitly organized around how metformin interacts with other drugs (mechanism, clinical impact, intervention), not around adverse reactions to metformin itself.\"}",
+  "elapsed_ms": 8387,
+  "usage": {
+    "input_tokens": 1066,
+    "output_tokens": 459
+  },
+  "logprobs": null
+}

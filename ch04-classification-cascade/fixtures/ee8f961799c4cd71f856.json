@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe following adverse reactions are also discussed elsewhere in the labeling: Lactic Acidosis [ see Boxed Warning and Warnings and Precautions (5.1) ]. Vitamin B12 Deficiency [ see Warnings and Precautions (5.2) ]. Hypoglycemia [ see Warnings and Precautions (5.3) For metformin hydrochloride tablets, the most common adverse reactions (>5.0%) are diarrhea, nausea/vomiting, flatulence, asthenia, indigestion, abdominal discomfort, and headache. ( 6.1 ) To report SUSPECTED ADVERSE REACTIONS, contact Granules Pharmaceuticals Inc at 1-877-770-3183 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch 6.1 Clinical Studies Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'The following adverse reactions are also discussed elsewhere' and lists specific adverse effects like lactic acidosis, vitamin B12 deficiency, and hypoglycemia. (2) It provides frequency data for common adverse reactions from metformin hydrochloride tablets, noting diarrhea, nausea/vomiting, flatulence, etc. are >5.0%. (3) It includes instructions for reporting suspected adverse reactions with contact information for the manufacturer and FDA. Step 2 - Most plausible categories: (a) 'adverse_reactions' - The entire passage is structured around discussing adverse reactions, their frequencies, cross-references to warnings, and reporting mechanisms. This is the core purpose of the text. (b) 'warnings_and_precautions' (not available in enum, but 'contraindications' could be a runner-up) - The passage does reference warnings and precautions, and discusses conditions to be aware of. However, this section is primarily about adverse reactions that occurred, not contraindications or absolute prohibitions. Step 3 - Decision: 'adverse_reactions' clearly wins. The passage is explicitly labeled as discussing 'adverse reactions,' provides frequency data from clinical trials, lists common side effects, and includes adverse reaction reporting information. The 'contraindications' category would be ruled out because this section describes side effects that can occur during treatment, not absolute situations where the drug must not be used. The document is definitively about observed reactions, not contraindications.\",\"classification\":\"adverse_reactions\",\"runner_up\":\"contraindications\",\"ruled_out_because\":\"This passage describes adverse reactions that occurred in clinical trials with frequency data (>5.0%), not situations where the drug is contraindicated. Contraindications would prohibit use entirely, whereas this documents observable side effects during use. The explicit framing 'adverse reactions are also discussed' and the clinical trial context confirm this is adverse_reactions, not contraindications.\"}",
+  "elapsed_ms": 8215,
+  "usage": {
+    "input_tokens": 1044,
+    "output_tokens": 446
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium is contraindicated in patients with: Hemorrhagic tendencies or blood dyscrasias Recent or contemplated surgery of the central nervous system or eye, or traumatic surgery resulting in large open surfaces [see Warnings and Precautions ( 5.8 )] Bleeding tendencies associated with: − Active ulceration or overt bleeding of the gastrointestinal, genitourinary, or respiratory tract − Central nervous system hemorrhage − Cerebral aneurysms, dissecting aorta − Pericarditis and pericardial effusions − Bacterial endocarditis Threatened abortion, eclampsia, and preeclampsia Unsupervised patients with conditions associated with potential high level of non-compliance Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding Hypersensitivity to warfarin or to any other components of this product (e.g., anaphylaxis) [see Adverse Reactions ( 6 )] Major regional or lumbar block anesthesia Malignant hypertension Pregnancy, except in women with mechanical heart valves ( 4 , 5.7 , 8.1 ) Hemorrhagic tendencies or blood dyscrasias ( 4 ) Recent or contemplated surgery of the central nervous system (CNS) or eye, or traumatic surgery resulting in large open surfaces ( 4 , 5.8 ) Bleeding tendencies associated with certain conditions ( 4 ) Threatened abortion, eclampsia, and preeclampsia ( 4 ) Unsupervised patients with potential high levels of non-compliance ( 4 ) Spinal puncture and other diagnostic or therapeutic procedures with potential for uncontrollable bleeding ( 4 ) Hypersensitivity to warfarin or any component of the product ( 4 ) Major regional or lumbar block anesthesia ( 4 ) Malignant hypertension ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(1) The passage begins with and is structured around explicit statements of when warfarin sodium 'is contraindicated in patients with,' followed by a bulleted list of specific conditions.\\n(2) The entire content consists of clinical situations where the drug must NOT be used (hemorrhagic tendencies, active bleeding, recent CNS surgery, pregnancy except in specific cases, etc.).\\n(3) The passage includes cross-references to regulatory sections (e.g., '[see Adverse Reactions (6)]', '[4, 5.7, 8.1]') typical of FDA labeling, and the format mirrors standard contraindications sections.\\n\\nStep 2: Two most plausible categories:\\n(A) CONTRAINDICATIONS: The document explicitly opens with 'is contraindicated in patients with' and lists only situations where the drug must be avoided entirely. This is the defining characteristic of a contraindications section.\\n(B) ADVERSE_REACTIONS: One might consider this if the passage were describing what happens when warfarin is used in these patient populations, but it does not. The passage prescriptively states when NOT to use the drug, not what reactions occur if it is used.\\n\\nStep 3: Classification decision:\\nCONTRAINDICATIONS wins decisively. The document is explicitly organized as a contraindications section, uses the precise regulatory language 'is contraindicated,' and enumerates absolute situations in which the drug is prohibited. ADVERSE_REACTIONS is ruled out because the passage does not describe clinical reactions, side effects, or adverse outcomes that occur in patients taking warfarin; it only specifies when the drug must not be administered at all.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"The passage prescriptively lists situations where warfarin must not be used (contraindications), not clinical reactions or side effects that occur when it is used (adverse reactions). The opening phrase 'is contraindicated in patients with' and the regulatory formatting definitively establish this as a contraindications section.\"}",
+  "elapsed_ms": 11261,
+  "usage": {
+    "input_tokens": 1237,
+    "output_tokens": 481
+  },
+  "logprobs": null
+}

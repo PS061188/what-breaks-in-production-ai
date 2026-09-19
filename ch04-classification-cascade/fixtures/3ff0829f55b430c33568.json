@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nEach canister contains a microcrystalline suspension of albuterol sulfate in propellant HFA‑134a (1,1,1,2‑tetrafluoroethane). It contains no other excipients. After priming, each actuation of the inhaler delivers 120 mcg of albuterol sulfate, USP in 75 mg of suspension from the valve and 108 mcg of albuterol sulfate, USP from the mouthpiece (equivalent to 90 mcg of albuterol base from the mouthpiece). Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray. Avoid spraying in eyes. Albuterol Sulfate chemical structure\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage specifies the active ingredient composition (albuterol sulfate in HFA-134a propellant), (b) It details the amount delivered per actuation (120 mcg from valve, 108 mcg from mouthpiece, equivalent to 90 mcg base), (c) It provides priming instructions with specific directions (4 sprays into air, shake before each spray, avoid eyes).\\n\\n2. Two most plausible categories: (a) 'how_supplied' - The passage discusses the physical formulation, propellant used, and delivery specifications (mcg per actuation, suspension form). This is characteristic of supply information that describes what is in each dose unit and how it's packaged/presented. (b) 'description' - The passage includes chemical composition (albuterol sulfate, HFA-134a, microcrystalline suspension) and mentions the chemical structure, which are classically descriptive elements.\\n\\n3. Decision: This is 'how_supplied' because while the passage does include some descriptive elements (the chemical components), its primary focus is on what each actuation delivers (dose amounts) and the practical specifications of the product as supplied (75 mg suspension, 108 mcg delivered from mouthpiece). The emphasis on the delivered dose per actuation (120 mcg from valve, 108 mcg from mouthpiece) is fundamentally about 'how supplied' - specifying the strength/quantity in each dose unit. The priming instructions are also supply/usage specifications. The 'description' category would focus more on chemical structure, molecular formula, or formulation rationale rather than delivery amounts and priming procedures.\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage mentions chemical composition (albuterol sulfate, HFA-134a propellant, microcrystalline suspension form), the dominant focus is on the delivered dose per actuation (108-120 mcg) and operational specifications (priming instructions). These are supply/packaging specifications rather than descriptive chemistry. Description would emphasize molecular structure and formulation principles, whereas this passage emphasizes what the patient receives with each use.\"}",
+  "elapsed_ms": 7858,
+  "usage": {
+    "input_tokens": 1019,
+    "output_tokens": 505
+  },
+  "logprobs": null
+}

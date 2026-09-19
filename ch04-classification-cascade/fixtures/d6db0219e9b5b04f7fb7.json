@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nCardiovascular: Cardiac arrest, myocardial infarction or cerebrovascular accident, possibly secondary to excessive hypotension in high-risk patients (see WARNINGS, Hypotension ), pulmonary embolism and infarction, worsening of heart failure, arrhythmias (including tachycardia, ventricular tachycardia, atrial tachycardia, atrial fibrillation, bradycardia, and premature ventricular contractions), angina pectoris, transient ischemic attacks, paroxysmal nocturnal dyspnea, decreased blood pressure, peripheral edema, vasculitis; Digestive: Pancreatitis, hepatitis (hepatocellular or cholestatic jaundice) (see WARNINGS, Hepatic Failure ), gastritis, anorexia, flatulence, increased salivation; Endocrine:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Three most prominent features: (a) This passage lists specific adverse medical events organized by body system (Cardiovascular, Digestive, Endocrine categories); (b) Events are presented as complications/side effects (cardiac arrest, myocardial infarction, pancreatitis, hepatitis, arrhythmias); (c) Cross-references to WARNINGS sections suggest this is from established safety documentation. 2. Two most plausible categories: (a) 'adverse_reactions' - the passage explicitly enumerates side effects and complications observed in patients, organized systematically by organ system, which is the standard format for adverse reaction sections; (b) 'contraindications' - some of these conditions (like cardiac arrest, severe hepatic disease) might represent situations where the drug should not be used, and the WARNINGS cross-reference could suggest contraindicated states. 3. Winner and ruling: 'adverse_reactions' wins definitively. The passage lists observed medical events that occurred in patients taking the drug (pancreatitis, hepatitis, arrhythmias, etc.), which is the defining characteristic of adverse reactions. Contraindications would list pre-existing conditions or patient states that preclude use of the drug, and would typically use language like 'must not be used in patients with' or 'contraindicated in'. This passage instead documents complications that developed during or after treatment, which is adverse reaction language. The organization by body system and the systematic enumeration of effects is characteristic of adverse reaction tables.\",\"classification\":\"adverse_reactions\",\"runner_up\":\"contraindications\",\"ruled_out_because\":\"While some of these conditions (cardiac arrest, severe hepatic disease) could theoretically represent contraindicated states, the passage presents them as observed complications and side effects that occurred in patients, not as pre-existing conditions that would prohibit drug use. The language documents reactions that developed secondary to drug use, which is adverse_reactions, not conditions for which the drug is contraindicated.\"}",
+  "elapsed_ms": 6642,
+  "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 436
+  },
+  "logprobs": null
+}

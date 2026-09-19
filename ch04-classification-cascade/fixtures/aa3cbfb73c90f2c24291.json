@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium is contraindicated in: Pregnancy Warfarin sodium is contraindicated in women who are pregnant except in pregnant women with mechanical heart valves, who are at high risk of thromboembolism [see Warnings and Precautions ( 5.7 ) and Use in Specific Populations ( 8.1 )] . Warfarin sodium can cause fetal harm when administered to a pregnant woman. Warfarin sodium exposure during pregnancy causes a recognized pattern of major congenital malformations (warfarin embryopathy and fetotoxicity), fatal fetal hemorrhage, and an increased risk of spontaneous abortion and fetal mortality. If warfarin sodium is used during pregnancy or if the patient becomes pregnant while taking this drug, the patient should be apprised of the potential hazard to a fetus [see Use in Specific Populations ( 8.1 )] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage explicitly states 'Warfarin sodium is contraindicated in: Pregnancy' at the opening; (b) It lists specific conditions where the drug must not be used (pregnancy, with rare exceptions for mechanical heart valves); (c) It describes serious fetal harms including congenital malformations, hemorrhage, and increased miscarriage risk.\\n\\n2. Two most plausible categories: (i) 'contraindications' - The document directly uses the term 'contraindicated' multiple times and lists situations in which the drug must not be used, which is the definition of contraindications. (ii) 'pediatric_use' - One might argue this relates to fetal/neonatal effects, but this is clearly maternal teratogenicity and fetal toxicity during pregnancy, not guidance on pediatric dosing or use in children after birth.\\n\\n3. Winner and rationale: 'contraindications' clearly wins. The passage is definitively structured as a contraindication statement (opening with 'is contraindicated in'), specifies when the drug absolutely must not be given (pregnancy, with exceptions), and explains the reasoning (fetal harm). While the passage mentions fetal effects, it is not classified as adverse_reactions because it is presented as a prohibition rather than an observed side effect in a treated population. The runner-up 'pediatric_use' is ruled out because this passage addresses maternal use and fetal exposure in utero, not the use of warfarin in children as patients. Pediatric_use would address dosing, monitoring, or known effects when warfarin is actually administered to pediatric patients.\", \"classification\": \"contraindications\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"The runner-up category addresses use of the drug in children as patients, whereas this passage addresses maternal contraindication and fetal exposure in utero. The passage is explicitly framed as a contraindication (using the word 'contraindicated' repeatedly) and identifies a situation in which the drug must not be used, which defines the contraindications category.\"}",
+  "elapsed_ms": 7081,
+  "usage": {
+    "input_tokens": 995,
+    "output_tokens": 479
+  },
+  "logprobs": null
+}

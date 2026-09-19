@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdequate and well-controlled studies with warfarin sodium have not been conducted in any pediatric population, and the optimum dosing, safety, and efficacy in pediatric patients is unknown. Pediatric use of warfarin sodium is based on adult data and recommendations, and available limited pediatric data from observational studies and patient registries. Pediatric patients administered warfarin sodium should avoid any activity or sport that may result in traumatic injury. The developing hemostatic system in infants and children results in a changing physiology of thrombosis and response to anticoagulants. Dosing of warfarin in the pediatric population varies by patient age, with infants generally having the highest, and adolescents having the lowest milligram per kilogram dose requirements to maintain target INRs.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Three most prominent features: (a) Explicitly states 'Adequate and well-controlled studies with warfarin sodium have not been conducted in any pediatric population' and discusses lack of established pediatric safety and efficacy data; (b) Contains specific guidance about pediatric patient management ('Pediatric patients administered warfarin sodium should avoid any activity or sport that may result in traumatic injury'); (c) Discusses age-related dosing variations in children ('Dosing of warfarin in the pediatric population varies by patient age, with infants generally having the highest, and adolescents having the lowest milligram per kilogram dose requirements'). 2. Two most plausible categories: (a) PEDIATRIC_USE - The passage is entirely devoted to pediatric considerations, lack of pediatric data, and how warfarin is used differently in children across age groups. This is the defining focus. (b) DOSAGE_AND_ADMINISTRATION - The passage does mention dosing information ('Dosing of warfarin in the pediatric population varies by patient age'), which could suggest this category, but the dosing information is presented only as context for explaining pediatric-specific considerations, not as the primary purpose of the section. 3. Winner and ruling: PEDIATRIC_USE decisively wins. The entire passage is structured around pediatric-specific considerations: absence of pediatric trials, unknown efficacy/safety in children, pediatric activity restrictions, developmental hemostatic differences in children, and age-dependent dosing requirements in the pediatric population. While dosing information is mentioned, it is subordinate to the overarching pediatric focus. DOSAGE_AND_ADMINISTRATION would be appropriate for general dosing guidance, but this is explicitly pediatric-focused guidance.\",\"classification\":\"pediatric_use\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"Although dosing variations are mentioned, they are presented specifically as pediatric dosing considerations, not as general administration guidance. The passage's primary purpose is to explain what is known and unknown about warfarin use in children, not to provide comprehensive dosage instructions for the drug generally.\"}",
+  "elapsed_ms": 6551,
+  "usage": {
+    "input_tokens": 966,
+    "output_tokens": 470
+  },
+  "logprobs": null
+}

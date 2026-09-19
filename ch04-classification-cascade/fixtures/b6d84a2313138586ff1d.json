@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFor oral inhalation only. ( 2 ) Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation every 4 to 6 hours. For some patients, 1 inhalation every 4 hours may be sufficient. ( 2.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. ( 2.2 ) Priming information: Prime Albuterol Sulfate HFA before using for the first time, when the inhaler has not been used for more than 2 weeks, or when the inhaler has been dropped. To prime Albuterol Sulfate HFA, release 4 sprays into the air away from the face, shaking well before each spray.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The document specifies 'For oral inhalation only' and detailed administration instructions (2 inhalations every 4-6 hours, 1 inhalation every 4 hours); (2) It describes usage in both treatment/prevention of bronchospasm and prevention of exercise-induced bronchospasm across age groups (adults and pediatric patients aged 4+); (3) It includes priming instructions with specific steps (4 sprays into air, shaking before each spray). Step 2 - Two most plausible categories: (A) 'dosage_and_administration' - the document explicitly states dose amounts (2 inhalations, 1 inhalation), frequency (every 4-6 hours, 15-30 minutes before exercise), route (oral inhalation), and administration technique (priming procedure). This is the core content. (B) 'indications_and_usage' - the document mentions treatment/prevention of bronchospasm and exercise-induced bronchospasm, which are clinical indications. However, the indications are only briefly mentioned as context; the bulk of the content focuses on how to administer the drug. Step 3 - Decision: 'dosage_and_administration' wins decisively. While indications are mentioned, they serve as context for the dosing regimens rather than being the focus. The document's primary purpose is to specify doses, frequencies, routes, and administration technique (priming). The 'indications_and_usage' category would typically provide more detail about the conditions themselves and patient populations, whereas this passage emphasizes the 'how' and 'how much' of administration.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"indications_and_usage\",\"ruled_out_because\": \"Although the document mentions clinical conditions (bronchospasm, exercise-induced bronchospasm), these are secondary context. The dominant content is dosing instructions: '2 inhalations every 4 to 6 hours,' '1 inhalation every 4 hours,' '2 inhalations 15 to 30 minutes before exercise,' and detailed priming procedures. This is characteristic of dosage_and_administration rather than indications_and_usage.\"}",
+  "elapsed_ms": 6153,
+  "usage": {
+    "input_tokens": 1008,
+    "output_tokens": 518
+  },
+  "logprobs": null
+}

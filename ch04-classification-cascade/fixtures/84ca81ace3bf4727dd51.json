@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nxanthopsia Hematologic Reactions 1. aplastic anemia 2. thrombocytopenia 3. agranulocytosis 4. hemolytic anemia 5. leukopenia 6. anemia 7. eosinophilia Dermatologic-Hypersensitivity Reactions 1. toxic epidermal necrolysis 2. Stevens-Johnson Syndrome 3. erythema multiforme 4. drug rash with eosinophilia and systemic symptoms 5. acute generalized exanthematous pustulosis 6. exfoliative dermatitis 7. bullous pemphigoid 8. purpura 9. photosensitivity 10. rash 11. pruritus 12. urticaria Cardiovascular Reaction 1. Orthostatic hypotension may occur and be aggravated by alcohol, barbiturates or narcotics. 2. Increase in cholesterol and triglyceride serum levels Other Reactions 1. hyperglycemia 2. glycosuria 3. hyperuricemia 4. muscle spasm 5. weakness 6. restlessness 7. urinary bladder spasm 8. thrombophlebitis 9. fever Whenever adverse reactions are moderate or severe, furosemide dosage should be reduced or therapy withdrawn.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. **Most prominent features**: (a) The document lists multiple categories of adverse reactions organized by body system/type (Hematologic, Dermatologic-Hypersensitivity, Cardiovascular, Other); (b) Each category contains numbered lists of specific side effects and reactions observed in patients; (c) The passage concludes with guidance on clinical management when adverse reactions are moderate or severe.\\n\\n2. **Two most plausible categories**: (a) \\\"adverse_reactions\\\" - This is the core content. The passage systematically enumerates side effects including xanthopsia, aplastic anemia, thrombocytopenia, Stevens-Johnson Syndrome, orthostatic hypotension, hyperglycemia, and many others. The organization by reaction type and the clinical management note at the end are typical of adverse reactions sections. (b) \\\"overdosage\\\" - Could be considered since some reactions listed (like agranulocytosis, hemolytic anemia, severe dermatologic reactions) can be dose-related, and the closing statement about reducing dosage/withdrawing therapy addresses management. However, overdosage typically presents signs and symptoms specifically associated with excessive doses or accumulation, often with acute onset and toxicity. This passage reads as a comprehensive adverse reaction profile rather than overdose-specific toxicity.\\n\\n3. **Classification decision**: \\\"adverse_reactions\\\" clearly wins. The passage is organized by reaction type/body system rather than by overdose presentation. The reactions listed are common side effects observed during normal therapeutic use (thrombocytopenia, rash, orthostatic hypotension), not acute toxicity from overdose. The final management statement about dose reduction applies to adverse reactions in general, not specifically to overdose scenarios. The systematic enumeration of diverse reactions across multiple organ systems is the hallmark of an adverse reactions section.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"overdosage\", \"ruled_out_because\": \"While dose adjustment is mentioned, this passage organizes adverse effects by body system and reaction type (hematologic, dermatologic, cardiovascular, other), which is characteristic of adverse reactions sections. Overdosage sections typically focus on acute toxicity signs and management specific to excessive doses, not a broad catalog of reactions encountered during normal therapeutic use.\"}",
+  "elapsed_ms": 6106,
+  "usage": {
+    "input_tokens": 1105,
+    "output_tokens": 504
+  },
+  "logprobs": null
+}

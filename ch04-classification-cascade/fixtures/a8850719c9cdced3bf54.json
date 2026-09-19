@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSertraline hydrochloride is a selective serotonin reuptake inhibitor (SSRI) for oral administration. It has a molecular weight of 342.7. Sertraline hydrochloride, USP has the following chemical name: (1S-cis)-4-(3,4-dichlorophenyl)-1,2,3,4-tetrahydro-N-methyl-1-naphthalenamine hydrochloride. The empirical formula C 17 H 17 NC l2 •HCl is represented by the following structural formula: Sertraline hydrochloride, USP is a white crystalline powder that is slightly soluble in water and isopropyl alcohol and sparingly soluble in ethanol. Sertraline tablets, USP are supplied for oral administration as scored tablets containing sertraline hydrochloride equivalent to 25 mg, 50 mg and 100 mg of sertraline and the following inactive ingredients:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) Chemical name provided: (1S-cis)-4-(3,4-dichlorophenyl)-1,2,3,4-tetrahydro-N-methyl-1-naphthalenamine hydrochloride; (b) Molecular weight stated: 342.7; (c) Physical properties described: white crystalline powder, solubility characteristics in various solvents. (d) Empirical formula given: C17H17NCl2•HCl. (e) Drug class identified: SSRI (selective serotonin reuptake inhibitor). These elements are hallmarks of a drug description section.\\n2. Two most plausible categories: (a) 'description' - This section explicitly provides chemical name, molecular weight, structural formula information, empirical formula, and physical/chemical properties of the active ingredient. This is textbook description content. (b) 'how_supplied' - The passage mentions that tablets are supplied in 25 mg, 50 mg, and 100 mg strengths with inactive ingredients listed. However, the passage cuts off before completing the inactive ingredient list, and the bulk of the content is devoted to chemical characterization rather than packaging/storage details.\\n3. The 'description' category clearly wins. The passage is dominated by chemical identity information (chemical name, formula, molecular weight, structural representation, physical properties like solubility and appearance). While 'how_supplied' is mentioned at the very end, it is incomplete and secondary to the extensive chemical and physical characterization that comprises the main body of the passage.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage concludes with a reference to supplied tablet strengths and mentions inactive ingredients, the overwhelming majority of the content is devoted to chemical identity, molecular weight, empirical formula, structural formula, and physical/chemical properties. These are definitional elements of a description section. The how_supplied information is incomplete (ingredient list is cut off) and appears as an afterthought, not the primary focus.\"}",
+  "elapsed_ms": 5271,
+  "usage": {
+    "input_tokens": 1016,
+    "output_tokens": 469
+  },
+  "logprobs": null
+}

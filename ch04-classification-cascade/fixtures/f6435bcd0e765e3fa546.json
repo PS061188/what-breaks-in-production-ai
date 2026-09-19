@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essential for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Closely monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   a) The passage explicitly states 'Levothyroxine sodium is indicated in patients from birth to less than 17 years of age' - this is a direct statement of approved uses\\n   b) It lists specific conditions being treated: primary/secondary/tertiary congenital or acquired hypothyroidism, and thyroid cancer management\\n   c) It emphasizes the critical importance of rapid therapy initiation in children and monitoring for cardiac complications\\n\\n2. Two most plausible categories:\\n   a) INDICATIONS_AND_USAGE: This passage directly states what conditions the drug is approved to treat ('is indicated in patients...for primary hypothyroidism...thyroid cancer'). It explains the therapeutic rationale and clinical importance of treatment initiation. This is definitional indications language.\\n   b) PEDIATRIC_USE: The passage is entirely focused on pediatric patients (birth to <17 years) and discusses age-specific considerations like preventing effects on cognitive development and physical growth, plus specific monitoring requirements ('Closely monitor infants during the first 2 weeks')\\n\\n3. Classification decision:\\n   The primary classification is INDICATIONS_AND_USAGE because the passage's core purpose is to state which conditions warrant levothyroxine therapy in this population - that is the definition of 'indications.' While the passage IS about pediatric use, its substance is establishing approved indications (hypothyroidism types, thyroid cancer management) rather than exploring pediatric-specific pharmacology, safety data, or dosing adjustments unique to children.\\n   \\n   PEDIATRIC_USE is ruled out because: Although the passage focuses on children, its function is to establish approved indications/uses, not to discuss age-specific safety, efficacy, pharmacokinetics, or dosing considerations that would distinguish pediatric-use documentation. The pediatric age group is the population context, but the content is fundamentally about indications.\",\"classification\": \"indications_and_usage\",\"runner_up\": \"pediatric_use\",\"ruled_out_because\": \"While the entire passage addresses pediatric patients (birth to <17 years), its primary function is to state approved indications and therapeutic rationale, not to provide pediatric-specific safety data, pharmacokinetics, dosing adjustments, or efficacy information that would characterize it as pediatric_use documentation.\"}",
+  "elapsed_ms": 6446,
+  "usage": {
+    "input_tokens": 998,
+    "output_tokens": 533
+  },
+  "logprobs": null
+}

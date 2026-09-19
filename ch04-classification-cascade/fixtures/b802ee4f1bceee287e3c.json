@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nClinical trials of albuterol sulfate HFA did not include sufficient numbers of subjects aged 65 years and older to determine whether older subjects respond differently than younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Explicit reference to subjects aged 65 years and older; (b) Comparison of elderly vs younger patient responses; (c) General guidance about dose selection for elderly patients, mentioning hepatic, renal, and cardiac function considerations.\\n\\n2. Two most plausible categories:\\n   - Geriatric_use: This section directly addresses how the drug is used in patients 65 and older, discusses clinical trial representation of elderly subjects, notes differences (or lack thereof) in response, and provides age-specific dosing guidance.\\n   - Dosage_and_administration: The passage does contain dose selection guidance (\\\"starting at the low end of the dosing range\\\"), which is typically dosage information.\\n\\n3. Classification decision: Geriatric_use wins decisively. While there is some dosage guidance, the entire passage is framed around geriatric-specific considerations. The primary purpose is not to state standard dosing, but rather to address how dosing and responses differ or should be managed in the elderly population specifically. The mention of clinical trials lacking sufficient elderly subjects, comparison with younger patients, and age-specific physiological considerations (hepatic, renal, cardiac function) are hallmarks of geriatric use sections. A dosage_and_administration section would present concrete dosing regimens, frequencies, and routes for all patients generally—not cautionary guidance specific to one age group.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"Although dose selection guidance is present, the passage is fundamentally about geriatric-specific considerations rather than standard dosing information. Dosage_and_administration sections typically provide concrete dosing regimens, routes, frequencies, and intervals applicable to the general patient population. This passage is specifically framed around elderly patients (65+), clinical trial representation in this age group, and age-related physiological factors—all defining features of geriatric_use sections.\"}",
+  "elapsed_ms": 6234,
+  "usage": {
+    "input_tokens": 900,
+    "output_tokens": 446
+  },
+  "logprobs": null
+}

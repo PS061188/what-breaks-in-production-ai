@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\n( 2.3 ) Cleaning information: At least once a week, wash the actuator with warm water and let it air-dry completely. ( 2.3 ) 2.1 Recommended Dosage for Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm) Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation repeated every 4 to 6 hours; in some patients, 1 inhalation every 4 hours may be sufficient. More frequent administration or a greater number of inhalations is not recommended. 2.2 Recommended Dosage for Prevention of Exercise-Induced Bronchospasm Adult and pediatric patients aged 4 years and older: 2 inhalations by oral inhalation 15 to 30 minutes before exercise. 2.3 Administration Information Albuterol Sulfate HFA should be administered by the orally inhaled route only.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage explicitly contains section numbers 2.1, 2.2, and 2.3 labeled as 'Recommended Dosage' and 'Administration Information'; (b) It specifies precise dosing instructions (2 inhalations every 4-6 hours, 1 inhalation every 4 hours) for specific indications; (c) It provides route of administration (oral inhalation) and maintenance instructions (cleaning the actuator weekly).\\n\\n2. Two most plausible categories: (i) 'dosage_and_administration' - This is the strongest match because the passage directly specifies how much medication to give (2 inhalations), how often (every 4-6 hours), the route (oral inhalation), timing for prevention (15-30 minutes before exercise), and maintenance of the device. The section headers themselves say 'Recommended Dosage' and 'Administration Information'. (ii) 'indications_and_usage' - While the passage mentions 'Bronchospasm (Acute Episodes or Symptoms Associated with Bronchospasm)' and 'Prevention of Exercise-Induced Bronchospasm,' these appear only as labels for the dosage sections, not as the primary content. The focus is on the dosing regimens for these conditions, not on establishing what the drug treats.\\n\\n3. Winner and ruling: 'dosage_and_administration' clearly wins. The entire passage is structured around 'Recommended Dosage' sections with specific numeric doses, frequencies, and routes. While indications are mentioned as context, they serve only to organize the dosage information. The passage is fundamentally prescriptive about how to administer the drug, not about what conditions warrant its use.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"Although bronchospasm and exercise-induced bronchospasm are mentioned, they function as headers organizing dosage information rather than as the primary content. The passage contains no discussion of the indications themselves, their definitions, or clinical rationale—only the dosing regimens for managing them. The focus is unambiguously on 'how much and how often' rather than 'when to use it.'\"}",
+  "elapsed_ms": 7335,
+  "usage": {
+    "input_tokens": 1018,
+    "output_tokens": 524
+  },
+  "logprobs": null
+}

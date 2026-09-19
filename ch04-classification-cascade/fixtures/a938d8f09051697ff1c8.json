@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe following clinically significant adverse reactions are described elsewhere in labeling: Anaphylactic reactions [see Warnings and Precautions (5.1) ] Severe Cutaneous Adverse Reactions (SCAR) [see Warnings and Precautions (5.2) ] Drug-Induced Enterocolitis Syndrome (DIES) [see Warnings and Precautions (5.3) ] Hepatic Dysfunction [see Warnings and Precautions (5.4) ] Clostridioides difficile- Associated Diarrhea (CDAD) [see Warnings and Precautions (5.5) ] Skin Rash in Patients with Mononucleosis [see Warnings and Precautions (5.6) ] The most frequently reported adverse reactions (incidence rate > 4 %) were coughing, vomiting, contact dermatitis (i.e., diaper rash), fever, upper respiratory tract infection, and diarrhea.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage explicitly references 'clinically significant adverse reactions' and lists specific reaction types with cross-references to warnings sections; (2) It provides incidence rates (>4%) for most frequently reported adverse reactions; (3) It lists specific side effects observed in patients including coughing, vomiting, contact dermatitis, fever, upper respiratory tract infection, and diarrhea. Step 2 - Two most plausible categories: (a) adverse_reactions - This passage is entirely devoted to describing negative health outcomes experienced by patients taking the drug, including both serious reactions (anaphylaxis, SCAR, DIES, hepatic dysfunction, CDAD) and common mild reactions (cough, vomiting, rash, fever, diarrhea). This is the textbook definition of adverse reactions. (b) contraindications - One might argue this could belong here since it describes situations related to the drug, but contraindications specifically denote absolute prohibitions on use in certain patient populations or conditions, not descriptions of what happens when patients do take the drug. Step 3 - The winner is adverse_reactions. This passage is explicitly labeled as describing 'adverse reactions' and documents side effects and negative outcomes observed in patients. Contraindications is ruled out because the passage describes what adverse events occur in patients (outcomes of use), not situations in which the drug must not be used at all (absolute prohibitions based on patient characteristics or conditions).\", \"classification\": \"adverse_reactions\", \"runner_up\": \"contraindications\", \"ruled_out_because\": \"The passage documents side effects and negative health outcomes that occur in patients taking the drug (anaphylaxis, rash, diarrhea, vomiting, etc.), not absolute prohibitions on use. Contraindications specify situations where the drug must not be used at all; this passage describes what adverse events do occur when patients use it.\"}",
+  "elapsed_ms": 7090,
+  "usage": {
+    "input_tokens": 1022,
+    "output_tokens": 429
+  },
+  "logprobs": null
+}

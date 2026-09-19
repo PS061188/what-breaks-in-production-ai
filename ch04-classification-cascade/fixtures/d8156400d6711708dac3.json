@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSee full prescribing information for drugs that affect thyroid hormone pharmacokinetics and metabolism (e.g., absorption, synthesis, secretion, catabolism, protein binding, and target tissue response) and may alter the therapeutic response to levothyroxine sodium. (7) 7.1 Drugs Known to Affect Thyroid Hormone Pharmacokinetics Many drugs can exert effects on thyroid hormone pharmacokinetics and metabolism (e.g., absorption, synthesis, secretion, catabolism, protein binding, and target tissue response) and may alter the therapeutic response to levothyroxine sodium (Tables 5 to 8). Table 5. Drugs That May Decrease T4 Absorption (Hypothyroidism) Potential impact: Concurrent use may reduce the efficacy of levothyroxine sodium by binding and delaying or preventing absorption, potentially resulting in hypothyroidism.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage explicitly discusses 'Drugs that affect thyroid hormone pharmacokinetics and metabolism' and how they 'may alter the therapeutic response to levothyroxine sodium'; (2) It references multiple tables (5-8) detailing drug-specific interactions; (3) It provides specific mechanisms of action (absorption, synthesis, secretion, catabolism, protein binding, target tissue response) and examples of potential clinical impacts (e.g., 'may reduce the efficacy of levothyroxine sodium by binding and delaying or preventing absorption, potentially resulting in hypothyroidism'). Step 2 - Two most plausible categories: (a) 'drug_interactions' - The passage is fundamentally about how other drugs interact with levothyroxine sodium, affecting its pharmacokinetics and therapeutic response. The detailed discussion of mechanisms and tables of drug interactions is classic drug_interactions content. (b) 'dosage_and_administration' - One might argue this could relate to dosage adjustment based on concurrent medications, since the passage discusses how certain drugs 'may alter the therapeutic response,' which could theoretically require dosing modifications. However, the passage does not actually discuss dosing, frequency, route, or any specific dosage adjustments. Step 3 - Winner and ruling: 'drug_interactions' clearly wins because the entire passage is dedicated to explaining how concurrent drugs affect levothyroxine pharmacokinetics and efficacy. The passage does not provide any dosage recommendations or administration guidance; it purely describes the nature and mechanisms of interactions with other drugs. The 'dosage_and_administration' category is ruled out because while dosage adjustment might be a downstream consequence of these interactions, this passage contains no actual dosing information.\", \"classification\": \"drug_interactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"The passage focuses exclusively on describing how other drugs interact with levothyroxine and affect its pharmacokinetics, not on actual dosing regimens, frequencies, routes, or specific dosage adjustments. There is no administration guidance present.\"}",
+  "elapsed_ms": 6558,
+  "usage": {
+    "input_tokens": 994,
+    "output_tokens": 475
+  },
+  "logprobs": null
+}

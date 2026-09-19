@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFurosemide tablets are particularly useful when an agent with greater diuretic potential is desired. Hypertension Oral furosemide may be used in adults for the treatment of hypertension alone or in combination with other antihypertensive agents. Hypertensive patients who cannot be adequately controlled with thiazides will probably also not be adequately controlled with furosemide alone.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The passage discusses three key features: (1) it explicitly states clinical conditions ('hypertension'), (2) it specifies a patient population and route of administration ('Oral furosemide may be used in adults'), and (3) it describes the therapeutic role and comparative effectiveness of the drug ('useful when an agent with greater diuretic potential is desired' and 'may be used...in combination with other antihypertensive agents'). The two most plausible categories are: (1) indications_and_usage - this passage clearly identifies hypertension as a condition for which furosemide is approved, mentions adult use, and discusses its clinical utility; (2) dosage_and_administration - the passage does mention 'oral' route and 'adults' which are administrative parameters. However, the passage does not specify actual doses, frequency, or administration details. The passage is fundamentally about which conditions (indications) the drug treats, not how to dose it. The mention of 'oral' and 'adults' are merely contextual to the indication, not the focus of instruction. The runner-up is clearly ruled out because no dosing information (amounts, frequencies, schedules) is provided—only the route is mentioned incidentally.\",\"classification\":\"indications_and_usage\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"While the route of administration (oral) and patient population (adults) are mentioned, there are no actual dosing instructions, frequencies, or administration schedules provided. The passage focuses on which conditions warrant furosemide use, not how to administer it.\"}",
+  "elapsed_ms": 5464,
+  "usage": {
+    "input_tokens": 879,
+    "output_tokens": 354
+  },
+  "logprobs": null
+}

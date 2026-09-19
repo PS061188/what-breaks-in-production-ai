@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril Hypotension - Patients on Diuretic Therapy: Patients on diuretics, and especially those in whom diuretic therapy was recently instituted, may occasionally experience an excessive reduction of blood pressure after initiation of therapy with lisinopril. The possibility of hypotensive effects with lisinopril can be minimized by either discontinuing the diuretic or increasing the salt intake prior to initiation of treatment with lisinopril. If it is necessary to continue the diuretic, initiate therapy with lisinopril at a dose of 5 mg daily, and provide close medical supervision after the initial dose for at least two hours and until blood pressure has stabilized for at least an additional hour.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Discusses blood pressure reduction/hypotension as a potential adverse effect; (2) Addresses patient populations at risk (those on diuretics); (3) Provides management strategies and monitoring guidance (discontinue diuretic, increase salt intake, initiate at 5 mg, supervise for two hours). Step 2 - Most plausible categories: (a) 'adverse_reactions' - the passage explicitly describes hypotension as an unwanted effect that can occur in patients; (b) 'drug_interactions' - the passage discusses the interaction between lisinopril and diuretics, and how this combination can lead to excessive blood pressure reduction. Step 3 - Decision: While the passage does describe an adverse effect (hypotension), the core focus is on how the interaction between lisinopril and diuretics creates this adverse effect, and provides management strategies specifically for handling this drug-drug interaction. The passage emphasizes the diuretic's role in potentiating the blood pressure-lowering effect, which is the defining feature of a drug interaction. The management recommendations are tailored to mitigating the interaction rather than generally managing hypotension as an adverse reaction. 'drug_interactions' is the more precise classification because it captures the combination effect and the conditional nature of the risk (only in patients on diuretics).\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While hypotension is mentioned as an adverse effect, the passage's primary focus is on how diuretics interact with lisinopril to amplify blood pressure reduction, and management strategies specific to this drug-drug combination. The interaction context and conditional risk profile make this fundamentally about drug interactions rather than a general adverse reaction.\"}",
+  "elapsed_ms": 5686,
+  "usage": {
+    "input_tokens": 952,
+    "output_tokens": 401
+  },
+  "logprobs": null
+}

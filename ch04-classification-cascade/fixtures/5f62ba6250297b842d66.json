@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTable 1. Adverse Reactions with Albuterol Sulfate HFA with ≥3% Incidence and More Common than Placebo in Adult and Adolescent Subjects Adverse Reaction Percent of Subjects Albuterol Sulfate HFA (n = 202) % CFC 11/12-Propelled Albuterol Inhaler (n = 207) % Placebo HFA-134a (n = 201) % Ear, nose, and throat Throat irritation 10 6 7 Upper respiratory inflammation 5 5 2 Lower respiratory Viral respiratory infections 7 4 4 Cough 5 2 2 Musculoskeletal Musculoskeletal pain 5 5 4 Adverse reactions reported by <3% of the adult and adolescent subjects receiving albuterol sulfate HFA and by a greater proportion of subjects receiving albuterol sulfate HFA than receiving HFA-134a placebo inhaler and that have the potential to be related to albuterol sulfate HFA include diarrhea, laryngitis, oropharyngeal edema, cough, lung disorders, tachycardia, and extrasystoles.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features: (1) This is a table presenting adverse reaction data comparing albuterol sulfate HFA to control groups, with specific percentages of subjects experiencing each reaction. (2) The reactions are organized by body system (ear/nose/throat, lower respiratory, musculoskeletal) with incidence rates. (3) Below the table is a list of additional adverse reactions reported at <3% incidence with potential relationship to the drug.\\n\\nStep 2 - Evaluating top two categories: (a) 'adverse_reactions' is highly plausible because the entire passage consists of a structured presentation of side effects observed in patient populations, with comparative incidence data across treatment groups. The document explicitly reports reactions like throat irritation, viral respiratory infections, cough, and musculoskeletal pain. (b) 'description' is not plausible here - this section would contain chemical/structural information and inactive ingredients, not clinical safety data.\\n\\nStep 3 - Final determination: The classification is clearly 'adverse_reactions'. The runner-up would be 'dosage_and_administration' only if one were to argue that the study population descriptor (adult and adolescent subjects) relates to dosing context, but this is a weak connection. The passage is unambiguously about adverse reactions data from clinical trials, with no mention of dosing instructions, routes of administration, or frequency of use. The ruled-out category here is 'dosage_and_administration' because the document contains zero information about how to administer the drug, only safety outcome data.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While the passage references 'adult and adolescent subjects,' it contains no information about drug dosing, routes of administration, frequency, or any other aspect of how to give the medication. The document is exclusively reporting incidence rates of side effects observed in clinical trial populations, not administration guidance.\"}",
+  "elapsed_ms": 7960,
+  "usage": {
+    "input_tokens": 1077,
+    "output_tokens": 443
+  },
+  "logprobs": null
+}

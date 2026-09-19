@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in <retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 08a44bdd-028d-41af-9d4e-70971b0bcc4e | last_updated: 20260109 | status: ACTIVE | version: 20260109]\n2 DOSAGE AND ADMINISTRATION Edema : • Initial dose is 20 mg to 40 mg once given intramuscularly or intravenously. The intravenous dose should be administered slowly over 1 minute to 2 minutes ( 2.2 ) • If needed, a second dose may be administered 2 hours after the first dose ( 2.2 ) Acute Pulmonary Edema : • Initial dose is 40 mg injected slowly intravenously over 1 minute to 2 minutes ( 2.2 ) • If needed, a second dose is 80 mg injected intravenously slowly in 1 minute to 2 minutes ( 2.2 ) Pediatric Dosage : • The initial dose in pediatric patients is 1 mg/kg body weight once given slowly intramuscularly or intravenously. If needed, dosage may be increased by 1 mg/kg not sooner than 2 hours after the previous dose, until the desired diuretic effect has been obtained. Doses greater than 6 mg/kg body weight are not recommended ( 2.3 ) 2.1 General Considerations Inspect Furosemide Injection visually for particulate matter and discoloration before administration. 2.2 Recommended Dosage for Adults Edema Individualize therapy according to patient response. The usual initial dose of furosemide is 20 mg to 40 mg given as a single-dose, injected intramuscularly or intravenously. Give the intravenous dose slowly (over 1 minute to 2 minutes). If needed, administer another dose in the same manner 2 hours later or increase the dose. The dose may be raised by 20 mg and administered not sooner than 2 hours after the previous dose until the desired diuretic effect has been obtained. Administer this individually determined single-dose once or twice daily. If the physician elects to use high-dose parenteral therapy, add the furosemide to either 0.9% Sodium Chloride Injection USP, Lactated Ringer's Injection USP, or Dextrose Injection 5%, USP, after pH has been adjusted to above 5.5, and administer as a controlled intravenous infusion at a rate not greater than 4 mg/min. Furosemide Injection is a buffered alkaline solution with a pH of about 9 and the drug may precipitate at pH values below 7. Care must be taken to ensure that the pH of the prepared infusion solution is in the weakly alkaline to neutral range. Acid solutions, including other parenteral medications (e.g., labetalol, ciprofloxacin, amrinone, milrinone) must not be administered concurrently in the same infusion because they may cause precipitation of the furosemide. Acute Pulmonary Edema The usual initial dose of furosemide is 40 mg injected slowly intravenously (over 1 minute to 2 minutes). If a satisfactory \n\n---\n\n[doc_id: 08a44bdd-b | last_updated: 20260109 | status: ACTIVE | version: 20260109]\n2 DOSAGE AND ADMINISTRATION Edema : • Initial dose is 40 mg to 80 mg once given intramuscularly or intravenously. The intravenous dose should be administered slowly over 1 minute to 2 minutes ( 2.2 ) • If needed, a second dose may be administered 2 hours after the first dose ( 2.2 ) Acute Pulmonary Edema : • Initial dose is 80 mg injected slowly intravenously over 1 minute to 2 minutes ( 2.2 ) • If needed, a second dose is 160 mg injected intravenously slowly in 1 minute to 2 minutes ( 2.2 ) Pediatric Dosage : • The initial dose in pediatric patients is 2 mg/kg body weight once given slowly intramuscularly or intravenously. If needed, dosage may be increased by 2 mg/kg not sooner than 2 hours after the previous dose, until the desired diuretic effect has been obtained. Doses greater than 12 mg/kg body weight are not recommended ( 2.3 ) 2.1 General Considerations Inspect Furosemide Injection visually for particulate matter and discoloration before administration. 2.2 Recommended Dosage for Adults Edema Individualize therapy according to patient response. The usual initial dose of furosemide is 40 mg to 80 mg given as a single-dose, injected intramuscularly or intravenously. Give the intravenous dose slowly (over 1 minute to 2 minutes). If needed, administer another dose in the same manner 2 hours later or increase the dose. The dose may be raised by 40 mg and administered not sooner than 2 hours after the previous dose until the desired diuretic effect has been obtained. Administer this individually determined single-dose once or twice daily. If the physician elects to use high-dose parenteral therapy, add the furosemide to either 0.9% Sodium Chloride Injection USP, Lactated Ringer's Injection USP, or Dextrose Injection 5%, USP, after pH has been adjusted to above 5.5, and administer as a controlled intravenous infusion at a rate not greater than 8 mg/min. Furosemide Injection is a buffered alkaline solution with a pH of about 9 and the drug may precipitate at pH values below 7. Care must be taken to ensure that the pH of the prepared infusion solution is in the weakly alkaline to neutral range. Acid solutions, including other parenteral medications (e.g., labetalol, ciprofloxacin, amrinone, milrinone) must not be administered concurrently in the same infusion because they may cause precipitation of the furosemide. Acute Pulmonary Edema The usual initial dose of furosemide is 80 mg injected slowly intravenously (over 1 minute to 2 minutes). If a satisfactory \n</retrieved_context>",
+  "user": "What is the recommended starting dose of Furosemide?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"08a44bdd-028d-41af-9d4e-70971b0bcc4e\", \"08a44bdd-b\"], \"starting_dose\": \"The recommended starting dose of Furosemide depends on the clinical indication: For Edema: 20-40 mg (doc 08a44bdd-028d-41af-9d4e-70971b0bcc4e) OR 40-80 mg (doc 08a44bdd-b) given intramuscularly or intravenously, administered slowly over 1-2 minutes. For Acute Pulmonary Edema: 40 mg (doc 08a44bdd-028d-41af-9d4e-70971b0bcc4e) OR 80 mg (doc 08a44bdd-b) injected slowly intravenously over 1-2 minutes. For Pediatric patients: 1 mg/kg body weight (doc 08a44bdd-028d-41af-9d4e-70971b0bcc4e) OR 2 mg/kg body weight (doc 08a44bdd-b).\", \"conflict\": \"There is a conflict between the two retrieved documents regarding dosing. Document 08a44bdd-028d-41af-9d4e-70971b0bcc4e recommends lower starting doses (20-40 mg for edema, 40 mg for acute pulmonary edema, 1 mg/kg pediatric), while document 08a44bdd-b recommends higher starting doses (40-80 mg for edema, 80 mg for acute pulmonary edema, 2 mg/kg pediatric). Both documents are marked ACTIVE. Please verify with the source system to determine which dosing regimen is current policy.\"}",
+  "elapsed_ms": 12029,
+  "usage": {
+    "input_tokens": 1994,
+    "output_tokens": 446
+  },
+  "logprobs": null
+}

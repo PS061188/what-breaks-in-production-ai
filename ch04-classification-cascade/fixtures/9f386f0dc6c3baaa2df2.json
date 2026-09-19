@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nBecause of changing warfarin requirements due to age, concomitant medications, diet, and existing medical condition, target INR ranges may be difficult to achieve and maintain in pediatric patients, and more frequent INR determinations are recommended. Bleeding rates varied by patient population and clinical care center in pediatric observational studies and patient registries. Infants and children receiving vitamin K-supplemented nutrition, including infant formulas, may be resistant to warfarin therapy, while human milk-fed infants may be sensitive to warfarin therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) The passage explicitly focuses on warfarin use in pediatric patients ('pediatric patients,' 'infants and children,' 'pediatric observational studies'); (b) It discusses dose management challenges specific to children ('changing warfarin requirements,' 'more frequent INR determinations'); (c) It addresses special considerations like nutrition effects on warfarin response in infants.\\n\\n2. Two most plausible categories: (a) pediatric_use - This passage is entirely dedicated to discussing warfarin's use, efficacy challenges, and special considerations in children and infants. It explicitly compares pediatric populations to other groups and discusses age-specific management factors. (b) dosage_and_administration - The passage mentions 'target INR ranges' and 'more frequent INR determinations,' which relate to dosing adjustments and monitoring frequency, which are dosage administration concepts.\\n\\n3. Classification decision: pediatric_use wins decisively. While the passage touches on monitoring (dosage-related), its core focus is characterizing how warfarin behaves differently in pediatric versus adult populations—examining sensitivity/resistance in infants based on nutrition, discussing bleeding rate variations in pediatric registries, and emphasizing that pediatric patients require special management approaches. The passage is fundamentally about what is known regarding warfarin use in children, not about general dosing instructions. The mention of INR determinations serves the pediatric characterization rather than being primary dosing guidance.\", \"classification\": \"pediatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While INR monitoring frequency is mentioned, the passage's primary purpose is to characterize warfarin's unique behavior and challenges in the pediatric population (sensitivity/resistance based on nutrition, varying bleeding rates), not to provide general dosing instructions. The dosage elements are secondary details supporting pediatric-specific management considerations.\"}",
+  "elapsed_ms": 5419,
+  "usage": {
+    "input_tokens": 908,
+    "output_tokens": 429
+  },
+  "logprobs": null
+}

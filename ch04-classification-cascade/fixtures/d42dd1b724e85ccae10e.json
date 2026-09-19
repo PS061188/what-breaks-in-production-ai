@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nCoadministration of probenecid is not recommended. 7.2 Oral Anticoagulants Abnormal prolongation of prothrombin time (increased international normalized ratio [INR]) has been reported in patients receiving amoxicillin and oral anticoagulants. ​​​​​​​Appropriate monitoring should be undertaken when anticoagulants are prescribed concurrently. Adjustments in the dose of oral anticoagulants may be necessary to maintain the desired level of anticoagulation. 7.3 Allopurinol The concurrent administration of allopurinol and amoxicillin increases substantially the incidence of rashes in patients receiving both drugs as compared to patients receiving amoxicillin alone. It is not known whether this potentiation of amoxicillin rashes is due to allopurinol or the hyperuricemia present in these patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features:\\n(1) The passage discusses interactions between amoxicillin and other medications (probenecid, oral anticoagulants, allopurinol)\\n(2) It describes specific clinical effects when these drugs are coadministered (abnormal INR prolongation, increased rash incidence)\\n(3) It provides guidance on clinical management (monitoring recommendations, dose adjustments for anticoagulants)\\n\\nStep 2 - Most Plausible Categories:\\n(1) drug_interactions: This is the primary focus - the passage explicitly discusses how amoxicillin interacts with other drugs, what effects result, and how to manage those interactions. This is definitional for the drug_interactions category.\\n(2) adverse_reactions: One could argue that rashes and INR prolongation are adverse reactions. However, these are only mentioned in the context of drug-drug interactions, not as direct adverse reactions of amoxicillin alone.\\n\\nStep 3 - Classification Decision:\\nThe classification is clearly drug_interactions. The passage is structured as a drug interaction section (note the section numbering 7.1, 7.2, 7.3). While rashes and INR changes are mentioned, they are presented specifically as consequences of combining drugs, not as standalone adverse reactions. The text discusses 'coadministration,' 'concurrent administration,' and how these combinations affect patients - all hallmarks of drug interaction content. The runner-up is ruled out because the adverse effects are presented in an interactive context, not as direct drug toxicities.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While rashes and INR prolongation are mentioned, they are presented as consequences of drug-drug interactions (coadministration effects), not as direct adverse reactions of amoxicillin alone. The passage is structured around interactions between amoxicillin and other specific medications, with management recommendations for those interactions.\"}",
+  "elapsed_ms": 6384,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 449
+  },
+  "logprobs": null
+}

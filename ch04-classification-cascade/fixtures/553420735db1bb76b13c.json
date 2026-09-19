@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdult Dosage for metformin hydrochloride tablets: Starting dose: 500 mg orally twice a day or 850 mg once a day, with meals ( 2.1 ) Increase the dose in increments of 500 mg weekly or 850 mg every 2 weeks, up to a maximum dose of 2550 mg per day, given in divided doses ( 2.1 ) Doses above 2000 mg may be better tolerated given 3 times a day with meals ( 2.1 ) Pediatric Dosage for metformin hydrochloride tablets: Starting dose: 500 mg orally twice a day, with meals ( 2.2 ) Increase dosage in increments of 500 mg weekly up to a maximum of 2000 mg per day, given in divided doses twice daily ( 2.2 ) Renal Impairment: Prior to initiation, assess renal function with estimated glomerular filtration rate (eGFR) ( 2.3 ) Do not use in patients with eGFR below 30 mL/minute/1.73 m 2 ( 2.3 ) Initiation is not recommended in patients with eGFR between 30 to 45 mL/minute/1.73 m 2 ( 2.3 ) Assess risk/benefit of continuing if eGFR falls below 45 mL/minute/1.73 m 2 ( 2.3 ) Discontinue if eGFR falls below 30 mL/minute/1.73 m 2 ( 2.3 ) 2.1 Adult Dosage Metformin Hydrochloride Tablets The recommended starting dose of metformin hydrochloride tablets are 500 mg orally twice a day or 850 mg once a day, given with meals.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage contains detailed dosing instructions with specific mg amounts, frequency (twice daily, once daily, three times daily), and administration route (orally); (2) It includes tiered dosing for different populations (adult vs. pediatric) with distinct maximum doses (2550 mg vs. 2000 mg); (3) It specifies dose titration schedules (increments of 500 mg weekly or 850 mg every 2 weeks) and contextual guidance (with meals, divided doses). Step 2 - Most plausible categories: (A) 'dosage_and_administration' is highly plausible because the entire passage is structured around how much drug to give, how often to give it, and what route/timing to use—the core definition of this category. (B) 'description' could be considered since the passage mentions 'metformin hydrochloride tablets,' but description focuses on chemical composition, inactive ingredients, and formulation details, not dosing regimens. Step 3 - Winner and ruling: 'dosage_and_administration' wins decisively. The passage contains no chemical information, ingredient lists, or structural details that would characterize a description section. Instead, it is exclusively devoted to starting doses, dose escalation, maximum doses, special population adjustments, and renal function monitoring criteria—all core elements of dosage and administration guidance. The runner-up (description) is ruled out because the document contains zero content related to the chemical nature, structure, inactive ingredients, or formulation composition of the product.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"description\", \"ruled_out_because\": \"The passage contains no information about chemical composition, structure, inactive ingredients, or formulation details. It is exclusively about dosing amounts, frequency, routes, titration schedules, and special population considerations, which definitively place it in dosage_and_administration rather than description.\"}",
+  "elapsed_ms": 5727,
+  "usage": {
+    "input_tokens": 1231,
+    "output_tokens": 438
+  },
+  "logprobs": null
+}

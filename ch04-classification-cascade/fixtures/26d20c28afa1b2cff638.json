@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTherapy with any combination of lisinopril and hydrochlorothiazide will be associated with both sets of dose-independent side effects, but addition of lisinopril in clinical trials blunted the hypokalemia normally seen with diuretics. To minimize dose-independent side effects, it is usually appropriate to begin combination therapy only after a patient has failed to achieve the desired effect with monotherapy. Dose Titration Guided by Clinical Effect A patient whose blood pressure is not adequately controlled with either lisinopril or hydrochlorothiazide monotherapy may be switched to lisinopril and hydrochlorothiazide tablets 10 mg/12.5 mg or lisinopril and hydrochlorothiazide tablets 20 mg/12.5 mg.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Discussion of side effects associated with therapy ('dose-independent side effects', 'hypokalemia'), indicating consideration of adverse effects; (2) Explicit guidance on when to initiate combination therapy and how to manage it ('begin combination therapy only after patient has failed with monotherapy'), indicating dosage administration strategy; (3) Specific tablet strengths and dosing transitions ('10 mg/12.5 mg', '20 mg/12.5 mg'), indicating dosing regimens. Step 2 - Two most plausible categories: (a) Adverse_reactions: The passage discusses side effects (hypokalemia, dose-independent side effects) observed with therapy; (b) Dosage_and_administration: The passage provides explicit instructions on when to use combination therapy, how to switch patients, and specific tablet strengths to use. Step 3 - Decision: While adverse reactions are mentioned, they are secondary context used to justify the dosage strategy. The primary purpose and content of this passage is to guide clinical decision-making about dose titration, when to switch to combination therapy, and which specific tablet strengths to administer. The passage is fundamentally instructing on how much to give and when, which is the core of dosage_and_administration. The adverse effects are mentioned only to explain the rationale for the dosing approach, not to comprehensively document side effects.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While adverse reactions (hypokalemia, dose-independent side effects) are mentioned, they serve only as supporting rationale for the dosing strategy. The primary content is prescriptive guidance on dose titration, when to initiate combination therapy, and specific tablet strengths to use—all core elements of dosage_and_administration rather than a comprehensive account of adverse reactions.\"}",
+  "elapsed_ms": 6645,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 424
+  },
+  "logprobs": null
+}

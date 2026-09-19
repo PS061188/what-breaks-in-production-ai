@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe safety and effectiveness of albuterol sulfate HFA for treatment or prevention of bronchospasm and for prevention of exercised-induced bronchospasm in pediatric patients aged 4 years and older have been established. Use of albuterol sulfate HFA for this indication is supported by evidence from adequate and well-controlled studies of two 12-week clinical trials in subjects aged 12 years and older with asthma and one 2-week clinical trial in subjects aged 4 to 11 years with asthma [see Adverse Reactions ( 6.1 ), Clinical Studies ( 14.1 )] . The safety and effectiveness of albuterol sulfate HFA in pediatric patients younger than 4 years have not been established. Three trials have been conducted to evaluate the safety and efficacy of albuterol sulfate HFA in subjects younger than 4 years and the findings are described below.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n1. The passage explicitly discusses safety and effectiveness of albuterol sulfate HFA in pediatric patients, with specific age breakdowns (4 years and older, 12 years and older, 4-11 years, younger than 4 years).\\n2. It references clinical trials conducted in pediatric populations to establish efficacy and safety.\\n3. It distinguishes between age groups where effectiveness has been established versus not established in children.\\n\\nStep 2 - Two most plausible categories:\\n1. Pediatric_use: This passage is fundamentally about what is known regarding use of the drug in pediatric patients across different age groups. It discusses trial evidence specific to children and explicitly addresses safety/effectiveness in the pediatric population.\\n2. Indications_and_usage: The passage mentions treatment and prevention of bronchospasm and exercise-induced bronchospasm, which are indications. However, these are presented specifically in the context of pediatric use rather than as a general statement of indications.\\n\\nStep 3 - Determining the winner:\\nThe passage is unambiguously focused on pediatric use. It systematically addresses what has been established about albuterol's safety and effectiveness in different pediatric age groups (under 4, 4-11, 12+), cites pediatric clinical trials, and explicitly notes that effectiveness in children younger than 4 has not been established. While indications are mentioned, they are presented as secondary details supporting the primary discussion of pediatric safety and efficacy. The runner_up (indications_and_usage) is ruled out because the passage's primary purpose is not to establish the drug's indications generally, but rather to document what is known about its use specifically in the pediatric population.\",\"classification\": \"pediatric_use\",\"runner_up\": \"indications_and_usage\",\"ruled_out_because\": \"While indications (treatment/prevention of bronchospasm) are mentioned, they are presented as supporting details within a document focused specifically on pediatric safety and efficacy across different age groups. The passage systematically addresses age-specific evidence and explicitly states what has and has not been established in children, making pediatric_use the clear primary classification rather than indications_and_usage.\"}",
+  "elapsed_ms": 6774,
+  "usage": {
+    "input_tokens": 998,
+    "output_tokens": 507
+  },
+  "logprobs": null
+}

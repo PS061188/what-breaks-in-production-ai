@@ -106,6 +106,7 @@ class LLM:
         self.fixtures = Path(chapter_dir) / "fixtures"
         self.fixtures.mkdir(exist_ok=True)
         self.model = model
+        self.last_logprobs = None
         self.provider = provider_for(model)
         self.live = live
         self.calls = 0
@@ -151,7 +152,7 @@ class LLM:
             self._client = openai.OpenAI()
         return self._client
 
-    def _call_openai(self, system, user, schema, max_tokens):
+    def _call_openai(self, system, user, schema, max_tokens, logprobs=False):
         """Same contract as the Anthropic path: text back, usage recorded.
 
         OpenAI's structured-output field is `response_format` with a named
@@ -171,16 +172,22 @@ class LLM:
                 "type": "json_schema",
                 "json_schema": {"name": "result", "strict": True, "schema": schema},
             }
+        if logprobs:
+            kwargs["logprobs"] = True
         response = self._get_client().chat.completions.create(**kwargs)
         choice = response.choices[0]
         if choice.finish_reason == "length":
             raise RuntimeError(
                 f"Response hit max_tokens={max_tokens} and was cut off mid-output."
             )
+        token_logprobs = None
+        if logprobs and choice.logprobs and choice.logprobs.content:
+            token_logprobs = [(t.token, t.logprob) for t in choice.logprobs.content]
         return (
             choice.message.content or "",
             response.usage.prompt_tokens,
             response.usage.completion_tokens,
+            token_logprobs,
         )
 
     def _key(self, payload: Dict[str, Any]) -> str:
@@ -193,8 +200,24 @@ class LLM:
         user: str,
         schema: Optional[Dict[str, Any]] = None,
         max_tokens: int = 4000,
+        sample: int = 0,
+        logprobs: bool = False,
     ) -> str:
-        """Return the model's text response, from cache or from the API."""
+        """Return the model's text response, from cache or from the API.
+
+        `sample` is folded into the cache key and never sent to the API. The
+        cache is content-addressed, so two identical requests share one fixture
+        and a replay returns the same answer twice — which makes any experiment
+        that samples the same prompt repeatedly look perfectly consistent for
+        the wrong reason. A nonzero sample index gives each draw its own file.
+        Zero leaves the key unchanged, so every fixture already committed still
+        resolves.
+
+        `logprobs` asks for per-token log-probabilities. OpenAI returns them on
+        the same call; Anthropic's API does not expose them at all, so the
+        Anthropic path refuses rather than silently returning nothing. They are
+        read back from `self.last_logprobs` after the call.
+        """
         payload = {
             "model": self.model,
             "system": system,
@@ -202,6 +225,11 @@ class LLM:
             "schema": schema,
             "max_tokens": max_tokens,
         }
+        if sample:
+            payload["sample"] = sample
+        if logprobs:
+            payload["logprobs"] = True
+        self.last_logprobs = None
         key = self._key(payload)
         path = self.fixtures / f"{key}.json"
 
@@ -220,6 +248,7 @@ class LLM:
                 self.recorded_seconds += recorded.get("elapsed_ms", 0) / 1000.0
                 self.input_tokens += recorded.get("usage", {}).get("input_tokens", 0)
                 self.output_tokens += recorded.get("usage", {}).get("output_tokens", 0)
+            self.last_logprobs = recorded.get("logprobs")
             return recorded["response"]
 
         if not self.live:
@@ -241,12 +270,18 @@ class LLM:
                 self.duplicate_requests += 1
 
         started = time.monotonic()
+        token_logprobs = None
         if self.provider == "openai":
             headroom = REASONING_HEADROOM.get(self.model, 0) if self.model in THINKS_BY_DEFAULT else 0
-            text, tokens_in, tokens_out = self._call_openai(
-                system, user, schema, max_tokens + headroom
+            text, tokens_in, tokens_out, token_logprobs = self._call_openai(
+                system, user, schema, max_tokens + headroom, logprobs=logprobs
             )
         else:
+            if logprobs:
+                raise RuntimeError(
+                    f"{self.model}: Anthropic's Messages API does not expose token "
+                    "log-probabilities. Use a gpt-* model for this measurement."
+                )
             # Models that think by default spend part of max_tokens on
             # reasoning before writing a single character of the answer, so a
             # budget tuned for a non-thinking model truncates them mid-output.
@@ -301,11 +336,13 @@ class LLM:
                     "response": text,
                     "elapsed_ms": elapsed_ms,
                     "usage": {"input_tokens": tokens_in, "output_tokens": tokens_out},
+                    "logprobs": token_logprobs,
                 },
                 indent=2,
                 ensure_ascii=False,
             )
         )
+        self.last_logprobs = token_logprobs
         return text
 
     def json(
@@ -314,6 +351,8 @@ class LLM:
         user: str,
         schema: Dict[str, Any],
         max_tokens: int = 4000,
+        sample: int = 0,
+        logprobs: bool = False,
     ) -> Any:
         """Same as complete(), but parses the response as JSON.
 
@@ -321,7 +360,12 @@ class LLM:
         difference between them is the prompt and the code around it — not
         whether the JSON parsed.
         """
-        return json.loads(self.complete(system, user, schema=schema, max_tokens=max_tokens))
+        return json.loads(
+            self.complete(
+                system, user, schema=schema, max_tokens=max_tokens,
+                sample=sample, logprobs=logprobs,
+            )
+        )
 
     def cost(self) -> float:
         rate_in, rate_out = PRICES.get(self.model, (0.0, 0.0))

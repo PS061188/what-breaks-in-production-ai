@@ -137,7 +137,7 @@ the same recorded votes.
 | fix | verdict |
 |---|---|
 | 1 — confidence-gated routing | **Close to useless here.** Flagged 33% (1/3) and 22% (2/9) of errors. On body passages it left 7 wrong labels in the pipeline and put 3 already-correct ones in the review queue: **60% of the queue it created was wasted human time.** |
-| 2 — ensemble with majority vote | **The fix that works.** Removed 3 of 3 and 8 of 9 errors, for a 1% review rate and **zero correct labels held**. Read the caveat below before adopting it. |
+| 2 — ensemble with majority vote | **Three prompts on one model, not three systems** — see `model_ensemble.py` (14 Sep 2026): a real three-system ensemble matched its best member and did not beat it. On the prompt ensemble: Removed 3 of 3 and 8 of 9 errors, for a 1% review rate and **zero correct labels held**. Read the caveat below before adopting it. |
 | 3 — per-category F1 gate | **Works exactly as the chapter says.** On body passages aggregate accuracy is 91% and looks fine; `description` scores F1 **0.74** and `pediatric_use` **0.77**. A gate on aggregate accuracy ships both. |
 | 4 — classification audit trail | **Worth the column.** `alternative_considered` was the true category on 100% (3/3) and 89% (8/9) of errors. That is the ceiling on what the chapter's weekly query can recover, and it is high. |
 
@@ -194,6 +194,7 @@ This is the uncomfortable one.
 | naive — *"assign the passage to exactly one category"* | 99% | 97% |
 | **Chapter 4's template** — chain of thought, confidence, runner-up | **97%** | **91%** |
 | heading — *"which heading was this printed under"*, options reversed | 99% | 99% |
+| **shipped template** — reasoning + runner_up, no confidence fields (3 runs, `shipped_prompt.py`) | 97 / 98 / 99% | 94 / 92 / 91% |
 
 The chapter's template cost **2 points on opening passages and 6 points on body
 passages** against a one-line prompt on the same passages. It was the weakest of

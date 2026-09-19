@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOther Agents: Lisinopril has been used concomitantly with nitrates and/or digoxin without evidence of clinically significant adverse interactions. No meaningful clinically important pharmacokinetic interactions occurred when lisinopril was used concomitantly with propranolol, digoxin, or hydrochlorothiazide. The presence of food in the stomach does not alter the bioavailability of lisinopril. Agents Increasing Serum Potassium: Lisinopril attenuates potassium loss caused by thiazide-type diuretics. Use of lisinopril with potassium-sparing diuretics (e.g., spironolactone, eplerenone, triamterene, or amiloride), potassium supplements, or potassium-containing salt substitutes may lead to significant increases in serum potassium.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Three prominent features inform classification: (1) The passage explicitly discusses concurrent use of lisinopril with other medications (nitrates, digoxin, propranolol, hydrochlorothiazide, potassium-sparing diuretics, potassium supplements); (2) It describes pharmacokinetic interactions and bioavailability effects when drugs are used together; (3) It warns about potential adverse consequences (significant increases in serum potassium) when certain drug combinations occur. The two most plausible categories are: (a) Drug_interactions - This passage directly addresses what happens when lisinopril is combined with other agents, describing both the absence of clinically significant interactions (nitrates, digoxin, propranolol) and the presence of important interactions (potassium-sparing agents). This is the definition of drug interactions content. (b) Adverse_reactions - One might argue that the potassium elevation represents a side effect or adverse reaction; however, this is described specifically in the context of drug combination, not as an inherent effect of lisinopril alone. Drug_interactions is the clear winner because the passage's organizing principle is concurrent use with other substances (other agents, food, potassium-sparing diuretics, supplements), not lisinopril's inherent safety profile. The passage explicitly frames its content around 'concomitant' use and interactions between lisinopril and other agents. Adverse_reactions would typically describe unwanted effects from lisinopril administration alone, not effects from drug-drug combinations.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"The passage is explicitly organized around concurrent use of lisinopril with other drugs and substances, discussing pharmacokinetic interactions and combination effects rather than the inherent side effect profile of lisinopril alone. The potassium elevation is presented as a drug-combination consequence, not an autonomous adverse reaction.\"}",
+  "elapsed_ms": 6489,
+  "usage": {
+    "input_tokens": 993,
+    "output_tokens": 433
+  },
+  "logprobs": null
+}

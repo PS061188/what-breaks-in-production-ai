@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nModify this dose based on consideration of patient-specific clinical factors. Consider lower initial and maintenance doses for elderly and/or debilitated patients and in Asian patients [see Use in Specific Populations ( 8.5 ) and Clinical Pharmacology ( 12.3 )] . Routine use of loading doses is not recommended as this practice may increase hemorrhagic and other complications and does not offer more rapid protection against clot formation. Individualize the duration of therapy for each patient. In general, anticoagulant therapy should be continued until the danger of thrombosis and embolism has passed [see Dosage and Administration ( 2.2 )] . Dosing Recommendations without Consideration of Genotype If the patient’s CYP2C9 and VKORC1 genotypes are not known, the initial dose of warfarin sodium tablets is usually 2 to 5 mg once daily.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Direct discussion of dose amounts ('initial dose...is usually 2 to 5 mg once daily'), (2) Instructions on dose modification based on patient characteristics (elderly, debilitated, Asian patients), (3) Guidance on duration of therapy ('continue until the danger of thrombosis and embolism has passed'). Step 2 - Most plausible categories: (a) 'dosage_and_administration' - this passage explicitly addresses how much drug to give (2-5 mg), when to give it (once daily), how to modify doses for specific populations, and how long to continue therapy. (b) 'geriatric_use' - the passage mentions dose considerations for elderly patients and references section 8.5 on 'Use in Specific Populations'. However, geriatric_use is specifically about clinical findings or guidance unique to patients 65+, not general dosing parameters that happen to mention elderly patients. Step 3 - Winner: 'dosage_and_administration' clearly dominates. The passage is fundamentally about prescribing instructions: specific mg amounts, frequency of administration, dose individualization strategies, and duration of treatment. Ruled out: 'geriatric_use' is ruled out because while it mentions elderly patients, this is incidental to the main purpose of communicating dosing parameters applicable across populations. The reference to elderly dosing is one modification factor within a broader dosing framework, not a dedicated clinical section on geriatric-specific safety or efficacy data.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"geriatric_use\", \"ruled_out_because\": \"While the passage mentions dose modifications for elderly patients, it is fundamentally a dosing instruction section covering initial doses (2-5 mg), frequency (once daily), duration of therapy, and population-specific adjustments. Geriatric use would be a dedicated section with clinical findings or safety/efficacy data specific to patients 65+, not incidental mention of elderly dosing within a general dosage framework.\"}",
+  "elapsed_ms": 5905,
+  "usage": {
+    "input_tokens": 997,
+    "output_tokens": 464
+  },
+  "logprobs": null
+}

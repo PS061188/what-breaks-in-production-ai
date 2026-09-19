@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in <retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 0621fe8d-fdee-4d4c-a8e3-97f729472a58 | last_updated: 20260120 | status: ACTIVE | version: 20260120]\n2 DOSAGE AND ADMINISTRATION Do not initiate treatment with sertraline hydrochloride capsules. Use another sertraline hydrochloride product for initial dosage, titration, and dosages below 150 mg once daily ( 2.1 ) Recommended dosage is 150 mg or 200 mg once daily ( 2.1 ) Maximum recommended dosage is 200 mg once daily ( 2.1 ) Swallow capsules whole. Do not open, crush, or chew ( 2.2 ) When discontinuing sertraline hydrochloride capsules, reduce dose gradually whenever possible. Gradual dosage reduction will require use of another sertraline hydrochloride product ( 2.5 , 5.5 ) 2.1 Dosage in Patients with MDD and OCD Do not initiate treatment with sertraline hydrochloride capsules because the only available dose strengths are 150 mg and 200 mg. Use another sertraline hydrochloride product for initial dosage, titration, and dosages below 150 mg once daily. Refer to Prescribing Information of the other sertraline hydrochloride products for the recommended dosage for those products. Sertraline hydrochloride capsules can be initiated in patients receiving 100 mg or 125 mg of sertraline hydrochloride for at least one week. The recommended dosage of sertraline hydrochloride capsules is 150 mg or 200 mg once daily. The maximum recommended dosage is 200 mg once daily. 2.2 Administration Instructions Administer sertraline hydrochloride capsules orally. Swallow capsules whole; do not open, crush, or chew. 2.3 Screen for Bipolar Disorder Prior to Starting sertraline hydrochloride capsules Prior to initiating treatment with sertraline hydrochloride capsules or another antidepressant, screen patients for a personal or family history of bipolar disorder, mania, or hypomania [see Warnings and Precautions ( 5.4 )] . 2.4 Switching Patients to or from a Monoamine Oxidase Inhibitor Antidepressant At least 14 days must elapse between discontinuation of a monoamine oxidase inhibitor (MAOI) antidepressant and initiation of sertraline hydrochloride capsules. In addition, at least 14 days must elapse after stopping sertraline hydrochloride capsules before starting an MAOI antidepressant [ see Contraindications ( 4 ), Warnings and Precautions ( 5.2 ) ]. 2.5 Discontinuation of Treatment with sertraline hydrochloride capsules Adverse reactions may occur upon discontinuation of sertraline hydrochloride capsules [ see Warnings and Precautions ( 5.5 ) ]. Gradually reduce the dosage rather than stopping sertraline hydrochloride capsules abruptly whenever possible. Given that dosage streng\n</retrieved_context>",
+  "user": "Conversation so far:\n[10:02] Pharmacist: For this patient we agreed to record a starting dose of 7 mg of Sertraline Hydrochloride.\n[10:03] Assistant: Noted.\n[10:15] Pharmacist: Correction to my earlier message: the agreed starting dose is 9 mg, not 7 mg.\n\nQuestion: According to the conversation, what starting dose should I record for Sertraline Hydrochloride?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"0621fe8d-fdee-4d4c-a8e3-97f729472a58\"], \"starting_dose\": \"9 mg\", \"conflict\": \"The retrieved document specifies that sertraline hydrochloride capsules should not be initiated with doses below 150 mg once daily, and recommends 150 mg or 200 mg once daily as the standard dosage. The pharmacist's stated starting dose of 9 mg is significantly below the documented recommended dosage and may not align with clinical guidelines.\"}",
+  "elapsed_ms": 3882,
+  "usage": {
+    "input_tokens": 1333,
+    "output_tokens": 130
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPotential Effects of Coadministration of Drugs Highly Bound to Plasma Proteins –Because sertraline is tightly bound to plasma protein, the administration of sertraline hydrochloride to a patient taking another drug which is tightly bound to protein (e.g., warfarin, digitoxin) may cause a shift in plasma concentrations potentially resulting in an adverse effect. Conversely, adverse effects may result from displacement of protein bound sertraline hydrochloride by other tightly bound drugs. In a study comparing prothrombin time AUC (0-120 hr) following dosing with warfarin (0.75 mg/kg) before and after 21 days of dosing with either sertraline hydrochloride (50-200 mg/day) or placebo, there was a mean increase in prothrombin time of 8% relative to baseline for sertraline hydrochloride compared to a 1% decrease for placebo (p<0.02).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) This passage discusses what happens when sertraline is given together with other drugs, specifically those highly bound to plasma proteins; (2) It describes the mechanism by which drug-drug interactions occur through protein binding displacement; (3) It includes a specific clinical study example with warfarin showing quantified interaction effects (8% increase in prothrombin time). Step 2 - Two most plausible categories: (a) 'drug_interactions' is highly plausible because the entire passage is structured around coadministration effects, mechanism of interaction through protein binding, and clinical evidence of an interaction with warfarin. (b) 'adverse_reactions' is plausible because the passage mentions 'adverse effect' and 'adverse effects' multiple times and discusses negative clinical outcomes. Step 3 - Classification decision: 'drug_interactions' wins decisively. While adverse effects are mentioned as potential consequences, the core purpose of this passage is to explain what happens when two drugs are taken together and the mechanism by which their interaction occurs. The warfarin study is presented as evidence of a drug-drug interaction, not as general adverse reaction safety data. The passage is fundamentally about the interaction between sertraline and other drugs, not about side effects from sertraline alone.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"Although adverse effects are mentioned as potential consequences of the drug interaction, this passage is fundamentally about the mechanism and clinical evidence of interaction between sertraline and other protein-bound drugs (particularly warfarin), not about intrinsic side effects of sertraline itself. The structure, focus, and content are clearly centered on coadministration effects rather than adverse reaction profiles.\"}",
+  "elapsed_ms": 5807,
+  "usage": {
+    "input_tokens": 1015,
+    "output_tokens": 393
+  },
+  "logprobs": null
+}

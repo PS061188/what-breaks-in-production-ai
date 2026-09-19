@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium is contraindicated in: Pregnancy Warfarin sodium is contraindicated in women who are pregnant except in pregnant women with mechanical heart valves, who are at high risk of thromboembolism [see Warnings and Precautions ( 5.7 ) and Use in Specific Populations ( 8.1 )] . Warfarin sodium can cause fetal harm when administered to a pregnant woman. Warfarin sodium exposure during pregnancy causes a recognized pattern of major congenital malformations (warfarin embryopathy and fetotoxicity), fatal fetal hemorrhage, and an increased risk of spontaneous abortion and fetal mortality. If warfarin sodium is used during pregnancy or if the patient becomes pregnant while taking this drug, the patient should be apprised of the potential hazard to a fetus [see Use in Specific Populations ( 8.1 )] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features: (1) The passage explicitly states 'Warfarin sodium is contraindicated in: Pregnancy' at the opening, using the direct contraindication language; (2) It describes situations where the drug must not be used (except in a specific high-risk exception), which is the definition of contraindications; (3) While it mentions fetal harm and congenital malformations, these are presented as the REASON for the contraindication, not as adverse reactions observed in treated patients.\\n\\nStep 2 - Most plausible categories: (a) 'contraindications' - The passage is structured as a contraindication statement, explicitly lists conditions under which warfarin must not be used, and uses the formal contraindication format with an exception clause. (b) 'adverse_reactions' - The passage does describe serious fetal harms (congenital malformations, hemorrhage, miscarriage), which could be framed as adverse outcomes. However, these are described in the context of what happens if the drug is used in a prohibited population, not as side effects observed in appropriate patient populations.\\n\\nStep 3 - Decision: 'contraindications' is the correct classification. The passage is formatted and worded as a contraindication section (starts with 'Warfarin sodium is contraindicated in'), specifies populations in which the drug must NOT be used, and includes an exception clause typical of contraindication statements. While adverse fetal effects are mentioned, they are cited as justification for the contraindication rather than as observed adverse reactions in a treated population. Adverse reactions would describe side effects occurring in patients who appropriately took the medication, whereas this describes what happens when a contraindicated population receives the drug.\",\"classification\": \"contraindications\",\"runner_up\": \"adverse_reactions\",\"ruled_out_because\": \"Although the passage describes serious harmful outcomes (congenital malformations, fetal hemorrhage), it frames these as consequences of using the drug in a contraindicated population, not as adverse reactions occurring in appropriate patients. The section is structurally and linguistically formatted as a contraindication statement ('is contraindicated in'), and the harms are cited as the reason for the contraindication, not as side effects of proper use.\"}",
+  "elapsed_ms": 7337,
+  "usage": {
+    "input_tokens": 995,
+    "output_tokens": 515
+  },
+  "logprobs": null
+}

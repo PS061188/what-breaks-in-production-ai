@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAtorvastatin calcium tablets, USP for oral use contain atorvastatin 10 mg, 20 mg, 40 mg, or 80 mg (equivalent to 10.34 mg, 20.68 mg, 41.36 mg, or 82.73 mg atorvastatin calcium anhydrous) and the following inactive ingredients: croscarmellose sodium, hydroxypropyl cellulose, lactose monohydrate, magnesium stearate, magnesium aluminometasilicate, microcrystalline cellulose, polysorbate 80, precipitated calcium carbonate, polyvinyl alcohol, titanium dioxide, talc, polyethylene glycol and lecithin.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage explicitly lists available dosage forms and strengths (10 mg, 20 mg, 40 mg, 80 mg tablets), (b) It provides the chemical composition including the active ingredient (atorvastatin calcium) with precise milligram equivalencies, and (c) It enumerates all inactive ingredients (croscarmellose sodium, hydroxypropyl cellulose, lactose monohydrate, etc.). 2. Two most plausible categories: (a) 'description' - This section typically includes the chemical identity of the drug, its formulation, and inactive ingredients. The passage aligns perfectly with this by listing the chemical form (atorvastatin calcium anhydrous), strengths, and complete inactive ingredient list. (b) 'how_supplied' - This category covers dosage forms, strengths, and packaging details. The passage does mention available strengths and the dosage form (tablets). 3. Decision: 'description' wins. The passage is fundamentally about what the product IS (its chemical composition, formulation components, and ingredient profile) rather than how it comes packaged or supplied. The detailed inactive ingredient listing and chemical equivalency calculations are hallmarks of descriptive pharmaceutical labeling. 'How_supplied' typically focuses on commercial packaging details (bottles, blister packs, storage conditions, NDC numbers), which are entirely absent here. The ruled-out category concerns the absence of packaging and commercial supply information.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While 'how_supplied' includes strength information, it primarily addresses packaging formats, storage conditions, and commercial availability details that are not present in this passage. The passage's focus on chemical composition, inactive ingredients, and formulation details is definitional of 'description' rather than supply/packaging information.\"}",
+  "elapsed_ms": 6389,
+  "usage": {
+    "input_tokens": 963,
+    "output_tokens": 420
+  },
+  "logprobs": null
+}

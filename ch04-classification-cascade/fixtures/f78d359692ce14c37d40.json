@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFurosemide may increase the ototoxic potential of aminoglycoside antibiotics, especially in the presence of impaired renal function. Except in life-threatening situations, avoid this combination. Furosemide should not be used concomitantly with ethacrynic acid because of the possibility of ototoxicity. Patients receiving high doses of salicylates concomitantly with furosemide, as in rheumatic disease, may experience salicylate toxicity at lower doses because of competitive renal excretory sites. There is a risk of ototoxic effects if cisplatin and furosemide are given concomitantly. In addition, nephrotoxicity of nephrotoxic drugs such as cisplatin may be enhanced if furosemide is not given in lower doses and with positive fluid balance when used to achieve forced diuresis during cisplatin treatment.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) The passage explicitly discusses interactions between furosemide and other drugs (aminoglycosides, ethacrynic acid, salicylates, cisplatin), focusing on how concurrent administration affects toxicity profiles; (b) Multiple specific drug combinations are named with descriptions of their interaction mechanisms and clinical consequences; (c) The content repeatedly addresses what happens when furosemide is given 'concomitantly' with other agents, which is the hallmark of drug interaction documentation.\\n\\n2. Two most plausible categories: (a) drug_interactions - This passage is fundamentally about what happens when furosemide is combined with other medications. It describes ototoxicity risk with aminoglycosides and ethacrynic acid, salicylate toxicity with concurrent salicylates, and nephrotoxicity/ototoxicity with cisplatin. The entire focus is on drug-drug interactions and their mechanisms. (b) adverse_reactions - One might consider this if the passage were primarily listing side effects of furosemide itself. However, the adverse reactions mentioned (ototoxicity, nephrotoxicity, salicylate toxicity) are presented specifically in the context of what happens when other drugs are co-administered, not as inherent adverse reactions to furosemide monotherapy.\\n\\n3. Drug_interactions wins decisively. The passage is structured around concurrent administration ('concomitantly', 'used with', 'given in combination') and explicitly addresses how the presence of other drugs modulates toxicity risk. This is the definition of drug interactions. Adverse_reactions would focus on what happens to patients taking furosemide alone. The runner-up must be ruled out because the passage's entire purpose is to warn about interactions rather than describe furosemide's standalone side effect profile.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While toxicity outcomes are mentioned, they are presented exclusively in the context of concurrent drug administration ('concomitantly,' 'given with,' 'used together'). The passage is organized around drug combinations and interaction mechanisms, not furosemide's inherent adverse reaction profile when used alone.\"}",
+  "elapsed_ms": 5954,
+  "usage": {
+    "input_tokens": 992,
+    "output_tokens": 494
+  },
+  "logprobs": null
+}

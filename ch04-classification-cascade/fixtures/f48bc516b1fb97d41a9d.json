@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets have been evaluated for safety in 930 patients, including 100 patients treated for 50 weeks or more. In clinical trials with lisinopril and hydrochlorothiazide tablets no adverse experiences peculiar to this combination drug have been observed. Adverse experiences that have occurred have been limited to those that have been previously reported with lisinopril or hydrochlorothiazide. The most frequent clinical adverse experiences in controlled trials (including open label extensions) with any combination of lisinopril and hydrochlorothiazide tablets were: dizziness (7.5%), headache (5.2%), cough (3.9%), fatigue (3.7%) and orthostatic effects (3.2%) all of which were more common than in placebo-treated patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) This passage reports safety evaluation data from clinical trials of a combination drug (lisinopril and hydrochlorothiazide tablets); (b) It lists specific adverse experiences observed during these trials with frequency percentages; (c) It compares the frequency of these adverse effects to placebo-treated patients.\\n\\n2. Two most plausible categories: (a) 'adverse_reactions' - The passage explicitly discusses adverse experiences that occurred in clinical trials, lists specific side effects with their frequencies (dizziness 7.5%, headache 5.2%, cough 3.9%, fatigue 3.7%, orthostatic effects 3.2%), and compares them to placebo. This is textbook adverse_reactions content. (b) 'drug_interactions' - One might consider this if the passage were discussing how this combination interacts with other substances or if adverse effects were attributed to drug-drug interactions, but the passage does not mention any other drugs or foods, nor does it explain mechanisms of interaction.\\n\\n3. Winner and ruling: 'adverse_reactions' clearly wins. The passage is entirely focused on reporting side effects and their frequencies in clinical trial populations. The ruled-out category is 'drug_interactions' because the document contains no discussion of how this drug interacts with other medications or food, makes no reference to concurrent drug administration, and simply documents observed adverse experiences in patients taking the combination therapy.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"The passage contains no discussion of interactions with other drugs or food. It focuses entirely on adverse experiences observed in patients taking lisinopril and hydrochlorothiazide, comparing frequencies to placebo, which is characteristic of adverse_reactions reporting rather than drug_interactions documentation.\"}",
+  "elapsed_ms": 5948,
+  "usage": {
+    "input_tokens": 979,
+    "output_tokens": 406
+  },
+  "logprobs": null
+}

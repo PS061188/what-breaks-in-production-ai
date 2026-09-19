@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying the three most prominent features:\\n(1) The passage is organized into body system categories (Fluid and Electrolyte, Musculoskeletal, Gastrointestinal, Dermatologic, Metabolic, Neurological, Endocrine, Ophthalmic, Additional Reactions)\\n(2) Each section lists specific clinical manifestations and pathological conditions observed in patients (e.g., 'muscle weakness', 'peptic ulcer', 'cataracts', 'convulsions')\\n(3) The content presents adverse effects and their consequences rather than treatment instructions, chemical properties, or dosing information\\n\\nStep 2: The two most plausible categories:\\n- ADVERSE_REACTIONS: This passage comprehensively catalogs side effects and undesired clinical outcomes organized by organ system. Every item listed (sodium retention, muscle weakness, peptic ulcer, cataracts, etc.) represents an adverse effect observed in patients taking the drug.\\n- CONTRAINDICATIONS: One might argue that listing serious potential complications could relate to when the drug should not be used. However, contraindications are conditions in patients (e.g., 'do not use in patients with renal failure') that preclude drug use entirely, not adverse effects that may occur during use.\\n\\nStep 3: Decisive factor:\\nThe passage presents observed clinical manifestations and side effects that occur as consequences of drug therapy—'muscle weakness', 'fluid retention', 'increased intracranial pressure', 'peptic ulcer with possible perforation'. These are hallmark adverse reaction descriptions. The passage does not state 'do not use in patients with X condition' or identify pre-existing patient conditions that contraindicate use. The systematic enumeration of undesired effects across body systems is the defining structure of an adverse reactions section. Contraindications would instead identify patient populations or clinical scenarios where the drug is absolutely forbidden.\",\"classification\": \"adverse_reactions\",\"runner_up\": \"contraindications\",\"ruled_out_because\": \"While the serious nature of some listed effects might prompt contraindications discussions, this passage does not identify conditions in patients that preclude drug use. Instead, it catalogs observed adverse effects and their manifestations during therapy, which is the core function of an adverse reactions section. Contraindications require stating 'do not use when' or 'do not give to patients with', which this passage does not do.\"}",
+  "elapsed_ms": 11466,
+  "usage": {
+    "input_tokens": 1163,
+    "output_tokens": 545
+  },
+  "logprobs": null
+}

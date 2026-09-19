@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHowever, another patient who took 2.5 grams of sertraline hydrochloride alone experienced a fatal outcome. Other important adverse events reported with sertraline hydrochloride overdose (single or multiple drugs) include bradycardia, bundle branch block, coma, convulsions, delirium, hallucinations, hypertension, hypotension, manic reaction, pancreatitis, QT-interval prolongation, serotonin syndrome, stupor and syncope. Overdose Management –Treatment should consist of those general measures employed in the management of overdosage with any antidepressant. Ensure an adequate airway, oxygenation and ventilation. Monitor cardiac rhythm and vital signs. General supportive and symptomatic measures are also recommended.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. The three most prominent features are: (a) a specific case of fatal overdose with a quantified dose (2.5 grams), (b) a comprehensive list of adverse events associated with overdose including bradycardia, coma, convulsions, serotonin syndrome, etc., and (c) explicit guidance on overdose management including airway management, cardiac monitoring, and supportive measures. 2. The two most plausible categories are 'overdosage' and 'adverse_reactions'. Overdosage is highly plausible because the passage explicitly discusses overdose scenarios, fatal outcomes from excessive doses, and management strategies. Adverse_reactions is plausible because it lists many adverse events (bradycardia, convulsions, hallucinations, etc.). 3. 'Overdosage' wins decisively. While adverse_reactions can describe side effects observed during normal use, this passage is explicitly framed around overdose scenarios—it discusses what happens when excessive amounts are taken, provides a fatal case example with a specific dose, and concludes with overdose-specific management recommendations. The phrase 'Overdose Management' and the context of single-dose toxicity at 2.5 grams clearly positions this as overdosage content rather than routine adverse reactions from therapeutic use.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While many adverse events are listed, the passage is explicitly framed around overdose scenarios (fatal outcome from 2.5 grams), overdose-specific management strategies (airway management, cardiac monitoring), and overdose toxicology rather than adverse reactions observed during normal therapeutic use.\"}",
+  "elapsed_ms": 5720,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 376
+  },
+  "logprobs": null
+}

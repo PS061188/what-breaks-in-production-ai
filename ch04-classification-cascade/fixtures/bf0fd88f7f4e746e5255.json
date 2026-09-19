@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nEach tablet contains the inactive ingredients povidone (K-30), Povidone (K-90), pregelatinized starch, and magnesium stearate. In addition, the coating for the tablet contains artificial blackberry flavor, hypromellose, macrogol and titanium dioxide. metformin-structure.jpg.jpg\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The passage contains a detailed listing of components and ingredients: (1) inactive ingredients identified by name (povidone K-30, povidone K-90, pregelatinized starch, magnesium stearate); (2) coating components and their specific chemical names (hypromellose, macrogol, titanium dioxide, artificial blackberry flavor); (3) reference to a chemical structure image. These are hallmark elements of a 'description' section, which catalogues the formulation, inactive ingredients, and chemical composition. The next most plausible category would be 'how_supplied' since that section sometimes lists packaging details and formulation specifics, but the passage focuses entirely on internal composition and does not mention dosage forms, strengths, quantities per container, or storage instructions—all typical of how_supplied. The passage is purely compositional/structural in nature, not logistical/packaging oriented.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While 'how_supplied' can include formulation details, it primarily addresses dosage forms (tablets, capsules, etc.), strengths, package sizes, and storage conditions. This passage contains no information about strength, package quantities, storage, or how the product is presented for sale—only the internal chemical and inactive ingredients that compose the tablet itself, which is the core of 'description'.\"}",
+  "elapsed_ms": 5458,
+  "usage": {
+    "input_tokens": 868,
+    "output_tokens": 314
+  },
+  "logprobs": null
+}

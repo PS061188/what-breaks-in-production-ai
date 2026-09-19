@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets USP, 10 mg/12.5 mg are white to off-white, round tablets, imprinted with ‘H150’ on one side and plain on the other side. NDC 60760-586-90 Bottle of 90 tablets Storage Store at 20°C-25°C (68°F-77°F); excursions permitted to 15°C-30°C (59°F-86°F) [see USP Controlled Room Temperature]. Protect from excessive light and humidity. Dispense in a well-closed container, if product package is subdivided.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. The three most prominent features are: (a) the specific dosage form and strength (10 mg/12.5 mg tablets), (b) the physical description including appearance and imprint code (white to off-white, round, imprinted 'H150'), and (c) storage instructions with temperature ranges and conditions. 2. The two most plausible categories are 'how_supplied' and 'description'. 'How_supplied' is strongly supported because the passage explicitly lists NDC number, package size (90 tablets), and storage instructions—all hallmarks of pharmaceutical supply information. 'Description' is plausible because the passage does provide physical characteristics (color, shape, imprint), which can be part of product description. 3. 'How_supplied' wins definitively. The passage is organized around supply and storage information: it specifies the NDC code, bottle quantity, storage temperature with specific ranges, and handling instructions (protection from light/humidity, container requirements). While some physical description is present, it is secondary and merely identifies which tablet is being discussed. The storage and NDC information is the core focus, which is quintessentially 'how_supplied' content.\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"Although the passage includes some descriptive details (color, shape, imprint), the primary content and organizational focus is on supply chain information: NDC number, package quantity (90 tablets), storage conditions with precise temperature ranges, and dispensing container requirements. These are definitional elements of 'how_supplied' rather than 'description,' which would emphasize chemical composition, formulation, and inactive ingredients.\"}",
+  "elapsed_ms": 5011,
+  "usage": {
+    "input_tokens": 942,
+    "output_tokens": 374
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSigns of acute toxicity in animals included ataxia, labored breathing, ptosis, sedation, hypoactivity, or excitation. Acute oral overdoses of gabapentin have been reported. Symptoms have included double vision, tremor, slurred speech, drowsiness, altered mental status, dizziness, lethargy, and diarrhea. Fatal respiratory depression has been reported with gabapentin overdose, alone and in combination with other CNS depressants. Gabapentin can be removed by hemodialysis. If overexposure occurs, call your poison control center at 1-800-222-1222.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage explicitly discusses 'Signs of acute toxicity' and 'Acute oral overdoses', establishing overdose as the primary topic; (b) It lists specific symptoms of overdose including double vision, tremor, slurred speech, drowsiness, altered mental status, dizziness, lethargy, and diarrhea; (c) It provides management guidance: 'Gabapentin can be removed by hemodialysis' and poison control contact information. 2. Two most plausible categories: (a) 'overdosage' - This section typically covers signs/symptoms of overdose and management recommendations, which perfectly matches the content here; (b) 'adverse_reactions' - While side effects are mentioned (tremor, drowsiness, dizziness), these are explicitly framed as overdose symptoms, not adverse reactions from normal dosing. 3. The distinction: The passage uses explicit overdose language ('acute toxicity', 'acute oral overdoses', 'overexposure') and provides overdose-specific management (hemodialysis, poison control contact). This is clearly the 'overdosage' section. The adverse_reactions category would cover side effects from therapeutic dosing; this passage is specifically about excessive doses and their consequences.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While some symptoms overlap with typical adverse reactions, the passage explicitly frames these as manifestations of 'acute toxicity' and 'overdose' rather than expected side effects from therapeutic use. The inclusion of management instructions specific to overdose (hemodialysis, poison control contact) and the emphasis on 'overexposure' confirms this belongs in overdosage, not adverse_reactions.\"}",
+  "elapsed_ms": 5517,
+  "usage": {
+    "input_tokens": 934,
+    "output_tokens": 399
+  },
+  "logprobs": null
+}

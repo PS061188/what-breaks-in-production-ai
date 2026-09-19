@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAs an adjunct to other LDL-C-lowering therapies, or alone if such treatments are unavailable, to reduce LDL-C in adults and pediatric patients aged 10 years and older with homozygous familial hypercholesterolemia (HoFH). As an adjunct to diet for the treatment of adults with: Primary dysbetalipoproteinemia Hypertriglyceridemia Atorvastatin calcium tablets are an HMG-CoA reductase inhibitor (statin) indicated ( 1 ): To reduce the risk of: Myocardial infarction (MI), stroke, revascularization procedures, and angina in adults with multiple risk factors for coronary heart disease (CHD) but without clinically evident CHD. MI and stroke in adults with type 2 diabetes mellitus with multiple risk factors for CHD but without clinically evident CHD.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying the three most prominent features:\\n1. The passage begins with 'As an adjunct to other LDL-C-lowering therapies' and continues with 'indicated' - clear language describing what the drug is used for\\n2. Multiple condition names are listed: homozygous familial hypercholesterolemia (HoFH), primary dysbetalipoproteinemia, hypertriglyceridemia, type 2 diabetes mellitus with CHD risk factors\\n3. The passage specifies 'to reduce LDL-C' and 'to reduce the risk of' specific cardiovascular events (MI, stroke, revascularization procedures, angina)\\n\\nStep 2: The two most plausible categories:\\n- INDICATIONS_AND_USAGE: This passage explicitly states what conditions the drug treats and what outcomes it reduces risk for. The language 'indicated' and the list of conditions with therapeutic purposes are hallmark indications language.\\n- DOSAGE_AND_ADMINISTRATION: While this mentions the drug should be used 'as an adjunct to diet' or 'alone,' there is no discussion of specific doses, dosing frequency, routes of administration, or administration schedules.\\n\\nStep 3: Determination:\\nINDICATIONS_AND_USAGE wins decisively. The passage contains the classic structure and language of an indications section: it names the drug (atorvastatin calcium tablets), identifies it as a specific drug class (HMG-CoA reductase inhibitor), and lists the approved conditions/outcomes it treats. DOSAGE_AND_ADMINISTRATION is ruled out because there are no specific dosing instructions, frequencies, or routes mentioned - only contextual information about how the drug should be used relative to other therapies.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While the passage mentions the drug should be used 'as an adjunct to diet' or 'as an adjunct to other therapies,' it contains no specific dose amounts, dosing intervals, routes of administration, or administration instructions. Dosage and administration sections would detail how much to give and how often, which is entirely absent here.\"}",
+  "elapsed_ms": 5621,
+  "usage": {
+    "input_tokens": 999,
+    "output_tokens": 514
+  },
+  "logprobs": null
+}

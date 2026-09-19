@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThis drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug may be greater in patients with impaired renal function. Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection. Evaluation of the hypertensive patient should always include assessment of renal function. (See DOSAGE AND ADMINISTRATION.)\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The three most prominent features of this document are: (1) emphasis on renal excretion and kidney-related safety considerations; (2) specific mention that elderly patients are at higher risk due to decreased renal function; and (3) direction to refer to DOSAGE AND ADMINISTRATION section for specific guidance. The two most plausible categories are geriatric_use and dosage_and_administration. Geriatric_use is plausible because the passage explicitly addresses elderly patients, their physiological differences (decreased renal function), and special considerations for their treatment. Dosage_and_administration is plausible because the passage discusses dose selection and refers readers to that section for more information. However, this passage is fundamentally about WHAT geriatric considerations should be taken into account, not HOW to dose the drug specifically. It describes the clinical issue (elderly = decreased renal function = higher toxicity risk) that necessitates dose adjustment, rather than providing the actual dosing guidance itself. The reference to dosage and administration is ancillary—it directs readers elsewhere for specifics. The core content focuses on age-related physiological differences and their implications, which is the essence of geriatric_use.\",\"classification\":\"geriatric_use\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"While the passage mentions dose selection and references the DOSAGE AND ADMINISTRATION section, it does not actually provide dosing information, frequency, or routes of administration. Instead, it explains the geriatric-specific clinical rationale (decreased renal function in elderly patients leading to increased toxicity risk) that drives the need for careful dose selection. The passage is fundamentally about how elderly patients differ physiologically and why care must be taken, not about what the actual doses should be.\"}",
+  "elapsed_ms": 8062,
+  "usage": {
+    "input_tokens": 875,
+    "output_tokens": 393
+  },
+  "logprobs": null
+}

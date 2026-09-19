@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe active component of Albuterol Sulfate HFA is albuterol sulfate, USP, the racemic form of albuterol and a relatively selective beta 2 -adrenergic bronchodilator. Albuterol sulfate has the chemical name α 1 -[( tert -butylamino)methyl]-4-hydroxy- m -xylene-α, α′-diol sulfate (2:1)(salt) and the following chemical structure: Albuterol sulfate is a white crystalline powder with a molecular weight of 576.7, and the empirical formula is (C 13 H 21 NO 3 ) 2 •H 2 SO 4 . It is soluble in water and slightly soluble in ethanol. The World Health Organization recommended name for albuterol base is salbutamol. Albuterol Sulfate HFA is a blue plastic inhaler with a blue cap containing a pressurized metered-dose aerosol canister fitted with a counter.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. Chemical name and structure information for albuterol sulfate (α1-[(tert-butylamino)methyl]-4-hydroxy-m-xylene-α,α′-diol sulfate)\\n2. Physical/chemical properties: white crystalline powder, molecular weight 576.7, empirical formula (C13H21NO3)2•H2SO4, solubility characteristics\\n3. Formulation details: blue plastic inhaler, pressurized metered-dose aerosol canister with counter\\n\\nStep 2 - Two most plausible categories:\\n1. DESCRIPTION: This category covers chemical name, structure, formulation and inactive ingredients. The passage explicitly provides the chemical name, chemical structure notation, molecular weight, empirical formula, solubility properties, WHO recommended name, and detailed description of the dosage form/packaging.\\n2. HOW_SUPPLIED: This category covers dosage forms, strengths, packaging and storage. The passage does describe the physical form (blue plastic inhaler, metered-dose aerosol canister with counter), which relates to how the product is supplied.\\n\\nStep 3 - Classification decision:\\nDESCRIPTION wins decisively. The passage focuses heavily on the chemical and physical characterization of the active ingredient itself (chemical name, structure, molecular properties, solubility) rather than supply/packaging information. While some packaging details are mentioned, the emphasis is overwhelmingly on describing what albuterol sulfate is chemically and formulation composition, which is the core purpose of a DESCRIPTION section in drug labeling.\\n\\nHOW_SUPPLIED is ruled out because: While packaging details appear (blue inhaler, counter), the passage is primarily focused on chemical characterization and active ingredient description rather than dosage strengths, pack sizes, or storage instructions that would be typical of a how_supplied section.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage includes some packaging details (blue plastic inhaler, metered-dose canister), it is predominantly focused on chemical characterization—the chemical name, structure, molecular weight, empirical formula, and solubility properties of the active ingredient. This emphasis on chemical/physical composition and formulation details is characteristic of a DESCRIPTION section, not how_supplied, which would focus on dosage strengths, available pack sizes, and storage conditions.\"}",
+  "elapsed_ms": 7263,
+  "usage": {
+    "input_tokens": 1033,
+    "output_tokens": 555
+  },
+  "logprobs": null
+}

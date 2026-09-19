@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe safety and effectiveness of atorvastatin calcium as an adjunct to diet to reduce LDL-C have been established pediatric patients 10 years of age and older with HeFH. Use of atorvastatin calcium for this indication is based on a double-blind, placebo-controlled clinical trial in 187 pediatric patients 10 years of age and older with HeFH. In this limited controlled trial, there was no significant effect on growth or sexual maturation in the boys or girls, or on menstrual cycle length in girls. The safety and effectiveness of atorvastatin calcium as an adjunct to other LDL-C-lowering therapies to reduce LDL-C have been established pediatric patients 10 years of age and older with HoFH. Use of atorvastatin calcium for this indication is based on a trial without a concurrent control group in 8 pediatric patients 10 years of age and older with HoFH [see Clinical Studies (14) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly discusses use 'in pediatric patients 10 years of age and older' with specific conditions (HeFH and HoFH); (2) It references clinical trial data specific to children, including 187 pediatric patients in one trial and 8 in another; (3) It documents safety outcomes in children, specifically noting 'no significant effect on growth or sexual maturation' and 'menstrual cycle length in girls.' Step 2 - Most plausible categories: (a) Pediatric_use - The entire passage is dedicated to describing safety and efficacy of atorvastatin in pediatric populations, with clinical trial data, age cutoffs, and developmental safety outcomes specific to children. (b) Indications_and_usage - The passage does mention indications (reducing LDL-C in HeFH and HoFH), but this context is secondary to the pediatric-specific focus. Step 3 - Classification decision: Pediatric_use wins decisively. While indications are mentioned, the passage's primary purpose is not to list general indications but rather to describe what is known specifically about pediatric use, including trial methodology, age groups studied, and pediatric-specific safety concerns (growth, sexual maturation, menstrual cycles). This is quintessential pediatric_use content. The indications_and_usage category is ruled out because the passage is not providing a comprehensive indication statement; rather, it is contextualizing those indications within the specific lens of pediatric safety and efficacy data.\",\"classification\": \"pediatric_use\",\"runner_up\": \"indications_and_usage\",\"ruled_out_because\": \"While indications (LDL-C reduction in HeFH/HoFH) are mentioned, they serve only as context for the pediatric safety and efficacy data. The passage's primary purpose is to document what is known about pediatric use, including clinical trial details, age groups tested, and pediatric-specific safety outcomes (growth, sexual maturation, menstrual function), which is the defining purpose of a pediatric_use section.\"}",
+  "elapsed_ms": 7031,
+  "usage": {
+    "input_tokens": 1018,
+    "output_tokens": 477
+  },
+  "logprobs": null
+}

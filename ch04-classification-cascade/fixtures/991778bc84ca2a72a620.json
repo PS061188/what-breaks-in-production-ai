@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nInquire whether patients are taking biotin or biotin-containing supplements. If so, advise them to stop biotin supplementation at least 2 days before assessing TSH and/or T4 levels [see Dosage and Administration (2.4) and Drug Interactions (7.10) ]. The peak therapeutic effect of a given dose of levothyroxine sodium tablets may not be attained for 4 to 6 weeks. 2.3 Recommended Dosage and Titration Primary, Secondary, and Tertiary Hypothyroidism in Adults The recommended starting daily dosage of levothyroxine sodium tablets in adults with primary, secondary, or tertiary hypothyroidism is based on age and comorbid cardiac conditions, as described in Table 1. For patients at risk of atrial fibrillation or patients with underlying cardiac disease, start with a lower dosage and titrate the dosage more slowly to avoid exacerbation of cardiac symptoms.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent Features:\\n(1) Detailed discussion of recommended starting daily dosage of levothyroxine sodium tablets in adults with specific conditions (primary, secondary, tertiary hypothyroidism)\\n(2) Explicit mention of dosage titration strategies, particularly for patients with cardiac risk factors\\n(3) Reference to a dosing table (Table 1) and age-based dosing considerations\\n\\nStep 2 - Two Most Plausible Categories:\\n(1) dosage_and_administration: The passage explicitly covers 'Recommended Dosage and Titration,' starting dosages based on age and comorbidities, titration strategies, and timing considerations (peak effect in 4-6 weeks). The section header is literally '2.3 Recommended Dosage and Titration.'\\n(2) drug_interactions: The passage begins with a reference to biotin supplementation interaction, advising discontinuation 2 days before TSH/T4 assessment, with cross-references to section 7.10 (Drug Interactions).\\n\\nStep 3 - Classification Decision:\\nWhile the passage does mention a drug interaction (biotin), the overwhelming majority and primary focus is on dosage and administration. The dosage and titration discussion comprises approximately 80% of the passage, with specific guidance on starting doses, titration approach for cardiac patients, and therapeutic timelines. The biotin interaction is mentioned briefly as a caveat before the main dosage section begins. The section numbering (2.3) and heading explicitly identify this as a dosage and titration section.\\n\\nThe runner-up (drug_interactions) is ruled out because while biotin is mentioned, it is a secondary consideration and brief reference. The passage's primary purpose and content focus is clearly on how to dose and titrate levothyroxine sodium tablets.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"Although biotin interaction is mentioned at the start, it occupies only a small portion of the passage. The overwhelming majority of the text (section 2.3 heading, table references, age-based dosing, titration strategies, cardiac considerations, and therapeutic timeline) is dedicated to dosage and administration guidance, making that the primary classification.\"}",
+  "elapsed_ms": 7031,
+  "usage": {
+    "input_tokens": 1010,
+    "output_tokens": 520
+  },
+  "logprobs": null
+}

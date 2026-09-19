@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril Hypotension - Patients on Diuretic Therapy: Patients on diuretics, and especially those in whom diuretic therapy was recently instituted, may occasionally experience an excessive reduction of blood pressure after initiation of therapy with lisinopril. The possibility of hypotensive effects with lisinopril can be minimized by either discontinuing the diuretic or increasing the salt intake prior to initiation of treatment with lisinopril. If it is necessary to continue the diuretic, initiate therapy with lisinopril at a dose of 5 mg daily, and provide close medical supervision after the initial dose for at least two hours and until blood pressure has stabilized for at least an additional hour.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1: Prominent features of this document:\\n(1) Discusses drug interaction between lisinopril and diuretics, specifically how diuretics can potentiate hypotensive effects\\n(2) Provides specific management strategies (discontinuing diuretic, increasing salt intake, dose adjustment to 5 mg daily)\\n(3) Includes monitoring requirements (close medical supervision for at least 2 hours after initial dose, until blood pressure stabilizes)\\n\\nStep 2: Most plausible categories:\\n- Drug_interactions: This passage explicitly addresses the interaction between lisinopril and diuretics, describing how one drug affects the response to another. It focuses on the mechanism (excessive reduction in blood pressure) when these are combined.\\n- Dosage_and_administration: The passage specifies a particular dose (5 mg daily) and administration precautions (close medical supervision, timing of monitoring). However, this dosing recommendation is conditional and specifically tied to managing a drug interaction risk, not a primary dosing instruction.\\n\\nStep 3: Decision:\\nDrug_interactions wins because the passage's primary focus is explaining how diuretics interact with lisinopril and what happens when these drugs are used together, rather than providing general dosing guidance. The dosing information (5 mg daily) is presented as a mitigation strategy for the interaction, not as primary dosage instruction. The passage begins with 'Lisinopril Hypotension - Patients on Diuretic Therapy' which frames this as an interaction concern.\\n\\nRuled_out_because: While dosage information is present, it is secondary to and contingent upon describing an interaction. The passage is structured around the interaction risk and management, not around general dosing guidance.\",\"classification\":\"drug_interactions\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"Although the passage specifies a dose of 5 mg daily and monitoring duration, this dosing guidance exists solely as a risk mitigation strategy for the diuretic-lisinopril interaction. The primary focus and framing of the content is on the interaction between two drugs, not on general dosage and administration principles.\"}",
+  "elapsed_ms": 7065,
+  "usage": {
+    "input_tokens": 952,
+    "output_tokens": 489
+  },
+  "logprobs": null
+}

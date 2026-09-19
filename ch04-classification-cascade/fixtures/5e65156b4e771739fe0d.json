@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOther short-acting sympathomimetic aerosol bronchodilators should not be used concomitantly with albuterol. If additional adrenergic drugs are to be administered by any route, they should be used with caution to avoid deleterious cardiovascular effects. Beta-blockers: Use with caution. May block bronchodilatory effects of beta-agonists and produce severe bronchospasm. ( 7.1 ) Diuretics: Use with caution. Electrocardiographic changes and/or hypokalemia associated with non–potassium-sparing diuretics may worsen with concomitant beta-agonists. ( 7.2 ) Digoxin: May decrease serum digoxin levels. Consider monitoring digoxin levels. ( 7.3 ) Monoamine oxidase inhibitors and tricyclic antidepressants:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage discusses interactions between albuterol and other drugs (beta-blockers, diuretics, digoxin, MAOIs, tricyclic antidepressants); (b) It warns about using multiple sympathomimetic aerosol bronchodilators together and cautions about cardiovascular effects; (c) It provides specific guidance on how to manage concurrent use (e.g., 'Use with caution', monitoring recommendations). 2. Two most plausible categories: (a) drug_interactions - This passage explicitly discusses how albuterol interacts with other medications (beta-blockers blocking bronchodilation, diuretics causing hypokalemia, digoxin level changes, etc.). This is the primary focus and structure of the content. (b) dosage_and_administration - One might consider this if the passage were primarily about how to administer albuterol in combination with other drugs, but it does not discuss dosing amounts, frequencies, or routes of administration for albuterol itself. 3. Classification decision: drug_interactions clearly wins. The entire passage is organized around drug-drug interactions, warning labels, and management considerations when albuterol is used with other medications. The runner-up (dosage_and_administration) is ruled out because there is no information about albuterol dosing, frequency, or administration routes—only about concurrent use of other agents and their interactions with albuterol.\",\"classification\":\"drug_interactions\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"The passage contains no information about albuterol dosing, frequency, or routes of administration. It focuses exclusively on how other drugs interact with albuterol and what precautions to take, not on how to administer albuterol itself.\"}",
+  "elapsed_ms": 5800,
+  "usage": {
+    "input_tokens": 994,
+    "output_tokens": 405
+  },
+  "logprobs": null
+}

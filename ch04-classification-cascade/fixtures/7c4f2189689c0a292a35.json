@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nResumption of warfarin sodium administration reverses the effect of vitamin K, and a therapeutic INR can again be obtained by careful dosage adjustment. If rapid re-anticoagulation is indicated, heparin may be preferable for initial therapy. Prothrombin complex concentrate (PCC), fresh frozen plasma, or activated Factor VII treatment may be considered if the requirement to reverse the effects of warfarin sodium is urgent. A risk of hepatitis and other viral diseases is associated with the use of blood products; PCC and activated Factor VII are also associated with an increased risk of thrombosis. Therefore, these preparations should be used only in exceptional or life-threatening bleeding episodes secondary to warfarin sodium overdosage.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage discusses management of warfarin overdose/toxicity, specifically reversal of anticoagulant effects; (2) It describes multiple treatment options (resumption of warfarin, heparin, PCC, FFP, activated Factor VII) used in overdose scenarios; (3) It addresses risk-benefit considerations for choosing among these interventions in overdose management. Step 2 - Most plausible categories: (a) 'overdosage' - This passage explicitly addresses overdose management, discussing what happens when warfarin levels are excessive and how to reverse those effects. The context is managing toxicity from too much warfarin. (b) 'drug_interactions' - One might consider this if the passage were discussing interactions between warfarin and other drugs, but it is not; it discusses overdose reversal strategies, not concurrent drug effects. Step 3 - Decision: 'overdosage' is the clear winner. The passage specifically discusses: reversing the effects of excess warfarin, management strategies for overdose (heparin, PCC, FFP, Factor VII), indications for urgent reversal in 'life-threatening bleeding episodes secondary to warfarin sodium overdosage,' and risk considerations specific to overdose management. This is definitionally overdosage content. 'drug_interactions' is ruled out because the passage does not address effects of combining warfarin with other drugs; it addresses toxicity reversal from overdose alone.\", \"classification\": \"overdosage\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"The passage discusses management of warfarin overdose and toxicity reversal, not the effects of combining warfarin with other drugs or substances. Drug interactions address concurrent use of multiple agents, whereas this focuses on reversing excess warfarin effects in overdose scenarios.\"}",
+  "elapsed_ms": 6394,
+  "usage": {
+    "input_tokens": 947,
+    "output_tokens": 417
+  },
+  "logprobs": null
+}

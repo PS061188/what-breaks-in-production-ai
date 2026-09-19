@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSafety and effectiveness of Gabapentin in the management of postherpetic neuralgia in pediatric patients have not been established. Safety and effectiveness as adjunctive therapy in the treatment of partial seizures in pediatric patients below the age of 3 years has not been established [see Clinical Studies (14.2)] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. The three most prominent features of this document are: (a) It explicitly concerns pediatric patients and addresses safety/effectiveness in children; (b) It discusses two specific medical conditions - postherpetic neuralgia and partial seizures; (c) It makes clear statements about what has NOT been established rather than prescribing clinical practices.\\n\\n2. The two most plausible categories are: (a) PEDIATRIC_USE - This passage directly addresses the safety and effectiveness of Gabapentin specifically in pediatric populations across multiple conditions, which is the core purpose of pediatric use sections. (b) INDICATIONS_AND_USAGE - One might argue this addresses approved indications, but the passage specifically negates indications rather than establishing them.\\n\\n3. PEDIATRIC_USE wins decisively. The passage is explicitly framed around what is known (or not known) about use in pediatric patients. It addresses safety and effectiveness specifically in children and differentiates by age (below 3 years). This is textbook content for a pediatric use section. INDICATIONS_AND_USAGE is ruled out because: (1) indications sections state what the drug IS approved to treat, while this section states what has NOT been established; (2) the primary organizing principle here is the age of the patient population, not the medical conditions themselves; (3) this is restricting/limiting information about pediatric use, not establishing affirmative indications.\",\"classification\":\"pediatric_use\",\"runner_up\":\"indications_and_usage\",\"ruled_out_because\":\"This passage explicitly negates rather than establishes indications, and is organized by pediatric population/age rather than by conditions the drug treats. The content is specific to what safety and effectiveness data does not exist in children, which is characteristic of pediatric use sections, not indications sections.\"}",
+  "elapsed_ms": 6346,
+  "usage": {
+    "input_tokens": 862,
+    "output_tokens": 411
+  },
+  "logprobs": null
+}

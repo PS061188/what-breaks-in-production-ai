@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAtorvastatin is an inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA) reductase. Atorvastatin calcium USP is (βR, δR)-2-(p-fluorophenyl)-β,δ-dihydroxy-5-isopropyl-3-phenyl-4(phenylcarbamoyl)pyrrole-l-heptanaote (1:2), trihydrate. The molecular formula of atorvastatin calcium USP is C 66 H 68 CaF 2 N 4 O 10 .3H 2 O and its molecular weight is 1209.41. Its structural formula is: Atorvastatin calcium USP is a white to off-white crystalline powder that is insoluble in aqueous solutions of pH 4 and below. Atorvastatin calcium USP is soluble to freely soluble in methanol, slightly soluble in alcohol, insoluble to very slightly soluble in distilled water, in pH 7.4 phosphate buffer, and in acetonitrile.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Detailed chemical nomenclature provided: full IUPAC name of atorvastatin calcium USP with stereochemical descriptors; (2) Molecular formula and molecular weight explicitly stated: C66H68CaF2N4O10·3H2O, MW 1209.41; (3) Physical and chemical properties described: appearance as white crystalline powder, solubility characteristics across multiple solvents and pH conditions. Step 2 - Two most plausible categories: (a) 'description' - This section provides the chemical structure, molecular formula, molecular weight, and formulation characteristics typical of drug descriptions. (b) 'how_supplied' - Packaging and physical form information could conceivably be relevant, though the passage contains no information about dosage forms, strengths, packaging configurations, or storage conditions typical of how_supplied sections. Step 3 - Determination: 'description' wins decisively. The passage contains classic description section elements: chemical nomenclature (IUPAC name with stereochemistry), molecular formula, molecular weight, structural information, and physical/chemical properties (appearance, solubility behavior). The 'how_supplied' category is ruled out because it contains zero information about packaging, storage conditions, available dosage strengths, or commercial forms—only the intrinsic chemical and physical properties of the active ingredient itself.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"The passage contains no information about dosage forms, strengths, packaging, or storage conditions. It focuses entirely on the chemical composition, structure, and intrinsic physical/chemical properties of atorvastatin calcium USP itself, which is characteristic of 'description' sections, not 'how_supplied' sections.\"}",
+  "elapsed_ms": 5246,
+  "usage": {
+    "input_tokens": 1061,
+    "output_tokens": 408
+  },
+  "logprobs": null
+}

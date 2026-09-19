@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe following serious adverse reactions to warfarin sodium are discussed in greater detail in other sections of the labeling: Hemorrhage [see Boxed Warning, Warnings and Precautions (5.1), and Overdosage ( 10 )] Tissue Necrosis [see Warnings and Precautions ( 5.2 )] Calciphylaxis [see Warnings and Precautions ( 5.3 )] Acute Kidney Injury [see Warnings and Precautions ( 5.4 )] Systemic Atheroemboli and Cholesterol Microemboli [see Warnings and Precautions ( 5.5 )] Limb Ischemia, Necrosis, and Gangrene in Patients with HIT and HITTS [see Warnings and Precautions ( 5.6 )] Other Clinical Settings with Increased Risks [see Warnings and Precautions ( 5.8 )] Other adverse reactions to warfarin sodium include:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n1. The passage explicitly lists and names serious adverse reactions associated with warfarin sodium (hemorrhage, tissue necrosis, calciphylaxis, acute kidney injury, etc.)\\n2. It cross-references these reactions to other sections of labeling, including Warnings and Precautions and Overdosage sections\\n3. The structure introduces these as 'serious adverse reactions' and then states 'Other adverse reactions to warfarin sodium include:' indicating a catalog of side effects\\n\\nStep 2: Two most plausible categories:\\n- Adverse_reactions: This passage directly catalogs serious adverse reactions observed with warfarin use, listing conditions like hemorrhage, tissue necrosis, calciphylaxis, and acute kidney injury. This is the defining content of the adverse reactions section.\\n- Overdosage: The passage mentions cross-references to the Overdosage section (10) when discussing hemorrhage, which is a manifestation of warfarin toxicity. However, the document itself is not describing overdose specifically—it's listing adverse reactions that can occur at therapeutic doses or in various clinical contexts.\\n\\nStep 3: Adverse_reactions wins decisively.\\nThe passage is explicitly framed as 'serious adverse reactions to warfarin sodium' and 'Other adverse reactions to warfarin sodium include:' This is a catalog of side effects and adverse reactions observed in clinical use. While overdose is mentioned as a cross-reference, the document itself is not discussing overdose management or overdose-specific signs; it's enumerating the adverse reaction profile of the drug. Overdosage sections typically focus on signs of toxicity from excessive dosing and management strategies, not a broad listing of adverse reactions that occur at various dose levels or in specific patient populations.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"overdosage\", \"ruled_out_because\": \"Although the passage cross-references the Overdosage section, the passage itself is explicitly titled and structured as a catalog of 'serious adverse reactions' and 'other adverse reactions,' not a discussion of overdose signs, symptoms, or management. Overdosage sections focus on excess toxicity and treatment of overdose specifically, whereas this passage enumerates the adverse reaction profile broadly.\"}",
+  "elapsed_ms": 6083,
+  "usage": {
+    "input_tokens": 1030,
+    "output_tokens": 512
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIn general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal or cardiac function, and of concomitant disease or other drug therapy. This drug is known to be substantially excreted by the kidney, and the risk of toxic reactions to this drug may be greater in patients with impaired renal function. Because elderly patients are more likely to have decreased renal function, care should be taken in dose selection and it may be useful to monitor renal function (see PRECAUTIONS: General and DOSAGE AND ADMINISTRATION ). Geriatric Patients: In general, dose selection for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ). Geriatric Patients: In general, dose selection and dose adjustment for the elderly patient should be cautious, usually starting at the low end of the dosing range (see PRECAUTIONS: Geriatric Use ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The passage explicitly and repeatedly addresses 'elderly patients' and 'geriatric patients' (mentioned 3 times)\\n2. It discusses dose selection considerations specific to aging, including decreased hepatic, renal, or cardiac function\\n3. It references renal function monitoring and provides guidance on starting doses for older populations\\n\\nStep 2 - Two most plausible categories:\\n1. GERIATRIC_USE: This is explicitly about elderly/geriatric patient populations, discussing dosing adjustments, physiological changes in aging, renal function concerns, and precautions specific to patients 65 and older. The category definition states 'what is known about use in patients 65 and older' - this passage is entirely about that.\\n2. DOSAGE_AND_ADMINISTRATION: The passage does address dosing (starting at low end of range, dose selection, dose adjustment), which could suggest it belongs in dosage and administration. However, the dosing guidance here is specifically contextualized and modified for elderly patients, not general dosing instructions.\\n\\nStep 3 - Decision:\\nGeriatric_use wins decisively. This passage is fundamentally about how to use the drug differently in elderly patients due to age-related physiological changes, not about general dosing for the population at large. The repeated emphasis on 'elderly patient,' 'geriatric patients,' and age-specific considerations (decreased renal function in older adults, greater frequency of comorbidities) makes this clearly a geriatric use section rather than a standard dosage and administration section.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dosing information is present, it is entirely subordinated to and contextualized by geriatric-specific considerations. This is guidance on how to dose elderly patients specifically, not general dosage and administration for all patients. The passage's exclusive focus on elderly/geriatric populations (stated three times) and age-related physiological factors makes geriatric_use the clear and unambiguous classification.\"}",
+  "elapsed_ms": 6258,
+  "usage": {
+    "input_tokens": 1020,
+    "output_tokens": 479
+  },
+  "logprobs": null
+}

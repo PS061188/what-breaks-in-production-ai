@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets are contraindicated in patients who are hypersensitive to any component of this product and in patients with a history of angioedema related to previous treatment with an angiotensin converting enzyme inhibitor and in patients with hereditary or idiopathic angioedema. Because of the hydrochlorothiazide component, this product is contraindicated in patients with anuria or hypersensitivity to other sulfonamide-derived drugs. Lisinopril and hydrochlorothiazide tablets are contraindicated in combination with a neprilysin inhibitor (e.g., sacubitril). Do not administer lisinopril and hydrochlorothiazide tablets within 36 hours of switching to or from sacubitril/valsartan, a neprilysin inhibitor (see WARNINGS ). Do not coadminister aliskiren with lisinopril and hydrochlorothiazide tablets in patients with diabetes.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly lists situations where the drug 'is contraindicated' or 'must not be used', including hypersensitivity, angioedema history, anuria, and specific drug combinations. (2) Multiple absolute prohibition statements using phrases like 'are contraindicated', 'Do not administer', and 'Do not coadminister'. (3) The content focuses entirely on patient populations and conditions in which use is forbidden, with no discussion of dosing, side effects, or other information.\\n\\nStep 2 - Most plausible categories: (a) 'contraindications' - This passage is a textbook definition of contraindications: it explicitly lists patient populations and conditions in which the drug must not be used, including specific medical history, comorbidities, and drug-drug interactions that prohibit use. (b) 'drug_interactions' - The passage does mention coadministration warnings with aliskiren and neprilysin inhibitors, which could relate to drug interactions, but these are presented as absolute contraindications rather than as information about what happens when drugs are combined.\\n\\nStep 3 - Determination: 'contraindications' clearly wins. While the passage does mention specific drugs (aliskiren, sacubitril/valsartan) that should not be coadministered, the framing and purpose of the entire section is to establish absolute prohibitions on use rather than to describe interaction mechanisms or effects. The language consistently uses 'is contraindicated' and 'do not' directives, which are the hallmark of contraindications sections. Drug interactions sections typically describe what effects occur when substances are combined, not absolute prohibitions. The runner-up is ruled out because this passage presents safety prohibitions rather than mechanistic or descriptive information about how drugs interact.\",\"classification\": \"contraindications\",\"runner_up\": \"drug_interactions\",\"ruled_out_because\": \"While the passage mentions specific drugs (aliskiren, sacubitril/valsartan) that should not be coadministered, these are presented as absolute contraindications rather than as descriptive information about interaction mechanisms or effects. The entire section uses contraindication language ('is contraindicated', 'do not administer', 'do not coadminister') to establish where use is forbidden, which is the defining characteristic of a contraindications section rather than a drug interactions section.\"}",
+  "elapsed_ms": 6636,
+  "usage": {
+    "input_tokens": 1019,
+    "output_tokens": 541
+  },
+  "logprobs": null
+}

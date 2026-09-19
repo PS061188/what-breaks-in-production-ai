@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nClinical studies of lisinopril and hydrochlorothiazide tablets did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy. In a multiple-dose pharmacokinetic study in elderly versus young hypertensive patients using the lisinopril/hydrochlorothiazide combination, area under the plasma concentration time curve (AUC) increased approximately 120% for lisinopril and approximately 80% for hydrochlorothiazide in older patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Explicit discussion of subjects aged 65 and over and elderly patients; (2) Comparison of elderly vs. younger patients in clinical experience; (3) Pharmacokinetic data from a multiple-dose study comparing elderly versus young hypertensive patients. Step 2 - Two most plausible categories: (a) Geriatric_use: The passage explicitly discusses clinical study enrollment of subjects 65+, clinical experience in elderly vs. younger patients, dose selection considerations for elderly patients, and pharmacokinetic differences in older patients. This is clearly the primary focus. (b) Drug_interactions: The passage mentions 'concomitant disease or other drug therapy' as a consideration, but this is only mentioned in passing as a general cautionary principle for dose selection in elderly patients, not as the main subject. Step 3 - Winner and ruled-out rationale: Geriatric_use is the clear winner. The entire passage is structured around age-related considerations: insufficient elderly representation in studies, lack of identified differences in responses between elderly and younger patients, specific dosing recommendations for elderly patients based on physiological changes, and pharmacokinetic data specifically comparing elderly versus young patients. The runner-up (drug_interactions) is ruled out because while concomitant therapy is mentioned, it is only referenced as one of several factors to consider in elderly dose selection, not as the focus of the passage. The passage is about how age affects drug response and dosing, not about interactions between lisinopril/hydrochlorothiazide and other drugs.\", \"classification\": \"geriatric_use\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"While concomitant disease or other drug therapy is mentioned, it appears only as one incidental consideration in a larger discussion of elderly dose selection. The passage's primary focus is on age-related pharmacokinetic differences, clinical experience in elderly versus younger patients, and dosing recommendations specific to patients 65 and older—all hallmarks of geriatric_use, not drug_interactions.\"}",
+  "elapsed_ms": 5093,
+  "usage": {
+    "input_tokens": 976,
+    "output_tokens": 463
+  },
+  "logprobs": null
+}

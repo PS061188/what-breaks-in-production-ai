@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nNo specific information is available on the treatment of overdosage with lisinopril and hydrochlorothiazide tablets. Treatment is symptomatic and supportive. Therapy with lisinopril and hydrochlorothiazide tablets should be discontinued and the patient observed closely. Suggested measures include induction of emesis and/or gastric lavage, and correction of dehydration, electrolyte imbalance and hypotension by established procedures. Lisinopril Following a single oral dose of 20 g/kg, no lethality occurred in rats and death occurred in one of 20 mice receiving the same dose. The most likely manifestation of overdosage would be hypotension, for which the usual treatment would be intravenous infusion of normal saline solution.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n(1) The passage explicitly begins with 'No specific information is available on the treatment of overdosage with lisinopril and hydrochlorothiazide tablets'\\n(2) It describes symptomatic and supportive treatment approaches, including induction of emesis, gastric lavage, correction of dehydration, and electrolyte imbalance\\n(3) It includes animal toxicity data (rats and mice receiving 20 g/kg doses) and discusses the 'most likely manifestation of overdosage' being hypotension with treatment recommendations\\n\\nStep 2 - Two most plausible categories:\\n(1) Overdosage: This section contains classic overdosage information including treatment strategies, animal toxicity studies, expected manifestations (hypotension), and management procedures (intravenous saline). The passage is structured exactly as an overdosage section would be.\\n(2) Adverse reactions: Could be considered because the passage mentions hypotension and effects seen in animal studies, which might be interpreted as adverse manifestations. However, adverse_reactions typically describe unwanted effects occurring at therapeutic or normal doses, not at overdose levels.\\n\\nStep 3 - Classification decision:\\nThe passage clearly falls under 'overdosage' because:\\n- It explicitly states it is discussing 'treatment of overdosage'\\n- It covers animal LD50-type data (dose levels causing lethality in test animals)\\n- It describes overdose-specific management procedures (emesis, gastric lavage)\\n- It identifies overdose-specific manifestations (hypotension in overdose context)\\n- The entire structure and content are characteristic of the overdosage section of a label\\n\\nAdverse_reactions is ruled out because this section discusses effects at overdose levels, not therapeutic use adverse effects.\",\"classification\":\"overdosage\",\"runner_up\":\"adverse_reactions\",\"ruled_out_because\":\"The passage explicitly addresses 'treatment of overdosage' with overdose-specific management procedures, animal LD50 data, and overdose manifestations. Adverse_reactions describes unwanted effects at therapeutic doses during normal use, not overdose toxicity and treatment.\"}",
+  "elapsed_ms": 7235,
+  "usage": {
+    "input_tokens": 966,
+    "output_tokens": 501
+  },
+  "logprobs": null
+}

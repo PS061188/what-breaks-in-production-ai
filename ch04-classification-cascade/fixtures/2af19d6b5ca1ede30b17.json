@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe safety and effectiveness of albuterol sulfate HFA for treatment or prevention of bronchospasm and for prevention of exercised-induced bronchospasm in pediatric patients aged 4 years and older have been established. Use of albuterol sulfate HFA for this indication is supported by evidence from adequate and well-controlled studies of two 12-week clinical trials in subjects aged 12 years and older with asthma and one 2-week clinical trial in subjects aged 4 to 11 years with asthma [see Adverse Reactions ( 6.1 ), Clinical Studies ( 14.1 )] . The safety and effectiveness of albuterol sulfate HFA in pediatric patients younger than 4 years have not been established. Three trials have been conducted to evaluate the safety and efficacy of albuterol sulfate HFA in subjects younger than 4 years and the findings are described below.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage explicitly states 'safety and effectiveness of albuterol sulfate HFA for treatment or prevention of bronchospasm' - this is describing what the drug is approved to treat; (2) The passage references specific clinical trial evidence supporting use in particular age groups (4 years and older, 12 years and older); (3) The passage discusses pediatric populations and what has/has not been established in different age groups. Step 2 - Two most plausible categories: (a) 'indications_and_usage' - The passage directly states the drug is used 'for treatment or prevention of bronchospasm and for prevention of exercise-induced bronchospasm' in pediatric patients, which is core language for approved indications. (b) 'pediatric_use' - The passage extensively discusses safety and effectiveness in different pediatric age groups (younger than 4 years, 4-11 years, 12 years and older), which is characteristic of pediatric_use sections. Step 3 - Determining the winner: While the passage does contain pediatric-specific information, its primary function is to state the approved indications (treatment/prevention of bronchospasm, exercise-induced bronchospasm) and the populations in which effectiveness has been established. The pediatric information is provided in the context of describing which populations these indications apply to - it's part of the indication statement rather than a separate discussion of how pediatric patients differ or require special consideration. The passage is asserting 'the drug works for X condition in Y populations' which is the essence of indications_and_usage. Pediatric_use sections typically go deeper into dosing adjustments, pharmacokinetic differences, or special monitoring needs in children, whereas this is simply delimiting the approved indications by age group.\",\"classification\": \"indications_and_usage\",\"runner_up\": \"pediatric_use\",\"ruled_out_because\": \"While the passage discusses pediatric populations extensively, it is primarily stating the approved indications and which age groups have established safety and effectiveness. The pediatric age breakdown is used to define the scope of approved indications rather than to discuss special pediatric considerations, dosing adjustments, or safety profiles unique to children. This is characteristic of indications_and_usage language.\"}",
+  "elapsed_ms": 7260,
+  "usage": {
+    "input_tokens": 998,
+    "output_tokens": 514
+  },
+  "logprobs": null
+}

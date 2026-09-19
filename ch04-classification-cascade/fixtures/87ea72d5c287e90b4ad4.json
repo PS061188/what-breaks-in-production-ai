@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAcute liver failure or decompensated cirrhosis [see Warnings and Precautions (5.3) ] Hypersensitivity to atorvastatin or any excipients in atorvastatin calcium. Hypersensitivity reactions, including anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, and toxic epidermal necrolysis, have been reported [see Adverse Reactions (6.2) ]. Acute liver failure or decompensated cirrhosis ( 4 ). Hypersensitivity to atorvastatin or any excipient in atorvastatin calcium ( 4 ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The document contains three prominent features: (1) Explicit reference to 'Acute liver failure or decompensated cirrhosis' as absolute contraindications with cross-reference to section 4; (2) Statement that 'Hypersensitivity to atorvastatin or any excipients' is a contraindication, also marked section 4; (3) A list of specific hypersensitivity reactions (anaphylaxis, angioneurotic edema, erythema multiforme, Stevens-Johnson syndrome, toxic epidermal necrolysis) with cross-reference to Adverse Reactions section 6.2. The two most plausible categories are: (A) 'contraindications' - the document explicitly identifies situations where the drug must not be used (acute liver failure, decompensated cirrhosis, hypersensitivity), with clear section 4 markings typical of contraindications sections; (B) 'adverse_reactions' - the document lists specific hypersensitivity reactions observed in patients with cross-reference to section 6.2. The document wins for 'contraindications' because the primary structure and intent is to state absolute conditions under which the drug must NOT be given (marked with section 4 references and framing language like 'must not' implied by the contraindications context). The hypersensitivity reactions listed serve here as evidence supporting why hypersensitivity is a contraindication, rather than as the primary focus of cataloging adverse effects. The cross-reference to section 6.2 for adverse reactions is secondary context, not the main classification purpose of this passage.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While hypersensitivity reactions are listed, they are presented here as justification for the contraindication of hypersensitivity, not as a catalog of observed side effects. The document's primary structure—identifying absolute conditions where the drug cannot be used (section 4)—defines it as a contraindications section rather than an adverse_reactions section.\"}",
+  "elapsed_ms": 5182,
+  "usage": {
+    "input_tokens": 949,
+    "output_tokens": 468
+  },
+  "logprobs": null
+}

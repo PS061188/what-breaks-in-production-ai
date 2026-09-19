@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMajor Depressive Disorder – Sertraline hydrochloride is indicated for the treatment of major depressive disorder in adults. The efficacy of Sertraline hydrochloride in the treatment of a major depressive episode was established in six to eight week controlled trials of adult outpatients whose diagnoses corresponded most closely to the DSM-III category of major depressive disorder (see Clinical Trials under CLINICAL PHARMACOLOGY ). A major depressive episode implies a prominent and relatively persistent depressed or dysphoric mood that usually interferes with daily functioning (nearly every day for at least 2 weeks); it should include at least 4 of the following 8 symptoms: change in appetite, change in sleep, psychomotor agitation or retardation, loss of interest in usual activities or decrease in sexual drive, increased fatigue, feelings of guilt or worthlessness, slowed thinking or impaired concentration, and a suicide attempt or suicidal ideation.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n(1) The passage explicitly states 'is indicated for the treatment of major depressive disorder in adults' - this is a direct statement of the approved therapeutic use\\n(2) The passage defines what constitutes a major depressive episode with specific diagnostic criteria (DSM-III category, symptoms list, duration requirements)\\n(3) The passage references controlled trials establishing efficacy, which is standard language in indications sections\\n\\nStep 2 - Two most plausible categories:\\n(1) 'indications_and_usage' - This passage is the canonical example of an indications section. It names the condition (major depressive disorder), specifies the population (adults), and provides clinical context including diagnostic criteria and trial data that justify the indication.\\n(2) 'description' - One might argue this section describes what major depressive disorder is clinically, including its diagnostic features. However, describing a disease state is fundamentally different from describing a drug's chemical composition, formulation, or inactive ingredients.\\n\\nStep 3 - Determination:\\n'indications_and_usage' wins decisively. The passage uses the phrase 'is indicated for the treatment of' which is the exact language of an indications statement. While it includes descriptive information about the condition, the purpose of this passage is to establish what disease state the drug is approved to treat. The 'description' category is for information about the drug itself (chemical name, structure, formulation, ingredients), not the medical condition it treats.\",\"classification\": \"indications_and_usage\",\"runner_up\": \"description\",\"ruled_out_because\": \"The 'description' category concerns the drug's chemical properties, formulation, and inactive ingredients, not the clinical condition being treated. Although this passage includes descriptive elements about major depressive disorder's symptoms and diagnostic criteria, its primary purpose is to establish the approved therapeutic indication, not to describe the drug product itself.\"}",
+  "elapsed_ms": 6225,
+  "usage": {
+    "input_tokens": 1001,
+    "output_tokens": 431
+  },
+  "logprobs": null
+}

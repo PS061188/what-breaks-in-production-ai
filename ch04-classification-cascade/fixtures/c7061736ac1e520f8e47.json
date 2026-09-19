@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nGabapentin Capsules USP 300 mg capsules: Hard gelatin capsules with yellow opaque body with caramel opaque cap, imprinted with “AHD” on cap and “300” on body in black ink and filled with white to off-white powder. NDC: 71335-1093-8: 40 Capsules in a BOTTLE NDC: 71335-1093-1: 90 Capsules in a BOTTLE NDC: 71335-1093-2: 28 Capsules in a BOTTLE NDC: 71335-1093-3: 58 Capsules in a BOTTLE NDC: 71335-1093-4: 30 Capsules in a BOTTLE NDC: 71335-1093-5: 60 Capsules in a BOTTLE NDC: 71335-1093-6: 120 Capsules in a BOTTLE NDC: 71335-1093-7: 180 Capsules in a BOTTLE Store at 20° to 25° C (68° to 77° F); excursions permitted to 15° to 30°C (59° to B6°F). [See USP Controlled Room Temperature] Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Detailed physical description of the capsule appearance including color, shape, imprint details, and powder characteristics; (2) Multiple NDC codes paired with specific package sizes (40, 90, 28, 58, 30, 60, 120, 180 capsules); (3) Storage instructions with temperature ranges and storage conditions. Step 2 - Most plausible categories: 'how_supplied' is the primary candidate because the document systematically lists dosage forms (hard gelatin capsules), strengths (300 mg), specific NDC identifiers with corresponding package quantities, and storage conditions - all hallmarks of how_supplied sections. 'description' is the runner-up because it does mention physical appearance of the capsule (color, cap/body distinction, imprint), which could relate to product description. Step 3 - 'how_supplied' definitively wins because while physical appearance is mentioned, the document's primary focus and structure is on commercial availability information: multiple package size options with their corresponding NDC codes, packaging containers (bottles), and storage requirements. This is the characteristic structure of how_supplied sections in pharmaceutical labeling. The description element (capsule appearance) is merely supporting detail to identify the product within the context of supply and distribution information. The runner-up is ruled out because the document lacks the typical elements of a true description section, such as chemical name, molecular structure, formulation details, or inactive ingredients list.\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage includes some physical appearance details of the capsule (color, imprint, contents), it is primarily organized around commercial supply information: multiple NDC codes, specific package quantities, and storage conditions. A true 'description' section would focus on chemical composition, structural details, formulation components, and inactive ingredients. Here, the appearance details are subordinate to the listing of available dosage forms and package sizes with their corresponding NDC codes, which is the defining structure of 'how_supplied'.\"}",
+  "elapsed_ms": 9800,
+  "usage": {
+    "input_tokens": 1110,
+    "output_tokens": 457
+  },
+  "logprobs": null
+}

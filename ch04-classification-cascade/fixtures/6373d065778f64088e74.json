@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFurosemide is a diuretic which is an anthranilic acid derivative. Furosemide Tablets for oral administration contain furosemide as the active ingredient and the following inactive ingredients: corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP. Chemically, it is 4-chloro-N-furfuryl-5-sulfamoylanthranilic acid. Furosemide is available as white-off white tablets for oral administration in dosage strengths of 20, 40 and 80 mg. Furosemide is a white to off-white odorless crystalline powder. It is practically insoluble in water, sparingly soluble in alcohol, freely soluble in dilute alkali solutions and insoluble in dilute acids. The structural formula is as follows: Tested by USP Dissolution Test 1. This is an image of the structural formula for furosemide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) Chemical name provided: '4-chloro-N-furfuryl-5-sulfamoylanthranilic acid'; (2) Detailed inactive ingredients listed: corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP; (3) Physical/chemical properties described: white to off-white powder, solubility characteristics, crystalline form, structural formula referenced.\\n\\nStep 2 - Two most plausible categories: (a) 'description' - This category explicitly covers chemical name, structure, formulation and inactive ingredients. The passage directly provides the chemical name, inactive ingredients list, physical descriptions, solubility properties, and structural formula. (b) 'how_supplied' - This category covers dosage forms, strengths, packaging and storage. The passage does mention 'available as white-off white tablets for oral administration in dosage strengths of 20, 40 and 80 mg,' which could suggest how_supplied.\\n\\nStep 3 - Winner: 'description' decisively wins. The core content focuses extensively on chemical identity (chemical name, structural formula, physical appearance, solubility), formulation details (inactive ingredients), and drug substance properties. While the passage mentions dosage strengths and tablet forms, these are secondary details embedded in descriptive context. The passage lacks information about packaging (bottles, quantity per package), storage conditions, or any practical supply information that would define 'how_supplied.' The overwhelming emphasis on chemical properties, inactive ingredients, and structural characteristics is definitional for 'description.'\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"Although dosage strengths (20, 40, 80 mg) and dosage forms (tablets) are mentioned, the passage lacks the practical supply information characteristic of 'how_supplied' such as packaging details, container types, quantity per package, or storage instructions. The focus is entirely on chemical identity and formulation composition rather than supply/distribution details.\"}",
+  "elapsed_ms": 5324,
+  "usage": {
+    "input_tokens": 1028,
+    "output_tokens": 479
+  },
+  "logprobs": null
+}

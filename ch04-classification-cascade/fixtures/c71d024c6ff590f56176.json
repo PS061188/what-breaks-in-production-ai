@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe safety and effectiveness of atorvastatin calcium have not been established in pediatric patients younger than 10 years of age with HeFH or HoFH, or in pediatric patients with other types of hyperlipidemia (other than HeFH or HoFH).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(1) Explicit focus on 'pediatric patients' and age specification ('younger than 10 years of age')\\n(2) Discussion of what has NOT been established regarding safety and effectiveness in this population\\n(3) Differentiation between pediatric subgroups (HeFH/HoFH vs. other hyperlipidemia types)\\n\\nStep 2: Two most plausible categories:\\n(1) 'pediatric_use' - This category directly addresses what is known about drug use in children. The passage explicitly discusses pediatric patients, age groups, and lacks established safety/effectiveness data in specific pediatric populations. This is the core subject matter.\\n(2) 'indications_and_usage' - One might argue this relates to approved indications, and the passage does mention conditions (HeFH, HoFH, hyperlipidemia). However, it does not state that the drug IS indicated for these conditions in pediatrics; rather, it states safety/effectiveness have NOT been established.\\n\\nStep 3: Classification decision:\\n'pediatric_use' wins decisively. The passage is fundamentally about what is (or isn't) known regarding pediatric use of the drug. It specifies an age threshold, discusses pediatric patient populations, and addresses safety and effectiveness in children—all core content of the pediatric_use section. The passage does not assert or describe indications; it negates them for a specific population (pediatric patients under 10). This is characteristic of limitations and gaps in pediatric data, which belongs in the pediatric_use category.\", \"classification\": \"pediatric_use\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"The passage does not establish or describe indications for which the drug is approved. Instead, it explicitly states that safety and effectiveness have NOT been established in pediatric patients—a limitation of pediatric use data. This is the antithesis of stating indications; it restricts rather than defines them. The runner_up category focuses on what the drug treats, whereas this passage focuses on what is unknown in a specific population (children), which is the domain of pediatric_use.\"}",
+  "elapsed_ms": 7093,
+  "usage": {
+    "input_tokens": 856,
+    "output_tokens": 496
+  },
+  "logprobs": null
+}

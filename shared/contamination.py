@@ -25,7 +25,18 @@ import re
 # canonical FDA subsection title, or the topic word in a position only a heading
 # occupies.
 TOPIC_HEADINGS = {
-    "pediatric_use": r"\b(?:Pediatric|Paediatric)\s+(?:Patients|Use|Population)\b",
+    # "Pediatric Dosage" is a heading too (Metformin), and one label (Albuterol)
+    # gives the paediatric dose as a labelled dosing line rather than under a
+    # heading: "pediatric patients aged 4 years and older: 2 inhalations". The
+    # second pattern is the one prose rule here, and it is kept to that exact
+    # shape — an age-qualified label ending in a colon — so a passing mention
+    # of children does not count. Both were found by the model, not the regex:
+    # its token probabilities on those two "fabrications" were higher than on
+    # the average correct answer, which is what a read answer looks like.
+    "pediatric_use": (
+        r"\b(?:Pediatric|Paediatric)\s+(?:Patients|Use|Population|Dosage|Dosing)\b"
+        r"|\b(?:pediatric|paediatric) patients aged \d+ (?:years|months)(?: of age)? and older\s*:"
+    ),
     "pregnancy": r"\bPregnan(?:cy|t)\s+(?:Patients|Women|Use)\b|\bPregnancy\b(?=\s*[:—-])",
     "drug_interactions": r"\bDrug\s+Interactions?\b|\bConcomitant\s+(?:Use|Medications?|Therapy)\b",
     "adverse_reactions": r"\bAdverse\s+Reactions?\b|\bSide\s+Effects?\b",

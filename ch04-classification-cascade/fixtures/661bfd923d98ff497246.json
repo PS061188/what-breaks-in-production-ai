@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLevothyroxine sodium tablets, USP contain no ingredients made from a gluten-containing grain (wheat, barley, or rye). Table 9 provides a listing of the color additives by tablet strength: Table 9. Levothyroxine Sodium Tablet Color Additives Strength (mcg) Color additive(s) 25 FD&C Yellow No. 6 Aluminum Lake 50 None 75 FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 2 Aluminum Lake 88 FD&C Blue No. 2 Aluminum Lake, FD&C Yellow No. 5 Aluminum Lake 100 FD&C Yellow No. 5 Aluminum Lake, FD&C Yellow No. 6 Aluminum Lake 112 FD&C Red No. 40 Aluminum Lake, Carmine 125 FD&C Yellow No. 6 Aluminum Lake, FD&C Red No. 40 Aluminum Lake, FD&C Blue No. 1 Aluminum Lake 137 FD&C Blue No. 1 Aluminum Lake 150 FD&C Blue No.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) The passage lists specific tablet strengths measured in micrograms (mcg), ranging from 25 to 150; (b) For each strength, it enumerates color additives (FD&C dyes and aluminum lakes); (c) It explicitly states that tablets contain no gluten-containing grains, addressing ingredient composition and safety considerations.\\n\\nStep 2 - Two most plausible categories: (i) 'how_supplied' is highly plausible because this section typically details dosage forms, strengths, and packaging specifications. The listing of available tablet strengths (25, 50, 75, 88, 100, 112, 125, 137, 150 mcg) and their distinguishing features (color additives) directly matches what appears in 'how supplied' sections. (ii) 'description' is also plausible because it typically covers formulation details, inactive ingredients, and composition information. The passage does mention specific color additives and the absence of gluten-containing grains, which are part of the formulation description.\\n\\nStep 3 - Winner and ruling: 'how_supplied' wins decisively. The primary purpose of this passage is to organize and present available tablet strengths as distinct products with their identifying characteristics (colors). This is the canonical function of 'how supplied' sections - to specify what dosage forms and strengths are available on the market. While the passage does mention inactive ingredients (color additives), the organizational structure and primary content (tabulated strengths with associated colors) is definitively characteristic of 'how_supplied' rather than a general 'description' section, which would focus more on the drug substance itself, chemical structure, and formulation principles rather than inventory of available strengths.\",\"classification\":\"how_supplied\",\"runner_up\":\"description\",\"ruled_out_because\":\"While the passage does mention color additives and ingredients, its primary organizational purpose is to enumerate available tablet strengths and their distinguishing visual characteristics (by color), which is the core function of 'how supplied' sections. A 'description' section would focus on chemical name, structure, and formulation principles rather than tabulating available market strengths.\"}",
+  "elapsed_ms": 6662,
+  "usage": {
+    "input_tokens": 1071,
+    "output_tokens": 492
+  },
+  "logprobs": null
+}

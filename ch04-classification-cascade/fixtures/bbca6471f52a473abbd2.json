@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPrednisone is a glucocorticoid. Glucocorticoids are adrenocortical steroids, both naturally occurring and synthetic, which are readily absorbed from the gastrointestinal tract. Prednisone, USP is a white to partially white, crystalline powder. It is very slightly soluble in water; slightly soluble in alcohol, chloroform, dioxane, and methanol. The chemical name for prednisone is 17,21-dihydroxypregna-1,4-dienne-3,11,20-trione. The structural formula is represented below: C 21 H 26 O 5 M.W. 358.44 Each tablet, for oral administration, contains 5, 10, or 20 mg of prednisone. Inactive Ingredients: PredniSONE Tablets, USP contain the following inactive ingredients: lactose monohydrate, magnesium stearate, microcrystalline cellulose, pregelatinized starch, sodium starch glycolate and stearic acid (5 mg only). chem-pred.jpg\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The document contains three most prominent features: (1) Chemical identification - the chemical name (17,21-dihydroxypregna-1,4-dienne-3,11,20-trione) and structural formula (C21H26O5) are explicitly provided; (2) Physical characteristics - description of prednisone as a white to partially white crystalline powder with specific solubility properties in various solvents; (3) Formulation details - tablet strengths (5, 10, or 20 mg) and a complete list of inactive ingredients (lactose monohydrate, magnesium stearate, microcrystalline cellulose, etc.). The document also notes the drug class (glucocorticoid/adrenocortical steroid). The two most plausible categories are: (1) 'description' - because the passage focuses on chemical structure, molecular weight, physical form, solubility characteristics, and drug classification; (2) 'how_supplied' - because it lists tablet strengths and ingredients relevant to how the medication is packaged and supplied. The 'description' category wins decisively. The passage explicitly defines what prednisone is at a chemical and physical level - its class, chemical name, molecular formula, structural formula, and physical properties (color, crystallinity, solubility). While 'how_supplied' is mentioned (tablet strengths and formulation), the emphasis is clearly on describing the drug substance itself rather than packaging, storage, or supply details. The document provides no information about storage conditions, packaging configurations, or commercial availability - all typical elements of 'how_supplied' sections.\",\"classification\":\"description\",\"runner_up\":\"how_supplied\",\"ruled_out_because\":\"Although tablet strengths and inactive ingredients are mentioned, the primary focus is on the chemical identity, classification, physical characteristics, and solubility properties of prednisone itself. A 'how_supplied' section would typically emphasize packaging formats, container types, storage conditions, and commercial availability - elements absent from this passage.\"}",
+  "elapsed_ms": 8528,
+  "usage": {
+    "input_tokens": 1052,
+    "output_tokens": 451
+  },
+  "logprobs": null
+}

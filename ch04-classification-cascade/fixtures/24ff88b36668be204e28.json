@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nhair loss, flushing, rash Endocrine: decreased bone mineral density Reproductive: menstrual irregularities, impaired fertility Seizures have been reported rarely with the institution of levothyroxine therapy. Adverse Reactions in Pediatric Patients Pseudotumor cerebri and slipped capital femoral epiphysis have been reported in pediatric patients receiving levothyroxine therapy. Overtreatment may result in craniosynostosis in infants who have not undergone complete closure of the fontanelles, and in premature closure of the epiphyses in pediatric patients still experiencing growth with resultant compromised adult height. Hypersensitivity Reactions Hypersensitivity reactions to inactive ingredients have occurred in patients treated with thyroid hormone products.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n(1) The passage lists multiple organ system side effects: hair loss, flushing, rash, decreased bone mineral density, menstrual irregularities, impaired fertility, and seizures.\\n(2) There is a specific subsection titled \\\"Adverse Reactions in Pediatric Patients\\\" describing pseudotumor cerebri, slipped capital femoral epiphysis, craniosynostosis, and premature epiphyseal closure.\\n(3) The passage includes a section on \\\"Hypersensitivity Reactions\\\" describing adverse reactions to inactive ingredients.\\n\\nStep 2 - Evaluating top two categories:\\n(1) ADVERSE_REACTIONS is highly plausible because the passage systematically enumerates undesired effects of levothyroxine across multiple body systems, reports rare but serious events (seizures, pseudotumor cerebri), and discusses hypersensitivity reactions. This is the core content of an adverse reactions section.\\n(2) PEDIATRIC_USE is also plausible because there is an explicit \\\"Adverse Reactions in Pediatric Patients\\\" subsection describing specific pediatric complications (pseudotumor cerebri, slipped capital femoral epiphysis, craniosynostosis) and the risks of overtreatment in children.\\n\\nStep 3 - Determining the winner:\\nADVERSE_REACTIONS is the correct classification. While the passage does contain pediatric-specific safety information, the primary organizational structure and content focus is on documenting adverse reactions across populations. The pediatric information is presented as a subset of adverse reactions (\\\"Adverse Reactions in Pediatric Patients\\\") rather than being a comprehensive discussion of pediatric use, dosing, monitoring, or other pediatric-specific guidance. The passage is clearly part of an adverse reactions section that happens to include pediatric details, not a dedicated pediatric use section.\",\"classification\": \"adverse_reactions\",\"runner_up\": \"pediatric_use\",\"ruled_out_because\": \"While pediatric-specific adverse reactions are discussed, the passage is structured and organized as part of an adverse reactions section. The pediatric information appears as a labeled subsection within the broader enumeration of adverse effects, not as a comprehensive pediatric use discussion covering pediatric indications, dosing, monitoring, or other pediatric-specific management guidance.\"}",
+  "elapsed_ms": 6663,
+  "usage": {
+    "input_tokens": 967,
+    "output_tokens": 531
+  },
+  "logprobs": null
+}

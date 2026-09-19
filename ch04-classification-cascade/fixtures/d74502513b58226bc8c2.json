@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAmoxicillin and clavulanate potassium for oral suspension, USP is an oral antibacterial combination consisting of the semisynthetic antibacterial amoxicillin and the beta-lactamase inhibitor, clavulanate potassium (the potassium salt of clavulanic acid). Amoxicillin is an analog of ampicillin, derived from the basic penicillin nucleus, 6-aminopenicillanic acid. Chemically, amoxicillin is (2 S ,5 R, 6 R )-6-[( R )-(-)-2-amino-2-( p -hydroxyphenyl)acetamido]-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0] heptane-2-carboxylic acid trihydrate and may be represented structurally as: C 16 H 19 N 3 O 5 S • 3H 2 O M.W. 419.46 Clavulanic acid is produced by the fermentation of Streptomyces clavuligerus .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - Explicit chemical nomenclature: detailed IUPAC name of amoxicillin with molecular formula and molecular weight\\n   - Discussion of chemical structure and derivation: states amoxicillin is \\\"an analog of ampicillin, derived from the basic penicillin nucleus, 6-aminopenicillanic acid\\\"\\n   - Manufacturing/sourcing information: \\\"Clavulanic acid is produced by the fermentation of Streptomyces clavuligerus\\\"\\n\\n2. Two most plausible categories:\\n   - DESCRIPTION: This section typically covers chemical name, structure, formulation, and inactive ingredients. The passage provides the chemical name, structural formula, molecular weight, and fermentation source—all hallmarks of Description sections.\\n   - HOW_SUPPLIED: This covers dosage forms, strengths, and packaging. The passage does mention \\\"oral suspension, USP\\\" which is a dosage form descriptor, but lacks strength information (mg/mL), package sizes, or storage conditions.\\n\\n3. Decision:\\n   DESCRIPTION wins decisively. The passage is fundamentally about chemical characterization (detailed nomenclature, molecular formula, structural derivation, and synthesis method). While \\\"oral suspension, USP\\\" appears early, it is merely incidental context; the body of the text focuses entirely on chemical identity and composition. How_supplied would emphasize specific strengths, quantities, and storage instructions—none of which are present.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"Although 'oral suspension' appears early, the passage focuses almost entirely on chemical nomenclature, structural formula (C16H19N3O5S•3H2O), and fermentation source. How_supplied sections specify strengths, package sizes, and storage—critical information entirely absent here. The content is characteristic of Description sections in drug labeling.\"}",
+  "elapsed_ms": 8055,
+  "usage": {
+    "input_tokens": 1070,
+    "output_tokens": 439
+  },
+  "logprobs": null
+}

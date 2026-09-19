@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin Hydrochloride Tablets The safety and effectiveness of metformin hydrochloride tablets for the treatment of type 2 diabetes mellitus have been established in pediatric patients 10 to 16 years old. Safety and effectiveness of metformin hydrochloride tablets have not been established in pediatric patients less than 10 years old. Use of metformin hydrochloride tablets in pediatric patients 10 to 16 years old for the treatment of type 2 diabetes mellitus is supported by evidence from adequate and well-controlled studies of metformin hydrochloride tablets in adults with additional data from a controlled clinical study in pediatric patients 10 to 16 years old with type 2 diabetes mellitus, which demonstrated a similar response in glycemic control to that seen in adults [ see Clinical Studies (14.1) ] . In this study, adverse reactions were similar to those described in adults. A maximum daily dose of 2000 mg of metformin hydrochloride tablets is recommended. [ see Dosage and Administration (2.2) . ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The passage focuses explicitly on safety and effectiveness data in pediatric patients aged 10-16 years old\\n2. It compares pediatric responses to adult responses, noting 'similar response in glycemic control to that seen in adults'\\n3. It states that safety/effectiveness has NOT been established in children under 10 years old, and references a controlled clinical study specifically in pediatric patients\\n\\nStep 2 - Two most plausible categories:\\n1. 'pediatric_use' - This is the primary subject matter. The entire passage discusses what is known about metformin use in children, establishes age-based safety/effectiveness boundaries (10-16 years established, <10 years not established), and summarizes pediatric clinical trial findings.\\n2. 'indications_and_usage' - The passage does mention the indication (type 2 diabetes mellitus treatment) and establishes that this indication is supported in the pediatric population, which could be viewed as part of the approved uses.\\n\\nStep 3 - Which wins and why:\\n'pediatric_use' is the clear winner. The passage is structured around pediatric-specific information: age ranges for which safety/effectiveness are or are not established, comparison of pediatric to adult responses, reference to a pediatric clinical study, and pediatric dosing recommendations. While indications are mentioned, they serve only as context for the pediatric use discussion. The runner-up 'indications_and_usage' is ruled out because the passage's primary organization and content focus is on pediatric population-specific data rather than on establishing or describing the general approved indications of the drug.\",\"classification\": \"pediatric_use\",\"runner_up\":\"indications_and_usage\",\"ruled_out_because\":\"While type 2 diabetes mellitus is mentioned as the indication, the passage's entire structure and focus is on pediatric-specific safety and effectiveness data, age-based applicability boundaries, and pediatric clinical trial results—not on describing or establishing the drug's approved indications generally. The indication serves only as context for the pediatric use discussion.\"}",
+  "elapsed_ms": 5569,
+  "usage": {
+    "input_tokens": 1035,
+    "output_tokens": 476
+  },
+  "logprobs": null
+}

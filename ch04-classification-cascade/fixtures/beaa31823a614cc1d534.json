@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe expected signs and symptoms with overdosage of albuterol are those of excessive beta-adrenergic stimulation and/or occurrence or exaggeration of any of the signs and symptoms of beta-adrenergic stimulation (e.g., seizures, angina, hypertension or hypotension, tachycardia with rates up to 200 beats/min, arrhythmias, nervousness, headache, tremor, muscle cramps, dry mouth, palpitation, nausea, dizziness, fatigue, malaise, insomnia, hyperglycemia, hypokalemia, metabolic acidosis). As with all inhaled sympathomimetic medicines, cardiac arrest and even death may be associated with an overdose of Albuterol Sulfate HFA Inhalation Aerosol. Treatment consists of discontinuation of Albuterol Sulfate HFA together with appropriate symptomatic therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Key features of this document: (1) Explicitly discusses 'overdosage' in the opening phrase; (2) Lists signs and symptoms of excessive beta-adrenergic stimulation (seizures, angina, hypertension, tachycardia, arrhythmias, tremor, etc.); (3) Describes treatment approach ('discontinuation... with appropriate symptomatic therapy') and notes serious outcomes including cardiac arrest and death. Step 2 - Most plausible categories: (a) 'overdosage' - This section defines what happens when too much drug is given, characterizes the toxic presentation, and describes management. The passage explicitly states 'with overdosage of albuterol are those of...' and 'Treatment consists of...' which are canonical overdosage section elements. (b) 'adverse_reactions' - Overdosage-related symptoms could theoretically appear in an adverse reactions section since these are unwanted effects. However, adverse reactions typically document side effects observed at therapeutic or recommended doses, not the specific toxicological syndrome that occurs with excessive amounts. Step 3 - Winner and ruling: The classification is definitively 'overdosage'. The passage is structured as a dedicated overdosage section with three components: (1) description of expected overdose presentation, (2) enumeration of signs/symptoms, and (3) explicit treatment guidance. The runner-up 'adverse_reactions' is ruled out because: (a) this passage focuses on a specific toxicological state resulting from dose excess, not the spectrum of side effects at normal dosing; (b) it includes explicit treatment/management recommendations, which are characteristic of overdosage sections, not adverse reactions sections; (c) the opening phrase 'The expected signs and symptoms with overdosage' directly signals the overdosage category.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While some symptoms listed (tremor, headache, nausea) overlap with typical adverse reactions, this passage is specifically structured as an overdosage section with three defining elements: description of the overdose toxidrome, enumeration of excessive beta-adrenergic stimulation signs, and explicit treatment recommendations ('discontinuation... with appropriate symptomatic therapy'). Adverse reactions sections document side effects at therapeutic doses, not overdose management protocols. The opening phrase 'The expected signs and symptoms with overdosage' explicitly frames this as overdosage content.\"}",
+  "elapsed_ms": 8101,
+  "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 552
+  },
+  "logprobs": null
+}

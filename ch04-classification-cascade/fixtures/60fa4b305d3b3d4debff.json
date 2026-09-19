@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIn premature infants furosemide may precipitate nephrocalcinosis/nephrolithiasis. Nephrocalcinosis/nephrolithiasis has also been observed in children under 4 years of age with no history of prematurity who have been treated chronically with furosemide. Monitor renal function, and renal ultrasonography should be considered, in pediatric patients receiving furosemide. If furosemide is administered to premature infants during the first weeks of life, it may increase the risk of persistence of patent ductus arteriosus. Pediatric Patients: The usual initial dose of oral furosemide in pediatric patients is 2 mg/kg body weight, given as a single dose. If the diuretic response is not satisfactory after the initial dose, dosage may be increased by 1 or 2 mg/kg no sooner than 6 to 8 hours after the previous dose. Doses greater than 6 mg/kg body weight are not recommended. For maintenance therapy in pediatric patients, the dose should be adjusted to the minimum effective level.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Three prominent features: (1) The passage discusses specific adverse reactions unique to pediatric populations—nephrocalcinosis/nephrolithiasis in premature infants and children under 4 years, and risk of patent ductus arteriosus persistence in premature infants. (2) The passage provides dosing guidance specific to pediatric patients, including initial dose (2 mg/kg), dose titration intervals (6-8 hours), maximum dose (6 mg/kg), and maintenance therapy principles. (3) The passage includes monitoring recommendations (renal function, renal ultrasonography) specific to pediatric use.\\n\\nMost plausible categories: (a) Pediatric_use—The entire passage is framed around pediatric patient populations (premature infants, children under 4, pediatric patients generally), adverse effects specific to these age groups, and dosing specific to children. (b) Dosage_and_administration—The passage contains specific dosing information: initial dose, dose escalation timing, maximum dose, and maintenance therapy adjustment.\\n\\nDecision: Pediatric_use wins decisively. While dosing information is present, it is explicitly labeled as 'Pediatric Patients' dosing and is embedded within a passage that opens with pediatric-specific adverse reactions and safety monitoring. The passage's primary purpose is to address what is known about furosemide use in children, including both benefits/risks and dosing guidance. The dosing information serves as support for the pediatric use section rather than standing as a standalone dosage_and_administration entry. Dosage_and_administration sections typically present universal dosing without the pediatric qualifier and safety context that dominates this passage.\", \"classification\": \"pediatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dosing information is present, the passage is explicitly framed around pediatric patients and begins with pediatric-specific adverse reactions and monitoring requirements. The dosing is presented as part of pediatric use guidance rather than as comprehensive dosage and administration for all populations. The pediatric qualifier and safety context make this a pediatric_use section rather than a general dosage_and_administration section.\"}",
+  "elapsed_ms": 8271,
+  "usage": {
+    "input_tokens": 1040,
+    "output_tokens": 490
+  },
+  "logprobs": null
+}

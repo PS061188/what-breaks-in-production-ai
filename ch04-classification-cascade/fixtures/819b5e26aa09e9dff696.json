@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdminister once daily, preferably on an empty stomach, one-half to one hour before breakfast with a full glass of water. (2.1) Administer at least 4 hours before or after drugs that are known to interfere with absorption. (2.1) Evaluate the need for dose adjustments when regularly administering within one hour of certain foods that may affect absorption. (2.1) Advise patients to stop biotin and biotin-containing supplements at least 2 days before assessing TSH and/or T4 levels. (2.2) Starting dose depends on a variety of factors, including age, body weight, cardiovascular status, and concomitant medications. Peak therapeutic effect may not be attained for 4 to 6 weeks. (2.2) See full prescribing information for dosing in specific patient populations.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Three most prominent features: (1) Specific administration instructions including timing (once daily, on empty stomach, before breakfast), route (with full glass of water), and temporal relationships to meals and other drugs (4 hours before/after interfering drugs, 1 hour from certain foods); (2) Dose adjustment guidance based on patient factors (age, body weight, cardiovascular status, concomitant medications) and timing of therapeutic effect (4-6 weeks); (3) Special instructions regarding biotin supplements and their interaction with laboratory testing (TSH/T4 levels). The two most plausible categories are: (A) DOSAGE_AND_ADMINISTRATION - This passage contains detailed instructions on how much to give (starting dose depends on multiple factors), when to give it (once daily, on empty stomach, before breakfast), route of administration (full glass of water), timing relative to other substances (4 hours separation, 1 hour from foods), and expected therapeutic timeline. This is classic dosage and administration content. (B) DRUG_INTERACTIONS - The passage mentions interactions with drugs that interfere with absorption, biotin-containing supplements affecting TSH/T4 levels, and foods affecting absorption. However, while interactions are mentioned, they are presented here primarily as dosing instructions (\\\"administer at least 4 hours before or after\\\") rather than as a discussion of what happens when interactions occur or the mechanisms involved. DOSAGE_AND_ADMINISTRATION wins decisively. The passage is structured as prescribing instructions for how to administer the drug, not as an explanation of drug-drug or drug-food interactions themselves. While interactions are mentioned, they are referenced only to specify proper administration timing, which is fundamentally a dosing instruction.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"Although the passage mentions interactions with certain drugs, foods, and biotin supplements, it references these only to provide administration timing instructions. The core content is prescriptive guidance on how, when, and in what context to administer the drug, which is the defining purpose of dosage_and_administration. A drug_interactions section would typically explain the clinical consequences of co-administration, mechanisms of interaction, or recommendations if concurrent use is necessary—not merely use interaction information to establish dosing instructions.\"}",
+  "elapsed_ms": 7665,
+  "usage": {
+    "input_tokens": 982,
+    "output_tokens": 511
+  },
+  "logprobs": null
+}

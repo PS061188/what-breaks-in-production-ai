@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOver the 4-week treatment period, there were no treatment differences in asthma symptom scores between the groups receiving albuterol sulfate HFA 90 mcg, albuterol sulfate HFA 180 mcg, and placebo in either trial. In a third trial, albuterol sulfate HFA was evaluated in 87 pediatric subjects younger than 24 months for the treatment of acute wheezing. Albuterol sulfate HFA was delivered with an AeroChamber Plus Valved Holding Chamber in this trial. There were no significant differences in asthma symptom scores and mean change from baseline in an asthma symptom score between albuterol sulfate HFA 180 mcg and albuterol sulfate HFA 360 mcg. In vitro dose characterization studies were performed to evaluate the delivery of albuterol sulfate HFA via holding chambers with attached masks.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) The passage discusses clinical trial results evaluating albuterol sulfate HFA at different doses (90 mcg, 180 mcg, 360 mcg) and placebo; (b) It reports symptom score outcomes over a 4-week treatment period comparing treatment groups; (c) It includes a pediatric trial in subjects younger than 24 months for acute wheezing treatment, with specific delivery methods mentioned (AeroChamber Plus Valved Holding Chamber).\\n\\n2. Two most plausible categories: (a) 'indications_and_usage' - The passage mentions treatment of acute wheezing and asthma in pediatric subjects, which defines what the drug is used for; (b) 'pediatric_use' - The passage specifically focuses on a pediatric trial in children younger than 24 months, directly addressing age-specific safety and efficacy data.\\n\\n3. Decision: 'pediatric_use' wins. While the passage does reference the indication (acute wheezing treatment), the overwhelming focus is on pediatric-specific trial data - specifically a trial in 87 subjects younger than 24 months with dose characterization studies using pediatric-appropriate delivery devices (holding chambers with masks). The passage is primarily presenting what is known about using this drug in the pediatric population, which is the core purpose of the pediatric_use category. The mention of indications is incidental context for understanding the pediatric trial, not the document's primary focus.\", \"classification\": \"pediatric_use\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"While the passage mentions treatment of acute wheezing (an indication), the document's primary focus is on clinical trial data specifically in a pediatric population (subjects <24 months) with evaluation of delivery methods appropriate for pediatric use. The indication is contextual background rather than the main subject of the passage.\"}",
+  "elapsed_ms": 5239,
+  "usage": {
+    "input_tokens": 1002,
+    "output_tokens": 436
+  },
+  "logprobs": null
+}

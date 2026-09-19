@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril monotherapy is an effective treatment of hypertension in once-daily doses of 10 mg to 80 mg, while hydrochlorothiazide monotherapy is effective in doses of 12.5 mg to 50 mg per day. In clinical trials of lisinopril/hydrochlorothiazide combination therapy using lisinopril doses of 10 mg to 80 mg and hydrochlorothiazide doses of 6.25 mg to 50 mg, the antihypertensive response rates generally increased with increasing dose of either component. The side effects (see WARNINGS ) of lisinopril are generally rare and apparently independent of dose; those of hydrochlorothiazide are a mixture of dose-dependent phenomena (primarily hypokalemia) and dose-independent phenomena (e.g., pancreatitis), the former much more common than the latter.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n1. Discusses specific dose ranges for lisinopril (10-80 mg) and hydrochlorothiazide (6.25-50 mg) in both monotherapy and combination therapy\\n2. References clinical trial data showing dose-response relationships\\n3. Mentions side effects but primarily in the context of dose-dependent vs dose-independent phenomena\\n\\nStep 2 - Two most plausible categories:\\n1. DOSAGE_AND_ADMINISTRATION: The passage explicitly states dose ranges, frequency (once-daily), and how antihypertensive response correlates with dose adjustments. This is the core clinical information about how to administer the drugs.\\n2. ADVERSE_REACTIONS: The passage discusses side effects of both components, distinguishing between dose-dependent (hypokalemia) and dose-independent (pancreatitis) phenomena, and notes that side effects are 'generally rare' for lisinopril.\\n\\nStep 3 - Winner and rationale:\\nDOSAGE_AND_ADMINISTRATION wins decisively. While adverse reactions are mentioned, they are secondary to the primary focus of the passage, which is establishing the therapeutic dose ranges and explaining how dose increases correlate with therapeutic efficacy. The passage states 'antihypertensive response rates generally increased with increasing dose of either component' - this is classic dosage_and_administration content. The adverse_reactions content is minimal, mentioned only parenthetically, and serves to contextualize dose considerations rather than comprehensively discuss side effects. The ruled-out category fails because adverse reactions are not the primary subject matter.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"adverse_reactions\",\"ruled_out_because\": \"While adverse reactions are mentioned (hypokalemia, pancreatitis), they are discussed only in passing as secondary information. The primary focus of the passage is establishing specific dose ranges (10-80 mg lisinopril, 6.25-50 mg hydrochlorothiazide) and demonstrating dose-response relationships in clinical trials. This is foundational dosage_and_administration content, not a comprehensive discussion of adverse reactions.\"}",
+  "elapsed_ms": 6376,
+  "usage": {
+    "input_tokens": 996,
+    "output_tokens": 492
+  },
+  "logprobs": null
+}

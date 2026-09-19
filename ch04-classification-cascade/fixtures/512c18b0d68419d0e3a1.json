@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nClinical studies of lisinopril and hydrochlorothiazide tablets did not include sufficient numbers of subjects aged 65 and over to determine whether they respond differently from younger subjects. Other reported clinical experience has not identified differences in responses between the elderly and younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy. In a multiple-dose pharmacokinetic study in elderly versus young hypertensive patients using the lisinopril/hydrochlorothiazide combination, area under the plasma concentration time curve (AUC) increased approximately 120% for lisinopril and approximately 80% for hydrochlorothiazide in older patients.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The three most prominent features are: (1) explicit focus on subjects aged 65 and over and comparison with younger subjects, (2) discussion of clinical trial inclusion and pharmacokinetic differences in elderly patients specifically, and (3) dosing guidance tailored to elderly patients ('dose selection for an elderly patient should be cautious, usually starting at the low end'). The two most plausible categories are geriatric_use and dosage_and_administration. Geriatric_use is plausible because the passage explicitly compares elderly to younger patients, notes clinical experience in this age group, and discusses pharmacokinetic differences in older patients. Dosage_and_administration is plausible because it includes specific dosing guidance ('usually starting at the low end of the dosing range'). However, the dosing guidance here is not a primary statement of standard dosing regimens—it is conditional guidance specific to elderly patients based on their pharmacokinetics and physiologic differences. The passage's primary purpose is to characterize how elderly patients respond differently and what clinicians should know about using this drug in the elderly population, rather than to establish the general dosing schedule. This is definitional geriatric_use content.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While the passage includes a dosing consideration, its primary focus is characterizing elderly patient responses, pharmacokinetics in patients 65+, and how clinical experience differs between elderly and younger patients—the core purpose of geriatric_use sections. The dosing statement is a consequence of geriatric findings, not a primary dosage schedule.\"}",
+  "elapsed_ms": 4363,
+  "usage": {
+    "input_tokens": 976,
+    "output_tokens": 369
+  },
+  "logprobs": null
+}

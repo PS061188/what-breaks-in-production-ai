@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin hydrochloride tablets are contraindicated in patients with: Severe renal impairment (eGFR below 30 mL/min/1.73 m 2 ) [ see Warnings and Precautions (5.1) ]. Hypersensitivity to metformin. Acute or chronic metabolic acidosis, including diabetic ketoacidosis, with or without coma. Severe renal impairment (eGFR below 30 mL/min/1.73 m 2 ) ( 4 , 5.1 ) Hypersensitivity to metformin ( 4 ) Acute or chronic metabolic acidosis, including diabetic ketoacidosis, with or without coma. ( 4 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly states 'are contraindicated in patients with' as an opening phrase; (2) It lists specific medical conditions and patient states in which the drug must not be used (severe renal impairment, hypersensitivity, metabolic acidosis, diabetic ketoacidosis); (3) Multiple cross-references to section numbers (4, 5.1) indicating this is from a structured drug label's contraindications section. Step 2 - Most plausible categories: (a) 'contraindications' is most plausible because the passage uses the term 'contraindicated' as its primary organizing principle and enumerates situations where the drug is absolutely prohibited. (b) 'adverse_reactions' could be considered since metabolic acidosis and ketoacidosis are serious conditions, but the context here is prohibition of use rather than observable patient reactions to drug administration. Step 3 - Classification decision: 'contraindications' clearly wins. The passage is explicitly structured around the contraindications statement and identifies absolute conditions prohibiting drug use. The runner-up 'adverse_reactions' is ruled out because the passage does not describe side effects that occur when patients take the drug, but rather lists pre-existing conditions that preclude its use entirely.\", \"classification\": \"contraindications\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"The passage is explicitly framed as 'contraindicated in' rather than describing reactions that occur after drug administration. It lists conditions that prohibit use, not observable side effects from taking metformin.\"}",
+  "elapsed_ms": 5659,
+  "usage": {
+    "input_tokens": 974,
+    "output_tokens": 361
+  },
+  "logprobs": null
+}

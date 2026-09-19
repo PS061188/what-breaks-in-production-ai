@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAtorvastatin calcium tablets, USP 80 mg of atorvastatin: white coloured, oval shaped, biconvex, film-coated tablets with \"MA\" on one side and \"4\" on other side. NDC: 71335-1336-1: 30 Tablets in a BOTTLE NDC: 71335-1336-2: 60 Tablets in a BOTTLE NDC: 71335-1336-3: 90 Tablets in a BOTTLE NDC: 71335-1336-4: 180 Tablets in a BOTTLE Store at controlled room temperature 20º to 25ºC (68º to 77ºF). Repackaged/Relabeled by: Bryant Ranch Prepack, Inc. Burbank, CA 91504\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) Specific dosage strength stated (80 mg atorvastatin calcium), (b) Detailed description of physical tablet characteristics (white, oval, biconvex, film-coated, imprint codes), (c) Multiple NDC numbers with specific package sizes and quantities, (d) Storage conditions specified.\\n\\n2. Two most plausible categories: (a) 'how_supplied' - this section typically includes dosage forms, strengths, package sizes, NDC numbers, and storage instructions. The passage contains all these elements in standard how_supplied format. (b) 'description' - this could cover the chemical composition and formulation details, and the passage does describe the tablet's appearance and composition (atorvastatin calcium 80 mg).\\n\\n3. Winner and ruling: 'how_supplied' decisively wins. While the passage does identify the drug as 'atorvastatin calcium tablets, USP 80 mg,' the overwhelming focus is on packaging and distribution details: multiple NDC numbers (71335-1336-1 through 1336-4), specific package quantities (30, 60, 90, 180 tablets per bottle), storage conditions (20-25°C), and repackaging information. The 'description' category would focus on chemical structure, inactive ingredients, and formulation science - none of which are present. The physical appearance description (oval, biconvex, film-coated, imprint codes) is included specifically to identify the product as distributed, which is a hallmark of the 'how_supplied' section.\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage does identify the active ingredient (atorvastatin calcium 80 mg) and describes the tablet's physical appearance, the document is overwhelmingly focused on distribution details: multiple NDC codes with specific package quantities (30, 60, 90, 180 tablets), storage conditions, and repackaging information. These are classic 'how_supplied' elements. A 'description' section would emphasize chemical structure, inactive ingredients, and formulation composition, which are entirely absent from this passage.\"}",
+  "elapsed_ms": 7337,
+  "usage": {
+    "input_tokens": 982,
+    "output_tokens": 497
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin hydrochloride tablets are contraindicated in patients with an estimated glomerular filtration rate (eGFR) below 30 mL/minute/1.73 m 2 . Initiation of metformin hydrochloride tablets in patients with an eGFR between 30 to 45 mL/minute/1.73 m 2 is not recommended. In patients taking metformin hydrochloride tablets whose eGFR later falls below 45 mL/min/1.73 m 2 , assess the benefit risk of continuing therapy. Discontinue metformin hydrochloride tablets if the patient’s eGFR later falls below 30 mL/minute/1.73 m 2 [ see Warnings and Precautions (5.1) ] . 2.4 Discontinuation for Iodinated Contrast Imaging Procedures Discontinue metformin hydrochloride tablets at the time of, or prior to, an iodinated contrast imaging procedure in patients with an eGFR between 30 and 60 mL/min/1.73 m 2 ;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) The passage explicitly states 'Metformin hydrochloride tablets are contraindicated in patients with an estimated glomerular filtration rate (eGFR) below 30 mL/minute/1.73 m2' - using the word 'contraindicated' which is the defining term for that category; (b) Multiple specific clinical situations where the drug must not be used or continued (eGFR thresholds); (c) Reference to 'Warnings and Precautions' suggesting safety-related guidance. 2. Most plausible categories: (a) 'contraindications' - The passage uses the explicit term 'contraindicated' and describes situations in which metformin must not be initiated or must be discontinued. This is the core definition of contraindications. (b) 'dosage_and_administration' - The passage does contain dosing-related guidance about initiation and discontinuation based on eGFR levels, which could be construed as administration guidance. However, the emphasis is clearly on when NOT to use the drug rather than how to dose it when appropriate. 3. Decision: 'contraindications' wins decisively. The passage explicitly uses the word 'contraindicated' in the opening statement, and the entire focus is on absolute and relative contraindications based on renal function (eGFR thresholds). While there is mention of discontinuation decisions, these are consequences of the contraindication determinations, not independent dosing guidance. The runner-up is ruled out because the passage is not providing dosing instructions for appropriate use scenarios; rather, it is defining when use is prohibited or not recommended.\",\"classification\": \"contraindications\",\"runner_up\": \"dosage_and_administration\",\"ruled_out_because\": \"Although the passage mentions discontinuation and eGFR-based decision points, its primary purpose is to state when metformin is contraindicated (absolutely prohibited), not to provide dosing instructions for appropriate therapeutic use. The explicit use of the term 'contraindicated' and the focus on prohibition rather than dose adjustment clearly establishes this as a contraindications section.\"}",
+  "elapsed_ms": 8549,
+  "usage": {
+    "input_tokens": 1060,
+    "output_tokens": 481
+  },
+  "logprobs": null
+}

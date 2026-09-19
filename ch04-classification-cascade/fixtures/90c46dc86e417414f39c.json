@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nControlled clinical studies of metformin hydrochloride tablets did not include sufficient numbers of elderly patients to determine whether they respond differently from younger patients. In general, dose selection for an elderly patient should be cautious, usually starting at the low end of the dosing range, reflecting the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy and the higher risk of lactic acidosis. Assess renal function more frequently in elderly patients [ see Warnings and Precautions (5.1) .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features: (1) The passage explicitly focuses on elderly patients and how they differ in treatment considerations; (2) It discusses dose selection strategies specific to elderly populations ('cautious', 'low end of dosing range'); (3) It addresses age-related physiological changes (hepatic, renal, cardiac function) that affect drug handling and risk. Step 2 - Evaluating top two categories: (a) 'geriatric_use' is highly plausible because the passage directly addresses what is known about use in patients 65 and older, discussing clinical study limitations in elderly patients, dose selection principles for this population, and special monitoring considerations. (b) 'dosage_and_administration' is plausible because the text mentions 'dose selection' and 'starting at the low end of the dosing range', which could be interpreted as dosing guidance. Step 3 - Determining the winner: The passage is fundamentally about geriatric-specific considerations rather than general dosage guidance. The dosage information provided (low end of range) is contextualized entirely within the framework of elderly patient management. The primary purpose is to describe what is known about elderly patient response and management, not to provide dosing instructions for the general population. The reference to 'Assess renal function more frequently in elderly patients' reinforces that this is geriatric-use guidance.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dose selection is mentioned, it is subordinate to and contextualized by the geriatric framework. The passage is fundamentally about how elderly patients should be managed differently, not about providing general dosage instructions. The entire section exists to explain geriatric-specific considerations rather than serve as dosing guidance for all patients.\"}",
+  "elapsed_ms": 4822,
+  "usage": {
+    "input_tokens": 912,
+    "output_tokens": 409
+  },
+  "logprobs": null
+}

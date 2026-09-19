@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe initial dosage of prednisone may vary from 5 mg to 60 mg of prednisone per day depending on the specific disease entity being treated. In situations of less severity lower doses will generally suffice while in selected patients higher initial doses may be required. The initial dosage should be maintained or adjusted until a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, prednisone should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. Specific numerical dosage information provided (5 mg to 60 mg per day)\\n2. Emphasis on dose variability and individualization based on disease and patient response\\n3. Guidance on dose maintenance, adjustment, and discontinuation protocols\\n\\nStep 2 - Two most plausible categories:\\n1. DOSAGE_AND_ADMINISTRATION: This passage contains explicit instructions on how much medication to give (dosage range), how to manage the dose over time (maintain or adjust), and what to do if inadequate response occurs. All core elements of dosing guidance are present.\\n2. INDICATIONS_AND_USAGE: The passage mentions that dosage \\\"varies\\\" depending on \\\"the specific disease entity being treated,\\\" which could suggest it's discussing conditions. However, it does not actually name or describe any specific indications - it only references them obliquely as context for why doses vary.\\n\\nStep 3 - Classification decision:\\nDOSAGE_AND_ADMINISTRATION wins because the passage is fundamentally prescriptive instruction about drug administration: specific dose ranges, when to maintain doses, when to adjust them, duration monitoring, and discontinuation criteria. The mention of disease variability is used as context to explain why dosing must be individualized, not to enumerate the indications themselves. The passage belongs in the section that tells clinicians HOW to give the drug, not WHAT conditions it treats.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"While the passage references that dosage depends on 'the specific disease entity being treated,' it does not actually name, describe, or enumerate any indications. The mention of disease is used merely to explain the rationale for dose individualization, not to establish what conditions the drug is approved to treat. The passage is fundamentally directive about administration practices, not indicative of approved uses.\"}",
+  "elapsed_ms": 6675,
+  "usage": {
+    "input_tokens": 945,
+    "output_tokens": 440
+  },
+  "logprobs": null
+}

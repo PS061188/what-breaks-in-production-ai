@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTable 3 presents clinically significant drug interactions with metformin hydrochloride tablets. Table 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets Carbonic Anhydrase Inhibitors Clinical Impact: Carbonic anhydrase inhibitors frequently cause a decrease in serum bicarbonate and induce non-anion gap, hyperchloremic metabolic acidosis. Concomitant use of these drugs with metformin hydrochloride tablets may increase the risk for lactic acidosis. Intervention: Consider more frequent monitoring of these patients. Examples: Topiramate, zonisamide, acetazolamide or dichlorphenamide. Drugs that Reduce metformin hydrochloride tablet Clearance Clinical Impact: Concomitant use of drugs that interfere with common renal tubular transport systems involved in the renal elimination of metformin (e.g., organic cationic transporter-2 [OCT2] / multidrug and toxin extrusion [MATE] inhibitors) could increase systemic exposure to metformin and may increase the risk for lactic acidosis [ see Clinical Pharmacology (12.3) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The document is explicitly titled 'Table 3: Clinically Significant Drug Interactions with Metformin Hydrochloride Tablets'; (2) It describes specific drug classes (carbonic anhydrase inhibitors, OCT2/MATE inhibitors) and their mechanisms of interaction with metformin; (3) It discusses clinical impacts and recommends monitoring interventions. Step 2 - Two most plausible categories: (a) 'drug_interactions' - This is the clear primary fit because the entire passage focuses on how other drugs interact with metformin, including specific examples, mechanisms of action, clinical consequences, and monitoring recommendations. This is textbook drug interaction content. (b) 'adverse_reactions' - Could be considered as a runner-up since the passage mentions potential harms (lactic acidosis risk) that could occur when metformin is combined with other drugs. However, adverse reactions typically describe direct side effects of the drug itself, not consequences of interactions. Step 3 - The winner is clearly 'drug_interactions' because the document explicitly addresses how concomitant use of other drugs affects metformin's safety and efficacy, including specific mechanisms (renal clearance inhibition) and examples of interacting agents. The runner-up 'adverse_reactions' is ruled out because while it mentions potential harm (lactic acidosis), this harm is specifically contextual to drug interactions, not an inherent adverse reaction of metformin monotherapy. The passage is fundamentally structured around drug-drug interactions, not spontaneous adverse reactions.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"Although lactic acidosis is mentioned, it is presented as a consequence of drug interactions (mechanism-based risk elevation), not as an adverse reaction of metformin itself. The entire passage is organized around how other drugs interfere with metformin clearance and efficacy, which is definitional for drug_interactions rather than adverse_reactions.\"}",
+  "elapsed_ms": 7546,
+  "usage": {
+    "input_tokens": 1066,
+    "output_tokens": 452
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nDrugs Affecting Glycemic Control Clinical Impact: Certain drugs tend to produce hyperglycemia and may lead to loss of glycemic control. Intervention: When such drugs are administered to a patient receiving metformin hydrochloride tablets, observe the patient closely for loss of blood glucose control. When such drugs are withdrawn from a patient receiving metformin hydrochloride tablets, observe the patient closely for hypoglycemia. Examples: Thiazides and other diuretics, corticosteroids, phenothiazines, thyroid products, estrogens, oral contraceptives, phenytoin, nicotinic acid, sympathomimetics, calcium channel blockers, and isoniazid. Carbonic anhydrase inhibitors may increase risk of lactic acidosis.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document are: (1) It discusses how other drugs interact with metformin hydrochloride by affecting blood glucose control; (2) It provides specific clinical monitoring recommendations when drugs are added or withdrawn; (3) It lists multiple examples of drugs that can cause hyperglycemia and notes a specific warning about carbonic anhydrase inhibitors and lactic acidosis risk. Step 2: The two most plausible categories are (a) drug_interactions - because the passage explicitly discusses the effects of administering other drugs alongside metformin, monitoring for loss of glucose control, and lists specific drug examples with their clinical effects; (b) adverse_reactions - because it mentions hyperglycemia, hypoglycemia, and lactic acidosis as potential problems. Step 3: Drug_interactions is the clear winner. The passage is fundamentally about how OTHER drugs affect a patient receiving metformin - it describes the clinical impact of co-administration, provides intervention strategies for when drugs are started or stopped, and lists specific drug-drug interactions. While adverse_reactions could describe hyperglycemia or lactic acidosis as side effects, this passage is explicitly framed as guidance about what happens when metformin is combined with other drugs, which is the definition of drug interactions. The adverse_reactions category would be appropriate for describing direct side effects of metformin itself, not the effects of other drugs on metformin's efficacy.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While hyperglycemia, hypoglycemia, and lactic acidosis are mentioned, the passage is structured as guidance about drug-drug interactions and what to monitor when other drugs are co-administered with metformin. It is not describing direct adverse reactions of metformin itself, but rather how other drugs interact with metformin therapy.\"}",
+  "elapsed_ms": 6676,
+  "usage": {
+    "input_tokens": 962,
+    "output_tokens": 414
+  },
+  "logprobs": null
+}

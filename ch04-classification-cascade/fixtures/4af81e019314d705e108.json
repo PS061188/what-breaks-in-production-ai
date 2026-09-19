@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOf the total number of patients receiving warfarin sodium in controlled clinical trials for which data were available for analysis, 1885 patients (24.4%) were 65 years and older, while 185 patients (2.4%) were 75 years and older. No overall differences in effectiveness or safety were observed between these patients and younger patients, but greater sensitivity of some older individuals cannot be ruled out. Patients 60 years or older appear to exhibit greater than expected INR response to the anticoagulant effects of warfarin [see Clinical Pharmacology ( 12.3 )] . Warfarin sodium is contraindicated in any unsupervised patient with senility. Conduct more frequent monitoring for bleeding with administration of warfarin sodium to elderly patients in any situation or with any physical condition where added risk of hemorrhage is present. Consider lower initiation and maintenance doses of warfarin sodium in elderly patients [see Dosage and Administration ( 2.2 , 2.3 )] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage explicitly discusses clinical trial data specifically for patients 65 years and older and 75 years and older; (2) It directly addresses sensitivity, effectiveness, and safety in this older population; (3) It provides specific clinical guidance for managing warfarin in elderly patients, including monitoring frequency and dose adjustments. Step 2 - Two most plausible categories: (a) 'geriatric_use' - The passage is entirely structured around age-stratified clinical trial data and specific recommendations for patients 65+, which is the definition of geriatric population. It addresses what is known about warfarin use specifically in older patients, the exact purpose of the geriatric_use section. (b) 'dosage_and_administration' - The passage does mention dose adjustments ('Consider lower initiation and maintenance doses'), which relates to dosing. However, this reference is parenthetical and contingent on geriatric status; the dosing discussion is secondary to the main focus on age-related differences. Step 3 - Decision: 'geriatric_use' clearly wins. The passage's primary purpose is to report on elderly patient outcomes from clinical trials and provide age-specific clinical guidance. The dosage mention is narrowly scoped to elderly patients specifically and references other sections for detailed dosing information, making it clearly subordinate to the geriatric focus. The 'ruled_out_because' should note that while dosage adjustment is mentioned, it is presented as secondary guidance specific to the elderly population rather than the primary focus of comprehensive dosing instructions.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dose adjustments are mentioned ('consider lower initiation and maintenance doses'), these are presented as geriatric-specific recommendations with references to other sections for detailed dosing. The passage's primary focus is on clinical trial data and safety/efficacy observations in patients 65+ years old, which is the core purpose of a geriatric_use section. The dosage component is secondary and contingent on age.\"}",
+  "elapsed_ms": 5527,
+  "usage": {
+    "input_tokens": 1015,
+    "output_tokens": 471
+  },
+  "logprobs": null
+}

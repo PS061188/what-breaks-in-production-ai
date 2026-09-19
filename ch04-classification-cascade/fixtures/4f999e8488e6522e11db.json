@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdditionally, the following adverse reactions were reported in ≥1 % to ≤5% of metformin hydrochloride tablets treated patients and were more commonly reported with metformin hydrochloride tablets than placebo: abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, nail disorder, rash, sweating increased, taste disorder, chest discomfort, chills, flu syndrome, flushing, palpitation. In metformin hydrochloride tablets clinical trials of 29-week duration, a decrease to subnormal levels of previously normal serum vitamin B 12 levels was observed in approximately 7% of patients. Pediatric Patients In clinical trials with metformin hydrochloride tablets in pediatric patients with type 2 diabetes mellitus, the profile of adverse reactions was similar to that observed in adults.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly lists adverse reactions reported in clinical trials with specific frequency percentages (≥1% to ≤5%); (2) It describes a documented decrease in vitamin B12 levels as a side effect observed in approximately 7% of patients; (3) It includes a subsection on 'Pediatric Patients' comparing adverse reaction profiles between pediatric and adult populations. Step 2 - Most plausible categories: (a) 'adverse_reactions' - the passage is structured as a catalog of side effects observed during clinical trials with quantified frequencies, which is the defining content of adverse reactions sections; (b) 'pediatric_use' - the passage includes a pediatric subsection that discusses how the adverse reaction profile in children compares to adults, which is relevant to pediatric use information. Step 3 - Decision: 'adverse_reactions' is the clear winner. While the passage does mention pediatric data, the overwhelming focus is on cataloging and quantifying adverse reactions (hypoglycemia, myalgia, vitamin B12 decrease, rash, taste disorder, etc.). The pediatric subsection is only a brief comparative note at the end, serving to contextualize the adverse reactions data rather than providing comprehensive pediatric use guidance. The ruled-out category fails because it lacks substantive information about pediatric dosing, safety considerations, efficacy in children, or clinical outcomes specific to the pediatric population - it merely states the adverse reaction profile is 'similar,' which is still anchored in adverse reactions content rather than pediatric use guidance.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"While a pediatric subsection is present, it only provides a brief comparative statement about adverse reaction profiles. The overwhelming content of the passage is dedicated to listing and quantifying specific adverse reactions with their frequencies, which is the core function of an adverse_reactions section. The pediatric mention is subordinate and does not provide the comprehensive pediatric use information (dosing, safety considerations, clinical efficacy) that would characterize a pediatric_use section.\"}",
+  "elapsed_ms": 5610,
+  "usage": {
+    "input_tokens": 987,
+    "output_tokens": 473
+  },
+  "logprobs": null
+}

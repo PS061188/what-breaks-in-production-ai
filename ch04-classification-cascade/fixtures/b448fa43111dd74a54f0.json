@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdditionally, the following adverse reactions were reported in ≥1 % to ≤5% of metformin hydrochloride tablets treated patients and were more commonly reported with metformin hydrochloride tablets than placebo: abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, nail disorder, rash, sweating increased, taste disorder, chest discomfort, chills, flu syndrome, flushing, palpitation. In metformin hydrochloride tablets clinical trials of 29-week duration, a decrease to subnormal levels of previously normal serum vitamin B 12 levels was observed in approximately 7% of patients. Pediatric Patients In clinical trials with metformin hydrochloride tablets in pediatric patients with type 2 diabetes mellitus, the profile of adverse reactions was similar to that observed in adults.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n(1) The passage explicitly lists adverse reactions with frequency data (≥1% to ≤5%), comparing metformin-treated patients to placebo, including abnormal stools, hypoglycemia, myalgia, lightheadedness, dyspnea, rash, taste disorder, palpitation, etc.\\n(2) It reports a specific clinical finding: decrease in serum vitamin B12 levels to subnormal in ~7% of patients in 29-week trials.\\n(3) It includes a statement about pediatric patients noting that the adverse reaction profile was similar to adults.\\n\\nStep 2 - Two most plausible categories:\\n(1) ADVERSE_REACTIONS: The document is fundamentally about side effects and reactions observed in patients taking metformin, with specific frequencies and comparison to placebo. This is the core definition of adverse reactions.\\n(2) PEDIATRIC_USE: The passage does include a statement about pediatric patients (\\\"Pediatric Patients In clinical trials with metformin hydrochloride tablets in pediatric patients...\\\"), noting that the adverse reaction profile in children was similar to adults. This technically touches on pediatric use information.\\n\\nStep 3 - Which wins:\\nADVERSE_REACTIONS is the clear winner. Although the passage mentions pediatric patients, it does so only in the context of comparing their adverse reaction profile to adults. The primary purpose is to document adverse reactions (the listing of reactions, frequencies, and vitamin B12 findings). The pediatric information is secondary and incidental to the main focus on adverse reactions. The passage is not establishing guidance for pediatric dosing, special precautions, or unique clinical considerations in children—it merely notes that adverse reaction patterns are similar. This statement is a small concluding note rather than a comprehensive section on pediatric use.\\n\\nRULED_OUT_BECAUSE: While the passage mentions pediatric patients, it does not address pediatric-specific guidance, dosing, administration, safety considerations, or clinical management. It merely confirms that adverse reactions in pediatric patients are similar to adults. The overwhelming content and purpose is cataloguing adverse reactions with frequencies in the general population.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"Although the passage concludes with a brief statement about pediatric patients, this is presented only to note that their adverse reaction profile is similar to adults. The passage contains no guidance on pediatric dosing, administration, clinical management, or special considerations for children. The dominant content is the enumeration of adverse reactions with frequency data and vitamin B12 findings, making this fundamentally an adverse_reactions document rather than a pediatric_use document.\"}",
+  "elapsed_ms": 6462,
+  "usage": {
+    "input_tokens": 987,
+    "output_tokens": 613
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOverdose of metformin hydrochloride has occurred, including ingestion of amounts greater than 50 grams. Hypoglycemia was reported in approximately 10% of cases, but no causal association with metformin has been established. Lactic acidosis has been reported in approximately 32% of metformin overdose cases [see Warnings and Precautions (5.1) ] . Metformin is dialyzable with a clearance of up to 170 mL/min under good hemodynamic conditions. Therefore, hemodialysis may be useful for removal of accumulated drug from patients in whom metformin overdosage is suspected.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) The passage explicitly discusses overdose of metformin hydrochloride with specific dosing information (amounts greater than 50 grams); (2) It reports adverse outcomes associated with overdose, specifically hypoglycemia in ~10% of cases and lactic acidosis in ~32% of cases; (3) It provides management guidance for overdose, recommending hemodialysis based on metformin's dialyzability. Step 2 - Top two categories: (a) 'overdosage' is most plausible because the passage is entirely structured around overdose scenarios, toxicity manifestations, and treatment approaches for overdose. (b) 'adverse_reactions' could be considered because lactic acidosis and hypoglycemia are described as reactions/outcomes, though the specific context of overdose dosing and management distinguishes this from general adverse reactions. Step 3 - Classification decision: 'overdosage' clearly wins. The passage is explicitly framed as overdose management with dosing thresholds (>50g), overdose-specific adverse outcomes with frequency data, and overdose-specific treatment recommendations (hemodialysis for drug removal). The 'adverse_reactions' category would cover side effects from normal therapeutic use, but this passage specifically addresses toxicity in the overdose context with management strategies tailored to overdose scenarios.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While hypoglycemia and lactic acidosis are adverse outcomes, they are presented specifically in the context of overdose management and treatment rather than as general adverse reactions from therapeutic use. The passage focuses on overdose dosing thresholds, overdose-specific incidence data, and overdose management via hemodialysis—all hallmarks of the 'overdosage' category.\"}",
+  "elapsed_ms": 4869,
+  "usage": {
+    "input_tokens": 940,
+    "output_tokens": 414
+  },
+  "logprobs": null
+}

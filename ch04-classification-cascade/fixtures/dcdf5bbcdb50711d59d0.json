@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAND ADMlNlSTRATION Postherpetic Neuralgia (2.1) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day) Day 3: 900 mg/day (i.e., 300 mg three times a day) Epilepsy with Partial Onset Seizures (2.2) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features of this document:\\n(1) The passage explicitly begins with 'AND ADMINISTRATION' heading, indicating it is part of a dosage and administration section\\n(2) Contains specific dose titration schedules organized by medical indication (Postherpetic Neuralgia and Epilepsy with Partial Onset Seizures)\\n(3) Provides detailed dosing regimens including: starting doses, titration schedules, maximum doses, frequency of administration (times per day), and age-specific dosing for pediatric patients\\n\\nStep 2 - Two most plausible categories:\\n(1) 'dosage_and_administration' - The heading explicitly states 'ADMINISTRATION' and the content provides comprehensive dosing information including titration schedules, frequency, maximum doses, and age-stratified regimens across different conditions\\n(2) 'pediatric_use' - The passage does include pediatric-specific dosing information (patients 3-4 years and 5-11 years), which might suggest this is discussing pediatric use\\n\\nStep 3 - Classification decision:\\n'dosage_and_administration' wins decisively. Although pediatric dosing is mentioned, it is presented as part of a comprehensive dosage and administration section that covers both adult and pediatric populations for multiple indications. The primary purpose is to convey HOW and HOW MUCH to administer the drug, which is the core definition of dosage_and_administration. The pediatric information is supplementary detail within this broader context, not the main focus. Pediatric_use would be more appropriate for discussions of safety, efficacy, or special considerations specific to children, not general dosing instructions.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"While the passage includes pediatric dosing information, the document's primary purpose is to provide complete dosing and administration instructions across all populations and indications. Pediatric_use is ruled out because it would be more appropriate for safety/efficacy data or clinical considerations specific to children, not for age-stratified dosing schedules that are part of general administration guidance.\"}",
+  "elapsed_ms": 9091,
+  "usage": {
+    "input_tokens": 1049,
+    "output_tokens": 493
+  },
+  "logprobs": null
+}

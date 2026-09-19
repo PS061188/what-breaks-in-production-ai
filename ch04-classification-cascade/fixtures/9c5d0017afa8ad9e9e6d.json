@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOf the total number of patients receiving warfarin sodium in controlled clinical trials for which data were available for analysis, 1885 patients (24.4%) were 65 years and older, while 185 patients (2.4%) were 75 years and older. No overall differences in effectiveness or safety were observed between these patients and younger patients, but greater sensitivity of some older individuals cannot be ruled out. Patients 60 years or older appear to exhibit greater than expected INR response to the anticoagulant effects of warfarin [see Clinical Pharmacology ( 12.3 )] . Warfarin sodium is contraindicated in any unsupervised patient with senility. Conduct more frequent monitoring for bleeding with administration of warfarin sodium to elderly patients in any situation or with any physical condition where added risk of hemorrhage is present. Consider lower initiation and maintenance doses of warfarin sodium in elderly patients [see Dosage and Administration ( 2.2 , 2.3 )] .\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. Three most prominent features: (a) Explicit discussion of patients 65 years and older (1885 patients, 24.4%) and 75 years and older (185 patients, 2.4%) in clinical trials; (b) Specific statements about safety and effectiveness comparisons in elderly patients versus younger patients; (c) Clinical guidance specific to elderly populations including monitoring frequency and dosing considerations.\\n\\n2. Two most plausible categories: (a) Geriatric_use - This passage directly addresses what is known about warfarin use in patients 65 and older, including efficacy/safety comparisons, special considerations, and dosing adjustments for elderly patients. This is the core purpose of a geriatric use section. (b) Dosage_and_administration - The passage mentions consideration of lower initiation and maintenance doses in elderly patients, which touches on dosing guidance.\\n\\n3. Winner and ruling: Geriatric_use wins decisively. While the passage mentions dosing adjustments, it is fundamentally a geriatric use section because: (1) it explicitly quantifies elderly patient participation in clinical trials; (2) it reports on safety and effectiveness specifically in the 65+ and 75+ age groups; (3) it provides clinical guidance specific to managing elderly patients on this drug (more frequent bleeding monitoring, lower doses where appropriate); (4) the entire focus is comparative analysis and special considerations for older patients, not a comprehensive dosing section. The dosing reference is secondary to the geriatric safety/efficacy narrative.\",\"classification\":\"geriatric_use\",\"runner_up\":\"dosage_and_administration\",\"ruled_out_because\":\"While the passage mentions lower initiation and maintenance doses in elderly patients, this is a subordinate point within a larger geriatric safety and efficacy discussion. The primary content focuses on clinical trial data for patients 65+, effectiveness/safety comparisons by age, and elderly-specific monitoring guidance—all hallmarks of geriatric_use rather than the comprehensive dosage_and_administration section.\"}",
+  "elapsed_ms": 5381,
+  "usage": {
+    "input_tokens": 1015,
+    "output_tokens": 454
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nRecovery time for normal HPA activity is variable depending upon the dose and duration of treatment. During this time the patient is vulnerable to any stressful situation. Although it has been shown that there is considerably less adrenal suppression following a single morning dose of prednisolone (10 mg) as opposed to a quarter of that dose administered every 6 hours, there is evidence that some suppressive effect on adrenal activity may be carried over into the following day when pharmacologic doses are used. Further, it has been shown that a single dose of certain corticosteroids will produce adrenocortical suppression for two or more days. Other corticoids, including methylprednisolone, hydrocortisone, prednisone, and prednisolone, are considered to be short acting (producing adrenocortical suppression for 1¼ to 1½ days following a single dose) and thus are recommended for alternate day therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The passage discusses three key features: (1) Recovery time and duration of HPA (hypothalamic-pituitary-adrenal) suppression following corticosteroid dosing, (2) specific comparison of dosing regimens (single morning dose vs. divided doses) and their effects on adrenal suppression, and (3) classification of corticosteroids by duration of action (short-acting vs. longer-acting) with recommendations for alternate-day therapy. This is clearly focused on HOW to administer the drug - dosing schedule, dose timing, frequency, and the therapeutic rationale behind these administration choices. The content discusses 'single morning dose,' 'every 6 hours,' 'alternate day therapy,' and the duration of suppressive effects relative to dosing patterns. While adverse_reactions might seem relevant (adrenal suppression is an unwanted effect), the passage is not cataloging side effects patients experience; rather, it is explaining pharmacokinetic/pharmacodynamic principles that inform DOSING DECISIONS and ADMINISTRATION TIMING. The runner-up would be adverse_reactions because adrenal suppression is indeed a side effect, but the passage explicitly frames this information in the context of dosing strategy and timing recommendations, not as a clinical adverse event being reported.\",\"classification\":\"dosage_and_administration\",\"runner_up\":\"adverse_reactions\",\"ruled_out_because\":\"Although adrenal suppression is technically an adverse effect, the passage is not presented as a description of side effects patients experience. Instead, it is mechanistic information about pharmacodynamics that directly informs dosing decisions - specifically, why certain corticosteroids are recommended for alternate-day therapy rather than divided daily dosing. The content is prescriptive about HOW to dose the drug, not descriptive about adverse events encountered during treatment.\"}",
+  "elapsed_ms": 6644,
+  "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 400
+  },
+  "logprobs": null
+}

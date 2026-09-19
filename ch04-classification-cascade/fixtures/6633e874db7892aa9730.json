@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHuman Experience – Of 1,027 cases of overdose involving sertraline hydrochloride worldwide, alone or with other drugs, there were 72 deaths (circa 1999). Among 634 overdoses in which sertraline hydrochloride was the only drug ingested, 8 resulted in fatal outcome, 75 completely recovered, and 27 patients experienced sequelae after overdosage to include alopecia, decreased libido, diarrhea, ejaculation disorder, fatigue, insomnia, somnolence and serotonin syndrome. The remaining 524 cases had an unknown outcome. The most common signs and symptoms associated with non-fatal sertraline hydrochloride overdosage were somnolence, vomiting, tachycardia, nausea, dizziness, agitation and tremor. The largest known ingestion was 13.5 grams in a patient who took sertraline hydrochloride alone and subsequently recovered.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1 - Prominent features: (1) This passage explicitly discusses overdose cases and outcomes ('1,027 cases of overdose involving sertraline hydrochloride worldwide'), (2) It reports signs and symptoms of overdose ('most common signs and symptoms associated with non-fatal sertraline hydrochloride overdosage were somnolence, vomiting, tachycardia, nausea, dizziness, agitation and tremor'), (3) It documents management outcomes and sequelae following overdose ('72 deaths', '75 completely recovered', '27 patients experienced sequelae'). Step 2 - Most plausible categories: (a) 'overdosage' is highly plausible because the passage is structured around overdose cases, outcomes, and clinical presentation of overdose; (b) 'adverse_reactions' could be considered because some symptoms mentioned (somnolence, nausea, dizziness) overlap with potential side effects, and sequelae like alopecia and decreased libido are listed. However, the critical distinction is that this passage is specifically about overdose scenarios and their outcomes, not adverse reactions observed during normal therapeutic use. Step 3 - 'overdosage' wins decisively. The passage is explicitly framed as 'Human Experience' related to overdose cases with quantified statistics (1,027 cases, 72 deaths, 8 fatal outcomes from 634 single-drug ingestions), the largest known ingestion amount, and recovery outcomes. While some symptoms may appear in adverse_reactions sections, the context here is unambiguously overdose-focused rather than therapeutic adverse effects. The 'adverse_reactions' category would be ruled out because it addresses side effects during intended use, not toxicity from excessive ingestion.\",\"classification\":\"overdosage\",\"runner_up\":\"adverse_reactions\",\"ruled_out_because\":\"While some symptoms listed (somnolence, nausea, dizziness) could appear as adverse reactions, the entire passage is explicitly framed around overdose cases, mortality statistics, ingestion amounts, and overdose outcomes. This is definitively overdosage content, not therapeutic adverse reaction reporting.\"}",
+  "elapsed_ms": 7134,
+  "usage": {
+    "input_tokens": 1013,
+    "output_tokens": 483
+  },
+  "logprobs": null
+}

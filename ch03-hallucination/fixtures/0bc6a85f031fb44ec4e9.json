@@ -1,0 +1,28 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the provided label excerpt, the following drug interactions with Sertraline Hydrochloride are mentioned:\n\n1. **Monoamine Oxidase Inhibitors (MAOIs)** - Intended to treat psychiatric disorders: At least 14 days should elapse between discontinuation of an MAOI and initiation of Sertraline Hydrochloride therapy, and vice versa.\n\n2. **Linezolid** - Do not start Sertraline Hydrochloride in patients being treated with linezolid due to increased risk of serotonin syndrome. If the patient is already on Sertraline Hydrochloride and requires linezolid, the medication should be stopped promptly. Sertraline Hydrochloride may be resumed 24 hours after the last dose of linezolid.\n\n3. **Methylene Blue (intravenous)** - Do not start Sertraline Hydrochloride in patients being treated with intravenous methylene blue due to increased risk of serotonin syndrome. Similar discontinuation and re-initiation guidelines apply as with linezolid. The risk with non-intravenous methylene blue routes or lower doses is unclear, though serotonin syndrome symptoms may still emerge.\n\nThese interactions are primarily associated with an increased risk of serotonin syndrome, a potentially serious condition.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1777,
+  "usage": {
+    "input_tokens": 817,
+    "output_tokens": 17
+  },
+  "logprobs": null
+}

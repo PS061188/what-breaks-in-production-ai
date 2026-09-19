@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAlbuterol Sulfate HFA Inhalation Aerosol is supplied in the following box of 1 as a pressurized aluminum canister fitted with a counter and supplied with a blue plastic actuator with a blue cap: NDC 80425-0359-01 18-g canister containing 200 actuations Each inhaler is packaged with a Patient Information leaflet. The blue actuator supplied with Albuterol Sulfate HFA should not be used with any other product canisters, and actuators from other products should not be used with an Albuterol Sulfate HFA canister. Counter Albuterol Sulfate HFA has a counter attached to the canister. The counter starts at 204 and counts down each time a spray is released. The correct amount of medication in each actuation cannot be assured after the counter reads 000, even though the canister is not completely empty and will continue to operate.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(a) Specific packaging details: pressurized aluminum canister, 18-g size, 200 actuations, blue plastic actuator with cap\\n(b) NDC number and supply configuration: box of 1, NDC 80425-0359-01\\n(c) Operational/storage information: dose counter mechanism, counter starts at 204 and counts down, medication reliability ceases at 000\\n\\nStep 2: Two most plausible categories:\\n(1) 'how_supplied': This section explicitly describes dosage forms, strengths, packaging, storage containers, and supply configurations. The passage contains all hallmark 'how_supplied' content: canister size (18-g), number of actuations (200), NDC number, package configuration (box of 1), physical description (aluminum canister, blue actuator), and included materials (Patient Information leaflet).\\n(2) 'dosage_and_administration': This might seem plausible because it discusses actuations and the counter mechanism. However, the passage does not explain how much drug is in each actuation, how frequently to use it, what condition it treats, or administration routes/technique. It only describes the mechanical counter and packaging.\\n\\nStep 3: Classification decision:\\n'how_supplied' wins decisively. The entire passage is fundamentally about how the product is packaged, supplied, and what physical form it comes in (canister size, actuator type, NDC number, box configuration). The counter information is part of describing the supplied device's features, not dosing instructions. The warning about the counter reading 000 is a supply/packaging caveat, not a dosing direction.\\n'dosage_and_administration' is ruled out because there are no instructions on dosing frequency, amount per dose in clinical terms, or patient administration technique—only packaging and counter mechanics.\", \"classification\": \"how_supplied\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"The passage describes only the physical packaging, canister size, actuations, NDC number, and counter mechanism—all hallmarks of 'how_supplied.' There are no dosing instructions, frequency guidance, route instructions, or clinical administration details that would characterize 'dosage_and_administration.'\"}",
+  "elapsed_ms": 7625,
+  "usage": {
+    "input_tokens": 1005,
+    "output_tokens": 523
+  },
+  "logprobs": null
+}

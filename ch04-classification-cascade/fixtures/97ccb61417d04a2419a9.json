@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLevothyroxine sodium is indicated in patients from birth to less than 17 years of age: As a replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. Rapid restoration of normal serum T4 concentrations is essential for preventing the adverse effects of congenital hypothyroidism on cognitive development as well as on overall physical growth and maturation. Therefore, initiate levothyroxine sodium therapy immediately upon diagnosis. Levothyroxine is generally continued for life in these patients [see Warnings and Precautions (5.1) ]. Closely monitor infants during the first 2 weeks of levothyroxine sodium therapy for cardiac overload and arrhythmias.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Analysis of the document's prominent features: (1) The passage explicitly states 'Levothyroxine sodium is indicated in patients from birth to less than 17 years of age' followed by specific medical conditions it treats (primary, secondary, and tertiary hypothyroidism; thyroid cancer management). (2) The passage emphasizes when to initiate therapy ('immediately upon diagnosis') and duration ('generally continued for life'), which are dosage/administration considerations. (3) The passage includes monitoring guidance ('Closely monitor infants during the first 2 weeks...for cardiac overload and arrhythmias'), which relates to safety during administration. The two most plausible categories are: (1) indications_and_usage - The passage begins with 'is indicated' and lists specific medical conditions (hypothyroidism types and thyroid cancer), which is the classic structure of an indications section. (2) dosage_and_administration - The passage includes timing of initiation ('immediately upon diagnosis') and duration ('continued for life'), plus monitoring instructions during early therapy, which are administration-related guidance. However, the indications_and_usage category is the clear winner because: (1) The passage opens with the explicit indicator phrase 'is indicated in patients from birth to less than 17 years of age' followed by the conditions treated; (2) The bulk of the content lists the specific approved uses (hypothyroidism replacement and thyroid cancer management); (3) While some administration timing is mentioned, it is secondary to establishing which conditions warrant treatment. The dosage_and_administration category is ruled out because the passage lacks the core content of that section: specific dose amounts (e.g., micrograms), frequency of administration, dosing schedules, or routes of administration. The timing and monitoring mentioned are contextual to indications, not the quantified dosing instructions that define dosage_and_administration sections.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While the passage includes some administration-related guidance (when to initiate, duration of therapy, monitoring), it lacks the core components of dosage_and_administration sections: specific dose amounts, dosing schedules, frequencies, or routes of administration. The primary focus is on establishing which conditions justify treatment, which is the hallmark of indications_and_usage.\"}",
+  "elapsed_ms": 6247,
+  "usage": {
+    "input_tokens": 998,
+    "output_tokens": 524
+  },
+  "logprobs": null
+}

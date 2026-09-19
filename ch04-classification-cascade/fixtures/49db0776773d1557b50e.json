@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMetformin hydrochloride tablets are indicated as an adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus. Metformin hydrochloride tablets are biguanide indicated as an adjunct to diet and exercise to improve glycemic control in adults and pediatric patients 10 years of age and older with type 2 diabetes mellitus. ( 1 )\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features:\\n1. The passage explicitly states the patient populations (adults and pediatric patients 10 years and older) and the condition being treated (type 2 diabetes mellitus)\\n2. The passage describes what the drug is intended to do ('improve glycemic control') and how it is used ('as an adjunct to diet and exercise')\\n3. The passage identifies the drug class ('biguanide') and explicitly uses the phrase 'are indicated'\\n\\nStep 2 - Two most plausible categories:\\n1. 'indications_and_usage' - This passage directly addresses what the drug is indicated for, the conditions it treats, and the patient populations it is approved for. The use of 'indicated' and specification of type 2 diabetes mellitus as the condition being treated are hallmark features of indications and usage sections.\\n2. 'description' - The passage does identify the drug class (biguanide) and mentions the formulation (tablets), which are elements found in description sections. However, a description section would typically include chemical composition, structure, inactive ingredients, and formulation details, not primarily the clinical conditions the drug treats.\\n\\nStep 3 - Decision:\\n'indications_and_usage' is the clear winner. The passage is fundamentally about what conditions the drug is approved to treat and which patients it can be used for. While 'description' is mentioned (biguanide class), the dominant content is clinical indication rather than pharmaceutical composition or formulation details. The explicit statement of indicated conditions and patient populations definitively categorizes this as indications_and_usage.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage mentions the drug class (biguanide) and form (tablets), which are descriptive elements, the overwhelming focus is on the clinical indication (type 2 diabetes mellitus), patient population (adults and pediatric patients 10+ years), and therapeutic purpose (improve glycemic control). The passage explicitly states what the drug 'is indicated' for, which is the defining characteristic of indications_and_usage rather than description sections.\"}",
+  "elapsed_ms": 6082,
+  "usage": {
+    "input_tokens": 896,
+    "output_tokens": 487
+  },
+  "logprobs": null
+}

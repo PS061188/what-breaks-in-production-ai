@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in CONTEXT INTEGRITY CHECK:\nBefore answering, verify:\n- Do retrieved documents address the same entity as the question?\n- Is there any conflict between documents? If yes, cite both and flag the conflict.\n- Does conversation history contain updates that override earlier statements?\n  If yes, use the most recent.\n\n<retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 0062fcc7-aa08-4990-9d33-d798725907f1 | last_updated: 20260713 | status: ACTIVE | version: 20260713]\nDOSAGE AND ADMINISTRATION Gastric irritation may be reduced if taken before, during, or immediately after meals or with food or milk. The maximal activity of the adrenal cortex is between 2 am and 8 am, and it is minimal between 4 pm and midnight. Exogenous corticosteroids suppress adrenocorticoid activity the least when given at the time of maximal activity (am) for single dose administration. Therefore, it is recommended that prednisone be administered in the morning prior to 9 am and when large doses are given, administration of antacids between meals to help prevent peptic ulcers. Multiple dose therapy should be evenly distributed in evenly spaced intervals throughout the day. Dietary salt restriction may be advisable in patients. Do not stop taking this medicine without first talking to your doctor. Avoid abrupt withdraw of therapy. The initial dosage of PredniSONE tablets may vary from 5 mg to 60 mg per day, depending on the specific disease entity being treated. In situations of less severity lower doses will generally suffice, while in selected patients higher initial doses may be required. The initial dosage should be maintained or adjusted until a satisfactory response is noted. If after a reasonable period of time there is a lack of satisfactory clinical response, PredniSONE should be discontinued and the patient transferred to other appropriate therapy. IT SHOULD BE EMPHASIZED THAT DOSAGE REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT. After a favorable response is noted, the proper maintenance dosage should be determined by decreasing the initial drug dosage in small increments at appropriate time intervals until the lowest dosage which will maintain an adequate clinical response is reached. It should be kept in mind that constant monitoring is needed in regard to drug dosage. Included in the situations which may make dosage adjustments necessary are changes in clinical status secondary to remissions or exacerbations in the disease process, the patient's individual drug responsiveness, and the effect of patient exposure to stressful situations not directly related to the disease entity under treatment; in this latter situation, it may be necessary to increase the dosage of PredniSONE for a period of time consistent with the patient's condition. If after long-term therapy the drug is to be stopped, it is recommended that it be withdrawn gradually rather than abrup\n\n---\n\n[doc_id: 03d9ce02-0559-494c-a53d-de9b9a64b606 | last_updated: 20260611 | status: ACTIVE | version: 20260611]\nDOSAGE AND ADMINISTRATION General Considerations Dosage of glipizide and metformin hydrochloride tablets must be individualized on the basis of both effectiveness and tolerance while not exceeding the maximum recommended daily dose of 20 mg glipizide/2000 mg metformin. Glipizide and metformin hydrochloride tablets should be given with meals and should be initiated at a low dose, with gradual dose escalation as described below, in order to avoid hypoglycemia (largely due to glipizide), reduce GI side effects (largely due to metformin), and permit determination of the minimum effective dose for adequate control of blood glucose for the individual patient. With initial treatment and during dose titration, appropriate blood glucose monitoring should be used to determine the therapeutic response to glipizide and metformin hydrochloride tablets and to identify the minimum effective dose for the patient. Thereafter, HbA 1c should be measured at intervals of approximately 3 months to assess the effectiveness of therapy. The therapeutic goal in all patients with type 2 diabetes is to decrease FPG, PPG, and HbA 1c to normal or as near normal as possible. Ideally, the response to therapy should be evaluated using HbA 1c , which is a better indicator of long-term glycemic control than FPG alone. No studies have been performed specifically examining the safety and efficacy of switching to glipizide and metformin hydrochloride tablet therapy in patients taking concomitant glipizide (or other sulfonylurea) plus metformin. Changes in glycemic control may occur in such patients, with either hyperglycemia or hypoglycemia possible. Any change in therapy of type 2 diabetes should be undertaken with care and appropriate monitoring. When colesevelam is coadministered with glipizide ER, maximum plasma concentration and total exposure to glipizide is reduced. Therefore, glipizide and metformin hydrochloride tablets should be administered at least 4 hours prior to colesevelam. Glipizide and Metformin Hydrochloride Tablets in Patients with Inadequate Glycemic Control on Diet and Exercise Alone For patients with type 2 diabetes whose hyperglycemia cannot be satisfactorily managed with diet and exercise alone, the recommended starting dose of glipizide and metformin hydrochloride tablets is 2.5 mg/250 mg once a day with a meal. For patients whose FPG is 280 mg/dL to 320 mg/dL a starting dose of glipizide and metformin hydrochloride tablets, 2.5 mg/500 mg twice daily should be conside\n</retrieved_context>",
+  "user": "What is the recommended starting dose of Metformin Hydrochloride?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"03d9ce02-0559-494c-a53d-de9b9a64b606\"], \"starting_dose\": \"For patients with type 2 diabetes whose hyperglycemia cannot be satisfactorily managed with diet and exercise alone, the recommended starting dose of glipizide and metformin hydrochloride tablets is 2.5 mg/250 mg once a day with a meal. For patients whose FPG is 280 mg/dL to 320 mg/dL, a starting dose of 2.5 mg/500 mg twice daily should be considered.\", \"conflict\": null}",
+  "elapsed_ms": 2186,
+  "usage": {
+    "input_tokens": 1797,
+    "output_tokens": 153
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHowever, another patient who took 2.5 grams of sertraline hydrochloride alone experienced a fatal outcome. Other important adverse events reported with sertraline hydrochloride overdose (single or multiple drugs) include bradycardia, bundle branch block, coma, convulsions, delirium, hallucinations, hypertension, hypotension, manic reaction, pancreatitis, QT-interval prolongation, serotonin syndrome, stupor and syncope. Overdose Management –Treatment should consist of those general measures employed in the management of overdosage with any antidepressant. Ensure an adequate airway, oxygenation and ventilation. Monitor cardiac rhythm and vital signs. General supportive and symptomatic measures are also recommended.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - The passage explicitly discusses a fatal outcome from a specific dose (2.5 grams) of sertraline hydrochloride\\n   - It lists numerous adverse events specifically reported with 'sertraline hydrochloride overdose' including serious complications like coma, convulsions, QT-interval prolongation, and serotonin syndrome\\n   - It includes a dedicated 'Overdose Management' section with treatment protocols (airway management, monitoring, supportive measures)\\n\\n2. Two most plausible categories:\\n   - 'overdosage': This is the strongest candidate because the passage explicitly labels events as occurring 'with sertraline hydrochloride overdose,' includes a case of fatal overdose at a specific dose, and provides management recommendations for overdose situations.\\n   - 'adverse_reactions': This is plausible because the passage does list adverse events/side effects. However, these are specifically contextualized as overdose-related rather than general adverse reactions from therapeutic use.\\n\\n3. Decision:\\n   'overdosage' wins decisively. The runner-up is 'adverse_reactions' and it is ruled out because the passage is explicitly organized around overdose scenarios (not therapeutic use), includes a fatal overdose case with dosing information, and provides overdose-specific management guidance. General adverse reactions would describe side effects from normal therapeutic dosing, whereas this section is entirely devoted to excess dosing and overdose management.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While the passage lists adverse events, it explicitly contextualizes them as occurring 'with sertraline hydrochloride overdose' and includes overdose management guidance. The content is organized around excess dosing and toxicity, not therapeutic side effects from normal use. The inclusion of a fatal outcome at a specific dose and overdose management protocols definitively places this in overdosage rather than general adverse_reactions.\"}",
+  "elapsed_ms": 6345,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 446
+  },
+  "logprobs": null
+}

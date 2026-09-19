@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe active ingredient in Gabapentin Capsules USP is gabapentin, which has the chemical name 1-(aminomethyl)cyclohexaneacetic acid. The molecular formula of gabapentin is C 9 H 17 NO 2 and the molecular weight is 171.24. The structural formula of gabapentin is: Gabapentin is a white to off-white crystalline solid with a pK a1 of 3.7 and a pK a2 of 10.7. It is freely soluble in water and both basic and acidic aqueous solutions. The log of the partition coefficient (n-octanol/0.05M phosphate buffer) at pH 7.4 is –1.25. Each Gabapentin capsule contains 100 mg, 300 mg, or 400 mg of gabapentin and the following inactive ingredients: Pregelatinized Maize starch, talc, gelatin, titanium dioxide, yellow iron oxide (300 mg and 400 mg only), and red iron oxide (300 mg and 400 mg only), black iron oxide (300 mg and 400 mg only). Ingredients of Imprinting Ink( Black SW-9049) are Black Iron Oxide NF(E 172), Butyl Alcohol NF, Dehydrated Alcohol USP, Isopropyl Alcohol USP, Potassium Hydroxide NF, Propylene Glycol USP, Shellac NF, and Strong Ammonia Solution NF.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) The passage opens by identifying 'the active ingredient' (gabapentin) and provides its chemical name '1-(aminomethyl)cyclohexaneacetic acid'; (b) It includes the molecular formula (C9H17NO2), molecular weight (171.24), and structural formula of gabapentin; (c) It lists complete inactive ingredients for the capsule formulations (pregelatinized maize starch, talc, gelatin, titanium dioxide, iron oxides) and imprinting ink components, with specific strengths (100 mg, 300 mg, 400 mg).\\n\\n2. Two most plausible categories: (a) 'description' - This section is definitional and chemical in nature, providing the physical and chemical characteristics of the drug substance and its formulation. (b) 'how_supplied' - This section mentions dosage forms (capsules), available strengths, and inactive ingredients/packaging components, which are typical how_supplied content.\\n\\n3. The winner is 'description' because while the passage does mention available strengths and formulations, the primary focus and majority of content is devoted to chemical characterization (chemical name, molecular formula, molecular weight, structural formula, physical properties like solubility and pKa values), and the composition of the drug substance itself. The 'how_supplied' category typically emphasizes what the pharmacist receives (packaging, storage conditions, NDC numbers), whereas this passage emphasizes what the drug substance *is* chemically and formulation-wise. The inclusion of imprinting ink composition further confirms this is descriptive rather than supply-focused.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage mentions capsule strengths (100 mg, 300 mg, 400 mg) which appear in how_supplied sections, the dominant content—chemical name, molecular formula, molecular weight, pKa values, solubility, partition coefficient, and structural formula—is characteristic of the description section. The how_supplied category focuses on what the product looks like as dispensed (appearance, packaging, storage), not the detailed chemical and physical properties of the active and inactive ingredients.\"}",
+  "elapsed_ms": 5658,
+  "usage": {
+    "input_tokens": 1148,
+    "output_tokens": 501
+  },
+  "logprobs": null
+}

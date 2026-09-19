@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nElevated systolic or diastolic pressure causes increased cardiovascular risk, and the absolute risk increase per mmHg is greater at higher blood pressures, so that even modest reductions of severe hypertension can provide substantial benefit. Relative risk reduction from blood pressure reduction is similar across populations with varying absolute risk, so the absolute benefit is greater in patients who are at higher risk independent of their hypertension (for example, patients with diabetes or hyperlipidemia), and such patients would be expected to benefit from more aggressive treatment to a lower blood pressure goal. Some antihypertensive drugs have smaller blood pressure effects (as monotherapy) in black patients, and many antihypertensive drugs have additional approved indications and effects (e.g., on angina, heart failure, or diabetic kidney disease).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying the three most prominent features of this document:\\n\\n(a) The text discusses the clinical rationale for treating hypertension and the relationship between blood pressure reduction and cardiovascular risk.\\n(b) It addresses population differences in treatment response (e.g., efficacy variations in black patients) and treatment intensity decisions based on individual risk factors.\\n(c) It mentions that some antihypertensive drugs have additional approved indications beyond hypertension (angina, heart failure, diabetic kidney disease).\\n\\nStep 2: Considering the two most plausible categories:\\n\\n(a) \\\"indications_and_usage\\\": This category addresses the conditions a drug is approved to treat. The passage does mention approved indications for antihypertensive drugs (hypertension, angina, heart failure, diabetic kidney disease), which is relevant to indications.\\n\\n(b) \\\"dosage_and_administration\\\": This category covers dosing intensity and adjustments. The passage explicitly discusses treatment intensity, the concept of \\\"more aggressive treatment to a lower blood pressure goal,\\\" and tailoring therapy to patient risk profiles—elements that relate to how much to give and treatment approach.\\n\\nStep 3: Determining the winner:\\n\\nThe passage is fundamentally about treatment strategy and decision-making regarding intensity of therapy based on cardiovascular risk and patient characteristics. While it mentions approved indications as examples, the core focus is on how aggressively to treat (e.g., \\\"more aggressive treatment to a lower blood pressure goal\\\") and how to adjust treatment based on individual factors. This is more characteristic of dosage_and_administration guidance rather than a straightforward statement of what conditions the drug treats. The runner-up, indications_and_usage, is mentioned only peripherally as context for additional uses.\\n\\nRuled out because: The passage's primary emphasis is on treatment intensity and individualization of therapy goals rather than simply stating what conditions warrant drug use. The indications are mentioned only as secondary examples of how drugs can have multiple approved uses, not as the main focus.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"indications_and_usage\", \"ruled_out_because\": \"While the passage mentions approved indications as examples, its primary focus is on treatment intensity decisions and adjusting therapy goals based on patient risk factors (e.g., 'more aggressive treatment to a lower blood pressure goal'), which is a dosage_and_administration concern rather than simply enumerating what conditions the drug treats.\"}",
+  "elapsed_ms": 7794,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 567
+  },
+  "logprobs": null
+}

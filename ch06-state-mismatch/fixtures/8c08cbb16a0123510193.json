@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in <retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 07c8bb17-9bd4-4fab-994d-0412205b53b4 | last_updated: 20260717 | status: ACTIVE | version: 20260717]\n2 DOSAGE AND ADMINISTRATION Postherpetic Neuralgia ( 2.1 ) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day ) Day 3: 900 mg/day (i.e., 300 mg three times a day ) Epilepsy with Partial Onset Seizures ( 2.2 ) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neuralgia, gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated. 2.2 Dosage for Epilepsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 300 mg three times a day. The recommended maintenance dose of gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer gabapentin three times a day using 600 mg or 800 mg tablets. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses. The recommended maintenance dose of gabapentin \n\n---\n\n[doc_id: 07c8bb17-b | last_updated: 20260717 | status: ACTIVE | version: 20260717]\n2 DOSAGE AND ADMINISTRATION Postherpetic Neuralgia ( 2.1 ) Dose can be titrated up as needed to a dose of 3600 mg/day Day 1: Single 600 mg dose Day 2: 1200 mg/day (i.e., 600 mg two times a day ) Day 3: 1800 mg/day (i.e., 600 mg three times a day ) Epilepsy with Partial Onset Seizures ( 2.2 ) Patients 12 years of age and older: starting dose is 600 mg three times daily; may be titrated up to 1200 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 30 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 80 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 70 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neuralgia, gabapentin may be initiated on Day 1 as a single 600 mg dose, on Day 2 as 1200 mg/day (600 mg two times a day), and on Day 3 as 1800 mg/day (600 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 3600 mg/day (1200 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 3600 mg/day to 7200 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 3600 mg/day was not demonstrated. 2.2 Dosage for Epilepsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 600 mg three times a day. The recommended maintenance dose of gabapentin is 600 mg to 1200 mg three times a day. Dosages up to 4800 mg/day have been well tolerated in long-term clinical studies. Doses of 7200 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer gabapentin three times a day using 1200 mg or 1600 mg tablets. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 20 mg/kg/day to 30 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of gabapentin in patients 3 to 4 years of age is 80 mg/kg/day, given in three divided doses. The recommended maintenance dose of gabapentin \n</retrieved_context>",
+  "user": "What is the recommended starting dose of Gabapentin?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"07c8bb17-9bd4-4fab-994d-0412205b53b4\", \"07c8bb17-b\"], \"starting_dose\": \"The recommended starting dose of Gabapentin varies by indication and patient age: For Postherpetic Neuralgia (adults): Day 1 starting dose is 300 mg as a single dose (doc 07c8bb17-9bd4-4fab-994d-0412205b53b4) OR 600 mg as a single dose (doc 07c8bb17-b). For Epilepsy with Partial Onset Seizures (patients 12 years and older): 300 mg three times daily (doc 07c8bb17-9bd4-4fab-994d-0412205b53b4) OR 600 mg three times daily (doc 07c8bb17-b). For pediatric patients (3-11 years) with epilepsy: Starting dose range is 10-15 mg/kg/day (doc 07c8bb17-9bd4-4fab-994d-0412205b53b4) OR 10-30 mg/kg/day (doc 07c8bb17-b), given in three divided doses.\", \"conflict\": \"There is a significant conflict between the two retrieved ACTIVE documents. Document 07c8bb17-9bd4-4fab-994d-0412205b53b4 specifies lower starting doses (300 mg for postherpetic neuralgia, 300 mg three times daily for epilepsy), while document 07c8bb17-b specifies higher starting doses (600 mg for postherpetic neuralgia, 600 mg three times daily for epilepsy). Both documents are marked ACTIVE with the same last_updated date (20260717). Please verify with the source system to confirm which dosing regimen is current.\"}",
+  "elapsed_ms": 4545,
+  "usage": {
+    "input_tokens": 2091,
+    "output_tokens": 451
+  },
+  "logprobs": null
+}

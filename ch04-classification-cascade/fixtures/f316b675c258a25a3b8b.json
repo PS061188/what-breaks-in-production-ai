@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe following important adverse reactions are described below and elsewhere in the labeling: Myopathy and Rhabdomyolysis [see Warnings and Precautions (5.1) ] Immune-Mediated Necrotizing Myopathy [see Warnings and Precautions (5.2) ] Hepatic Dysfunction [see Warnings and Precautions (5.3) ] Increases in HbA1c and Fasting Serum Glucose Levels [see Warnings and Precautions (5.4) ] Most common adverse reactions (incidence ≥5%) are nasopharyngitis, arthralgia, diarrhea, pain in extremity, and urinary tract infection ( 6.1 ). To report SUSPECTED ADVERSE REACTIONS, contact Novadoz Pharmaceuticals LLC at 1-855-668-2369 or FDA at 1-800-FDA-1088 or www.fda.gov/medwatch. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, the adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"Step 1: Identifying the 3 most prominent features of this document:\\n1. The passage explicitly lists 'important adverse reactions' including myopathy, rhabdomyolysis, immune-mediated necrotizing myopathy, hepatic dysfunction, and changes in HbA1c/glucose levels\\n2. It provides specific incidence data for the most common adverse reactions (≥5%): nasopharyngitis, arthralgia, diarrhea, pain in extremity, and urinary tract infection\\n3. It includes instructions for reporting suspected adverse reactions with contact information for Novadoz Pharmaceuticals and the FDA\\n\\nStep 2: The two most plausible categories:\\n- 'adverse_reactions' is the primary candidate because the entire passage is devoted to describing side effects observed in patients, listing specific reactions, their severity levels, and reporting mechanisms. This is the core definition of the adverse_reactions category.\\n- 'description' could be considered a runner-up if the passage were describing the drug's chemical composition or formulation, but it clearly does not. Instead, it discusses safety-related clinical observations.\\n\\nStep 3: Classification decision:\\nThe classification is decisively 'adverse_reactions' because every sentence discusses unwanted effects in patients (myopathy, rhabdomyolysis, hepatic dysfunction, common side effects like nasopharyngitis and diarrhea) and reporting procedures for adverse events. The document contains no information about drug composition, indications, dosing, contraindications, drug interactions, or special populations. The 'description' category is ruled out because it concerns drug composition and formulation, not clinical safety observations.\",\"classification\":\"adverse_reactions\",\"runner_up\":\"description\",\"ruled_out_because\":\"The passage contains no information about chemical composition, structure, formulation, or inactive ingredients. It is entirely focused on describing unwanted clinical effects and their reporting, which is the defining characteristic of adverse_reactions rather than description.\"}",
+  "elapsed_ms": 7715,
+  "usage": {
+    "input_tokens": 1070,
+    "output_tokens": 439
+  },
+  "logprobs": null
+}

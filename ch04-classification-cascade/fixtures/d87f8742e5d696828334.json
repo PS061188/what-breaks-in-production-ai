@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nWarfarin sodium tablets USP, 1 mg are available as pink, capsule-shaped, biconvex scored tablets, debossed with TV/1 on the scored side and 1712 on the other side containing 1 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1712-01) and 1000 (NDC 0093-1712-10) tablets. Warfarin sodium tablets USP, 2 mg are available as lavender, capsule-shaped, biconvex scored tablets, debossed with TV/2 on the scored side and 1713 on the other side containing 2 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1713-01) and 1000 (NDC 0093-1713-10) tablets. Warfarin sodium tablets USP, 2.5 mg are available as green, capsule-shaped, biconvex scored tablets, debossed with TV/2 1 / 2 on the scored side and 1714 on the other side containing 2.5 mg warfarin sodium, USP, packaged in bottles of 100 (NDC 0093-1714-01) and 1000 (NDC 0093-1714-10) tablets.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"The three most prominent features of this document are: (1) Specific dosage strengths listed (1 mg, 2 mg, 2.5 mg), (2) Detailed physical descriptions of tablets (color, shape, scoring, debossing details), and (3) Packaging information with NDC numbers and bottle quantities (100 and 1000 tablets). The document provides no information about indications, dosing regimens, contraindications, adverse effects, drug interactions, overdosage management, or special populations. The two most plausible categories are 'how_supplied' and 'description'. 'How_supplied' is appropriate because it covers dosage forms, strengths, packaging and storage—all of which are explicitly detailed here (tablet forms, strengths of 1/2/2.5 mg, bottle counts of 100 and 1000, and NDC codes). 'Description' could apply because the document includes formulation details and the active ingredient (warfarin sodium, USP), but this passage is primarily focused on the commercial availability and packaging specifics rather than the chemical composition or full formulation details. The document wins for 'how_supplied' because its primary purpose is to enumerate what forms, strengths, and packages are commercially available, which is the core definition of that category. The runner-up 'description' is ruled out because while some descriptive elements are present (color, shape), the passage is overwhelmingly focused on packaging, availability, and NDC codes—the hallmarks of 'how_supplied'—rather than on chemical structure, inactive ingredients, or complete formulation information that would characterize 'description'.\",\"classification\":\"how_supplied\",\"runner_up\":\"description\",\"ruled_out_because\":\"While the passage includes some physical descriptions of the tablets (color, shape, scoring), it is primarily organized around and focused on packaging information (bottle quantities, NDC numbers, and commercial availability). The dominant content concerns how the drug is supplied to consumers rather than its chemical composition or complete formulation details.\"}",
+  "elapsed_ms": 5568,
+  "usage": {
+    "input_tokens": 1113,
+    "output_tokens": 447
+  },
+  "logprobs": null
+}

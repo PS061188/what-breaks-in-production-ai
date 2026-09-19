@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\ndibasic calcium phosphate dihydrate, hydroxypropyl cellulose, microcrystalline cellulose, magnesium stearate, opadry green (titanium dioxide, hypromellose 3cP, hypromellose 6cP, Macrogol/Peg 400, Polysorbate 80, D&C Yellow # 10 Aluminum Lake, and FD&C Blue # 2/Indigo Carmine Aluminum Lake for 25mg tablet), opadry light blue (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, FD&C Blue # 2/Indigo Carmine Aluminum Lake and Polysorbate 80 for 50 mg tablet), opadry yellow (hypromellose 3cP, hypromellose 6cP, titanium dioxide, Macrogol/Peg 400, Polysorbate 80, Iron Oxide Yellow, Iron oxide Red for 100mg tablet) and sodium starch glycolate. image\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (1) This passage lists specific chemical compounds and inert ingredients (dibasic calcium phosphate dihydrate, hydroxypropyl cellulose, microcrystalline cellulose, magnesium stearate). (2) It explicitly names multiple Opadry coating formulations with different colors (green, light blue, yellow) tied to different tablet strengths (25mg, 50mg, 100mg). (3) It details inactive ingredients and excipients (titanium dioxide, hypromellose, Macrogol/PEG 400, colorants like D&C Yellow #10, FD&C Blue #2, Iron Oxides). Step 2 - Most plausible categories: (A) 'Description' is highly plausible because this passage explicitly catalogs the chemical composition, formulation components, inactive ingredients, and tablet appearances by strength - all core elements of a product description section. (B) 'How_supplied' is plausible because it lists dosage forms (tablets) in multiple strengths (25mg, 50mg, 100mg) with specific visual identification (colors), which relates to how a drug is packaged and supplied. Step 3 - Winner and ruling: 'Description' wins decisively. While the passage does mention multiple strengths, the overwhelming focus is on the chemical and pharmaceutical ingredients that compose the tablets and how they are formulated (inactive ingredients, binding agents, coating systems). This is the hallmark of a description/composition section. 'How_supplied' is ruled out because it lacks any information about packaging format (blister packs, bottles, quantities per package), storage conditions, or supply details - elements essential to a 'how supplied' section. This is purely compositional/formulation content.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage mentions multiple tablet strengths (25mg, 50mg, 100mg) and their colors, it contains no information about packaging (bottles, blister packs, quantity per container), storage instructions, or supply logistics. The content is entirely focused on chemical composition and tablet formulation - the defining characteristic of a description section, not a how_supplied section.\"}",
+  "elapsed_ms": 9530,
+  "usage": {
+    "input_tokens": 1052,
+    "output_tokens": 506
+  },
+  "logprobs": null
+}

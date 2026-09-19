@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLisinopril and hydrochlorothiazide tablets USP, 10 mg/12.5 mg are white to off-white, round tablets, imprinted with ‘H150’ on one side and plain on the other side. NDC 60760-586-90 Bottle of 90 tablets Storage Store at 20°C-25°C (68°F-77°F); excursions permitted to 15°C-30°C (59°F-86°F) [see USP Controlled Room Temperature]. Protect from excessive light and humidity. Dispense in a well-closed container, if product package is subdivided.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Identifying prominent features - (1) Specific dosage form description: 'white to off-white, round tablets' with specific imprint 'H150'. (2) NDC code and package size: NDC 60760-586-90, Bottle of 90 tablets. (3) Storage conditions with precise temperature ranges and humidity/light protection guidance. Step 2: Most plausible categories - (a) 'how_supplied': This category covers dosage forms, strengths, packaging, and storage. The passage contains the drug strength (10 mg/12.5 mg), the physical appearance of the tablet, the NDC code, package size (90 tablets), and storage instructions. (b) 'description': This category covers chemical formulation and inactive ingredients, but this passage focuses on the physical tablet appearance only without discussing the chemical composition or inactive ingredients. Step 3: Determination - 'how_supplied' is the clear winner. The passage systematically presents product identification information (imprint, appearance), packaging information (NDC number, bottle size), and storage/handling instructions. These are all core elements of 'how_supplied' sections in drug labeling. The 'description' category would address what the tablet contains chemically and what inactive ingredients are present, which is not provided here. The passage is purely about pharmaceutical presentation and supply specifications.\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"While 'description' covers formulation details, this passage lacks any discussion of chemical composition, inactive ingredients, or pharmacological formulation. Instead, it focuses exclusively on the physical tablet characteristics, packaging identifiers, and storage logistics, which are the defining elements of 'how_supplied'.\"}",
+  "elapsed_ms": 8650,
+  "usage": {
+    "input_tokens": 942,
+    "output_tokens": 389
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nDirections • for adults 18 years of age and older • this product is to be used once a day (every 24 hours), every day for 14 days • it may take 1 to 4 days for full effect; some people get complete relief of symptoms within 24 hours 14-Day Course of Treatment • swallow 1 tablet with a glass of water before eating in the morning • take every day for 14 days • do not take more than 1 tablet a day • do not use for more than 14 days unless directed by your doctor • swallow whole. Do not chew or crush tablets Repeated 14-Day Courses (if needed) • you may repeat a 14-day course every 4 months • do not take for more than 14 days or more often than every 4 months unless directed by a doctor • children under 18 years of age: ask a doctor. Heartburn in children may sometimes be caused by a serious condition.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n1. Explicit instructions on dosing frequency and timing (\\\"once a day every 24 hours\\\", \\\"every day for 14 days\\\", \\\"swallow 1 tablet with a glass of water before eating in the morning\\\")\\n2. Administration route and method specified (\\\"swallow whole. Do not chew or crush tablets\\\")\\n3. Duration of treatment and repetition schedule outlined (\\\"for 14 days\\\", \\\"repeat every 4 months\\\", \\\"do not use for more than 14 days unless directed by your doctor\\\")\\n\\nStep 2: Two most plausible categories:\\n- dosage_and_administration: This category encompasses how much to give (1 tablet), how often (once daily for 14 days), route (oral, swallowed whole), timing (before eating in morning), and duration/frequency patterns (14-day courses every 4 months). Nearly every sentence directly addresses dosing instructions.\\n- how_supplied: Could potentially apply since dosage forms (tablets) and packaging concepts (implied quantity) are mentioned, but the document is almost entirely about usage instructions rather than describing available strengths, forms, or storage.\\n\\nStep 3: dosage_and_administration clearly wins. The passage is overwhelmingly focused on HOW to take the medication (quantity, frequency, timing, method, duration), which is the core definition of dosage_and_administration. The how_supplied category would address what forms/strengths are available and how it's packaged/stored, which is entirely absent. The brief mention of \\\"tablet\\\" is incidental to the usage instructions, not a description of product supply.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"how_supplied\",\"ruled_out_because\": \"While 'tablet' is mentioned as a dosage form, the document contains no information about available strengths, packaging formats, storage conditions, or how the product is supplied. It is purely usage instructions, making how_supplied clearly secondary. The document is structured as a directions label focused entirely on administration.\"}",
+  "elapsed_ms": 6644,
+  "usage": {
+    "input_tokens": 1011,
+    "output_tokens": 470
+  },
+  "logprobs": null
+}

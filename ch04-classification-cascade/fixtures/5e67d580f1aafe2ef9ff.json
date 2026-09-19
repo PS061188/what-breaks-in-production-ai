@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nCoadministration with probenecid is not recommended. ( 7.1 ) Concomitant use of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL with oral anticoagulants may increase the prolongation of prothrombin time. ( 7.2 ) Coadministration with allopurinol increases the risk of rash. ( 7.3 ) Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may reduce efficacy of oral contraceptives. ( 7.4 ) 7.1 Probenecid Probenecid decreases the renal tubular secretion of amoxicillin. Concurrent use with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may result in increased and prolonged blood levels of amoxicillin.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The three most prominent features of this document are: (1) it discusses multiple drug-drug interactions with amoxicillin and clavulanate potassium, including probenecid, oral anticoagulants, allopurinol, and oral contraceptives; (2) it explains the mechanism of action for these interactions (e.g., probenecid decreases renal tubular secretion, leading to increased blood levels); and (3) it provides clinical guidance on what effects or risks occur when these drugs are combined. The two most plausible categories are: (a) drug_interactions - because the passage explicitly lists multiple drug combinations and their effects, which is the core definition of this category; and (b) dosage_and_administration - because it could theoretically relate to how to administer the medication in the context of other drugs. However, drug_interactions is clearly the correct classification because the passage focuses entirely on what happens when amoxicillin/clavulanate is combined with other specific drugs, their mechanisms, and resulting clinical consequences. Dosage_and_administration would focus on dosing schedules, routes, and frequency of the primary drug itself, not interactions with other agents. The passage contains no information about dosing the primary drug.\", \"classification\": \"drug_interactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"dosage_and_administration addresses how to dose and administer the primary drug, whereas this passage exclusively discusses what happens when the drug is combined with other medications—the defining feature of drug_interactions.\"}",
+  "elapsed_ms": 4350,
+  "usage": {
+    "input_tokens": 1043,
+    "output_tokens": 351
+  },
+  "logprobs": null
+}

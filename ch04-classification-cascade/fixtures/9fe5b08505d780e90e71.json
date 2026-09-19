@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nSee full prescribing information for details regarding concomitant use of atorvastatin calcium with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis ( 2.5 , 7.1 ). Rifampin: May reduce atorvastatin plasma concentrations. Administer simultaneously with atorvastatin calcium ( 7.2 ). Oral Contraceptives: May increase plasma levels of norethindrone and ethinyl estradiol; consider this effect when selecting an oral contraceptive (7.3 ). Digoxin: May increase digoxin plasma levels; monitor patients appropriately ( 7.3 ). 7.1 Drug Interactions that may Increase the Risk of Myopathy and Rhabdomyolysis with Atorvastatin Calcium Atorvastatin is a substrate of CYP3A4 and transporters (e.g., OATP1B1/1B3, P-gp, or BCRP).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying the three most prominent features:\\n1. The passage explicitly discusses concomitant use of atorvastatin with other drugs (rifampin, oral contraceptives, digoxin)\\n2. It mentions specific pharmacokinetic interactions (increased plasma concentrations, decreased plasma concentrations)\\n3. It references risk of myopathy and rhabdomyolysis as adverse outcomes from drug interactions\\n4. It discusses CYP3A4 metabolism and transporter substrates, which is mechanistic information about drug interactions\\n\\nStep 2 - Evaluating the two most plausible categories:\\n- 'drug_interactions': This is explicitly and repeatedly the focus. The passage discusses how atorvastatin interacts with rifampin, oral contraceptives, digoxin, and grapefruit juice. It explains effects on plasma concentrations and clinical monitoring recommendations. This is the primary subject matter.\\n- 'adverse_reactions': While myopathy and rhabdomyolysis are mentioned as potential adverse outcomes, they are specifically presented as consequences of drug interactions rather than general adverse reactions to atorvastatin monotherapy. The passage is not cataloging side effects, but rather warning about interaction-mediated risks.\\n\\nStep 3 - Determining the winner:\\n'drug_interactions' clearly wins. The passage is structured as an interaction warning section with specific guidance on concomitant drug use. While adverse effects are mentioned, they are presented as potential consequences of the interactions being described, not as the primary subject. The document's focus is on how other drugs affect atorvastatin's metabolism and action.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"Although myopathy and rhabdomyolysis are mentioned, they appear as potential consequences of drug interactions rather than as the primary subject. The passage focuses on how specific drugs (rifampin, oral contraceptives, digoxin) interact with atorvastatin, plasma concentration changes, and monitoring recommendations - all hallmarks of drug interaction documentation rather than adverse reaction profiling.\"}",
+  "elapsed_ms": 7634,
+  "usage": {
+    "input_tokens": 1033,
+    "output_tokens": 476
+  },
+  "logprobs": null
+}

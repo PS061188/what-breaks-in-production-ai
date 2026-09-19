@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe efficacy of Sertraline hydrochloride in the treatment of PTSD was established in two 12-week placebo-controlled trials of adult outpatients whose diagnosis met criteria for the DSM-III-R category of PTSD (see Clinical Trials under CLINICAL PHARMACOLOGY ). PTSD, as defined by DSM-III-R/IV, requires exposure to a traumatic event that involved actual or threatened death or serious injury, or threat to the physical integrity of self or others, and a response which involves intense fear, helplessness, or horror. Symptoms that occur as a result of exposure to the traumatic event include reexperiencing of the event in the form of intrusive thoughts, flashbacks or dreams, and intense psychological distress and physiological reactivity on exposure to cues to the event;\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) This passage explicitly states 'The efficacy of Sertraline hydrochloride in the treatment of PTSD was established in two 12-week placebo-controlled trials' - a direct statement about what the drug treats; (2) It specifies the diagnostic criteria met (DSM-III-R category of PTSD) and references Clinical Trials under CLINICAL PHARMACOLOGY; (3) It provides detailed description of PTSD symptoms including reexperiencing, flashbacks, dreams, and psychological distress. Step 2 - Two most plausible categories: (a) 'indications_and_usage' is most plausible because the passage directly states efficacy was established for treating PTSD, naming the specific condition and the clinical evidence base for approval. This is the core definition of indications - what the drug is approved to treat. (b) 'adverse_reactions' might seem secondary since symptoms are described, but these are PTSD symptoms (the disease being treated), not side effects of the drug itself. Step 3 - Winner and ruling: 'indications_and_usage' wins decisively. The passage explicitly establishes that sertraline's efficacy in treating PTSD was proven through clinical trials. The ruling out is clear: the passage discusses the symptoms of PTSD (the condition being treated), not adverse reactions caused by the drug. The reference to clinical trials and efficacy establishment is definitional language for indications.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"The symptoms described (intrusive thoughts, flashbacks, psychological distress) are symptoms of PTSD being treated, not adverse reactions caused by sertraline. The passage establishes what the drug treats (indication), not what side effects it causes.\"}",
+  "elapsed_ms": 5552,
+  "usage": {
+    "input_tokens": 972,
+    "output_tokens": 417
+  },
+  "logprobs": null
+}

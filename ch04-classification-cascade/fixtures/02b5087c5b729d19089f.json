@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAlthough the clinical significance of these effects is not known, caution is advised in the coadministration of Albuterol Sulfate HFA with non–potassium-sparing diuretics. 7.3 Digoxin Mean decreases of 16% to 22% in serum digoxin levels were demonstrated after single-dose intravenous and oral administration of albuterol, respectively, to normal volunteers who had received digoxin for 10 days. The clinical relevance of these findings for patients with obstructive airway disease who are receiving inhaled albuterol and digoxin on a chronic basis is unclear. Nevertheless, it would be prudent to carefully evaluate the serum digoxin levels in patients who are currently receiving digoxin and albuterol.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"The document discusses specific interactions between Albuterol Sulfate HFA and other medications (non-potassium-sparing diuretics and digoxin). The passage describes: (1) documented pharmacological effects when albuterol is coadministered with these drugs (mean decreases in serum digoxin levels of 16-22%), (2) clinical study data showing these interactions in normal volunteers, and (3) recommendations for monitoring. The three most prominent features are: the explicit focus on drug-drug interactions, the quantification of the interaction effect (16-22% decrease), and the clinical guidance regarding coadministration monitoring.\\n\\nThe two most plausible categories are: (1) drug_interactions - because the entire passage is centered on how albuterol interacts with other drugs (diuretics and digoxin), with dosing adjustments and monitoring recommendations based on these interactions, and (2) dosage_and_administration - because there is mention of dosing regimens (single-dose intravenous and oral administration) and guidance about patient evaluation.\\n\\nDrug_interactions is the clear winner. The passage is fundamentally about the pharmacological effects that occur when albuterol is taken together with other medications, the magnitude of those effects, and the clinical monitoring required. While dosage forms are mentioned (intravenous, oral, inhaled), they are only mentioned in the context of demonstrating the interaction effect, not as the primary subject. The phrase 'caution is advised in the coadministration' and 'serum digoxin levels in patients who are currently receiving digoxin and albuterol' definitively establish this as interaction-focused content.\", \"classification\": \"drug_interactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"Although dosage forms (IV, oral, inhaled) are mentioned, they serve only as context for describing the interaction study design, not as the document's primary focus. The passage does not address how much albuterol to administer or the proper dosing schedule—it addresses what happens when albuterol is combined with other drugs.\"}",
+  "elapsed_ms": 5565,
+  "usage": {
+    "input_tokens": 969,
+    "output_tokens": 477
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nMeasure the total amount of water (see Table 2) to be added in two parts. Add approximately 2/3 of the total amount of water for reconstitution, replace cap and shake vigorously to suspend powder. Add remainder of the water (that had been measured), replace cap and again shake vigorously. Table 2: Volume of Water for Reconstituting Amoxicillin and Clavulanate Potassium for Oral Suspension, 600 mg/42.9 mg per 5 mL Bottle Size Amount of Water Required for Reconstitution 75 mL 68 mL 125 mL 108 mL 200 mL 170 mL ​​​​​​​​​​​​​​Each 5 mL will contain 600 mg of amoxicillin as the trihydrate, and 42.9 mg of clavulanic acid as the potassium salt. Shake oral suspension well before each use. Suspension must be refrigerated.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Prominent features: (a) Detailed instructions for reconstituting a powder formulation with specific water volumes, (b) A table showing bottle sizes and corresponding water amounts needed, (c) Post-reconstitution handling instructions (refrigeration, shaking before use) and content information (mg per 5 mL).\\n\\nStep 2 - Two most plausible categories: (1) 'how_supplied' because the passage specifies dosage forms (oral suspension), strengths (600 mg/42.9 mg per 5 mL), and storage requirements (refrigeration). (2) 'dosage_and_administration' because it provides detailed instructions on how to prepare/administer the medication (reconstitution procedure, shaking, refrigeration).\\n\\nStep 3 - Decision: This is 'how_supplied'. The passage focuses on describing the physical product form, its strength, and how it is supplied/prepared for use, rather than clinical dosing guidance. While it includes preparation instructions, these are part of the product description rather than clinical dosage directions. The table specifically enumerates different bottle sizes and their reconstitution volumes - characteristic of 'how supplied' documentation. 'Dosage_and_administration' would instead specify how many doses a patient should take and at what frequency, which is absent here.\", \"classification\": \"how_supplied\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"The passage describes the physical product form, strength, packaging sizes, and reconstitution specifications rather than clinical dosing instructions. There is no information about patient dose, frequency, or route of administration for therapeutic purposes. The focus on bottle sizes and reconstitution volumes is characteristic of 'how_supplied' rather than 'dosage_and_administration'.\"}",
+  "elapsed_ms": 4808,
+  "usage": {
+    "input_tokens": 1030,
+    "output_tokens": 408
+  },
+  "logprobs": null
+}

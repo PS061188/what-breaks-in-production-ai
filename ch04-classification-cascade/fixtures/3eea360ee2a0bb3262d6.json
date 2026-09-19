@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nFurosemide is a diuretic which is an anthranilic acid derivative. Furosemide Tablets for oral administration contain furosemide as the active ingredient and the following inactive ingredients: corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP. Chemically, it is 4-chloro-N-furfuryl-5-sulfamoylanthranilic acid. Furosemide is available as white-off white tablets for oral administration in dosage strengths of 20, 40 and 80 mg. Furosemide is a white to off-white odorless crystalline powder. It is practically insoluble in water, sparingly soluble in alcohol, freely soluble in dilute alkali solutions and insoluble in dilute acids. The structural formula is as follows: Tested by USP Dissolution Test 1. This is an image of the structural formula for furosemide.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying the 3 most prominent features:\\n(1) Chemical identity: The passage provides the chemical name (4-chloro-N-furfuryl-5-sulfamoylanthranilic acid) and describes furosemide as a diuretic and anthranilic acid derivative.\\n(2) Formulation details: The passage explicitly lists inactive ingredients (corn starch NF, lactose monohydrate NF, magnesium stearate NF, pregelatinized starch NF, and talc USP).\\n(3) Physical/pharmaceutical properties: The passage describes the drug as a white to off-white odorless crystalline powder, its solubility characteristics, available dosage strengths (20, 40, 80 mg tablets), and includes reference to structural formula and USP dissolution testing.\\n\\nStep 2 - Evaluating the 2 most plausible categories:\\n(1) DESCRIPTION: This category covers chemical name, structure, formulation, and inactive ingredients. The passage provides all of these elements - chemical name, structural formula reference, and complete list of inactive ingredients. This is a strong match.\\n(2) HOW_SUPPLIED: This category covers dosage forms, strengths, packaging and storage. The passage does mention dosage strengths (20, 40, 80 mg) and dosage form (tablets for oral administration), though notably lacks packaging and storage information.\\n\\nStep 3 - Determining the winner:\\nThe passage is predominantly focused on describing the drug's chemical composition, structure, pharmaceutical properties, and formulation - hallmark elements of a DESCRIPTION section. While dosage strengths are mentioned, they appear incidentally within the context of describing the available tablet forms as part of the product composition, not as the primary focus of how the product is packaged or supplied for distribution. The emphasis on inactive ingredients, chemical properties, solubility, physical appearance, and structural information is definitively characteristic of a DESCRIPTION section.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"Although the passage mentions dosage strengths (20, 40, 80 mg), these are presented as part of describing the available tablet formulations rather than as packaging/supply information. The passage lacks any discussion of packaging configuration, container types, or storage conditions, which are essential to how_supplied. The overwhelming focus on chemical identity, inactive ingredients, physical properties, and structural information is definitively characteristic of description sections.\"}",
+  "elapsed_ms": 6085,
+  "usage": {
+    "input_tokens": 1028,
+    "output_tokens": 562
+  },
+  "logprobs": null
+}

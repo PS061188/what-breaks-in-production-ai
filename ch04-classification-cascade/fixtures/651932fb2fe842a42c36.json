@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIt is a beta-lactam structurally related to the penicillins and possesses the ability to inactivate a wide variety of beta-lactamases by blocking the active sites of these enzymes. Clavulanic acid is particularly active against the clinically important plasmid-mediated beta-lactamases frequently responsible for transferred drug resistance to penicillins and cephalosporins. Chemically, clavulanate potassium is potassium ( Z )-(2 R ,5 R )-3-(2-hydroxyethylidene)-7-oxo-4-oxa-1-azabicyclo[3.2.0]-heptane-2-carboxylate and may be represented structurally as: C 8 H 8 KNO 5 M.W. 237.25 Following constitution, each 5 mL of oral suspension contains 600 mg of amoxicillin as the trihydrate and 42.9 mg of clavulanic acid (equivalent to 51.1 mg of clavulanate potassium).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying prominent features:\\n1. Chemical structure and molecular formula provided (C8H8KNO5, M.W. 237.25)\\n2. Detailed description of how clavulanic acid works mechanistically (beta-lactamase inhibitor, blocks active sites)\\n3. Specific formulation composition with exact amounts (600 mg amoxicillin, 42.9 mg clavulanic acid per 5 mL)\\n\\nStep 2 - Evaluating top two categories:\\n- DESCRIPTION: This passage contains chemical characterization (structural class as beta-lactam), chemical name (potassium clavulanate), molecular formula, molecular weight, and formulation details including inactive components and specific concentrations. This is quintessential description section content.\\n- HOW_SUPPLIED: The mention of \\\"oral suspension\\\" and specific amounts per 5 mL could suggest dosage form information, but the emphasis is on the chemical/formulation makeup rather than packaging, strengths available, or storage instructions typical of how_supplied sections.\\n\\nStep 3 - Decision:\\nDESCRIPTION wins decisively. The passage provides chemical nomenclature, structural information (beta-lactam class, beta-lactamase inhibitor mechanism), molecular formula, and the precise composition of the formulation. While it does mention the oral suspension form and concentrations, the primary focus is chemical and formulation description, not packaging/storage information that would define how_supplied. The how_supplied section would typically enumerate available strengths, package sizes, and storage conditions, none of which appear here.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage mentions oral suspension form and specific concentrations per 5 mL, the primary content focuses on chemical structure, nomenclature, molecular weight, and formulation composition. The how_supplied category would address packaging variants, available strengths, and storage conditions, which are not present in this passage. The passage is fundamentally a chemical and formulation description, not a supply/packaging reference.\"}",
+  "elapsed_ms": 6097,
+  "usage": {
+    "input_tokens": 1047,
+    "output_tokens": 475
+  },
+  "logprobs": null
+}

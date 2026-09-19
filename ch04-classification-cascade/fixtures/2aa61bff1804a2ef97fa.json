@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nConcentrations increased by morphine; may need dose adjustment (5.4, 7.1 ) 7.1 Opioids Respiratory depression and sedation, sometimes resulting in death, have been reported following coadministration of gabapentin with opioids (e.g., morphine, hydrocodone, oxycodone, buprenorphine) [ see Warnings and Precautions (5.7) ]. Hydrocodone Coadministration of gabapentin with hydrocodone decreases hydrocodone exposure [ see Clinical Pharmacology (12.3) ]. The potential for alteration in hydrocodone exposure and effect should be considered when gabapentin is started or discontinued in a patient taking hydrocodone. Morphine When gabapentin is administered with morphine, patients should be observed for signs of CNS depression, such as somnolence, sedation and respiratory depression [see Clinical Pharmacology (12.3) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n(1) The passage explicitly discusses interactions between gabapentin and opioid medications (morphine, hydrocodone, oxycodone, buprenorphine)\\n(2) It describes specific clinical effects of these interactions: respiratory depression, sedation, CNS depression, and altered drug exposure\\n(3) It provides guidance on clinical management: dose adjustment may be needed, patients should be observed for signs of CNS depression\\n\\nStep 2: Two most plausible categories:\\n(a) 'drug_interactions' - This passage is fundamentally about how gabapentin interacts with other drugs (opioids), how their concentrations are affected, and what clinical monitoring is needed. The entire content is organized around describing coadministration effects.\\n(b) 'adverse_reactions' - While the passage mentions side effects like respiratory depression and sedation, these are presented specifically as consequences of drug-drug interactions, not as standalone adverse reactions from gabapentin monotherapy.\\n\\nStep 3: 'drug_interactions' clearly wins. The passage is structured around the mechanism of interaction (concentration changes, altered exposure), specific drug pairs (morphine with gabapentin, hydrocodone with gabapentin), and management of those interactions. The adverse effects mentioned (respiratory depression, sedation, CNS depression) are explicitly framed as occurring \\\"following coadministration\\\" and \\\"when gabapentin is administered with morphine\\\" - they are consequences of the interaction, not primary adverse reactions. The cross-references to Clinical Pharmacology (12.3) and Warnings and Precautions (5.7) further confirm this is about interactions rather than standalone adverse effects.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While adverse effects (respiratory depression, sedation) are mentioned, they are explicitly presented as consequences of drug-drug interactions ('following coadministration,' 'when gabapentin is administered with morphine'), not as standalone adverse reactions. The focus is on altered pharmacokinetics (concentration changes, exposure reduction) and interaction management (dose adjustment, clinical observation), which are hallmarks of drug_interactions rather than adverse_reactions.\"}",
+  "elapsed_ms": 6013,
+  "usage": {
+    "input_tokens": 1008,
+    "output_tokens": 497
+  },
+  "logprobs": null
+}

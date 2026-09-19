@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage lists specific adverse reactions including angioedema, bullous pemphigoid, erythema multiforme, Stevens-Johnson syndrome, and respiratory depression; (2) It describes adverse reactions that occur following abrupt discontinuation (anxiety, insomnia, nausea, pain, sweating); (3) It explicitly references a 'Clinical Trials Experience' section and discusses adverse reaction rates from clinical trials. Step 2 - Two most plausible categories: (a) 'adverse_reactions' - The passage is dominated by enumeration of specific side effects and unwanted reactions observed in patients, with detailed clinical findings. (b) 'dosage_and_administration' - The mention of abrupt discontinuation could theoretically relate to how the drug should be administered/discontinued, though this is a weak interpretation. Step 3 - Determination: 'adverse_reactions' clearly wins. The entire passage is structured around cataloging undesirable effects (angioedema, Stevens-Johnson syndrome, respiratory depression, post-discontinuation symptoms). The reference to 'Clinical Trials Experience' confirms this is from the adverse reactions section of prescribing information. The mention of discontinuation is in the context of adverse effects that occur after stopping (a type of adverse reaction), not instructions on proper dosing/administration. The runner-up is ruled out because there are no dosing instructions, frequencies, routes of administration, or administration parameters discussed.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While abrupt discontinuation is mentioned, it is framed as an adverse reaction outcome (causing anxiety, insomnia, nausea, pain, sweating) rather than as dosing guidance or administration instructions. The passage is entirely focused on undesirable effects and safety signals, not on how to properly administer the drug.\"}",
+  "elapsed_ms": 4967,
+  "usage": {
+    "input_tokens": 983,
+    "output_tokens": 425
+  },
+  "logprobs": null
+}

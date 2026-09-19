@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nOf the total number of atorvastatin calcium -treated patients in clinical trials, 15,813 (40%) were ≥65 years old and 2,800 (7%) were ≥75 years old. No overall differences in safety or effectiveness were observed between these patients and younger patients. Advanced age (≥65 years) is a risk factor for atorvastatin calcium -associated myopathy and rhabdomyolysis. Dose selection for an elderly patient should be cautious, recognizing the greater frequency of decreased hepatic, renal, or cardiac function, and of concomitant disease or other drug therapy and the higher risk of myopathy. Monitor geriatric patients receiving atorvastatin calcium for the increased risk of myopathy [see Warnings and Precautions (5.1) and Clinical Pharmacology (12.3) ].\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features: (1) The passage discusses clinical trial populations aged ≥65 and ≥75 years, (2) It addresses dose selection considerations specific to elderly patients, and (3) It provides guidance on monitoring geriatric patients for myopathy risk. Step 2 - Most plausible categories: (a) 'geriatric_use' is highly plausible because the entire passage focuses on elderly patients (≥65 years), safety/effectiveness in this population, and clinical management recommendations specific to advanced age. (b) 'dosage_and_administration' is plausible because it mentions 'dose selection for an elderly patient should be cautious,' which relates to how to administer the drug. Step 3 - Classification decision: 'geriatric_use' is the clear winner. While the passage does briefly mention dose selection, the overwhelming content (trial demographics, age-related risk factors, monitoring guidance, and multiple explicit references to 'geriatric patients') directly addresses what is known and recommended about using this drug in elderly populations. The dose selection statement is subordinate to and part of the geriatric considerations rather than being the primary focus of administration guidance. The passage is fundamentally about geriatric-specific safety and efficacy, not about general dosage administration protocol.\", \"classification\": \"geriatric_use\", \"runner_up\": \"dosage_and_administration\", \"ruled_out_because\": \"While dose selection is mentioned, it is presented as a geriatric-specific consideration within the context of elderly patient management, not as primary dosage and administration guidance. The passage's primary focus is on clinical trial data in elderly populations, age-related risk factors, and monitoring recommendations specific to geriatric patients—the core definition of geriatric_use. The dosage element is secondary and contextual.\"}",
+  "elapsed_ms": 6340,
+  "usage": {
+    "input_tokens": 989,
+    "output_tokens": 410
+  },
+  "logprobs": null
+}

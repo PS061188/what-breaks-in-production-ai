@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nConcomitant use of drugs that increase bleeding risk, antibiotics, antifungals, botanical (herbal) products, and inhibitors and inducers of CYP2C9, 1A2, or 3A4. ( 7 ) Consult labeling of all concurrently used drugs for complete information about interactions with warfarin sodium or increased risks for bleeding. ( 7 ) 7.1 General Information Drugs may interact with warfarin sodium through pharmacodynamic or pharmacokinetic mechanisms. Pharmacodynamic mechanisms for drug interactions with warfarin sodium are synergism (impaired hemostasis, reduced clotting factor synthesis), competitive antagonism (vitamin K), and alteration of the physiologic control loop for vitamin K metabolism (hereditary resistance).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. The three most prominent features are: (a) explicit discussion of drug interactions with warfarin sodium, including specific mechanisms (pharmacodynamic and pharmacokinetic); (b) listing of drug classes that interact (anticoagulants increasing bleeding risk, antibiotics, antifungals, botanical products, CYP enzyme inhibitors/inducers); and (c) detailed mechanistic explanation of how these interactions occur (synergism, competitive antagonism, altered vitamin K metabolism).\\n\\n2. The two most plausible categories are: (a) drug_interactions - because the entire passage is devoted to how other drugs interact with warfarin sodium, the mechanisms of these interactions, and the cytochrome P450 involvement; and (b) contraindications - because the passage discusses situations (concomitant use with certain drug classes) that pose serious risks and might suggest avoidance. However, contraindications typically describe absolute prohibitions on use in specific populations or conditions, whereas this passage is explaining interaction mechanisms rather than stating the drug must not be used in these situations.\\n\\n3. drug_interactions clearly wins. The passage uses the term 'interactions' explicitly multiple times, references section 7 (Drug Interactions), discusses both pharmacodynamic and pharmacokinetic mechanisms of interaction, and provides detailed explanations of how specific drug classes affect warfarin's action. This is definitional content for the drug_interactions category. The runner-up (contraindications) is ruled out because the passage does not state these combinations are contraindicated or forbidden; rather, it explains how interactions work and advises consulting labels for 'complete information' and 'increased risks'—a precautionary stance consistent with interactions guidance rather than absolute contraindications.\", \"classification\": \"drug_interactions\", \"runner_up\": \"contraindications\", \"ruled_out_because\": \"The passage explains mechanisms of drug interactions and advises caution/consultation rather than stating these situations are absolute contraindications. The focus is on interaction mechanisms (pharmacodynamic, pharmacokinetic, CYP450 involvement) rather than on conditions that absolutely forbid use of the drug.\"}",
+  "elapsed_ms": 6778,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 474
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nPediatric Patients aged 3 months to 12 years weighing less than or equal to 40 kg: 90 mg/kg/day divided every 12 hours, administered for 10 days. ( 2 ) 2.1 Important Administration Instructions To minimize the potential for gastrointestinal intolerance, amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL should be taken at the start of a meal. Absorption of clavulanate potassium may be enhanced when amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is administered at the start of a meal. 2.2 Dosage in Pediatric Patients Pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended dose of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is 90 mg/kg/day divided every 12 hours, administered for 10 days (see Table 1 as a general example guideline for attainment of this dosage).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) Explicit focus on pediatric patients aged 3 months to 12 years with weight-based dosing calculations; (2) Clear dosage instructions specifying 90 mg/kg/day divided every 12 hours for 10 days; (3) Administration guidance about taking the medication at the start of a meal to minimize GI intolerance and enhance absorption. Step 2 - Two most plausible categories: (a) 'pediatric_use' because the passage explicitly centers on pediatric patients with age ranges, weight-based calculations, and specialized dosing for children; (b) 'dosage_and_administration' because it contains specific dosage amounts (90 mg/kg/day), frequency (every 12 hours), duration (10 days), and administration instructions (timing with meals). Step 3 - Decision: While this passage does contain dosage and administration information, the organizing principle and primary focus is pediatric-specific dosing. The passage is located in what appears to be a Pediatric Dosage section (section 2.2), with explicit language 'Dosage in Pediatric Patients' and is positioned as pediatric guidance. However, the content itself is fundamentally about how much drug to give and how to administer it—core dosage_and_administration elements. The pediatric_use category typically covers what is 'known about use' in children (safety, efficacy, special considerations), whereas this is prescriptive dosing instructions. The ruler-out factor: This is prescriptive dosing information presented in a dosage table format, not a discussion of pediatric-specific safety considerations, efficacy data, or what has been studied/known about pediatric use.\",\"classification\": \"dosage_and_administration\",\"runner_up\": \"pediatric_use\",\"ruled_out_because\": \"Although the passage is pediatric-focused, it is fundamentally prescriptive dosing guidance (specific amounts, frequency, and administration instructions), which is the core content of dosage_and_administration. The pediatric_use category typically encompasses what is known or recommended about use in children as a special population consideration, rather than serving as the primary location for actual pediatric dosing tables and calculations.\"}",
+  "elapsed_ms": 9858,
+  "usage": {
+    "input_tokens": 1111,
+    "output_tokens": 503
+  },
+  "logprobs": null
+}

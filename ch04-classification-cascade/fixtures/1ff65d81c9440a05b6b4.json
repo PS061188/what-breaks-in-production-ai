@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAmoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is indicated for the treatment of pediatric patients aged 3 months to 12 years weighing less than or equal to 40 kg with: Recurrent or persistent acute otitis media due to S. pneumoniae (penicillin MICs less than or equal to 2 mcg/mL), H. influenzae (including beta-lactamase-producing strains), or M. catarrhalis (including beta-lactamase-producing strains) characterized by the following risk factors: Antibacterial drug exposure for acute otitis media within the preceding 3 months, and either of the following: 1) age 2 years, or younger or 2) day care attendance [see Microbiology (12.4) ] . Limitations of Use Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL is not indicated for the treatment of acute otitis media due to S.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Three most prominent features: (1) The passage explicitly states 'is indicated for the treatment of' followed by specific clinical conditions (recurrent/persistent acute otitis media); (2) It specifies the patient population (pediatric patients aged 3 months to 12 years weighing ≤40 kg); (3) It lists specific bacterial pathogens and resistance characteristics that define the indication. Step 2 - Two most plausible categories: (a) 'indications_and_usage' because the passage directly describes what conditions this formulation is indicated for, with explicit inclusion criteria and risk factors; (b) 'pediatric_use' because the passage focuses specifically on pediatric patients and their age/weight parameters. Step 3 - Decision: 'indications_and_usage' is the correct classification. While the passage does address pediatric populations, its primary function is to state the approved therapeutic uses and indications for this specific formulation. The pediatric age range is mentioned as part of defining the indication population, not as ancillary information about pediatric pharmacology, safety, or dosing considerations unique to children. The 'Limitations of Use' section at the end further confirms this is an indications section. 'Pediatric_use' sections typically address pharmacokinetic differences, safety profiles in children, or developmental considerations—not the core indications themselves.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"While the passage focuses on pediatric patients, it is primarily stating the approved therapeutic indications and conditions for treatment, not discussing pediatric-specific pharmacology, safety, or dosing considerations. The age restriction (3 months to 12 years) is a defining characteristic of the indication itself, not a separate pediatric use consideration.\"}",
+  "elapsed_ms": 6997,
+  "usage": {
+    "input_tokens": 1051,
+    "output_tokens": 410
+  },
+  "logprobs": null
+}

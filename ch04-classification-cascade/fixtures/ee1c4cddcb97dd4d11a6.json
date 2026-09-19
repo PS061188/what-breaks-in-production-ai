@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLevothyroxine sodium tablets are not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis. Levothyroxine sodium tablets are a L-thyroxine (T4) indicated in adult and pediatric patients, including neonates, for: Hypothyroidism: As replacement therapy in primary (thyroidal), secondary (pituitary), and tertiary (hypothalamic) congenital or acquired hypothyroidism. (1) Pituitary Thyrotropin (Thyroid‑Stimulating Hormone, TSH) Suppression: As an adjunct to surgery and radioiodine therapy in the management of thyrotropin-dependent well-differentiated thyroid cancer. (1) Limitations of Use: Not indicated for suppression of benign thyroid nodules and nontoxic diffuse goiter in iodine-sufficient patients Not indicated for treatment of hypothyroidism during the recovery phase of subacute thyroiditis\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Most prominent features: (a) The passage explicitly states what levothyroxine sodium tablets ARE indicated for, listing specific clinical conditions (hypothyroidism replacement, TSH suppression in thyroid cancer); (b) The passage specifies patient populations (adults, pediatric patients, neonates); (c) The passage includes a 'Limitations of Use' section that explicitly states what the drug is NOT indicated for, which is a characteristic feature of indications sections in drug labeling.\\n\\n2. Two most plausible categories: (i) 'indications_and_usage' - This passage directly addresses what conditions the drug is approved to treat, specifies the approved uses (hypothyroidism replacement, TSH suppression), names patient populations, and includes explicit limitations of use. This is classic indications labeling. (ii) 'description' - One might consider this if the passage were primarily about the chemical nature of the drug (L-thyroxine T4), but the passage only briefly mentions this chemical identity before immediately pivoting to therapeutic uses and approved indications.\\n\\n3. Classification decision: 'indications_and_usage' clearly wins. The passage's core content is a systematic enumeration of approved therapeutic uses organized by condition (Hypothyroidism, TSH Suppression), with patient population qualifications and explicit limitations of use. This is the definitive structure of an indications section. The chemical description (L-thyroxine T4) is merely introductory and ancillary. The runner-up 'description' is ruled out because the passage contains only minimal chemical information and is overwhelmingly focused on stating what the drug is indicated for, not what it chemically is.\",\"classification\": \"indications_and_usage\",\"runner_up\": \"description\",\"ruled_out_because\": \"While the passage briefly identifies levothyroxine as 'L-thyroxine (T4)', the overwhelming majority of the content is dedicated to enumerating approved therapeutic uses (hypothyroidism replacement, TSH suppression in thyroid cancer), specifying patient populations, and stating explicit limitations of use. This structure is characteristic of indications sections, not description sections, which would focus primarily on chemical composition, structure, formulation, and inactive ingredients.\"}",
+  "elapsed_ms": 7231,
+  "usage": {
+    "input_tokens": 1015,
+    "output_tokens": 500
+  },
+  "logprobs": null
+}

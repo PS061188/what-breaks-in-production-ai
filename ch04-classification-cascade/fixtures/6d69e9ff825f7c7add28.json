@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nThe expected signs and symptoms with overdosage of albuterol are those of excessive beta-adrenergic stimulation and/or occurrence or exaggeration of any of the signs and symptoms of beta-adrenergic stimulation (e.g., seizures, angina, hypertension or hypotension, tachycardia with rates up to 200 beats/min, arrhythmias, nervousness, headache, tremor, muscle cramps, dry mouth, palpitation, nausea, dizziness, fatigue, malaise, insomnia, hyperglycemia, hypokalemia, metabolic acidosis). As with all inhaled sympathomimetic medicines, cardiac arrest and even death may be associated with an overdose of Albuterol Sulfate HFA Inhalation Aerosol. Treatment consists of discontinuation of Albuterol Sulfate HFA together with appropriate symptomatic therapy.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - Explicit discussion of 'overdosage' in the opening phrase (\\\"signs and symptoms with overdosage\\\")\\n   - Enumeration of excessive beta-adrenergic stimulation effects and manifestations\\n   - Treatment approach for managing the overdose condition (discontinuation and symptomatic therapy)\\n\\n2. Two most plausible categories:\\n   - OVERDOSAGE: The passage is explicitly framed around overdosage signs, symptoms, and management. It describes what happens when excessive amounts are taken and how to treat it.\\n   - ADVERSE_REACTIONS: The passage lists many unwanted effects (seizures, arrhythmias, tremor, etc.) that could theoretically be classified as adverse reactions if they occur at therapeutic doses.\\n\\n3. Decision:\\n   OVERDOSAGE is the clear winner. The passage is explicitly structured around 'overdosage of albuterol' and discusses signs/symptoms that occur specifically with excessive dosing ('excessive beta-adrenergic stimulation') along with treatment for overdose. Adverse reactions typically refer to side effects observed at normal therapeutic doses during regular use. The context here is specifically about what happens when doses exceed the therapeutic range, and the treatment guidance ('discontinuation of Albuterol Sulfate HFA together with appropriate symptomatic therapy') is characteristic of overdosage management rather than managing expected adverse reactions. The phrase 'cardiac arrest and even death may be associated with an overdose' further anchors this as overdosage content rather than typical adverse reactions documentation.\", \"classification\": \"overdosage\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"While the passage lists many undesirable effects, the entire context is specifically about OVERDOSAGE - excessive dosing beyond therapeutic range - rather than adverse reactions that occur at normal doses. The treatment guidance (discontinuation + symptomatic therapy) is tailored to overdose management. Adverse reactions sections typically document side effects at approved therapeutic doses, whereas this passage is explicitly framed around 'overdosage' and 'excessive beta-adrenergic stimulation' from overdosing.\"}",
+  "elapsed_ms": 6721,
+  "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 482
+  },
+  "logprobs": null
+}

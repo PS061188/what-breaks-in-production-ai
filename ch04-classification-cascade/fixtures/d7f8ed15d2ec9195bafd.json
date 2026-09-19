@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdverse reactions associated with levothyroxine sodium therapy are primarily those of hyperthyroidism due to therapeutic overdosage [see Warnings and Precautions (5) and Overdosage (10) ]. They include the following: General: fatigue, increased appetite, weight loss, heat intolerance, fever, excessive sweating Central nervous system: headache, hyperactivity, nervousness, anxiety, irritability, emotional lability, insomnia Musculoskeletal: tremors, muscle weakness, muscle spasm Cardiovascular: palpitations, tachycardia, arrhythmias, increased pulse and blood pressure, heart failure, angina, myocardial infarction, cardiac arrest Respiratory: dyspnea Gastrointestinal: diarrhea, vomiting, abdominal cramps, elevations in liver function tests Dermatologic:\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - The passage explicitly states 'Adverse reactions associated with levothyroxine sodium therapy'\\n   - It provides a comprehensive, organized list of side effects organized by body system (General, CNS, Musculoskeletal, Cardiovascular, Respiratory, GI, Dermatologic)\\n   - All items listed (fatigue, headache, tremors, palpitations, dyspnea, diarrhea, etc.) are clinical manifestations of adverse effects\\n\\n2. Two most plausible categories:\\n   - adverse_reactions: This is the clear primary fit. The passage is titled with the explicit phrase 'Adverse reactions' and systematically enumerates side effects by organ system. This is the textbook structure of an adverse reactions section.\\n   - overdosage: The passage mentions that these reactions are 'primarily those of hyperthyroidism due to therapeutic overdosage' with cross-references to sections 5 and 10 (Overdosage). One could argue this belongs in overdosage since the mechanism is explicitly linked to overdose.\\n\\n3. Decision:\\n   - adverse_reactions wins decisively. While the passage notes that overdosage is the mechanism, the content itself is organized and presented as a catalog of adverse reactions (the clinical manifestations patients may experience). The passage is enumerating side effects by symptom category, not describing overdose management, toxidrome recognition, or treatment of overdose. The mere mention that overdosage is the cause does not transform this into an overdosage section.\\n   - overdosage is ruled out because: The passage does not discuss recognition of overdose, clinical signs of toxicity requiring intervention, or management/treatment of overdose. It simply lists adverse reactions with a note about their etiology. This is documentation of adverse effects, not overdose management.\",\"classification\": \"adverse_reactions\",\"runner_up\": \"overdosage\",\"ruled_out_because\": \"While the passage notes that these reactions stem from therapeutic overdosage, it does not address overdose management, treatment, or recognition protocols. It is organized as a systematic catalog of adverse reactions by organ system, not as an overdosage section which would focus on toxidrome management and treatment approaches.\"}",
+  "elapsed_ms": 7495,
+  "usage": {
+    "input_tokens": 992,
+    "output_tokens": 504
+  },
+  "logprobs": null
+}

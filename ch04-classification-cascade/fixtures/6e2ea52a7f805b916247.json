@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nTake orally once daily with or without food ( 2.1 ). Assess LDL-C when clinically appropriate, as early as 4 weeks after initiating atorvastatin calcium tablets, and adjust dosage if necessary ( 2.1 ). Adults ( 2.2 ): Recommended starting dosage is 10 or 20 mg once daily; dosage range is 10 mg to 80 mg once daily. Patients requiring LDL-C reduction >45% may start at 40 mg once daily. Pediatric Patients Aged 10 Years of Age and Older with HeFH: Recommended starting dosage is 10 mg once daily; dosage range is 10 to 20 mg once daily ( 2.3 ). Pediatric Patients Aged 10 Years of Age and Older with HoFH: Recommended starting dosage is 10 to 20 mg once daily; dosage range is 10 to 80 mg once daily ( 2.4 ).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features: (a) Specific oral dosing instruction ('Take orally once daily'); (b) Precise dosage ranges and strengths (10 mg to 80 mg once daily); (c) Differentiated dosing regimens by patient population (adults, pediatric 10+ with HeFH, pediatric 10+ with HoFH). 2. The two most plausible categories are: (a) 'dosage_and_administration' - this document explicitly covers route of administration (oral), frequency (once daily), specific dose amounts (10-80 mg), timing of assessment (4 weeks), and dosing stratified by patient group; (b) 'pediatric_use' - the passage does include specific pediatric dosing guidance for patients aged 10 and older. However, the pediatric information is presented as part of a comprehensive dosage administration section rather than as clinical guidance about pediatric use more broadly. 3. 'Dosage_and_administration' wins because the entire passage is structured around HOW to administer the drug: the route (oral), frequency (once daily), whether food matters (with or without food), specific dose ranges, and monitoring recommendations (assess LDL-C at 4 weeks). The pediatric dosing is included as part of the dosage framework, not as a separate discussion of pediatric safety, efficacy, or special considerations. 'Pediatric_use' is ruled out because while pediatric dosing is mentioned, it is subordinate to and integrated within the overall dosage and administration guidance rather than constituting a dedicated discussion of pediatric-specific considerations.\", \"classification\": \"dosage_and_administration\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"Although pediatric dosing information is present, it is presented as part of the comprehensive dosage administration guidance rather than as a dedicated section on pediatric use. The document's primary focus is on 'how to give' the drug (route, frequency, amount) across all populations, not on pediatric-specific safety or efficacy considerations.\"}",
+  "elapsed_ms": 5612,
+  "usage": {
+    "input_tokens": 1031,
+    "output_tokens": 466
+  },
+  "logprobs": null
+}

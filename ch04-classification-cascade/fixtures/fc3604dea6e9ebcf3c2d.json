@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nIn addition, each tablet contains the following inactive ingredients: colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose. The 1 mg also contains FD&C red no. 40. The 2 mg also contains FD&C blue no. 2 aluminum lake and FD&C red no. 40 aluminum lake. The 2.5 mg also contains D&C yellow no. 10 aluminum lake and FD&C blue no. 1 aluminum lake. The 3 mg also contains FD&C yellow no. 6 aluminum lake, FD&C blue no. 2 aluminum lake, FD&C red no. 40 aluminum lake, and D&C yellow no. 10 aluminum lake. The 4 mg also contains FD&C blue no. 1 aluminum lake and FD&C blue no. 2 aluminum lake. The 5 mg also contains FD&C yellow no. 6 aluminum lake, FD&C red no.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identifying the three most prominent features:\\n(1) The passage enumerates inactive ingredients common to all tablet strengths (colloidal silicon dioxide, croscarmellose sodium, lactose monohydrate, magnesium stearate, and microcrystalline cellulose)\\n(2) It lists colorants (FD&C dyes and D&C colorants) specific to each dosage strength\\n(3) The information is presented in a structured format typical of pharmaceutical labeling that details formulation composition\\n\\nStep 2 - Two most plausible categories:\\n(1) 'description': This section typically includes chemical formulation, inactive ingredients, and details about how the drug is manufactured/composed. The passage directly describes the tablet composition and ingredient list.\\n(2) 'how_supplied': This category covers dosage forms, strengths, and packaging information. The passage does mention multiple strengths (1 mg, 2 mg, 2.5 mg, 3 mg, 4 mg, 5 mg) which relates to how the product is supplied.\\n\\nStep 3 - Determining the winner:\\nThe 'description' category is the clear winner. While 'how_supplied' mentions strengths/forms, the primary focus here is on the actual composition and ingredients of the tablets at each strength. The detailed enumeration of inactive ingredients and coloring agents is definitional content for the 'description' section, which explains what the drug product actually contains. 'How_supplied' typically focuses on packaging details, storage conditions, and availability format rather than the detailed formulation of each strength.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"While the passage does mention multiple dosage strengths, it focuses almost exclusively on the inactive ingredients and colorants that compose each strength rather than on packaging, presentation format, or storage/availability information that would characterize 'how_supplied'.\"}",
+  "elapsed_ms": 7365,
+  "usage": {
+    "input_tokens": 1044,
+    "output_tokens": 445
+  },
+  "logprobs": null
+}

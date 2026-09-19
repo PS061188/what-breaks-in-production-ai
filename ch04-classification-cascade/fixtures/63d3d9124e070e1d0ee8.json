@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nangioedema [see Warnings and Precautions (5.2) ] , bullous pemphigoid,erythema multiforme, Stevens-Johnson syndrome. There are postmarketing reports of life-threatening or fatal respiratory depression in patients taking gabapentin with opioids or other CNS depressants, or in the setting of underlying respiratory impairment [ see Warnings and Precautions (5.7) ]. Adverse reactions following the abrupt discontinuation of gabapentin have also been reported. The most frequently reported reactions were anxiety, insomnia, nausea, pain, and sweating. 6.1 Clinical Trials Experience Because clinical trials are conducted under widely varying conditions, adverse reaction rates observed in the clinical trials of a drug cannot be directly compared to rates in the clinical trials of another drug and may not reflect the rates observed in practice.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features:\\n1. The passage lists specific adverse reactions/side effects: angioedema, bullous pemphigoid, erythema multiforme, Stevens-Johnson syndrome, respiratory depression\\n2. It explicitly discusses postmarketing reports of serious adverse events (life-threatening/fatal respiratory depression)\\n3. It describes reactions following discontinuation: anxiety, insomnia, nausea, pain, sweating\\n4. The section is explicitly labeled as discussing 'Adverse reactions' and references clinical trial experience\\n\\nStep 2: Two most plausible categories:\\n- adverse_reactions: This passage clearly enumerates observed side effects and adverse events from clinical use. It mentions specific conditions, postmarketing reports of serious reactions, and discontinuation symptoms. The language is characteristic of adverse reaction reporting.\\n- description: Could theoretically include formulation details, but this passage contains no chemical information, inactive ingredients, structure, or formulation details whatsoever.\\n\\nStep 3: Winner and rationale:\\nThe classification is clearly adverse_reactions. The passage explicitly discusses adverse reactions observed in patients, postmarketing safety reports, and discontinuation-related symptoms. There is no descriptive pharmaceutical information present. The passage even cites section 6.1 which discusses 'Clinical Trials Experience' in the context of adverse reaction rates.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"drug_interactions\", \"ruled_out_because\": \"While the passage mentions taking gabapentin with opioids or CNS depressants in the context of respiratory depression risk, this is presented as an adverse reaction outcome rather than as drug interaction information. The focus is on the adverse consequence (respiratory depression) not on the interaction mechanism or how co-administration affects drug levels/metabolism. The passage does not characterize how these drugs interact with each other, only that combined use carries a serious risk.\"}",
+  "elapsed_ms": 4930,
+  "usage": {
+    "input_tokens": 983,
+    "output_tokens": 421
+  },
+  "logprobs": null
+}

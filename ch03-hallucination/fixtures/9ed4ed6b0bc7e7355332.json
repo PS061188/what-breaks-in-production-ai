@@ -1,0 +1,28 @@
+{
+  "model": "claude-sonnet-5",
+  "system": "You are classifying an assistant's response to a question.\n\nDecide which of these it is:\n- ASSERTED: the response states an answer to the question, in whole or in part.\n- DECLINED: the response says it cannot answer, that the information is not in\n  the provided sources, or otherwise refuses to state an answer.\n\nJudge only what the response does. Do not judge whether the answer is correct.",
+  "user": "QUESTION:\nWhich other drugs interact with Sertraline Hydrochloride?\n\nRESPONSE:\nBased on the provided label excerpt, the specific drug interactions mentioned are: 1) Monoamine Oxidase Inhibitors (MAOIs) intended to treat psychiatric disorders - at least 14 days should elapse between discontinuation of an MAOI and initiation of Sertraline hydrochloride therapy, or vice versa; 2) Linezolid - do not start Sertraline hydrochloride in patients being treated with linezolid due to increased risk of serotonin syndrome; 3) Intravenous methylene blue - do not start Sertraline hydrochloride in patients being treated with intravenous methylene blue due to increased risk of serotonin syndrome. The label notes that if a patient already receiving Sertraline hydrochloride requires urgent treatment with linezolid or intravenous methylene blue and no acceptable alternatives are available, Sertraline hydrochloride should be stopped and the patient monitored for serotonin syndrome symptoms for 2 weeks or until 24 hours after the last dose of linezolid or methylene blue. The label provided does not contain a comprehensive list of all possible drug interactions.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "ASSERTED",
+          "DECLINED"
+        ]
+      }
+    },
+    "required": [
+      "verdict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"verdict\":\"ASSERTED\"}",
+  "elapsed_ms": 1991,
+  "usage": {
+    "input_tokens": 760,
+    "output_tokens": 17
+  },
+  "logprobs": null
+}

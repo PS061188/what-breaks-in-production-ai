@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nHow Supplied The color of the dry powder for Amoxicillin and clavulanate potassium for oral suspension, USP, 600 mg/42.9 mg per 5 mL is white to off-white powder. Each 5 mL of reconstituted orange-flavored suspension contains 600 mg amoxicillin trihydrate and 42.9 mg clavulanic acid as the potassium salt. It is available in bottles of 75 mL (NDC 62135-095-75), 125 mL (NDC 62135-095-13), and 200 mL (NDC 62135-095-22). Storage Store dry powder at 20° to 25°C (68° to 77°F) [See USP Controlled Room Temperature]. Dispense in original container. Keep tightly closed. Store reconstituted suspension under refrigeration. Discard unused suspension after 10 days. Keep this and all medications out of the reach of children.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1: Three most prominent features of this document:\\n1. Describes the physical appearance and composition of the drug product (white to off-white powder, orange-flavored suspension)\\n2. Lists specific dosage forms, strengths, and packaging sizes with NDC numbers (75 mL, 125 mL, 200 mL bottles)\\n3. Provides storage and handling instructions (room temperature for dry powder, refrigeration for reconstituted suspension, 10-day discard timeline)\\n\\nStep 2: Two most plausible categories:\\n- \\\"how_supplied\\\" is the most obvious fit because the passage explicitly begins with \\\"How Supplied\\\" as the section header and details packaging sizes (bottles of 75 mL, 125 mL, 200 mL with specific NDC numbers), dosage forms (dry powder, oral suspension), and strengths (600 mg/42.9 mg per 5 mL).\\n- \\\"description\\\" could be considered a runner-up because the passage does describe the appearance and formulation details (white to off-white powder, orange-flavored, contains amoxicillin trihydrate and clavulanic acid as potassium salt), which could fall under chemical composition and formulation.\\n\\nStep 3: \\\"how_supplied\\\" clearly wins because:\\n- The entire passage is explicitly labeled \\\"How Supplied\\\" in the original text\\n- The primary content focuses on packaging information (bottle sizes, NDC numbers) and availability formats rather than chemical structure or inactive ingredient composition\\n- Storage instructions are included as part of supply/handling information\\n- While description includes some compositional details (the active ingredients and their amounts), the passage's main purpose is to convey what products are available and in what configurations\\n\\n\\\"description\\\" is ruled out because it emphasizes formulation and chemical/structural details, whereas this passage emphasizes availability, packaging, and handling—the core elements of \\\"how supplied.\\\"\", \"classification\": \"how_supplied\", \"runner_up\": \"description\", \"ruled_out_because\": \"While the passage does mention some formulation details (amoxicillin trihydrate, clavulanic acid, orange flavoring), its primary purpose and explicit header is to communicate what packages and strengths are available (NDC numbers, bottle sizes), which is the defining content of 'how_supplied' rather than the chemical structure and inactive ingredient emphasis of 'description.'\"}",
+  "elapsed_ms": 8497,
+  "usage": {
+    "input_tokens": 1026,
+    "output_tokens": 545
+  },
+  "logprobs": null
+}

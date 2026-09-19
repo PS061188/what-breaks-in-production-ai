@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAlbuterol Sulfate HFA is a beta 2 -adrenergic agonist indicated for: Treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. ( 1.1 ) Prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older. ( 1.2 ) 1.1 Bronchospasm Albuterol Sulfate HFA Inhalation Aerosol is indicated for the treatment or prevention of bronchospasm in adult and pediatric patients aged 4 years and older with reversible obstructive airway disease. 1.2 Exercise-Induced Bronchospasm Albuterol Sulfate HFA is indicated for the prevention of exercise-induced bronchospasm in adult and pediatric patients aged 4 years and older.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Three most prominent features: (1) The passage explicitly uses the phrase 'indicated for' twice, which is the standard terminology for indications and approved uses. (2) The content describes two specific clinical conditions for which the drug is approved: treatment/prevention of bronchospasm in reversible obstructive airway disease, and prevention of exercise-induced bronchospasm. (3) The passage is organized with numbered sections (1.1, 1.2) that correspond to distinct indications, which is typical of the indications_and_usage section of prescribing information. The most plausible categories are: (a) indications_and_usage - This passage lists the conditions approved for treatment and the populations for which they are approved, using standard indication language ('indicated for'). (b) pediatric_use - The passage does mention pediatric patients aged 4 years and older, which could suggest this is about pediatric use. However, pediatric_use sections typically discuss safety, efficacy data, or special considerations specific to children, not merely list age ranges in the indication statement. The pediatric age restriction here is part of the indication itself, not a discussion of pediatric-specific evidence or considerations. The winner is indications_and_usage because it directly states the approved uses and conditions for which the drug is indicated, which is the defining characteristic of that section. The passage would be ruled out of pediatric_use because it does not provide pediatric-specific safety, efficacy, or dosing information—it only includes age restrictions as part of the standard indications statement, which belongs in indications_and_usage.\", \"classification\": \"indications_and_usage\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"While the passage mentions pediatric patients aged 4 years and older, it does not discuss pediatric-specific safety, efficacy data, or special considerations for children. The age range is part of the indication statement itself, not a discussion of pediatric use. Indications_and_usage is the appropriate category for listing approved conditions and eligible populations.\"}",
+  "elapsed_ms": 6499,
+  "usage": {
+    "input_tokens": 1002,
+    "output_tokens": 457
+  },
+  "logprobs": null
+}

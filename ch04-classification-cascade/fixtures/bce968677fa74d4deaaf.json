@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAdditionally, the following adverse reactions were reported in ≥1 % to ≤5% of metformin hydrochloride tablets treated patients and were more commonly reported with metformin hydrochloride tablets than placebo: abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, nail disorder, rash, sweating increased, taste disorder, chest discomfort, chills, flu syndrome, flushing, palpitation. In metformin hydrochloride tablets clinical trials of 29-week duration, a decrease to subnormal levels of previously normal serum vitamin B 12 levels was observed in approximately 7% of patients. Pediatric Patients In clinical trials with metformin hydrochloride tablets in pediatric patients with type 2 diabetes mellitus, the profile of adverse reactions was similar to that observed in adults.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Identify the 3 most prominent features:\\n1. The passage explicitly lists adverse reactions reported in clinical trials (abnormal stools, hypoglycemia, myalgia, lightheaded, dyspnea, nail disorder, rash, sweating, taste disorder, chest discomfort, chills, flu syndrome, flushing, palpitation)\\n2. It specifies the frequency of these reactions (≥1% to ≤5%) and compares them to placebo\\n3. It includes specific clinical trial observations, including a vitamin B12 decrease finding in ~7% of patients over 29 weeks\\n4. The passage mentions pediatric use but only to note that the adverse reaction profile is similar to adults\\n\\nStep 2 - Two most plausible categories:\\n- ADVERSE_REACTIONS: The dominant content is a listing of side effects and reactions observed in clinical trials with specific frequencies. This is the classic structure of adverse reactions reporting.\\n- PEDIATRIC_USE: The passage does mention pediatric patients and clinical trials in this population, though this content occupies only the final sentence.\\n\\nStep 3 - Determining the winner:\\nADVERSE_REACTIONS clearly wins. While the passage does mention pediatric patients, it does so only in the context of reporting that their adverse reaction profile matches adults. The vast majority of the passage (approximately 90%) is devoted to documenting specific adverse reactions and their frequencies. The pediatric mention is incidental to the adverse reactions discussion, not a primary focus on pediatric-specific guidance or considerations.\\n\\nThe runner-up (PEDIATRIC_USE) is ruled out because: The passage only uses pediatric information as a comparison point within the adverse reactions section, not as substantive information about pediatric dosing, safety considerations, or usage guidelines specific to children. It merely notes similarity to adult profiles rather than providing pediatric-specific guidance.\", \"classification\": \"adverse_reactions\", \"runner_up\": \"pediatric_use\", \"ruled_out_because\": \"The pediatric reference is only incidental—it merely notes that the adverse reaction profile in pediatric trials was similar to adults. The passage is overwhelmingly focused (>90%) on documenting specific adverse reactions and their frequencies in clinical trials, not on providing pediatric-specific dosing, safety guidance, or use considerations.\"}",
+  "elapsed_ms": 6500,
+  "usage": {
+    "input_tokens": 987,
+    "output_tokens": 526
+  },
+  "logprobs": null
+}

@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nCoadministration with probenecid is not recommended. ( 7.1 ) Concomitant use of amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL with oral anticoagulants may increase the prolongation of prothrombin time. ( 7.2 ) Coadministration with allopurinol increases the risk of rash. ( 7.3 ) Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may reduce efficacy of oral contraceptives. ( 7.4 ) 7.1 Probenecid Probenecid decreases the renal tubular secretion of amoxicillin. Concurrent use with amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL may result in increased and prolonged blood levels of amoxicillin.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"1. Three most prominent features:\\n   - Explicit discussion of interactions between the drug (amoxicillin/clavulanate potassium) and other medications (probenecid, anticoagulants, allopurinol, oral contraceptives)\\n   - Detailed mechanism of interaction (e.g., 'probenecid decreases the renal tubular secretion of amoxicillin')\\n   - Clinical consequences of coadministration stated (e.g., 'increased and prolonged blood levels of amoxicillin', 'increases the risk of rash')\\n\\n2. Two most plausible categories:\\n   - Drug_interactions: This passage is entirely structured as a section enumerating interactions with other drugs and foods. It lists multiple drug-drug interactions with specific mechanisms and clinical outcomes. The format (7.1, 7.2, 7.3, 7.4) matches typical prescribing information drug interactions sections.\\n   - Adverse_reactions: While drug interactions can technically produce adverse reactions, this passage does not describe patient-observed side effects or clinical manifestations in the primary sense. Instead, it focuses on pharmacokinetic and pharmacodynamic interactions between substances.\\n\\n3. Winner: drug_interactions\\n   - The passage is exclusively organized as a drug interactions section with cross-references (7.1, 7.2, 7.3, 7.4) and systematically covers interactions with probenecid, anticoagulants, allopurinol, and oral contraceptives.\\n   - Ruled out adverse_reactions because: This section does not enumerate side effects observed in patients using the drug alone. Rather, it describes what happens when the drug is combined with other agents. The focus is on drug-drug interactions and their mechanisms, not on spontaneous adverse reactions or clinical safety data from patients. The section explicitly states interactions occur upon 'coadministration' and 'concurrent use', which is the hallmark of drug interactions sections.\", \"classification\": \"drug_interactions\", \"runner_up\": \"adverse_reactions\", \"ruled_out_because\": \"The passage focuses exclusively on interactions occurring upon coadministration with other drugs and their mechanisms (e.g., 'probenecid decreases the renal tubular secretion'), not on adverse reactions observed in patients taking the drug alone. Adverse_reactions sections typically enumerate side effects and clinical manifestations, whereas this is clearly structured as a drug interactions enumeration with subsection references (7.1-7.4).\"}",
+  "elapsed_ms": 8366,
+  "usage": {
+    "input_tokens": 1043,
+    "output_tokens": 569
+  },
+  "logprobs": null
+}

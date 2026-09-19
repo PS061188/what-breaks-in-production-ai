@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nAll Dosage Forms of Sertraline: The use of MAOIs intended to treat psychiatric disorders with Sertraline hydrochloride or within 14 days of stopping treatment with Sertraline hydrochloride is contraindicated because of an because of an increased risk if serotonin syndrome. The use of Sertraline hydrochloride within 14 days of stopping an MAOI intended to treat psychiatric disorders is also contraindicated (see WARNINGS and DOSAGE AND ADMINISTRATION ). Starting Sertraline hydrochloride in a patient who is being treated with MAOIs such as linezolid or intravenous methyelene blue is also contraindicated because of an increased risk of serotonin syndrome (see WARNINGS and DOSAGE AND ADMINISTRATION).\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\":\"1. The three most prominent features are: (a) explicit use of the word 'contraindicated' multiple times, establishing situations where the drug must NOT be used; (b) specific reference to MAOIs and their timing relative to sertraline administration (14-day windows); (c) naming of specific drugs (linezolid, intravenous methylene blue) that create absolute prohibitions on concurrent use.\\n\\n2. The two most plausible categories are: (a) CONTRAINDICATIONS - because the passage explicitly states what situations prohibit drug use ('contraindicated'), which is the defining feature of this category; (b) DRUG_INTERACTIONS - because the passage discusses what happens when sertraline is combined with other drugs (MAOIs, linezolid, methylene blue), which could be framed as interactions.\\n\\n3. CONTRAINDICATIONS wins decisively. The passage is not describing what happens when drugs interact (the mechanism or severity of an interaction), but rather establishing absolute prohibitions - situations where the drug MUST NOT be used at all. The repeated use of 'contraindicated' is the technical language of the Contraindications section. Drug Interactions would discuss the effects of combining these substances, with guidance on management; Contraindications states outright that certain combinations are forbidden. The specific framing as prohibitions rather than warnings about potential effects clinches this classification.\",\"classification\":\"contraindications\",\"runner_up\":\"drug_interactions\",\"ruled_out_because\":\"While this passage mentions other drugs, it is structured as absolute prohibitions ('contraindicated') rather than descriptions of interaction effects or management strategies. Contraindications establishes situations where use is forbidden; Drug Interactions would describe what occurs when drugs are combined and how to manage those effects. The language here is prescriptive prohibition, not descriptive interaction.\"}",
+  "elapsed_ms": 5950,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 405
+  },
+  "logprobs": null
+}

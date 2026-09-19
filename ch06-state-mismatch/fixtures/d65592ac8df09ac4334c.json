@@ -1,0 +1,49 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a policy assistant. You ONLY answer based on\ndocuments provided in CONTEXT INTEGRITY CHECK:\nBefore answering, verify:\n- Do retrieved documents address the same entity as the question?\n- Is there any conflict between documents? If yes, cite both and flag the conflict.\n- Does conversation history contain updates that override earlier statements?\n  If yes, use the most recent.\n\n<retrieved_context>. Each document has a metadata header —\ncheck it before using it.\n\nSTATUS CHECK:\nBefore using any retrieved document, check its metadata:\n- \"status\": must be \"ACTIVE\" (not \"SUPERSEDED\", \"DRAFT\", or \"ARCHIVED\")\nIf a retrieved document is not ACTIVE:\n1. Do NOT use its content to answer\n2. State explicitly: \"The retrieved document [doc_id] is marked [status].\n   I cannot rely on it for current policy.\"\n3. If no ACTIVE document is available, say: \"I don't have a current version of\n   this policy in my context. Please verify with the source system.\"\n\n<retrieved_context>\n[doc_id: 07c8bb17-9bd4-4fab-994d-0412205b53b4 | last_updated: 20260717 | status: ACTIVE | version: 20260717]\n2 DOSAGE AND ADMINISTRATION Postherpetic Neuralgia ( 2.1 ) Dose can be titrated up as needed to a dose of 1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two times a day ) Day 3: 900 mg/day (i.e., 300 mg three times a day ) Epilepsy with Partial Onset Seizures ( 2.2 ) Patients 12 years of age and older: starting dose is 300 mg three times daily; may be titrated up to 600 mg three times daily Patients 3 to 11 years of age: starting dose range is 10 to 15 mg/kg/day, given in three divided doses; recommended dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses; the recommended dose in patients 5 to 11 years of age is 25 to 35 mg/kg/day, given in three divided doses. The recommended dose is reached by upward titration over a period of approximately 3 days Dose should be adjusted in patients with reduced renal function ( 2.3 , 2.4 ) 2.1 Dosage for Postherpetic Neuralgia In adults with postherpetic neuralgia, gabapentin may be initiated on Day 1 as a single 300 mg dose, on Day 2 as 600 mg/day (300 mg two times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The dose can subsequently be titrated up as needed for pain relief to a dose of 1800 mg/day (600 mg three times a day). In clinical studies, efficacy was demonstrated over a range of doses from 1800 mg/day to 3600 mg/day with comparable effects across the dose range; however, in these clinical studies, the additional benefit of using doses greater than 1800 mg/day was not demonstrated. 2.2 Dosage for Epilepsy with Partial Onset Seizures Patients 12 years of age and above The starting dose is 300 mg three times a day. The recommended maintenance dose of gabapentin is 300 mg to 600 mg three times a day. Dosages up to 2400 mg/day have been well tolerated in long-term clinical studies. Doses of 3600 mg/day have also been administered to a small number of patients for a relatively short duration, and have been well tolerated. Administer gabapentin three times a day using 600 mg or 800 mg tablets. The maximum time between doses should not exceed 12 hours. Pediatric Patients Age 3 to 11 years The starting dose range is 10 mg/kg/day to 15 mg/kg/day, given in three divided doses, and the recommended maintenance dose reached by upward titration over a period of approximately 3 days. The recommended maintenance dose of gabapentin in patients 3 to 4 years of age is 40 mg/kg/day, given in three divided doses. The recommended maintenance dose of gabapentin \n</retrieved_context>",
+  "user": "Conversation so far:\n[10:02] Pharmacist: For this patient we agreed to record a starting dose of 7 mg of Gabapentin.\n[10:03] Assistant: Noted.\n[10:15] Pharmacist: Correction to my earlier message: the agreed starting dose is 9 mg, not 7 mg.\n\nQuestion: According to the conversation, what starting dose should I record for Gabapentin?",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "usable_doc_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "starting_dose": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "conflict": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "required": [
+      "usable_doc_ids",
+      "starting_dose",
+      "conflict"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"usable_doc_ids\": [\"07c8bb17-9bd4-4fab-994d-0412205b53b4\"], \"starting_dose\": \"9 mg\", \"conflict\": null}",
+  "elapsed_ms": 2241,
+  "usage": {
+    "input_tokens": 1441,
+    "output_tokens": 51
+  },
+  "logprobs": null
+}

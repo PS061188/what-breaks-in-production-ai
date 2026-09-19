@@ -1,0 +1,60 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a document classifier. Classification errors propagate to\nextraction, routing and downstream processing, so accuracy and an honest\naccount of your reasoning are both required.\n\nCATEGORIES:\n- indications_and_usage: the conditions the drug is approved to treat\n- dosage_and_administration: how much to give, how often, and by what route\n- contraindications: situations in which the drug must not be used at all\n- adverse_reactions: side effects and reactions observed in patients\n- drug_interactions: effects of taking this drug alongside other drugs or foods\n- overdosage: signs of overdose and how to manage one\n- how_supplied: dosage forms, strengths, packaging and storage\n- description: chemical name, structure, formulation and inactive ingredients\n- pediatric_use: what is known about use in children\n- geriatric_use: what is known about use in patients 65 and older\n\nBEFORE STATING YOUR CLASSIFICATION:\n1. List the 3 most prominent features of this document that inform\n   classification.\n2. Name the 2 categories that are most plausible, and why each is.\n3. State which one wins, and what specifically ruled the other out.\n\nOUTPUT FORMAT (strict JSON):\n{\n  \"reasoning\": \"<your step-by-step analysis>\",\n  \"classification\": \"<CATEGORY>\",\n  \"runner_up\": \"<the second most likely category>\",\n  \"ruled_out_because\": \"<what decided it against the runner-up>\"\n}\n\nIf the evidence genuinely does not separate the top two, say so in\n\"ruled_out_because\" and put the weaker one in \"runner_up\" anyway. Do not\nmanufacture a distinction that is not in the document.",
+  "user": "<passage>\nLevothyroxine sodium tablets, USP is L-thyroxine (T4) and contains synthetic crystalline L-3,3’,5,5’-tetraiodothyronine sodium salt. Synthetic T4 is chemically identical to that produced in the human thyroid gland. Levothyroxine (T4) sodium has an empirical formula of C 15 H 10 I 4 N NaO 4 • H 2 O, molecular weight of 798.86 (anhydrous), and structural formula as shown: Levothyroxine sodium tablets, USP for oral administration are supplied in the following strengths: 25 mcg, 50 mcg, 75 mcg, 88 mcg, 100 mcg, 112 mcg, 125 mcg, 137 mcg, 150 mcg, 175 mcg, 200 mcg, and 300 mcg. Each levothyroxine sodium tablet contains the inactive ingredients microcrystalline sodium, light magnesium oxide, sodium starch glycolate and sodium stearyl fumarate.\n</passage>",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "reasoning": {
+        "type": "string"
+      },
+      "classification": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "runner_up": {
+        "type": "string",
+        "enum": [
+          "indications_and_usage",
+          "dosage_and_administration",
+          "contraindications",
+          "adverse_reactions",
+          "drug_interactions",
+          "overdosage",
+          "how_supplied",
+          "description",
+          "pediatric_use",
+          "geriatric_use"
+        ]
+      },
+      "ruled_out_because": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "reasoning",
+      "classification",
+      "runner_up",
+      "ruled_out_because"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"reasoning\": \"Step 1 - Most prominent features:\\n1. Detailed chemical information: mentions synthetic crystalline L-3,3',5,5'-tetraiodothyronine sodium salt, empirical formula (C15H10I4NNaO4•H2O), molecular weight (798.86), and structural formula reference\\n2. Dosage form and strength information: lists 12 different tablet strengths (25 mcg through 300 mcg) for oral administration\\n3. Inactive ingredient listing: identifies microcrystalline sodium, light magnesium oxide, sodium starch glycolate, and sodium stearyl fumarate\\n\\nStep 2 - Two most plausible categories:\\n1. DESCRIPTION: This category covers chemical name, structure, formulation and inactive ingredients. The passage contains the chemical name (L-thyroxine/T4), empirical formula, molecular weight, structural formula reference, and explicitly lists inactive ingredients. This is textbook description content.\\n2. HOW_SUPPLIED: This category covers dosage forms, strengths, packaging and storage. The passage lists all 12 tablet strengths and mentions oral administration, which are core elements of how_supplied sections.\\n\\nStep 3 - Determining the winner:\\nAlthough the passage mentions dosage strengths, it lacks essential how_supplied elements like packaging information, storage conditions, or specific product identification. The dominant content is unambiguously chemical/formulation in nature: the synthetic T4 identification, chemical formula, molecular weight, structural formula, and inactive ingredients comprise the bulk of the passage. The strength listings serve primarily to complete the description of what the formulation contains, not as typical how_supplied packaging/storage information. DESCRIPTION clearly wins as the primary classification.\\n\\nThe ruled_out_because: While strength information appears, there is no packaging description, storage conditions, or container type information that would characterize a complete how_supplied section. The focus is on what the drug IS (chemical composition and formulation), not how it is supplied/packaged.\", \"classification\": \"description\", \"runner_up\": \"how_supplied\", \"ruled_out_because\": \"Although tablet strengths are listed, the passage lacks the typical how_supplied elements such as packaging information, container types, and storage conditions. The dominant content is chemical characterization (formula, molecular weight, structure) and formulation details (inactive ingredients), which are core to the description category.\"}",
+  "elapsed_ms": 9911,
+  "usage": {
+    "input_tokens": 1058,
+    "output_tokens": 546
+  },
+  "logprobs": null
+}
