@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-10274\nDate: 2026-01-21\n\nAddresses appear in the order: sender, recipient, billing party.\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nOakhurst Electrics\n870 Airport Road\nLincoln 6923\n\nNimbus Software\n15 Turbine Way\nPoole 1201\n\nItems: 30 cartons, 732 kg\nCarrier reference: CR7645\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ridgeway Components, 7 Station Yard, Cardiff 1926\",\"source_quote\":\"Ridgeway Components\\n7 Station Yard\\nCardiff 1926\"},\"destination_address\":{\"value\":\"Oakhurst Electrics, 870 Airport Road, Lincoln 6923\",\"source_quote\":\"Oakhurst Electrics\\n870 Airport Road\\nLincoln 6923\"},\"billing_address\":{\"value\":\"Nimbus Software, 15 Turbine Way, Poole 1201\",\"source_quote\":\"Nimbus Software\\n15 Turbine Way\\nPoole 1201\"}}",
+  "elapsed_ms": 1572,
+  "usage": {
+    "input_tokens": 651,
+    "output_tokens": 159
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: The patient states that he has epigastric pain, but denies dark, tarry stools.\nS2: SKIN: No rash, no lesion, no bruising.\nS3: All questions were answered.\nS4: Gastrointestinal: Reports epigastric pain.\nS5: The patient notes that the pain has been occurring for the last several weeks.\nS6: Pain to palpation of epigastric area.\nS7: GI/GU: Non-distended Active bowel sounds.\nS8: Difficulty swallowing.\nS9: The pain radiates to his chest when he swallows.\nS10: Negative McMurphy's Sign.\nS11: HENT: Reports dysphagia.\nS12: He notes that he does not have pain every time he eats but mostly when he has big pieces of food as they seem to get stuck.\nS13: He denies any weight loss, but endorses weight gain.\nS14: Tonsils are midline of the neck.\nS15: After reviewing the patient's examination and barium swallow findings today, I have had a lengthy discussion with the patient in regards to his current symptoms.\nS16: We discussed that he should eat slowly and chew his food thoroughly to avoid big pieces of food.\nS17: Taylor notes that it has been stressful for him the past couple of months as they moved from the West Coast to the East Coast, so he has been drinking more, and having pizza, and burgers more.\nS18: EYES: Equal and reactive to light.\nS19: MSK: Examination of the mouth reveals no obvious ulcers or evidence of thrush present.\nS20: The barium swallow study revealed two areas of mild narrowing in the mid and lower portions of your esophagus.\nS21: The patient will follow up with me in 1 week for his endoscopy.\nS22: Constitutional: Reports weight gain.\nS23: I have also advised him to avoid citrus foods, fruits, and spicy foods until his symptoms have improved.\nS24: Raymond Taylor is a pleasant 67-year-old male who presents to the clinic today for difficulty swallowing.\nS25: Neurological: Positive stress.\nS26: RESPIRATORY: Normal respiratory effort no respiratory distress\nS27: I have also advised him to change his diet, decrease alcohol, and caffeine.\nS28: I have also prescribed the patient Carafate 1 gram 4 times daily for 1 month to help coat the lining of his esophagus and stomach.\nS29: No peritoneal signs.\nS30: I recommended a upper endoscopy for further evaluation.\nS31: NECK: No adenopathy, thyromegaly.\nS32: I have prescribed the patient Protonix 40 mg first thing in the morning to treat his acute esophagitis.\nS33: Denies dark, tarry stools.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S4\", \"S5\", \"S8\", \"S11\", \"S12\", \"S13\", \"S17\", \"S24\", \"S33\"], \"objective_exam\": [\"S2\", \"S6\", \"S7\", \"S10\", \"S14\", \"S18\", \"S19\", \"S25\", \"S26\", \"S29\", \"S31\"], \"objective_results\": [\"S20\"], \"assessment_and_plan\": [\"S3\", \"S9\", \"S15\", \"S16\", \"S21\", \"S22\", \"S23\", \"S27\", \"S28\", \"S30\", \"S32\"]}",
+  "elapsed_ms": 2320,
+  "usage": {
+    "input_tokens": 1308,
+    "output_tokens": 157
+  },
+  "logprobs": null
+}

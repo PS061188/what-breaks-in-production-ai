@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-92758\nDate: 2026-05-21\n\nSender:\nHolloway Furniture\n540 Ridge Road\nDover 2268\n\nTo:\nEllery Instruments\n8 Barley Mews\nWigan 9980\n\nAccount holder:\nMarlowe Textiles\n58 Orchard Way\nPlymouth 5185\n\nItems: 22 cartons, 429 kg\nCarrier reference: CR5344\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Holloway Furniture, 540 Ridge Road, Dover 2268\",\"source_quote\":\"Sender:\\nHolloway Furniture\\n540 Ridge Road\\nDover 2268\"},\"destination_address\":{\"value\":\"Ellery Instruments, 8 Barley Mews, Wigan 9980\",\"source_quote\":\"To:\\nEllery Instruments\\n8 Barley Mews\\nWigan 9980\"},\"billing_address\":{\"value\":\"Marlowe Textiles, 58 Orchard Way, Plymouth 5185\",\"source_quote\":\"Account holder:\\nMarlowe Textiles\\n58 Orchard Way\\nPlymouth 5185\"}}",
+  "elapsed_ms": 2754,
+  "usage": {
+    "input_tokens": 650,
+    "output_tokens": 175
+  },
+  "logprobs": null
+}

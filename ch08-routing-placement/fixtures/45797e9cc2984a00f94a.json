@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: I encouraged her to practice yoga for depression relief as well as her back pain.\nS2 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS3 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient says she is doing well on Neurontin with only occasional exacerbation of the pain.\nS4 [ASSESSMENT AND PLAN]: I will also prescribe an albuterol inhaler, 2 puffs as needed, and a prednisone taper pack.\nS5 [SUBJECTIVE]: She also notes some palpitations at times.\nS6 [SUBJECTIVE]: She continues to smoke but has decreased from two packs a day down to a couple of cigarettes daily.\nS7 [SUBJECTIVE]: The patient is a 48-year-old female who presents for shortness of breath.\nS8 [SUBJECTIVE]: Regarding her chronic back pain, the patient has been taking Neurontin, which she states is helping control her pain.\nS9 [SUBJECTIVE]: She states she tries to get as much rest as she can.\nS10 [SUBJECTIVE]: She is not sure if it is due to her back pain or not.\nS11 [OBJECTIVE RESULTS]: X-ray of the chest demonstrates flattening of the diaphragm which is consistent with COPD.\nS12 [SUBJECTIVE]: • Cardiovascular: Endorses dyspnea on exertion.\nS13 [OBJECTIVE EXAM]: • Respiratory: Mild wheezes bilaterally.\nS14 [SUBJECTIVE]: Endorses palpitations.\nS15 [SUBJECTIVE]: • Psychiatric: Endorses depression.\nS16 [ASSESSMENT AND PLAN]: Her pulmonary function tests suggest asthma or COPD and her most recent chest x-ray and physical examination today are also consistent with COPD.\nS17 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I counseled the patient on the importance of smoking cessation.\nS18 [SUBJECTIVE]: She is no longer doing yoga as she has not made it a habit.\nS19 [SUBJECTIVE]: • Respiratory: Endorses shortness of breath.\nS20 [SUBJECTIVE]: Shortness of breath.\nS21 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient presents today with shortness of breath with exertion.\nS22 [SUBJECTIVE]: The patient states she has been exercising more.\nS23 [ASSESSMENT AND PLAN]: • Medical Treatment: We will start the patient on Combivent, 2 puffs twice a day.\nS24 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: She will keep taking the Effexor.\nS25 [SUBJECTIVE]: The patient reports shortness of breath with mild exercise and walking.\nS26 [ASSESSMENT AND PLAN]: • Medical Treatment: She can continue Neurontin as is.\nS27 [ASSESSMENT AND PLAN]: • Medical Reasoning: It sounds like her depression is stable, so we will not change anything at this time.\nS28 [SUBJECTIVE]: She has a history of depression, smoking and chronic back pain.\nS29 [SUBJECTIVE]: Regarding her depression, the patient feels that it is well managed on Effexor.\nS30 [OBJECTIVE RESULTS]: Pulmonary function test demonstrates mild asthma and the appearance of COPD.\nS31 [SUBJECTIVE]: • Musculoskeletal: Endorses back pain.\nS32 [ASSESSMENT AND PLAN]: I also encouraged her to practice yoga for her back pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S7\", \"S5\", \"S6\", \"S8\", \"S9\", \"S10\", \"S12\", \"S14\", \"S15\", \"S18\", \"S19\", \"S20\", \"S22\", \"S25\", \"S28\", \"S29\", \"S31\"], \"objective_exam\": [\"S13\"], \"objective_results\": [\"S11\", \"S30\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S3\", \"S4\", \"S16\", \"S17\", \"S21\", \"S23\", \"S24\", \"S26\", \"S27\", \"S32\"]}",
+  "elapsed_ms": 2520,
+  "usage": {
+    "input_tokens": 1275,
+    "output_tokens": 153
+  },
+  "logprobs": null
+}

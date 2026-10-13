@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: The patient works from home and plans to coach his son’s basketball team in 04/2022.\nS2 [SUBJECTIVE]: He experiences pain and feelings of instability within the ankle while ambulating and is concerned for further injury.\nS3 [ASSESSMENT AND PLAN]: Right lateral malleolar fracture.\nS4 [OBJECTIVE RESULTS]: X-rays, including AP, lateral, and oblique views of the right ankle, were obtained in the office and reviewed today.\nS5 [OBJECTIVE EXAM]: SKIN: No epidermolysis.\nS6 [ASSESSMENT AND PLAN]: After reviewing the patient's examination and radiographic findings today, I have had a lengthy discussion with him regarding treatment options.\nS7 [OBJECTIVE EXAM]: Mild tenderness over the medial deltoid region.\nS8 [SUBJECTIVE]: Jerry Cook is a 45-year-old male who presents today with a right ankle injury.\nS9 [SUBJECTIVE]: Musculoskeletal: Reports right ankle pain and instability.\nS10 [ASSESSMENT AND PLAN]: Recommendation was made for an open reduction internal fixation of the right ankle.\nS11 [ASSESSMENT AND PLAN]: We discussed the risks and benefits of the procedure as well as the postoperative recovery period following surgery.\nS12 [ASSESSMENT AND PLAN]: I advised that it will be 3 months before he can resume his exercise routine.\nS13 [ASSESSMENT AND PLAN]: I recommended he ice and elevate the ankle as well.\nS14 [SUBJECTIVE]: His pain is primarily located along the lateral aspect of the right ankle.\nS15 [OBJECTIVE EXAM]: Swelling on the lateral side of the ankle.\nS16 [ASSESSMENT AND PLAN]: In the meantime, I will prescribe meloxicam to reduce swelling.\nS17 [SUBJECTIVE]: He reports he landed awkwardly and twisted his right ankle after jumping to make a layup.\nS18 [ASSESSMENT AND PLAN]: He will be given crutches to assist with ambulation.\nS19 [OBJECTIVE EXAM]: CV: Brisk capillary refill.\nS20 [OBJECTIVE RESULTS]: There is no evidence of medial or posterior malleolar fractures.\nS21 [SUBJECTIVE]: He notes bruising and swelling.\nS22 [SUBJECTIVE]: The patient sustained an injury to the right ankle while playing basketball with his son.\nS23 [ASSESSMENT AND PLAN]: The patient understands and agrees with the recommended medical treatment plan.\nS24 [SUBJECTIVE]: The patient is able to weight-bear while standing.\nS25 [SUBJECTIVE]: He enjoys working out and reports he recently resumed engaging in a consistent gym routine.\nS26 [OBJECTIVE EXAM]: No horrible malalignment.\nS27 [SUBJECTIVE]: Skin: Reports right ankle bruising and swelling.\nS28 [OBJECTIVE RESULTS]: These demonstrate a displaced lateral malleolus at the Weber C level.\nS29 [OBJECTIVE EXAM]: MSK: Examination of the right ankle: Exquisite tenderness laterally.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S8\", \"S9\", \"S14\", \"S17\", \"S21\", \"S22\", \"S24\", \"S25\", \"S27\"], \"objective_exam\": [\"S5\", \"S7\", \"S15\", \"S19\", \"S26\", \"S29\"], \"objective_results\": [\"S4\", \"S20\", \"S28\"], \"assessment_and_plan\": [\"S3\", \"S6\", \"S10\", \"S11\", \"S12\", \"S13\", \"S16\", \"S18\", \"S23\"]}",
+  "elapsed_ms": 2488,
+  "usage": {
+    "input_tokens": 1135,
+    "output_tokens": 141
+  },
+  "logprobs": null
+}

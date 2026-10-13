@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS2: Gastrointestinal: Denies abdominal pain.\nS3: - Medical Reasoning: This appears to be well-controlled with dietary modifications and lisinopril.\nS4: - Medical Reasoning: This appears to be well controlled at this time.\nS5: After that, he should be fine to continue playing normally.\nS6: Right elbow contusion.\nS7: There is swelling about the elbow, as well as mild ecchymosis.\nS8: - Patient Education and Counseling: I encouraged the patient to avoid playing lacrosse for the next couple of weeks, just until his elbow heals.\nS9: Musculoskeletal: Reports right elbow pain.\nS10: Mild pain with flexion and extension but otherwise normal range of motion.\nS11: - Medical Treatment: I'm going to prescribe him ibuprofen 800 mg twice daily to help with some of the pain and swelling.\nS12: X-ray of the right elbow was reviewed and demonstrates no evidence of fracture or bony abnormalities.\nS13: Cardiovascular: Denies chest pain.\nS14: Hematology/Lymphatic/Immunology\nS15: - Medical Treatment: We will keep him on lisinopril 20 mg daily.\nS16: - Examination: Pain to palpation of the olecranon area of the posterior elbow.\nS17: - Medical Treatment: We will keep him on metformin 500 mg and order a hemoglobin A1c to evaluate any need for medication adjustments.\nS18: Grade 2/6 systolic ejection murmur.\nS19: He should also ice the area in 20-minute intervals 3 times per day to further reduce his symptoms.\nS20: - Auscultation of Lungs: Clear bilaterally.\nS21: His x-ray and exam findings are consistent with an elbow contusion.\nS22: - Medical Reasoning: The patient sustained an injury to his elbow when his son struck him with a lacrosse stick.\nS23: - Patient Education and Counseling: I encouraged him to keep up with his dietary modifications.\nS24: - Examination: Bruising noted over the right elbow.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S4\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S6\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 2462,
+  "usage": {
+    "input_tokens": 1637,
+    "output_tokens": 422
+  },
+  "logprobs": null
+}

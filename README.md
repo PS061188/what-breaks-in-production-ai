@@ -19,11 +19,12 @@ python3 run_all.py
 
 ## Five results worth your next two minutes
 
-**Requiring a source quote does not catch fabrication.** Asked to fill fields
-the document does not cover, the model invented values on 6% of them — and
-attached a genuine quote to every single fabrication. **2 of 2 passed a
-quote-existence check.** It does not invent quotations. It attaches real ones,
-lifted from elsewhere in the document, to values it made up.
+**The empty-field failure did not reproduce on drug labels.** Given two sections
+of each label and asked to fill six fields, the model filled 1 of the 33 fields
+counted as not covered by the supplied text, and it is a correct reading of that
+text: **no fabrication in 33**. On the other 32 it wrote "N/A". What the run could
+measure is cost: checked over the whole quote, the book's quote-verification rule
+kept only **54%** of correct extractions, against 95% over the first 80 characters.
 → [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 **The stronger model is worse at silent corruption.** Feed a damaged document to
@@ -40,10 +41,10 @@ on.
 → [`ch04-classification-cascade/`](ch04-classification-cascade/)
 
 **One clause caused almost the whole prompt effect.** The book blamed soft words
-— *relevant, typical, appropriate*. Measured, those are worth about 5 points and
-are not statistically significant. The clause *"drawing on standard pharmacology
-where the excerpt is thin"* is worth **75**, taking fabrication from 11% to 89%.
-The dangerous prompt is not the vague one; it is the one that grants permission.
+— *relevant, typical, appropriate*. On the 32 questions the supplied text does not
+cover, those words took fabrication from 1 question to 2. The clause *"drawing on
+standard pharmacology where the excerpt is thin"* took it from 2 to **29 of 32**
+(6% to 91%). The dangerous prompt is the one that grants permission.
 → [`ch03-hallucination/`](ch03-hallucination/)
 
 **Eight of fourteen published figures fell outside the range their own code
@@ -66,8 +67,8 @@ Every prompt template in the book was run against the same documents. Sorted by
 
 | The instruction asks for | Outcome |
 |---|---|
-| **A restriction on what may be asserted** — *only from the sources* · *null is a correct answer* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −85 pts** fabrication, **6% → 0%**, **67% → 17%**, **95% flagged** |
-| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Nothing, in four chapters.** Lowest grade returned **0 times in 400+ assessments**. 97% of fields graded HIGH, including wrong ones. Self-count wrong **18 of 18** |
+| **A restriction on what may be asserted** — *only from the sources* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −91 pts** fabrication, **67% → 17%**, **95% flagged** |
+| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Little, in four chapters.** Lowest grade returned **0 times in 400+ assessments** of damaged or mislabelled inputs; it appeared only when Chapter 2 made the damage extreme. On real clinical notes, **7 in 10 misplaced sentences graded HIGH**. A self-count was **its own list's length in 54 of 54** calls |
 
 A restriction changes what the model may output, and the code reading the response
 can enforce it. A self-assessment adds a field and changes nothing else — it is a
@@ -89,13 +90,13 @@ Full template, with the numbers behind each line, in
 | chapter | what it measures | result |
 |---|---|---|
 | [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided — but the four checks the book *prescribed* catch **37%** |
-| [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −85 pts** from the grounding prompt, across 4 models |
+| [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −91 pts** from the grounding prompt, across 4 models |
 | [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
 | [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges level |
-| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone beats the book's six-rule protocol, **17% vs 33%** |
+| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone does better than the book's six-rule protocol, **17% vs 33%** |
 | [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
 | [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
-| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **6% → 0%** with a section constraint |
+| [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **did not reproduce** — 0 of 33; the section check rejected 5 correct children's doses |
 | [10 — Silent omissions](ch10-silent-omissions/) | items dropped without a signal | rare on numeric lists, **absent** on a 185-item prose enumeration |
 
 Claude Haiku 4.5 is the default; Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini
@@ -151,8 +152,9 @@ flagging any that moved. **Use it before believing a difference.**
 This is not optional advice. Nothing in this repo was measured twice until
 August 2026. When it was, four published numbers turned out to be wrong:
 
-- a result reported as "no effect" was a real, consistent 5-point effect that
-  one underpowered run could not see
+- a result reported as "no effect" pointed the same way in 4 of 5 runs (about 5
+  points, on 48 questions before the ground-truth audit), which one underpowered
+  run could not see
 - a fix reported as improving qualifier retention improves nothing once compared
   against a fair baseline
 - a fix instructed to preserve dose ranges preserves *fewer* of them than saying
@@ -160,9 +162,9 @@ August 2026. When it was, four published numbers turned out to be wrong:
 - an LLM-judge false-alarm rate published at 38% came back 17-25% across four
   fresh runs of an identical configuration
 
-The measured noise floor is roughly **±1-2 cases per 40 samples**, which is wide
-enough to swallow several single-run findings. A number without a spread beside
-it is a claim about one run.
+The measured noise floor is roughly **±1-2 cases per 40 samples**, which is
+large enough that several single-run findings fall inside it. A number without a
+spread beside it is a claim about one run.
 
 To try a different model:
 
@@ -178,9 +180,22 @@ model, and finding out which is more useful than assuming.
 `data/labels.json` — FDA drug labels retrieved from the
 [openFDA API](https://open.fda.gov/apis/drug/label/). Public domain, real
 documents, and sparse in ways nobody arranged: Prednisone's label has no
-pediatric-use section, Sertraline's has no pregnancy section. Those gaps are
-the ground truth every chapter scores against, which is why there is no
-hand-labelled answer key anywhere in this repo.
+pediatric-use section, Sertraline's has no pregnancy section. Chapters 3 and 9
+do not score against those gaps. They give the model two sections of each label,
+and a question counts as unanswerable when the section that would answer it was
+not supplied. Most labels do carry the withheld sections (pediatric use in 8 of
+12, pregnancy in 7 of 12), so these two chapters measure answers that go beyond
+the supplied text, and a model that answers may be recalling the real label.
+Either way the ground truth comes from the labels themselves, which is why there
+is no hand-labelled answer key anywhere in this repo.
+
+`data/aci_bench_notes.json` — 60 reference visit notes from
+[ACI-Bench](https://github.com/wyim/aci-bench) (Yim et al., *Nature Scientific
+Data*, 2023; CC BY 4.0), twenty from each of its three subsets. Role-played or
+constructed encounters, not real patients; the notes were checked and rewritten
+by medical scribes or physicians. Used by Chapter 8's Experiment 8.6, the only
+experiment in the book on a document whose sections are decided by convention
+rather than by wording. The file records the selection rule.
 
 Refresh or change the corpus:
 
@@ -218,6 +233,7 @@ FINDINGS.md         where running the book contradicted the book
 shared/llm.py       model client, fixture cache, cost meter
 shared/scoring.py   quote verification and the result tables — no model calls
 data/labels.json    the corpus
+data/aci_bench_notes.json   60 ACI-Bench clinical notes (Chapter 8, Experiment 8.6)
 fetch_data.py       re-download the corpus
 run_all.py          every chapter, both variants
 repeat.py           run an experiment N times and print the spread
@@ -288,31 +304,31 @@ Code: [`ch02-input-integrity/`](ch02-input-integrity/)
 ### Experiment 3.1
 
 **Does prompt wording change the fabrication rate?**  
-6% plain, 9% soft words, 88% with a permission clause  
+3% plain (1 of 32), 6% soft words (2 of 32), 91% with a permission clause (29 of 32)  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
 
 ### Experiment 3.2
 
 **Does the grounding template reduce it?**  
-at least -85 points, across four models and two providers  
+at least -91 points, across four models and two providers; 0 of 32 fabricated on every model  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
 
 ### Experiment 3.3
 
 **The four engineering fixes**  
-cross-encoder at 0.3: 85% caught, 12% false alarms  
+cross-encoder at 0.3: 29 of 29 caught, 3 of 24 false alarms; the judge, in its kept run: 29 of 29 caught, 6 of 24 false alarms  
 Code: [`ch03-hallucination/`](ch03-hallucination/)
 
 ### Experiment 3.4
 
 **Does asking the same question five times expose fabrication?**
-catches 2 of 34 unanswerable questions a single draw called safe; misses the 1 that fabricates identically every draw
+flags the 2 of 32 unanswerable questions a single draw called safe; none fabricated on every draw (the one counted before, Sertraline, is a correct reading)
 Code: [`ch03-hallucination/probe_selfconsistency.py`](ch03-hallucination/probe_selfconsistency.py)
 
 ### Experiment 3.5
 
 **Do the model's own token probabilities separate invented answers from real ones?**
-fabricated −0.30 / −0.39 / −0.34 vs correct −0.08 / −0.10 / −0.08, three complete runs (1, 3, 4) on GPT-4.1-mini; a cut between −0.18 and −0.21 catches every fabrication, flags 1–3 of 24 correct answers — and 15–19 of 22–27 correct refusals. Run 2 (8 fabrications) lacks a refusal count and its answers were overwritten; see FINDINGS §H. Not measurable on Claude: the API returns no token probabilities
+fabricated −0.40 / −0.34 vs correct −0.10 / −0.08 on GPT-4.1-mini, in runs 3 and 4 (the answers of runs 1 and 2 were overwritten); a cut at −0.20 / −0.18 catches 11 of 11 and 7 of 7 fabrications, flags 3 of 24 correct answers each time — and 16 of 21 and 17 of 25 correct refusals. Not measurable on Claude: the API returns no token probabilities
 Code: [`ch03-hallucination/probe_logprobs.py`](ch03-hallucination/probe_logprobs.py)
 
 ### Experiment 4.1
@@ -381,6 +397,12 @@ Code: [`ch06-state-mismatch/fix_reconcile.py`](ch06-state-mismatch/fix_reconcile
 Hindi rejected at cosine 0.995; 24 legitimate queries destroyed  
 Code: [`ch07-edge-input/`](ch07-edge-input/)
 
+### Experiment 7.2
+
+**Does a ready-made scanner model beat eight lines of regex?**  
+LLM Guard: 37/48 attempts flagged in default mode, 48/48 in chunk mode, incl. all 12 Spanish the regex missed — and all 12 Hindi questions flagged as attacks at risk 1.00  
+Code: [`ch07-edge-input/probe_llmguard.py`](ch07-edge-input/probe_llmguard.py)
+
 ### Experiment 8.1
 
 **Does content end up in the wrong box?**  
@@ -389,27 +411,81 @@ Code: [`ch08-routing-placement/`](ch08-routing-placement/)
 
 ### Experiment 8.2
 
-**The model's account of its own sourcing**  
-wrong section named 3-15% across runs; 97% graded HIGH  
+**The model's account of its own placement**  
+97% of fields graded HIGH in every run, LOW never issued, `requires_review` set on 0 of 11 records; an earlier "wrong section named 3–15%" figure was the 80-character locator artefact and is withdrawn  
 Code: [`ch08-routing-placement/`](ch08-routing-placement/)
+
+### Experiment 8.3
+
+**Does the placement check catch misplacement when it is planted?**  
+65 of 66 planted swaps caught as shipped, 1 false rejection of 33 untouched boxes; 66/66 at a 200-char locator, 4 false  
+Code: [`ch08-routing-placement/probe_planted.py`](ch08-routing-placement/probe_planted.py)
+
+### Experiment 8.4
+
+**Does the failure appear when the headings are removed and the sentences shuffled?**  
+No: 0 real misplacements of 33, three draws each, plain prompt and Prompt 8-1 alike; the scorer's flags are the boilerplate artefact and joined quotes it cannot find  
+Code: [`ch08-routing-placement/probe_hardcorpus.py`](ch08-routing-placement/probe_hardcorpus.py) · demonstration of the record: [`demo_provenance.py`](ch08-routing-placement/demo_provenance.py)
+
+### Experiment 8.5
+
+**Generated shipping documents: does the prompt prevent misplacement when the labels vary, then vanish?**  
+With any label or an order line, 0 misplaced of 108 fields a level for every prompt (an earlier "empty fields" claim was a company-only scorer artefact, withdrawn); with no labels and no line, both prompts assumed sender-first and swapped origin and destination on every reversed document — plain 12, 12, 12 of 36 a run, Prompt 8-1 12, 15, 11 with null on only 4, 2, 5; the graded prompt marked 104 of 108 unlabelled fields MEDIUM or LOW and flagged all 36 records; asked per field whether the document states the role, the model said "not stated" on all 108 unlabelled fields (and on 29 labelled ones, all correct) while still filling them  
+Code: [`ch08-routing-placement/probe_convention.py`](ch08-routing-placement/probe_convention.py)
+
+### Experiment 8.6
+
+**Placement on real clinical notes: does the failure appear when sections are decided by convention?**  
+Yes — of 2,070 sentences from 60 ACI-Bench notes, headings removed and shuffled, 375 / 366 / 381 filed under a different heading from the author's by words alone (18%), 286 / 268 / 256 with section definitions, 1 / 0 / 1 with each sentence's section tag kept; the rate ran 8.8% to 27.7% across the benchmark's three note styles; the confidence grade carried signal (error rate 10% HIGH → 39% MEDIUM → 63% LOW) but 7 in 10 misplaced sentences were graded HIGH  
+Code: [`ch08-routing-placement/probe_clinical.py`](ch08-routing-placement/probe_clinical.py) · corpus: [`data/aci_bench_notes.json`](data/aci_bench_notes.json)
+
+### Experiment 8.7
+
+**What does a strict output schema actually guarantee?**  
+On 60 clinical notes with the plain prompt: no schema — 0 invented keys, 0 unknown IDs, 2 duplicates, 8 sentences dropped; schema enforced — 0, 0, 3, 33; schema plus a Pydantic validator (every sentence exactly once) with one re-ask — 0, 0, 0, 0, at 13 re-asks in 60; misplacement unchanged at 376 / 375 / 383 of 2,070  
+Code: [`ch08-routing-placement/probe_schema.py`](ch08-routing-placement/probe_schema.py)
 
 ### Experiment 9.1
 
 **How often does an empty box get filled?**  
-6% of unsupported fields filled anyway  
+0 of 33 — the one filled field was a correct reading of the supplied text; the failure did not reproduce  
 Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 ### Experiment 9.2
 
 **The fix, and the mistake in how it was tested**  
-both fabrications carried a real quote  
+the first check was the answer key: its 0% was arithmetic  
 Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 ### Experiment 9.3
 
-**The same fix on a corpus where it can fail**  
-0% fabrication, 76% recall  
+**The same check with four sections supplied**  
+fabrication still forced to zero; the rule rejected 5 correct children's doses  
 Code: [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
+
+### Experiment 9.4
+
+**A note written from a conversation: does a heading template invent what nobody said?**  
+On 60 ACI-Bench conversations, Claude Haiku 4.5 via the subscription CLI, three runs: a template prompt stated "No known drug allergies" in 4, 3 and 4 of the 58 notes whose conversation never discussed allergies to medicines, and "Denies tobacco" in 0, 1, 0 of 53; with the rule "write 'Not discussed.'" 0, 0, 0 of each; family history (41) and alcohol (49) never filled under either prompt; every counted case read against its conversation  
+Code: [`ch09-sparse-field-fabrication/probe_conversation.py`](ch09-sparse-field-fabrication/probe_conversation.py) · corpus: [`data/aci_bench_dialogues.json`](data/aci_bench_dialogues.json)
+
+### Experiment 9.5
+
+**Do the chapter's checks catch real invented entries?**  
+On Experiment 9.4's notes, 12 invented entries and 89 on discussed topics: a keyword topic search caught 6 of 12 (3 false flags); an embedding check 6 of 12 at 0.5 (19 flagged); Claude Sonnet 5 shown the conversation 12 of 12, and Claude Haiku 4.5, the model that wrote the notes, also 12 of 12; Sonnet 5 shown only the note caught 9 of 12 and flagged 48 of 89. Most flags on discussed entries were real errors, read one by one. Extended to Experiment 9.6's record values (`--source schema`): both models caught the two zero-evidence inventions, and the five "No allergies"-from-a-seasonal-denial entries were approved by the writer five of five while Sonnet caught three of five — combined over 19 invented entries, a second model caught 17 and the writer 14. The packaged Guardrails ProvenanceEmbeddings validator was then run over the identical entries: as shipped (distance 0.8, five-sentence source windows) it caught 2 of 12 and still flagged 12 of 89, and no setting in its range separated the groups; it also crashes on single-chunk sources, needs punkt_tab its setup does not fetch, and phones telemetry home  
+Code: [`ch09-sparse-field-fabrication/probe_checks.py`](ch09-sparse-field-fabrication/probe_checks.py) · [`probe_guardrails.py`](ch09-sparse-field-fabrication/probe_guardrails.py) (runs in its own environment; install line in the docstring)
+
+### Experiment 9.6
+
+**Do the schema fix and the quote check work where the model invents?**  
+Four optional topics as a JSON record over Experiment 9.4's 60 conversations, two conditions × three runs (360 CLI replies): with every value required, the model stored a silence filler in 577 of 603 no-source fields and invented in 5; allowed null, 0 fillers and 2 inventions. The quote check caught the one invented value with no quote, passed the six whose real quotes are about something else (a seasonal-allergy denial read as "No allergies"), nulled 546 of 611 required-mode fillers, and wrongly rejected 7 of 97 and 3 of 92 sound values — the read case a correct value whose quote stitched two passages  
+Code: [`ch09-sparse-field-fabrication/probe_schema.py`](ch09-sparse-field-fabrication/probe_schema.py)
+
+### Experiment 9.7
+
+**Does a list of quotes fix the quote check's false alarms?**  
+Same sixty ACI-Bench conversations, fields optional, `source_quotes` a list with one item per place in the conversation, three runs: wrong rejections of discussed-topic values fell from 3 of 92 (single quote, 9.6) to 0 of 75; invented values 1 of 603, its quote found (the seasonal-denial case again — existence is still not support); 32 of 93 non-null values carried two or more quotes, and the two-place steroid value that 9.6 rejected passes in every run. Cost: values on discussed topics fell from 92 to 75, nulls up accordingly  
+Code: [`ch09-sparse-field-fabrication/probe_schema_list.py`](ch09-sparse-field-fabrication/probe_schema_list.py)
 
 ### Experiment 10.1
 
@@ -420,8 +496,44 @@ Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
 ### Experiment 10.2
 
 **Do the chapter's fixes help?**  
-independent count works; self-count wrong on 6 of 6  
+the independent count caught the one real gap (Amoxicillin's 200 mg and 400 mg); the model's own count of the source is not a count of the source (Experiment 10.3)  
 Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
+
+### Experiment 10.3
+
+**Can the model count its own source, and does the inventory protocol help?**  
+Claude Haiku 4.5 via the subscription CLI, six labels, three runs of each instruction: asked to count the dose amounts and check its list against the count, the model's count equalled the number of items it listed in 54 of 54 calls (one-line instruction as printed, the same with the count defined as distinct amounts, and the chapter's inventory protocol), so the check cannot find a gap; figures returned 83%, 83%, 100% with the protocol against 98%, 98%, 98% for the one-line instruction (corrected 4 Oct: the matcher now credits a range's first figure on the list side, Experiment 10.4's hand-read caught it); the protocol's self-check flagged none of the short documents and one complete one, with a warning about repeated label sections. The reference count was fixed to skip a lab value (serum creatinine 3 mg/dL)  
+Code: [`ch10-silent-omissions/probe_count.py`](ch10-silent-omissions/probe_count.py) · [`probe_protocol.py`](ch10-silent-omissions/probe_protocol.py)
+
+### Experiment 10.4
+
+**Can a general named-entity model supply the independent count?**  
+en_core_web_trf (the model the chapter names) has no dose type: used as printed it flagged all 4 really short runs and 10 of 50 complete ones — the catches all in the one document where the entity count matches a complete list, the false flags all one lab value; it finds no doses in either dosing table, so a list can lose up to 11 figures unflagged; the small model flags nothing; the repo's pattern count, same rule, flags 4 of 4 with no false flag  
+Code: [`ch10-silent-omissions/probe_ner.py`](ch10-silent-omissions/probe_ner.py) · needs its own spaCy environment (install line in the docstring)
+
+### Experiment 10.8
+
+**Does a tagger with a dose label remove the domain work?**  
+Med7 (`en_core_med7_lg`, STRENGTH/DOSAGE) and `blaze999/Medical-NER` (DeBERTa, DOSAGE) over the same six dosing sections and 60 recorded extractions as 10.4: 0 false alarms in 50 complete runs for each (the general tagger had 10), but neither labels doses written per kg, per day or as paired suspension strengths — Med7 saw 1 of Levothyroxine's 11 doses, DeBERTa 3 of 11 and 2 of Warfarin's 6 — and each caught 3 of the 4 real drops, missing the Amoxicillin drop because the two lost figures are ones it cannot see. A tagger's count flags only the loss of what it counts. Amazon Comprehend Medical (DOSAGE/STRENGTH attributes) not run: no AWS account  
+Code: [`ch10-silent-omissions/probe_ner_dose.py`](ch10-silent-omissions/probe_ner_dose.py) · own environment `.venv-med` (spaCy 3.4 + transformers; install lines in the docstring) · no model calls · outputs in `ner_dose_med7_out.txt`, `ner_dose_deberta_out.txt`
+
+### Experiment 10.5
+
+**Does a long conversation's dose survive into the note?**  
+On Experiment 9.4's 360 recorded ACI-Bench notes, 64 unique dose facts stated across 39 conversations all reached every one of their notes, attached to the right drug (396 proximity checks, 6 failures — all one dose the doctor retracted mid-sentence, which every note correctly replaced); uncertain doses were flagged, not invented. A null at this length and fact type; the chapter's real-world rate rests on the outside studies  
+Code: [`ch10-silent-omissions/exp105_dialogue_doses/`](ch10-silent-omissions/exp105_dialogue_doses/) · no model calls, replays Experiment 9.4's notes
+
+### Experiment 10.6
+
+**Does the secondary "what is missing?" audit catch known omissions?**  
+The chapter's completeness-audit fix, run once over all 60 recorded extractions of Experiment 10.3 (12 short by a known set of figures, 48 complete). It caught 10 of 41 known-missing figures — every full catch a one-figure gap — answered "nothing is missing" on the extraction that had dropped eight strength figures, and raised alarms on 6 of 48 complete extractions, mostly figures the extraction already carried in other words, once a figure in neither the source nor the extraction. The same missing dose was caught in 4 runs and missed in 2  
+Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Haiku 4.5 calls through the subscription CLI, $2.04 notional · every case in [`audit_log.txt`](ch10-silent-omissions/audit_log.txt)
+
+### Experiment 10.7
+
+**What does the `not_extracted` field hold on text whose items are not delimited?**  
+Prompt 10-1 as printed, item type "medication dose amount", three runs over the 60 ACI-Bench conversations. The extraction dropped none of the 64 stated doses in any run (the one ruler miss is a dose the doctor retracted mid-sentence). The field filled on 49, 51 and 50 of 60 conversations (19, 20 and 19 of the 21 with no dose) with 137, 149 and 147 entries: 95, 91 and 88 a medicine named without an amount, 13, 9 and 9 a frequency only, the rest correct judgement calls (lab values, vitals, salt targets, a declined dose). No entry held back a dose the extraction should have carried. Volume, not wrong calls. One added line — "Do not list items that simply have no amount. List only values that could be mistaken for a medication dose amount." — run three more times (`--condition narrowed`): 57, 62 and 58 entries on 26, 32 and 30 conversations, the medicine inventory down to 5, 2 and 3, extraction unchanged, judgement calls kept  
+Code: [`ch10-silent-omissions/probe_field_conversation.py`](ch10-silent-omissions/probe_field_conversation.py) · 360 Haiku 4.5 calls through the subscription CLI, $8.12 notional · every entry in [`field_conversation_log.txt`](ch10-silent-omissions/field_conversation_log.txt) and [`field_conversation_narrowed_log.txt`](ch10-silent-omissions/field_conversation_narrowed_log.txt)
 
 ### Experiment C.1
 
@@ -450,7 +562,7 @@ Write-up: [`report/`](report/)
 ### Experiment G.1
 
 **Is the ground truth actually true?**
-14 of 48 "unanswerable" questions were answerable; 4 published rates were too high
+16 of 48 "unanswerable" questions were answerable; 4 published rates were too high
 Code: [`shared/contamination.py`](shared/contamination.py)
 
 Chapters 3 and 9 derive their ground truth the same way: supply two sections of a
@@ -461,28 +573,36 @@ carries a full paediatric dosing table under its own heading, and the paediatric
 question was being scored as unanswerable.
 
 The test is structural: an explicit subsection heading naming the withheld topic,
-found inside the supplied text — plus one prose rule, a dosing line addressed to
-children by age and ending in a colon. No model, no reading for meaning. It is
+found inside the supplied text — plus three narrow patterns: a dosing line
+addressed to children by age and ending in a colon, a "Use of X With …:"
+co-administration heading, and an over-the-counter "children under N years of
+age:" line. No model, no reading for meaning. It is
 deliberately narrow, so the contaminated set is a floor and the corrections below
 are conservative.
 
-Two of the fourteen were found by the model rather than the regex. In Experiment 3.5
-the two "fabrications" with the highest token probability in the whole set — higher
-than the average correct answer — were Metformin and Albuterol pediatric dosing.
-Both are answered in the supplied text: one under a heading that reads "Pediatric
-Dosage" rather than "Pediatric Use", one in a labelled dosing line. The detector
-now catches both; the rates below are recounted on the remaining thirty-four.
+Four of the sixteen were not found by the test at first. Two were found by the
+model: in Experiment 3.5 the two "fabrications" with the highest token probability
+in the whole set — higher than the average correct answer — were Metformin and
+Albuterol pediatric dosing. Both are answered in the supplied text: one under a
+heading that reads "Pediatric Dosage" rather than "Pediatric Use", one in a
+labelled dosing line. Two more were found by reading the answers: Sertraline's
+interactions, which its dosing section covers under two headings about MAOIs, and
+Omeprazole's over-the-counter line "children under 18 years of age: ask a doctor".
+The detector now catches all four; the rates in the table that follows are recounted on
+the remaining thirty-two.
 
 | figure | published | corrected |
 |---|---|---|
-| 3.1 fabrication, plain prompt | 30% (14/48) | **6%** (2/34) |
-| 3.1 fabrication, soft vocabulary | 35% | **9%** (3/34) |
-| 3.1 fabrication, permission clause | 92% | **88%** (30/34) |
-| 3.2 grounding template | −69 pts | **at least −85 pts**, all four models |
-| 9.1 fields filled with no source | 29% (14/48) | **6%** (2/35) |
+| 3.1 fabrication, plain prompt | 30% (14/48) | **3%** (1/32) |
+| 3.1 fabrication, soft vocabulary | 35% | **6%** (2/32) |
+| 3.1 fabrication, permission clause | 92% | **91%** (29/32) |
+| 3.2 grounding template | −69 pts | **at least −91 pts**, all four models |
+| 9.1 fields filled with no source | 29% (14/48) | **0 of 33** — the 1 filled field is a correct reading |
 
-Every correction moves in the same direction: the *baselines* were inflated, so the
-gaps the book attributes to prompt design are wider than published, not narrower.
+Every Chapter 3 correction moves in the same direction: the *baselines* were
+inflated, so the gaps the book attributes to prompt design are wider than
+published. Chapter 9's corrected baseline holds no fabrication, so it leaves no
+gap for a prompt or a check to close.
 
 Two chapters were audited and cleared. Chapter 4's `precautions` section nests
 `pediatric_use`, `geriatric_use` and `drug_interactions`, so seven passages sit

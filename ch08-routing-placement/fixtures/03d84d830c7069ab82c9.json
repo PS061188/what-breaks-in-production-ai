@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "SYSTEM:\nYou are an intake processor. Extract and route data to the correct\nfields. Field confusion causes downstream errors - precision is\nrequired.\n\nFIELD DEFINITIONS (apply these before extracting):\n  - \"origin_address\": where the item comes FROM.\n    Keywords: \"from\", \"sender\", \"origin\", \"pickup location\"\n  - \"destination_address\": where the item is going TO.\n    Keywords: \"to\", \"deliver to\", \"destination\", \"drop-off\"\n  - \"billing_address\": who pays. May differ from both.\n    Keywords: \"bill to\", \"invoice to\", \"charge to\", \"account holder\"\n\nA field may be filled ONLY from text that carries its own keywords. If\nthe text supporting a value carries another field's keywords, that\nvalue\nbelongs to the other field.\n\nFor every field, return the exact sentence you took it from. Copy it\ncharacter for character; do not paraphrase it.\n\nIf no text in the document supports a field, return null for that\nfield\nand null for its quote. A null field is a correct answer.\nReturn:\n{\n  \"origin_address\":      { \"value\": ..., \"source_quote\": ... },\n  \"destination_address\": { \"value\": ..., \"source_quote\": ... },\n  \"billing_address\":     { \"value\": ..., \"source_quote\": ... }\n}\n\n<document>\nSHIPPING DOCUMENT  No. SD-46340\nDate: 2026-02-20\n\nAddresses appear in the order: sender, recipient, billing party.\nRavenscar Timber\n310 Union Boulevard\nWells 7176\n\nEllery Instruments\n8 Barley Mews\nWigan 9980\n\nDelta Grain Co\n31 Weavers Row\nSwansea 8411\n\nItems: 7 cartons, 790 kg\nCarrier reference: CR7957\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ravenscar Timber, 310 Union Boulevard, Wells 7176\",\"source_quote\":\"Addresses appear in the order: sender, recipient, billing party. Ravenscar Timber 310 Union Boulevard Wells 7176\"},\"destination_address\":{\"value\":\"Ellery Instruments, 8 Barley Mews, Wigan 9980\",\"source_quote\":\"Ellery Instruments 8 Barley Mews Wigan 9980\"},\"billing_address\":{\"value\":\"Delta Grain Co, 31 Weavers Row, Swansea 8411\",\"source_quote\":\"Delta Grain Co 31 Weavers Row Swansea 8411\"}}",
+  "elapsed_ms": 2142,
+  "usage": {
+    "input_tokens": 935,
+    "output_tokens": 174
+  },
+  "logprobs": null
+}

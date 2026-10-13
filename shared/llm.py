@@ -5,7 +5,8 @@ Every chapter script goes through this. Two things matter here:
 1. **Fixtures.** Each request is hashed and its response written to the
    chapter's fixtures/ directory. Re-running offline replays the recorded
    response, so `python broken.py` works with no API key and costs nothing.
-   `--live` re-runs against the API and rewrites the fixtures.
+   `--live` re-runs against the API and rewrites every fixture; `--live missing`
+   calls the API only for requests that have no fixture yet and replays the rest.
 
 2. **Cost.** Every live call accumulates token usage, printed at the end of
    each run. If a chapter costs more than a few cents you should be able to
@@ -102,7 +103,12 @@ def load_dotenv(start: Path) -> None:
 
 
 class LLM:
-    def __init__(self, chapter_dir: Path, model: str = DEFAULT_MODEL, live: bool = False):
+    def __init__(self, chapter_dir: Path, model: str = DEFAULT_MODEL, live=False):
+        # live: False replays; True calls the API for every request and rewrites
+        # its fixture; "missing" calls the API only where no fixture exists. The
+        # third mode exists because a --live re-run to add one condition once
+        # re-recorded every earlier draw of an experiment as a side effect.
+        assert live in (False, True, "missing"), live
         self.fixtures = Path(chapter_dir) / "fixtures"
         self.fixtures.mkdir(exist_ok=True)
         self.model = model
@@ -241,7 +247,7 @@ class LLM:
             with open(audit, "a") as handle:
                 handle.write(f"{self.fixtures}\t{key}\n")
 
-        if not self.live and path.is_file():
+        if self.live is not True and path.is_file():
             recorded = json.loads(path.read_text())
             with self._lock:
                 self.replayed += 1
@@ -377,10 +383,13 @@ class LLM:
         On a replay the cost and time are what the *recorded* live run spent,
         read back out of the fixtures — a replay itself is free and instant.
         """
-        mode = "live" if self.live else "replay"
-        seconds = self.api_seconds if self.live else self.recorded_seconds
-        n = self.calls if self.live else self.replayed
-        parts = [f"  [{mode}] {n} model call(s)"]
+        if self.live is True:
+            mode, n, seconds = "live", self.calls, self.api_seconds
+        elif self.live:
+            mode, n, seconds = "fill", self.calls + self.replayed, self.api_seconds + self.recorded_seconds
+        else:
+            mode, n, seconds = "replay", self.replayed, self.recorded_seconds
+        parts = [f"  [{mode}] {n} model call(s)" + (f" ({self.calls} live, {self.replayed} replayed)" if mode == "fill" else "")]
         if self.input_tokens or self.output_tokens:
             parts.append(f"{self.input_tokens:,} in / {self.output_tokens:,} out tokens")
             parts.append(f"${self.cost():.4f} on {self.model}")
@@ -483,8 +492,11 @@ def base_args(description: str):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
         "--live",
-        action="store_true",
-        help="call the API instead of replaying fixtures (costs money, rewrites fixtures)",
+        nargs="?",
+        const=True,
+        default=False,
+        help="call the API instead of replaying fixtures (costs money, rewrites every fixture); "
+        "'--live missing' calls the API only for requests with no fixture yet and replays the rest",
     )
     parser.add_argument(
         "--model",

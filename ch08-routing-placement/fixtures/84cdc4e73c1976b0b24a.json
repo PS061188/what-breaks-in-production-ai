@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: Patient reports a history of type 2 diabetes, gout, and a 2/6 Systolic ejection murmur.\nS2 [ASSESSMENT AND PLAN]: Nicotine dependence.\nS3 [OBJECTIVE EXAM]: - Palpation: No enlarged lymph nodes.\nS4 [OBJECTIVE EXAM]: - Auscultation of Heart: Regular rate.\nS5 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: We discussed that continuing to follow a healthy diet and perform regular exercise will help to maintain his blood glucose levels.\nS6 [ASSESSMENT AND PLAN]: He received handouts today for common smoking triggers.\nS7 [ASSESSMENT AND PLAN]: Hemoglobin A1c is ordered to be completed by his next visit in 2 weeks.\nS8 [ASSESSMENT AND PLAN]: I explained to the patient that stress can often be a trigger for smoking.\nS9 [ASSESSMENT AND PLAN]: - Medical Reasoning: Stable with medication.\nS10 [ASSESSMENT AND PLAN]: He is highly motivated to cease smoking as he is preparing to become a father.\nS11 [ASSESSMENT AND PLAN]: I would like to see him again in 2 weeks to discuss how things are going and to reevaluate the nicotine patch dosage.\nS12 [OBJECTIVE EXAM]: 2/6 systolic ejection murmur.\nS13 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: I applaud the patient on making this first step to stop smoking.\nS14 [ASSESSMENT AND PLAN]: I encouraged him to maintain his gym routine, engage in meditation, and try adding in yoga to help further reduce his stress levels.\nS15 [OBJECTIVE EXAM]: No expiratory wheezes, rales, or rhonchi.\nS16 [SUBJECTIVE]: Patient reports he is a smoker.\nS17 [ASSESSMENT AND PLAN]: We discussed additional cessation aids.\nS18 [OBJECTIVE EXAM]: - Auscultation of Lungs: Clear bilaterally.\nS19 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS20 [ASSESSMENT AND PLAN]: I recommend he change the patch location each day as that will help reduce or avoid any skin irritation that can occur if he re-uses the same location repeatedly.\nS21 [ASSESSMENT AND PLAN]: We will work together to decrease the dosage of the nicotine patch, so there are not necessarily any hard dates in mind.\nS22 [ASSESSMENT AND PLAN]: He is currently smoking 1.5 packs per day.\nS23 [ASSESSMENT AND PLAN]: - Medical Reasoning: Stable.\nS24 [OBJECTIVE EXAM]: Hematology/Lymphatic/Immunology\nS25 [ASSESSMENT AND PLAN]: - Medical Treatment: We will continue to monitor his type 2 diabetes.\nS26 [ASSESSMENT AND PLAN]: - Medical Treatment: The patient has chosen his birthday, as a quit date.\nS27 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: I advised him to continue to watch for foods that will exacerbate his uric acid levels.\nS28 [ASSESSMENT AND PLAN]: The patient and I discussed coping mechanisms for when he encounters stressful situations.\nS29 [ASSESSMENT AND PLAN]: I reassured him that with absolute 100% certainty that I will be with him every step of the way.\nS30 [ASSESSMENT AND PLAN]: On that day, I am going to start him with a 21 mg nicotine patch, and the goal will be to decrease that over time.\nS31 [ASSESSMENT AND PLAN]: - Medical Treatment: He will continue his allopurinol.\nS32 [ASSESSMENT AND PLAN]: - Medical Reasoning: The patient has a long history of smoking cigarettes.\nS33 [ASSESSMENT AND PLAN]: I advised him to be watchful and monitor his stress level, not only regarding work, but also his impending fatherhood.\nS34 [SUBJECTIVE]: Patient reports taking allopurinol.\nS35 [OBJECTIVE EXAM]: - General Examination: Neck is supple without lymphadenopathy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S16\", \"S34\"], \"objective_exam\": [\"S3\", \"S4\", \"S12\", \"S15\", \"S18\", \"S24\", \"S35\"], \"objective_results\": [], \"assessment_and_plan\": [\"S2\", \"S5\", \"S6\", \"S7\", \"S8\", \"S9\", \"S10\", \"S11\", \"S13\", \"S14\", \"S17\", \"S19\", \"S20\", \"S21\", \"S22\", \"S23\", \"S25\", \"S26\", \"S27\", \"S28\", \"S29\", \"S30\", \"S31\", \"S32\", \"S33\"]}",
+  "elapsed_ms": 1737,
+  "usage": {
+    "input_tokens": 1411,
+    "output_tokens": 166
+  },
+  "logprobs": null
+}

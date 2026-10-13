@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Musculoskeletal: Reports left-sided low back pain.\nS2: No pain with palpation on the right side.\nS3: MSK: Examination of the lumbar spine: No pain with flexion or extension.\nS4: I explained that Vicodin is a strong medication for this issue and that I would need to refer him to pain management for that, but I did provide him with a prescription for Demerol.\nS5: The patient is status post lumbar microdiscectomy performed in 11/2020.\nS6: These reveal no evidence of fracture or other abnormalities in the spine or vertebrae.\nS7: The patient reports that, prior to his microdiscectomy in 2020, he was taking high-dose gabapentin for severe nerve pain through his back and lower extremities.\nS8: After reviewing the patient's examination and radiographic findings today, I believe his symptoms are related to a muscle strain due to spinal misalignment.\nS9: The patient requested a prescription for Vicodin and Demerol.\nS10: Normal range of motion.\nS11: He is currently taking ibuprofen 800 mg daily.\nS12: His previous surgical site is visible and appears to have healed properly.\nS13: Stretching and ibuprofen 800 mg daily are helpful, but he denies having tried icing the area.\nS14: Other than spontaneous flare-ups, his pain is worsened with excessive spinal flexion.\nS15: Pain with weight-bearing.\nS16: X-ray images of the lumbar spine were obtained and reviewed in office today.\nS17: Dorsiflexion is normal.\nS18: Low back pain, left side.\nS19: The patient has been experiencing pain in the left side of his low back, generally localized around the surgical site of his microdiscectomy performed in 11/2020, but occasionally into the right side as well.\nS20: I recommend that we treat the patient conservatively with formal physical therapy and meloxicam.\nS21: Sean Phillips is a pleasant 35-year-old male who presents to the clinic today for the evaluation of left-sided low back pain.\nS22: Pain with palpation on the left side around L5.\nS23: No nerve pain in his lower extremities.\nS24: Low back pain, left side.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"MEDIUM\"}], \"requires_review\": true}",
+  "elapsed_ms": 4496,
+  "usage": {
+    "input_tokens": 1644,
+    "output_tokens": 421
+  },
+  "logprobs": null
+}

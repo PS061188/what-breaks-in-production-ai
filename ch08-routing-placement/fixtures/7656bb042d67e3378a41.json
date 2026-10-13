@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: I have recommended a splint.\nS2 [ASSESSMENT AND PLAN]: If she does not improve, she will follow up with me.\nS3 [OBJECTIVE EXAM]: No tenderness over the proximal phalanx or the MP joint.\nS4 [OBJECTIVE EXAM]: Examination of the right index finger shows tenderness over the distal phalanx.\nS5 [SUBJECTIVE]: She states she was skiing on Sunday and hyperextended her finger when it became caught in a strap on a jump.\nS6 [OBJECTIVE RESULTS]: X-rays of the right hand show no obvious signs of fracture or bony abnormalities.\nS7 [ASSESSMENT AND PLAN]: At this point, I discussed the diagnosis and treatment options with the patient.\nS8 [SUBJECTIVE]: Brooks is a 48-year-old female who presents today for an evaluation of right finger pain.\nS9 [ASSESSMENT AND PLAN]: Right hand index finger contusion at the tip of the finger.\nS10 [ASSESSMENT AND PLAN]: She will take Motrin 600 mg every 6 hours for a week.\nS11 [SUBJECTIVE]: She has tried applying ice and taking Ibuprofen, but it is still very painful.\nS12 [ASSESSMENT AND PLAN]: All questions were answered.\nS13 [SUBJECTIVE]: She has pain with movement.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S8\", \"S5\", \"S11\", \"S13\"], \"objective_exam\": [\"S4\", \"S3\"], \"objective_results\": [\"S6\"], \"assessment_and_plan\": [\"S9\", \"S7\", \"S1\", \"S10\", \"S2\", \"S12\"]}",
+  "elapsed_ms": 1837,
+  "usage": {
+    "input_tokens": 737,
+    "output_tokens": 77
+  },
+  "logprobs": null
+}

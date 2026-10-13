@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-86415\nDate: 2026-06-10\n\nShip From:\nFoxglove Nursery\n27 Granary Street\nStirling 7272\n\nShip To:\nSable River Dairy\n22 Tannery Walk\nChester 4423\n\nBill To:\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nItems: 15 cartons, 399 kg\nCarrier reference: CR8424\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Foxglove Nursery, 27 Granary Street, Stirling 7272\",\"source_quote\":\"Foxglove Nursery\\n27 Granary Street\\nStirling 7272\"},\"destination_address\":{\"value\":\"Sable River Dairy, 22 Tannery Walk, Chester 4423\",\"source_quote\":\"Sable River Dairy\\n22 Tannery Walk\\nChester 4423\"},\"billing_address\":{\"value\":\"Ridgeway Components, 7 Station Yard, Cardiff 1926\",\"source_quote\":\"Ridgeway Components\\n7 Station Yard\\nCardiff 1926\"}}",
+  "elapsed_ms": 2630,
+  "usage": {
+    "input_tokens": 653,
+    "output_tokens": 169
+  },
+  "logprobs": null
+}

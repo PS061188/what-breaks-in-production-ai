@@ -160,20 +160,38 @@ otherwise part of the measured difference is the sampler.</p>
 <p>647 recorded runs, <strong>$0.85</strong> of Haiku calls (about $1.95 across
 iterations).</p>
 
-<h3>Chapter 4 verdict</h3>
+<h3>Follow-up experiments (September 2026)</h3>
 
+<h4>4.2 &mdash; The shipped prompt, measured on its own</h4>
+<p>The book&rsquo;s template had only been measured with its <code>confidence</code> and <code>requires_human_review</code> fields in it. The shipped version drops both and keeps the reasoning steps, <code>runner_up</code> and <code>ruled_out_because</code>. Three runs, both passage positions, $2.56.</p>
+<table>
+  <tr><th style="width:40%">Prompt</th><th class="num">Opening passage</th><th class="num">Body passage</th></tr>
+  <tr><td>One-line prompt (replayed)</td><td class="num">100% (96/96)</td><td class="num">96% (92/96)</td></tr>
+  <tr><td>Full template, with confidence (replayed)</td><td class="num">98%</td><td class="num">90%</td></tr>
+  <tr><td>Shipped template, runs 1 / 2 / 3</td><td class="num">97 / 98 / 99%</td><td class="num">94 / 92 / 91%</td></tr>
+</table>
+<p>Dropping the confidence fields recovered one to four points on the body passages; the template still trails the one-line prompt. <code>runner_up</code> held the true category on 6 of 6 opening errors and 18 of 23 body errors.</p>
+
+<h4>4.3 &mdash; Fix 2 as the chapter describes it: three different systems</h4>
+<p>Haiku 4.5 with the shipped template, GPT-4.1-mini with the one-line prompt, and <code>facebook/bart-large-mnli</code> zero-shot on CPU; majority vote, and a three-way disagreement goes to review. Three runs each position.</p>
+<table>
+  <tr><th style="width:24%">Position</th><th class="num">Haiku</th><th class="num">GPT-4.1-mini</th><th class="num">bart</th><th class="num">Ensemble</th><th class="num">Sent to review</th></tr>
+  <tr><td>Opening</td><td class="num">99 / 99 / 97</td><td class="num">97 / 97 / 99</td><td class="num">59</td><td class="num">99 / 99 / 98</td><td class="num">2 / 2 / 0</td></tr>
+  <tr><td>Body</td><td class="num">93 / 93 / 93</td><td class="num">96 / 96 / 94</td><td class="num">59</td><td class="num">96 / 96 / 94</td><td class="num">1 / 2 / 1</td></tr>
+</table>
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>The earlier &ldquo;ensemble vote works, 8 of 9&rdquo; (97&ndash;100%) was three prompts on one model, where two strong prompts outvoted the weakest. It does not describe a model ensemble. The real ensemble matches its best member and does not beat it; its useful part is the disagreement lane, which sent 0 to 2 of 96 passages to review.</p>
+</div>
+
+<h3>Chapter 4 verdict</h3>
 <table>
   <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
   <tr><td>The failure itself</td><td>Barely reproduces</td><td>3 and 9 errors of 96</td></tr>
-  <tr><td>Prompt template</td><td><strong>Harmful here</strong></td><td>6 points below a one-line prompt</td></tr>
-  <tr><td>1 · Confidence gating</td><td><strong>Cannot work</strong></td>
-      <td>LOW never issued in 192 cases — decisive</td></tr>
-  <tr><td>2 · Ensemble vote</td><td><strong>Works</strong></td><td>8 of 9, no correct answers lost</td></tr>
-  <tr><td>3 · Per-category F1 gate</td><td><strong>Works</strong></td><td>two categories caught under a passing aggregate</td></tr>
-  <tr><td>4 · Audit trail</td><td><strong>Works</strong></td><td>runner-up correct on 67–100%</td></tr>
+  <tr><td>Prompt template (shipped)</td><td>Trails a one-line prompt</td><td>1&ndash;3 points opening, 2&ndash;5 body, three runs</td></tr>
+  <tr><td>Confidence gating</td><td><strong>Cannot work</strong></td><td>LOW never issued in 192 cases</td></tr>
+  <tr><td>Per-category F1 gate</td><td><strong>Works</strong></td><td>two categories caught under a passing aggregate</td></tr>
+  <tr><td>Audit trail (<code>runner_up</code>)</td><td><strong>Works</strong></td><td>true category held on 24 of 29 errors</td></tr>
+  <tr><td>Model ensemble</td><td>Matches its best member</td><td>disagreement lane: 0&ndash;2 of 96 to review</td></tr>
 </table>
-
-<p><strong>The chapter's ordering is upside down.</strong> Its first fix cannot
-work, its prompt template may make a reader's classifier worse, and the fix that
-would have caught its own dominant error sits third in the list and costs
-nothing.</p>
+<p><strong>Order the fixes by result:</strong> the F1 gate, then the audit trail, then the ensemble&rsquo;s disagreement lane. Confidence gating cannot work on a grade the model never issues.</p>

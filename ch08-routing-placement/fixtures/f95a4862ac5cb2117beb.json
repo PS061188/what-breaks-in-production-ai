@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: He reports an onset of a few months ago but denies any specific injury.\nS2: After reviewing the patient's clinical history and examination today, I have had a lengthy discussion with him regarding treatment options for his current symptoms.\nS3: NEURO: Decreased sensation in the right thumb and index finger.\nS4: His symptoms are worse at night, and he wakes with numbness in the bilateral hands.\nS5: He experiences numbness in all fingers, but states it is the most noticeable in the left thumb and index finger.\nS6: George Lewis is a pleasant 57-year-old male who presents to the clinic today for evaluation of left wrist and hand pain.\nS7: He reports he drops objects and explains “I have a hard time feeling it.”\nS8: The patient will follow up with me in 2 weeks when the EMG results are available for review.\nS9: The patient denies a history of rheumatoid arthritis.\nS10: However, the patient notes he often engages in repetitive motions while performing his work duties.\nS11: I advised him to take ibuprofen 600 mg every 6 hours.\nS12: Musculoskeletal: Reports left wrist and hand pain.\nS13: Left wrist and hand pain.\nS14: For relief, he shakes his hands upon waking.\nS15: Positive Tinel sign bilaterally.\nS16: The patient also experiences weakness in his left hand.\nS17: Bilateral carpal tunnel syndrome.\nS18: I also recommended that he wear a wrist splint to provide increased support.\nS19: If at that time his symptoms have not improved with these conservative measures, we will discuss further treatment options including additional diagnostic testing or possible surgical intervention.\nS20: He affirms intermittent numbness in the left little finger.\nS21: Denies right hand pain.\nS22: Additionally, I recommended we obtain an EMG of the bilateral upper extremities to evaluate for carpal tunnel syndrome.\nS23: MSK: Examination of the bilateral hands: Grip strength is less on the left in comparison to the right.\nS24: The patient states he understands and is in agreement with the plan.\nS25: He reports consuming 1 to 2 beers on weekends.\nS26: All questions were answered to the patient's satisfaction.\nS27: The patient will follow up with me in 2 weeks.\nS28: Neurological: Reports numbness in bilateral hands and fingers, and left hand weakness.\nS29: He works in landscaping.\nS30: I discussed the importance of activity modification and encouraged the patient to limit active repetitive motions while working for the next 2 weeks.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S4\", \"S5\", \"S6\", \"S7\", \"S9\", \"S10\", \"S12\", \"S14\", \"S16\", \"S20\", \"S21\", \"S25\", \"S28\", \"S29\"], \"objective_exam\": [\"S3\", \"S15\", \"S23\"], \"objective_results\": [], \"assessment_and_plan\": [\"S2\", \"S8\", \"S11\", \"S13\", \"S17\", \"S18\", \"S19\", \"S22\", \"S24\", \"S26\", \"S27\", \"S30\"]}",
+  "elapsed_ms": 1710,
+  "usage": {
+    "input_tokens": 1246,
+    "output_tokens": 146
+  },
+  "logprobs": null
+}

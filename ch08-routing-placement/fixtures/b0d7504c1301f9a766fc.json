@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: She took Ibuprofen on but it did not help her.\nS2: She will follow up with me in 2 weeks for a repeat evaluation.\nS3: James is a 42-year-old female who presents today for an evaluation of right index finger pain.\nS4: I have recommended a splint.\nS5: If she is unimproved, we will consider hand therapy at that time.\nS6: Right index finger pain.\nS7: At this point, I discussed the diagnosis and treatment options with the patient.\nS8: A prescription is provided for Mobic 15 mg once a day, dispense 14.\nS9: X-rays of the right index finger show no obvious signs of fracture.\nS10: She denies any icing it or wearing a splint.\nS11: All questions were answered.\nS12: She states she injured it while skiing.\nS13: Chronic constipation\nS14: She states she fell and jammed her finger.\nS15: Appendectomy at age 7.\nS16: She rates her pain 7/10.\nS17: Right index finger DIP joint sprain.\nS18: Examination of the right hand reveals pain to palpation of the MCP and DIP joints.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S6\", \"S1\", \"S10\", \"S12\", \"S14\", \"S16\", \"S13\", \"S15\"], \"objective_exam\": [\"S18\"], \"objective_results\": [\"S9\"], \"assessment_and_plan\": [\"S7\", \"S17\", \"S4\", \"S8\", \"S11\", \"S2\", \"S5\"]}",
+  "elapsed_ms": 2265,
+  "usage": {
+    "input_tokens": 921,
+    "output_tokens": 97
+  },
+  "logprobs": null
+}

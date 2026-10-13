@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: He is not ready to try any medications.\nS2: • Patient Education and Counseling: We will defer initiating medication at this time.\nS3: Regarding his GERD, he is taking his omeprazole.\nS4: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS5: • Additional Testing: I will order a hemoglobin A1c in 1 month.\nS6: He has noticed increased fluid retention following dietary indiscretion.\nS7: • Medical Treatment: He will continue the insulin pump.\nS8: His shortness of breath is primarily with exertion such as walking up the stairs.\nS9: Reducing his alcohol intake has been tough during the holiday season, but he is getting better about this.\nS10: He states that it takes him a little while to get up.\nS11: Labs were all within normal limits, including the WBC.\nS12: Regarding his depression, he states that it has been a crazy year and a half.\nS13: No jugular venous distention.\nS14: He is trying to avoid sugar but admits to an affinity for chocolate bars.\nS15: The patient states he has had some shortness of breath and mild leg swelling which he thinks has to do with eating some salty foods at some house parties recently.\nS16: • Patient Education and Counseling: I advised the patient to monitor and log his daily weights.\nS17: Regarding his type 1 diabetes, he is using his insulin pump.\nS18: He has been consistently monitoring his blood sugars during the working week, but notes that he checks less on the weekends, due to being busy.\nS19: • Medical Treatment: This is currently stable with use of an insulin pump.\nS20: • Respiratory: Denies coughor wheezing.\nS21: This has been going on for about 10 days now.\nS22: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS23: He woke from sleep once with shortness of breath about a week ago.\nS24: • Medical Reasoning: The patient has been doing well with outdoor stretching.\nS25: He has made some lifestyle modifications like cutting back on his red bull intake and other caffeine.\nS26: The patient will follow up with his endocrinologist.\nS27: He also notes discomfort lying flat in bed and musculoskeletal stiffness in the morning.\nS28: • Musculoskeletal: 1+ pitting bilateral lower extremity edema.\nS29: • Medical Reasoning: The patient is retaining fluid.\nS30: Endorses shortness of breath..\nS31: • Medical Treatment: Initiate Lasix 40 mg a day.\nS32: • Cardiovascular: 3/6 systolic ejection murmur.\nS33: Acute heart failure exacerbation.\nS34: • Cardiovascular: Denies chest pain.\nS35: • Medical Treatment: Continue omeprazole 20 mg a day.\nS36: • Musculoskeletal: Endorses lower extremity edema.\nS37: He has tried some natural solutions.\nS38: • Medical Treatment: I will refer him to psychiatry as his current management strategy is unsustainable due to the change in season.\nS39: He denies suicidal and homicidal ideation.\nS40: He has experienced dyspnea on exertion for the past 10 days.\nS41: He was instructed to call me or 911 if he experiences dyspnea at rest.\nS42: In the summer, he did daily outdoor stretching, which was great; but now that the weather has changed, he needs to find some alternatives.\nS43: • Medical Reasoning: His symptoms are stable with medication.\nS44: Chest x-ray did not show any evidence of airspace disease.\nS45: • Patient Education and Counseling: I encouraged the patient to have an eye exam.\nS46: Endorses dyspnea on exertion.\nS47: He continues to decline the use of medications for this issue.\nS48: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan. his endo\nS49: Shortness of breath.\nS50: • Neck: No carotid bruits appreciable.\nS51: • Constitutional: Denies fevers, chills.\nS52: He will contact me if these continue to increase.\nS53: The patient denies chest pain, fever, chills, cough, and abdominal pain.\nS54: • Psychiatric: Endorses depression.\nS55: • Respiratory: Rales are heard bilaterally at lung bases.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S25\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S27\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S30\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S34\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S37\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S39\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S40\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S46\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S47\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S51\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S53\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S1\", \"placement_confidence\": \"MEDIUM\"}], \"objective_exam\": [{\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S28\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S32\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S36\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S50\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S54\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S55\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S44\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S26\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S29\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S31\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S33\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S35\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S38\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S41\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S42\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S43\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S45\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S48\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S49\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S52\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 4556,
+  "usage": {
+    "input_tokens": 2249,
+    "output_tokens": 918
+  },
+  "logprobs": null
+}

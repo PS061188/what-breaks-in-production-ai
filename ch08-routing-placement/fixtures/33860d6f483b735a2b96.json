@@ -1,0 +1,83 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a clinical data extraction assistant. Read the drug label\nbelow and fill in each requested field. Include a short source_quote for each\nfield, and name the section you took it from.\n\n<label>\nEndocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2.\nSeasonal or perennial allergic rhinitis Bronchial asthma Contact dermatitis Atopic dermatitis Serum sickness Drug hypersensitivity reactions 6.\nOphthalmic Diseases Severe acute and chronic allergic and inflammatory processes involving the eye and its adnexa such as:\nSystemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4.\nCollagen Diseases During an exacerbation or as maintenance therapy in selected cases of:\nAllergic corneal marginal ulcers Herpes zoster ophthalmicus Anterior segment inflammation Diffuse posterior uveitis and choroiditis Sympathetic ophthalmia Allergic conjunctivitis Keratitis Chorioretinitis Optic neuritis Iritis and iridocyclitis 7.\nPsoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3.\nRheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in:\nCONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\nRespiratory Diseases Symptomatic sarcoidosis Loeffler’s syndrome not manageable by other means Berylliosis Fulminating or disseminated pulmonary tuberculosis when used concurrently with appropriate antituberculous chemotherapy Aspiration pneumoniti\nINDICATIONS Prednisone tablets are indicated in the following conditions: 1.\nAllergic States Control of severe or incapacitating allergic conditions intractable to adequate trials of conventional treatment:\nADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\nDermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5.\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\":{\"value\":\"Prednisone is indicated for endocrine disorders (adrenocortical insufficiency, congenital adrenal hyperplasia, hypercalcemia associated with cancer), allergic states (seasonal or perennial allergic rhinitis, bronchial asthma, drug hypersensitivity reactions), ophthalmic diseases (severe allergic and inflammatory processes of the eye), collagen diseases (systemic lupus erythematosus, systemic dermatomyositis), rheumatic disorders (rheumatoid arthritis, psoriatic arthritis, ankylosing spondylitis), respiratory diseases (symptomatic sarcoidosis, berylliosis, pulmonary tuberculosis), and dermatologic diseases (pemphigus, severe psoriasis, Stevens-Johnson syndrome)\",\"source_quote\":\"Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency...2. Seasonal or perennial allergic rhinitis Bronchial asthma...5. Dermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome)\",\"source_section\":\"INDICATIONS\"},\"who_must_not_take_it\":{\"value\":\"Patients with systemic fungal infections and those with known hypersensitivity to components of the medication should not take prednisone.\",\"source_quote\":\"CONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\",\"source_section\":\"CONTRAINDICATIONS\"},\"side_effects\":{\"value\":\"Side effects include fluid and electrolyte disturbances (sodium retention, hypokalemia, hypertension), musculoskeletal effects (muscle weakness, osteoporosis, aseptic necrosis), gastrointestinal effects (peptic ulcer, pancreatitis), dermatologic effects (impaired wound healing, thin fragile skin), metabolic effects (negative nitrogen balance), neurological effects (increased intracranial pressure, convulsions, vertigo), endocrine effects (menstrual irregularities, Cushingoid state, growth suppression), ophthalmic effects (posterior subcapsular cataracts, glaucoma), and allergic reactions.\",\"source_quote\":\"Fluid and Electrolyte Disturbances Sodium retention Fluid retention...Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis...Peptic ulcer with possible perforation and hemorrhage...Impaired wound healing Thin fragile skin...Increased intracranial pressure with papilledema...Posterior subcapsular cataracts Increased intraocular pressure Glaucoma...Urticaria and other allergic, anaphylactic or hypersensitivity reactions\",\"source_section\":\"ADVERSE REACTIONS\"}}",
+  "elapsed_ms": 10196,
+  "usage": {
+    "input_tokens": 1590,
+    "output_tokens": 659
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: We will follow up with him afterwards to determine his level of relief.\nS2 [SUBJECTIVE]: He reports that his left arm pain began approximately 2 weeks ago.\nS3 [OBJECTIVE EXAM]: Upper extremities: 1+ bilateral biceps, triceps, brachioradialis, reflexes bilaterally, negative.\nS4 [ASSESSMENT AND PLAN]: He will continue his home exercise program as well as twice daily gabapentin.\nS5 [SUBJECTIVE]: The patient is a veteran and receives 1% disability.\nS6 [OBJECTIVE RESULTS]: Impression: Significant disc degeneration at C5-6 and to a lesser extent C4-5 and C3-4.\nS7 [SUBJECTIVE]: He applied ice and after 2-3 hours, the pain improved and he was able to go back to sleep, the pain did not return until that evening.\nS8 [ASSESSMENT AND PLAN]: He denies any blood thinners.\nS9 [ASSESSMENT AND PLAN]: I suspect that this is a flare of cervical radiculopathy.\nS10 [OBJECTIVE EXAM]: Cervical: Nontender over cervical spine.\nS11 [OBJECTIVE EXAM]: Upper extremities: Normal throughout the biceps, triceps, deltoid, grip strength, and finger abduction, bilaterally.\nS12 [ASSESSMENT AND PLAN]: • Neck pain in the setting of arthritis and disc generation\nS13 [SUBJECTIVE]: Peripheral neuropathy.\nS14 [OBJECTIVE EXAM]: Spurling's maneuver is benign.\nS15 [ASSESSMENT AND PLAN]: We will tentatively plan for a left C7-T1 epidural afterwards, although the exact level will be pending the MRI results.\nS16 [SUBJECTIVE]: She suspected a pinched nerve and completed x-rays of the cervical spine, prescribed gabapentin and prednisone, and referred the patient to us.\nS17 [SUBJECTIVE]: Clark does report a history of a left finger injury, stating “it rarely works”, and neuropathy in one leg from his knee to his foot which he receives 1% disability for.\nS18 [OBJECTIVE EXAM]: Elderly Caucasian male in no apparent distress.\nS19 [OBJECTIVE EXAM]: Presents in wheelchair.\nS20 [ASSESSMENT AND PLAN]: • Left upper extremity neuropathy, suspicious for cervical radiculopathy, possible contribution of peripheral neuropathy\nS21 [ASSESSMENT AND PLAN]: Continue home exercise program and twice daily gabapentin.\nS22 [SUBJECTIVE]: The pain initially was encountered at night, but the patient notes that the symptoms carry into the next day.\nS23 [ASSESSMENT AND PLAN]: I am going to set him up for a cervical MRI.\nS24 [ASSESSMENT AND PLAN]: This plan was discussed in detail with the patient who is in agreement.\nS25 [SUBJECTIVE]: The patient has benefited from the gabapentin and prednisone, reporting improvement of pain at night.\nS26 [OBJECTIVE RESULTS]: X-ray Cervical Spine, 06/04/2021.\nS27 [SUBJECTIVE]: He denies pain when moving his neck, turning his head, and moving his shoulder.\nS28 [OBJECTIVE RESULTS]: Significant lower facet arthropathy.\nS29 [ASSESSMENT AND PLAN]: Follow-up after epidural.\nS30 [SUBJECTIVE]: The patient is a veteran.\nS31 [SUBJECTIVE]: He woke around 2:00 am with intense pain in his left arm and hand.\nS32 [OBJECTIVE EXAM]: Sensation: Intact to light touch throughout the upper and lower extremities.\nS33 [OBJECTIVE RESULTS]: C6-7 and C7-T1 are difficult to visualize in the current x-rays.\nS34 [ASSESSMENT AND PLAN]: Schedule MRI and epidural injection.\nS35 [SUBJECTIVE]: After several nights of experiencing the left arm and hand pain, he was seen by Betty Ross, PA-C.\nS36 [OBJECTIVE EXAM]: Mildly restricted cervical extension and right and left lateral rotation, which is symmetric, which gives him mild lateral neck pain, but no radicular pain.\nS37 [OBJECTIVE EXAM]: Gait: Not assessed today.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S5\", \"S7\", \"S13\", \"S16\", \"S17\", \"S22\", \"S25\", \"S27\", \"S30\", \"S31\", \"S35\"], \"objective_exam\": [\"S3\", \"S10\", \"S11\", \"S14\", \"S18\", \"S19\", \"S32\", \"S36\", \"S37\"], \"objective_results\": [\"S6\", \"S26\", \"S28\", \"S33\"], \"assessment_and_plan\": [\"S1\", \"S4\", \"S8\", \"S9\", \"S12\", \"S15\", \"S20\", \"S21\", \"S23\", \"S24\", \"S29\", \"S34\"]}",
+  "elapsed_ms": 2863,
+  "usage": {
+    "input_tokens": 1439,
+    "output_tokens": 173
+  },
+  "logprobs": null
+}

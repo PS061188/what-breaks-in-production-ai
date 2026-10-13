@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-11617\nDate: 2026-07-24\n\nAddresses appear in the order: recipient, sender, billing party.\nWestmoor Print\n5 Copper Court\nPreston 5243\n\nEllery Instruments\n8 Barley Mews\nWigan 9980\n\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nItems: 35 cartons, 742 kg\nCarrier reference: CR1247\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ellery Instruments, 8 Barley Mews, Wigan 9980\",\"source_quote\":\"Ellery Instruments\\n8 Barley Mews\\nWigan 9980\"},\"destination_address\":{\"value\":\"Westmoor Print, 5 Copper Court, Preston 5243\",\"source_quote\":\"Westmoor Print\\n5 Copper Court\\nPreston 5243\"},\"billing_address\":{\"value\":\"Ridgeway Components, 7 Station Yard, Cardiff 1926\",\"source_quote\":\"Ridgeway Components\\n7 Station Yard\\nCardiff 1926\"}}",
+  "elapsed_ms": 2632,
+  "usage": {
+    "input_tokens": 653,
+    "output_tokens": 162
+  },
+  "logprobs": null
+}

@@ -8,7 +8,7 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">2 of 55 figures</td><td class="num">3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">wrong on 6 of 6</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Works, expensively</td><td class="num">2 real of 8 flags, 87% of the bill</td><td class="num">1 run</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
+<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">1&ndash;2 of 54 figures</td><td class="num">4 runs</td></tr><tr><td>Failure &mdash; doses from long conversations</td><td><strong>Did not reproduce</strong></td><td class="num">64 of 64 reached all notes</td><td class="num">360 notes, 3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">count = own list, 54 of 54</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Misses large gaps</td><td class="num">10 of 41 known-missing caught</td><td class="num">60 runs</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
 <h4>What to keep / What to drop</h4>
 <ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the independent count.</strong> Free, no model, and the only thing that found the real omission. It is also what makes fixes 2, 3 and 4 measurable &mdash; without it this chapter has no findings at all.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, renamed.</strong> Describe it as <em>&ldquo;where I had to make a judgement&rdquo;</em> and use it as a review queue and as schema feedback.</li><li><span class='drop'>DROP</span> — <strong>Fix 2 in any form where the model supplies the count.</strong> Wrong on every document tested, always by overcounting &mdash; once claiming 41 items where 13 existed, while listing those 13 correctly.</li><li><span class='drop'>DROP</span> — <strong>Reading an empty &ldquo;not extracted&rdquo; list as a completeness claim.</strong> It was empty on the one document that actually failed.</li></ul>
 <h4>The one thing to remember</h4>
@@ -154,20 +154,23 @@ the improvement the chapter implies, and the direction is wrong.</p>
 
 <h4>The four engineering fixes</h4>
 
-<table>
+<table style="table-layout:fixed;width:100%">
   <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
   <tr><td><strong>1 · Independent entity count</strong></td>
-      <td class="num">agreed every time; caught a bug in itself</td>
-      <td><strong>Works</strong> — the only fix here worth keeping</td></tr>
+      <td>pattern count: caught every real drop, no false flag; a general
+      NER model (10.4): 4 of 4 and 10 false flags, none of a table&rsquo;s doses seen</td>
+      <td><strong>Works in code</strong> — the only fix here worth keeping; the
+      &ldquo;lightweight NER model&rdquo; of the book&rsquo;s wording does the job only
+      after the same domain filtering the pattern needed</td></tr>
   <tr><td><strong>2 · List-length assertions</strong></td>
-      <td class="num">model's self-count wrong on <strong>6 of 6</strong></td>
+      <td class="num">the model&rsquo;s count was its own list&rsquo;s length, <strong>54 of 54</strong></td>
       <td>Works with a real range; <strong>cannot work</strong> when the model
       supplies the number</td></tr>
   <tr><td><strong>3 · Completeness audit call</strong></td>
-      <td class="num">9 flags, <strong>1 real</strong></td>
+      <td class="num">8 flags, <strong>2 real</strong></td>
       <td>Works, with a caveat that swamps the benefit</td></tr>
   <tr><td><strong>4 · "What I did not extract" field</strong></td>
-      <td class="num">11 items flagged, <strong>0 omissions</strong></td>
+      <td class="num">8 entries, <strong>0 omissions</strong></td>
       <td><strong>Works</strong> — as a review queue and as schema feedback, not
       as a completeness check</td></tr>
 </table>
@@ -216,46 +219,196 @@ FOLLOWED_BY_COMPARISON = re.compile(r"^\s*[><=]")</pre>
 skip one followed by a comparison operator (<code>1639G &gt; A</code>). Either
 alone catches this case; both are kept because they fail in different directions.</p>
 
+<p><strong>A third exclusion, 3 Oct 2026, for the same reason.</strong> Lisinopril&rsquo;s
+&ldquo;serum creatinine &hellip; 3 mg/dL&rdquo; is a lab value, and the pattern counted it as
+a dose; the model rightly left it out. The pattern now skips a unit followed by
+<code>/dL</code>. It still misses doses printed without their own unit &mdash; the first
+number of a range (&ldquo;0.5 to 2 mg&rdquo;), the cells of a dosing table whose heading
+carries the unit. That error runs the safe way: a count that is too low hides a
+gap, it does not invent one.</p>
+
 <p><strong>This is why fix 1 is the only fix in the chapter worth keeping.</strong>
 It is free, it involves no model, and the one real error it caught was in the
 measuring apparatus — which is the error you are least likely to find any other
 way, because nothing else in the pipeline is looking at it.</p>
 
-<h4>Fix 2 — the model counting its own source</h4>
+<h4>Experiment 10.5 — omission where the length pressure is real</h4>
+
+<p>Prachi&rsquo;s direction: if the labels cannot produce the failure, measure it on
+a corpus that can. Experiment 9.4&rsquo;s 360 recorded notes are that corpus: long
+role-played conversations compressed into eleven-heading notes. The checkable
+fact is the chapter&rsquo;s own, dose amounts. No model calls; every note replays
+(<code>exp105_dialogue_doses/</code>, full case log in its <code>cases.md</code>).</p>
+
+<p><strong>Zero true omissions.</strong> The dialogues state 64 unique dose facts
+across 39 conversations, spoken as digits and as words (&ldquo;a thousand
+milligrams&rdquo;, &ldquo;seven and a half&rdquo;). Every one reaches all six of
+its notes, within 80 characters of its own drug&rsquo;s name (396 attachment
+checks). The one candidate, in all six cells, is a dose the doctor retracted
+mid-sentence &mdash; &ldquo;5000 units on sundays, and two thous&hellip; or
+50,000 units on sundays, excuse me&rdquo; &mdash; and every note carries the
+corrected figure, which is right scribing. Doses the conversation left uncertain
+were flagged, not guessed. The limits: dose facts are what the MEDICATIONS
+heading asks for; durations, intervals and lab values were not measured;
+dialogues run 2&ndash;8k characters, not fifty pages. The external studies carry
+the real-world rate; this experiment says the failure did not occur here, not
+that it does not happen.</p>
+
+<h4>Experiment 10.4 — the named-entity model the chapter names, run as printed</h4>
+
+<p>The fix&rsquo;s own wording says to get the independent count from &ldquo;spaCy
+en_core_web_trf or AWS Comprehend&rdquo;. The repo had always used a regular
+expression instead. <code>probe_ner.py</code> runs en_core_web_trf 3.8.0 over the
+six dosing sections and holds all 60 recorded extractions against its count
+(<code>probe_ner.py</code>; spaCy 3.8.7, its own environment, no model calls).</p>
 
 <table>
-  <tr><th style="width:38%">Document</th><th class="num">Independent count</th>
-      <th class="num">Model's own count</th></tr>
-  <tr><td>Lisinopril</td><td class="num">8</td><td class="num">13</td></tr>
-  <tr><td>Levothyroxine Sodium</td><td class="num">11</td><td class="num">13</td></tr>
-  <tr><td>Amoxicillin</td><td class="num">10</td><td class="num">25</td></tr>
-  <tr><td>Sertraline Hydrochloride</td><td class="num">7</td><td class="num">21</td></tr>
-  <tr><td>Warfarin Sodium</td><td class="num">6</td><td class="num">11</td></tr>
-  <tr><td>Gabapentin</td><td class="num">13</td><td class="num"><strong>41</strong></td></tr>
+  <tr><th style="width:44%">Check, over 60 document-runs</th>
+      <th class="num">Really short (4)</th><th class="num">Complete (50), false flags</th></tr>
+  <tr><td>NER rule as printed</td><td class="num"><strong>4</strong></td><td class="num"><strong>10</strong></td></tr>
+  <tr><td>NER rule, lab values skipped in code</td><td class="num">4</td><td class="num">0</td></tr>
+  <tr><td>NER count against the number of items listed</td><td class="num">0</td><td class="num">5</td></tr>
+  <tr><td>The repo&rsquo;s pattern count, same rule</td><td class="num">4</td><td class="num">0</td></tr>
+</table>
+
+<p>Both headline numbers are narrower than they look. The four catches all sit in
+Amoxicillin, the one document where the entity count equals a complete list; the
+ten false flags are all one lab value, serum creatinine &ldquo;3 mg/dL&rdquo;,
+counted as a dose. The model has no dose type &mdash; doses land in QUANTITY,
+next to lab values and volumes &mdash; and it finds no doses at all in either
+dosing table: Warfarin&rsquo;s genotype ranges and 37 of Gabapentin&rsquo;s 40
+renal-table cells get no entity, so a list can lose up to 11 figures there
+unflagged. The small model, en_core_web_sm, flags nothing: it reads the
+&ldquo;50&rdquo; of &ldquo;50 mg&rdquo; as a bare number. The hand-read behind
+this experiment also caught a matcher bug of ours &mdash; a returned range
+&ldquo;10 to 15 mg/kg/day&rdquo; was scored as dropping the 10 &mdash; which is
+corrected above and in Experiment 10.3&rsquo;s figures.</p>
+
+<h4>Experiment 10.8 &mdash; fix 1 with taggers that have a dose label</h4>
+
+<p>Experiment 10.4 ran the tagger the chapter names and found it has no dose
+type. Prachi asked (12 Oct 2026) whether any tagger has one, and whether having
+the label removes the domain work. Two off-the-shelf models do:
+<code>en_core_med7_lg</code> (Med7, spaCy 3.4, MIT; trained on MIMIC-III notes;
+labels DRUG, STRENGTH, DOSAGE, FORM, FREQUENCY, ROUTE, DURATION) and
+<code>blaze999/Medical-NER</code> (DeBERTa-v3-base, MIT; trained on PubMed case
+reports; 41 types including DOSAGE, MASS, LAB_VALUE). <code>probe_ner_dose.py</code>
+runs each over the same six dosing sections with the same counting rule as 10.4
+&mdash; distinct dose amounts inside an entity carrying a dose label &mdash; and
+holds every one of the 60 recorded extractions against its count. No model
+calls; the taggers run locally in under a second per document. Amazon
+Comprehend Medical, whose DetectEntitiesV2 returns MEDICATION attributes typed
+DOSAGE and STRENGTH, needs an AWS account and was not run; plain Amazon
+Comprehend, the product the chapter had named, has nine general types (QUANTITY
+among them) and no medication type.</p>
+
+<table>
+  <tr><th style="width:46%">Measure</th><th class="num">en_core_web_trf (10.4)</th><th class="num">Med7</th><th class="num">DeBERTa</th></tr>
+  <tr><td>Dose mentions with a unit (of 179) inside the label counted</td><td class="num">QUANTITY</td><td class="num">144</td><td class="num">125</td></tr>
+  <tr><td>&nbsp;&nbsp;in no entity at all</td><td class="num">&mdash;</td><td class="num">35</td><td class="num">41</td></tr>
+  <tr><td>Distinct doses seen: Levothyroxine (pattern 11)</td><td class="num">&mdash;</td><td class="num">1</td><td class="num">3</td></tr>
+  <tr><td>&nbsp;&nbsp;Amoxicillin (pattern 10)</td><td class="num">&mdash;</td><td class="num">8</td><td class="num">6</td></tr>
+  <tr><td>&nbsp;&nbsp;Warfarin (pattern 6)</td><td class="num">&mdash;</td><td class="num">6</td><td class="num">2</td></tr>
+  <tr><td>Real drops flagged (of 4)</td><td class="num">4</td><td class="num">3</td><td class="num">3</td></tr>
+  <tr><td>Complete extractions flagged, false (of 50)</td><td class="num">10</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Pattern count, same rule</td><td class="num">4 / 0</td><td class="num">4 / 0</td><td class="num">4 / 0</td></tr>
+</table>
+
+<p><strong>What the label bought.</strong> The look-alike false alarms are gone: no
+lab value was counted as a dose by either tagger across the six sections, so
+no complete extraction was flagged. <strong>What it did not buy.</strong> A label
+knows the way its training text wrote the fact. Hospital notes write &ldquo;500
+mg&rdquo;; the labels write &ldquo;90 mg/kg/day&rdquo;, &ldquo;200 mcg/day&rdquo;,
+&ldquo;50-200 mg/day&rdquo; and &ldquo;600 mg/42.9 mg per 5 mL&rdquo;, and neither
+tagger put those in a dose label. Med7 therefore saw 1 of Levothyroxine&rsquo;s 11
+doses and DeBERTa 3; both missed Amoxicillin&rsquo;s 200 mg and 400 mg. Those two
+are exactly the figures the extraction drops, so each tagger missed that one
+real drop: a tagger&rsquo;s count can only flag the loss of a figure it counts
+itself. DeBERTa also flagged the six Sertraline runs that were short only by
+another drug&rsquo;s dose (methylene blue, 1 mg/kg), which the chapter does not
+count as a drop.</p>
+
+<p><strong>Verdict.</strong> As shipped, Med7 is the safer tagger (no false alarm,
+no code, fastest) and en_core_web_trf the more complete one; with the one-line
+lab exclusion in code the general tagger catches all four drops with no false
+alarm, the best of the three here, and none of them sees the dosing tables. Read
+the label list first: a label for your fact type removes the look-alike false
+alarms. Then measure the label&rsquo;s coverage on
+your own documents against a hand-read sample, because the label was learned
+from one way of writing the fact. Where coverage is poor, the pattern you write
+needs the same domain work but you control it, and on these documents it was
+the only count that caught every drop with no false alarm. Output in
+<code>ner_dose_med7_out.txt</code> and <code>ner_dose_deberta_out.txt</code>.</p>
+
+<h4>Fix 2 — the model counting its own source</h4>
+
+<p>The first run of this fix compared the model&rsquo;s count with the number of
+<em>distinct</em> dose figures, while the prompt asked it to &ldquo;count the dose amounts
+in the source&rdquo;, which also reads as every mention. Every answer sat between the
+two counts, so &ldquo;wrong on 6 of 6&rdquo; measured the question as much as the model.
+Experiment 10.3 asked again, three runs each, Claude Haiku 4.5 through the
+subscription CLI, with every answer kept:</p>
+
+<table>
+  <tr><th style="width:62%">Instruction</th><th class="num">Count = items it listed</th></tr>
+  <tr><td>fixed.py&rsquo;s prompt, word for word</td><td class="num">18 of 18</td></tr>
+  <tr><td>The same, with the count defined as distinct amounts</td><td class="num">18 of 18</td></tr>
+  <tr><td>The chapter&rsquo;s inventory protocol, Step 1</td><td class="num">18 of 18</td></tr>
 </table>
 
 <div class="headline">
-  Wrong on <b>every document</b>, always by overcounting — once by more than
-  three times.
+  The model&rsquo;s count of the source was the length of its own list in <b>54 of
+  54</b> calls.
 </div>
 
-<p>Note what this is <em>not</em>: the model's extraction was perfect on all six.
-It listed every figure correctly and then, asked how many were in the source,
-gave a number bearing no relation to reality. <strong>A model asked to audit
-itself is the same reader reading twice.</strong> A completeness check built on
-that number is measuring nothing.</p>
+<p>Defining the count removed the mention-counting (0 answers of 18 nearer the
+mention count, against 3 as printed), but it did not make the count independent.
+<strong>A model asked to audit itself is the same reader reading twice:</strong> when
+the list drops an item, the count drops with it, and the comparison reports no
+gap.</p>
 
 <h4>Fix 3 — the expensive audit, priced</h4>
 
 <table>
   <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
-  <tr><td>Items flagged as missing by a second, stronger model</td><td class="num">9</td></tr>
-  <tr><td>Of which genuinely missing</td><td class="num"><strong>1</strong></td></tr>
+  <tr><td>Items flagged as missing by a second, stronger model</td><td class="num">8</td></tr>
+  <tr><td>Of which genuinely missing</td><td class="num"><strong>2</strong></td></tr>
   <tr><td>Share of the total run cost spent on the audit</td><td class="num">the large majority</td></tr>
 </table>
 
-<p>Eight humans sent to check something already correct, at premium prices, on a
+<p>Six people sent to check something already correct, at premium prices, on a
 task where the extraction was essentially perfect.</p>
+
+<h4>Experiment 10.6 &mdash; the audit against extractions with known gaps</h4>
+
+<p>The 8-flags run above audited an extraction set that was essentially
+complete, so it could not say whether the audit catches omissions that are
+known to have happened. <code>probe_audit.py</code> put the book&rsquo;s
+question, word for word, to Claude Haiku 4.5 once for each of the 60 recorded
+extractions of Experiment 10.3 &mdash; 12 short by a known set of figures, 48
+complete, 41 known-missing figures in all. 60 calls through the subscription
+CLI, $2.04 notional; every case is printed in <code>audit_log.txt</code>.</p>
+
+<table>
+  <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Known-missing figures named by the audit</td><td class="num"><strong>10 of 41</strong></td></tr>
+  <tr><td>Short extractions: all figures caught / some / none</td><td class="num">5 / 3 / 4 of 12</td></tr>
+  <tr><td>Reply on the worst extraction (8 figures dropped)</td><td class="num">&ldquo;nothing missing&rdquo;</td></tr>
+  <tr><td>Alarms on complete extractions</td><td class="num">6 of 48</td></tr>
+  <tr><td>The same missing dose, over the 6 runs that dropped it</td><td class="num">caught 4, missed 2</td></tr>
+</table>
+
+<p>Every full catch was a one-figure gap &mdash; the methylene-blue dose,
+Warfarin&rsquo;s 100&nbsp;mg cap, the clavulanate component. The more an
+extraction was missing, the smaller the share the audit named: at best 2 of 8
+strength figures, and on the single worst extraction it reported nothing
+missing at all. Four of the six alarms listed doses the extraction already
+carried in different words; one of those four also named &ldquo;1000
+mg/day&rdquo;, a figure that appears in neither the source nor the output. The
+other two alarms named real source content outside the dose task &mdash;
+treatment durations and an INR threshold. As a sampled monitor the audit is
+cheap and sometimes names the exact missing line; as the only completeness
+check it would have passed the worst extraction in the record.</p>
 
 <h4>Fix 4 — the "what I did not extract" field, with what it actually contained</h4>
 
@@ -265,8 +418,8 @@ that an empty list becomes an explicit claim of completeness rather than a silen
 one — <em>"I extracted everything"</em> stated out loud, where it can be
 challenged.</p>
 
-<p><strong>What happened.</strong> The model filled the field on four of six
-documents, listing eleven items. <strong>Not one of them was a dose it had
+<p><strong>What happened.</strong> The model filled the field on three of six
+documents, listing eight entries (ten values; one entry names three intervals). <strong>Not one of them was a dose it had
 missed.</strong> Every single entry was a judgement call about what counts as a
 dose. These are the real entries, verbatim:</p>
 
@@ -297,6 +450,116 @@ dose. These are the real entries, verbatim:</p>
   this particular judgement — <em>is this number a dose?</em> — the model
   outperformed the regular expression, and it wrote down its reasoning.</p>
 </div>
+
+<h4>Experiment 10.7 &mdash; the field on text whose items are not delimited</h4>
+
+<p>Every measurement of the field above ran on FDA dosing sections, where every
+dose carries a unit. The chapter had then said that on a document whose items
+are not clearly delimited the field &ldquo;fills with noise rather than
+judgement&rdquo;. Nothing had measured that. <code>probe_field_conversation.py</code>
+put Prompt 10-1, as printed, with the item type set to &ldquo;medication dose
+amount&rdquo;, to the 60 ACI-Bench doctor&ndash;patient conversations, three
+runs, Claude Haiku 4.5 through the subscription CLI: 180 calls, $3.43 notional,
+4,563 recorded seconds. The ruler is Experiment 10.5&rsquo;s extractor: 64 unique
+doses across 39 conversations; 21 state none. Every entry and every extra is in
+<code>field_conversation_log.txt</code>.</p>
+
+<table>
+  <tr><th style="width:58%">Measure, per run</th><th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Run 3</th></tr>
+  <tr><td>Ruler doses in <code>extracted</code></td><td class="num">62 of 64</td><td class="num">63 of 64</td><td class="num">63 of 64</td></tr>
+  <tr><td>True silent omissions (after reading the misses)</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Conversations where the field was filled (of 60; of the 21 with no dose)</td><td class="num">49 (19)</td><td class="num">51 (20)</td><td class="num">50 (19)</td></tr>
+  <tr><td>Entries in the field</td><td class="num">137</td><td class="num">149</td><td class="num">147</td></tr>
+  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">95</td><td class="num">91</td><td class="num">88</td></tr>
+  <tr><td>&nbsp;&nbsp;frequency, duration or route, no amount</td><td class="num">13</td><td class="num">9</td><td class="num">9</td></tr>
+  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, exam grade, measurement, habit)</td><td class="num">17</td><td class="num">36</td><td class="num">37</td></tr>
+  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium target, per-decilitre lab, tissue grams)</td><td class="num">4</td><td class="num">4</td><td class="num">5</td></tr>
+  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers, all read</td><td class="num">7</td><td class="num">9</td><td class="num">8</td></tr>
+  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+  <tr><td>Entries that held back a dose the extraction should have carried</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
+</table>
+
+<p><strong>The misses, read.</strong> The one ruler dose missing from every run
+is D2N027&rsquo;s &ldquo;5000 units&rdquo;, which the doctor retracts in the same
+sentence (&ldquo;or 50,000 units on sundays, excuse me&rdquo;); every run
+extracted the corrected 50,000 and 2,000 units. Run 1&rsquo;s second miss, 175
+mg, sat in the field with the right reason: the patient proposed the increase
+and the doctor did not agree to it. So the extraction dropped nothing, three
+times, the same null as Experiment 10.5.</p>
+
+<p><strong>What the ruler cannot see.</strong> <code>extracted</code> also carried
+12, 14 and 12 amounts per run in forms the pattern has no unit for &mdash; two
+puffs, one to two tablets, 1 cc, 1 millilitre, half a teaspoon &mdash; and 8, 4
+and 8 numbers the dialogue states without a unit (&ldquo;two . five of
+norvasc&rdquo;, &ldquo;five hundred of metformin&rdquo;). In 3, 7 and 3 strings
+the model added the unit itself (&ldquo;Norvasc 2.5 mg&rdquo;, &ldquo;2,000
+units&rdquo; for &ldquo;2000s&rdquo;); each matched the conversation&rsquo;s own
+context, and no run produced a number absent from its conversation. The
+over-inclusions were 9, 7 and 8 strings with no amount at all, nearly all
+application schedules from one dermatology conversation (D2N145).</p>
+
+<p><strong>Verdict.</strong> The field did not fill with wrong calls: 433
+entries read, none held back a dose. It filled with volume. About two in three
+entries name a medicine the conversation mentions without an amount, one line
+per medicine, on conversations that state no dose as readily as on those that
+do. The judgement calls are there &mdash; lab values, vital signs, salt targets,
+a declined dose, an unclear utterance (&ldquo;lortab 500-&rdquo;) &mdash; but a
+reader has to go through about 140 lines per 60 conversations to find the 30
+to 50 of them. The chapter&rsquo;s sentence now says that; &ldquo;noise rather
+than judgement&rdquo; is withdrawn.</p>
+
+<p><strong>The fourth condition: one line added (12 Oct 2026).</strong> The volume
+came from entries the prompt never asked for: medicines named without an amount
+are not &ldquo;values that could be mistaken for a dose&rdquo;. The printed
+prompt plus one line &mdash; <em>&ldquo;Do not list items that simply have no
+amount. List only values that could be mistaken for a medication dose
+amount.&rdquo;</em> &mdash; ran three more times over the same 60 conversations
+(180 calls, $4.69 notional; <code>--condition narrowed</code>; every entry in
+<code>field_conversation_narrowed_log.txt</code>).</p>
+
+<table>
+  <tr><th style="width:52%">Per run</th><th class="num">as printed 1 / 2 / 3</th><th class="num">one line added 1 / 2 / 3</th></tr>
+  <tr><td>Ruler doses in <code>extracted</code> (of 64)</td><td class="num">62 / 63 / 63</td><td class="num">62 / 63 / 63</td></tr>
+  <tr><td>True silent omissions, after reading</td><td class="num">0 / 0 / 0</td><td class="num">0 / 0 / 0</td></tr>
+  <tr><td>Conversations where the field was filled (of 60)</td><td class="num">49 / 51 / 50</td><td class="num"><strong>26 / 32 / 30</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;of the 21 that state no dose</td><td class="num">19 / 20 / 19</td><td class="num">13 / 11 / 10</td></tr>
+  <tr><td>Entries</td><td class="num">137 / 149 / 147</td><td class="num"><strong>57 / 62 / 58</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">95 / 91 / 88</td><td class="num"><strong>5 / 2 / 3</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, grade, measurement, habit)</td><td class="num">17 / 36 / 37</td><td class="num">28 / 40 / 36</td></tr>
+  <tr><td>&nbsp;&nbsp;frequency, duration or route only</td><td class="num">13 / 9 / 9</td><td class="num">9 / 3 / 5</td></tr>
+  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium, per-dL lab, tissue grams)</td><td class="num">4 / 4 / 5</td><td class="num">7 / 7 / 5</td></tr>
+  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers</td><td class="num">7 / 9 / 8</td><td class="num">7 / 9 / 9</td></tr>
+  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">1 / 0 / 0</td><td class="num">1 / 1 / 0</td></tr>
+  <tr><td>Entries that held back a dose the extraction should have carried</td><td class="num">0 / 0 / 0</td><td class="num">0 / 0 / 0</td></tr>
+</table>
+
+<p><strong>Read, not just counted.</strong> The two ruler doses set aside with a
+reason are the right two: 175 mg (the patient&rsquo;s proposed increase, which
+the doctor did not agree to) and, in run 2, the retracted 5000 units
+(&ldquo;initial dose mentioned but corrected to 50,000 units&rdquo;). The
+remaining medicine-without-amount entries are tablet counts with no unit
+(&ldquo;i&rsquo;m just on one now&rdquo;) and &ldquo;a little tylenol&rdquo;.
+The look-alike class now carries what the field is for: A1C values, a white
+cell count of 23,000, blood pressures, reflex grades, SPF 30, a wound size, a
+temperature of 100.3, and in run 2 four drug prices in dollars. The contents
+vary between runs: on D2N088 run 1 listed two A1C values and run 2 nothing; on
+D2N013 run 1 listed nothing and run 2 the glucose of 162.</p>
+
+<p>Two conversations, before and after, run 1. D2N107 (no dose stated):
+as printed, <code>extracted ["Two Advils"]</code> and the field
+<code>["meloxicam — medication prescribed but no specific dose amount provided"]</code>;
+with the line, the same extraction and an empty field. D2N088: as printed, the
+field held <code>Robitussin</code>, <code>Ibuprofen</code>, <code>Tylenol</code>, each
+&ldquo;mentioned without dose amount specified&rdquo;; with the line, it held
+<code>"at eight" — hemoglobin a1c lab value</code> and <code>"around six or
+seven" — target a1c values</code>.</p>
+
+<p><strong>Verdict, revised.</strong> One line that says what the field is for
+cut the queue by more than half, removed the medicine inventory almost
+entirely, left the extraction unchanged, and kept every judgement call the
+labels had produced. The queue is still around one entry per stated dose and
+still varies run to run, so it remains a sampled review aid, not a completeness
+check; but it is now a list a person can read.</p>
 
 <h4>One document, all three checks, side by side</h4>
 
@@ -416,11 +679,11 @@ documents where the independent count already disagrees, it would have been 2 in
 I missed"</em> field. Those are different products:</p>
 
 <ul>
-  <li>As a completeness check it failed — 0 of 11.</li>
-  <li>As a <strong>review queue</strong> it is excellent. The eleven entries are
+  <li>As a completeness check it failed — 0 of 8.</li>
+  <li>As a <strong>review queue</strong> it is excellent. The eight entries are
   precisely the records where a person's judgement would differ from the model's,
   and they arrive pre-sorted with the reasoning attached.</li>
-  <li>As <strong>schema feedback</strong> it is better still. Three of the eleven
+  <li>As <strong>schema feedback</strong> it is better still. Three of the eight
   say the same thing — <em>this document contains durations and intervals and
   your schema has one field called "doses"</em>. That is a design defect the field
   reported for free.</li>
@@ -470,10 +733,10 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
   <span class="label">Notice what made every other result in this chapter knowable</span>
   <p>How do we know Gabapentin dropped <code>10 mg</code> and <code>25 mg</code>?
   <strong>Because fix 1 counted the source independently.</strong></p>
-  <p>How do we know the model's self-count is wrong 6 times out of 6? Because
-  there was an independent count to compare it against. How do we know the
+  <p>How do we know the model's own count cannot stand in for it? Because
+  there was an independent count to compare it with. How do we know the
   expensive audit raised 8 flags of which 2 were real? Same. How do we know fix
-  4's eleven entries contained no omissions? Same.</p>
+  4's eight entries contained no omissions? Same.</p>
   <p><strong>Fix 1 is the ground truth that makes fixes 2, 3 and 4 measurable at
   all.</strong> Without it this chapter has no findings — not weak findings, none.
   It costs $0 and involves no model.</p>
@@ -495,14 +758,15 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
       <td><strong>0 of 11 entries were omissions.</strong> On Amoxicillin it
       declared 3 gaps, none of them the 2 doses it actually dropped</td></tr>
   <tr><td>2 · Model counts the source</td><td>The model, about itself</td>
-      <td><strong>Wrong 6 of 6</strong>, always overcounting — once by 46 against
-      a true 13</td></tr>
+      <td><strong>Its count was its own list&rsquo;s length</strong> in 54 of 54
+      calls, so it cannot show a gap</td></tr>
 </table>
 
 <div class="verdict">
   <span class="label">Sort that table by "who does the checking" and the chapter writes itself</span>
   <p><strong>Everything computed outside the model worked. Everything that asked
-  the model about its own completeness failed — 0 of 6, and 0 of 11.</strong>
+  the model about its own completeness failed — a count that only restated its
+list, and 0 omissions in 11 entries.</strong>
   The second-model audit sits in between, which is what you would predict: better
   than self-report, still a model, still expensive.</p>
   <p>This is the fifth independent measurement in this report that a model cannot
@@ -524,7 +788,7 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
   be counted by a pattern &mdash; obligations in a contract, findings in a report
   &mdash; a second model is the only option left. Price it honestly: 87% of the
   bill, and 6 false flags for 2 real ones.</li>
-  <li><strong>Fix 2, never.</strong> Wrong on every document tested.</li>
+  <li><strong>Fix 2, never with the model&rsquo;s own count.</strong> The count it gives is the length of the list it is checking.</li>
 </ol>
 
 <h4>Task 10.1 — the prose enumeration test, run, with a prediction that failed</h4>
@@ -645,13 +909,16 @@ answer is negative:</p>
       <td><strong>Did not reproduce</strong></td>
       <td><strong>185/185 in 3 of 4 runs</strong>, 184/185 in the fourth</td></tr>
   <tr><td>Prompt template</td><td>Did nothing here</td><td>−2 cases, inside the noise</td></tr>
-  <tr><td>1 · Independent count</td><td><strong>Works</strong></td>
-      <td>caught a real error — a gene variant read as a 1,639 g dose</td></tr>
+  <tr><td>1 · Independent count</td><td><strong>Works, in code</strong></td>
+      <td>caught a real error — a gene variant read as a 1,639 g dose; the general
+      NER model the fix names needs the same domain filtering and misses whole
+      tables (10.4)</td></tr>
   <tr><td>2 · List-length assertions</td><td>Cannot work as described</td>
-      <td>6 of 6 wrong — decisive</td></tr>
-  <tr><td>3 · Completeness audit</td><td>Works, with a caveat</td><td>9 flags, 1 real</td></tr>
+      <td>count = its own list, 54 of 54 — decisive</td></tr>
+  <tr><td>3 · Completeness audit</td><td>Weak on its own</td><td>caught 10 of 41 known-missing figures; reported
+      nothing missing on the worst extraction (10.6)</td></tr>
   <tr><td>4 · "Not extracted" field</td><td><strong>Works</strong>, differently</td>
-      <td>11 items, 0 omissions — all judgement calls, all correct</td></tr>
+      <td>labels: 8 entries, 0 omissions, all correct; conversations: 137–149 entries per run, two in three a medicine with no amount, none wrong; one added line → 57–62 entries, medicine inventory gone (10.7)</td></tr>
 </table>
 
 <div class="verdict">
@@ -662,11 +929,12 @@ answer is negative:</p>
   measuring the model with itself.</p>
   <p>What survives is the independent count — free, effective, and the one thing
   in the chapter that caught a real error.</p>
-  <p><strong>This is the largest editorial call in the report and it should not be
-  made from six documents.</strong> The test covers short, salient, numeric items.
-  It does not cover long prose enumerations — forty obligations in a contract, two
-  hundred entries in an adverse-reactions list — which is where the chapter's own
-  examples live. The correct statement today is <em>"did not reproduce on this
-  task"</em>, not <em>"does not happen"</em>. Running the prose version is the
-  single most valuable follow-up left undone.</p>
+  <p><strong>This is the largest editorial call in the report.</strong> When it was
+  first made it rested on six documents of short, salient, numeric items. Since
+  then the long prose enumeration (185 items, Experiment 10.1) and doses across
+  long dialogues (360 notes, Experiment 10.5) have both run and did not reproduce
+  the failure either, while scanning-damaged input reproduces it reliably. The
+  correct statement is still <em>“did not reproduce on these tasks”</em>, not
+  <em>“does not happen”</em>: the chapter’s real-world rate rests on the outside
+  studies, and the strongest local lever remains input quality.</p>
 </div>

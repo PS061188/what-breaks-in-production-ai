@@ -1,38 +1,58 @@
 <!-- ============================ CHAPTER 9 ============================ -->
+<!-- Rewritten 29 Sep 2026 from FINDINGS.md "Chapter 9 re-read": the failure did not reproduce (0 of 33 after the 29 Sep recount); 9.3's fabrication side is forced; the "real quote" finding, the Prednisone example, the embedding result and the null-rate comparison withdrawn. Backup: 06-ch09.html.pre-ch9-reread. Experiment 9.4 (conversations) added 29 Sep 2026 from FINDINGS; backup 06-ch09.html.pre-exp94. Experiment 9.5 (the checks on the invented entries) added 4 Oct 2026 from FINDINGS; backup 06-ch09.html.pre-exp95 -->
 <h2 class="part">Chapter 9 — Sparse field fabrication</h2>
 <div class="summary">
 <span class="kicker">At a glance &middot; Chapter 9 &middot; Sparse field fabrication</span>
-<p class="oneline">Give a schema a field the document does not cover and the model fills it anyway &mdash; plausibly, in the right format, with a quote attached that really is in the document. This chapter has the cleanest reproduction in the book, and the most decisive negative result.</p>
+<p class="oneline">The chapter&rsquo;s failure is a form field the source does not cover, filled with a plausible value anyway. On 12 FDA drug labels it did not happen. On visit notes written from 60 doctor&ndash;patient conversations it did: the template prompt wrote &ldquo;No known drug allergies&rdquo; where drug allergies never came up, in 4, 3 and 4 of 58 notes across three runs. One rule in the prompt removed every case.</p>
 <h4>How it was tested</h4>
-<table><tr><td style="width:26%">Corpus</td><td>FDA labels; five requested fields, of which several have no supporting section in the supplied text</td></tr><tr><td style="width:26%">Cases</td><td>48 field-fills per configuration, 24 of them with source content present</td></tr><tr><td style="width:26%">Ground truth</td><td>Corpus-intrinsic &mdash; a field is unsupported <em>by construction</em> because its section was withheld</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; Opus 5, GPT-5-mini and GPT-4.1-mini in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>4 live runs</strong>; the provenance fix rebuilt on a 4-section corpus after the first design was found circular</td></tr><tr><td style="width:26%">Cost</td><td>$0.06 baseline, $0.08 fixed, per run</td></tr></table>
+<table>
+<tr><td style="width:26%">Documents</td><td>9.1&ndash;9.3: 12 FDA drug labels, two sections supplied (four in 9.3). 9.4: 60 ACI-Bench doctor&ndash;patient conversations, a note under eleven headings</td></tr>
+<tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 101 filled entries from 9.4&rsquo;s template notes &mdash; 12 invented, 89 on discussed topics</td></tr>
+<tr><td style="width:26%">Ground truth</td><td>Labels: a field is unanswerable when its section was not supplied. Conversations: a topic is never discussed when no related word appears in the dialogue</td></tr>
+<tr><td style="width:26%">Model</td><td>Claude Haiku 4.5; 9.4 ran through <code>claude -p</code> on my Claude subscription</td></tr>
+<tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr>
+<tr><td style="width:26%">Runs</td><td>9.1: 1 run and 3 re-samples. 9.2, 9.3: 1 run each. 9.4: 3 runs per prompt, 360 notes. 9.5: one verdict per checker per entry, 303 calls. 9.6: 2 conditions &times; 3 runs, 360 records. 9.7: 1 condition &times; 3 runs, 180 records</td></tr>
+<tr><td style="width:26%">Cost</td><td>Per run: $0.06 (9.1), $0.08 (9.2), $0.09 (9.3). 9.4: a notional $8.6 in all, not billed. 9.5: a notional $4.0 plus $1.8 for the extension, not billed. 9.6: a notional $6.2, not billed. 9.7: a notional $2.0, not billed</td></tr>
+</table>
 <h4>What the evidence says</h4>
 <table>
-<tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>The failure itself</td><td><strong>Reproduces</strong></td><td class="num">29%, ±1 case over 4 runs</td><td class="num">strong</td></tr><tr><td>Prompt template</td><td><strong>Works</strong></td><td class="num">declined on 3 of 4 field types</td><td class="num">strong</td></tr><tr><td>1 &middot; Optional, no defaults</td><td>Works &mdash; prerequisite</td><td class="num">not separable</td><td class="num">structural</td></tr><tr><td>2 &middot; Quote verification</td><td><strong>Cannot work here</strong></td><td class="num">0 of 14 caught</td><td class="num">decisive</td></tr><tr><td>2b &middot; Section constraint</td><td><strong>Works</strong></td><td class="num">0% fabrication, 76% recall</td><td class="num">small n</td></tr><tr><td>3 &middot; Null-rate monitoring</td><td><strong>Works as a monitor</strong></td><td class="num">separates completely</td><td class="num">strong</td></tr><tr><td>4 &middot; Embedding provenance</td><td><strong>Cannot work here</strong></td><td class="num">0.85 vs 0.55</td><td class="num">decisive</td></tr></table>
+<tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:24%">Number</th></tr>
+<tr><td>The failure, drug labels (9.1)</td><td><strong>Did not reproduce</strong></td><td class="num">0 fabrications in 33</td></tr>
+<tr><td>The failure, conversations (9.4)</td><td><strong>Reproduces</strong>: &ldquo;No known drug allergies&rdquo;</td><td class="num">4, 3, 4 of 58</td></tr>
+<tr><td>A &ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Removed it</strong>, all three runs</td><td class="num">0, 0, 0 of 58</td></tr>
+<tr><td>1 &middot; Optional fields, no defaults</td><td><strong>Works</strong>; the harm of &ldquo;required&rdquo; is fillers (9.6)</td><td class="num">577 fillers + 5 invented of 603 &rarr; 0 + 2</td></tr>
+<tr><td>2 &middot; Quote verification</td><td>Catches quote-less inventions only; real quotes pass (9.6); the window matters</td><td class="num">caught 1 of 7; 11 vs 23 of 23 kept</td></tr>
+<tr><td>2c &middot; A list of quotes, one per place (9.7)</td><td><strong>Removes the quote check&rsquo;s main false alarm</strong>; the model states fewer values; existence is still not support</td><td class="num">wrong rejections 0 of 75, from 3 of 92</td></tr>
+<tr><td>2b &middot; Section check (9.2, 9.3)</td><td><strong>Fabrication side forced</strong>; rejected correct values</td><td class="num">5 of 40 lost</td></tr>
+<tr><td>3 &middot; Null-rate monitoring</td><td>Not tested</td><td class="num">comparison withdrawn</td></tr>
+<tr><td>4 &middot; Embedding provenance</td><td>Withdrawn on labels; <strong>separates poorly</strong> on the notes (9.5)</td><td class="num">at 0.5: 6 of 12 caught, 19 of 89 flagged</td></tr>
+<tr><td>A checker shown the conversation (9.5)</td><td><strong>A second model caught most; the writer approved its own generalisations</strong></td><td class="num">17 vs 14 of 19</td></tr>
+<tr><td>A checker shown only the output (9.5)</td><td>Missed invented entries and flagged half of the rest</td><td class="num">notes 9 of 12, 48 of 89; records 2 of 7, 11 of 49</td></tr>
+</table>
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The prompt template.</strong> Declining unprompted on 3 of 4 field types is the cheapest win available.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2b, the section constraint</strong> &mdash; each field filled only from its own named section. 0% fabrication.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, null-rate monitoring.</strong> It separates fabricating from declining configurations completely, and costs nothing.</li><li><span class='drop'>DROP</span> — <strong>Fix 2, quote verification, as a fabrication check.</strong> <strong>Both fabrications carried a quote that really was in the document.</strong> The model does not invent quotes; it attaches real ones to invented values. 0 of 2 caught.</li><li><span class='drop'>DROP</span> — <strong>Fix 4, embedding provenance.</strong> A fabricated value scored 0.85 similarity against the document; a genuine one 0.55. The signal runs backwards.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>A rule that lets the note say &ldquo;Not discussed&rdquo;.</strong> It removed every case in three runs.</li><li><span class='keep'>KEEP</span> — <strong>A bounded window when checking a quote.</strong> Checked over the whole quote, the book&rsquo;s matching rule kept 11 of 23 correct extractions; checked over the first 80 characters, all 23.</li><li><span class='drop'>DROP</span> — <strong>The section map as written, for FDA labels.</strong> It allows a children&rsquo;s dose only from the paediatric-use section. FDA labels print children&rsquo;s doses under Dosage and Administration, so the map rejected 5 correct values.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;Fabrications carry real quotes&rdquo; (14 of 14, then 2 of 2).</strong> Withdrawn. The quotes were real because the values were correct.</li><li><span class='drop'>DROP</span> — <strong>The embedding and null-rate results.</strong> The label result is withdrawn (the 12 values the check scored as fabrications are all correct), &ldquo;0% vs 100% nulls&rdquo; compared two schemas, and on the notes no cut-off separated invented entries from discussed ones (9.5).</li><li><span class='keep'>KEEP</span> — <strong>Show the checker the conversation, ask a narrow question, and prefer a model that did not write the entry.</strong> Shown the conversation, a second model caught 17 of the 19 invented entries across both sets and the writer 14; most flags on other entries were real errors (9.5).</li><li><span class='keep'>KEEP</span> — <strong>&ldquo;The writing model, asked to check, applies the same sense and approves&rdquo; &mdash; for entries born from its own habit.</strong> On the 14 zero-evidence inventions the writer, asked separately with the conversation shown, caught every one; on the five &ldquo;No allergies&rdquo; entries it had generalised from a seasonal denial, it approved all five, while a second model caught three (9.5). Independence is a measured preference, not a mechanism that always bites.</li></ul>
 <h4>The one thing to remember</h4>
-<p><strong>The fabrications came with real quotes.</strong> Fourteen of fourteen. This is the finding that should reshape the chapter: a citation check confirms a quote exists, not that it supports the value attached to it. Every &ldquo;require a source quote&rdquo; recommendation in the industry rests on an assumption this measured and broke.</p>
+<p><strong>The failure depends on the source.</strong> On drug labels the model wrote &ldquo;N/A&rdquo; where the text was silent. From a conversation it wrote &ldquo;No known drug allergies&rdquo; when drug allergies never came up. One rule in the prompt stopped it.</p>
 <h4>Where this is weakest</h4>
-<p>The section-constraint result rests on a small denominator &mdash; 0 of 6 &mdash; and the first version of the provenance experiment was <em>circular</em>: the check was bit-identical to the ground-truth predicate, so its &ldquo;29% &rarr; 0%&rdquo; was arithmetic, not measurement. It was rebuilt. That is the kind of error nothing but re-reading the code will catch.</p>
+<p>On labels no fix was measured on fabrication: there was none, and the section check&rsquo;s zero is forced. On conversations the ground truth is a word search, the dialogues are role-played, and the command-line tool adds an environment block. 9.5 rests on 19 invented entries from 9 conversations, one verdict per checker per entry, and its five habit-born entries are one judgement call from one conversation; the discussed-topic entries were not all read, so the real errors found among them are a floor, not a count.</p>
 </div>
 
 <h3 class="top">The failure: a blank the system will not accept gets filled</h3>
 
-<p class="lede">Give a system a form with a box on it and the box gets filled.
-This chapter also contains the most serious mistake in this report — a headline
-result that turned out to be arithmetic rather than measurement — so it is
-written twice: once as it was run, and once as it should have been.</p>
+<p class="lede">The chapter&rsquo;s claim: a box the system requires gets filled whether
+or not the document supports a value. On 12 drug labels it did not hold; on notes
+written from 60 conversations it did (Experiment 9.4). The
+chapter also contains the most serious mistake in this report: a check whose 0%
+could not have come out any other way, and a second version with the same flaw.</p>
 
 <h4>What the failure looks like</h4>
 
 <p>A family-history section in a clinical note where family history was never
 discussed, filled with plausible family history. A criminal-record field in a
 background check returning something rather than nothing. A renovation-history
-field in property underwriting where the question was never asked.</p>
-
-<p>The pattern is always the same: the schema requires a value, no source content
-exists, and the model produces something that fits.</p>
+field in property underwriting where the question was never asked. In each case
+the schema requires a value, no source content exists, and the model produces
+something that fits.</p>
 
 <h3>Experiment 9.1 — How often does an empty box get filled?</h3>
 
@@ -45,70 +65,87 @@ exists, and the model produces something that fits.</p>
       <td>Two sections only: <code>indications_and_usage</code> and
       <code>dosage_and_administration</code>, each truncated to 3,000 characters.</td></tr>
   <tr><td><strong>The form</strong></td>
-      <td>Six boxes: indications, adult dose, children's dose, pregnancy
-      guidance, overdose management, drug interactions. Each requires a value and
-      a supporting quotation.</td></tr>
+      <td>Six fields, each a box the model must fill: indications, adult dose,
+      children's dose, pregnancy guidance, overdose management, drug interactions.
+      Each requires a value and a supporting quotation.</td></tr>
   <tr><td><strong>Ground truth</strong></td>
-      <td>Two of the six have supporting material. Four do not, because the
-      section that would answer them was not supplied. Derived from the corpus,
-      not authored.</td></tr>
-  <tr><td><strong>Cases</strong></td><td>72 boxes — 24 supported, 48 not.</td></tr>
+      <td>Two of the six have supporting material. Four count as unanswerable,
+      because the section that would answer them was not supplied. Taken from the
+      labels, not written by hand.</td></tr>
+  <tr><td><strong>Cases</strong></td><td>72 fields — 24 supported, 48 not. The
+      ground-truth audit, later in this report, removed 15 of the 48: the supplied
+      text covers their topic anyway, usually under its own heading. 33 remain.</td></tr>
 </table>
 
-<p>The baseline does what most systems do: every box is required to be a string,
-and the instruction offers <code>"N/A"</code> for anything not stated. That sounds
-like permission to leave a box empty. It is not — the model still has to produce
-a string, and a plausible string beats <code>"N/A"</code> by every instinct it
-has.</p>
+<p>The plain prompt does what most systems do: every field must hold a string, and
+the instruction offers <code>"N/A"</code> for anything not stated. The chapter
+predicts that a model made to write a string will write a plausible one.</p>
 
 <h4>The numbers</h4>
 
 <table>
-  <tr><th style="width:56%">Measure</th><th class="num">Result</th></tr>
-  <tr><td>Boxes filled that had no supporting material</td>
-      <td class="num"><strong>29%</strong> — 14 of 48</td></tr>
-  <tr><td>Boxes correctly filled where material existed</td>
+  <tr><th style="width:62%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Fields filled, of the 33 counted as not covered</td>
+      <td class="num">1 of 33</td></tr>
+  <tr><td>Of that 1, a correct reading of the supplied text</td>
+      <td class="num">1 of 1</td></tr>
+  <tr><td><strong>Fabrications</strong></td>
+      <td class="num"><strong>0 of 33</strong></td></tr>
+  <tr><td>Fields answered &ldquo;N/A&rdquo;, of the other 32</td>
+      <td class="num">32 of 32</td></tr>
+  <tr><td>Fields filled, of the 15 the audit removed (all correct values)</td>
+      <td class="num">11 of 15</td></tr>
+  <tr><td>Fields correctly filled where material existed</td>
       <td class="num">96% — 23 of 24</td></tr>
 </table>
 
-<p>Re-sampled three times during review, this ran 13, 12 and 12 of 48 against a
-committed 14 — so the 29% is stable to about ±1 case.</p>
-
-<h4>What a fabrication actually looks like</h4>
-
-<p>Prednisone's label has <strong>no paediatric-use section at all</strong>. Asked
-for a children's dose, this is what came back — value and supporting quotation,
-verbatim:</p>
-
-<div class="verdict">
-  <span class="label">Field: pediatric_dosage · supporting section: does not exist</span>
-  <p><strong>Value returned:</strong> "Dosage requirements are variable and must
-  be individualized on the basis of the disease under treatment and response of
-  the patient. Pediatric dosing not specifically differentiated in label; ADT
-  dosing may help minimize growth suppression in children."</p>
-  <p style="margin-top:3mm"><strong>Quotation supplied:</strong> "DOSAGE
-  REQUIREMENTS ARE VARIABLE AND MUST BE INDIVIDUALIZED ON THE BASIS OF THE
-  DISEASE UNDER TREATMENT AND THE RESPONSE OF THE PATIENT…growth suppression in
-  children."</p>
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>An earlier version of this report gave this experiment a fabrication rate of
+  29% (14 of 48), and three re-samples during review gave 13, 12 and 12 of 48.
+  Those numbers count every withheld field the model filled. Nearly all of them are
+  fields whose topic the supplied text covers under its own heading. They are
+  withdrawn as fabrication rates. So is the 6% (2 of 35) that replaced them: the
+  audit now removes one of its two cases, and the other follows.</p>
 </div>
 
-<p>Look carefully at what happened, because it is not what the word
-"fabrication" suggests.</p>
+<h4>The one filled field, read in full</h4>
 
-<p><strong>The quotation is real.</strong> Every word of it is in the document —
-in the <em>adult dosing</em> section. The model did not invent a paediatric dose.
-It went looking, found real text that mentions children, and filed it under
-children's dosing with an accurate citation attached.</p>
+<table>
+  <tr><th style="width:24%">Label and field</th><th style="width:34%">Value returned</th><th>Where the supplied text says it</th></tr>
+  <tr><td>Furosemide<br><code>drug_interactions</code></td>
+      <td>An instruction to cut the dose of other blood-pressure drugs by at
+      least 50 percent</td>
+      <td>The dosing section: &ldquo;the dosage of other agents should be reduced
+      by at least 50 percent when furosemide tablets are added to the
+      regimen&rdquo;</td></tr>
+</table>
+
+<p>The value is a correct reading of text the model was given.</p>
+
+<ul>
+  <li><strong>Furosemide.</strong> The instruction sits in a dosing paragraph with
+  no heading of its own. The audit looks for headings and a few fixed patterns,
+  and this sentence matches none of them, so it could not detect this case.</li>
+  <li><strong>Omeprazole.</strong> Its children&rsquo;s field, counted before as a
+  second fabrication, reads &ldquo;children under 18 years of age: ask a
+  doctor&rdquo;, word for word from the supplied over-the-counter directions. The
+  audit now removes it.</li>
+</ul>
 
 <div class="headline">
-  <b>Both fabricated values carried a quotation that is genuinely in the
-  document.</b> Not one was an invented quotation.
+  <b>0 fabrications in 33.</b> The failure did not reproduce.
 </div>
 
-<p>This is Chapter 3's source-tracking failure appearing inside Chapter 9's
-defences — content that exists somewhere in the material, attributed to the wrong
-place. And it defeats the chapter's main engineering fix completely, because that
-fix checks whether the quotation exists.</p>
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>An earlier version of this report showed a Prednisone children&rsquo;s dose
+  as the typical fabrication, and said every fabrication carried a quotation that
+  is genuinely in the document (14 of 14, then 2 of 2). In the recorded run,
+  Prednisone&rsquo;s children&rsquo;s field reads &ldquo;N/A&rdquo;. The quotations were real because the values were correct.
+  Both claims are withdrawn, and with them the link to Chapter 3&rsquo;s
+  source-tracking failure.</p>
+</div>
 
 <h3>Experiment 9.2 — The fix, and the mistake in how it was tested</h3>
 
@@ -121,33 +158,37 @@ this table</strong> — which is the point.</p>
 
 <h4>What was reported, and why it was wrong</h4>
 
-<p>The first run reported <strong>fabrication 29% → 0%</strong> with recall
-unchanged, and that number was repeated three times as the strongest result in
-this project. A review then proved by enumeration that it could not have come out
-any other way.</p>
+<p>The first run reported <strong>fabrication 29% → 0%</strong>, and that number
+was repeated three times as the strongest result in this project. A review then
+proved by enumeration that the 0% could not have come out any other way. Recall
+on the fields that had supporting material also fell, from 23 of 24 to 22 of
+24.</p>
 
 <div class="verdict">
-  <span class="label">The mistake, stated plainly</span>
+  <span class="label">The mistake</span>
   <p>Every field in that design is either supplied for all twelve labels or
   supplied for none. <code>pediatric_use</code> was never among the two sections
   shown to the model — so a paediatric quotation could never be located in a
   permitted section, so the check <strong>rejected every unsupported field
   unconditionally</strong>.</p>
-  <p>"Can this field pass the check" was bit-for-bit identical to "does this field
-  have supporting material" — the ground-truth predicate. <strong>The filter was
-  the answer key wearing a filter's clothes.</strong> 0% was guaranteed on any
-  corpus, any model, any temperature.</p>
+  <p>&ldquo;Can this field pass the check&rdquo; was exactly the same test as
+  &ldquo;does this field have supporting material&rdquo;, which is the ground
+  truth. <strong>The check was the answer key.</strong> 0% was guaranteed on any
+  set of documents, with any model, at any temperature.</p>
 </div>
 
-<p>The idea was not wrong. The corpus made it untestable. So the corpus was
-changed.</p>
+<p>The design also had nothing to remove: the plain prompt produced no
+fabrication, and Prompt 9-1 itself returned null on all 33 fields. And a check that rejects every unsupported field cannot show whether
+it tells a real value from an invented one.</p>
 
-<h3>Experiment 9.3 — The same fix, on a corpus where it can fail</h3>
+<h3>Experiment 9.3 — The same check with four sections supplied</h3>
 
 <h4>What changed</h4>
 
+<div style="page-break-inside:avoid">
 <p>Four sections are now supplied instead of two — <strong>but only when the label
-actually carries them</strong>:</p>
+actually carries them</strong> — and the form asks for the four fields those
+sections answer:</p>
 
 <table>
   <tr><th style="width:44%">Section</th><th class="num">Present in</th></tr>
@@ -156,151 +197,558 @@ actually carries them</strong>:</p>
   <tr><td><strong>pediatric_use</strong></td><td class="num"><strong>8 of 12</strong></td></tr>
   <tr><td><strong>drug_interactions</strong></td><td class="num"><strong>10 of 12</strong></td></tr>
 </table>
+</div>
 
-<p>Now a children's dose is legitimately answerable for eight drugs and
-unanswerable for four, <strong>in the same run</strong>. The check has to
-discriminate rather than reject. A check that nulls everything now scores
-terribly on recall; a check that passes everything scores terribly on
-fabrication. Neither is free any more.</p>
+<p>The aim was a run where a children's dose is answerable for eight drugs and
+unanswerable for four, so that the check would have to tell them apart.</p>
 
-<h4>The real numbers</h4>
+<h4>Why the fabrication result is still forced</h4>
+
+<p>The check runs on one label at a time, and each field has one permitted
+section. The six unanswerable fields are exactly the six whose permitted section
+is missing from that label. A quote can never be located in a section that is not
+there, so the check nulls all six whatever the model writes. <strong>0 of 6 is
+arithmetic, as in 9.2.</strong> Only the recall side of this experiment measures
+anything.</p>
+
+<h4>The numbers</h4>
 
 <table>
-  <tr><th style="width:52%">Measure</th><th class="num">Circular design</th><th class="num">Non-circular design</th></tr>
-  <tr><td>Fabrication on unsupported fields</td>
-      <td class="num">0% — <em>forced</em></td><td class="num"><strong>0% — 0 of 6</strong></td></tr>
-  <tr><td>Recall on supported fields</td>
-      <td class="num">92%</td><td class="num"><strong>76% — 32 of 42</strong></td></tr>
-  <tr><td>Fields nulled by code</td><td class="num">13</td><td class="num">9</td></tr>
+  <tr><th style="width:46%">Measure</th><th class="num">First design (9.2)</th><th class="num">Four sections (9.3)</th></tr>
+  <tr><td>Fabrication on unanswerable fields</td>
+      <td class="num">0 of 33 — <em>forced</em></td><td class="num">0 of 6 — <em>forced</em></td></tr>
+  <tr><td>Recall on answerable fields, as scored</td>
+      <td class="num">22 of 24</td><td class="num"><strong>32 of 42</strong></td></tr>
+  <tr><td>Fields nulled by code</td><td class="num">13 of 72</td><td class="num">9 of 48</td></tr>
 </table>
 
-<p><strong>The fix does work — and it costs about a quarter of legitimate
-extractions.</strong> That is a far more useful sentence than the one it
-replaces, and it is a sentence the original design could not have produced.</p>
-
-<p>The 0-of-6 carries an honest caveat: six unsupported fields is a small
-denominator, and one fabrication would make it 17%. What matters more is that the
-zero is now <em>earned</em> — the check had six chances to fail and did not.</p>
+<p>Read one by one, the ten recall losses in 9.3 have five causes. Two of the 42
+fields should have been null, and one loss is a scoring error. <strong>Recall is
+at least 33 of 40 answerable fields, and the section rule itself cost 5 of the
+40.</strong></p>
 
 <h4>Where the recall went — every loss, with its reason</h4>
 
 <table>
-  <tr><th style="width:24%">Drug</th><th style="width:22%">Field</th><th>Why it was lost</th></tr>
-  <tr><td>Metformin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
-  <tr><td>Atorvastatin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
-  <tr><td>Albuterol</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
-  <tr><td>Gabapentin</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
-  <tr><td>Furosemide</td><td>pediatric_dosage</td><td>quote sits in dosage_and_administration</td></tr>
-  <tr><td>Lisinopril</td><td>pediatric_dosage</td><td>model returned nothing</td></tr>
-  <tr><td>Levothyroxine</td><td>pediatric_dosage</td><td>model returned nothing</td></tr>
-  <tr><td>Atorvastatin</td><td>drug_interactions</td><td>quote not found in document</td></tr>
+  <tr><th style="width:15%">Drug</th><th style="width:19%">Field</th><th style="width:17%">Cause</th><th>Detail</th></tr>
+  <tr><td>Metformin</td><td>pediatric_dosage</td><td>Section rule</td><td>Correct dose; the quote sits in dosage_and_administration</td></tr>
+  <tr><td>Atorvastatin</td><td>pediatric_dosage</td><td>Section rule</td><td>Correct dose; the quote sits in dosage_and_administration</td></tr>
+  <tr><td>Albuterol</td><td>pediatric_dosage</td><td>Section rule</td><td>Correct dose; the quote sits in dosage_and_administration</td></tr>
+  <tr><td>Gabapentin</td><td>pediatric_dosage</td><td>Section rule</td><td>Correct dose; the quote sits in dosage_and_administration</td></tr>
+  <tr><td>Furosemide</td><td>pediatric_dosage</td><td>Section rule</td><td>Correct dose; the quote sits in dosage_and_administration</td></tr>
+  <tr><td>Atorvastatin</td><td>drug_interactions</td><td>Quote match</td><td>Quote not matched in the document (not read further)</td></tr>
+  <tr><td>Levothyroxine</td><td>pediatric_dosage</td><td>Model</td><td>Model returned null (not read further)</td></tr>
+  <tr><td>Lisinopril</td><td>pediatric_dosage</td><td>Ground truth</td><td>Correct null, counted as a loss: the paediatric-use section is about newborns exposed to the drug in the womb and states no dose</td></tr>
+  <tr><td>Amoxicillin</td><td>adult_dosage</td><td>Ground truth</td><td>Correct null, counted as a loss: the label is for a children&rsquo;s suspension and says &ldquo;Experience &hellip; in adults is not available&rdquo;</td></tr>
+  <tr><td>Gabapentin</td><td>drug_interactions</td><td>Scorer</td><td>A complete interaction list, kept by the check, scored as declined because it contains &ldquo;does not&rdquo;</td></tr>
 </table>
 
-<p><strong>Five of the eight losses are the same story.</strong> A paediatric
-section existed, and the model answered from the adult dosing section anyway. The
-check rejected it — correctly by its own rule, since the quotation is not in the
-permitted section.</p>
+<p><strong>Five of the ten losses have one cause: the map.</strong> In each, the
+model returned a correct children's dose from the dosing section, and the rule
+rejected it because the map permits only the paediatric-use section. FDA labels
+put children's doses in the dosing section by regulation: 21 CFR
+201.57(c)(9)(iv) says &ldquo;appropriate pediatric dosage information must be
+given under the &lsquo;Dosage and Administration&rsquo; section&rdquo;. The map
+was wrong for this kind of document, and the check applied it exactly.</p>
 
-<p>Whether that is the right call is a judgement your domain has to make. The
-adult dosing section may well contain a legitimate paediatric statement. What the
-check guarantees is that <strong>a value only survives if its evidence sits where
-that value is supposed to come from</strong> — and it is now measurable that this
-guarantee costs 24 points of recall on this corpus.</p>
+<p>So 9.3 measured a cost: the map as written rejected 5 correct values out of 40
+answerable fields. Whether the check stops a fabrication was not measured, in 9.2
+or here.</p>
 
 <h4>Cost and time</h4>
 
-<p>12 calls, roughly $0.08, under a minute. The check itself is a dictionary
-lookup and a string search — no model, no download, well under a millisecond per
-field.</p>
+<p>12 calls, $0.09 as recorded. The check itself is a dictionary lookup and a
+string search in code; it calls no model.</p>
 
 <h3>The four engineering fixes</h3>
 
 <table>
-  <tr><th style="width:28%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
+  <tr><th style="width:26%">Fix (book's order)</th><th>Result</th><th style="width:25%">Verdict</th></tr>
   <tr><td><strong>1 · Optional fields, no defaults</strong></td>
-      <td class="num">prerequisite</td>
-      <td><strong>Works</strong> — its contribution cannot be separated from the others</td></tr>
+      <td>Never isolated from the other changes. The filler-phrase validator the
+      chapter describes was never built.</td>
+      <td>Not tested</td></tr>
   <tr><td><strong>2 · Quote anchoring + verification</strong></td>
-      <td class="num">caught <strong>0 of 14</strong></td>
-      <td>Cannot work on this failure — the quotes were real</td></tr>
-  <tr><td><strong>2b · Section constraint</strong> <em>(added)</em></td>
-      <td class="num">0 of 6 fabricated<br>76% recall</td>
-      <td><strong>Works</strong>, at a measurable cost</td></tr>
+      <td>No fabrication to find. Checked over the whole quote it kept 11 of 23
+      correct extractions; over the first 80 characters, all 23.</td>
+      <td>Fabrication side not tested; use a bounded window</td></tr>
+  <tr><td><strong>2b · Section check</strong> <em>(added)</em></td>
+      <td>Fabrication side forced to zero in 9.2 and 9.3. Rejected 5 correct
+      children&rsquo;s doses in 9.3.</td>
+      <td>The map was wrong for FDA labels</td></tr>
   <tr><td><strong>3 · Null-rate monitoring</strong></td>
-      <td class="num">0% vs 100% per field</td>
-      <td><strong>Works</strong> as a monitor, never as a gate</td></tr>
+      <td>&ldquo;0% vs 100% nulls&rdquo; compared a schema that cannot return
+      null with nulls forced by the code check.</td>
+      <td>Not evidence; never tested as a monitor</td></tr>
   <tr><td><strong>4 · Embedding provenance</strong></td>
-      <td class="num">no threshold separates</td>
-      <td>Cannot work on this failure</td></tr>
+      <td>All 12 values it scored as fabrications are correct.</td>
+      <td>Withdrawn; not tested</td></tr>
 </table>
 
-<h4>Fix 2 — and a second problem in the rule as printed</h4>
+<h4>Fix 2 — the rule as printed discards correct quotes</h4>
 
-<p>Beyond catching none of the fabrications, the rule has a defect that costs
-recall. The chapter says to verify the quotation with approximate matching above
-a threshold of 85, and says nothing about quotation length.</p>
+<p>The chapter says to verify the quotation with approximate matching and to keep
+it only if it scores more than 85. It says nothing about quotation length. Run that way, the rule
+discards correct extractions.</p>
 
 <table>
-  <tr><th style="width:44%">How much of the quote is checked</th>
-      <th class="num">Correct extractions kept</th><th class="num">Fabrications caught</th></tr>
-  <tr><td>All of it — the rule as printed</td>
-      <td class="num"><strong>54%</strong></td><td class="num">14%</td></tr>
-  <tr><td>The first 80 characters</td><td class="num"><strong>95%</strong></td><td class="num">22%</td></tr>
-  <tr><td>The first 150 characters</td><td class="num">83%</td><td class="num">22%</td></tr>
+  <tr><th style="width:46%">How much of the quote is checked</th>
+      <th class="num">Plain prompt, kept of 23</th><th class="num">Prompt 9-1, kept of 23</th></tr>
+  <tr><td>All of it — the rule as printed</td><td class="num"><strong>9</strong></td><td class="num"><strong>11</strong></td></tr>
+  <tr><td>The first 80 characters</td><td class="num"><strong>23</strong></td><td class="num"><strong>23</strong></td></tr>
+  <tr><td>The first 150 characters</td><td class="num">19</td><td class="num">20</td></tr>
+  <tr><td>The first 200 characters</td><td class="num">14</td><td class="num">15</td></tr>
 </table>
+<p style="font-size:9pt;color:var(--muted)">One recorded run of each prompt, replayed 29 September 2026: correct values returned for the fields the two supplied sections cover. An earlier sweep, whose recordings were overwritten, gave 54% and 95%.</p>
 
 <p>The matching method scores the quotation against the best-matching stretch of
 document <em>of the quotation's own length</em>, so its tolerance shrinks as
-quotations grow. The model returns quotations of 240–720 characters that are
-near-perfect with a few words elided; those score in the sixties and are
-discarded as fabrications.</p>
+quotations grow. The model returns quotations of roughly 150 to 1,070 characters that are
+near-perfect with a few words left out; those score in the sixties and seventies
+and are discarded.</p>
 
-<p><strong>The rule as printed trades 42 points of correct extractions for 8
-points of fabrication catching, with no warning that the trade is happening.</strong></p>
+<p><strong>Run as printed, the rule discards more than half of the correct
+extractions (14 and 12 of 23), and the chapter gives no warning that it will.</strong> Its effect on
+fabrication could not be measured, because there was no fabrication.</p>
 
-<p>One caution the review added: the 80-character window is job-specific. Imported
-unchanged into Chapter 8's placement check, it produced that chapter's only
-"error" — a false one.</p>
+<p>One caution the review added: the 80-character window is job-specific. Reused
+unchanged in Chapter 8's placement check, it produced that chapter's only
+&ldquo;error&rdquo; — a false one.</p>
 
-<h4>Fix 4 — a fix that cannot work here, shown rather than asserted</h4>
+<h4>Fixes 3 and 4 — two results withdrawn</h4>
 
-<table>
-  <tr><th class="num" style="width:22%">Strictness</th>
-      <th class="num">Fabrications rejected</th><th class="num">Real extractions destroyed</th></tr>
-  <tr><td class="num">0.5</td><td class="num">7%</td><td class="num">0%</td></tr>
-  <tr><td class="num">0.7</td><td class="num">43%</td><td class="num">35%</td></tr>
-  <tr><td class="num">0.8</td><td class="num">86%</td><td class="num"><strong>61%</strong></td></tr>
-</table>
-
-<div class="headline">
-  Most source-like fabrication: <b>0.85</b>. Least source-like real extraction:
-  <b>0.55</b>. The distributions overlap completely — <b>no setting separates
-  them.</b>
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <ul>
+    <li><strong>Fix 3, null-rate monitoring.</strong> An earlier version of this
+    report said the share of null answers separates fabricating setups from
+    declining ones completely: 0% against 100%. The plain prompt&rsquo;s schema
+    requires a string, so its answers are &ldquo;N/A&rdquo; and never null. The
+    nulls on the fixed side are forced by the code check. The comparison measured
+    the two schemas, and the monitor itself was never tested.</li>
+    <li><strong>Fix 4, embedding provenance.</strong> This fix scores how similar
+    each value is to the document, using text embeddings, and rejects values whose
+    score is lower than a set threshold. An earlier version of this report said no threshold
+    separates fabrications (highest score 0.85) from real extractions (lowest
+    0.55). All 12 values it scored as fabrications are correct: the 11 filled fields among
+    the 15 the audit removed, and the one filled field shown in Experiment 9.1. The 0.85 is Albuterol&rsquo;s children&rsquo;s dose.
+    The comparison and the threshold sweep are withdrawn.</li>
+  </ul>
 </div>
 
-<p>The reason is now familiar. This tool asks whether the text resembles the
-source document. These fabrications were lifted <em>from</em> the source
-document. Of course they resemble it — they are it.</p>
+<h3>Experiment 9.4 — A note written from a conversation</h3>
+
+<p>Experiments 9.1 to 9.3 extracted fields from drug labels, and the failure did
+not occur. The chapter&rsquo;s own scenario is different: a clinical note written
+from a doctor&ndash;patient conversation, under headings the conversation may
+never touch.</p>
+
+<h4>The materials</h4>
+
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Conversations</strong></td><td>60 ACI-Bench doctor&ndash;patient
+      conversations: the encounters used in Chapter 8, now with their dialogues
+      (<code>data/aci_bench_dialogues.json</code>). Role-played or constructed, not
+      real patients.</td></tr>
+  <tr><td><strong>The note</strong></td><td>Eleven headings: chief complaint, history
+      of present illness, review of systems, past medical history, medications,
+      allergies, family history, social history, physical examination, results,
+      assessment and plan.</td></tr>
+  <tr><td><strong>Model</strong></td><td>Claude Haiku 4.5, through the Claude Code
+      command-line tool (<code>claude -p</code>) on my Claude subscription: default
+      system prompt replaced, no tools or tool servers, no settings files. The tool still adds a
+      short environment block to each call.</td></tr>
+  <tr><td><strong>Prompts</strong></td><td>Two, identical except for one rule. The
+      <strong>template prompt</strong> gives the headings only. The <strong>one-rule
+      prompt</strong> adds: &ldquo;If the conversation does not cover a section, write
+      exactly &lsquo;Not discussed.&rsquo; &hellip; Do not infer, assume, or fill a
+      section with typical content.&rdquo;</td></tr>
+  <tr><td><strong>Ground truth</strong></td><td>A strict word search over each
+      conversation. A topic counts as never discussed only when no related word
+      appears at all: for family history, &ldquo;family&rdquo; or any relative; for
+      drug allergies, an allergy exchange about medicines, &ldquo;allergic to&rdquo;
+      or &ldquo;reaction to&rdquo;; for tobacco, smok-, tobacco, cigar or vape; for
+      alcohol, alcohol, drink, beer or wine.</td></tr>
+  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $8.6
+      that was not billed, because the calls ran on the subscription.</td></tr>
+</table>
+
+<h4>The numbers</h4>
+
+<div style="page-break-inside:avoid">
+<p>Notes that stated something about a topic the conversation never touched, in
+each of the three runs:</p>
+
+<table>
+  <tr><th style="width:40%">Topic never discussed</th><th class="num">Template prompt</th>
+      <th class="num">One-rule prompt</th></tr>
+  <tr><td><strong>Drug allergies</strong> (58 notes)</td><td class="num"><strong>4, 3, 4</strong></td><td class="num"><strong>0, 0, 0</strong></td></tr>
+  <tr><td>Tobacco (53 notes)</td><td class="num">0, 1, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Family history (41 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Alcohol (49 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+</table>
+</div>
+
+<ul>
+  <li><strong>The failure took one form:</strong> the standard phrase &ldquo;No known
+  drug allergies&rdquo;, in 11 notes over the three runs, about half of them with
+  &ldquo;documented&rdquo; or &ldquo;noted&rdquo; after it. Once, a note said
+  &ldquo;Denies tobacco&rdquo;.</li>
+  <li><strong>The one rule removed every case in all three runs</strong>, and cost
+  nothing that was measured. Both prompts kept the two real drug-allergy answers
+  (D2N018, D2N022) in every run. Where a patient reported seasonal allergies, the
+  one-rule prompt moved them to the history or the review of systems instead of
+  dropping them.</li>
+</ul>
+
+<h4>Two counted cases, from run 1</h4>
+
+<table>
+  <tr><th style="width:13%">Case</th><th style="width:33%">What the conversation says</th>
+      <th>Template prompt, Allergies</th><th>One-rule prompt, Allergies</th></tr>
+  <tr><td>D2N099</td><td>Nothing about allergies anywhere in the conversation.</td>
+      <td>&ldquo;No known drug allergies.&rdquo;</td><td>&ldquo;Not discussed.&rdquo;</td></tr>
+  <tr><td>D2N088</td><td>Doctor: &ldquo;do you have any history of any seasonal
+      allergies at all?&rdquo; Patient: &ldquo;none whatsoever.&rdquo; Drug
+      allergies never come up.</td>
+      <td>&ldquo;No known drug allergies. No seasonal allergies.&rdquo;</td>
+      <td>&ldquo;Not discussed.&rdquo; The review of systems carries &ldquo;No
+      seasonal allergies.&rdquo;</td></tr>
+</table>
+
+<p>In D2N088 the template note&rsquo;s second sentence is what the patient said. The
+first answers a question nobody asked.</p>
+
+<h4>Three scorer corrections, made before these numbers were taken</h4>
+
+<p>Every counted case was read against its conversation. The first version of the
+scorer was wrong in three ways:</p>
+
+<ul>
+  <li><strong>Family history: the word list was too narrow.</strong> It missed
+  &ldquo;run in your family&rdquo;, &ldquo;anyone in your family&rdquo; and
+  &ldquo;my son&rdquo;, so five family histories in run 1 that the conversation did
+  contain were counted as invented.</li>
+  <li><strong>Allergies: the test was too broad.</strong> Any word beginning
+  &ldquo;allerg&rdquo; counted as allergies discussed. That hid four &ldquo;No known
+  drug allergies&rdquo; claims made where only seasonal allergies were asked
+  about.</li>
+  <li><strong>Silence was counted as a claim.</strong> Sentences about the
+  conversation, such as &ldquo;No drug allergies discussed.&rdquo; and
+  &ldquo;Tobacco &hellip;: Not documented&rdquo;, were scored as claims about the
+  patient.</li>
+</ul>
+
+<p>The rule now: &ldquo;No known drug allergies&rdquo;, with or without
+&ldquo;documented&rdquo; after it, and &ldquo;No drug allergies noted&rdquo; state
+the usual claim about the patient and count. Sentences that describe the
+conversation do not count.</p>
+
+<h4>Where this is weakest</h4>
+
+<ul>
+  <li><strong>The ground truth is a word search.</strong> The counts depend on the
+  word lists, which is why every counted case was read.</li>
+  <li><strong>The conversations are role-played</strong> or constructed, not real
+  patients.</li>
+  <li><strong>One model:</strong> Claude Haiku 4.5.</li>
+  <li><strong>The command-line tool adds a short environment block</strong> to every
+  call, so the model did not see exactly the prompt given here.</li>
+</ul>
+
+<p>The checks are run against these notes&rsquo; entries in Experiment 9.5, next.</p>
+
+<h3>Experiment 9.5 — The checks, run on the invented entries</h3>
+
+<p>Until this experiment, every check in the chapter had met only drug labels,
+where the model invented nothing, so no check had ever been seen catching
+anything. Experiment 9.4 produced the missing material: notes with real invented
+entries, each read against its conversation. This experiment runs the checks on
+them. (<code>probe_checks.py</code>)</p>
+
+<h4>The materials</h4>
+
+<p>The template-prompt notes from all three runs of Experiment 9.4 hold
+<strong>101 filled entries</strong> about the four optional topics: <strong>12
+invented</strong> (11 &ldquo;No known drug allergies&rdquo;, one &ldquo;Denies
+tobacco&rdquo;, from 8 conversations) and <strong>89 whose topic the conversation
+discussed</strong>. Five checks, cheapest first, one verdict per entry:</p>
+
+<table>
+  <tr><th style="width:30%">Check</th><th>What it is</th></tr>
+  <tr><td>Keyword topic search</td><td>Code: does the conversation mention the
+      topic at all? A plain keyword list per field, written as a team would write
+      it &mdash; deliberately not the scorer&rsquo;s own patterns</td></tr>
+  <tr><td>Embedding</td><td>Code: highest cosine similarity between the entry and
+      any sentence of the conversation (all-MiniLM-L6-v2), flag below a
+      cut-off &mdash; the chapter&rsquo;s fix 4</td></tr>
+  <tr><td>A second model, shown the conversation</td><td>Claude Sonnet 5:
+      &ldquo;does the conversation support the entry?&rdquo;</td></tr>
+  <tr><td>The writing model, shown the conversation</td><td>Claude Haiku 4.5
+      &mdash; the model that wrote the notes &mdash; asked the same question in a
+      separate call</td></tr>
+  <tr><td>A second model, shown only the note</td><td>Claude Sonnet 5, no
+      conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
+</table>
+
+<p>The model checks ran through <code>claude -p</code> on my Claude subscription:
+303 verdicts, a notional $4.0, about 6.5 seconds per call.</p>
+
+<h4>The numbers</h4>
+
+<table>
+  <tr><th style="width:34%">Check</th><th class="num">Invented caught (of 12)</th>
+      <th class="num">Discussed-topic entries flagged (of 89)</th></tr>
+  <tr><td>Keyword topic search</td><td class="num">6</td><td class="num">3</td></tr>
+  <tr><td>Embedding, cut-off 0.5</td><td class="num">6</td><td class="num">19</td></tr>
+  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">6</td></tr>
+  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">7</td></tr>
+  <tr><td>Sonnet 5, shown only the note</td><td class="num">9</td><td class="num">48</td></tr>
+</table>
+
+<p>The embedding sweep, caught / flagged: 0.3 gives 2/1, 0.4 gives 4/4, 0.5 gives
+6/19, 0.6 gives 8/51, 0.7 gives 10/72. No cut-off separates the groups.</p>
+
+<h4>The flagged discussed-topic entries, read one by one</h4>
+
+<p>&ldquo;Discussed&rdquo; does not mean &ldquo;correct&rdquo;. Nine entries were
+flagged by a model that saw the conversation, and seven are real errors on topics
+the conversation did discuss:</p>
+
+<ul>
+  <li>A renal family history with relatives mixed up in two of its three runs; one
+  run added &ldquo;patient&rsquo;s father has undergone renal
+  transplantation&rdquo;, which nobody said &mdash; the conversation&rsquo;s
+  transplant belongs to the grandfather, and the aunt is &ldquo;my dad&rsquo;s
+  sister, so her great aunt&rdquo;.</li>
+  <li>&ldquo;Denies tobacco and drug use&rdquo; when the doctor asked about
+  tobacco, drugs and alcohol together and the patient answered only &ldquo;i drink
+  a little wine on occasion&rdquo;.</li>
+  <li>&ldquo;Patient is a smoker&rdquo; for a patient who said &ldquo;i stopped
+  smoking probably about seven years ago&rdquo; &mdash; the same entry also carries
+  the correct quit-history, contradicting itself.</li>
+  <li>A question about the patient&rsquo;s own history of lung infections,
+  answered &ldquo;no&rdquo;, recorded as a <em>family</em>-history denial, in two
+  runs.</li>
+  <li>Increased caffeine the patient never mentioned &mdash; the doctor&rsquo;s
+  advice to cut caffeine turned into a report of consuming it.</li>
+</ul>
+
+<p>The other two flags: one borderline inference (a sister &ldquo;currently ill
+with upper respiratory infection&rdquo; when she had &ldquo;been sick&rdquo; and,
+per the doctor, probably shared the patient&rsquo;s virus) and one trivial
+(&ldquo;Friday and Saturday evenings&rdquo; for &ldquo;on the weekends&rdquo;).
+So Sonnet&rsquo;s six flags are five real errors plus the borderline one, and
+Haiku&rsquo;s seven are six real plus the trivial one. The 89 were not all read:
+seven real errors is a floor.</p>
+
+<h4>Why the cheap checks miss</h4>
+
+<p>The keyword search catches an invented entry only when the topic word never
+appears. Six of the eleven &ldquo;No known drug allergies&rdquo; came from
+conversations that mention allergies in another sense &mdash; seasonal allergies,
+a cat. Its three flags are one conversation, in all three runs, that describes
+drug reactions without the word: a steroid avoided &ldquo;because of the reaction
+to dexamethasone, which causes his heart to race&rdquo;, and methylprednisolone
+that &ldquo;itched me like crazy&rdquo;. The entry is correct; the keyword list
+cannot see it.</p>
+
+<p>The blind check flags what reads as unusually precise &mdash; 28 of its 48
+flags are family histories &mdash; and passed the plainest invented line,
+&ldquo;No known drug allergies. No seasonal allergies.&rdquo;, in all three runs
+of its conversation. A fabricated line reads perfectly well on its own.</p>
+
+<h4>The extension: the same checks on Experiment 9.6&rsquo;s record values</h4>
+
+<p>The note-set result needed wider evidence before the book could lean on it, so
+the three model checks were rerun on Experiment 9.6&rsquo;s values: its 7 invented
+values and its 49 run-1 values on discussed topics (<code>--source schema</code>;
+168 verdicts, a notional $1.8).</p>
+
+<table style="table-layout:fixed;width:100%">
+  <tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 7)</th>
+      <th>Discussed-topic values flagged (of 49)</th></tr>
+  <tr><td>Keyword topic search</td><td class="num">2</td><td class="num">2</td></tr>
+  <tr><td>Embedding, cut-off 0.5</td><td class="num">3</td><td class="num">9</td></tr>
+  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>5</strong></td><td class="num">1</td></tr>
+  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>2</strong></td><td class="num">3</td></tr>
+  <tr><td>Sonnet 5, shown only the record</td><td class="num">2</td><td class="num">11</td></tr>
+</table>
+
+<p><strong>The split reverses half of the note-set conclusion.</strong> The two
+zero-evidence inventions were caught by both models, as all twelve note-set
+inventions were. The five misses are one judgement call: &ldquo;No allergies&rdquo;,
+written from the patient&rsquo;s denial of <em>seasonal</em> allergies, with that
+denial attached as the supporting quote. <strong>The writer approved its own
+generalisation five of five.</strong> Sonnet caught three of five &mdash; and
+returned different verdicts on identical entry text from the same conversation.
+The note-set entries said &ldquo;No known <em>drug</em> allergies&rdquo;, a specific
+claim a seasonal denial plainly cannot support, which is why both models caught
+all of those. Combined: 19 invented entries, a second model 17, the writer 14,
+every zero-evidence entry caught by both. The extension&rsquo;s flags on
+discussed-topic values are again real errors (the D2N185 relative mix-ups; a
+patient&rsquo;s own answer filed as family history).</p>
+
+<h4>The packaged validator itself</h4>
+
+<p>Prachi then asked for the product, not only the from-scratch version
+(<code>probe_guardrails.py</code>; guardrails-ai 0.6.8, validator installed from
+its GitHub source because the hub&rsquo;s API host does not resolve here; no
+model calls). As shipped &mdash; threshold a cosine <em>distance</em> of 0.8,
+five-sentence source windows, any failing output sentence fails the value &mdash;
+it caught 2 of the 12 invented note entries and flagged 12 of the 89 on
+discussed topics; every setting in its range that caught all 12 flagged 79&ndash;88
+of the 89. At the same nominal cut it flags twice what the from-scratch check
+flagged (40 vs 19 of 89 at 0.5): the any-sentence rule punishes multi-sentence
+entries, and punkt chunking struggles on sparse-punctuation transcripts. Its
+read flags are paraphrase distance, not missing support. It also crashes when a
+source chunks to a single window (a squeeze makes the embedding matrix 1-D),
+needs an nltk resource its setup does not fetch, and attempts to send telemetry.
+The product confirms the from-scratch conclusion.</p>
+
+<h4>Where this is weakest</h4>
+
+<ul>
+  <li><strong>19 invented entries, 9 conversations, two surface families.</strong>
+  Eleven of the nineteen are one phrase, and the five habit-born entries are one
+  judgement call from one conversation. One verdict per checker per entry, no
+  re-sampling &mdash; and on that judgement call the second model&rsquo;s verdict
+  moved between identical entries.</li>
+  <li><strong>The 89 discussed-topic entries were not all read</strong>, so the
+  false-alarm columns count flags, not confirmed false alarms &mdash; at least
+  seven flags are real errors.</li>
+  <li><strong>The checker prompts are one wording each.</strong> A different
+  question could move both columns.</li>
+</ul>
+
+<h3>Experiment 9.6 — The schema fix and the quote check, where the model invents</h3>
+
+<p>The chapter&rsquo;s first two fixes had never met an invented value. This
+experiment asks for the four optional topics as a JSON record from each of the 60
+conversations &mdash; two conditions, identical but for the field rule, three runs
+each, 360 replies through the subscription CLI (<code>probe_schema.py</code>; the
+recording stalled at a session limit at 182 replies and was resumed; every counted
+case below was then read by hand).</p>
+
+<table style="table-layout:fixed;width:100%">
+  <tr><th style="width:52%">Of 603 fields per condition whose topic the conversation never discussed</th>
+      <th class="num">required</th><th class="num">optional (fix 1)</th></tr>
+  <tr><td>Invented values</td><td class="num">5</td><td class="num">2</td></tr>
+  <tr><td>Silence fillers stored as strings</td><td class="num"><strong>577</strong></td><td class="num">0</td></tr>
+  <tr><td>Null</td><td class="num">0</td><td class="num">585</td></tr>
+  <tr><td>Replies breaking the condition&rsquo;s format rule</td><td class="num">0 of 180</td><td class="num">0 of 180</td></tr>
+</table>
+
+<p><strong>Fix 1 works, and the measured harm of a required field is fillers, not
+inventions.</strong> Forced to fill, the model stored &ldquo;Not discussed&rdquo;-style
+fillers in 577 of 603 no-source fields &mdash; the exact failure the book predicts
+&mdash; and invented in 5. Allowed null, no fillers and 2 inventions.</p>
+
+<p><strong>The seven invented values, read:</strong> five are one conversation,
+D2N088, where a denial of <em>seasonal</em> allergies (&ldquo;none whatsoever&rdquo;)
+became &ldquo;No allergies&rdquo; or &ldquo;No known allergies&rdquo;; one rests on
+&ldquo;i&rsquo;m not taking any medications&rdquo;; one came with no quote.
+<strong>The quote check caught only the quote-less one.</strong> The other six carry
+real lines of the conversation that do not support the value &mdash; the
+fabrication-side version of Experiment 9.2&rsquo;s lesson. Under &ldquo;required&rdquo;
+the check did null 546 of 611 fillers (their quotes are empty or absent), and its
+cost was 7 of 97 and 3 of 92 discussed-topic values rejected; the read sample is a correct
+steroid-reactions value whose quote stitched two real passages and scored 82
+against the 85 cut-off.</p>
+
+<h3>Experiment 9.7 — A list of quotes, one per place</h3>
+
+<p>The fix-2 read case is a correct value whose evidence sits in two places; the
+model joined both into one quote and the check rejected it. Prachi asked for the
+proposed repair to be measured: <code>source_quotes</code> as a list, one item
+per place, every item checked on its own, a value kept only when every item is
+found (<code>probe_schema_list.py</code>; same sixty conversations, fields
+optional, three runs, 180 records).</p>
+
+<table style="table-layout:fixed;width:100%">
+  <tr><th style="width:56%">Of the values on discussed topics</th>
+      <th class="num">single quote (9.6)</th><th class="num">quote list (9.7)</th></tr>
+  <tr><td>Wrongly rejected by the quote gate</td><td class="num">3 of 92</td><td class="num"><strong>0 of 75</strong></td></tr>
+  <tr><td>Invented values, of 603 no-source fields</td><td class="num">2</td><td class="num">1</td></tr>
+  <tr><td>Values stated at all</td><td class="num">92</td><td class="num">75</td></tr>
+</table>
+
+<p><strong>The target case is fixed, and read.</strong> D2N022&rsquo;s
+steroid-reactions value returns three to four quotes in every run, each one
+continuous passage, each found; a third of non-null values used two or more
+quotes, legitimately (a question and its answer; two separate mentions of a
+father&rsquo;s kidney stones). The costs, also read: the model grew more
+conservative (75 stated values against 92, nulls up accordingly), and existence
+is still not support &mdash; the one invented value passed on a found quote
+(the seasonal-denial case again), and one correct value arrived backed by
+&ldquo;yeah i think so&rdquo;, an answer quoted without its question, in a
+conversation whose speaker labels are scrambled. <strong>Adopted as the
+chapter&rsquo;s fix 3, with the two costs printed beside it.</strong></p>
 
 <h3>Chapter 9 verdict</h3>
 
 <table>
-  <tr><th style="width:38%">Item</th><th style="width:28%">Verdict</th><th>Evidence strength</th></tr>
-  <tr><td>The failure itself</td><td><strong>Reproduces</strong></td>
-      <td>29%, stable to ±1 case over 4 runs</td></tr>
-  <tr><td>Prompt template</td><td><strong>Works</strong></td>
-      <td>declined unprompted on 3 of 4 field types</td></tr>
-  <tr><td>1 · Optional, no defaults</td><td><strong>Works</strong></td><td>prerequisite; not separable</td></tr>
-  <tr><td>2 · Quote verification</td><td>Cannot work here</td><td>0 of 14 — unambiguous</td></tr>
-  <tr><td>2b · Section constraint</td><td><strong>Works</strong></td>
-      <td><strong>0 of 6 fabrication, 76% recall</strong> — small denominator, but earned</td></tr>
-  <tr><td>3 · Null-rate monitoring</td><td>Works as a monitor</td><td>separates completely</td></tr>
-  <tr><td>4 · Embedding provenance</td><td>Cannot work here</td><td>0.85 vs 0.55 — decisive</td></tr>
+  <tr><th style="width:30%">Item</th><th style="width:26%">Verdict</th><th>Evidence</th></tr>
+  <tr><td>The failure, drug labels</td><td><strong>Did not reproduce</strong></td>
+      <td>0 fabrications in 33; the one filled field is a correct reading of the
+      supplied text</td></tr>
+  <tr><td>The failure, conversations</td><td><strong>Reproduces</strong></td>
+      <td>&ldquo;No known drug allergies&rdquo; with no allergy exchange: 4, 3 and 4
+      of 58 notes; &ldquo;Denies tobacco&rdquo; once in 53</td></tr>
+  <tr><td>&ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Works</strong></td>
+      <td>0 of 58 in all three runs, both real allergy answers kept; on labels
+      the plain prompt already declined</td></tr>
+  <tr><td>1 · Optional, no defaults</td><td><strong>Works</strong></td>
+      <td>Required fields: 577 fillers and 5 inventions in 603 no-source fields;
+      optional: none and 2 (9.6)</td></tr>
+  <tr><td>2c · Quote list, one per place</td><td><strong>Works</strong></td>
+      <td>Wrong rejections 0 of 75, from 3 of 92; stated values fell to 75;
+      existence still not support (9.7)</td></tr>
+  <tr><td>2 · Quote verification</td><td>Catches only quote-less inventions</td>
+      <td>1 of 7 invented values caught; the six passed carry real quotes about
+      something else (9.6). Whole quote kept 11 of 23 correct extractions; first
+      80 characters, all 23</td></tr>
+  <tr><td>2b · Section check</td><td>Fabrication side forced</td>
+      <td>0 of 6 is arithmetic; the map rejected 5 correct children&rsquo;s
+      doses</td></tr>
+  <tr><td>3 · Null-rate monitoring</td><td>Not tested</td>
+      <td>&ldquo;0% vs 100%&rdquo; compared two schemas</td></tr>
+  <tr><td>4 · Embedding provenance</td><td><strong>Separates poorly</strong></td>
+      <td>Label result withdrawn (all 12 scored values correct); on the notes, at
+      0.5, 6 of 12 invented caught for 19 of 89 flagged (9.5)</td></tr>
+  <tr><td>A checker shown the conversation</td><td><strong>Works, best when independent</strong></td>
+      <td>Across 19 invented entries, a second model caught 17 and the writer 14;
+      the writer approved all five entries born from its own generalisation;
+      most further flags were real errors (9.5)</td></tr>
+  <tr><td>A checker shown only the note</td><td><strong>Does not work</strong></td>
+      <td>9 of 12, and 48 of 89 discussed-topic entries flagged (9.5)</td></tr>
 </table>
 
-<p><strong>The chapter's diagnosis is right and its main engineering fix is
-aimed at the wrong failure.</strong> Sparse fields do get filled, at 29%. But
-quotation verification catches none of it, because the failure is misattribution
-rather than invention. The fix that works is a lookup table the chapter does not
-currently contain — and, now that it has been tested honestly, it costs about a
-quarter of legitimate extractions, which the chapter should say.</p>
+<p><strong>On drug labels the failure did not occur, so no fix could be tested
+against it.</strong> The plain prompt filled 1 of the 33 fields counted as not
+covered, and it is a correct reading of the text it was given. Two costs were
+measured. Quote verification over the whole quote discards more than half of the
+correct extractions (14 and 12 of 23). A section map that allows children&rsquo;s doses only from
+the paediatric-use section rejects correct doses on FDA labels, which print them
+under Dosage and Administration.</p>
+
+<p><strong>On notes written from conversations it did occur, and one rule
+removed it.</strong> The failure needs a form that asks for more than the source
+contains, and a visit note under eleven headings does. The template prompt wrote
+&ldquo;No known drug allergies&rdquo; where nobody had asked about drug allergies, in
+11 notes over three runs; the rule &ldquo;If the conversation does not cover a section, write exactly
+&lsquo;Not discussed.&rsquo;&rdquo; removed every case and kept both real allergy
+answers.</p>
+
+<p><strong>Sight of the conversation is the first condition, and independence is
+the second.</strong> Shown the conversation and asked a narrow question, a second
+model and the writing model alike caught every invented entry that had no
+evidence behind it, and between them a stack of real errors in entries whose
+topic was discussed. Where the entry came from the writer&rsquo;s own
+generalisation, the writer approved it every time and the second model caught
+three of five. The keyword search missed every invented &ldquo;no drug
+allergies&rdquo; whose conversation mentioned allergies in another sense; the
+embedding check separated the groups at no cut-off; the checker that could not
+see the conversation flagged half of everything and still passed the plainest
+invented line.</p>

@@ -44,16 +44,39 @@ DOSE = re.compile(r"\b(\d+(?:\.\d+)?)\s*(mg|mcg|g|units?)\b", re.I)
 # that is precisely what happened on the first run.
 IDENTIFIER_BEFORE = re.compile(r"[A-Z]{2,}[0-9]*[\u2212\-]?$")
 FOLLOWED_BY_COMPARISON = re.compile(r"^\s*[><=]")
+# Lab values share a dose unit: "serum creatinine ... 3 mg/dL" is a measurement,
+# not a dose, and the model rightly leaves it out (found 3 Oct 2026, Experiment 10.3).
+LAB_UNIT_AFTER = re.compile(r"^\s*/\s*dL\b", re.I)
+# A range stated as "10 to 15 mg" or "10-15 mg" carries its first figure without
+# its own unit. The conservative reference count ignores it; the MATCH side must
+# not, or a model that returns the range as written is scored as dropping the
+# first figure — which happened (Gabapentin "10 to 15 mg/kg/day", found 4 Oct
+# 2026, Experiment 10.4).
+DOSE_RANGE = re.compile(
+    r"\b(\d+(?:\.\d+)?)\s*(?:to|through|[\u2010-\u2015-])\s*"
+    r"(\d+(?:\.\d+)?)\s*(mg|mcg|g|units?)\b", re.I)
 
 
-def dose_figures(text: str) -> set:
-    """Every distinct dose figure in the text, normalised for comparison."""
+def dose_figures(text: str, expand_ranges: bool = False) -> set:
+    """Every distinct dose figure in the text, normalised for comparison.
+
+    `expand_ranges` also credits the first figure of "A to B unit" / "A-B unit".
+    It is for reading a MODEL'S list, so a range returned as written counts both
+    ends. The reference count over the source keeps the conservative rule.
+    """
     found = set()
+    if expand_ranges:
+        for match in DOSE_RANGE.finditer(text):
+            amount, unit = match.group(1), match.group(3)
+            amount = amount.rstrip("0").rstrip(".") if "." in amount else amount
+            found.add(f"{amount} {unit.lower().rstrip('s')}")
     for match in DOSE.finditer(text):
         amount, unit = match.group(1), match.group(2)
         if IDENTIFIER_BEFORE.search(text[max(0, match.start() - 12) : match.start()]):
             continue
         if FOLLOWED_BY_COMPARISON.match(text[match.end() : match.end() + 4]):
+            continue
+        if LAB_UNIT_AFTER.match(text[match.end() : match.end() + 6]):
             continue
         amount = amount.rstrip("0").rstrip(".") if "." in amount else amount
         found.add(f"{amount} {unit.lower().rstrip('s')}")
@@ -81,7 +104,7 @@ def score(case: dict, returned: list) -> dict:
     """Compare what was returned against the independent count."""
     got = set()
     for item in returned:
-        got |= dose_figures(str(item))
+        got |= dose_figures(str(item), expand_ranges=True)
     expected = case["expected"]
     missed = expected - got
     return {

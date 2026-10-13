@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-87644\nDate: 2026-08-10\n\nAddresses appear in the order: recipient, sender, billing party.\nKingsmere Tyres\n19 Fold Lane\nHexham 9989\n\nIronbridge Tools\n640 Northern Bypass\nHull 8775\n\nSilverpine Foods\n101 Docklands Avenue\nKendal 9666\n\nItems: 23 cartons, 496 kg\nCarrier reference: CR5448\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ironbridge Tools, 640 Northern Bypass, Hull 8775\",\"source_quote\":\"Ironbridge Tools\\n640 Northern Bypass\\nHull 8775\"},\"destination_address\":{\"value\":\"Kingsmere Tyres, 19 Fold Lane, Hexham 9989\",\"source_quote\":\"Kingsmere Tyres\\n19 Fold Lane\\nHexham 9989\"},\"billing_address\":{\"value\":\"Silverpine Foods, 101 Docklands Avenue, Kendal 9666\",\"source_quote\":\"Silverpine Foods\\n101 Docklands Avenue\\nKendal 9666\"}}",
+  "elapsed_ms": 2759,
+  "usage": {
+    "input_tokens": 655,
+    "output_tokens": 166
+  },
+  "logprobs": null
+}

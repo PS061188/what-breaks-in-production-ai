@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-34231\nDate: 2026-07-17\n\nShip From:\nKingsmere Tyres\n19 Fold Lane\nHexham 9989\n\nShip To:\nDelta Grain Co\n31 Weavers Row\nSwansea 8411\n\nBill To:\nStonefall Ceramics\n600 Trade Estate\nDurham 3702\n\nItems: 29 cartons, 271 kg\nCarrier reference: CR8337\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Kingsmere Tyres, 19 Fold Lane, Hexham 9989\",\"source_quote\":\"Ship From:\\nKingsmere Tyres\\n19 Fold Lane\\nHexham 9989\"},\"destination_address\":{\"value\":\"Delta Grain Co, 31 Weavers Row, Swansea 8411\",\"source_quote\":\"Ship To:\\nDelta Grain Co\\n31 Weavers Row\\nSwansea 8411\"},\"billing_address\":{\"value\":\"Stonefall Ceramics, 600 Trade Estate, Durham 3702\",\"source_quote\":\"Bill To:\\nStonefall Ceramics\\n600 Trade Estate\\nDurham 3702\"}}",
+  "elapsed_ms": 2788,
+  "usage": {
+    "input_tokens": 654,
+    "output_tokens": 181
+  },
+  "logprobs": null
+}

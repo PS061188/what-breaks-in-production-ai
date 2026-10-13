@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-29700\nDate: 2026-02-21\n\nNorthgate Supply\n14 Mill Road\nLeeds 7311\n\nWexcombe Brewing\n72 Quayside\nLuton 9832\n\nLarkspur Optics\n77 Market Square\nDerby 1533\n\nItems: 40 cartons, 217 kg\nCarrier reference: CR2059\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Northgate Supply, 14 Mill Road, Leeds 7311\",\"source_quote\":\"Northgate Supply\\n14 Mill Road\\nLeeds 7311\"},\"destination_address\":{\"value\":\"Wexcombe Brewing, 72 Quayside, Luton 9832\",\"source_quote\":\"Wexcombe Brewing\\n72 Quayside\\nLuton 9832\"},\"billing_address\":{\"value\":\"Larkspur Optics, 77 Market Square, Derby 1533\",\"source_quote\":\"Larkspur Optics\\n77 Market Square\\nDerby 1533\"}}",
+  "elapsed_ms": 2576,
+  "usage": {
+    "input_tokens": 637,
+    "output_tokens": 162
+  },
+  "logprobs": null
+}

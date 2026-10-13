@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Hill is a 41-year-old female who presents today for an evaluation of right middle finger pain after she was rear-ended in a motor vehicle accident.\nS2: Examination of the right middle finger shows tenderness over the distal phalanx.\nS3: X-rays of the right middle finger, 3 views obtained on today's visit shows a comminuted distal phalanx fracture.\nS4: At this point, I discussed the diagnosis and treatment options with the patient.\nS5: All questions were answered.\nS6: I recommend a prescription for Tramadol 50 mg every 6 hours as needed for pain, dispense 8.\nS7: She is provided a finger splint and will return in 2 weeks for a follow-up x-ray.\nS8: Right middle finger distal phalanx fracture.\nS9: She has no other injuries.\nS10: Right middle finger pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S9\", \"S10\"], \"objective_exam\": [\"S2\"], \"objective_results\": [\"S3\"], \"assessment_and_plan\": [\"S4\", \"S5\", \"S6\", \"S7\", \"S8\"]}",
+  "elapsed_ms": 2042,
+  "usage": {
+    "input_tokens": 639,
+    "output_tokens": 65
+  },
+  "logprobs": null
+}

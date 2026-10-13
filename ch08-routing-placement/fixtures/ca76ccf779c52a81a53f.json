@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: His pain is localized to the lateral aspect of his left ankle and can be rated at 8 out of 10 without medication.\nS2: Capillary refill is brisk at less than 3 seconds bilaterally.\nS3: The onset of his pain began 2 days ago, when he stepped off of a curb and landed on his left ankle wrong.\nS4: He will also be placed into an Aircast for ankle stabilization and will be provided crutches in order to remain non-weight-bearing.\nS5: Musculoskeletal: Patient reports left ankle pain.\nS6: I also advised him that his symptoms will likely start to improve significantly over the next 4 to 6 days.\nS7: When taking ibuprofen his pain level is 7 out of 10.\nS8: He states he has also iced and elevated his ankle.\nS9: Tenderness to palpation laterally.\nS10: He was able to ambulate back to his house after the incident but with pain.\nS11: No joint laxity appreciated.\nS12: NEURO: Normal strength and sensation bilaterally.\nS13: Patient reports that he has been working from home since the start of COVID-19 and enjoys taking lots of walks.\nS14: The nature of the diagnosis and treatment options were discussed.\nS15: After reviewing the patient's examination and radiographic findings today, I have had a lengthy discussion with the patient in regards to his current symptoms.\nS16: He denies any previous injuries to his left ankle.\nS17: Matthew Murphy is a pleasant 20-year-old male who presents to the clinic today for the evaluation of left ankle pain.\nS18: Strong dorsalis pedis pulses bilaterally.\nS19: He will continue to take NSAIDs as needed for pain and swelling.\nS20: At this time he will continue to follow the RICE protocol.\nS21: Left ankle sprain of the lateral ligament complex.\nS22: No bony tenderness to palpation of the foot.\nS23: Patient reports taking ibuprofen.\nS24: We discussed that his symptoms are consistent with an ankle sprain of the lateral ligament complex.\nS25: These reveal no fracture or bony abnormalities.\nS26: The patient will follow up with me in 2 weeks to assess his progress, sooner if needed.\nS27: We discussed that it may be a few days before he feels able to tolerate walking.\nS28: He denies hearing a pop at the time of the injury, however, he describes his ankle as feeling extended and stretched.\nS29: MSK: Examination of the left ankle: Ecchymosis noted over the lateral malleolus.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S3\", \"S5\", \"S7\", \"S8\", \"S10\", \"S13\", \"S16\", \"S17\", \"S23\", \"S28\"], \"objective_exam\": [\"S2\", \"S9\", \"S11\", \"S12\", \"S18\", \"S22\", \"S29\"], \"objective_results\": [\"S25\"], \"assessment_and_plan\": [\"S4\", \"S6\", \"S14\", \"S15\", \"S19\", \"S20\", \"S21\", \"S24\", \"S26\", \"S27\"]}",
+  "elapsed_ms": 2488,
+  "usage": {
+    "input_tokens": 1257,
+    "output_tokens": 141
+  },
+  "logprobs": null
+}

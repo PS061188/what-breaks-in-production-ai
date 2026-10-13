@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: • Cardiovascular: 2/6 systolic ejection murmur, stable.\nS2 [SUBJECTIVE]: In regards to his arthritis, the patient states that occasionally he has pain in his elbow, but nothing out of the ordinary.\nS3 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient is doing well on Synthroid and is asymptomatic at this time.\nS4 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I advised the patient to rest his knees.\nS5 [SUBJECTIVE]: Gutierrez a couple of weeks ago, and everything was normal at that time.\nS6 [SUBJECTIVE]: By the end of the day, his knees were very painful.\nS7 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient reports increased joint pain in his bilateral knees over the past weekend.\nS8 [SUBJECTIVE]: He presents today with complaints of joint pain.\nS9 [OBJECTIVE RESULTS]: Good bony alignment.\nS10 [SUBJECTIVE]: He states that he has had some knee problems in the past, but he believes that it was due to the repetition and the weight of the boxes.\nS11 [SUBJECTIVE]: • Musculoskeletal: Denies muscle pain.\nS12 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS13 [SUBJECTIVE]: • Neurological: Denies headaches.\nS14 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue current regimen.\nS15 [OBJECTIVE EXAM]: • Musculoskeletal: There is edema and erythema of the right knee with pain to palpation.\nS16 [ASSESSMENT AND PLAN]: • Additional Testing: We will order a thyroid panel.\nS17 [SUBJECTIVE]: • Constitutional: Denies fevers, chills, or weight loss.\nS18 [SUBJECTIVE]: He states that the pain does not prevent him from doing his activities of daily living.\nS19 [SUBJECTIVE]: He notes that he saw Dr.\nS20 [OBJECTIVE RESULTS]: White blood cell count is within normal limits.\nS21 [ASSESSMENT AND PLAN]: If his symptoms persist, we can consider further imaging and possibly a referral to physical therapy.\nS22 [SUBJECTIVE]: Andrew Perez is a 62-year-old male with a past medical history significant for a kidney transplant, hypothyroidism, and arthritis.\nS23 [ASSESSMENT AND PLAN]: Status post renal transplant.\nS24 [OBJECTIVE RESULTS]: Kidney function is normal.\nS25 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue Synthroid.\nS26 [ASSESSMENT AND PLAN]: • Medical Reasoning: He is doing well and has been compliant with his immunosuppressive medications.\nS27 [ASSESSMENT AND PLAN]: He presents today with complaints of joint pain.\nS28 [ASSESSMENT AND PLAN]: Given that his right knee x-ray was unremarkable, I believe this is an acute exacerbation of his arthritis.\nS29 [SUBJECTIVE]: The patient states that he had a kidney transplant a few years ago for some polycystic kidneys.\nS30 [ASSESSMENT AND PLAN]: Andrew Perez is a 62-year-old male with a past medical history significant for a kidney transplant, hypothyroidism, and arthritis.\nS31 [OBJECTIVE RESULTS]: X-ray of the right knee is unremarkable.\nS32 [SUBJECTIVE]: The patient continues to utilize his immunosuppressant medications.\nS33 [OBJECTIVE RESULTS]: Labs: Within normal limits.\nS34 [SUBJECTIVE]: He denies any other symptoms such as fever, chills, muscle aches, nausea, vomiting, diarrhea, fatigue, and weight loss.\nS35 [SUBJECTIVE]: Endorses joint pain in the bilateral knees.\nS36 [OBJECTIVE EXAM]: Range of motion is decreased.\nS37 [ASSESSMENT AND PLAN]: On recent labs, his white blood cell count was within a normal limits and his kidney function is stable.\nS38 [OBJECTIVE EXAM]: Left knee exam is normal.\nS39 [SUBJECTIVE]: The patient reports that over the weekend, he was moving boxes up and down the basement stairs.\nS40 [SUBJECTIVE]: By the end of the day on Saturday, his knee soreness interrupted his sleep.\nS41 [SUBJECTIVE]: Regarding his hypothyroidism, the patient states that he is doing well.\nS42 [ASSESSMENT AND PLAN]: • Medical Treatment: Initiate Ultram 50 mg every 6 hours as needed.\nS43 [ASSESSMENT AND PLAN]: • Additional Testing: We will order an autoimmune panel for further evaluation.\nS44 [SUBJECTIVE]: The patient has taken Tylenol and iced his knees for a short period of time, but nothing really seemed to help.\nS45 [SUBJECTIVE]: He has continued to utilize Synthroid regularly.\nS46 [SUBJECTIVE]: The pain is equal in the bilateral knees.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S5\", \"S6\", \"S8\", \"S10\", \"S11\", \"S13\", \"S17\", \"S18\", \"S19\", \"S22\", \"S29\", \"S32\", \"S34\", \"S35\", \"S39\", \"S40\", \"S41\", \"S44\", \"S45\", \"S46\"], \"objective_exam\": [\"S1\", \"S15\", \"S36\", \"S38\"], \"objective_results\": [\"S9\", \"S20\", \"S24\", \"S31\", \"S33\"], \"assessment_and_plan\": [\"S3\", \"S4\", \"S7\", \"S12\", \"S14\", \"S16\", \"S21\", \"S23\", \"S25\", \"S26\", \"S27\", \"S28\", \"S30\", \"S37\", \"S42\", \"S43\"]}",
+  "elapsed_ms": 3073,
+  "usage": {
+    "input_tokens": 1628,
+    "output_tokens": 209
+  },
+  "logprobs": null
+}

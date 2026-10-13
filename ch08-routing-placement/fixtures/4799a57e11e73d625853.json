@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-74008\nDate: 2026-01-16\n\nSender:\nSummit Packaging\n1200 Industrial Parkway\nAberdeen 2320\n\nConsignee:\nCorvus Data\n155 Meadow Lane\nReading 1708\n\nCharge to:\nDelta Grain Co\n31 Weavers Row\nSwansea 8411\n\nItems: 29 cartons, 458 kg\nCarrier reference: CR8248\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Summit Packaging, 1200 Industrial Parkway, Aberdeen 2320\",\"source_quote\":\"Summit Packaging\\n1200 Industrial Parkway\\nAberdeen 2320\"},\"destination_address\":{\"value\":\"Corvus Data, 155 Meadow Lane, Reading 1708\",\"source_quote\":\"Corvus Data\\n155 Meadow Lane\\nReading 1708\"},\"billing_address\":{\"value\":\"Delta Grain Co, 31 Weavers Row, Swansea 8411\",\"source_quote\":\"Delta Grain Co\\n31 Weavers Row\\nSwansea 8411\"}}",
+  "elapsed_ms": 1442,
+  "usage": {
+    "input_tokens": 652,
+    "output_tokens": 161
+  },
+  "logprobs": null
+}

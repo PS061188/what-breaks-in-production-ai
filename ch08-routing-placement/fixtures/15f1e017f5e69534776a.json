@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Roberts went to the emergency room for palpitations and hypertension.\nS2: He has been monitoring his blood pressure at home daily, obtaining systolic blood pressure readings of 146 to 155.\nS3: Normal rate, regular rhythm, S2 normal, normal heart sounds, and normal pulses.\nS4: He denies additional episodes of palpitations.\nS5: • Resistant hypertension.\nS6: Several family members positive for hypertension.\nS7: He was provided materials to follow the DASH diet and encouraged to meet 30-min of walking most days.\nS8: Jordan Roberts is a 49-year-old with a long history of hypertension and an acute episode of palpitations.\nS9: He does report a family history of hypertension.\nS10: He attributed this to a panic attack, but also stated he consumed several cups of coffee on an empty stomach the morning of.\nS11: He is currently on maximal doses for 3 medications.\nS12: I have tried to avoid this, given the potential for issues with erectile dysfunction.\nS13: Schedule follow up appointment in 2 weeks for blood pressure check and basic metabolic panel.\nS14: I have added spironolactone to his regimen which will require monitoring of his potassium and sodium.\nS15: I provided and reviewed with Mr.\nS16: Additionally, he has been monitoring his salt intake and feels he is doing well at reducing it.\nS17: I counseled the patient about spironolactone side effects, including gynecomastia and electrolyte disturbances, as well as his increased risk of dehydration, with one sign to watch for being dizziness.\nS18: High blood pressure and palpitations.\nS19: We will schedule him for a follow up in 2 weeks to complete a basic metabolic panel and check his blood pressure.\nS20: Next medication to consider adding is carvedilol.\nS21: He has a new primary care physician who started him on a new medication Benicar HCT, which he has been using for the past month.\nS22: Roberts the American Heart association website (heart.org) and encouraged him to access for tips on lowering his salt intake and increasing his potassium intake.\nS23: Roberts presents with resistant hypertension, with systolic blood pressure readings between 146-155.\nS24: Breath sounds normal.\nS25: Amlodipine 10 mg daily.\nS26: If we are not able to improve his blood pressure with spironolactone, the next step would be sending him to the resistant hypertension clinic.\nS27: His maximum salt intake should be 1500 to <2000 mg per day.\nS28: Benicar HCT 40 mg/25 mg\nS29: Reduce sodium intake to 1500 to <2000 mg per day.\nS30: He also walks on his treadmill as often as he can.\nS31: There is no tenderness.\nS32: Thyroid profile 03/01/2021.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[{\"id\":\"S1\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S2\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S4\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S6\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S8\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S9\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S10\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S11\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S16\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S21\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S25\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S28\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S30\",\"placement_confidence\":\"HIGH\"}],\"objective_exam\":[{\"id\":\"S3\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S24\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S31\",\"placement_confidence\":\"HIGH\"}],\"objective_results\":[{\"id\":\"S32\",\"placement_confidence\":\"HIGH\"}],\"assessment_and_plan\":[{\"id\":\"S5\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S7\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S12\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S13\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S14\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S15\",\"placement_confidence\":\"LOW\"},{\"id\":\"S17\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S18\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S19\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S20\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S22\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S23\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S26\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S27\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S29\",\"placement_confidence\":\"HIGH\"}],\"requires_review\":true}",
+  "elapsed_ms": 2683,
+  "usage": {
+    "input_tokens": 1803,
+    "output_tokens": 429
+  },
+  "logprobs": null
+}

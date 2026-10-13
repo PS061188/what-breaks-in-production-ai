@@ -47,9 +47,9 @@ print today.
 | **7** | legitimate queries answered | 100% (48/48) | **46%** (22/48) | |
 | **8** | placement error rate | 3% (1/33) | 3% (1/33) | *[noise]*, and the 1 is a checker bug — §3 |
 | **8** | model named the wrong section for its own quote | 18% (6/33) | 3% (1/33) | **0/33 real** — §3 |
-| **9** | fabrication on fields with no source content | 6% (2/35) | **0%** (0/35) | forced by construction — §1; see §G |
+| **9** | fabrication on fields with no source content | ~~6% (2/35)~~ **0 of 35** | 0% (0/35) | both "fabrications" are correct readings; the fixed side is forced — see *Chapter 9 re-read (29 Sep)* |
 | **9** | recall on fields the document does cover | 96% (23/24) | 92% (22/24) | *[noise]* — but it did move |
-| **9** | fabrications whose quote IS in the document | **100%** (14/14) | — | the finding |
+| **9** | fabrications whose quote IS in the document | ~~100% (14/14)~~ withdrawn | — | no fabrication left to carry a quote — *Chapter 9 re-read (29 Sep)* |
 | **10** | dose figures returned | 100% (55/55) | 96% (53/55) | *[noise]*; the failure does not reproduce |
 | **10** | model's own count vs the independent count | — | 0% (0/6) | measures a prompt ambiguity — §16 |
 
@@ -222,6 +222,13 @@ Measured, sweeping how much of the quote is verified:
 | first 200 chars | 66% | 18% |
 
 The rule as printed buys 8 points of fabrication for 42 points of recall.
+
+*Replayed 29 Sep 2026 on the committed fixtures, one run each, correct values on
+the fields the supplied sections cover (of 23):* plain prompt — whole quote 9,
+first 80 characters 23, 150 → 19, 200 → 14; Prompt 9-1 — 11, 23, 20, 15. The
+sweep above came from recordings since overwritten, and its fabrication column
+counted correct readings (see "Chapter 9 re-read"). The book prints the replayed
+figures.
 A reader who implements it exactly will null nearly half their legitimate
 extractions and have no idea why.
 
@@ -1058,7 +1065,7 @@ claiming 47 where 13 existed. Every later step compares against that number.
 
 | what the instruction asks | outcome |
 |---|---|
-| **restrict what may be asserted** (ch3 only-from-sources, ch9 null-is-correct, ch6 status must be ACTIVE, ch2 scan for these signals) | **at least −85 pts, 6%→0%, 67%→17%, 95% flagged** |
+| **restrict what may be asserted** (ch3 only-from-sources, ch6 status must be ACTIVE, ch2 scan for these signals; ch9 null-is-correct withdrawn 29 Sep — nothing to reduce) | **at least −85 pts, 67%→17%, 95% flagged** |
 | **ask the model to assess itself** (ch2 confidence_to_proceed, ch4 confidence, ch8 placement_confidence, ch10 self-count) | **LOW 0/159, LOW 0/192, 97% HIGH and 0 caught, 0/18 correct** |
 
 **Across four chapters and 400+ self-assessments, a model asked to grade its own
@@ -1206,8 +1213,8 @@ without a heading, and is not caught. Corrections below are therefore conservati
 | 3.1 soft vocabulary | 35% | **9%** (3/34) |
 | 3.1 permission clause | 92% (44/48) | **88%** (30/34) |
 | 3.2 grounding template, Haiku 4.5 | 23% (11/48) | **3%** (1/34) |
-| 9.1 fields filled, no source | 29% (14/48) | **6%** (2/35) |
-| 9.2 fabrications carrying a real quote | 14 of 14 | **2 of 2** |
+| 9.1 fields filled, no source | 29% (14/48) | **6%** (2/35) → 0 of 35 on 29 Sep: both are correct readings |
+| 9.2 fabrications carrying a real quote | 14 of 14 | **2 of 2** → withdrawn 29 Sep: the values are real too |
 
 Cross-model, Experiment 3.2. Baselines were at or near ceiling in the recorded
 sweep, so removing 12 cases bounds them tightly; `fixed.py` was replayed directly.
@@ -1494,3 +1501,1205 @@ partial input, another customer's data in the context is contaminated input. Bot
 and 8 with their issue described there; the tenant figure is Figure 2-3. Chapter 6 keeps a brief fix 3 for the
 write side (check the destination belongs to the customer). Chapter 6 fixes renumbered 1–8. Code stays in
 `ch06-state-mismatch/`.
+
+
+## Chapter 7 — an off-the-shelf injection scanner, measured (23 Sep 2026)
+
+The chapter's injection fix names LLM Guard and Azure Content Safety and then
+measures an eight-line regex. `ch07-edge-input/probe_llmguard.py` runs LLM Guard's
+`PromptInjection` scanner (`protectai/deberta-v3-base-prompt-injection-v2`, library
+default threshold 0.92, local CPU, no API) over the same 144 cases, on the query
+and on the document. Python 3.10+ in its own venv; the rest of the repo is 3.9.
+
+| | full (default) | chunks |
+|---|---|---|
+| injection attempts flagged (query or document), of 48 | **37** | **48** |
+| `inj_spanish` flagged on the query, of 12 (regex: 0) | 12 | 12 |
+| `inj_buried_doc` flagged on the document, of 12 | 1 | 12 |
+| legitimate inputs wrongly flagged, of 96 | **24** | **24** |
+| `ood_hindi` flagged, of 12 | **12** (risk 1.00) | 12 |
+| `ood_numeric` flagged, of 12 | 12 | 12 |
+| `ood_long` (padded) flagged, of 12 | 0 | 0 |
+| any document wrongly flagged | 0 | 0 |
+| time per scan | 51 ms | 77 ms |
+
+**Finding.** The model scanner has the recall the phrase list lacks — every Spanish
+attempt, and in chunk mode every buried payload — and it flags every Hindi question
+as an injection at maximum confidence: the embedding-gate failure again, from a
+different model. The default match type misses payloads past the first 512 tokens;
+for documents, chunk mode is the only usable setting. On this corpus the regex plus
+the prompt's refusal rule already gave 0/48 obeyed with no Hindi refusals, so the
+extra recall added nothing the pipeline needed. A scanner model can log and route;
+it must not refuse on its own. Azure Content Safety remains untested (paid API, key
+required).
+
+
+## Chapter 8 — the rules engine, measured on planted misplacement (24 Sep 2026)
+
+Nothing was misplaced on the labels (§3), so `fixed.py`'s rules engine had nothing
+to catch. `ch08-routing-placement/probe_planted.py` builds the failure on purpose,
+as Chapter 6's context-integrity test did: it replays the recorded outputs and
+swaps quote and value between two boxes by code, every pair once — 11 cases × 3
+swaps = 33 variants, 66 planted misplacements, 33 untouched boxes. No model calls.
+
+| locator window | planted | caught | missed | untouched | false rejections |
+|---|---|---|---|---|---|
+| 80 chars (as shipped) | 66 | **65** | 1 | 33 | **1** |
+| 200 chars | 66 | 66 | 0 | 33 | 4 |
+| whole quote | 66 | 66 | 0 | 33 | 6 |
+
+All 66 rejections at the shipped window were "quote came from X, not Y" — the
+placement check itself. The one miss and the one false rejection are the same
+boilerplate artefact as §3 (first 80 characters shared across sections). The
+longer windows fix recall and pay in unfindable-quote rejections, exactly the
+two-way tension §3 describes. **Finding:** the detector works when there is
+something to detect; the null result is about the corpus, not the check.
+
+
+## Chapter 8 — the prompt on a corpus where misplacement is possible (24 Sep 2026)
+
+`ch08-routing-placement/probe_hardcorpus.py`: headings removed, the three
+sections' sentences shuffled together (fixed seed per drug), so the model must
+route by content alone. Plain prompt vs Prompt 8-1 as printed, three live draws
+each (`sample=1..3`), 66 calls, $0.35.
+
+| prompt | run | misplaced (80-char locator) | no match (80) | no match (whole quote) |
+|---|---|---|---|---|
+| plain | 1, 2, 3 | 1, 1, 0 | 0, 1, 1 | 18, 19, 18 |
+| chapter | 1, 2, 3 | 0, 0, 0 | 3, 0, 0 | 16, 16, 14 |
+
+Every flagged row was read. The plain prompt's two "misplaced" boxes are the
+Amoxicillin contraindication whose quote opens with the drug-name boilerplate
+(§3's artefact); the content is a contraindication, correctly placed. Every
+"no match" is correctly placed content whose quote joins sentences that are not
+adjacent in the source, so the locator cannot find it — which is also why the
+whole-quote window cannot score this corpus. **Real misplacements: 0 of 33, every
+run, both prompts.** On a drug label the sections differ in meaning; the model
+separates them without headings. A note's sections differ by convention (the
+same BP belongs in HPI and in A/P), which these documents cannot pose. The
+chapter says so; Prompt 8-1 still cannot be credited with placement accuracy.
+
+## Chapter 8 — provenance record demonstration (24 Sep 2026)
+
+`ch08-routing-placement/demo_provenance.py`: a two-stage pipeline in code with
+the record switched on; four faults planted per label (merge fault, generator
+fault, duplicate, no record). The record names every cause, 11 of 11 each — by
+construction, and the book does not print it as a rate. What the demo shows is
+the second table: with only the quote check, merge fault, generator fault and
+duplicate all read "wrong section, cause unknown", and "no record" looks fine.
+
+
+## Chapter 8 — placement by convention: generated shipping documents (24 Sep 2026)
+
+`ch08-routing-placement/probe_convention.py`. The document Prompt 8-1 was written
+for: three addresses (origin, destination, billing), same kind of content in
+three roles. 36 GENERATED documents with exact ground truth, three levels: L1
+explicit labels; L2 varied labels per document (Sender/Consignee/Payer, From/To/
+Invoice to, ...); L3 no labels, a header states the order, half reversed. Three
+prompts: plain; Prompt 8-1 as printed (loaded from draft/ebook.html); Prompt 8-1
+plus placement_confidence and requires_review. Three live draws each (`sample`),
+324 calls, $0.60. (The helper reported 108 "duplicate requests": the first live launch crashed on the chapter prompt after recording the plain prompt's 108 calls, and the relaunch re-recorded them. Each draw has its own fixture, and replay reproduces the live table exactly.)
+
+| prompt | L1 misplaced / other | L2 misplaced / other | L3 misplaced / other |
+|---|---|---|---|
+| plain | 0 / 0, 0, 0 | 0 / 6, 9, 3 | 0 / 0, 0, 0 |
+| chapter | 0 / 0, 0, 0 | 0 / 3, 0, 0 | 0 / 0, 0, 0 |
+| graded | 0 / 0, 0, 0 | 0 / 0, 0, 0 | 0 / 0, 0, 0 |
+
+(of 36 fields per level per run; 324 fields per prompt over three runs, 972 in all)
+
+Grade on the graded prompt, all fields: HIGH 312, MEDIUM 12, LOW 0; requires_review
+set on 9 of 108 records. Every MEDIUM and every review flag was on a correct field.
+
+**Finding.** Third null. A single extraction call given a whole, clean document
+does not misplace, whether sections differ by meaning (labels) or by convention
+(addresses), even position-only. The field definitions appeared to reduce *empty* fields on unfamiliar labels — WITHDRAWN 25 Sep: a company-only scorer artefact, see the 25 Sep entry. The grade cannot be judged
+against errors here because there were none; what it did was raise nine false
+review flags. The failure the studies measure has two things none of these
+experiments had: a **merge step** that files generated pieces into a document,
+and **real clinical sentences** that belong in two sections by convention. That
+is the experiment to run next (ACI-Bench / PriMock57 reference notes give real
+sentences with known sections).
+
+
+## Chapter 8 — placement on real clinical notes (24 Sep 2026)
+
+`ch08-routing-placement/probe_clinical.py`. The corpus the failure needs: 60
+reference visit notes from ACI-Bench (`data/aci_bench_notes.json`; Yim et al.,
+Nature Scientific Data 2023, CC BY 4.0; 20 per subset: aci, virtassist,
+virtscribe). Each note divided into subjective / objective_exam /
+objective_results / assessment_and_plan with the MEDIQA-Chat 2023 section
+tagger's rule (re-implemented from its header lists; identical spans on all 207
+notes). VITALS blocks excluded (the tagger files them under subjective by
+position). Sentences shuffled, headings removed, the model files each sentence
+under one of the four headings. Ground truth: the author's section; a sentence
+whose exact text sits in two divisions (46 of 2,070) is correct under either.
+2,070 scored sentences. Four prompts × three draws, 720 calls, $1.98, 8 workers.
+(24 "duplicate requests" = the NOTES=2 smoke test's fixtures, re-recorded by the
+full run; replay reproduces the live table exactly.)
+
+| prompt | misplaced r1 / r2 / r3 (of 2,070) | duplicate | missing |
+|---|---|---|---|
+| plain (four headings) | 375 (18.1%) / 366 (17.7%) / 381 (18.4%) | 3 / 2 / 0 | 33 / 39 / 32 |
+| defined (+ section definitions) | 286 (13.8%) / 268 (12.9%) / 256 (12.4%) | 0 / 0 / 3 | 12 / 16 / 16 |
+| graded (+ confidence per sentence) | 271 (13.1%) / 266 (12.9%) / 269 (13.0%) | 0 / 0 / 0 | 3 / 3 / 3 |
+| tagged (each sentence carries its section) | 1 / 0 / 1 | 0 / 0 / 0 | 3 / 2 / 1 |
+
+By subset (plain, three runs summed): aci 163/1857 (8.8%), virtassist 332/2091
+(15.9%), virtscribe 627/2262 (27.7%). Where the plain prompt's misplacements
+went (summed): subjective→A&P 341, subjective→exam 198, A&P→results 172,
+A&P→subjective 165, subjective→results 124, A&P→exam 77. Stability: of the 462
+sentences misplaced at least once, 283 in all three runs, 94 in two, 85 in one.
+
+Grade (graded prompt, 6,201 graded placements over three runs): HIGH 5,048
+correct / 560 misplaced; MEDIUM 322 / 203; LOW 25 / 43. Share misplaced: HIGH
+10.0%, MEDIUM 38.7%, LOW 63.2%. A queue on "below HIGH": 593 flagged, 347
+correct, 246 of 806 misplaced caught (30.5%). requires_review (180 note-runs):
+set on 117 with an error and 8 without; not set on 36 with an error and 19
+without (153 note-runs had at least one error).
+
+**Finding.** The failure reproduces as soon as the sections are decided by
+convention: ~1 in 6 sentences filed elsewhere by words alone; definitions
+remove about a third; the section tag removes it (1, 0, 1). The rate is a
+property of the notes, not the model (8.8% → 27.7% across subsets of one
+benchmark). Most misplacement is history ↔ assessment-and-plan, then ROS lines
+that read like exam findings; 61% of misplaced sentences are stable across runs
+(convention, not sampling). The confidence grade carries signal for the first
+time in the repo — LOW appears, and the error rate rises with each lower grade —
+but 7 in 10 misplaced sentences are graded HIGH, so a queue keyed on the grade
+misses most errors and fills with correct ones. The plain prompt also drops
+sentences (33/39/32 per run): Chapter 10's failure inside a merge step.
+Not measured: the generation step (sentences were the note's own, not a
+model's). Book: Chapter 8 test section, provenance "Measured here", "What did
+not survive testing", fixes 2–3, takeaways; Chapter 2 and 12 echoes corrected
+("never returned its lowest grade" → first two tasks only; "Nothing, in four
+chapters" → "Little"); Experiment 8.2's "3–15% wrong section" withdrawn as the
+80-character artefact.
+
+
+## Chapter 8 — shipping documents, level 4, and a scorer artefact of my own (25 Sep 2026)
+
+`probe_convention.py` gained a fourth level: no role labels and no order line,
+sender first in half the documents, recipient first in the other half. 48
+documents now; 432 calls, $0.79. Two corrections to the 24 Sep entry:
+
+1. **The "empty fields" claim was a scorer artefact.** The judge matched the
+   company name only; the plain prompt at level 2 returned correct addresses
+   *without* the company line ("22 Tannery Walk, Chester 4423"), which scored
+   as "other" and was written up as "left empty". Scored on company OR street,
+   every prompt filled 108 of 108 fields at every labelled level. The field
+   definitions changed nothing where labels were present. Withdrawn from the
+   book, the READMEs and this file's earlier table.
+2. **`--live` re-recorded levels 1–3** (the helper re-calls the API for every
+   request in live mode; 324 "duplicates"). The earlier draws are gone; the
+   numbers below are the recordings on disk. Fix: `--live missing` now records
+   only requests with no fixture.
+
+| prompt | L1 misplaced (r1, r2, r3) | L2 | L3 | L4 misplaced | L4 null |
+|---|---|---|---|---|---|
+| plain | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 | 12, 12, 12 | 0, 0, 0 |
+| chapter (Prompt 8-1) | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 | 12, 15, 11 | 4, 2, 5 |
+| graded | 0, 0, 0 | 0, 0, 0 | 0, 0, 0 | 12, 12, 12 | 2, 3, 2 |
+
+(of 36 fields per level per run)
+
+Level 4, what happened: both prompts assumed sender-first; every recipient-first
+document had origin and destination swapped (6 docs × 2 fields = 12 a run).
+Prompt 8-1's "fill only from text carrying its keywords, null otherwise" rule
+produced null on 11 of 108 fields (mostly billing) and did not stop the guess.
+Grade at level 4 (graded prompt, 108 fields): HIGH 2 correct / 2 misplaced;
+MEDIUM 36 / 34; LOW 27 correct / 0 misplaced / 7 empty. `requires_review` set
+on all 36 records (21 with an error, 15 without). Levels 1–3 correct fields:
+HIGH 306, MEDIUM 18, LOW 0.
+
+**Finding.** On label-decided documents the prompt's definitions change
+nothing while labels are present (a plain prompt reads ordinary labels as
+well) and do not stop the model when labels are absent: it fills the roles by
+convention, like the plain prompt, and is wrong whenever the convention is.
+What works there is the flag: with no labels the model marks nearly every
+field MEDIUM/LOW and flags every record — it can see that the document gives it
+nothing, even though it cannot say which guess is wrong. Contrast the clinical
+notes (8.6), where it could not see that its convention was wrong. Book:
+Chapter 8 now carries two prompts — 8-1 (labelled forms, this test) and 8-2
+(the clinical merge-step prompt that 8.6 ran, printed for the first time).
+
+
+## Chapter 8 — shipping documents, the "role stated?" prompt (25 Sep 2026)
+
+Prachi asked whether the model could be made to name the wrong *fields* rather
+than mark the whole document down. `probe_convention.py` gained a fourth prompt,
+`evidence`: Prompt 8-1 plus, per field, `role_stated` (true if the document says
+in words which address plays this role — a label or an order line — false if
+decided from position or convention), the grade, and `requires_review` when any
+field is unstated or LOW. 144 calls with `--live missing`; nothing re-recorded.
+
+| level | role_stated=true (correct / wrong) | role_stated=false (correct / wrong) | requires_review, of 36 |
+|---|---|---|---|
+| L1 plain labels | 108 / 0 | 0 / 0 | 0 |
+| L2 varied labels | 105 / 0 | 3 / 0 | 3 |
+| L3 order line only | 82 / 0 | 26 / 0 | 9 |
+| L4 nothing | 0 / 0 | 50 / 58 | 36 |
+
+Misplaced at L4 with this prompt: 12, 12, 12 (the same swaps); null 8, 8, 6.
+
+**Finding.** The model can report, field by field, that the document did not
+state the role — 108 of 108 at L4, and every "false" at L2–L3 sat on a correct
+field — but it cannot report which guess is wrong, because nothing in the
+document says; it filled the unstated fields anyway and swapped the same twelve
+a run. The actionable output is `role_stated=false`, which code can turn into a
+null or a review, whatever grade accompanies it. Book: one paragraph at the end
+of Prompt 8-1's "What this prompt does"; the fuller-version sentences for both
+prompts are now printed in the prompt intros.
+
+
+## Chapter 8 — what a strict schema guarantees, measured (25 Sep 2026)
+
+`ch08-routing-placement/probe_schema.py`, Experiment 8.7. Fix 1 ("strict JSON
+schema with enum-constrained field names — the model cannot invent field names
+or cross-populate them") had never been compared with its absence, because every
+run in the repo enforces a schema. Plain prompt (headings only), 60 ACI-Bench
+notes, one draw per condition; 193 calls (73 live, 120 replayed), $0.40.
+
+| condition | not JSON | extra keys | unknown IDs | duplicates | missing | misplaced (of 2,070) |
+|---|---|---|---|---|---|---|
+| free — no schema, code parses the reply | 0 | 0 | 0 | 2 | 8 | 376 |
+| schema — JSON schema enforced by the API (8.6's draw 1) | 0 | 0 | 0 | 3 | 33 | 375 |
+| validated — schema + Pydantic validator (every ID exactly once) + re-ask, max 2 | 0 | 0 | 0 | 0 | 0 | 383 |
+
+13 of 60 outputs failed the validator at first; all 13 were fixed by one re-ask
+(73 live calls = 60 free + 13 re-asks; the schema condition replayed 8.6).
+
+**Finding.** On this task the model never invented a key or an ID, with or
+without the schema, so the guarantee fix 1 sells was not exercised. The schema
+call dropped *more* sentences (33) than the free call (8) — one draw each, so
+treat the direction with care, but the schema clearly does not keep sentences.
+What did keep them was the validator-and-re-ask loop (the mechanism Instructor
+automates): 0 duplicates, 0 missing, at 13 extra calls in 60. None of the three
+touches misplacement. Fix 1 in the book now says this ("Measured here") instead
+of "not measured".
+
+Instructor itself (1.17.0, Anthropic client, isolated venv): ten notes, the same validator, `max_retries=2` — a valid filing returned for each; retries not counted.
+
+Experiment 8.6, counted 29 Sep 2026: the VITALS exclusion removed 27 sentences in 15 of the 60 notes (2,070 scored).
+
+---
+
+## Chapter 9 re-read (29 Sep 2026) — the corrected baseline holds no fabrication, and 9.3's zero is forced
+
+**Manuscript changed in the same pass.** Every case below was opened by replaying
+the committed fixtures (`broken.py`, `fixed.py`, `fixed_noncircular.py`,
+`fix_provenance.py`); no live calls.
+
+**9.1 and 9.2 — the two survivors of §G are correct readings.**
+
+- *Furosemide, `drug_interactions`.* Value: reduce the dose of other
+  antihypertensives by at least 50 percent. Quote, from the supplied
+  `dosage_and_administration`: "the dosage of other agents should be reduced by
+  at least 50 percent when furosemide tablets are added to the regimen". The
+  supplied text states it; §G's heading test cannot see it.
+- *Omeprazole, `pediatric_dosage`.* Value: "children under 18 years of age: ask a
+  doctor" — verbatim from the supplied OTC directions. §G already names this case
+  as a miss of its own detector and it was still counted.
+
+Corrected: **0 fabrications in 35** on the plain prompt. "2 of 2 carried a real
+quote" is withdrawn — the quotes are real because the values are. On 12 FDA
+labels with Claude Haiku 4.5, sparse field fabrication **did not reproduce**: a
+schema that forced a string into every field got "N/A" on all 33 fields the
+supplied text did not cover.
+
+**9.3 — the fabrication side is forced again.** `enforce()` keeps a value only if
+its quote is located in `SUPPORTING_SECTIONS[field]`, and each field has one
+supporting section. The six unanswerable fields are exactly the ones whose
+supporting section is absent *from that label*, so their quotes can never be
+located there: **0 of 6 is arithmetic.** The script's note "the check CAN pass
+here — the supporting sections exist for other drugs in the same run" reasons
+about the corpus; the check runs per document. Only the recall side measures
+anything. Note corrected in `fixed_noncircular.py`; the printed notes in `broken.py` and `fix_provenance.py` now carry the same corrections (their numbers are unchanged, their claims withdrawn).
+
+**9.3 recall — the ten losses, each opened.**
+
+| cause | n | cases |
+|---|---|---|
+| section rule rejected a correct children's dose | 5 | Metformin, Atorvastatin, Albuterol, Gabapentin, Furosemide — every quote sits in `dosage_and_administration` |
+| quote not matched in the document | 1 | Atorvastatin `drug_interactions` (not opened further) |
+| model returned null | 1 | Levothyroxine `pediatric_dosage` (not opened further) |
+| correct null, counted as a loss | 2 | Lisinopril — its `pediatric_use` concerns neonates exposed in utero and states no dose; Amoxicillin — a paediatric suspension, "Experience … in adults is not available" |
+| scorer artefact | 1 | Gabapentin `drug_interactions` — a complete interaction list, kept by the check, scored as declined because it contains "does not" (`ABSENCE_MARKERS`) |
+
+The five rule losses are a wrong map, not a model error: 21 CFR 201.57(c)(9)(iv)
+says "appropriate pediatric dosage information must be given under the 'Dosage
+and Administration' section". Recall is at least 33 of 40 answerable fields; the
+rule itself cost 5. The report's loss table listed 8 of the 10.
+
+**Fix 4 (embeddings) measured no fabrication.** `fix_provenance.py` counts
+`present == False and not declined` as a fabrication without the §G exclusion.
+Its 12 "fabrications" are the 10 contaminated fills plus the two above — all
+correct values. The top-scoring one (0.85) is Albuterol's children's dose. "0.85
+vs 0.55" and the threshold sweep are withdrawn as evidence.
+
+**Fix 3 (null rate) — "0% vs 100%" measured two schemas.** The baseline schema
+requires a string, so "N/A" is never null; the fixed side's nulls on withheld
+fields are forced by the code check. Not evidence. Never tested as a monitor.
+
+**Fix 1 (optional fields, no defaults)** was never isolated, and the filler-phrase
+validator the chapter describes was never built.
+
+**Prompt 9-1 as printed was not the prompt that ran.** It lacked "A null field
+is a correct answer, not a failure." and said "ANY OPTIONAL FIELD" where
+`fixed.SYSTEM` says "ANY FIELD"; a merge step had also broken its line structure.
+The book now prints `fixed.SYSTEM` without its `source_section` instruction, which
+the code records and never uses.
+
+**What the book says now.** Chapter 9's box uses outside measurements (Ontario
+Auditor General 2026, 9 of 20 approved AI-scribe systems; Fox et al. 2026, 2 of 3
+deployed scribes wrote examinations for telephone consultations; Taylor et al.
+2026, 41 of 356 notes); the body prints the null result, and Asgari et al. 2025 is
+the outside evidence for permitting "unknown". Chapter 3's pointer, Chapter 12's
+"6% to zero" and *Where the Numbers Come From* follow.
+
+*Box revised 30 Sep 2026 at Prachi's review.* The three figures above counted
+hallucination anywhere in a note (Ontario, Taylor) or history filed as
+examination (Fox, telephone consultations — Chapter 8's pattern), not a field the
+source left empty. The box now carries two external measurements that do: Fox et
+al. 2026, invented patient identity — "where a name is inaudible or a sex never
+stated, the note supplies one and uses it throughout", 34 of 142 consultations,
+all three products; and Banerjee et al. 2024 (arXiv 2406.06496) — 52% (95% CI
+48.95–54.23) of chest X-ray reports from a research model on the MIMIC-CXR test
+set (1,383 studies) referred to a prior exam it never saw. Ontario and Taylor
+were removed from the references. *Same day, Prachi's final choice:* Banerjee was
+replaced by this repo's Experiment 9.4 ("No known drug allergies" in 4, 3, 4 of 58
+notes; 0 in every run with the "Not discussed." rule), labelled as the companion
+repository; the Banerjee reference was removed.
+
+**Open.** The failure needs a template that asks for more than the source
+contains — a note written from a conversation. ACI-Bench's dialogues (the repo
+holds only its notes) with a full note template are the test to run. Per Prachi's
+standing rule it runs on her subscription through `claude -p`, not the API.
+
+---
+
+## Chapter 3 re-read (29 Sep 2026) — the Sertraline "fabrication" is a correct reading
+
+**Manuscript changed on 29 Sep; see the recount at the end of this section.** Opened by replaying
+the committed fixtures; no live calls.
+
+The question "Which other drugs interact with Sertraline Hydrochloride?" is scored
+unanswerable because `drug_interactions` is withheld. The supplied
+`dosage_and_administration` carries two subsections that answer it: "Switching a
+Patient To or From a Monoamine Oxidase Inhibitor (MAOI) Intended to Treat
+Psychiatric Disorders" and "Use of Sertraline Hydrochloride With Other MAOIs Such as
+Linezolid or Methylene Blue". The model's answer (MAOIs, linezolid, intravenous
+methylene blue) and all three of its quotes come from there. `shared/contamination.py`
+misses it because neither heading contains the words "drug interactions".
+
+Where it is counted as a fabrication:
+
+| run | as scored | the Sertraline case | other residual cases |
+|---|---|---|---|
+| neutral prompt (broken.py) | 2 of 34 | counted | Lisinopril pregnancy (not opened here) |
+| soft words (broken.py) | 3 of 34 | counted | 2 not opened here |
+| soft inference / permission clause | 30 of 34 | counted | — |
+| Prompt 3-1, Haiku 4.5 | 1 of 34 | the only one | none |
+| Prompt 3-1, Opus 5 | 2 of 34 | counted | Omeprazole pediatric: "The source does not provide a pediatric dose … for children under 18 ask a doctor" — a decline written as an answer |
+| Prompt 3-1, GPT-5-mini | 1 of 34 | the only one | none |
+| Prompt 3-1, GPT-4.1-mini | 0 of 34 | — | — |
+| self-consistency, five draws | "fabricated on every draw: 1" | **is** this case | the two split cases (Lisinopril and Atorvastatin pregnancy) are real |
+
+Consequences for the book:
+
+- **Prompt 3-1 produced no fabrication on any of the four models.** "3%, one question
+  in thirty-four … all fell between 0% and 6%" counts correct readings.
+- **The quote-existence paragraph has no case left.** "A drug-interactions claim …
+  that the supplied label does not make … the model does not invent quotes; it
+  attaches real text … to a claim the source does not support" — the label makes
+  the claim.
+- **The self-consistency conclusion is inverted.** The answer "repeated every time"
+  that the method "missed" is correct; the method flagged both real fabrications
+  and let the correct answer through. That a fabrication repeated word for word
+  cannot be flagged remains true by design, but it was not observed.
+- **Plain-prompt 6% (2/34) includes this case**; so does soft-words 9% and the
+  permission-clause 88%. Omeprazole's OTC "children under 18 years of age: ask a
+  doctor" is a second detector miss (Chapter 9 re-read above).
+
+**Class fix, applied 29 Sep 2026 (Prachi chose the full recount).** `TOPIC_HEADINGS`
+gained the two verified shapes (a "Use of X With …:" co-administration heading; an
+OTC "children under N years of age:" line). Each matches exactly one label in the
+twelve. Covered (label, topic) pairs: 14 → **16**. `fix_judge.py` and
+`fix_similarity.py` never applied §G at all: they now skip covered questions and
+count an answer to an unanswerable question as ungrounded only if the pinned
+classifier judged it ASSERTED (a correct decline is neither a catch nor a miss).
+Every figure below is a replay of committed fixtures.
+
+| figure | printed | recounted |
+|---|---|---|
+| unanswerable questions (Ch 3) | 34 | **32** |
+| 3.1 plain prompt | 6% (2/34) | **3% (1/32)** — Lisinopril pregnancy |
+| 3.1 soft words | 9% (3/34) | **6% (2/32)** — Prednisone adverse reactions, Lisinopril interactions |
+| 3.1 permission clause, Haiku 4.5 | 88% (30/34) | **91% (29/32)** — Furosemide's answer opened it: it goes "beyond the label" |
+| permission clause, Opus 5 / GPT-5-mini / GPT-4.1-mini | 100% / 97–100% / 91–100% | **100% / 100% / 94%** (one recorded run each) |
+| 3.2 Prompt 3-1, four models | 3%, 6%, 3%, 0% | **0% on all four** |
+| recall on answerable, four models | — | 88%, 92%, 96%, 100% (unchanged) |
+| 3.4 five draws | 31 / 2 / 1 of 34 | **30 / 2 / 0 of 32** |
+| 3.5 logprobs, GPT-4.1-mini | runs 1, 3, 4 | runs 3 and 4 only (run 1 was overwritten): fabricated 11, 7; means −0.40, −0.34 vs correct −0.10, −0.08; cuts −0.20, −0.18 catch 11/11 and 7/7, flag 3/24 correct and 16/21, 17/25 declines |
+| 3.3 cross-encoder at 0.3 | 85% caught, 12% FA | **29/29 caught, 3/24 FA**; 5/24 FA from 0.4 up |
+| 3.3 bi-encoder | — | 0.4: 27/29, 4/24 FA; 0.5: 29/29, 9/24; 0.7: 29/29, 20/24 |
+| 3.3 judge, recorded run | 90% caught (four runs) | **29/29 caught**, 6/24 FA (the other three runs were overwritten; their 4–6 in 24 FA spread stands) |
+| 9.1 fields with no heading support (Ch 9) | 35 | **33**; plain prompt filled 1 (Furosemide, a correct reading); Prompt 9-1 null on all 33 |
+
+Book changed in the same pass: Chapter 3's figures and the quote-existence and
+five-draws passages, Chapter 9's counts, Chapter 12's "91–100% down to none",
+and *Where the Numbers Come From* rows 3.1–3.5, 9.1 and G.1 ("16 of 48").
+
+---
+
+## Chapter 9 — a note written from a conversation, Experiment 9.4 (29 Sep 2026)
+
+`ch09-sparse-field-fabrication/probe_conversation.py`. The setup the failure needs:
+60 ACI-Bench conversations (the Chapter 8 encounters, now with their dialogues in
+`data/aci_bench_dialogues.json`), a note under eleven headings, Claude Haiku 4.5
+through `claude -p` on Prachi's subscription (default system prompt replaced, no
+tools, no MCP, no settings; the CLI still adds a short environment block). Two
+prompts, identical except for one rule: *template* (headings only) and
+*permission* ("If the conversation does not cover a section, write exactly 'Not
+discussed.' … Do not infer, assume, or fill a section with typical content.").
+Three runs each, 360 notes, notional $8.6 on the subscription, not billed.
+
+Ground truth is a strict word search over the dialogue: a topic counts as not
+discussed only when no related word appears at all (family: the word "family" or
+any relative; drug allergies: an allergy exchange about medicines, "allergic
+to", "reaction to"; tobacco: smok-/tobacco/cigar/vape; alcohol:
+alcohol/drink/beer/wine).
+
+| topic, never discussed | template, runs 1–3 | permission, runs 1–3 |
+|---|---|---|
+| drug allergies (58 notes) | **4, 3, 4** | **0, 0, 0** |
+| tobacco (53) | 0, 1, 0 | 0, 0, 0 |
+| family history (41) | 0, 0, 0 | 0, 0, 0 |
+| alcohol (49) | 0, 0, 0 | 0, 0, 0 |
+
+Both prompts kept the two real drug-allergy answers (D2N018, D2N022) in every run.
+
+**Every counted case was read** against its dialogue. The first scorer overcounted
+three ways, each fixed before the numbers above were taken: (1) a narrow
+family regex missed "run in your family", "anyone in your family", "my son" —
+five "fabricated family histories" in run 1 were real content; (2) "allerg"
+anywhere counted as allergies discussed, which hid four "No known drug
+allergies" claims made where only seasonal allergies were asked about; (3)
+silence statements ("No drug allergies discussed.", "Tobacco …: Not documented")
+were scored as claims. The rule now: "No known drug allergies", with or without
+a trailing "documented", and "No drug allergies noted" state the usual claim
+about the patient and count; clauses that describe the conversation do not.
+
+**Finding.** The failure reproduces on conversations, in one form: the standard
+phrase "No known drug allergies" (about half of the 11 with "documented" or
+"noted" after it), plus one "Denies tobacco". The one-line rule removed every
+case in all three runs and cost nothing measured: both real allergy answers were
+kept, and seasonal allergies the patient reported moved to History or Review of
+Systems rather than being dropped. The engineering fixes were not exercised here;
+the book's drug-label measurements of them stand.
+
+## Chapter 3 — Prompt 3-1 as printed is not the prompt that ran (2 Oct 2026, resolved 3 Oct)
+
+Found during the book-wide pointer sweep. `ch03-hallucination/fixed.py` adapts the
+template; its `SYSTEM` differs from the book's Prompt 3-1 in four rules:
+
+- Rule 2: the code requires a quote of the exact supporting text; the book prints
+  `[Source N, paragraph X]`.
+- Rule 3: the code says set `answerable` to false and `answer` to null, "That is a
+  correct and expected outcome, not a failure."; the book prints say "Not found in
+  provided sources. I cannot confirm this." and has no such sentence.
+- Rule 5: the code routes unsure claims to `unverified_claims`; the book prints an
+  "Uncertain —" line.
+- The self-check wording differs slightly.
+
+Two claims in the chapter rest on this. "Rule 3 of Prompt 3-1 accounts for most of
+the effect … Most of the drop in fabrication comes from this one sentence — not
+from the citation format, and not from the self-check" (repeated in the takeaway:
+"That single rule accounts for most of the effect") was never isolated: no run
+removes Rule 3 or the sentence. The measured contrasts are plain 3%, soft words 6%,
+permission clause 91%, Prompt 3-1 0% (§ Chapter 3 re-read), so the large change
+comes from the permission clause, and on Haiku 4.5 Prompt 3-1 moved the plain
+baseline by one question of 32. *(Corrected 3 Oct: "one question" holds for Haiku
+only; see the resolution below.)* "State the rule in exactly those words" points at words the
+printed prompt does not contain. The book is unchanged on this point pending
+Prachi's decision; the same defect in Chapter 9 was fixed by printing
+`fixed.SYSTEM` (§ Chapter 9 re-read).
+
+**Resolved 3 Oct 2026, on Prachi's "yes".** Every figure below is a replay of
+committed fixtures; no live calls.
+
+- **The book now prints `fixed.SYSTEM`**, re-wrapped to the page, with
+  `{context}` shown as `{{source_document}}`. The four schema fields are named in
+  the prompt's introduction; the structured outputs that enforce them are not
+  prompt text. The old block's fused line ("…flag it as unverified. `<sources>`") went with it.
+- **The Rule 3 paragraph is gone.** In its place, "What the test does not show":
+  the test compared whole prompts and never removed one rule at a time. Takeaway 2
+  now says the same, without digits.
+- **Scope added to every single-model figure.** Plain 3%, soft words 6%,
+  permission 91% and the recall figures are Haiku 4.5. The permission clause on the
+  other three models: 100% (Opus 5), 100% (GPT-5-mini), 94% (GPT-4.1-mini), one
+  recorded run each, already in the Chapter 3 re-read table. Prompt 3-1 is 0/32 on
+  all four, with **0 answers rejected by the code gate on each**, so the zero is the
+  prompt's own result, not the gate's.
+- **Plain-prompt rates on the other models, as scored: Opus 5 69% (22/32),
+  GPT-5-mini 22% (7/32), GPT-4.1-mini 22% (7/32).** Not printed. Reading Opus 5's
+  counted answers: most say the label lacks the section and then add general
+  knowledge marked "not from this excerpt"; a few quote text the excerpt does carry
+  (Lisinopril adverse reactions, Metformin and contrast media); some state outside
+  facts unmarked (Lisinopril pregnancy). The judge counts any assertion, so these
+  rates mix a marked guess with an unmarked one. Printing them needs a re-score that
+  separates the two. The GPT answers were not opened.
+- **The cost bullet was wrong twice.** Plain-prompt recall on Haiku is 96%
+  (23/24), not 100%; the 100% is the soft-words and permission prompts'. And its
+  example said the plain instruction "would have guessed a number" for Lisinopril's
+  starting dose; it did not. It said the label gives no starting dose, which is
+  true (a combination-tablet label), and the grounded prompt declined and put its
+  guess in `unverified_claims`. Of the grounded prompt's three declines, Lisinopril
+  and Omeprazole (an OTC "Drug Facts" excerpt that never names the drug) have a
+  reason in the text; Amoxicillin is the real cost (the label gives 90 mg/kg/day
+  for its children's suspension; the plain prompt answered with it). The bullet now
+  says this.
+- **Takeaway 3 (citation enforcement)** no longer implies real quotes under
+  unsupported claims: the check had no fabricated answer to reject.
+- **Chapter 12** "91–100% down to none" now names what was compared (the
+  permission prompt against the grounded prompt).
+
+
+## Chapter 10 — the model's own count, asked without ambiguity (Experiment 10.3, 3 Oct 2026)
+
+Closes the §16 caveat ("Chapter 10's 0/6 self-count agreement measures a prompt
+ambiguity"). Two probes, Claude Haiku 4.5 through `claude -p` on the claude.ai plan,
+the same six labels, every run kept (`fixtures_count/`):
+
+- `probe_count.py`: fixed.py's prompt word for word ("as-printed"), and the same
+  prompt with the count defined as distinct amounts ("distinct"). 3 runs each.
+- `probe_protocol.py`: the chapter's inventory protocol (book_prompt.py), 3 runs.
+  repeat.py had kept only the last of its three API runs, so two of the three runs
+  behind the book's protocol figures could not be reopened.
+
+**The count is the length of the model's own list.** The count the model gave for
+the source equalled the number of items it listed in **54 of 54** calls: 18/18
+as-printed, 18/18 distinct, 18/18 protocol. In the earlier API runs it held on 4 of
+6 (fixed.py; the other two within two items) and 3 of 6 (protocol; Sertraline 31
+against 21 items, Gabapentin 77 against 49, both nearer the number of mentions).
+A list that drops an item drops it from the count, so "check your list against
+your count" cannot find a gap. With the count defined as distinct amounts, no
+answer was nearer the mention count (0 of 18, against 3 of 18 as printed).
+
+**The reference count had its own errors**, found by opening every disagreement:
+- It counted a lab value as a dose: Lisinopril's "serum creatinine … 3 mg/dL".
+  `common.py` now skips a unit followed by `/dL` (`LAB_UNIT_AFTER`); Lisinopril's
+  reference count 8 → 7. Replays: fixed.py 96% (52/54, was 53/55), the protocol's
+  kept API run 80% (43/54, was 44/55), broken.py 100% (54/54).
+- It misses doses printed without their own unit: the first number of a range
+  ("0.5 to 2 mg") and the cells of a table whose heading carries the unit
+  (Gabapentin's renal-dosing table, "300 TID 400 TID …" under "(mg)"). Gabapentin
+  has 24 dose amounts by the model's list and 13 by the pattern; Warfarin 8 and 6.
+  Not changed: a stricter reference count misses gaps, it does not invent them.
+- It ignores mL, so Amoxicillin's weight-band volumes never count.
+
+**The inventory protocol, same setup as the one-line instruction (CLI):**
+
+| | run 1 | run 2 | run 3 |
+|---|---|---|---|
+| figures returned, one-line instruction (as-printed) | 94% (51/54) | 98% (53/54) | 98% (53/54) |
+| figures returned, inventory protocol | 80% (43/54) | 83% (45/54) | 100% (54/54) |
+| Step 1 count = items listed | 6/6 | 6/6 | 6/6 |
+| Step 3 flagged a short document | 1 of 3 | 0 of 2 | none short |
+| Step 3 flagged a complete document | 0 of 3 | 0 of 4 | 0 of 6 |
+
+The kept API run agrees on Step 3: it flagged 2 of 3 short documents and none of
+the complete ones. **Withdrawn:** "Step 1 wrong on every document in every run —
+forty-seven dose amounts in a document containing thirteen" (a count of mentions
+compared with a count of distinct figures); "Step 3 announced a mismatch on
+documents that were complete" (no recorded run shows it); "84%, 71% and 80%" (two
+runs unrecoverable; replaced by the three recorded runs above); Chapter 10's
+"wrong on six of six … forty-one where thirteen … a count bearing no relation to
+what it had just listed" and Chapter 12's echoes ("six of six", "18 out of 18").
+The book also said "three runs over the same twelve labels": the test uses the six
+labels with at least six dose figures.
+
+## Chapter 12 — two withdrawn results were still in the self-assessment list (3 Oct 2026)
+
+"Asked which section of a document its own quote came from, it named the wrong
+section in 3–15% of cases" was withdrawn on 24 Sep (the 80-character artefact,
+§ Chapter 8 — placement on real clinical notes), and "it attached genuine quotes to
+all fourteen of its fabricated values" on 29 Sep (§ Chapter 9 re-read). Both were
+still printed in Chapter 12's "five results from five chapters". The list now has
+four: Chapter 2's confidence (no information about damage), Chapter 4's grade (LOW
+never issued), Chapter 8's grade on clinical notes (7 in 10 misplaced sentences
+graded HIGH) and Chapter 10's count (the length of its own list). The "Who checks"
+row for the model reads "caught little or nothing" rather than "failed", because
+Chapter 8's grade carried some signal; "five to ten times the cost" reads "about
+five times", the judge's re-measured multiple.
+
+## Report costs part still printed the withdrawn judge figures (3 Oct 2026)
+
+`report/parts/09-costs.html` carried 38% false alarms, $41 per thousand and "ten
+times the price" after Part 3 had re-measured them (4–6 of 24 over four runs, $22,
+five times). Corrected there and in the front summary ("one costs ten times").
+
+## References — cited sources sat under "not cited" (3 Oct 2026)
+
+The "Further reading — context, not cited in the text" label stood above entries
+46–55, but 49–55 are cited. Renumbered: the cited seven are now 46–52 under
+"Studies, datasets and records"; the three uncited are 53–55, last, under Further
+reading. 11 markers changed; every marker was checked against its entry's position.
+
+## Two smaller corrections found on the same pass (3 Oct 2026)
+
+- **Report, Chapter 10 audit:** the table and summary said "9 flagged, 1 genuinely
+  missing" while the recorded run replays as 8 and 2, which the report's own later
+  sentence ("the 2 real omissions and 6 false ones") already used. Aligned.
+- **Book PDF citation links:** `convert_to_pdf.py` took reference targets from any
+  page where a line began "N." at reference type size, so the Field Toolkit's
+  numbered lists, which come first, captured low numbers: at least 16 links (every
+  [10], for one) opened the toolkit instead of the reference. Targets now come from
+  the References pages only; all 74 links checked against their entry's number.
+
+## Chapter 9 — the checks, run on real invented entries (Experiment 9.5, 4 Oct 2026)
+
+Prachi asked whether Chapter 9's prevention steps were ever tried. Only step 1 was
+(Experiment 9.4). Steps 2 and 3 had met only drug labels, where nothing was invented,
+so no check had ever been seen catching anything. `probe_checks.py` runs them on
+Experiment 9.4's recorded template-prompt notes (60 ACI-Bench conversations × 3 runs):
+**101 entries about the four optional topics — 12 invented** (11 "No known drug
+allergies", 1 "Denies tobacco", from 8 conversations; each read against its
+conversation in 9.4) **and 89 whose topic the conversation discussed.** Model checks
+through `claude -p` on the subscription, one verdict per entry.
+
+| check | invented caught (of 12) | discussed entries flagged (of 89) |
+|---|---|---|
+| keyword topic search, code | 6 | 3 |
+| embedding (all-MiniLM-L6-v2, best sentence < 0.5) | 6 | 19 |
+| Claude Sonnet 5, shown the conversation | **12** | 6 |
+| Claude Haiku 4.5 — the model that wrote the note — shown the conversation | **12** | 7 |
+| Claude Sonnet 5, shown only the note | 9 | **48** |
+
+Embedding sweep (caught / flagged): 0.3 2/1 · 0.4 4/4 · 0.5 6/19 · 0.6 8/51 · 0.7 10/72.
+No cut-off separates the two groups.
+
+**The flagged discussed entries, read one by one.** Nine were flagged by a model that
+saw the conversation; seven are real errors on topics that *were* discussed:
+relatives mixed up (two runs of one renal family history, one adding "patient's
+father has undergone renal transplantation", never said); "Denies tobacco and drug
+use" when the patient answered only about wine; the patient's own pneumonia history
+filed as family history (two runs); "Patient is a smoker" for a man who quit seven
+years ago; increased caffeine the patient never mentioned. One is a borderline
+inference (a sister "ill with upper respiratory infection"; she had "been sick" and
+probably shared the patient's virus), one trivial ("Friday and Saturday evenings"
+for "on the weekends"). So Sonnet's 6 flags are 5 real + 1 borderline; Haiku's 7 are
+6 real + 1 trivial. The 89 "discussed" entries are therefore not all correct, and the
+unflagged ones were not read.
+
+**Topic search.** It catches an invented entry only when the topic word never
+appears: 6 of the 11 "No known drug allergies" came from conversations that mention
+allergies in another sense (seasonal allergies, a cat). Its 3 flags are one
+conversation that describes reactions to dexamethasone and methylprednisolone
+without the word "allergy" (all three runs), so they are false alarms.
+
+**The blind check** flags whatever looks "unusually precise" (28 of its 48 flags
+are family histories) and passed the plainest invented line, "No known drug
+allergies. No seasonal allergies.", in all three runs of that conversation.
+
+**Consequences for the book — not yet applied, pending Prachi:**
+- Step 3's first condition ("the writing model … asked to check the entry, applies
+  the same sense and approves it") is **contradicted**: the writer, asked in a
+  separate call with the conversation in front of it, caught 12 of 12 and six of the
+  seven real errors. What mattered was seeing the input and a narrow question.
+- Step 3's second condition (the checker must see the input) **holds**.
+- Step 2's topic check misses invented entries whenever the topic word appears in
+  another sense, and flags entries whose topic is discussed in other words.
+- Engineering fix 5 (an embedding validator of the ProvenanceEmbeddings kind) is
+  now measured, and it separates poorly on this task.
+
+## Experiment 10.3 corrected — a scorer artefact of mine, found by Experiment 10.4 (4 Oct 2026)
+
+The hand-read behind Experiment 10.4 (below) caught two errors in what I printed
+on 3 Oct. Both were re-verified against the raw fixtures before this correction.
+
+- **The matcher refused range forms.** Gabapentin run 1 (as-printed and protocol)
+  returned "10 to 15 mg/kg/day" and "25 to 35 mg/kg/day"; `dose_figures` credits
+  only a number with its own unit, so it scored 10 and 25 as dropped. The figures
+  are in the lists. Fix: `dose_figures(…, expand_ranges=True)` credits the first
+  figure of "A to B unit" on the MODEL-LIST side only; the conservative reference
+  rule over the source is unchanged. Corrected figures returned —
+  one-line instruction **53, 53, 53 of 54 (98% each run)**, was printed 94/98/98;
+  protocol **45, 45, 54 of 54 (83%, 83%, 100%)**, was printed 80/83/100. With the
+  fix, the pattern comparison flags all 4 really short runs and no complete one.
+- **The protocol's one "flag" was not about a gap.** Across the 18 protocol runs
+  the self-check raised exactly one warning — Gabapentin run 1, a complete list —
+  and the warning says the label's sections repeat (`all_counts_match` is true).
+  Withdrawn: "flagged one of the five documents whose list was short, and none of
+  the complete ones" (book), "flagged 1 of 5 short documents and 0 of 13 complete
+  ones" (README), and the 10.3 table's self-check row. Correct statement: **the
+  self-check flagged none of the short documents and one complete one, with a
+  note about repeated sections.**
+- **Whose dose is the missed "1 mg".** Every remaining as-printed shortfall is
+  Sertraline's "1 mg/kg" — methylene blue's intravenous threshold, not a
+  sertraline dose. The task as prompted is "list every dose amount mentioned in
+  the text", so the runs stay counted short, with the attribution noted.
+
+## Chapter 10 — the named-entity count, run as printed (Experiment 10.4, 4 Oct 2026)
+
+The chapter's first engineering fix runs the source through "spaCy
+en_core_web_trf or AWS Comprehend" and flags an extraction that returned fewer
+items than the entity count. It had never been run; the repo's regular
+expression stood in for it. `probe_ner.py` (built by a subagent; its two
+decisive claims re-verified by hand above) runs en_core_web_trf 3.8.0 (spaCy
+3.8.7, CPU, its own virtual environment) over the six dosing sections and holds
+all 60 recorded extractions against it. The model has no dose type: QUANTITY
+holds 153 of the 179 unit-bearing dose mentions, alongside lab values and
+volumes, so the counting rule is a mg/mcg/g/unit amount inside a QUANTITY
+entity, each distinct amount once.
+
+| check, over 60 document-runs | really short (4) | another drug's dose only (6) | complete (50), false flags |
+|---|---|---|---|
+| NER rule as printed | **4** | 0 | **10** |
+| NER rule, lab values skipped in code | 4 | 0 | 0 |
+| NER count vs number of items listed | 0 | 0 | 5 |
+| pattern count, same rule | 4 | 6 | 0 |
+
+Both headline numbers are narrower than they look: all four real drops sit in
+Amoxicillin, the one document where the entity count equals a complete list, and
+all ten false flags are one lab value (serum creatinine "3 mg/dL" counted as a
+dose — the mistake the pattern made until 3 Oct). Elsewhere the entity count
+runs below a complete list, so a list can lose figures unflagged: Warfarin 4 of
+its 6 (the genotype table's ranges get no entity at all), Levothyroxine 3 of 11,
+Gabapentin its whole renal table (37 of 40 cells get no entity, the unit lives
+in the column heading), Sertraline the methylene-blue dose — which is exactly
+what six runs dropped, unflagged. en_core_web_sm flags nothing: it tags the
+"50" of "50 mg" as a bare number. Read literally as "fewer items than the
+count", the check catches 0 of 4. AWS Comprehend was not tested (paid API);
+clinical NER with dose types (Comprehend Medical, med7) is the natural next
+test. **For the book:** a general entity model can supply the independent count
+only after code adds a unit filter, a lab-value filter and table handling — the
+pattern's own work again — and it finds no doses at all in either dosing table,
+the longest lists on these documents. Numbering: 10.4 is this probe; the
+ACI-Bench omission measurement in progress becomes Experiment 10.5.
+
+## Chapter 10 — omission measured where the length pressure is real (Experiment 10.5, 4–6 Oct 2026)
+
+Prachi's direction: if the drug labels cannot produce the failure, test on a free
+corpus where it can occur naturally. The corpus already existed: Experiment 9.4's
+360 recorded notes (60 ACI-Bench conversations × 2 prompts × 3 runs), long
+role-played visits compressed into eleven-heading notes. The checkable fact type
+is the chapter's own: medication dose amounts. Built and first read by a subagent
+(scripts and full case log in `ch10-silent-omissions/exp105_dialogue_doses/`,
+paths made repo-relative and the run reproduced there); no model calls — every
+note replays from Experiment 9.4's fixtures.
+
+**Result: zero true omissions.** 83 raw number-plus-unit mentions in the
+dialogues; 9 excluded with printed reasons (dietary sodium, lab values, one
+breast-tissue weight, one bra size); 74 kept, including spoken forms ("a thousand
+milligrams", "seven and a half", a stutter restart). They give 64 unique
+(conversation, dose) facts across 39 conversations. Every one of the 64 reaches
+all six of its notes, attached within 80 characters of its own drug's name (396
+attachment checks, 6 failures, all one case). The one candidate the matcher
+produced, in all six cells, is D2N027's vitamin D "5000 units on sundays, and two
+thous… or 50,000 units on sundays, excuse me": a dose the doctor retracted
+mid-sentence, and every note carries the corrected 50,000/2,000 — right scribing,
+not omission. Doses the conversation left uncertain were flagged, not invented
+("Gabapentin (dose uncertain; patient unsure if taking 300 mg or 100 mg)").
+
+**Read as a null, with its limits:** dose facts are maximally note-salient (the
+MEDICATIONS heading solicits them); durations, follow-up intervals and lab values
+were not measured; dialogue length is 2–8k characters, not a 50-page document;
+frequency/route survival and dose *additions* (Chapter 9's fact type) are outside
+the measurement. The external studies carry the chapter's real-world rate
+(Taylor 18% of 356 deployed-scribe notes; Williams 1.75 vs 0.86 per discharge
+summary) — this experiment says the failure is not reproduced at this length and
+fact type, not that it does not happen.
+
+## Chapter 9 — fixes 1 and 2, run where the model invents (Experiment 9.6, 4–6 Oct 2026)
+
+The chapter's first two fixes had never met an invented value. `probe_schema.py`
+(drafted by a subagent that stalled at the session limit at 182 of 360
+recordings; resumed and completed on the CLI, and every counted case below read
+by hand) asks for the four optional topics as a JSON record over the 60
+Experiment 9.4 conversations — two conditions, three runs each, Claude Haiku 4.5
+through `claude -p`, 360 replies, a notional $6.23:
+
+- **required** — every value must be a non-empty string (what fix 1 removes);
+- **optional** — a value may be null when the conversation does not cover it (fix 1).
+
+| of 603 fields per condition whose topic the conversation never discussed | required | optional |
+|---|---|---|
+| invented values | 5 (all allergies) | 2 |
+| silence fillers stored as strings ("Not discussed") | 577 | 0 |
+| null | 0 | 585 |
+| replies breaking the condition's format rule | 0 of 180 | 0 of 180 |
+
+**Fix 1 does what the chapter claims, and the measured harm of "required" is
+fillers, not inventions.** Forced to fill, the model stored a silence filler in
+577 of 603 no-source fields — the exact failure the book predicts ("looks like
+data and is stored as data") — and invented in 5. Allowed null, fillers vanish
+and invention halves.
+
+**Every invented value was read.** Five are one conversation, D2N088: the
+patient denies *seasonal* allergies ("none whatsoever") and the value
+generalises to "No allergies" / "No known allergies". One (D2N038) rests on "i'm
+not taking any medications", which says nothing about allergies. One (D2N101)
+came with no quote at all.
+
+**Fix 2, the quote check (partial_ratio ≥ 85), on those values:** it caught the
+quote-less one and **passed the other six — their quotes are real text about
+something else.** Chapter 3's finding again, now on the fabrication side: a real
+quote proves the text exists, not that it supports the value. What the quote
+gate did do under "required" is null 546 of 611 silence fillers (their quotes
+are empty or not in the conversation), turning most stored fillers back into
+empties. Its cost on sound values: 7 of 97 (required) and 3 of 92 (optional)
+values on discussed topics rejected; the read sample is a correct
+steroid-reactions value whose quote stitched two real passages with "; ",
+scoring 82 — the check wants one contiguous passage.
+
+Numbering: this is Experiment 9.6; 9.5 is the checks probe above.
+
+## Experiment 9.5 extended to the record values — the independence condition comes back (6 Oct 2026)
+
+Prachi asked for the step-3 wording to stand on wider evidence, so the three
+model checks were rerun on Experiment 9.6's values (`probe_checks.py --source
+schema`): the 7 invented values and the 49 run-1 values on discussed topics.
+168 verdicts, notional $1.77; one hung CLI call killed the first attempt and the
+retry loop now treats a timeout as a failed attempt. Every verdict on an
+invented value, and every flag on a control, was read.
+
+| check | invented caught (of 7) | discussed-topic values flagged (of 49) |
+|---|---|---|
+| keyword topic search | 2 | 2 |
+| embedding, 0.5 | 3 | 9 |
+| Claude Sonnet 5, shown the conversation | **5** | 1 |
+| Claude Haiku 4.5 — the writer — shown the conversation | **2** | 3 |
+| Claude Sonnet 5, shown only the record | 2 | 11 |
+
+**The split is clean, and it reverses half of the 9.5 note-set conclusion.**
+The two zero-evidence inventions (a quote about medications under an allergy
+claim; an empty quote) were caught by both models — as all 12 note-set
+inventions were. The five misses are one judgment call: "No allergies" / "No
+known allergies" / "none", written from the patient's denial of *seasonal*
+allergies, with that denial attached as the supporting quote. **The writer
+approved its own generalisation five of five.** Sonnet caught three of five and
+was not steady: it returned NOT_SUPPORTED for "No allergies" in one record and
+SUPPORTED for the identical entry text, same conversation, in another. The
+note-set entries said "No known **drug** allergies" — a specific claim a
+seasonal denial plainly cannot support — which is why both models caught all of
+those; the record values are looser and carry the writer's own quote, and there
+the writer's habit survives its own review.
+
+**Combined, 19 invented entries:** second model shown the input 17 of 19;
+writer 14 of 19; every zero-evidence entry (14 of 14) caught by both; every
+habit-born entry approved by the writer. The extension's control flags are
+again real errors (the D2N185 relative mix-ups; a patient's own answer filed as
+family history).
+
+**Consequence for the book, applied:** step 3 keeps "see the input" as the
+first condition and restores the independence preference as the second, now
+measured rather than asserted — with the caveat that a second model was not
+steady on the judgment-call entries either. The 9.5-only conclusion ("which
+model matters less than expected") was an artefact of an easy set, exactly what
+the wider run was for.
+
+## Chapter 9 — a list of quotes per value (Experiment 9.7, 8 Oct 2026)
+
+Prachi asked for the fix-2 note's schema change to be tested and, if it helps,
+promoted to an engineering fix. `probe_schema_list.py` reran Experiment 9.6's
+extraction over the same sixty ACI-Bench conversations, one condition, three
+runs (180 CLI replies, notional $2.01): fields optional, and `source_quotes` a
+LIST — "one list item for each separate place in the conversation; never join
+two places into one item." Gate: a value is kept only when every quote in its
+list is found (partial_ratio ≥ 85, first eighty characters).
+
+| | single quote (9.6, optional) | quote list (9.7) |
+|---|---|---|
+| discussed-topic values wrongly rejected | 3 of 92 | **0 of 75** |
+| invented values (of 603 no-source fields) | 2 | 1 |
+| values carrying ≥ 2 quotes | — | 32 of 93 non-null |
+| nulls per run | 195 | 208–210 |
+
+**The target case is fixed.** D2N022's steroid-reactions value — the stitched
+two-place quote that 9.6 rejected at 82 — now returns three to four quotes in
+every run, each one continuous passage, each found. D2N018 and D2N050 show the
+same shape legitimately (question + answer; two separate mentions of the
+father's kidney stones).
+
+**Costs and limits, from reading the cases:**
+- **Fewer values on discussed topics: 75 across three runs against 9.6's 92**,
+  with nulls up accordingly. The stricter quote instruction makes the model more
+  conservative about stating values at all.
+- **The gate still checks existence, not support.** The one invented value
+  (D2N088 run 3, "Denies allergies" from the seasonal denial "none whatsoever")
+  passed, as its single-quote cousins did. And D2N059 shows a new face of the
+  limit: the value "Seasonal allergies" is right, but its found quotes are
+  "yeah i think so yeah" (the answer without its question — ACI's speaker
+  labels are scrambled there) and an unrelated ear-fluid line. A quote list
+  multiplies the places where an existence check can be satisfied by
+  meaning-free text.
+
+**Verdict: adopt as an engineering fix.** It removes the quote check's main
+false-alarm mechanism at no gate cost; the support-vs-existence limit is
+unchanged and stays with step 3 and fix 3.
+
+## Experiment 9.5, closed with the packaged validator itself (8 Oct 2026)
+
+Prachi asked for the actual Guardrails ProvenanceEmbeddings validator, not only
+the from-scratch version of its check. Install route: `guardrails-ai` 0.6.8 in
+its own virtual environment; the hub's API host (`hub.api.guardrailsai.com`)
+does not resolve from this machine, so the validator was installed from its
+public GitHub source. Field notes from running a shipped guardrail: it needs
+nltk's `punkt_tab`, which its setup does not fetch; it attempted to send
+OpenTelemetry traces home (blocked offline); and it **crashes on sources whose
+chunker returns a single chunk** — a `squeeze()` turns the one-row embedding
+matrix 1-D and `norm(axis=1)` raises — which sparse-punctuation transcripts
+trigger. Workaround: duplicate the source (identical k=1 distances).
+`probe_guardrails.py` runs it over the identical 9.5 entries, both source sets,
+no model calls.
+
+**How it actually works** (read from source): threshold is a cosine DISTANCE,
+default 0.8 — a similarity of 0.2; the output is split into sentences (nltk)
+and each sentence is compared with its nearest source chunk (k=1); any failing
+sentence fails the value; sources are chunked into five-sentence windows with
+overlap 2 by default; cosine is the only metric; there is no fix action.
+Metadata must supply `sources` + `embed_function` (here all-MiniLM-L6-v2) or a
+`query_function`; chunking is controlled by `chunk_strategy` / `chunk_size` /
+`chunk_overlap`.
+
+| configuration (notes set: 12 invented / 89 discussed) | caught | flagged |
+|---|---|---|
+| as shipped: distance 0.8, five-sentence windows | 2 of 12 | 12 of 89 |
+| distance 0.5, five-sentence windows | 9 of 12 | 61 of 89 |
+| distance 0.5, single-sentence windows | 7 of 12 | 40 of 89 |
+| every setting that caught all 12 | 12 of 12 | 79–88 of 89 |
+
+Records set (7 invented / 49 discussed) behaves the same; as shipped it caught
+2 of 7 and flagged 12 of 49. At the same nominal cut (distance 0.5 ≈ similarity
+0.5) the product flags twice what the from-scratch check flagged (40 vs 19 of
+89): its any-sentence-fails rule punishes multi-sentence entries, and punkt
+chunking struggles on transcripts with sparse punctuation. Five of its flags
+were read: all are paraphrase distance, not missing support — "Reduced alcohol
+use, particularly during holiday season", "Occasional alcohol use (wine)" — the
+same wording-not-meaning behaviour as Chapter 7's distance filter; one flagged
+set is the D2N122 family-history entries that really are wrong, flagged for the
+wrong reason. **Verdict: the packaged validator confirms the from-scratch
+conclusion. As shipped it is looser and misses ten of twelve inventions; no
+configuration separates invented from supported on these entries.**
+
+## Chapter 10 — the completeness audit, against extractions with known gaps (Experiment 10.6, 8 Oct 2026)
+
+The chapter's third engineering fix is a second model call — show a model the
+source document and the extracted output and ask, verbatim, "What information
+present in the source is missing from the extraction?" The book recommended it
+without a measurement. `probe_audit.py` ran that audit once over every recorded
+extraction of Experiment 10.3: the 54 CLI runs (as-printed, distinct, protocol)
+plus the kept API protocol run's 6 — 60 extractions over the chapter's six FDA
+labels. The corrected pattern comparison (lab-unit fix on the source side,
+`expand_ranges=True` on the list side) names the ground truth: 12 extractions
+short, 48 complete, 41 known-missing figures in all. Auditor: Claude Haiku 4.5
+through `claude -p` on the claude.ai plan — the same model that produced the 54
+CLI extractions. The question was asked word for word, with one addition for
+scorability: "Answer with JSON only: {\"missing\": [...]}". 60 calls, no
+retries, $2.04 notional. Every counted case is printed in full in
+`audit_log.txt`, and `python3 probe_audit.py` rescores the recorded replies.
+
+**Caught: 10 of 41 known-missing figures** (as-printed 3/3, distinct 0/9,
+protocol 5/18, api-protocol 2/11). Every full catch was a one-figure gap: the
+methylene-blue dose the Sertraline extractions kept dropping (audit named
+"1 mg/kg"; caught in 4 of the 6 runs that dropped it), Warfarin's "≤ 100 mg/day"
+cap, Amoxicillin's clavulanate component ("6.4 mg/kg/day"). Of the 12 short
+extractions: every figure caught in 5, part in 3, nothing in 4.
+
+**The largest omission got a pass.** distinct/amoxicillin run 1 dropped eight
+strength figures — every tablet and suspension strength — and the audit
+answered that nothing was missing. The two protocol runs with the same eight
+figures missing each got "500 mg" and "875 mg" named (the plain tablet
+strengths) and never any combination strength (200 mg/28.5 mg, 400 mg/57 mg,
+600 mg/42.9 mg). api-protocol/gabapentin (one figure short, 400 mg) got three
+entries, every one a figure already in the extraction, and not the 400 mg.
+
+**Alarms: 6 of the 48 complete extractions.** Four listed doses the extraction
+already carried, in different wording ("300 mg three times a day" against the
+extraction's "300 mg three times daily"); one of those four also named
+"1000 mg/day" — a figure that appears in neither the source nor the extraction
+(verified by substring over both; the extraction's titration ladder runs
+100–900 then 1400 mg/day). Two named real source content outside the dose task:
+treatment durations ("10 days"; "6 to 12 months", "4 weeks", "4 hours",
+"2 days") and an INR threshold ("greater than 4").
+
+**Same omission, different verdicts.** The identical one-figure gap — the
+methylene-blue dose, same document, same missing line — was caught in
+as-printed runs 1–3 and protocol run 2, and missed in distinct run 2 and
+protocol run 1.
+
+**Reading.** The gaps in this test are defined by the pattern count in code, so
+the code count finds all of them by construction; the audit, given the same two
+documents, fully caught 5 of 12. The fix's sentence "catches omissions that
+rule-based checks miss" did not show on the dose task: what the audit named
+beyond the pattern's reach was non-dose content on complete extractions — that
+is, alarms under the task. As a sampled monitor it is cheap and sometimes names
+the exact missing line; as the only completeness check it would have passed the
+worst extraction in the record. Caveats: one document type, one task, one
+auditor model, and the auditor is the same model that wrote the CLI
+extractions. Book changes: fix 3 carries this as its "Measured here", the
+prevention section's input-coverage paragraph points to it, and the takeaway
+box gained one bullet.
+
+## Chapter 10 — the `not_extracted` count, re-read against the fixtures (9 Oct 2026)
+
+Prachi asked "eleven items out of how many?" and the answer was not in the record.
+Replaying `fixed.py` (Experiment 10.2, committed fixtures, no live calls): the field
+was filled on **3 of 6** documents with **8 entries** — Lisinopril 1, Amoxicillin 3,
+Warfarin 4 — naming ten values (the Warfarin intervals entry lists three). No
+fixture supports "eleven items" or "four of six documents"; both figures stood in
+the book (fix 4's Measured here), in this file (§ "Two improvements that are
+definitions"), and in the report (summary table, Fix 4 prose, verdict table). All
+three now say 8 entries on 3 of 6.
+
+The book also said the field "stayed empty on the one document where a dose had
+silently dropped out". It did not: on Amoxicillin, the document that dropped 200 mg
+and 400 mg, the field held three entries (10 days, 2/3 of the water, the remainder
+of the water) and named neither missing strength. Chapter 12 already described it
+that way; Chapter 10 now does too. The denominators printed in the book are the
+post-10.3 reference counts: 7, 11, 10, 7, 6, 13 = 54 figures, 52 returned.
+
+Chapter 10's "What this prompt does" also now says which prompt ran: `fixed.py`'s
+wording, which carries the printed `not_extracted` rule and additionally asks for a
+source count (`source_count_claimed`), the subject of "What did not survive testing".
+
+## Chapter 10 — the `not_extracted` field on text whose items are not delimited (Experiment 10.7, 10 Oct 2026)
+
+Prachi asked whether anything in the chapter measured its claim that on a document
+whose items are not clearly delimited the field "fills with noise rather than
+judgement". Nothing did: every run of the field was on FDA dosing sections, and the
+sentence was an inference printed as a result (in "Where this prompt works" and in
+the takeaway box).
+
+`probe_field_conversation.py`: Prompt 10-1 **as printed** (system prompt), `{item_type}`
+= "medication dose amount", the 60 ACI-Bench dialogues as the document, 3 runs,
+Claude Haiku 4.5 via `claude -p` on the subscription, 180 calls, $3.43 notional,
+4,563 recorded seconds, fixtures in `fixtures_field_conversation/s{1,2,3}/`. Ruler:
+Experiment 10.5's `count_doses.py` (64 unique doses, 39 dialogues; 21 state none).
+Every reply parsed as JSON on the first attempt.
+
+| per run | 1 | 2 | 3 |
+|---|---|---|---|
+| ruler doses in `extracted` | 62/64 | 63/64 | 63/64 |
+| true silent omissions, after reading | **0** | **0** | **0** |
+| field filled: conversations (of the 21 with no dose) | 49 (19) | 51 (20) | 50 (19) |
+| entries | 137 | 149 | 147 |
+| — medicine named without any amount | 95 | 91 | 88 |
+| — frequency / duration / route only | 13 | 9 | 9 |
+| — number that is not a dose (lab, vital, grade, measurement, habit) | 17 | 36 | 37 |
+| — excluded by the ruler (sodium, per-dL lab, tissue grams) | 4 | 4 | 5 |
+| — other quantities / unit-less numbers | 7 | 9 | 8 |
+| — a ruler dose set aside with a reason | 1 | 0 | 0 |
+| entries that held back a dose the extraction should carry | **0** | **0** | **0** |
+
+**Read, not just counted.** The miss in every run is D2N027 "5000 units", retracted in
+the same sentence; every run extracted the corrected 50,000 + 2,000 units (cases.md §1
+already had it). Run 1's 175 mg sat in the field with the right reason (the patient
+proposed it; the doctor declined). Every "not found in dialogue" extra was a number
+the dialogue states without a unit and the model unit-ed from context ("two . five of
+norvasc" -> 2.5 mg; "300 or 100" -> mg; "2000s" -> units; "i'm at 140" -> mg): zero
+invented numbers in 180 replies. `extracted` also carried 12/14/12 amounts per run the
+ruler has no unit for (puffs, tablets, cc, mL, teaspoon) and 9/7/8 strings with no
+amount at all (application schedules, almost all from D2N145) — over-inclusion, the
+same direction as Experiment 10.1. The medicine-without-amount class was read in full
+for runs 1–3 and the other classes for all runs; the sub-class regexes in
+`subclass()` are the scorer's claim, the printed lists are the record.
+
+**Verdict.** Not "noise rather than judgement": none of the 433 entries was a wrong
+call. Volume: ~2.3 entries per stated dose, two in three of them a medicine named with
+no amount, filled on 19–20 of the 21 conversations that state no dose at all. The
+real decisions (lab values, vitals, salt targets, a declined dose, "lortab 500-") are
+30–50 per run inside ~140 lines.
+
+**Scorer notes.** The ruler's unit-less blindness ("two . five") needed a spoken-number
+matcher with ACI-Bench's "two . five" transcription; `stated_without_unit()` holds it.
+The first classification (before `subclass()`) is what `field_conversation_log.txt`
+was first written with; the log was regenerated from the final scorer.
+
+**Book.** "Where this prompt works" now carries the measurement with a Measured here;
+the takeaway bullet says "the queue lists every one of them, so the real judgement
+calls sit inside a much longer list" instead of "fills with noise"; the numbers table
+gained rows 10.6 and 10.7. Report part 07-ch10 gained the subsection; README gained
+10.7.
+
+## Chapter 10 — fix 1 with taggers that have a dose label (Experiment 10.8, 12 Oct 2026)
+
+Prachi: the chapter recommended AWS Comprehend without trying it; en_core_web_trf has no
+dose type so "our" application needed a unit filter, but a reader's fact type may be in
+some tagger's label list — give the conclusion generically, and try a tagger with a dose
+label if one exists.
+
+**Comprehend.** No AWS account on this machine, so not run. The product the chapter named,
+plain Amazon Comprehend, has nine general types (COMMERCIAL_ITEM, DATE, EVENT, LOCATION,
+ORGANIZATION, OTHER, PERSON, QUANTITY, TITLE) — no medication type; it would have behaved
+like en_core_web_trf. Amazon Comprehend Medical (DetectEntitiesV2) returns MEDICATION
+attributes typed DOSAGE, STRENGTH, FREQUENCY, DURATION, ROUTE_OR_MODE, FORM, RATE (API
+reference, Attribute.Type). The book now says both, and recommends neither untried.
+
+**Taggers with a dose label, run.** `probe_ner_dose.py`, environment `.venv-med` (spaCy
+3.4.4 for Med7's pin, numpy<2, transformers 4.57, torch 2.8; the Med7 wheel's filename
+`-any-` is rejected by pip and must be renamed `en_core_med7_lg-3.4.2.1-py3-none-any.whl`).
+Same six sections, same 60 recorded extractions, same rule as 10.4.
+
+| | en_core_web_trf (10.4) | Med7 STRENGTH+DOSAGE | DeBERTa DOSAGE |
+|---|---|---|---|
+| with-unit mentions in the label (of 179) | QUANTITY | 144 | 125 |
+| in no entity | — | 35 | 41 |
+| Levothyroxine distinct doses (pattern 11, read 14) | — | 1 | 3 |
+| Amoxicillin (10) | — | 8 (no 200, 400) | 6 (no 28.5, 57, 200, 400) |
+| Warfarin (6) | — | 6 | 2 |
+| real drops flagged (of 4) | 4 | 3 | 3 |
+| complete runs flagged, false (of 50) | 10 | 0 | 0 |
+| short only by another drug's dose, flagged (of 6) | 6 | 0 | 6 |
+
+Forms neither label covered: "90 mg/kg/day", "1.6 mcg/kg/day", "200 mcg/day", "50-200
+mg/day", "600 mg/42.9 mg per 5 mL", the genotype table cells. Med7 tags "3 mg/dL" as
+STRENGTH in a test sentence but did not in the Lisinopril section as written, so no lab
+false alarm appeared; the risk is there. The drop both taggers missed is the api-run
+Amoxicillin extraction (8 of 10, lost 200 and 400 mg): a tagger whose count is 8 or 6
+cannot flag a list of 8. Per document 0.2–0.8 s (Med7), 0.2–0.6 s (DeBERTa, mps).
+
+**Generic conclusion, as now printed in fix 1:** read the label list (a matching label
+removes look-alike false alarms); measure the label's coverage on your own documents
+against a hand-read sample (a label knows one way of writing the fact); where coverage is
+poor write the pattern (same domain work, your rule); a tagger's count flags only the
+loss of what it sees; the count must come from outside the model either way.
+
+## Experiment 10.7, fourth condition — the field with one line added (12 Oct 2026)
+
+Prachi: "do the 4th run". The line: "Do not list items that simply have no amount. List
+only values that could be mistaken for a medication dose amount." — inserted before the
+printed prompt's "An empty not_extracted list is a claim…". Three runs, same 60
+conversations, same ruler, 180 calls, $4.69 notional, 6,575 recorded seconds
+(`--condition narrowed`, fixtures in `fixtures_field_conversation/narrowed/s{1,2,3}/`).
+
+| per run | as printed 1/2/3 | one line added 1/2/3 |
+|---|---|---|
+| ruler doses in `extracted` (of 64) | 62/63/63 | 62/63/63 |
+| true silent omissions, after reading | 0/0/0 | 0/0/0 |
+| field filled: conversations (of 60) | 49/51/50 | **26/32/30** |
+| of the 21 with no dose | 19/20/19 | 13/11/10 |
+| entries | 137/149/147 | **57/62/58** |
+| — medicine named without any amount | 95/91/88 | **5/2/3** |
+| — number that is not a dose | 17/36/37 | 28/40/36 |
+| — frequency / duration / route only | 13/9/9 | 9/3/5 |
+| — excluded by the ruler | 4/4/5 | 7/7/5 |
+| — other quantities / unit-less | 7/9/8 | 7/9/9 |
+| — ruler dose set aside with a reason | 1/0/0 | 1/1/0 |
+| entries that held back a dose the extraction should carry | 0/0/0 | 0/0/0 |
+
+Read: the two set-aside ruler doses are the right two (175 mg proposed-and-declined; run 2's
+retracted 5000 units, with the reason "corrected to 50,000 units"). The five remaining
+medicine entries in run 1 are tablet counts without a unit ("i'm just on one now") and
+"a little bit of anti-inflammatory"; run 2 listed four drug prices ($850, $70…) as
+look-alikes — a stretch, harmless. Contents vary run to run (D2N088: two A1C values in run
+1, none in run 2; D2N013: none in run 1, "162" in run 2). Extraction unchanged in every
+cell.
+
+Verdict: the volume was the prompt's fault, not the field's. One line that says what the
+field is for cut it by more than half and removed the medicine inventory, with no loss on
+the extraction side and no wrong call. Book: the "Adapt this before you use it" note now
+carries the line with its measured effect; "Where this prompt works" has the before/after
+counts; numbers table row 10.7 updated. The printed prompt is unchanged (it is the one
+the FDA-label results were measured with).

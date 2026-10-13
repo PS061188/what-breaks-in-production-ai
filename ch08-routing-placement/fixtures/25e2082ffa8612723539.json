@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: - Auscultation of Lungs: Clear bilaterally.\nS2: He describes it as something stuck in his throat.\nS3: He is still taking Norvasc.\nS4: Respiratory: Denies cough, shortness of breath, or hemoptysis.\nS5: Difficulty swallowing.\nS6: He states that he has never fully choked before, but has recently thought about potentially choking.\nS7: - Medical Treatment: I referred the patient to gastroenterology.\nS8: HENT: Reports dysphagia.\nS9: The patient will follow-up in 1 month for his diabetic lab results and any modifications needed.\nS10: - Patient Education and Counseling: We discussed that I am concerned he has a narrowing in his throat that is causing this.\nS11: Cardiovascular: Denies chest pain.\nS12: I advised the patient to call our office if his symptoms worsen.\nS13: Constitutional: Denies weight changes.\nS14: I ordered another hemoglobin A1c, as well as a kidney function test.\nS15: Regarding his diabetes, the patient states he is doing well.\nS16: - Patient Education and Counseling: I advised the patient to continue his current medication, Norvasc.\nS17: No murmurs, gallops or rubs.\nS18: - Medical Reasoning: This seems well-controlled.\nS19: Hematology/Lymphatic/Immunology\nS20: His last hemoglobin A1c was 7.4.\nS21: He denies having to cough.\nS22: He states that he checks his blood sugars most of the time, but sometimes he is in a hurry and will forget.\nS23: I advised the patient the gastroenterology will do a scope.\nS24: However, he does note that when he checks his blood sugar, they are within range.\nS25: - Patient Education and Counseling: The patient will continue with his metformin as he seems to be doing well.\nS26: - Assessment of Respiratory Effort: Normal respiratory effort.\nS27: - Medical Reasoning: This seems well-controlled.\nS28: I advised the patient to follow up in 1 month for results and any adjustments that may be needed.\nS29: Gastrointestinal: Denies hematochezia, hematemesis, vomiting, nausea, or diarrhea.\nS30: - Auscultation of Heart: Regular rate and rhythm.\nS31: We discussed that he should eat his food slowly and chew his food frequently.\nS32: - Medical Treatment: I refilled the Norvasc.\nS33: He denies any side effects of the metformin such as nausea, vomiting, or diarrhea.\nS34: Denies having this issue with liquids, hot or cold.\nS35: - Examination of Abdomen: No masses or swelling.\nS36: He states that it bothers him a little bit throughout the day as sometimes it becomes painful.\nS37: The patient noticed the difficulty swallowing approximately 4 to 5 weeks ago.\nS38: I recommended Prilosec as he might be experiencing reflux.\nS39: Denies hematochezia, vomiting blood, coughing up blood, any weight changes, chest pain, or shortness of breath.\nS40: High blood pressure.\nS41: The patient states that occasionally when he tries to eat something relatively solid it seems to get stuck and he will have to wash it down with a drink.\nS42: Epigastric tenderness noted.\nS43: Patient reports a history of diabetes and hypertension.\nS44: - Medical Reasoning: The patient describes difficulty swallowing when he eats solid foods.\nS45: I referred the patient to ophthalmology for retinopathy.\nS46: - Medical Treatment: Continue metformin 500 mg twice a day.\nS47: He is compliant with his metformin 500 mg twice a day.\nS48: However, he states they usually close in range.\nS49: I prescribed Prilosec 20 mg once a day.\nS50: He notes that occasionally he will have a lower blood pressure and then other days it will be elevated.\nS51: - Normal capillary refill and perfusion.\nS52: - Normal back examination.\nS53: Patient reports that he take metformin 500 mg twice a day and Norvasc.\nS54: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS55: No wheezes, rales, or rhonchi.\nS56: Tyler Green is a 56-year-old male who presents today complaining of difficulty swallowing.\nS57: Difficulty swallowing.\nS58: In regards to his blood pressure, the patient states that he is doing okay.\nS59: - Palpation: No enlarged lymph nodes.\nS60: - General Examination: Neck is supple without thyromegaly or lymphadenopathy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[\"S2\",\"S3\",\"S4\",\"S5\",\"S6\",\"S8\",\"S13\",\"S15\",\"S22\",\"S24\",\"S33\",\"S34\",\"S36\",\"S37\",\"S41\",\"S43\",\"S47\",\"S50\",\"S53\",\"S56\",\"S57\",\"S58\"],\"objective_exam\":[\"S1\",\"S11\",\"S17\",\"S26\",\"S30\",\"S35\",\"S42\",\"S51\",\"S52\",\"S55\",\"S59\",\"S60\"],\"objective_results\":[\"S14\",\"S20\"],\"assessment_and_plan\":[\"S7\",\"S9\",\"S10\",\"S12\",\"S16\",\"S18\",\"S23\",\"S25\",\"S27\",\"S28\",\"S31\",\"S32\",\"S38\",\"S39\",\"S40\",\"S44\",\"S45\",\"S46\",\"S49\",\"S54\",\"S21\",\"S29\",\"S39\",\"S48\"]}",
+  "elapsed_ms": 3468,
+  "usage": {
+    "input_tokens": 1613,
+    "output_tokens": 209
+  },
+  "logprobs": null
+}

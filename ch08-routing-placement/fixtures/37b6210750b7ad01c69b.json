@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-81550\nDate: 2026-05-20\n\nAddresses appear in the order: recipient, sender, billing party.\nMarlowe Textiles\n58 Orchard Way\nPlymouth 5185\n\nIronbridge Tools\n640 Northern Bypass\nHull 8775\n\nQuarry Lane Steel\n402 Riverside Drive\nExeter 4714\n\nItems: 5 cartons, 181 kg\nCarrier reference: CR6452\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ironbridge Tools, 640 Northern Bypass, Hull 8775\",\"source_quote\":\"Ironbridge Tools\\n640 Northern Bypass\\nHull 8775\"},\"destination_address\":{\"value\":\"Marlowe Textiles, 58 Orchard Way, Plymouth 5185\",\"source_quote\":\"Marlowe Textiles\\n58 Orchard Way\\nPlymouth 5185\"},\"billing_address\":{\"value\":\"Quarry Lane Steel, 402 Riverside Drive, Exeter 4714\",\"source_quote\":\"Quarry Lane Steel\\n402 Riverside Drive\\nExeter 4714\"}}",
+  "elapsed_ms": 1584,
+  "usage": {
+    "input_tokens": 650,
+    "output_tokens": 157
+  },
+  "logprobs": null
+}

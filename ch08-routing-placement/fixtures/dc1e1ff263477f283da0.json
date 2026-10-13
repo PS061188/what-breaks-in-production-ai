@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Coumadin 4 mg daily.\nS2: Atrial fibrillation.\nS3: I also recommended that the patient continues to be active within her limits.\nS4: Melissa Sanchez is a 58-year-old female being seen today for a status post mitral valve repair, completed on 08/03/2020.\nS5: Status post mitral valve repair.\nS6: Rhythm is irregularly irregular, S1 slightly accentuated, no S3.\nS7: Sanchez in office, and she was doing well and thus we recommended maintaining her current medications, she is using a reminder app to stay compliant with medications.\nS8: Lungs have reduced breath, but auscultation and percussion are clear.\nS9: The patient reports feeling better and overall, pretty good.\nS10: Mitral valve repair 08/03/2020.\nS11: Impression: Atrial fibrillation with a controlled ventricular response, t-wave inversion anteriorly.\nS12: Mitral regurgitation.\nS13: She denies experiencing new symptoms.\nS14: Melissa Sanchez is a 58-year-old female being seen today for a status post mitral valve repair, completed on 08/03/2020.\nS15: She is still having chest pain intermittently, and her breathing “gets shallow” which results in her “slowing down” and decreasing her exertion.\nS16: Coumadin 4 mg daily, Lasix 40 mg daily, and Atenolol 50 mg daily.\nS17: On 09/17/20 we saw Mrs.\nS18: Trace peripheral edema on extremities.\nS19: Compared to the previous study, there are no significant changes.\nS20: • Status post mitral valve repair\nS21: Atenolol 50 mg daily.\nS22: Return to clinic in 6-9 months.\nS23: An episode of shortness of breath and chest pains may last a few minutes and will not recur for a few weeks.\nS24: Continue with current medications.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S4\", \"S7\", \"S9\", \"S13\", \"S15\", \"S17\", \"S23\"], \"objective_exam\": [\"S6\", \"S8\", \"S18\"], \"objective_results\": [\"S11\", \"S19\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S3\", \"S5\", \"S10\", \"S12\", \"S16\", \"S20\", \"S21\", \"S22\", \"S24\"]}",
+  "elapsed_ms": 1897,
+  "usage": {
+    "input_tokens": 921,
+    "output_tokens": 117
+  },
+  "logprobs": null
+}

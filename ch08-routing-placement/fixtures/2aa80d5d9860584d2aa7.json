@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: - Auscultation of Lungs: Clear bilaterally.\nS2 [SUBJECTIVE]: He describes it as something stuck in his throat.\nS3 [SUBJECTIVE]: He is still taking Norvasc.\nS4 [SUBJECTIVE]: Respiratory: Denies cough, shortness of breath, or hemoptysis.\nS5 [SUBJECTIVE]: Difficulty swallowing.\nS6 [SUBJECTIVE]: He states that he has never fully choked before, but has recently thought about potentially choking.\nS7 [ASSESSMENT AND PLAN]: - Medical Treatment: I referred the patient to gastroenterology.\nS8 [SUBJECTIVE]: HENT: Reports dysphagia.\nS9 [ASSESSMENT AND PLAN]: The patient will follow-up in 1 month for his diabetic lab results and any modifications needed.\nS10 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: We discussed that I am concerned he has a narrowing in his throat that is causing this.\nS11 [SUBJECTIVE]: Cardiovascular: Denies chest pain.\nS12 [ASSESSMENT AND PLAN]: I advised the patient to call our office if his symptoms worsen.\nS13 [SUBJECTIVE]: Constitutional: Denies weight changes.\nS14 [ASSESSMENT AND PLAN]: I ordered another hemoglobin A1c, as well as a kidney function test.\nS15 [SUBJECTIVE]: Regarding his diabetes, the patient states he is doing well.\nS16 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: I advised the patient to continue his current medication, Norvasc.\nS17 [OBJECTIVE EXAM]: No murmurs, gallops or rubs.\nS18 [ASSESSMENT AND PLAN]: - Medical Reasoning: This seems well-controlled.\nS19 [OBJECTIVE EXAM]: Hematology/Lymphatic/Immunology\nS20 [SUBJECTIVE]: His last hemoglobin A1c was 7.4.\nS21 [SUBJECTIVE]: He denies having to cough.\nS22 [SUBJECTIVE]: He states that he checks his blood sugars most of the time, but sometimes he is in a hurry and will forget.\nS23 [ASSESSMENT AND PLAN]: I advised the patient the gastroenterology will do a scope.\nS24 [SUBJECTIVE]: However, he does note that when he checks his blood sugar, they are within range.\nS25 [ASSESSMENT AND PLAN]: - Patient Education and Counseling: The patient will continue with his metformin as he seems to be doing well.\nS26 [OBJECTIVE EXAM]: - Assessment of Respiratory Effort: Normal respiratory effort.\nS27 [ASSESSMENT AND PLAN]: - Medical Reasoning: This seems well-controlled.\nS28 [ASSESSMENT AND PLAN]: I advised the patient to follow up in 1 month for results and any adjustments that may be needed.\nS29 [SUBJECTIVE]: Gastrointestinal: Denies hematochezia, hematemesis, vomiting, nausea, or diarrhea.\nS30 [OBJECTIVE EXAM]: - Auscultation of Heart: Regular rate and rhythm.\nS31 [ASSESSMENT AND PLAN]: We discussed that he should eat his food slowly and chew his food frequently.\nS32 [ASSESSMENT AND PLAN]: - Medical Treatment: I refilled the Norvasc.\nS33 [SUBJECTIVE]: He denies any side effects of the metformin such as nausea, vomiting, or diarrhea.\nS34 [SUBJECTIVE]: Denies having this issue with liquids, hot or cold.\nS35 [OBJECTIVE EXAM]: - Examination of Abdomen: No masses or swelling.\nS36 [SUBJECTIVE]: He states that it bothers him a little bit throughout the day as sometimes it becomes painful.\nS37 [SUBJECTIVE]: The patient noticed the difficulty swallowing approximately 4 to 5 weeks ago.\nS38 [ASSESSMENT AND PLAN]: I recommended Prilosec as he might be experiencing reflux.\nS39 [SUBJECTIVE]: Denies hematochezia, vomiting blood, coughing up blood, any weight changes, chest pain, or shortness of breath.\nS40 [ASSESSMENT AND PLAN]: High blood pressure.\nS41 [SUBJECTIVE]: The patient states that occasionally when he tries to eat something relatively solid it seems to get stuck and he will have to wash it down with a drink.\nS42 [OBJECTIVE EXAM]: Epigastric tenderness noted.\nS43 [SUBJECTIVE]: Patient reports a history of diabetes and hypertension.\nS44 [ASSESSMENT AND PLAN]: - Medical Reasoning: The patient describes difficulty swallowing when he eats solid foods.\nS45 [ASSESSMENT AND PLAN]: I referred the patient to ophthalmology for retinopathy.\nS46 [ASSESSMENT AND PLAN]: - Medical Treatment: Continue metformin 500 mg twice a day.\nS47 [SUBJECTIVE]: He is compliant with his metformin 500 mg twice a day.\nS48 [SUBJECTIVE]: However, he states they usually close in range.\nS49 [ASSESSMENT AND PLAN]: I prescribed Prilosec 20 mg once a day.\nS50 [SUBJECTIVE]: He notes that occasionally he will have a lower blood pressure and then other days it will be elevated.\nS51 [OBJECTIVE EXAM]: - Normal capillary refill and perfusion.\nS52 [OBJECTIVE EXAM]: - Normal back examination.\nS53 [SUBJECTIVE]: Patient reports that he take metformin 500 mg twice a day and Norvasc.\nS54 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS55 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS56 [SUBJECTIVE]: Tyler Green is a 56-year-old male who presents today complaining of difficulty swallowing.\nS57 [ASSESSMENT AND PLAN]: Difficulty swallowing.\nS58 [SUBJECTIVE]: In regards to his blood pressure, the patient states that he is doing okay.\nS59 [OBJECTIVE EXAM]: - Palpation: No enlarged lymph nodes.\nS60 [OBJECTIVE EXAM]: - General Examination: Neck is supple without thyromegaly or lymphadenopathy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S3\", \"S4\", \"S5\", \"S6\", \"S8\", \"S11\", \"S13\", \"S15\", \"S20\", \"S21\", \"S22\", \"S24\", \"S29\", \"S33\", \"S34\", \"S36\", \"S37\", \"S39\", \"S41\", \"S43\", \"S47\", \"S48\", \"S50\", \"S53\", \"S56\", \"S58\"], \"objective_exam\": [\"S1\", \"S17\", \"S19\", \"S26\", \"S30\", \"S35\", \"S42\", \"S51\", \"S52\", \"S55\", \"S59\", \"S60\"], \"objective_results\": [], \"assessment_and_plan\": [\"S7\", \"S9\", \"S10\", \"S12\", \"S14\", \"S16\", \"S18\", \"S23\", \"S25\", \"S27\", \"S28\", \"S31\", \"S32\", \"S38\", \"S40\", \"S44\", \"S45\", \"S46\", \"S49\", \"S54\", \"S57\"]}",
+  "elapsed_ms": 2428,
+  "usage": {
+    "input_tokens": 1952,
+    "output_tokens": 266
+  },
+  "logprobs": null
+}

@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: The patient will discontinue prednisone and continue methotrexate.\nS2: • High risk medication use.\nS3: Psoriatic arthritis management.\nS4: Musculoskeletal: Full range of motion.\nS5: The patient will follow up in 3 months.\nS6: • Psoriatic arthritis.\nS7: Gomez is currently taking methotrexate and prednisone 1 mg daily.\nS8: She did not hold methotrexate for her second COVID-19 vaccine.\nS9: The patient reports she has been doing well since her last visit.\nS10: Dystrophy of all the nails of the toes.\nS11: The patient states when she received her first COVID-19 vaccine she held her methotrexate and felt \"horrible\" all week until the next Wednesday when she took it.\nS12: Stable on methotrexate and prednisone 1 mg daily.\nS13: Psoriatic arthritis.\nS14: Judy Gomez is a 61-year-old female who presents to the clinic today for ongoing management of psoriatic arthritis.\nS15: She felt better by the end of the week.\nS16: She believes methotrexate has been relieving her joint pain.\nS17: She has been able to decrease her prednisone dose to 1 mg daily; however, she took 2 mg for a couple of days due to increased pain in her bilateral feet.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"MEDIUM\"}], \"objective_results\": [], \"assessment_and_plan\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S2\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S3\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S6\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S12\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S13\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S15\", \"placement_confidence\": \"LOW\"}], \"requires_review\": true}",
+  "elapsed_ms": 3874,
+  "usage": {
+    "input_tokens": 1449,
+    "output_tokens": 313
+  },
+  "logprobs": null
+}

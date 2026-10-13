@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: The patient understands and agrees with the recommended medical treatment plan.\nS2: She will discontinue clopidogrel for one week prior to knee replacement surgery; we will provide a reminder to patient of this as well.\nS3: Labs were checked and creatinine is appropriate.\nS4: A1c is 5.5 on last check, so there is no need for a further A1c today.\nS5: She was increasingly dyspneic.\nS6: Magnesium 1.7, hemoglobin WNL, potassium 3.9, creatinine 0.7, BUN 23.\nS7: Schedule a preop checkup 1st or 2nd week of June.\nS8: No family history of colon cancer.\nS9: We had changed her furosemide to torsemide at 20 mg by mouth daily.\nS10: Start magnesium supplement.\nS11: She is going to be having a right knee replacement at the end of 06/2021.\nS12: She notes that her heartburn was severe at one point but resolved after trying Prilosec for 2 weeks in 01/2021.\nS13: She denies any concerns with defecation.\nS14: No family history of colon cancer.\nS15: Otherwise, continue her current regimen.\nS16: She is currently double covered with Medicare and private insurance.\nS17: We switched her from furosemide to torsemide and symptomatically, she is doing a lot better.\nS18: Regarding her prior symptoms of heartburn, she denies any recent gastrointestinal issues.\nS19: I last saw her in 04/2021, and she had reported being interested in having her right knee replaced this summer at East Metropolitan Hospital, so it was recommended that we work to control her cardiovascular status prior to surgery.\nS20: She may need another one prior to her surgery next month.\nS21: Lisinopril 10 mg daily.\nS22: • Preop examination.\nS23: She did report experiencing bilateral leg cramps which she treated with consumption of pickle juice, which did resolve the cramps.\nS24: She is still taking iron supplementation.\nS25: Her breathing is nonlabored.\nS26: Chronic congestive heart failure with mixed presentation.\nS27: She has since transitioned back to her original \"stomach medication\".\nS28: We are going to repeat an EKG today.\nS29: Some of which may be water weight decreasing.\nS30: The patient is not on a potassium supplement currently.\nS31: We will schedule a preop check the first week or two of June prior to the surgery.\nS32: She is currently scheduled to have surgery on 06/24/2021.\nS33: She denies any issues with heartburn since that time and has stopped taking Prilosec altogether.\nS34: Chronic Congestive Heart Failure.\nS35: Her magnesium is below the preferred 2 at 1.7, with some occurrence of bilateral leg cramping, therefore we will start her on magnesium supplement.\nS36: Torsemide 20 mg by mouth daily.\nS37: She is about 1.5 kg down in weight.\nS38: The patient was called in for a follow up with me for chronic congestive heart failure with diastolic dysfunction.\nS39: She thought the cramps were related to her being cold.\nS40: Iron deficiency Anemia.\nS41: The patient is due for a colonoscopy.\nS42: Nicole Miller is a 71-year-old female who presents for follow-up.\nS43: • Diabetes mellitus.\nS44: This is just a screening colonoscopy that she is overdue for.\nS45: 03/2020 Hgb A1c 5.5.\nS46: She had an exacerbation of CHF earlier in the spring.\nS47: The patient is overdue for a colonoscopy, which we will try to have done at County Hospital in the next month, prior to a change in her insurance.\nS48: The patient states that she has lost approximately 3 to 3.5 pounds since her last visit in 04/2021.\nS49: She plans to discontinue clopidogrel a week before her surgery.\nS50: Her lisinopril had also been increased up to 10 mg daily in 03/2021.\nS51: Call the clinic with any questions or new symptoms.\nS52: Her BNP had been 3000 in 03/2021, up to 6000 in 04/2021.\nS53: • Chronic congestive heart failure with mixed presentation.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S5\", \"S8\", \"S12\", \"S13\", \"S18\", \"S19\", \"S23\", \"S24\", \"S27\", \"S33\", \"S38\", \"S39\", \"S42\", \"S46\", \"S48\"], \"objective_exam\": [\"S9\", \"S17\", \"S21\", \"S25\", \"S28\", \"S36\"], \"objective_results\": [\"S3\", \"S4\", \"S6\", \"S37\", \"S45\", \"S50\", \"S52\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S7\", \"S10\", \"S11\", \"S14\", \"S15\", \"S16\", \"S20\", \"S22\", \"S26\", \"S30\", \"S31\", \"S32\", \"S34\", \"S35\", \"S40\", \"S41\", \"S43\", \"S44\", \"S47\", \"S49\", \"S51\", \"S53\"]}",
+  "elapsed_ms": 2882,
+  "usage": {
+    "input_tokens": 1525,
+    "output_tokens": 233
+  },
+  "logprobs": null
+}

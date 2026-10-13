@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: She took Ibuprofen on but it did not help her.\nS2 [ASSESSMENT AND PLAN]: She will follow up with me in 2 weeks for a repeat evaluation.\nS3 [SUBJECTIVE]: James is a 42-year-old female who presents today for an evaluation of right index finger pain.\nS4 [ASSESSMENT AND PLAN]: I have recommended a splint.\nS5 [ASSESSMENT AND PLAN]: If she is unimproved, we will consider hand therapy at that time.\nS6 [SUBJECTIVE]: Right index finger pain.\nS7 [ASSESSMENT AND PLAN]: At this point, I discussed the diagnosis and treatment options with the patient.\nS8 [ASSESSMENT AND PLAN]: A prescription is provided for Mobic 15 mg once a day, dispense 14.\nS9 [OBJECTIVE RESULTS]: X-rays of the right index finger show no obvious signs of fracture.\nS10 [SUBJECTIVE]: She denies any icing it or wearing a splint.\nS11 [ASSESSMENT AND PLAN]: All questions were answered.\nS12 [SUBJECTIVE]: She states she injured it while skiing.\nS13 [SUBJECTIVE]: Chronic constipation\nS14 [SUBJECTIVE]: She states she fell and jammed her finger.\nS15 [SUBJECTIVE]: Appendectomy at age 7.\nS16 [SUBJECTIVE]: She rates her pain 7/10.\nS17 [ASSESSMENT AND PLAN]: Right index finger DIP joint sprain.\nS18 [OBJECTIVE EXAM]: Examination of the right hand reveals pain to palpation of the MCP and DIP joints.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S6\", \"S1\", \"S10\", \"S12\", \"S14\", \"S16\", \"S13\", \"S15\"], \"objective_exam\": [\"S18\"], \"objective_results\": [\"S9\"], \"assessment_and_plan\": [\"S17\", \"S7\", \"S4\", \"S8\", \"S2\", \"S5\", \"S11\"]}",
+  "elapsed_ms": 2620,
+  "usage": {
+    "input_tokens": 806,
+    "output_tokens": 97
+  },
+  "logprobs": null
+}

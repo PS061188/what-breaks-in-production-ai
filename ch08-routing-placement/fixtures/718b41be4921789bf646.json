@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: • Medical Treatment: We will initiate Lasix 40 mg once daily, and continue with Toprol 50 mg daily and lisinopril 10 mg daily.\nS2: She denies issues since that time.\nS3: This has been more of a struggle recently as she has been traveling a lot.\nS4: Moderate mitral regurgitation.\nS5: • Neurological: Endorses dizziness.\nS6: • Cardiovascular: Denies dyspnea.\nS7: Her colonoscopy from 3 years ago demonstrated mild diverticulosis.\nS8: She denies any black, tarry stools, heavy menstrual bleeding, unintentional weight loss, or syncope.\nS9: • Cardiovascular: Grade 3/6 systolic ejection murmur.\nS10: • Medical Reasoning: She has noticed some lower extremity edema.\nS11: • Ears, Nose, Mouth and Throat: Endorses nasal congestion from allergies.\nS12: She will contact me with any questions or concerns.\nS13: The patient denies recent issues with kidney stones.\nS14: The patient denies fever, chills, sore throat, or cough.\nS15: The patient reports she has been really tired and dizzy over the past couple of months.\nS16: Stephanie Diaz is a 49-year-old female with a past medical history significant for congestive heart failure, kidney stones, and prior colonoscopy, who presents today for abnormal labs.\nS17: Diaz had a colonoscopy about 3 years ago due to blood in her stool.\nS18: She gets seasonal allergies but everything else has been okay.\nS19: Regarding her congestive heart failure, she states she is not doing well with her salt intake.\nS20: Her echocardiogram from 6 months ago demonstrated a reduced ejection fraction of 45%, as well as moderate mitral regurgitation.\nS21: She denies low back pain, flank pain, or blood in her urine.\nS22: • Constitutional: Denies fevers, chills, or weight loss.\nS23: She has noticed some swelling in her legs but nothing too extreme.\nS24: • Additional Testing: We will order an anemia profile for further evaluation.\nS25: She denies any blood in her stools recently but notes she had blood in her stool about 3 years ago and had a colonoscopy for that.\nS26: • Musculoskeletal: Trace to 1+ edema in the bilateral ankles.\nS27: • Patient Education and Counseling: I encouraged her to continue with dietary modifications and proper hydration.\nS28: Echocardiogram demonstrates decreased ejection fraction of 45%.\nS29: • Patient Education and Counseling: She should continue to limit her sodium intake.\nS30: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS31: This showed mild diverticulitis.\nS32: • Respiratory: Denies cough, shortness of breath.\nS33: She reports these symptoms while walking a mile, going to work, and performing daily tasks.\nS34: Diaz notes she has had some nasal congestion but attributes this to the season changing.\nS35: • Medical Reasoning: This is a new issue.\nS36: I advised her to monitor her daily weights and notify me if these start to increase.\nS37: Congestive heart failure.\nS38: • Musculoskeletal: Endorses bilateral leg swelling.\nS39: • Medical Reasoning: She as asymptomatic denies any recent flare ups.\nS40: • Gastrointestinal: Denies hematochezia, melena.\nS41: Stephanie Diaz is a 49-year-old female with a past medical history significant for congestive heart failure, kidney stones, and prior colonoscopy, who presents today for abnormal labs.\nS42: Her recent hemoglobin level was low at 8.2, but she denies any signs of gastrointestinal bleeding or urinary tract bleeding, as well as any abnormal menstrual bleeding.\nS43: • Specialist Referrals: We will refer her back to gastroenterology for repeat evaluation with possible endoscopy and colonoscopy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S3\", \"S5\", \"S6\", \"S8\", \"S11\", \"S13\", \"S14\", \"S15\", \"S16\", \"S17\", \"S18\", \"S19\", \"S21\", \"S22\", \"S23\", \"S25\", \"S32\", \"S34\", \"S38\", \"S40\", \"S41\", \"S42\"], \"objective_exam\": [\"S9\", \"S26\"], \"objective_results\": [\"S4\", \"S7\", \"S20\", \"S28\", \"S31\"], \"assessment_and_plan\": [\"S1\", \"S10\", \"S12\", \"S24\", \"S27\", \"S29\", \"S30\", \"S35\", \"S36\", \"S37\", \"S39\", \"S43\"]}",
+  "elapsed_ms": 3199,
+  "usage": {
+    "input_tokens": 1644,
+    "output_tokens": 193
+  },
+  "logprobs": null
+}

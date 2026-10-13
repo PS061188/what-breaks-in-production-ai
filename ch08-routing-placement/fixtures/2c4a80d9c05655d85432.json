@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: He is fully vaccinated for COVID-19 with his first dose on 01/15/2021 and his second dose on 02/05/2021.\nS2: • Lung field abnormal finding on examination.\nS3: • Right testicular nodule.\nS4: Preventative health.\nS5: His lipid panel showed elevated total cholesterol of 247, HDL 66, LDL 166, and triglycerides 74.\nS6: His current medication list only consists of clindamycin prior to dental procedures and vitamin D3 (50,000 IU on Sundays and 2000 IU the other 6 days).\nS7: Eugene Walker is a 61-year-old male who presents today for a routine follow-up of his chronic medical conditions.\nS8: - Most recent blood work reviewed with no significant abnormalities.\nS9: - Ordered echocardiogram and stress test.\nS10: • History of aortic aneurysm repair.\nS11: - He had found himself feeling more fatigued at the end of the day.\nS12: - MMR titer performed today.\nS13: He believes he snores a bit but denies any signs of apnea.\nS14: Furthermore, the patient has noticed a 2 to 3 mm nodule in his right testicle, possibly with the epididymis but he is unsure.\nS15: As he is now 8 years post-op, he has requested an echocardiogram from Dr.\nS16: • Elevated alkaline phosphate level.\nS17: History of aortic aneurysm repair.\nS18: • Preventative health.\nS19: - This could be related to his liver but most likely related to his bone health.\nS20: - Ordered an alkaline phosphatase and gamma GT.\nS21: Lung field abnormal finding on examination.\nS22: - Most recent CMP showed elevation at 156 IU/L.\nS23: - His exhalation phase was low on exam.\nS24: Routine follow up of chronic medical conditions.\nS25: Elevated alkaline phosphate level.\nS26: - Referral placed to urology for possible ultrasound.\nS27: He denies any wheezing.\nS28: His last stress test was performed on 09/09/2019.\nS29: From a preventative standpoint, the patient is due for the shingles vaccine and an MMR titer.\nS30: - Currently he is not seen by cardiology routinely and I have suggested he follow up with Dr.\nS31: There is no palpable hernia.\nS32: Regarding his blood work from 04/10/2021, the patient's alkaline phosphatase was elevated at 156.\nS33: He notes that he usually rides his bike for about 20 to 30 miles and by the end of his ride he is tired enough that he will immediately fall asleep.\nS34: Eugene Walker is a 61-year-old male who presents today for a routine follow-up of his chronic medical conditions.\nS35: Today, the patient reports feeling more fatigued as of late.\nS36: This has also been noticed by his other providers.\nS37: - The patient has been noted to purse his lips while breathing.\nS38: - Recommend shingles vaccine next month.\nS39: The patient adds that he can fall asleep easily and gets about 6 or 7 hours of sleep per night.\nS40: - Ordered pulmonary function testing for further evaluation.\nS41: - 2 to 3 mm nodule noted on exam.\nS42: Lewis to review how he is doing currently.\nS43: The exhalation phase is low.\nS44: The patient's TSH was normal at 2.68.\nS45: - Overall, he is doing well and currently asymptomatic.\nS46: Right testicular nodule.\nS47: - He is fully vaccinated against COVID-19.\nS48: Pursed lip breathing noted.\nS49: Of note, the patient underwent an aortic valve replacement and ascending aortic aneurysm repair on 01/22/2013.\nS50: Left testicle normal.\nS51: Walker reports that his wife and friends have told him that he has pursed lips when he walks.\nS52: - He does cycle 20 to 30 miles at a time.\nS53: Lungs are clear to auscultation, no wheezing.\nS54: - Return in 1 year for routine wellness visit, sooner if needed.\nS55: His CBC was unremarkable.\nS56: He has not had a vasectomy.\nS57: His most recent vitamin D level was at the high end of normal at 94.\nS58: - Call with any questions or concerns.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S4\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S27\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S28\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S29\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S33\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S34\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S35\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S39\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S49\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S51\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S52\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S56\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S25\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S31\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S37\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S41\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S43\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S46\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S48\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S50\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S53\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S19\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S32\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S36\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S44\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S45\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S47\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S55\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S57\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S26\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S30\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S38\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S40\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S42\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S54\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S58\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 4718,
+  "usage": {
+    "input_tokens": 2234,
+    "output_tokens": 968
+  },
+  "logprobs": null
+}

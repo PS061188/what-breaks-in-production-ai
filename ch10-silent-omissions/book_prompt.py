@@ -82,7 +82,7 @@ def main() -> int:
     rows, returned, expected, dropped = [], 0, 0, 0
     warned_when_short = short = 0
     for case, r in zip(cases, results):
-        got = dose_figures(" ".join(r["doses"]))
+        got = dose_figures(" ".join(r["doses"]), expand_ranges=True)
         missing = case["expected"] - got
         truth = len(case["expected"])
         returned += len(case["expected"] & got)

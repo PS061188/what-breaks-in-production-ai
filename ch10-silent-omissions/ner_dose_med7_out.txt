@@ -1,0 +1,70 @@
+Python 3.9.6 (arm64, CPU) · en_core_med7_lg 3.4.2.1 · spaCy 3.4.4
+load 1.3s · per document 0.2s, 0.8s, 0.3s, 0.6s, 0.8s, 0.7s
+dose labels counted: STRENGTH + DOSAGE · variant: STRENGTH
+
+Where the pattern's dose mentions land, by entity label
+-------------------------------------------------------
+drug           dose printed  mentions  STRENGTH  DOSAGE  other label  no entity
+-------------  ------------  --------  --------  ------  -----------  ---------
+Lisinopril     with unit     17        17        0       0            0        
+Lisinopril     no unit       0         0         0       0            0        
+Levothyroxine  with unit     16        2         0       0            14       
+Levothyroxine  no unit       8         0         0       0            8        
+Amoxicillin    with unit     44        37        0       0            7        
+Amoxicillin    no unit       0         0         0       0            0        
+Sertraline Hy  with unit     24        16        4       0            4        
+Sertraline Hy  no unit       7         0         4       0            3        
+Warfarin Sodi  with unit     21        20        0       0            1        
+Warfarin Sodi  no unit       20        7         0       2            11       
+Gabapentin     with unit     57        48        0       0            9        
+Gabapentin     no unit       42        12        2       24           4        
+all six        with unit     179       140       4       0            35       
+all six        no unit       77        19        6       26           26       
+  other labels that covered a dose mention: FREQUENCY 26
+
+Examples of doses with a unit that did not land in a dose label:
+  Levothyroxine no entity    entity '-'              in ...othyroidism in Adults* *Dosages greater than 200 mcg/day are seldom required....
+  Levothyroxine no entity    entity '-'              in ...quate response to daily dosages greater than 300 mcg/day is rare and may indi...
+  Levothyroxine no entity    entity '-'              in ...with hypothyroidism Full replacement dose is 1.6 mcg/kg/day. Some patients re...
+  Amoxicillin   no entity    entity '-'              in ...years weighing less than or equal to 40 kg: 90 mg/kg/day divided every 12...
+  Amoxicillin   no entity    entity '-'              in ...40 kg : Based on the amoxicillin component (600 mg/5 mL), the recommended d...
+  Amoxicillin   no entity    entity '-'              in ...oral suspension, 600 mg/42.9 mg per 5 mL is 90 mg/kg/day divided every 12...
+  Sertraline Hy no entity    entity '-'              in ...sorder, patients were dosed in a range of 50-200 mg/day in the clinical tria...
+  Sertraline Hy no entity    entity '-'              in ...PMDD, patients were dosed in the range of 50-150 mg/day with dose increases...
+  Sertraline Hy no entity    entity '-'              in ...or OCD, patients were dosed in a range of 25-200 mg/day in the clinical tria...
+  Warfarin Sodi no entity    entity '-'              in ...to 7 mg 3 to 4 mg 3 to 4 mg 3 to 4 mg 0.5 to 2 mg AG 5 to 7 mg 3 to 4 mg 3...
+  Gabapentin    no entity    entity '-'              in ...1800 mg/day Day 1: Single 300 mg dose Day 2: 600 mg/day (i.e., 300 mg two ti...
+  Gabapentin    no entity    entity '-'              in ...1 years of age: starting dose range is 10 to 15 mg/kg/day, given in three d...
+  Gabapentin    no entity    entity '-'              in ...nded dose in patients 3 to 4 years of age is 40 mg/kg/day, given in three d...
+
+Counts of distinct dose amounts per document
+--------------------------------------------
+drug           pattern  read  dose-label ents  model rule  variant  model only  pattern only                                                                
+-------------  -------  ----  ---------------  ----------  -------  ----------  ----------------------------------------------------------------------------
+Lisinopril     7        7     14               7           7        -           -                                                                           
+Levothyroxine  11       14    2                1           1        -           1 mcg, 1.6 mcg, 3 mcg, 5 mcg, 6 mcg, 8 mcg, 10 mcg, 15 mcg, 200 mcg, 300 mcg
+Amoxicillin    10       10    25               8           8        -           200 mg, 400 mg                                                              
+Sertraline Hy  7        7     20               6           6        -           1 mg                                                                        
+Warfarin Sodi  6        8     28               6           6        -           -                                                                           
+Gabapentin     13       24    66               11          11       -           25 mg, 40 mg                                                                
+
+Each recorded extraction: distinct figures in the list, against the model count
+-------------------------------------------------------------------------------
+drug           pattern  model  api  ap1  ap2  ap3  di1  di2  di3  pr1  pr2  pr3
+-------------  -------  -----  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---
+Lisinopril     7        7      7    7    7    7    7    7    7    7    7    7  
+Levothyroxine  11       1      14   14   14   14   14   14   14   14   14   14 
+Amoxicillin    10       8      8*   10   10   10   2!*  10   10   2!*  2!*  10 
+Sertraline Hy  7        6      7    6~   6~   6~   7    6~   7    6~   6~   7  
+Warfarin Sodi  6        6      8    8    8    8    8    8    8    8    8    8  
+Gabapentin     13       11     13   24   24   24   24   24   24   24   24   24 
+  ap = as-printed, di = distinct, pr = protocol (fixtures_count/); api = fixed.py's run (fixtures/)
+  ! flagged by the model rule   * really short (read)   ~ short only by another drug's dose
+
+What each check flags, of 60 document-runs
+------------------------------------------
+check                       really short, flagged  other drug only, flagged  complete, flagged (false)
+--------------------------  ---------------------  ------------------------  -------------------------
+model rule                  3/4                    0/6                       0/50                     
+model rule, variant labels  3/4                    0/6                       0/50                     
+pattern count, same rule    4/4                    6/6                       0/50                     

@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Hemoglobin A1c is elevated at 8.\nS2: • Medical Treatment: Continue Keppra at current dosage.\nS3: He notes that he has going from place to place for different events and they've recently had a lot of visitors; therefore, he was not monitoring his sugar intake over the last few weeks.\nS4: The patient denies chest pain, shortness of breath, vomiting, dizziness, fevers, and chills.\nS5: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS6: • Musculoskeletal: Trace pitting edema to the bilateral lower extremities.\nS7: • Neurological: Endorses epilepsy.\nS8: In terms of his anxiety, he states he has had his moments, but now that it is almost the weekend, his symptoms have improved.\nS9: • Respiratory: Denies shortness of breath.\nS10: He presents today with an abnormal lab finding.\nS11: John Brooks is a 55-year-old male with a past medical history significant for anxiety and epilepsy.\nS12: The patient was notified by the emergency room physician that he had elevated blood sugar levels.\nS13: John Brooks is a 55-year-old male with a past medical history significant for anxiety and epilepsy, who presents with an abnormal lab finding.\nS14: He was started on metformin 500 mg twice daily during that time.\nS15: • Psychiatric: Endorses anxiety.\nS16: Newly diagnosed diabetes.\nS17: • Cardiovascular: Denies chest pain or dyspnea.\nS18: He continues to take Keppra.\nS19: • Constitutional: Denies fevers, chills.\nS20: • Cardiovascular: Regular rate and rhythm.\nS21: • Medical Treatment: Continue metformin 500 mg twice daily.\nS22: His blood glucose level is also elevated in clinic today.\nS23: No wheezes, rales, or rhonchi.\nS24: • Medical Reasoning: His past hemoglobin A1c levels have been borderline high, but his most recent level was 8.\nS25: Non-fasting glucose is elevated.\nS26: • Respiratory: Lungs are clear to auscultation bilaterally.\nS27: Regarding his epilepsy, he has not had any seizures in a few months.\nS28: • Additional Testing: Repeat hemoglobin A1c.\nS29: • Medical Reasoning: He saw his neurologist about 3 months ago and has been asymptomatic for the past few months.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[{\"id\":\"S3\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S4\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S8\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S10\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S11\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S12\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S18\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S27\",\"placement_confidence\":\"HIGH\"}],\"objective_exam\":[{\"id\":\"S6\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S7\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S9\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S15\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S17\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S19\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S20\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S22\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S23\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S26\",\"placement_confidence\":\"HIGH\"}],\"objective_results\":[{\"id\":\"S1\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S25\",\"placement_confidence\":\"HIGH\"}],\"assessment_and_plan\":[{\"id\":\"S2\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S5\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S13\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S14\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S16\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S21\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S24\",\"placement_confidence\":\"MEDIUM\"},{\"id\":\"S28\",\"placement_confidence\":\"HIGH\"},{\"id\":\"S29\",\"placement_confidence\":\"MEDIUM\"}],\"requires_review\":true}",
+  "elapsed_ms": 2531,
+  "usage": {
+    "input_tokens": 1712,
+    "output_tokens": 390
+  },
+  "logprobs": null
+}

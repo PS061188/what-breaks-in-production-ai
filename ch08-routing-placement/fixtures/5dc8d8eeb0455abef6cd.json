@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: • Multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS2: Start Retin-A 0.1% topical gel, apply to acne prone areas, titrate as instructed.\nS3: Kayla Ward is a 15-year-old female who presents for new patient evaluation of acne located on the face.\nS4: Kayla states her acne started approximately 2 years ago and it is present almost every day.\nS5: Full exam is performed today except for under the underwear and under the bra.\nS6: Multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS7: New acne evaluation.\nS8: I recommend starting with topical therapy first.\nS9: In the evening, wash face with same mild cleanser and allow to dry.\nS10: Follow recommended cleaning regimen.\nS11: She denies any significant acne present on the chest or back.\nS12: SuperClarify Cleanser along with toner and Persa-Gel.\nS13: It may also cause some dryness or irritation.\nS14: Lives with parents and sister.\nS15: No significant family medical history.\nS16: Will continue to monitor for progression or changes in 6 months.\nS17: The patient was instructed to wash face every morning with a mild cleanser, then use a non-comedogenic moisturizer with sunscreen SPF 30 of higher.\nS18: Reassurance given moles are normal in appearance and have no concerning characteristics.\nS19: There are no associated symptoms, including no itching, bleeding, or pain.\nS20: We discussed the diagnosis, etiology, and treatment options.\nS21: They have a dog, bird, and rabbits in the home.\nS22: She is in the 7th grade and active in basketball, volleyball, and tap dancing.\nS23: She is accompanied by her mother today.\nS24: Her acne regimen includes washing her face in the morning with Persa-Gel and at night e.l.f.\nS25: If it is very expensive or not covered by insurance, you can try Differin gel over the counter.\nS26: The patient has been washing her face regularly.\nS27: Start off using a few nights a week, slowly work up to using every night.\nS28: Kayla reports that today is a good day for her acne.\nS29: The patient’s mother notes that the most significant acne flares started in the fall when she was playing school sports.\nS30: She wears sunscreen in the summer SPF 30.\nS31: Your topical retinoid will cause sun sensitivity, so you will need to wear sunscreen when you are outside.\nS32: The remainder of examination is normal.\nS33: Scattered skin-colored papules, open and closed comedones, and erythematous papules on the face, primarily on the forehead, with also some on the central cheeks and chin.\nS34: The chest and back are relatively spared.\nS35: There are multiple benign nevi on the trunk and extremities.\nS36: Follow up in 6 months.\nS37: This regimen is somewhat helpful.\nS38: It does not tend to flare with her periods.\nS39: Apply a thin layer of topical retinoid, Retin-A 0.1% gel, to acne prone areas.\nS40: Full skin examination revealed mild to moderate comedonal acne with a small inflammatory component and multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS41: Kayla Ward is a 15-year-old female seen today for new acne evaluation.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S4\", \"S11\", \"S14\", \"S15\", \"S21\", \"S22\", \"S23\", \"S24\", \"S26\", \"S28\", \"S29\", \"S30\", \"S37\", \"S38\"], \"objective_exam\": [\"S5\", \"S32\", \"S33\", \"S34\", \"S35\", \"S40\"], \"objective_results\": [\"S1\", \"S6\", \"S18\", \"S19\"], \"assessment_and_plan\": [\"S2\", \"S7\", \"S8\", \"S9\", \"S10\", \"S12\", \"S13\", \"S16\", \"S17\", \"S20\", \"S25\", \"S27\", \"S31\", \"S36\", \"S39\", \"S41\"]}",
+  "elapsed_ms": 2949,
+  "usage": {
+    "input_tokens": 1276,
+    "output_tokens": 189
+  },
+  "logprobs": null
+}

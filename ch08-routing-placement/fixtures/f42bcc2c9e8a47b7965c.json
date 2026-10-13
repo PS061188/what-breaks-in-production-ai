@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Some decreased range of motion.\nS2: Her last bowel movement was 2 days ago, and it was normal.\nS3: No rebound or guarding.\nS4: • Medical Reasoning: She reports episodes of vomiting in the morning, as well as abdominal pain and bloating.\nS5: The patient reports her arthritis is starting to get better.\nS6: She started to make some dietary modifications, but she still needs to make more progress.\nS7: • Additional Testing: We will order an ultrasound of her right upper quadrant, as well as additional labs, to rule out biliary etiology.\nS8: She denies blood in her stool.\nS9: • Medical Reasoning: Her flares are well controlled on allopurinol.\nS10: Slight pain to palpation.\nS11: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS12: • Patient Education and Counseling: I advised her to continue pilates and using the knee.\nS13: No extra heart sounds.\nS14: • Gastrointestinal: Denies hematochezia, melena.\nS15: Anna Mitchell is a 44-year-old female with a past medical history significant for arthritis, gout, and reflux, who presents today for follow-up of her chronic problems.\nS16: • Medical Treatment: Continue omeprazole 40 mg once daily.\nS17: • Musculoskeletal: Right knee shows a little effusion.\nS18: This has helped build up some muscles and her joint pain has reduced.\nS19: Physical therapy has also been beneficial for her.\nS20: Endorses vomiting, abdominal pain, and bloating.\nS21: Regarding her acid reflux, she was placed on omeprazole 40 mg once a day to help with some of the symptoms she was having.\nS22: The patient denies unexplained weight gain or loss, fevers, chills.\nS23: She will contact me if she has any issues and we can consider further imaging or intervention at that time.\nS24: • Gastrointestinal: Pain to palpation of the right upper quadrant.\nS25: It has been about 6 months since I last saw the patient.\nS26: No wheezes, rales, or rhonchi.\nS27: She reports episodes of vomiting in the morning.\nS28: • Cardiovascular: No murmurs, gallops, or rubs.\nS29: The patient has also continued to attend physical therapy, which she feels has been beneficial.\nS30: Mitchell had an episode of gout of her right first big toe about 2 months ago.\nS31: Follow-up of chronic problems.\nS32: Anna Mitchell is a 44-year-old female with a past medical history significant for arthritis, gout, and reflux, who presents today for follow-up of her chronic problems.\nS33: Her right knee x-ray demonstrated residual arthritis but was otherwise normal.\nS34: Acid reflux with nausea and vomiting.\nS35: • Respiratory: Lungs are clear to auscultation bilaterally.\nS36: • Constitutional: Denies fevers, chills, or weight loss.\nS37: • Patient Education and Counseling: I encouraged her to continue with dietary modifications.\nS38: Autoimmune panel is within normal limits.\nS39: This was refilled today.\nS40: X-ray of the right knee demonstrates residual arthritis.\nS41: No peritoneal signs.\nS42: • Medical Treatment: Continue allopurinol 100 mg once daily.\nS43: The patient also has abdominal pain and bloating.\nS44: She states she is doing well on the allopurinol 100 mg once daily and has had no further flare ups.\nS45: She has been compliant with omeprazole and has made a few dietary modifications.\nS46: • Medical Reasoning: She is doing well and has remained active since her last visit.\nS47: She has been trying to move her body with pilates and lifting weights.\nS48: • Musculoskeletal: Endorses joint pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S15\", \"S25\", \"S2\", \"S4\", \"S5\", \"S8\", \"S20\", \"S21\", \"S22\", \"S27\", \"S30\", \"S34\", \"S36\", \"S43\", \"S44\", \"S45\", \"S47\"], \"objective_exam\": [\"S1\", \"S3\", \"S10\", \"S13\", \"S17\", \"S24\", \"S26\", \"S28\", \"S35\", \"S41\", \"S48\"], \"objective_results\": [\"S33\", \"S38\", \"S40\"], \"assessment_and_plan\": [\"S6\", \"S7\", \"S9\", \"S11\", \"S12\", \"S14\", \"S16\", \"S18\", \"S19\", \"S23\", \"S29\", \"S31\", \"S32\", \"S37\", \"S39\", \"S42\", \"S46\"]}",
+  "elapsed_ms": 2207,
+  "usage": {
+    "input_tokens": 1407,
+    "output_tokens": 217
+  },
+  "logprobs": null
+}

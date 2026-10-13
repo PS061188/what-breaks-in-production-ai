@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-66411\nDate: 2026-09-11\n\nHolloway Furniture\n540 Ridge Road\nDover 2268\n\nGlasswing Cosmetics\n63 Hillside Terrace\nRipon 8862\n\nQuarry Lane Steel\n402 Riverside Drive\nExeter 4714\n\nItems: 17 cartons, 387 kg\nCarrier reference: CR6533\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Holloway Furniture, 540 Ridge Road, Dover 2268\",\"source_quote\":\"Holloway Furniture\\n540 Ridge Road\\nDover 2268\"},\"destination_address\":{\"value\":\"Glasswing Cosmetics, 63 Hillside Terrace, Ripon 8862\",\"source_quote\":\"Glasswing Cosmetics\\n63 Hillside Terrace\\nRipon 8862\"},\"billing_address\":{\"value\":\"Quarry Lane Steel, 402 Riverside Drive, Exeter 4714\",\"source_quote\":\"Quarry Lane Steel\\n402 Riverside Drive\\nExeter 4714\"}}",
+  "elapsed_ms": 2638,
+  "usage": {
+    "input_tokens": 640,
+    "output_tokens": 166
+  },
+  "logprobs": null
+}

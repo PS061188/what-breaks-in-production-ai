@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-50237\nDate: 2026-08-12\n\nReturn address:\nSummit Packaging\n1200 Industrial Parkway\nAberdeen 2320\n\nTo:\nCorvus Data\n155 Meadow Lane\nReading 1708\n\nInvoice to:\nFoxglove Nursery\n27 Granary Street\nStirling 7272\n\nItems: 10 cartons, 399 kg\nCarrier reference: CR4476\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Summit Packaging, 1200 Industrial Parkway, Aberdeen 2320\",\"source_quote\":\"Return address:\\nSummit Packaging\\n1200 Industrial Parkway\\nAberdeen 2320\"},\"destination_address\":{\"value\":\"Corvus Data, 155 Meadow Lane, Reading 1708\",\"source_quote\":\"To:\\nCorvus Data\\n155 Meadow Lane\\nReading 1708\"},\"billing_address\":{\"value\":\"Foxglove Nursery, 27 Granary Street, Stirling 7272\",\"source_quote\":\"Invoice to:\\nFoxglove Nursery\\n27 Granary Street\\nStirling 7272\"}}",
+  "elapsed_ms": 2646,
+  "usage": {
+    "input_tokens": 649,
+    "output_tokens": 177
+  },
+  "logprobs": null
+}

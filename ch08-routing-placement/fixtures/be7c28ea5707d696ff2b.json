@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: If he fails to improve, we can consider obtaining an MRI for further evaluation.\nS2: Neurological: Reports tingling in the right foot.\nS3: Ice and Advil provided no relief, but his pain is less severe when he is in a seated position and taking a hot shower helped alleviate his pain.\nS4: I recommend we treat this conservatively with rest, meloxicam, and formal physical therapy.\nS5: Prior to this, he recalls a similar episode approximately 3 years ago in which his symptoms resolved after 1 day.\nS6: MSK: Examination of the lumbar spine: No pain on extension.\nS7: Dorsiflexion is normal.\nS8: NEURO: Normal strength and sensation.\nS9: X-rays obtained and reviewed in office today were normal.\nS10: Pulses are equal in all extremities.\nS11: Pain with palpation around L5.\nS12: The patient will follow up in 2 weeks.\nS13: He is accompanied today by his partner.\nS14: Approximately 2 hours after he finished raking leaves yesterday, the patient began to feel a tightening sensation in his low back and tingling in his right foot.\nS15: The patient's partner reports that his pain seems to worsen when he stands up.\nS16: Some pain with flexion.\nS17: Bryan Brooks is a pleasant 39-year-old male who presents to the clinic today for the evaluation of low back pain.\nS18: Musculoskeletal: Reports low back pain.\nS19: The examination findings and x-ray results were discussed with the patient and his partner today.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S17\", \"S13\", \"S14\", \"S18\", \"S2\", \"S3\", \"S5\", \"S15\"], \"objective_exam\": [\"S6\", \"S11\", \"S16\", \"S7\", \"S8\", \"S10\"], \"objective_results\": [\"S9\", \"S19\"], \"assessment_and_plan\": [\"S4\", \"S1\", \"S12\"]}",
+  "elapsed_ms": 2797,
+  "usage": {
+    "input_tokens": 804,
+    "output_tokens": 101
+  },
+  "logprobs": null
+}

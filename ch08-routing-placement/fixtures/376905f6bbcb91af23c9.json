@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-95608\nDate: 2026-02-26\n\nFrom:\nStonefall Ceramics\n600 Trade Estate\nDurham 3702\n\nDeliver to:\nGreyfield Paper\n2 Wharf Place\nYork 3969\n\nInvoice to:\nCedar Point Labs\n3 Foundry Lane\nNorwich 4867\n\nItems: 7 cartons, 691 kg\nCarrier reference: CR3122\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Stonefall Ceramics, 600 Trade Estate, Durham 3702\",\"source_quote\":\"From:\\nStonefall Ceramics\\n600 Trade Estate\\nDurham 3702\"},\"destination_address\":{\"value\":\"Greyfield Paper, 2 Wharf Place, York 3969\",\"source_quote\":\"Deliver to:\\nGreyfield Paper\\n2 Wharf Place\\nYork 3969\"},\"billing_address\":{\"value\":\"Cedar Point Labs, 3 Foundry Lane, Norwich 4867\",\"source_quote\":\"Invoice to:\\nCedar Point Labs\\n3 Foundry Lane\\nNorwich 4867\"}}",
+  "elapsed_ms": 1436,
+  "usage": {
+    "input_tokens": 646,
+    "output_tokens": 170
+  },
+  "logprobs": null
+}

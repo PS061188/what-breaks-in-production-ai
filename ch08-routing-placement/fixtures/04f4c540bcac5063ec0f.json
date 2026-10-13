@@ -1,0 +1,98 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are a precision extraction assistant. Each field below may be\nfilled ONLY from its own section of the label. Do not carry content across\nsections — a condition the drug treats and a condition that forbids the drug\nare opposite instructions, and putting one where the other belongs inverts the\nmeaning.\n\nFIELD SOURCES — apply without exception:\n  what_it_treats        -> [indications_and_usage] only\n  who_must_not_take_it  -> [contraindications] only\n  side_effects          -> [adverse_reactions] only\n\nFor each field, quote the supporting text character-for-character and name the\nsection header you took it from. If a field's own section does not support it,\nleave the value empty rather than borrowing from another section.\n\n<label>\nEndocrine Disorders Primary or secondary adrenocortical insufficiency (hydrocortisone or cortisone is the first choice; synthetic analogs may be used in conjunction with mineralocorticoids where applicable; in infancy mineralocorticoid supplementation is of particular importance) Congenital adrenal hyperplasia Hypercalcemia associated with cancer Nonsuppurative thyroiditis 2.\nSeasonal or perennial allergic rhinitis Bronchial asthma Contact dermatitis Atopic dermatitis Serum sickness Drug hypersensitivity reactions 6.\nOphthalmic Diseases Severe acute and chronic allergic and inflammatory processes involving the eye and its adnexa such as:\nSystemic lupus erythematosus Systemic dermatomyositis (polymyositis) Acute rheumatic carditis 4.\nCollagen Diseases During an exacerbation or as maintenance therapy in selected cases of:\nAllergic corneal marginal ulcers Herpes zoster ophthalmicus Anterior segment inflammation Diffuse posterior uveitis and choroiditis Sympathetic ophthalmia Allergic conjunctivitis Keratitis Chorioretinitis Optic neuritis Iritis and iridocyclitis 7.\nPsoriatic arthritis Rheumatoid arthritis, including juvenile rheumatoid arthritis (selected cases may require low-dose maintenance therapy) Ankylosing spondylitis Acute and subacute bursitis Acute nonspecific tenosynovitis Acute gouty arthritis Post-traumatic osteoarthritis Synovitis of osteoarthritis Epicondylitis 3.\nRheumatic Disorders As adjunctive therapy for short-term administration (to tide the patient over an acute episode or exacerbation) in:\nCONTRAINDICATIONS Systemic fungal infections and known hypersensitivity to components.\nRespiratory Diseases Symptomatic sarcoidosis Loeffler’s syndrome not manageable by other means Berylliosis Fulminating or disseminated pulmonary tuberculosis when used concurrently with appropriate antituberculous chemotherapy Aspiration pneumoniti\nINDICATIONS Prednisone tablets are indicated in the following conditions: 1.\nAllergic States Control of severe or incapacitating allergic conditions intractable to adequate trials of conventional treatment:\nADVERSE REACTIONS Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture, particularly of the Achilles tendon Vertebral compression fractures Aseptic necrosis of femoral and humeral heads Pathologic fracture of long bones Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis Abdominal distention Ulcerative esophagitis Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses Facial erythema Increased sweating May suppress reactions to skin tests Metabolic Negative nitrogen balance due to protein catabolism Neurological Increased intracranial pressure with papilledema (pseudotumor cerebri) usually after treatment Convulsions Vertigo Headache Endocrine Menstrual irregularities Development of Cushingoid state Secondary adrenocortical and pituitary unresponsiveness, particularly in times of stress, as in trauma, surgery or illness Suppression of growth in children Decreased carbohydrate tolerance Manifestations of latent diabetes mellitus Increased requirements for insulin or oral hypoglycemic agents in diabetics Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma Exophthalmos Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\nDermatologic Diseases Pemphigus Bullous dermatitis herpetiformis Severe erythema multiforme (Stevens-Johnson syndrome) Exfoliative dermatitis Mycosis fungoides Severe psoriasis Severe seborrheic dermatitis 5.\n</label>",
+  "user": "Fill in these fields: what_it_treats, who_must_not_take_it, side_effects",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "what_it_treats": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "who_must_not_take_it": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      },
+      "side_effects": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "source_quote": {
+            "type": "string"
+          },
+          "source_section": {
+            "type": "string",
+            "enum": [
+              "indications_and_usage",
+              "contraindications",
+              "adverse_reactions"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "source_section"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "what_it_treats",
+      "who_must_not_take_it",
+      "side_effects"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"what_it_treats\":{\"value\":\"Prednisone tablets are indicated in the following conditions: Endocrine Disorders, Allergic States, Respiratory Diseases, Rheumatic Disorders, Collagen Diseases, Ophthalmic Diseases, and Dermatologic Diseases including adrenocortical insufficiency, allergic rhinitis, bronchial asthma, contact dermatitis, atopic dermatitis, serum sickness, drug hypersensitivity reactions, severe acute and chronic allergic and inflammatory processes involving the eye, systemic lupus erythematosus, systemic dermatomyositis, acute rheumatic carditis, psoriatic arthritis, rheumatoid arthritis, ankylosing spondylitis, acute bursitis, symptomatic sarcoidosis, pemphigus, bullous dermatitis herpetiformis, severe erythema multiforme, exfoliative dermatitis, mycosis fungoides, severe psoriasis, and severe seborrheic dermatitis.\",\"source_quote\":\"Prednisone tablets are indicated in the following conditions: 1. Endocrine Disorders Primary or secondary adrenocortical insufficiency...Allergic States Control of severe or incapacitating allergic conditions intractable to adequate trials of conventional treatment...Respiratory Diseases Symptomatic sarcoidosis...Rheumatic Disorders As adjunctive therapy...Collagen Diseases...Ophthalmic Diseases Severe acute and chronic allergic and inflammatory processes...Dermatologic Diseases Pemphigus...\",\"source_section\":\"indications_and_usage\"},\"who_must_not_take_it\":{\"value\":\"Systemic fungal infections and known hypersensitivity to components.\",\"source_quote\":\"Systemic fungal infections and known hypersensitivity to components.\",\"source_section\":\"contraindications\"},\"side_effects\":{\"value\":\"Sodium retention, fluid retention, congestive heart failure, potassium loss, hypokalemic alkalosis, hypertension, muscle weakness, steroid myopathy, osteoporosis, tendon rupture, aseptic necrosis, peptic ulcer, pancreatitis, impaired wound healing, thin fragile skin, petechiae, increased intracranial pressure, convulsions, menstrual irregularities, Cushingoid state, posterior subcapsular cataracts, increased intraocular pressure, glaucoma, urticaria, and anaphylactic reactions.\",\"source_quote\":\"Fluid and Electrolyte Disturbances Sodium retention Fluid retention Congestive heart failure in susceptible patients Potassium loss Hypokalemic alkalosis Hypertension Musculoskeletal Muscle weakness Steroid myopathy Loss of muscle mass Osteoporosis Tendon rupture...Gastrointestinal Peptic ulcer with possible perforation and hemorrhage Pancreatitis...Dermatologic Impaired wound healing Thin fragile skin Petechiae and ecchymoses...Neurological Increased intracranial pressure...Convulsions...Endocrine Menstrual irregularities Development of Cushingoid state...Ophthalmic Posterior subcapsular cataracts Increased intraocular pressure Glaucoma...Additional Reactions Urticaria and other allergic, anaphylactic or hypersensitivity reactions\",\"source_section\":\"adverse_reactions\"}}",
+  "elapsed_ms": 8361,
+  "usage": {
+    "input_tokens": 1820,
+    "output_tokens": 798
+  },
+  "logprobs": null
+}

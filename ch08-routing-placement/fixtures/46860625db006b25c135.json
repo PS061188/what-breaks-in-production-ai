@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: Failed Renal Transplant.\nS2: Ashley is a 14-year-old female who presents today for evaluation of abnormal renal ultrasound with atrophic right kidney.\nS3: She reports hesitancy while urinating and she states she has to wait for her urinary flow to commence.\nS4: Obstructive Neuropathy.\nS5: CT abdomen and pelvis, 03/22/2021.\nS6: This kept recurring for approximately 2 months and then it spontaneously resolved.\nS7: Imaging shows compensatory hypertrophy of her left kidney.\nS8: No family history of polycystic kidney disease.\nS9: Myocardial Infarction.\nS10: Her lymph nodes were swollen, and she had \"a lot of infections\".\nS11: Ashley is at higher risk of hypertension and proteinuria, which will need to be followed annually.\nS12: When the patient was 4 years old, she was hospitalized 3 or 4 times, for up to 2-3 days each time.\nS13: Ashley was still experiencing stomach pain and vomiting, her father brought her to another facility in Jacksonville.\nS14: The patient was seen briefly by her physician the next day, which was insignificant.\nS15: She received fluids and antibiotics, and then discharged.\nS16: The patient should avoid use of nonsteroidal anti-inflammatory medications and use Tylenol for pain and fever.\nS17: End Stage Chronic Kidney Disease was Dialysis dependent.\nS18: Schedule follow up appointment with local adult nephrologist or primary care physician.\nS19: The father details a history of the patient coming home sick one day with extreme right-sided abdominal pain.\nS20: Next patient Ashley James is a 14-year-old female, previously healthy, who is here for evaluation of abnormal renal ultrasound with atrophic right kidney.\nS21: Some beverages are associated with dysuria, thus the patient drinks mainly water, Gatorade and V8 juice.\nS22: A week or 2 post-discharge the fever and symptoms would return.\nS23: The patient is still experiencing some stomach burning.\nS24: Her urinalysis is without sediment.\nS25: Abdominal ultrasound, 03/22/2021.\nS26: Her parents brought her for evaluation, and they treated her for a stomach virus and administered fluids prior to sending her home.\nS27: Prior to her current medical complaints, the patient was healthy.\nS28: Well-appearing female adolescent, sitting comfortably on the exam table in no acute distress.\nS29: She has right-sided renal hypoplasia with a small atrophic right kidney discovered incidentally on imaging for abdominal pain.\nS30: Also, on an annual basis I recommend completion of a urinalysis to assess for proteinuria and blood pressure checks.\nS31: The next day, the patient's pain was more severe.\nS32: I counseled the patient and family about the importance of a healthy diet and remaining active to avoid future comorbidities that may put her at increased risk for chronic kidney disease as in adult.\nS33: She has normal kidney function with creatinine of 0.62, which equates to an estimated GFR of greater than 90 mL/min per 1.73 m², and normal serum electrolytes and acid base status.\nS34: The patient was unable to follow back up with her primary care physician as he was still out of town.\nS35: The patient was sent back to follow-up with her primary care physician.\nS36: At that time, they were encouraged to follow-up with her primary care physician.\nS37: Posterior Urethral Valves.\nS38: The patient plays on softball team and is interested in joining a drill team over the summer.\nS39: Additionally, cysts on her kidneys, ovaries, and other locations were found.\nS40: Pepcid 40 mg once daily.\nS41: Otherwise, she shows no sequelae of chronic kidney disease and enjoys normal blood pressure.\nS42: The patient came to Atlanta, remained here for 4 days, was evaluated and treated with subsequent improvement of her symptoms.\nS43: It is also recommended that she stay well hydrated, avoiding dehydration, especially while participating in sports, by consuming 2 L of water per day.\nS44: The patient returned to the doctor's office and an ultrasound and additional testing was performed which revealed left kidney hypertrophy.\nS45: Yearly ultrasound to monitor the hypertrophic left kidney and atrophic right kidney.\nS46: Evaluation of abnormal renal ultrasound with atrophic right kidney.\nS47: She has not vomited since.\nS48: The patient does not need to follow up with a pediatric nephrologist but can instead follow up with her primary care physician or an adult nephrologist closer to home.\nS49: She endorses occasional dysuria.\nS50: The etiology of her kidney issues is believed to have been caused by some severe infection the patient experienced, possibly as a child.\nS51: Claritin as needed for allergies.\nS52: Paternal Great Aunt: End Stage Chronic Kidney Disease is Dialysis dependent.\nS53: Ashley denies hematuria.\nS54: Paternal Grandfather: Deceased approximately 47.\nS55: Her father reports that no workup was ever performed to rule out infections during these hospitalizations.\nS56: At that location, the patient's family received information that her right kidney was nonfunctioning, atrophic, and smaller than her left kidney.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S3\", \"S6\", \"S10\", \"S12\", \"S13\", \"S19\", \"S21\", \"S23\", \"S27\", \"S38\", \"S49\", \"S53\"], \"objective_exam\": [\"S28\"], \"objective_results\": [\"S5\", \"S7\", \"S24\", \"S25\", \"S29\", \"S33\", \"S39\", \"S41\", \"S44\", \"S56\"], \"assessment_and_plan\": [\"S1\", \"S4\", \"S9\", \"S11\", \"S14\", \"S15\", \"S16\", \"S17\", \"S18\", \"S20\", \"S22\", \"S26\", \"S30\", \"S31\", \"S32\", \"S34\", \"S35\", \"S36\", \"S37\", \"S40\", \"S42\", \"S43\", \"S45\", \"S46\", \"S47\", \"S48\", \"S50\", \"S51\", \"S52\", \"S54\", \"S55\"]}",
+  "elapsed_ms": 3348,
+  "usage": {
+    "input_tokens": 1945,
+    "output_tokens": 245
+  },
+  "logprobs": null
+}

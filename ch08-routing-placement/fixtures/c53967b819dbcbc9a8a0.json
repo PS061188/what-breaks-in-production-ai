@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: • Respiratory: Lungs are clear to auscultation bilaterally.\nS2 [SUBJECTIVE]: She had a steroid injection for her herniated disc several months ago, which has been doing well.\nS3 [SUBJECTIVE]: The pain is described as burning and is located in the middle of her chest.\nS4 [OBJECTIVE EXAM]: • Neck: No carotid bruits appreciable.\nS5 [SUBJECTIVE]: She has had prior stenting for her heart and heart vessels in the past.\nS6 [ASSESSMENT AND PLAN]: Her recent echocardiogram demonstrated a reduced ejection fraction of 45%.\nS7 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient is doing well postoperatively.\nS8 [ASSESSMENT AND PLAN]: • Medical Reasoning: She has been asymptomatic since receiving a steroid injection several months ago.\nS9 [SUBJECTIVE]: Over the last month, she reports chest pain approximately 3-4 times a week with ambulation.\nS10 [ASSESSMENT AND PLAN]: Initiate Crestor 20 mg once daily.\nS11 [SUBJECTIVE]: Endorses chest pain with exertion.\nS12 [ASSESSMENT AND PLAN]: Evelyn Morris is a 56-year-old female with a past medical history significant for coronary artery disease, prior carpal tunnel release, and a herniated disc.\nS13 [ASSESSMENT AND PLAN]: Coronary artery disease.\nS14 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: If she has any recurrent symptoms, she will let me know and we can take it from there.\nS15 [SUBJECTIVE]: • Musculoskeletal: Denies muscle pain.\nS16 [SUBJECTIVE]: Her chest pain does resolve with rest.\nS17 [OBJECTIVE EXAM]: • Cardiovascular: Slight 3/6 systolic ejection murmur.\nS18 [SUBJECTIVE]: Evelyn Morris is a 56-year-old female with a past medical history significant for coronary artery disease, prior carpal tunnel release, and a herniated disc.\nS19 [SUBJECTIVE]: • Constitutional: Denies fevers, chills.\nS20 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue aspirin and Toprol.\nS21 [OBJECTIVE EXAM]: • Integumentary: Well-healed surgical scars on her right wrist.\nS22 [ASSESSMENT AND PLAN]: Status post right carpal tunnel release.\nS23 [SUBJECTIVE]: She presents for her annual exam.\nS24 [OBJECTIVE RESULTS]: Echocardiogram shows reduced ejection fraction at 45% with a slight mitral regurgitation.\nS25 [ASSESSMENT AND PLAN]: • Medical Reasoning: She reports a burning chest pain with exertion approximately 3 times per week for the past month.\nS26 [SUBJECTIVE]: She has not had any back pain or any limitations in movement.\nS27 [SUBJECTIVE]: • Cardiovascular: Denies dyspnea.\nS28 [SUBJECTIVE]: She denies pain at rest.\nS29 [SUBJECTIVE]: • Ears, Nose, Mouth and Throat: Endorses nasal congestion form allergies.\nS30 [SUBJECTIVE]: She has had a little bit of nasal congestion from allergies.\nS31 [SUBJECTIVE]: The patient denies, shortness of breath, nausea, vomiting, or lower extremity edema.\nS32 [SUBJECTIVE]: No numbness or tingling in her hands.\nS33 [SUBJECTIVE]: She has full range of motion and it feels really good.\nS34 [ASSESSMENT AND PLAN]: I do not think we need to refer her for any further steroid injections or physical therapy at this time.\nS35 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS36 [OBJECTIVE RESULTS]: ECG prior coronary artery disease.\nS37 [ASSESSMENT AND PLAN]: She has returned to work and denies any recurrent symptoms.\nS38 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS39 [SUBJECTIVE]: • Respiratory: Denies shortness of breath.\nS40 [ASSESSMENT AND PLAN]: She presents for her annual exam.\nS41 [SUBJECTIVE]: Her right carpal tunnel release was performed a couple of years ago and she is back to work.\nS42 [ASSESSMENT AND PLAN]: • Additional Testing: We will order a cardiac stress test and a lipid panel for further evaluation.\nS43 [SUBJECTIVE]: The patient states she has been doing okay with her herniated disc in her back.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[\"S2\",\"S3\",\"S5\",\"S9\",\"S11\",\"S15\",\"S16\",\"S18\",\"S19\",\"S23\",\"S26\",\"S27\",\"S28\",\"S29\",\"S30\",\"S31\",\"S32\",\"S33\",\"S39\",\"S41\",\"S43\"],\"objective_exam\":[\"S1\",\"S4\",\"S17\",\"S21\",\"S38\"],\"objective_results\":[\"S24\",\"S36\"],\"assessment_and_plan\":[\"S6\",\"S7\",\"S8\",\"S10\",\"S12\",\"S13\",\"S14\",\"S20\",\"S22\",\"S25\",\"S34\",\"S35\",\"S37\",\"S40\",\"S42\"]}",
+  "elapsed_ms": 2008,
+  "usage": {
+    "input_tokens": 1545,
+    "output_tokens": 158
+  },
+  "logprobs": null
+}

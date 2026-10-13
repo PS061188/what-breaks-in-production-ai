@@ -1,0 +1,132 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "SYSTEM:\nYou are an intake processor. Extract and route data to the correct\nfields. Field confusion causes downstream errors - precision is\nrequired.\n\nFIELD DEFINITIONS (apply these before extracting):\n  - \"origin_address\": where the item comes FROM.\n    Keywords: \"from\", \"sender\", \"origin\", \"pickup location\"\n  - \"destination_address\": where the item is going TO.\n    Keywords: \"to\", \"deliver to\", \"destination\", \"drop-off\"\n  - \"billing_address\": who pays. May differ from both.\n    Keywords: \"bill to\", \"invoice to\", \"charge to\", \"account holder\"\n\nA field may be filled ONLY from text that carries its own keywords. If\nthe text supporting a value carries another field's keywords, that\nvalue\nbelongs to the other field.\n\nFor every field, return the exact sentence you took it from. Copy it\ncharacter for character; do not paraphrase it.\n\nIf no text in the document supports a field, return null for that\nfield\nand null for its quote. A null field is a correct answer.\nReturn:\n{\n  \"origin_address\":      { \"value\": ..., \"source_quote\": ... },\n  \"destination_address\": { \"value\": ..., \"source_quote\": ... },\n  \"billing_address\":     { \"value\": ..., \"source_quote\": ... }\n}\n\n<document>\nSHIPPING DOCUMENT  No. SD-61271\nDate: 2026-09-15\n\nShip From:\nFoxglove Nursery\n27 Granary Street\nStirling 7272\n\nShip To:\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nBill To:\nHarbor Foods\n220 Harbour Street\nBristol 3201\n\nItems: 9 cartons, 144 kg\nCarrier reference: CR7246\n</document>\n\nFor each field, also state role_stated: true if the document says in words which address plays this role (a label such as Ship From, Consignee or Bill To, or a line giving the order), false if you decided from position or convention. Also state placement_confidence: HIGH, MEDIUM or LOW. Set requires_review to true if any field has role_stated false or placement_confidence LOW.",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "role_stated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "placement_confidence",
+          "role_stated"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "role_stated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "placement_confidence",
+          "role_stated"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placement_confidence": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          },
+          "role_stated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "value",
+          "source_quote",
+          "placement_confidence",
+          "role_stated"
+        ],
+        "additionalProperties": false
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\": {\"value\": \"Foxglove Nursery, 27 Granary Street, Stirling 7272\", \"source_quote\": \"Ship From:\\nFoxglove Nursery\\n27 Granary Street\\nSterling 7272\", \"placement_confidence\": \"HIGH\", \"role_stated\": true}, \"destination_address\": {\"value\": \"Ridgeway Components, 7 Station Yard, Cardiff 1926\", \"source_quote\": \"Ship To:\\nRidgeway Components\\n7 Station Yard\\nCardiff 1926\", \"placement_confidence\": \"HIGH\", \"role_stated\": true}, \"billing_address\": {\"value\": \"Harbor Foods, 220 Harbour Street, Bristol 3201\", \"source_quote\": \"Bill To:\\nHarbor Foods\\n220 Harbour Street\\nBristol 3201\", \"placement_confidence\": \"HIGH\", \"role_stated\": true}, \"requires_review\": false}",
+  "elapsed_ms": 3096,
+  "usage": {
+    "input_tokens": 1270,
+    "output_tokens": 232
+  },
+  "logprobs": null
+}

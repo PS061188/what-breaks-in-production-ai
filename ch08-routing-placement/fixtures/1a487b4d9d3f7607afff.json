@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: • Status post bilateral reduction mammoplasty.\nS2 [ASSESSMENT AND PLAN]: - Obtain bilateral breast photos today to monitor scarring.\nS3 [ASSESSMENT AND PLAN]: Pamela Cook is a 36-year-old female who is status post bilateral reduction mammaplasty on 10/10/2020.\nS4 [ASSESSMENT AND PLAN]: Follow up in 6 months to reevaluate scars.\nS5 [SUBJECTIVE]: She reports that the scar on her breast has been bothersome.\nS6 [SUBJECTIVE]: The patient was last seen in clinic by Ruth Sanchez, PA in 03/2021 at which time there was a lump along the left breast, and she was advised to perform massages.\nS7 [SUBJECTIVE]: Mederma scar gel to incision.\nS8 [ASSESSMENT AND PLAN]: - Continue Mederma scar gel and incisional scar massage twice daily.\nS9 [SUBJECTIVE]: Status post bilateral reduction mammaplasty 10/10/2020.\nS10 [OBJECTIVE EXAM]: Bilateral breast incisions well healed with widening of the scar tissue.\nS11 [ASSESSMENT AND PLAN]: There is some widening of the scar tissue bilaterally.\nS12 [SUBJECTIVE]: The patient denies fever, chills, nausea, or vomiting.\nS13 [OBJECTIVE EXAM]: No signs of infection or erythema.\nS14 [SUBJECTIVE]: Follow up bilateral reduction mammoplasty.\nS15 [SUBJECTIVE]: The left breast lower incisional lump from last visit has resolved with massaging and use of scar gel.\nS16 [SUBJECTIVE]: Pamela Cook is a 36-year-old female who is returning for a postoperative visit.\nS17 [SUBJECTIVE]: Cook reports she is doing well and that her breasts feel great.\nS18 [SUBJECTIVE]: She is no longer suffering from back pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[\"S5\",\"S6\",\"S7\",\"S9\",\"S12\",\"S14\",\"S15\",\"S16\",\"S17\",\"S18\"],\"objective_exam\":[\"S10\",\"S13\"],\"objective_results\":[],\"assessment_and_plan\":[\"S1\",\"S2\",\"S3\",\"S4\",\"S8\",\"S11\"]}",
+  "elapsed_ms": 2059,
+  "usage": {
+    "input_tokens": 892,
+    "output_tokens": 83
+  },
+  "logprobs": null
+}

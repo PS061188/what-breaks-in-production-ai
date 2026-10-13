@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: She has tried meditation and running with her dog for stress relief, however these have not been helpful.\nS2: The patient has cut out soda, which seemed to help.\nS3: Her recent autoimmune panel was normal.\nS4: She has been walking, exercising, and doing yoga, which has helped with her arthritis.\nS5: Event monitor: Positive for conversion pause.\nS6: Slight 2/6 systolic ejection murmur.\nS7: It has been a year since she was last seen.\nS8: • Medical Treatment: She will continue on methotrexate 2.5 mg once weekly.\nS9: • Patient Education and Counseling: She could continue with dietary modifications and avoid known dietary triggers.\nS10: • Cardiovascular: Denies chest pain or dyspnea.\nS11: Her most recent episode was about 1 week ago.\nS12: Well controlled rheumatoid arthritis.\nS13: The patient states she is doing well.\nS14: • Medical Reasoning: She continues to experience episodes of palpitations.\nS15: In terms of her atrial fibrillation, she endorses continued palpitations.\nS16: This was refilled today.\nS17: • Medical Reasoning: She has been compliant with dietary modifications and denies any episodes in approximately 5 months.\nS18: • Specialist Referrals: If she needs a referral back to the rheumatologist, she will let me know.\nS19: Andrea Roberts is a 52-year-old female with a past medical history significant for rheumatoid arthritis, atrial fibrillation, and reflux, who presents today for her annual exam.\nS20: Endorses palpitations.\nS21: The last episode she had was about 1 week ago.\nS22: • Respiratory: Lungs are clear to auscultation bilaterally.\nS23: She denies chest pain, shortness of breath, nausea, and vomitting.\nS24: She has noticed that when she starts to get stressed they start to flare up again.\nS25: She has not had a flare up in over 5 months.\nS26: • Musculoskeletal: No lower extremity edema.\nS27: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS28: Andrea Roberts is a 52-year-old female with a past medical history significant for rheumatoid arthritis, atrial fibrillation, and reflux, who presents today for her annual exam.\nS29: The patient endorses nasal congestion because of her allergies.\nS30: Rheumatoid arthritis.\nS31: It has been a year since she was last seen.\nS32: • Specialist Referrals: We will refer her to cardiology for a cardiac ablation.\nS33: Edema and erythema of the right elbow.\nS34: • Medical Reasoning: The patient has remained active and has been compliant with methotrexate once weekly.\nS35: She is in normal sinus rhythm today, but her recent cardiac event monitor demonstrated a conversion pause.\nS36: • Cardiovascular: Regular rate and rhythm.\nS37: The patient has continued utilizing methotrexate 2.5 mg once a week and denies issues with that.\nS38: She denies issues with stiffness, pain, or flare ups over the last year.\nS39: • Respiratory: Denies shortness of breath.\nS40: • Musculoskeletal: Denies joint pain.\nS41: Pain to palpation of the right elbow.\nS42: Regarding her GERD, she has continued to utilize Protonix 40 mg a day.\nS43: • Medical Treatment: Continue on Protonix 40 mg daily.\nS44: The patient had called last month and had an event monitor done.\nS45: Autoimmune panel: Normal.\nS46: Atrial fibrillation.\nS47: No wheezes, rales, or rhonchi.\nS48: • Ears, Nose, Mouth and Throat: Endorses nasal congestion from allergies.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S4\", \"S7\", \"S10\", \"S11\", \"S13\", \"S15\", \"S19\", \"S20\", \"S23\", \"S24\", \"S25\", \"S28\", \"S29\", \"S31\", \"S37\", \"S38\", \"S39\", \"S40\", \"S42\", \"S44\", \"S48\"], \"objective_exam\": [\"S6\", \"S22\", \"S26\", \"S27\", \"S33\", \"S36\", \"S41\", \"S47\"], \"objective_results\": [\"S3\", \"S5\", \"S45\"], \"assessment_and_plan\": [\"S8\", \"S9\", \"S12\", \"S14\", \"S16\", \"S17\", \"S18\", \"S30\", \"S32\", \"S34\", \"S35\", \"S43\", \"S46\"]}",
+  "elapsed_ms": 3157,
+  "usage": {
+    "input_tokens": 1615,
+    "output_tokens": 213
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: She reports that her heart has been doing well and her arteries have been looking good.\nS2: The patient notes that it might be due been trapped inside and remotely over the past year.\nS3: • Medical Reasoning: The patient was previously doing well on Prozac 20 mg once daily but feels as though she needs a higher dose at this time.\nS4: History of coronary artery bypass graft.\nS5: She reports that she has had a coronary artery bypass grafting.\nS6: She reports that she had a congenital artery when she was a baby and they had to do a CABG on her fairly young age.\nS7: No wheezes, rales, or rhonchi.\nS8: She reports that she has a little bit of numbness down her legs, but no tingling or pain down her legs.\nS9: Decreased flexion of back.\nS10: She notes that an increase in her Prozac dose might be beneficial for her at this time.\nS11: • Neurological: Endorses numbness in legs.\nS12: Prescription submitted.\nS13: The patient is a 27-year-old female who presents today for an annual followup of chronic conditions.\nS14: • Cardiovascular: 3/6 systolic ejection murmur, stable.\nS15: • Medical Treatment: Physical therapy referral ordered.\nS16: Patient would like to defer pain medication at this time.\nS17: • Medical Treatment: Increase Prozac to 40 mg once daily.\nS18: The patient reports that she has had chronic back pain that she has been managing.\nS19: • Medical Reasoning: She is experiencing worsened pain with sitting for extended periods of time.\nS20: The patient is a 27-year-old female who presents for her annual visit.\nS21: X-rays of the lumbar spine stable in comparison to last year.\nS22: She reports that the symptoms improve when she stands up or changes positions.\nS23: • Medical Treatment: Echocardiogram ordered.\nS24: She reports that she is taking Prozac 20 mg, but she believes that it has been weighing on her lately.\nS25: • Constitutional: in no apparent distress.\nS26: She reports that she has been struggling with her depression off and on for the past year.\nS27: Lower extremity strength is good.\nS28: She reports that it helps when she gets up and moves.\nS29: She reports that she experiences stiffness and pain when she sits or stands for long periods of time at her desk at work.\nS30: • Musculoskeletal: Pain to palpation of the lumbar spine.\nS31: The patient reports that she has been doing better since her last visit.\nS32: • Musculoskeletal: Endorses back pain.\nS33: • Psychiatric: Endorses depression.\nS34: She denies any weakness in her legs.\nS35: • Respiratory: Lungs are clear to auscultation bilaterally.\nS36: Echocardiogram appears unchanged in comparison to last year.\nS37: We will continue to monitor this.\nS38: • Medical Reasoning: She is doing well at this time.\nS39: • Neck: Supple without thyromegaly.\nS40: Continue aspirin 81 mg daily.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S4\", \"S5\", \"S6\", \"S8\", \"S10\", \"S13\", \"S18\", \"S20\", \"S24\", \"S26\", \"S28\", \"S29\", \"S31\", \"S34\"], \"objective_exam\": [\"S7\", \"S9\", \"S11\", \"S14\", \"S25\", \"S27\", \"S30\", \"S32\", \"S33\", \"S35\", \"S39\"], \"objective_results\": [\"S21\", \"S36\"], \"assessment_and_plan\": [\"S3\", \"S12\", \"S15\", \"S16\", \"S17\", \"S19\", \"S22\", \"S23\", \"S37\", \"S38\", \"S40\"]}",
+  "elapsed_ms": 1913,
+  "usage": {
+    "input_tokens": 1203,
+    "output_tokens": 185
+  },
+  "logprobs": null
+}

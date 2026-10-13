@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Coumadin 4 mg daily.\nS2: Atrial fibrillation.\nS3: I also recommended that the patient continues to be active within her limits.\nS4: Melissa Sanchez is a 58-year-old female being seen today for a status post mitral valve repair, completed on 08/03/2020.\nS5: Status post mitral valve repair.\nS6: Rhythm is irregularly irregular, S1 slightly accentuated, no S3.\nS7: Sanchez in office, and she was doing well and thus we recommended maintaining her current medications, she is using a reminder app to stay compliant with medications.\nS8: Lungs have reduced breath, but auscultation and percussion are clear.\nS9: The patient reports feeling better and overall, pretty good.\nS10: Mitral valve repair 08/03/2020.\nS11: Impression: Atrial fibrillation with a controlled ventricular response, t-wave inversion anteriorly.\nS12: Mitral regurgitation.\nS13: She denies experiencing new symptoms.\nS14: Melissa Sanchez is a 58-year-old female being seen today for a status post mitral valve repair, completed on 08/03/2020.\nS15: She is still having chest pain intermittently, and her breathing “gets shallow” which results in her “slowing down” and decreasing her exertion.\nS16: Coumadin 4 mg daily, Lasix 40 mg daily, and Atenolol 50 mg daily.\nS17: On 09/17/20 we saw Mrs.\nS18: Trace peripheral edema on extremities.\nS19: Compared to the previous study, there are no significant changes.\nS20: • Status post mitral valve repair\nS21: Atenolol 50 mg daily.\nS22: Return to clinic in 6-9 months.\nS23: An episode of shortness of breath and chest pains may last a few minutes and will not recur for a few weeks.\nS24: Continue with current medications.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S19\", \"placement_confidence\": \"MEDIUM\"}], \"assessment_and_plan\": [{\"id\": \"S1\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S2\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S14\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S17\", \"placement_confidence\": \"LOW\"}, {\"id\": \"S20\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S21\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 4624,
+  "usage": {
+    "input_tokens": 1594,
+    "output_tokens": 428
+  },
+  "logprobs": null
+}

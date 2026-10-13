@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: • Multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS2 [ASSESSMENT AND PLAN]: Start Retin-A 0.1% topical gel, apply to acne prone areas, titrate as instructed.\nS3 [SUBJECTIVE]: Kayla Ward is a 15-year-old female who presents for new patient evaluation of acne located on the face.\nS4 [SUBJECTIVE]: Kayla states her acne started approximately 2 years ago and it is present almost every day.\nS5 [OBJECTIVE EXAM]: Full exam is performed today except for under the underwear and under the bra.\nS6 [ASSESSMENT AND PLAN]: Multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS7 [SUBJECTIVE]: New acne evaluation.\nS8 [ASSESSMENT AND PLAN]: I recommend starting with topical therapy first.\nS9 [ASSESSMENT AND PLAN]: In the evening, wash face with same mild cleanser and allow to dry.\nS10 [ASSESSMENT AND PLAN]: Follow recommended cleaning regimen.\nS11 [SUBJECTIVE]: She denies any significant acne present on the chest or back.\nS12 [SUBJECTIVE]: SuperClarify Cleanser along with toner and Persa-Gel.\nS13 [ASSESSMENT AND PLAN]: It may also cause some dryness or irritation.\nS14 [SUBJECTIVE]: Lives with parents and sister.\nS15 [SUBJECTIVE]: No significant family medical history.\nS16 [ASSESSMENT AND PLAN]: Will continue to monitor for progression or changes in 6 months.\nS17 [ASSESSMENT AND PLAN]: The patient was instructed to wash face every morning with a mild cleanser, then use a non-comedogenic moisturizer with sunscreen SPF 30 of higher.\nS18 [ASSESSMENT AND PLAN]: Reassurance given moles are normal in appearance and have no concerning characteristics.\nS19 [SUBJECTIVE]: There are no associated symptoms, including no itching, bleeding, or pain.\nS20 [ASSESSMENT AND PLAN]: We discussed the diagnosis, etiology, and treatment options.\nS21 [SUBJECTIVE]: They have a dog, bird, and rabbits in the home.\nS22 [SUBJECTIVE]: She is in the 7th grade and active in basketball, volleyball, and tap dancing.\nS23 [SUBJECTIVE]: She is accompanied by her mother today.\nS24 [SUBJECTIVE]: Her acne regimen includes washing her face in the morning with Persa-Gel and at night e.l.f.\nS25 [ASSESSMENT AND PLAN]: If it is very expensive or not covered by insurance, you can try Differin gel over the counter.\nS26 [SUBJECTIVE]: The patient has been washing her face regularly.\nS27 [ASSESSMENT AND PLAN]: Start off using a few nights a week, slowly work up to using every night.\nS28 [SUBJECTIVE]: Kayla reports that today is a good day for her acne.\nS29 [SUBJECTIVE]: The patient’s mother notes that the most significant acne flares started in the fall when she was playing school sports.\nS30 [SUBJECTIVE]: She wears sunscreen in the summer SPF 30.\nS31 [ASSESSMENT AND PLAN]: Your topical retinoid will cause sun sensitivity, so you will need to wear sunscreen when you are outside.\nS32 [OBJECTIVE EXAM]: The remainder of examination is normal.\nS33 [OBJECTIVE EXAM]: Scattered skin-colored papules, open and closed comedones, and erythematous papules on the face, primarily on the forehead, with also some on the central cheeks and chin.\nS34 [OBJECTIVE EXAM]: The chest and back are relatively spared.\nS35 [OBJECTIVE EXAM]: There are multiple benign nevi on the trunk and extremities.\nS36 [ASSESSMENT AND PLAN]: Follow up in 6 months.\nS37 [SUBJECTIVE]: This regimen is somewhat helpful.\nS38 [SUBJECTIVE]: It does not tend to flare with her periods.\nS39 [ASSESSMENT AND PLAN]: Apply a thin layer of topical retinoid, Retin-A 0.1% gel, to acne prone areas.\nS40 [ASSESSMENT AND PLAN]: Full skin examination revealed mild to moderate comedonal acne with a small inflammatory component and multiple benign melanocytic nevi of upper and lower extremities and trunk.\nS41 [ASSESSMENT AND PLAN]: Kayla Ward is a 15-year-old female seen today for new acne evaluation.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S4\", \"S7\", \"S11\", \"S12\", \"S14\", \"S15\", \"S19\", \"S21\", \"S22\", \"S23\", \"S24\", \"S26\", \"S28\", \"S29\", \"S30\", \"S37\", \"S38\"], \"objective_exam\": [\"S5\", \"S32\", \"S33\", \"S34\", \"S35\"], \"objective_results\": [], \"assessment_and_plan\": [\"S1\", \"S2\", \"S6\", \"S8\", \"S9\", \"S10\", \"S13\", \"S16\", \"S17\", \"S18\", \"S20\", \"S25\", \"S27\", \"S31\", \"S36\", \"S39\", \"S40\", \"S41\"]}",
+  "elapsed_ms": 1999,
+  "usage": {
+    "input_tokens": 1507,
+    "output_tokens": 190
+  },
+  "logprobs": null
+}

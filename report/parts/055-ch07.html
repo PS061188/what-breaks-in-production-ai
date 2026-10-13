@@ -170,25 +170,29 @@ independent measurement in this report of unreliable model self-assessment.</str
 <p>309 recorded runs, <strong>$0.66</strong>. The embedding distances are cached
 to a file so the OOD gate replays without installing anything.</p>
 
-<h3>Chapter 7 verdict</h3>
+<h3>Follow-up experiment (23 September 2026)</h3>
 
+<h4>7.2 &mdash; An off-the-shelf injection scanner, measured</h4>
+<p>The chapter names LLM Guard and then measures an eight-pattern regex. LLM Guard&rsquo;s <code>PromptInjection</code> scanner (<code>protectai/deberta-v3-base-prompt-injection-v2</code>, default threshold 0.92, local CPU, no API) was run over the same 144 cases, on the query and on the document.</p>
+<table>
+  <tr><th style="width:52%">Measure</th><th class="num">Full input (default)</th><th class="num">In chunks</th></tr>
+  <tr><td>Injection attempts flagged, of 48</td><td class="num"><strong>37</strong></td><td class="num"><strong>48</strong></td></tr>
+  <tr><td>Spanish attempts flagged, of 12 (regex: 0)</td><td class="num">12</td><td class="num">12</td></tr>
+  <tr><td>Payloads buried in a document flagged, of 12</td><td class="num">1</td><td class="num">12</td></tr>
+  <tr><td>Legitimate inputs wrongly flagged, of 96</td><td class="num">24</td><td class="num">24</td></tr>
+  <tr><td>Questions in Hindi flagged, of 12</td><td class="num"><strong>12</strong> (risk 1.00)</td><td class="num">12</td></tr>
+  <tr><td>Time per scan</td><td class="num">51 ms</td><td class="num">77 ms</td></tr>
+</table>
+<p>The scanner has the recall the phrase list lacks &mdash; every Spanish attempt, and in chunk mode every buried payload &mdash; and it flags every Hindi question as an injection at maximum confidence: the embedding gate&rsquo;s failure again, from a different model. On this corpus the regex plus the prompt&rsquo;s refusal rule already let no attack through with no Hindi refusals, so the extra recall added nothing the pipeline needed. Azure Content Safety was not tested (paid API).</p>
+
+<h3>Chapter 7 verdict</h3>
 <table>
   <tr><th style="width:38%">Item</th><th style="width:28%">Verdict</th><th>Evidence strength</th></tr>
-  <tr><td>The failure itself</td><td><strong>Did not reproduce</strong></td>
-      <td>144/144 baseline — decisive</td></tr>
-  <tr><td>1 · Model pre-filter</td><td><strong>Cannot work alone</strong></td>
-      <td>0 of 12 on direct injections</td></tr>
-  <tr><td>2 · OOD by embedding distance</td><td><strong>Harmful</strong></td>
-      <td>0.995 on Hindi; 24 good queries destroyed</td></tr>
-  <tr><td>3 · Injection scanner</td><td>Works here</td>
-      <td>⚠️ scanner and payloads written by the same author</td></tr>
-  <tr><td>4 · Stratified evaluation</td><td><strong>Works</strong></td>
-      <td>the only fix that produced information</td></tr>
+  <tr><td>The failure itself</td><td><strong>Did not reproduce</strong></td><td>144/144 baseline</td></tr>
+  <tr><td>Stratified evaluation</td><td><strong>Works</strong></td><td>the only fix that produced information</td></tr>
+  <tr><td>Model pre-filter</td><td><strong>Cannot work alone</strong></td><td>0 of 12 on direct injections</td></tr>
+  <tr><td>OOD by embedding distance</td><td><strong>Harmful</strong></td><td>0.995 on Hindi; 24 good queries lost</td></tr>
+  <tr><td>Regex injection scanner + refusal rule</td><td>Works here</td><td>&#9888; scanner and payloads written by the same author</td></tr>
+  <tr><td>LLM Guard scanner</td><td>High recall, rejects every Hindi question</td><td>48 of 48 in chunks; 12 of 12 Hindi flagged</td></tr>
 </table>
-
-<p><strong>The chapter's ordering is inverted.</strong> It calls the classifier
-"the most important structural element" and it is the weaker of the two injection
-defences. It lists stratified evaluation last, and that is the only thing here
-that told anyone something they did not already know. And its embedding fix
-should carry an explicit equity warning, because on this evidence it rejects
-non-English speakers almost perfectly.</p>
+<p><strong>A scanner model may log and route; it must not refuse on its own.</strong> The chapter now puts stratified evaluation first and carries the equity warning for both the embedding gate and the scanner model.</p>

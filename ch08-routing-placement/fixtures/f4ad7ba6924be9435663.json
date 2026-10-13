@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-56315\nDate: 2026-05-28\n\nShip From:\nBrackenfield Seeds\n6 Almond Grove\nRugby 3740\n\nShip To:\nWexcombe Brewing\n72 Quayside\nLuton 9832\n\nBill To:\nIronbridge Tools\n640 Northern Bypass\nHull 8775\n\nItems: 37 cartons, 832 kg\nCarrier reference: CR1305\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Brackenfield Seeds, 6 Almond Grove, Rugby 3740\",\"source_quote\":\"Ship From:\\nBrackenfield Seeds\\n6 Almond Grove\\nRugby 3740\"},\"destination_address\":{\"value\":\"Wexcombe Brewing, 72 Quayside, Luton 9832\",\"source_quote\":\"Ship To:\\nWexcombe Brewing\\n72 Quayside\\nLuton 9832\"},\"billing_address\":{\"value\":\"Ironbridge Tools, 640 Northern Bypass, Hull 8775\",\"source_quote\":\"Bill To:\\nIronbridge Tools\\n640 Northern Bypass\\nHull 8775\"}}",
+  "elapsed_ms": 1657,
+  "usage": {
+    "input_tokens": 650,
+    "output_tokens": 174
+  },
+  "logprobs": null
+}

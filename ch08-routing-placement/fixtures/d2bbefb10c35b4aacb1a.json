@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: He may continue to take Tylenol between the oxycodone doses for any breakthrough pain.\nS2: He explains that when he had pain, which has now resolved, it would radiate almost to his groin.\nS3: If his symptoms have not improved, we will discuss further treatment options including lithotripsy.\nS4: He denies any hematuria.\nS5: MSK: Examination of the abdomen: No pain with palpation of the abdomen.\nS6: The patient initially thought his pain was due to throwing hay; however, he broke out into a sweat and became nauseated.\nS7: The patient should continue to use the strainer when he urinates until the stone passes.\nS8: There is no evidence of hydronephrosis.\nS9: The CT scan of the abdomen revealed a stone that is measuring 0.5 cm located in the proximal right ureter.\nS10: There is CVA tenderness on the right side.\nS11: He explains that he has been straining his urine, but has not seen anything.\nS12: The patient describes the pain as intermittent after he found out it was a kidney stone.\nS13: He denies having kidney stones before, but states that his father has a history of kidney stones in the past.\nS14: I have also recommended that we obtain a BMP, urinalysis, and urine culture to evaluate for any signs of infection.\nS15: Mason Ward is a pleasant 80-year-old male who presents to the clinic today for the evaluation of kidney stones.\nS16: Musculoskeletal: Reports right back pain.\nS17: We reviewed the patient's CT results in detail today.\nS18: The onset of his pain began 1 week ago when he was in his barn moving hay when he had a sudden onset of right back pain.\nS19: I have prescribed the patient oxycodone 5 mg every 6 to 8 hours for pain.\nS20: The patient will follow up with me in 1 to 2 weeks to check on his progress.\nS21: No rebound or guarding.\nS22: I have recommended that we treat the patient conservatively.\nS23: The patient was referred from his primary care physician.\nS24: He was seen by his primary care physician, who ordered a CT scan and told him that he had a kidney stone.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S4\", \"S6\", \"S11\", \"S12\", \"S13\", \"S15\", \"S16\", \"S18\", \"S23\", \"S24\"], \"objective_exam\": [\"S5\", \"S10\", \"S21\"], \"objective_results\": [\"S8\", \"S9\", \"S14\", \"S17\"], \"assessment_and_plan\": [\"S1\", \"S3\", \"S7\", \"S19\", \"S20\", \"S22\"]}",
+  "elapsed_ms": 1558,
+  "usage": {
+    "input_tokens": 968,
+    "output_tokens": 121
+  },
+  "logprobs": null
+}

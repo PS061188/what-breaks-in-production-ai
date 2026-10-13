@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-87451\nDate: 2026-03-28\n\nConsignor:\nOakhurst Electrics\n870 Airport Road\nLincoln 6923\n\nTo:\nGlasswing Cosmetics\n63 Hillside Terrace\nRipon 8862\n\nBill to:\nSilverpine Foods\n101 Docklands Avenue\nKendal 9666\n\nItems: 3 cartons, 190 kg\nCarrier reference: CR2233\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Oakhurst Electrics, 870 Airport Road, Lincoln 6923\",\"source_quote\":\"Consignor:\\nOakhurst Electrics\\n870 Airport Road\\nLincoln 6923\"},\"destination_address\":{\"value\":\"Glasswing Cosmetics, 63 Hillside Terrace, Ripon 8862\",\"source_quote\":\"To:\\nGlasswing Cosmetics\\n63 Hillside Terrace\\nRipon 8862\"},\"billing_address\":{\"value\":\"Silverpine Foods, 101 Docklands Avenue, Kendal 9666\",\"source_quote\":\"Bill to:\\nSilverpine Foods\\n101 Docklands Avenue\\nKendal 9666\"}}",
+  "elapsed_ms": 2098,
+  "usage": {
+    "input_tokens": 658,
+    "output_tokens": 190
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: The patient and his wife began going on walks and gardening over the summer and he notes good relief of his depression from this; however, the season has changed and he needs an alterative method of management.\nS2 [SUBJECTIVE]: • Gastrointestinal: Denies hematochezia or abdominal pain.\nS3 [SUBJECTIVE]: • Respiratory: Denies shortness of breath.\nS4 [SUBJECTIVE]: His blood pressures have reportedly been good.\nS5 [SUBJECTIVE]: In regards to his depression, the patient notes that it has been a crazy year and a half.\nS6 [OBJECTIVE EXAM]: • Cardiovascular: Slight 2/6 systolic ejection murmur heard at the left base, heard previously.\nS7 [OBJECTIVE RESULTS]: EKG was unremarkable.\nS8 [OBJECTIVE EXAM]: • Constitutional: Well-developed, well-nourished, in no apparent distress.\nS9 [SUBJECTIVE]: The patient is still taking metformin for his diabetes.\nS10 [ASSESSMENT AND PLAN]: • Additional Testing: I will order an echocardiogram to reassess the heart murmur.\nS11 [ASSESSMENT AND PLAN]: His most recent hemoglobin A1c was elevated at 8 percent.\nS12 [SUBJECTIVE]: Denies suicidal and homicidal ideations.\nS13 [ASSESSMENT AND PLAN]: He is compliant with metformin.\nS14 [SUBJECTIVE]: Bruce Howard is a 60-year-old male with a past medical history significant for depression, type 2 diabetes, and hypertension who presents for follow up of his chronic problems.\nS15 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient admits to recent dietary indiscretion.\nS16 [ASSESSMENT AND PLAN]: • Medical Reasoning: He has been monitoring his blood pressure on a regular basis.\nS17 [SUBJECTIVE]: He denies suicidal and homicidal ideation.\nS18 [ASSESSMENT AND PLAN]: • Medical Reasoning: He has been doing well with going on morning walks; however, this has ended due to the cooler weather.\nS19 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS20 [ASSESSMENT AND PLAN]: Blood pressure is well controlled at this time.\nS21 [SUBJECTIVE]: • Cardiovascular: Denies chest pain or dyspnea on exertion.\nS22 [OBJECTIVE EXAM]: • Neck: No carotid bruits appreciable.\nS23 [ASSESSMENT AND PLAN]: I will also order a lipid panel.\nS24 [SUBJECTIVE]: He denies chest pain, dyspnea, abdominal pain, hematochezia, or weight loss.\nS25 [ASSESSMENT AND PLAN]: He continues to decline the use of medications for this issue.\nS26 [SUBJECTIVE]: In terms of his hypertension, he notes he is compliant with lisinopril.\nS27 [SUBJECTIVE]: • Constitutional: Denies weight loss.\nS28 [SUBJECTIVE]: Follow up of chronic problems.\nS29 [ASSESSMENT AND PLAN]: Bruce Howard is a 60-year-old male with a past medical history significant for depression, type 2 diabetes, and hypertension who presents for follow up of his chronic problems.\nS30 [ASSESSMENT AND PLAN]: • Medical Treatment: He will continue lisinopril 20 mg daily.\nS31 [ASSESSMENT AND PLAN]: • Medical Treatment: We will defer initiating medication at this time.\nS32 [ASSESSMENT AND PLAN]: • Specialist Referrals: I will refer him to psychiatry to engage in talk therapy.\nS33 [SUBJECTIVE]: He experienced a lot of anxiety while getting ready for Thanksgiving but it is starting to resolve now.\nS34 [SUBJECTIVE]: He did buy a blood pressure cuff and is checking his blood pressure at home.\nS35 [OBJECTIVE RESULTS]: Diabetic labs revealed an elevated hemoglobin A1c of 8.\nS36 [OBJECTIVE EXAM]: • Respiratory: Lungs are clear to auscultation bilaterally.\nS37 [ASSESSMENT AND PLAN]: • Medical Treatment: We will increase his metformin to 1000 mg twice a day.\nS38 [SUBJECTIVE]: • Psychiatric: Endorses anxiety and depression.\nS39 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS40 [SUBJECTIVE]: He has preferred to avoid medications in the past.\nS41 [OBJECTIVE EXAM]: • Musculoskeletal: 1+ nonpitting edema bilaterally.\nS42 [ASSESSMENT AND PLAN]: • Additional Testing: I will order a repeat hemoglobin A1c in the next couple of months.\nS43 [SUBJECTIVE]: He notes some dietary indiscretion with Thanksgiving but he is doing better with this now.\nS44 [ASSESSMENT AND PLAN]: He has a systolic ejection murmur that continues to be heard on exam.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S3\", \"S4\", \"S5\", \"S9\", \"S12\", \"S14\", \"S17\", \"S21\", \"S24\", \"S26\", \"S27\", \"S28\", \"S33\", \"S34\", \"S38\", \"S40\", \"S43\"], \"objective_exam\": [\"S6\", \"S8\", \"S22\", \"S36\", \"S39\", \"S41\"], \"objective_results\": [\"S7\", \"S35\"], \"assessment_and_plan\": [\"S10\", \"S11\", \"S13\", \"S15\", \"S16\", \"S18\", \"S19\", \"S20\", \"S23\", \"S25\", \"S29\", \"S30\", \"S31\", \"S32\", \"S37\", \"S42\", \"S44\"]}",
+  "elapsed_ms": 2100,
+  "usage": {
+    "input_tokens": 1633,
+    "output_tokens": 201
+  },
+  "logprobs": null
+}

@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: Notably, the patient was experiencing higher levels of stress than normal for her at that time due to a job transition.\nS2: She was not prescribed any medications in the emergency department but was given a referral to me for suspected esophagitis.\nS3: • Psychiatric:  Positive for stress.\nS4: She states that it felt like a heart attack and the onset was sudden.\nS5: Her cardiac evaluation in the emergency department was normal and she was referred to me for suspected esophagitis.\nS6: When asked about potential triggers, the patient identifies that she was experiencing a lot of stress at that time due to a job transition.\nS7: Suspected etiology of anxiety with or without underlying musculoskeletal etiology.\nS8: • Follow up as needed.\nS9: The patient is agreeable to this plan.\nS10: • Self-monitor for symptom recurrence and notify my office if this occurs.\nS11: Mild tenderness to light palpation in the upper abdominal quadrants.\nS12: She states she is trying to lose weight.\nS13: The pain has resolved but she kept this appointment to discuss the original 4-day episode.\nS14: The patient denies unintentional weight loss, weight gain, abdominal pain, constipation, and diarrhea.\nS15: The patient presents today following a visit to the emergency department in early 10/2020 for 4-days of sharp chest pain, made worse by eating, and dysphagia.\nS16: Possible etiologies of her chest pain and dysphagia include GERD, dyspepsia, esophagitis, musculoskeletal etiologies, and anxiety.\nS17: The patient’s pain and associated dysphagia spontaneously resolved 3 days after her emergency department visit and has not recurred.\nS18: Given her current asymptomatic status, I am comfortable foregoing the EGD for now in lieu of continued monitoring for symptom recurrence.\nS19: Her chest pain and dysphagia resolved spontaneously approximately 3 days after her emergency department visit and has not recurred.\nS20: The patient agreed to notify my office if her symptoms return at which time, we could schedule the EGD.\nS21: Based on her history today, I suspect she had an anxiety attack related to her job transition, plus or minus a contribution from musculoskeletal etiologies.\nS22: • Cardiovascular:  Positive for chest pain.\nS23: Non-cardiac chest pain.\nS24: She was able to tolerate the chest pain and dysphagia for 4 days but reports that nothing she tried relieved her symptoms.\nS25: • We discussed the role of an EGD in evaluating her prior symptoms.\nS26: All results came back normal from these tests.\nS27: • Gastrointestinal:  Positive for difficulty swallowing.\nS28: The patient was referred from the emergency department where she was seen in early 10/2020 following 4 days of chest pain.\nS29: The patient describes her chest pain in early 10/2020 as sharp and localized behind the sternum.\nS30: The patient is not able to say whether she had heartburn as she has never experienced heartburn before and is unsure what it feels like.\nS31: She then presented to the emergency department and underwent labs and EKG.\nS32: Betty Hill is a 53 y.o. female who presents to clinic today for a new patient evaluation of suspected esophagitis.\nS33: The pain was exacerbated by eating and accompanied by dysphagia.\nS34: The patient’s emergency department records from her 10/2020 visit were reviewed, including the normal cardiac workup.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S27\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S29\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S30\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S32\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S33\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S26\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S31\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S34\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S25\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S28\", \"placement_confidence\": \"MEDIUM\"}], \"requires_review\": true}",
+  "elapsed_ms": 4980,
+  "usage": {
+    "input_tokens": 1961,
+    "output_tokens": 581
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Continue with home blood pressure monitoring 3 times per week.\nS2: Referral to urology was also provided due to her recurrent episodes.\nS3: She will push fluids and has been provided with a urine strainer.\nS4: No rebound or guarding.\nS5: Musculoskeletal: Reports left-sided back pain.\nS6: Previous hemoglobin A1c is reviewed at 7.3.\nS7: Cardiovascular: Denies chest pain.\nS8: - Medical treatment: Continue metformin 500 mg daily.\nS9: - Examination of Abdomen: Tenderness to palpation of the abdomen.\nS10: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS11: Constitutional: Reports chills and decreased appetite.\nS12: - Auscultation of Heart: Grade 2 out of 6 systolic ejection murmur, unchanged.\nS13: Continue with home glucose monitoring before meals.\nS14: CVA tenderness present at right flank.\nS15: Patient reports history of history of hypertension, diabetes, and kidney stones.\nS16: Left-sided back pain.\nS17: Gastrointestinal: Reports nausea.\nS18: Referral to a dietitian was provided.\nS19: Tylenol is recommended for breakthrough pain.\nS20: She was also advised on the importance of diet modification with limiting salt to 2300 mg daily.\nS21: Patient reports taking Tylenol, occasional ibuprofen, Norvasc 2.5 mg daily, and metformin 500 mg daily.\nS22: No wheezes, rales, or rhonchi.\nS23: Denies abdominal pain.\nS24: - Patient Education and Counseling: We discussed the importance of home blood pressure monitoring with the goal of at least 3 times per week.\nS25: Her blood pressure was slightly elevated today, however, this is due to her current pain level.\nS26: - Medical Reasoning: Patient presents today with symptoms consistent with kidney stones.\nS27: - Auscultation of Lungs: Clear bilaterally.\nS28: Genitourinary: Reports hematuria.\nS29: - Medical Reasoning: Patient is currently stable and has not had any elevated glucose readings.\nS30: - Patient Education and Counseling: We discussed the importance of diet modification.\nS31: - Medical Reasoning: Patient is currently stable and has not had any elevated readings.\nS32: - Medical Treatment: Continue Norvasc 2.5 mg.\nS33: - Patient Education and Counseling: We discussed the importance of pushing fluids to help facilitate passing the kidney stone.\nS34: She does have a history of kidney stones with this being her third episode.\nS35: - Medical Treatment: Prescription for oxycodone 5 mg every 6 to 8 hours as needed for pain was provided today.\nS36: Limit salt intake to 2300 mg daily.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S5\", \"S7\", \"S11\", \"S15\", \"S16\", \"S17\", \"S21\", \"S23\", \"S28\", \"S34\"], \"objective_exam\": [\"S4\", \"S9\", \"S12\", \"S14\", \"S22\", \"S25\", \"S27\"], \"objective_results\": [\"S6\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S3\", \"S8\", \"S10\", \"S13\", \"S18\", \"S19\", \"S20\", \"S24\", \"S26\", \"S29\", \"S30\", \"S31\", \"S32\", \"S33\", \"S35\", \"S36\"]}",
+  "elapsed_ms": 2666,
+  "usage": {
+    "input_tokens": 1135,
+    "output_tokens": 169
+  },
+  "logprobs": null
+}

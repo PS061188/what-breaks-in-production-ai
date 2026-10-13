@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: • Status post bilateral reduction mammoplasty.\nS2: - Obtain bilateral breast photos today to monitor scarring.\nS3: Pamela Cook is a 36-year-old female who is status post bilateral reduction mammaplasty on 10/10/2020.\nS4: Follow up in 6 months to reevaluate scars.\nS5: She reports that the scar on her breast has been bothersome.\nS6: The patient was last seen in clinic by Ruth Sanchez, PA in 03/2021 at which time there was a lump along the left breast, and she was advised to perform massages.\nS7: Mederma scar gel to incision.\nS8: - Continue Mederma scar gel and incisional scar massage twice daily.\nS9: Status post bilateral reduction mammaplasty 10/10/2020.\nS10: Bilateral breast incisions well healed with widening of the scar tissue.\nS11: There is some widening of the scar tissue bilaterally.\nS12: The patient denies fever, chills, nausea, or vomiting.\nS13: No signs of infection or erythema.\nS14: Follow up bilateral reduction mammoplasty.\nS15: The left breast lower incisional lump from last visit has resolved with massaging and use of scar gel.\nS16: Pamela Cook is a 36-year-old female who is returning for a postoperative visit.\nS17: Cook reports she is doing well and that her breasts feel great.\nS18: She is no longer suffering from back pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [], \"assessment_and_plan\": [{\"id\": \"S1\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S14\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 2143,
+  "usage": {
+    "input_tokens": 1476,
+    "output_tokens": 326
+  },
+  "logprobs": null
+}

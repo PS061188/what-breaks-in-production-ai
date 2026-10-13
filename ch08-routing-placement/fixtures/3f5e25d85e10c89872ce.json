@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: • Status post bilateral reduction mammoplasty.\nS2: - Obtain bilateral breast photos today to monitor scarring.\nS3: Pamela Cook is a 36-year-old female who is status post bilateral reduction mammaplasty on 10/10/2020.\nS4: Follow up in 6 months to reevaluate scars.\nS5: She reports that the scar on her breast has been bothersome.\nS6: The patient was last seen in clinic by Ruth Sanchez, PA in 03/2021 at which time there was a lump along the left breast, and she was advised to perform massages.\nS7: Mederma scar gel to incision.\nS8: - Continue Mederma scar gel and incisional scar massage twice daily.\nS9: Status post bilateral reduction mammaplasty 10/10/2020.\nS10: Bilateral breast incisions well healed with widening of the scar tissue.\nS11: There is some widening of the scar tissue bilaterally.\nS12: The patient denies fever, chills, nausea, or vomiting.\nS13: No signs of infection or erythema.\nS14: Follow up bilateral reduction mammoplasty.\nS15: The left breast lower incisional lump from last visit has resolved with massaging and use of scar gel.\nS16: Pamela Cook is a 36-year-old female who is returning for a postoperative visit.\nS17: Cook reports she is doing well and that her breasts feel great.\nS18: She is no longer suffering from back pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S5\", \"S6\", \"S12\", \"S16\", \"S17\", \"S18\"], \"objective_exam\": [\"S1\", \"S9\", \"S10\", \"S11\", \"S13\", \"S15\"], \"objective_results\": [], \"assessment_and_plan\": [\"S2\", \"S4\", \"S7\", \"S8\", \"S14\"]}",
+  "elapsed_ms": 2228,
+  "usage": {
+    "input_tokens": 803,
+    "output_tokens": 98
+  },
+  "logprobs": null
+}

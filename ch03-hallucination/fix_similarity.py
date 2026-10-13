@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from broken import SCHEMA, SOFT_INFERENCE  # noqa: E402
-from common import build_cases  # noqa: E402
+from common import build_cases, judge_asserted  # noqa: E402
 from shared import bench  # noqa: E402
 from shared.llm import LLM, base_args  # noqa: E402
 from shared.scoring import headline, pct, rule, table  # noqa: E402
@@ -104,6 +104,15 @@ def main() -> int:
             schema=SCHEMA,
             max_tokens=800,
         )["answer"]
+
+        # Ground truth, corrected 29 Sep 2026 (FINDINGS, Chapter 3 re-read): a
+        # question the supplied text covers under its own heading is not scored,
+        # and an answer to an unanswerable question counts as ungrounded only if
+        # it asserted something. A correct decline is neither a catch nor a miss.
+        if case.get("contaminated"):
+            continue
+        if not case["answerable"] and not judge_asserted(generator, case["question"], answer):
+            continue
 
         claims = sentences(answer)
         chunks = passages(case["context"])

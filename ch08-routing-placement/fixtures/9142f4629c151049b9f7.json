@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: He is not ready to try any medications.\nS2 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: We will defer initiating medication at this time.\nS3 [SUBJECTIVE]: Regarding his GERD, he is taking his omeprazole.\nS4 [SUBJECTIVE]: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS5 [ASSESSMENT AND PLAN]: • Additional Testing: I will order a hemoglobin A1c in 1 month.\nS6 [ASSESSMENT AND PLAN]: He has noticed increased fluid retention following dietary indiscretion.\nS7 [ASSESSMENT AND PLAN]: • Medical Treatment: He will continue the insulin pump.\nS8 [SUBJECTIVE]: His shortness of breath is primarily with exertion such as walking up the stairs.\nS9 [SUBJECTIVE]: Reducing his alcohol intake has been tough during the holiday season, but he is getting better about this.\nS10 [SUBJECTIVE]: He states that it takes him a little while to get up.\nS11 [OBJECTIVE RESULTS]: Labs were all within normal limits, including the WBC.\nS12 [SUBJECTIVE]: Regarding his depression, he states that it has been a crazy year and a half.\nS13 [OBJECTIVE EXAM]: No jugular venous distention.\nS14 [SUBJECTIVE]: He is trying to avoid sugar but admits to an affinity for chocolate bars.\nS15 [SUBJECTIVE]: The patient states he has had some shortness of breath and mild leg swelling which he thinks has to do with eating some salty foods at some house parties recently.\nS16 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I advised the patient to monitor and log his daily weights.\nS17 [SUBJECTIVE]: Regarding his type 1 diabetes, he is using his insulin pump.\nS18 [SUBJECTIVE]: He has been consistently monitoring his blood sugars during the working week, but notes that he checks less on the weekends, due to being busy.\nS19 [ASSESSMENT AND PLAN]: • Medical Treatment: This is currently stable with use of an insulin pump.\nS20 [SUBJECTIVE]: • Respiratory: Denies coughor wheezing.\nS21 [SUBJECTIVE]: This has been going on for about 10 days now.\nS22 [ASSESSMENT AND PLAN]: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS23 [SUBJECTIVE]: He woke from sleep once with shortness of breath about a week ago.\nS24 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient has been doing well with outdoor stretching.\nS25 [SUBJECTIVE]: He has made some lifestyle modifications like cutting back on his red bull intake and other caffeine.\nS26 [ASSESSMENT AND PLAN]: The patient will follow up with his endocrinologist.\nS27 [SUBJECTIVE]: He also notes discomfort lying flat in bed and musculoskeletal stiffness in the morning.\nS28 [OBJECTIVE EXAM]: • Musculoskeletal: 1+ pitting bilateral lower extremity edema.\nS29 [ASSESSMENT AND PLAN]: • Medical Reasoning: The patient is retaining fluid.\nS30 [SUBJECTIVE]: Endorses shortness of breath..\nS31 [ASSESSMENT AND PLAN]: • Medical Treatment: Initiate Lasix 40 mg a day.\nS32 [OBJECTIVE EXAM]: • Cardiovascular: 3/6 systolic ejection murmur.\nS33 [ASSESSMENT AND PLAN]: Acute heart failure exacerbation.\nS34 [SUBJECTIVE]: • Cardiovascular: Denies chest pain.\nS35 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue omeprazole 20 mg a day.\nS36 [SUBJECTIVE]: • Musculoskeletal: Endorses lower extremity edema.\nS37 [SUBJECTIVE]: He has tried some natural solutions.\nS38 [ASSESSMENT AND PLAN]: • Medical Treatment: I will refer him to psychiatry as his current management strategy is unsustainable due to the change in season.\nS39 [SUBJECTIVE]: He denies suicidal and homicidal ideation.\nS40 [ASSESSMENT AND PLAN]: He has experienced dyspnea on exertion for the past 10 days.\nS41 [ASSESSMENT AND PLAN]: He was instructed to call me or 911 if he experiences dyspnea at rest.\nS42 [SUBJECTIVE]: In the summer, he did daily outdoor stretching, which was great; but now that the weather has changed, he needs to find some alternatives.\nS43 [ASSESSMENT AND PLAN]: • Medical Reasoning: His symptoms are stable with medication.\nS44 [OBJECTIVE RESULTS]: Chest x-ray did not show any evidence of airspace disease.\nS45 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I encouraged the patient to have an eye exam.\nS46 [SUBJECTIVE]: Endorses dyspnea on exertion.\nS47 [ASSESSMENT AND PLAN]: He continues to decline the use of medications for this issue.\nS48 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan. his endo\nS49 [SUBJECTIVE]: Shortness of breath.\nS50 [OBJECTIVE EXAM]: • Neck: No carotid bruits appreciable.\nS51 [SUBJECTIVE]: • Constitutional: Denies fevers, chills.\nS52 [ASSESSMENT AND PLAN]: He will contact me if these continue to increase.\nS53 [SUBJECTIVE]: The patient denies chest pain, fever, chills, cough, and abdominal pain.\nS54 [SUBJECTIVE]: • Psychiatric: Endorses depression.\nS55 [OBJECTIVE EXAM]: • Respiratory: Rales are heard bilaterally at lung bases.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S3\", \"S4\", \"S8\", \"S9\", \"S10\", \"S12\", \"S14\", \"S15\", \"S17\", \"S18\", \"S20\", \"S21\", \"S23\", \"S25\", \"S27\", \"S30\", \"S34\", \"S36\", \"S37\", \"S39\", \"S42\", \"S46\", \"S49\", \"S51\", \"S53\", \"S54\"], \"objective_exam\": [\"S13\", \"S28\", \"S32\", \"S50\", \"S55\"], \"objective_results\": [\"S11\", \"S44\"], \"assessment_and_plan\": [\"S2\", \"S5\", \"S6\", \"S7\", \"S16\", \"S19\", \"S22\", \"S24\", \"S26\", \"S29\", \"S31\", \"S33\", \"S35\", \"S38\", \"S40\", \"S41\", \"S43\", \"S45\", \"S47\", \"S48\", \"S52\"]}",
+  "elapsed_ms": 3276,
+  "usage": {
+    "input_tokens": 1885,
+    "output_tokens": 245
+  },
+  "logprobs": null
+}

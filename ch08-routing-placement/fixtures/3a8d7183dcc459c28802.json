@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: We will follow up with him afterwards to determine his level of relief.\nS2: He reports that his left arm pain began approximately 2 weeks ago.\nS3: Upper extremities: 1+ bilateral biceps, triceps, brachioradialis, reflexes bilaterally, negative.\nS4: He will continue his home exercise program as well as twice daily gabapentin.\nS5: The patient is a veteran and receives 1% disability.\nS6: Impression: Significant disc degeneration at C5-6 and to a lesser extent C4-5 and C3-4.\nS7: He applied ice and after 2-3 hours, the pain improved and he was able to go back to sleep, the pain did not return until that evening.\nS8: He denies any blood thinners.\nS9: I suspect that this is a flare of cervical radiculopathy.\nS10: Cervical: Nontender over cervical spine.\nS11: Upper extremities: Normal throughout the biceps, triceps, deltoid, grip strength, and finger abduction, bilaterally.\nS12: • Neck pain in the setting of arthritis and disc generation\nS13: Peripheral neuropathy.\nS14: Spurling's maneuver is benign.\nS15: We will tentatively plan for a left C7-T1 epidural afterwards, although the exact level will be pending the MRI results.\nS16: She suspected a pinched nerve and completed x-rays of the cervical spine, prescribed gabapentin and prednisone, and referred the patient to us.\nS17: Clark does report a history of a left finger injury, stating “it rarely works”, and neuropathy in one leg from his knee to his foot which he receives 1% disability for.\nS18: Elderly Caucasian male in no apparent distress.\nS19: Presents in wheelchair.\nS20: • Left upper extremity neuropathy, suspicious for cervical radiculopathy, possible contribution of peripheral neuropathy\nS21: Continue home exercise program and twice daily gabapentin.\nS22: The pain initially was encountered at night, but the patient notes that the symptoms carry into the next day.\nS23: I am going to set him up for a cervical MRI.\nS24: This plan was discussed in detail with the patient who is in agreement.\nS25: The patient has benefited from the gabapentin and prednisone, reporting improvement of pain at night.\nS26: X-ray Cervical Spine, 06/04/2021.\nS27: He denies pain when moving his neck, turning his head, and moving his shoulder.\nS28: Significant lower facet arthropathy.\nS29: Follow-up after epidural.\nS30: The patient is a veteran.\nS31: He woke around 2:00 am with intense pain in his left arm and hand.\nS32: Sensation: Intact to light touch throughout the upper and lower extremities.\nS33: C6-7 and C7-T1 are difficult to visualize in the current x-rays.\nS34: Schedule MRI and epidural injection.\nS35: After several nights of experiencing the left arm and hand pain, he was seen by Betty Ross, PA-C.\nS36: Mildly restricted cervical extension and right and left lateral rotation, which is symmetric, which gives him mild lateral neck pain, but no radicular pain.\nS37: Gait: Not assessed today.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S25\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S27\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S30\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S31\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S35\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S32\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S36\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S37\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S26\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S28\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S33\", \"placement_confidence\": \"HIGH\"}], \"assessment_and_plan\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S29\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S34\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 5300,
+  "usage": {
+    "input_tokens": 1905,
+    "output_tokens": 629
+  },
+  "logprobs": null
+}

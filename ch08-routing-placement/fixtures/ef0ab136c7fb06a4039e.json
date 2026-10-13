@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: • Cardiovascular: 2/6 systolic ejection murmur, stable.\nS2: In regards to his arthritis, the patient states that occasionally he has pain in his elbow, but nothing out of the ordinary.\nS3: • Medical Reasoning: The patient is doing well on Synthroid and is asymptomatic at this time.\nS4: • Patient Education and Counseling: I advised the patient to rest his knees.\nS5: Gutierrez a couple of weeks ago, and everything was normal at that time.\nS6: By the end of the day, his knees were very painful.\nS7: • Medical Reasoning: The patient reports increased joint pain in his bilateral knees over the past weekend.\nS8: He presents today with complaints of joint pain.\nS9: Good bony alignment.\nS10: He states that he has had some knee problems in the past, but he believes that it was due to the repetition and the weight of the boxes.\nS11: • Musculoskeletal: Denies muscle pain.\nS12: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS13: • Neurological: Denies headaches.\nS14: • Medical Treatment: Continue current regimen.\nS15: • Musculoskeletal: There is edema and erythema of the right knee with pain to palpation.\nS16: • Additional Testing: We will order a thyroid panel.\nS17: • Constitutional: Denies fevers, chills, or weight loss.\nS18: He states that the pain does not prevent him from doing his activities of daily living.\nS19: He notes that he saw Dr.\nS20: White blood cell count is within normal limits.\nS21: If his symptoms persist, we can consider further imaging and possibly a referral to physical therapy.\nS22: Andrew Perez is a 62-year-old male with a past medical history significant for a kidney transplant, hypothyroidism, and arthritis.\nS23: Status post renal transplant.\nS24: Kidney function is normal.\nS25: • Medical Treatment: Continue Synthroid.\nS26: • Medical Reasoning: He is doing well and has been compliant with his immunosuppressive medications.\nS27: He presents today with complaints of joint pain.\nS28: Given that his right knee x-ray was unremarkable, I believe this is an acute exacerbation of his arthritis.\nS29: The patient states that he had a kidney transplant a few years ago for some polycystic kidneys.\nS30: Andrew Perez is a 62-year-old male with a past medical history significant for a kidney transplant, hypothyroidism, and arthritis.\nS31: X-ray of the right knee is unremarkable.\nS32: The patient continues to utilize his immunosuppressant medications.\nS33: Labs: Within normal limits.\nS34: He denies any other symptoms such as fever, chills, muscle aches, nausea, vomiting, diarrhea, fatigue, and weight loss.\nS35: Endorses joint pain in the bilateral knees.\nS36: Range of motion is decreased.\nS37: On recent labs, his white blood cell count was within a normal limits and his kidney function is stable.\nS38: Left knee exam is normal.\nS39: The patient reports that over the weekend, he was moving boxes up and down the basement stairs.\nS40: By the end of the day on Saturday, his knee soreness interrupted his sleep.\nS41: Regarding his hypothyroidism, the patient states that he is doing well.\nS42: • Medical Treatment: Initiate Ultram 50 mg every 6 hours as needed.\nS43: • Additional Testing: We will order an autoimmune panel for further evaluation.\nS44: The patient has taken Tylenol and iced his knees for a short period of time, but nothing really seemed to help.\nS45: He has continued to utilize Synthroid regularly.\nS46: The pain is equal in the bilateral knees.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S6\", \"S8\", \"S10\", \"S18\", \"S19\", \"S22\", \"S29\", \"S30\", \"S34\", \"S35\", \"S39\", \"S40\", \"S41\", \"S44\", \"S45\"], \"objective_exam\": [\"S1\", \"S9\", \"S11\", \"S13\", \"S15\", \"S17\", \"S36\", \"S38\", \"S46\"], \"objective_results\": [\"S20\", \"S24\", \"S31\", \"S33\", \"S37\"], \"assessment_and_plan\": [\"S3\", \"S4\", \"S5\", \"S7\", \"S12\", \"S14\", \"S16\", \"S21\", \"S23\", \"S25\", \"S26\", \"S27\", \"S28\", \"S32\", \"S42\", \"S43\"]}",
+  "elapsed_ms": 3308,
+  "usage": {
+    "input_tokens": 1578,
+    "output_tokens": 209
+  },
+  "logprobs": null
+}

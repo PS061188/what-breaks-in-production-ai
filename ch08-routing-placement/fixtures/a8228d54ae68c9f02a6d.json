@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-66029\nDate: 2026-05-18\n\nShip From:\nSummit Packaging\n1200 Industrial Parkway\nAberdeen 2320\n\nShip To:\nLarkspur Optics\n77 Market Square\nDerby 1533\n\nBill To:\nBluefin Logistics\n91 Beacon Avenue\nGlasgow 4898\n\nItems: 12 cartons, 900 kg\nCarrier reference: CR4674\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Summit Packaging, 1200 Industrial Parkway, Aberdeen 2320\",\"source_quote\":\"Ship From:\\nSummit Packaging\\n1200 Industrial Parkway\\nAberdeen 2320\"},\"destination_address\":{\"value\":\"Larkspur Optics, 77 Market Square, Derby 1533\",\"source_quote\":\"Ship To:\\nLarkspur Optics\\n77 Market Square\\nDerby 1533\"},\"billing_address\":{\"value\":\"Bluefin Logistics, 91 Beacon Avenue, Glasgow 4898\",\"source_quote\":\"Bill To:\\nBluefin Logistics\\n91 Beacon Avenue\\nGlasgow 4898\"}}",
+  "elapsed_ms": 2642,
+  "usage": {
+    "input_tokens": 647,
+    "output_tokens": 176
+  },
+  "logprobs": null
+}

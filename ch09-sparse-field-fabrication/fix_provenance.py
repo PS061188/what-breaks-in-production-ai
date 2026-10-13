@@ -100,8 +100,8 @@ def main() -> int:
                     [case["drug"][:18], name, f"{score:.2f}", str(value)[:46].replace("\n", " ")]
                 )
 
-    rule("The 14 fabrications, and how well each one matches the source")
-    table(["drug", "field", "best cosine", "fabricated value (first 46)"], rows)
+    rule("Fields filled with no supplied section (all correct readings: FINDINGS, Chapter 9 re-read)")
+    table(["drug", "field", "best cosine", "value (first 46)"], rows)
 
     rule("Threshold sweep — reject a value scoring below T")
     sweep = []
@@ -125,11 +125,11 @@ def main() -> int:
     )
     headline(
         "Why",
-        "the fabricated text is really in the document",
-        "Chapter 9's fabrications are pediatric dosing lifted out of the "
-        "indications section. Semantic overlap with the document is high because "
-        "the text came from the document. This rail is built for invented "
-        "content, and misattributed content is not invented.",
+        "no fabrication in this run (withdrawn)",
+        "Withdrawn 29 Sep 2026: every value scored as a fabrication here is a "
+        "correct reading of the supplied text (the 0.85 one is Albuterol's "
+        "children's dose), so this run measured no fabrication at all. See "
+        "FINDINGS, Chapter 9 re-read.",
     )
 
     print()

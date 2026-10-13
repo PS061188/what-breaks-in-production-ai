@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: Some decreased range of motion.\nS2 [SUBJECTIVE]: Her last bowel movement was 2 days ago, and it was normal.\nS3 [OBJECTIVE EXAM]: No rebound or guarding.\nS4 [ASSESSMENT AND PLAN]: • Medical Reasoning: She reports episodes of vomiting in the morning, as well as abdominal pain and bloating.\nS5 [SUBJECTIVE]: The patient reports her arthritis is starting to get better.\nS6 [SUBJECTIVE]: She started to make some dietary modifications, but she still needs to make more progress.\nS7 [ASSESSMENT AND PLAN]: • Additional Testing: We will order an ultrasound of her right upper quadrant, as well as additional labs, to rule out biliary etiology.\nS8 [SUBJECTIVE]: She denies blood in her stool.\nS9 [ASSESSMENT AND PLAN]: • Medical Reasoning: Her flares are well controlled on allopurinol.\nS10 [OBJECTIVE EXAM]: Slight pain to palpation.\nS11 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS12 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I advised her to continue pilates and using the knee.\nS13 [OBJECTIVE EXAM]: No extra heart sounds.\nS14 [SUBJECTIVE]: • Gastrointestinal: Denies hematochezia, melena.\nS15 [ASSESSMENT AND PLAN]: Anna Mitchell is a 44-year-old female with a past medical history significant for arthritis, gout, and reflux, who presents today for follow-up of her chronic problems.\nS16 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue omeprazole 40 mg once daily.\nS17 [OBJECTIVE EXAM]: • Musculoskeletal: Right knee shows a little effusion.\nS18 [SUBJECTIVE]: This has helped build up some muscles and her joint pain has reduced.\nS19 [ASSESSMENT AND PLAN]: Physical therapy has also been beneficial for her.\nS20 [SUBJECTIVE]: Endorses vomiting, abdominal pain, and bloating.\nS21 [SUBJECTIVE]: Regarding her acid reflux, she was placed on omeprazole 40 mg once a day to help with some of the symptoms she was having.\nS22 [SUBJECTIVE]: The patient denies unexplained weight gain or loss, fevers, chills.\nS23 [ASSESSMENT AND PLAN]: She will contact me if she has any issues and we can consider further imaging or intervention at that time.\nS24 [OBJECTIVE EXAM]: • Gastrointestinal: Pain to palpation of the right upper quadrant.\nS25 [SUBJECTIVE]: It has been about 6 months since I last saw the patient.\nS26 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS27 [SUBJECTIVE]: She reports episodes of vomiting in the morning.\nS28 [OBJECTIVE EXAM]: • Cardiovascular: No murmurs, gallops, or rubs.\nS29 [SUBJECTIVE]: The patient has also continued to attend physical therapy, which she feels has been beneficial.\nS30 [SUBJECTIVE]: Mitchell had an episode of gout of her right first big toe about 2 months ago.\nS31 [SUBJECTIVE]: Follow-up of chronic problems.\nS32 [SUBJECTIVE]: Anna Mitchell is a 44-year-old female with a past medical history significant for arthritis, gout, and reflux, who presents today for follow-up of her chronic problems.\nS33 [ASSESSMENT AND PLAN]: Her right knee x-ray demonstrated residual arthritis but was otherwise normal.\nS34 [ASSESSMENT AND PLAN]: Acid reflux with nausea and vomiting.\nS35 [OBJECTIVE EXAM]: • Respiratory: Lungs are clear to auscultation bilaterally.\nS36 [SUBJECTIVE]: • Constitutional: Denies fevers, chills, or weight loss.\nS37 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I encouraged her to continue with dietary modifications.\nS38 [OBJECTIVE RESULTS]: Autoimmune panel is within normal limits.\nS39 [ASSESSMENT AND PLAN]: This was refilled today.\nS40 [OBJECTIVE RESULTS]: X-ray of the right knee demonstrates residual arthritis.\nS41 [OBJECTIVE EXAM]: No peritoneal signs.\nS42 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue allopurinol 100 mg once daily.\nS43 [SUBJECTIVE]: The patient also has abdominal pain and bloating.\nS44 [SUBJECTIVE]: She states she is doing well on the allopurinol 100 mg once daily and has had no further flare ups.\nS45 [ASSESSMENT AND PLAN]: She has been compliant with omeprazole and has made a few dietary modifications.\nS46 [ASSESSMENT AND PLAN]: • Medical Reasoning: She is doing well and has remained active since her last visit.\nS47 [SUBJECTIVE]: She has been trying to move her body with pilates and lifting weights.\nS48 [SUBJECTIVE]: • Musculoskeletal: Endorses joint pain.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S5\", \"S6\", \"S8\", \"S14\", \"S18\", \"S20\", \"S21\", \"S22\", \"S25\", \"S27\", \"S29\", \"S30\", \"S31\", \"S32\", \"S36\", \"S43\", \"S44\", \"S47\", \"S48\"], \"objective_exam\": [\"S1\", \"S3\", \"S10\", \"S13\", \"S17\", \"S24\", \"S26\", \"S28\", \"S35\", \"S41\"], \"objective_results\": [\"S38\", \"S40\"], \"assessment_and_plan\": [\"S4\", \"S7\", \"S9\", \"S11\", \"S12\", \"S15\", \"S16\", \"S19\", \"S23\", \"S33\", \"S34\", \"S37\", \"S39\", \"S42\", \"S45\", \"S46\"]}",
+  "elapsed_ms": 2067,
+  "usage": {
+    "input_tokens": 1676,
+    "output_tokens": 217
+  },
+  "logprobs": null
+}

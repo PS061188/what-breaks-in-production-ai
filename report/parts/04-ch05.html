@@ -325,30 +325,37 @@ carry, on a specific field, in a specific document.</p>
 loop is useless — it is evidence that if your provider enforces the output shape,
 this loop will sit idle, which is the correct outcome rather than a wasted fix.</p>
 
-<h3>Chapter 5 verdict</h3>
+<h3>Follow-up experiments (15 September 2026)</h3>
+<p><code>ch05-extraction-normalisation/more_experiments.py</code>, $1.13.</p>
 
+<h4>5.3 &mdash; Five runs each, with a corrected range counter</h4>
+<table>
+  <tr><th style="width:30%">Prompt</th><th class="num">Ranges kept (of 8)</th><th class="num">Qualifiers kept</th><th class="num">Values findable in the source</th></tr>
+  <tr><td>Plain</td><td class="num">4, 5, 5, 4, 5</td><td class="num">42, 37, 34, 39, 34%</td><td class="num">71, 58, 68, 59, 63%</td></tr>
+  <tr><td>Normalise inside the prompt</td><td class="num">3, 3, 4, 2, 1</td><td class="num">18, 26, 21, 24, 21%</td><td class="num">61, 59, 59, 68, 62%</td></tr>
+  <tr><td>Capture verbatim</td><td class="num">5, 5, 5, 5, 5</td><td class="num">39, 34, 50, 39, 32%</td><td class="num">92, 92, 96, 94, 92%</td></tr>
+</table>
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>The earlier verdict that the capture prompt was &ldquo;actively worse&rdquo; on ranges (85% &rarr; 65%) came from a range counter that was wrong. Corrected, capture kept 5 of 8 ranges in every run, the plain prompt 4 or 5, and the one-prompt version 1 to 4.</p>
+</div>
+<p>The capture prompt also returned more values (72&ndash;80) than the plain one (59&ndash;63), so its findable figure is not a smaller-denominator effect.</p>
+
+<h4>5.4 &mdash; The retry loop, run</h4>
+<p>Of 376 dose and frequency values from the capture prompt, 117 (31%) could not be parsed by the normaliser. Retries with the error fed back fixed 5, then 3, then 0: 8 in all. The other 109 were absences (&ldquo;not specified&rdquo;, &ldquo;adjust if necessary&rdquo;, tapering prose). <strong>Retries fix formats; they cannot supply a number the label does not contain.</strong></p>
+
+<h4>5.5 &mdash; A model swap, for the golden-set fix</h4>
+<p>The capture prompt once on Claude Sonnet 5 and on GPT-4.1-mini, against the Haiku run: the same normalised value per field on 45&ndash;67% (Sonnet) and 42&ndash;83% (GPT). That is the regression a golden set exists to catch, now measured rather than asserted.</p>
+
+<h3>Chapter 5 verdict</h3>
 <table>
   <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
-  <tr><td>Capture-verbatim prompt — <em>auditability</em></td><td><strong>Works</strong></td>
-      <td>66% → 93% vs a plain baseline, ahead in 5 of 5 runs — but on a
-      <strong>model-chosen denominator</strong> that swings up to 43%</td></tr>
-  <tr><td>Capture-verbatim prompt — <em>qualifiers</em></td><td><strong>Does not work</strong></td>
-      <td>38% vs 39% against a plain baseline. The published 29% → 45% was
-      measured against a prompt told to "keep it tidy"</td></tr>
-  <tr><td>Capture-verbatim prompt — <em>ranges</em></td>
-      <td><strong>Actively worse</strong></td>
-      <td>85% → 65%; the fix lost in <strong>5 of 5 runs</strong>, spreads do not
-      overlap, despite instructing "never collapse a range"</td></tr>
-  <tr><td>1 · Validators</td><td>Works (partly untested)</td><td>doses and frequencies only</td></tr>
-  <tr><td>2 · Retry loop</td><td>Not implemented as written</td><td>superseded here</td></tr>
-  <tr><td>3 · Separate normalisation + discard log</td><td><strong>Works</strong></td>
-      <td>52 rows; ⚠️ the "vs 0" baseline was a definition</td></tr>
-  <tr><td>4 · Golden set</td><td>Not implemented as written</td><td>no labelled set</td></tr>
+  <tr><td>Capture-verbatim prompt &mdash; values findable</td><td><strong>Works</strong></td><td>92&ndash;96% vs 58&ndash;71%, five runs each</td></tr>
+  <tr><td>Capture-verbatim prompt &mdash; ranges</td><td><strong>Works</strong></td><td>5 of 8 every run; plain 4&ndash;5; one-prompt 1&ndash;4</td></tr>
+  <tr><td>Capture-verbatim prompt &mdash; qualifiers</td><td>No consistent difference</td><td>ahead in 1 run, behind in 3, level in 1</td></tr>
+  <tr><td>Field-level validators</td><td>Works (doses, frequencies)</td><td>dates and units untested</td></tr>
+  <tr><td>Retry loop</td><td>Fixes formats only</td><td>8 of 117 unparseable values</td></tr>
+  <tr><td>Normalisation as separate code + discard log</td><td><strong>Works</strong></td><td>the strongest idea in the chapter</td></tr>
+  <tr><td>Golden-set regression tests</td><td>Needed</td><td>a model swap changed 17&ndash;58% of normalised values</td></tr>
 </table>
-
-<p><strong>The chapter holds and is the cheapest in the book</strong> — its fixes
-cost nothing at runtime because the expensive work moved out of the model and
-into code. What the chapter should stop implying is that separating the steps
-<em>solves</em> specificity loss. It makes specificity loss <strong>visible</strong>,
-which is a different and more defensible claim, and the discard log is the
-evidence for it.</p>
+<p><strong>The chapter holds.</strong> Separating capture from normalisation makes specificity loss visible and keeps values traceable to the source; retries cannot recover information the source does not hold.</p>

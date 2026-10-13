@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: He states that he has been given \"nerve pain medicine” but has not been taking it.\nS2 [SUBJECTIVE]: He reports mild stiffness in his neck.\nS3 [OBJECTIVE EXAM]: Toes down going bilaterally.\nS4 [SUBJECTIVE]: He notes that he did hit his head during the car accident and was diagnosed with a contusion.\nS5 [SUBJECTIVE]: • Endocrine: Excessive hunger.\nS6 [ASSESSMENT AND PLAN]: Cook is a 60-year-old male referred today for evaluation of numbness and tingling of both hands.\nS7 [SUBJECTIVE]: He denies complete loss of sensation in any of his fingers, but states that they seem less sensitive than they should be.\nS8 [SUBJECTIVE]: • Gastrointestinal: Excessive appetite, abdominal bloating.\nS9 [SUBJECTIVE]: He reports a history of prediabetes, which he has brought under control via dietary changes.\nS10 [OBJECTIVE EXAM]: Tinel’s sign positive at both wrists and elbows.\nS11 [ASSESSMENT AND PLAN]: We could also refer to an orthopedist for the same treatment.\nS12 [SUBJECTIVE]: The symptoms come and go and seem to occur mostly at night.\nS13 [SUBJECTIVE]: • Respiratory: Shortness of breath.\nS14 [OBJECTIVE EXAM]: Reflexes are 1+ and symmetric, 2+ knees.\nS15 [SUBJECTIVE]: He denies any history of thyroid issues.\nS16 [SUBJECTIVE]: • Integumentary: Dry itchy skin, nail bed changes.\nS17 [OBJECTIVE EXAM]: Pinprick sensation intact in the 3rd and 4th fingers on the right hand and 4th and 5th fingers on the left hand.\nS18 [SUBJECTIVE]: The 4th and 5th fingers in the left hand and 3rd and 4th on the right-hand tingle.\nS19 [SUBJECTIVE]: He currently takes Coreg for his hypertension and Lexapro for his anxiety.\nS20 [SUBJECTIVE]: Numbness and tingling of both hands.\nS21 [SUBJECTIVE]: Any exertion exacerbates the tingling, and after something exacerbates the pain, the tingling seems \"dull\".\nS22 [ASSESSMENT AND PLAN]: • Bilateral carpal tunnel syndrome\nS23 [ASSESSMENT AND PLAN]: If still symptomatic, we can consider a referral to our Hand Clinic possibly for injections or carpal tunnel release surgery.\nS24 [SUBJECTIVE]: Elijah Cook is a 60-year-old male referred today for evaluation of numbness and tingling of both hands.\nS25 [ASSESSMENT AND PLAN]: We will plan for a follow-up visit after the EMG testing is performed.\nS26 [SUBJECTIVE]: The patient complains of numbness, tingling, and pain in both hands which began in 12/2019 after he broke both wrists in a motor vehicle accident and which has progressively worsened since then.\nS27 [SUBJECTIVE]: • Cardiovascular: Bilateral peripheral edema.\nS28 [SUBJECTIVE]: • Constitutional Symptoms: Easily fatigued, weight gain.\nS29 [SUBJECTIVE]: • Musculoskeletal: Gout, muscle pain.\nS30 [SUBJECTIVE]: The sensation radiates from the hands into the forearms and is equal bilaterally.\nS31 [SUBJECTIVE]: He continues to wear a splint on the right wrist all the time and on the left only intermittently, which he states is because the right wrist was injured more severely in the accident.\nS32 [ASSESSMENT AND PLAN]: Diagnosis discussed with patient, I explained that the nerves in his wrists are aggravated by the past trauma causing the pain and tingling.\nS33 [ASSESSMENT AND PLAN]: His symptom presentation and exam findings today suggest this is bilateral carpal tunnel syndrome or, potentially, this could also be bilateral cubital tunnel syndrome.\nS34 [ASSESSMENT AND PLAN]: Further testing is indicated to measure the responsiveness of the nerves to determine exactly where the nerve irritation is coming from.\nS35 [ASSESSMENT AND PLAN]: Follow-up after EMG testing.\nS36 [SUBJECTIVE]: He states that his fingers are sore with palpation and seem weaker than before.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S4\", \"S5\", \"S7\", \"S8\", \"S9\", \"S12\", \"S13\", \"S15\", \"S16\", \"S18\", \"S19\", \"S20\", \"S21\", \"S24\", \"S26\", \"S27\", \"S28\", \"S29\", \"S30\", \"S31\", \"S36\"], \"objective_exam\": [\"S3\", \"S10\", \"S14\", \"S17\"], \"objective_results\": [], \"assessment_and_plan\": [\"S6\", \"S11\", \"S22\", \"S23\", \"S25\", \"S32\", \"S33\", \"S34\", \"S35\"]}",
+  "elapsed_ms": 2138,
+  "usage": {
+    "input_tokens": 1462,
+    "output_tokens": 170
+  },
+  "logprobs": null
+}

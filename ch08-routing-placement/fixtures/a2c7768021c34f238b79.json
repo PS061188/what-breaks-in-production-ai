@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Skin inspection of the face was performed today.\nS2: Rosacea, including ocular rosacea.\nS3: I provided a prescription for Tacrolimus and counseled her on possible side effects of using the medication.\nS4: Also, use Bruder mask as needed.\nS5: I counseled the patient about the risks and benefits of doxycycline and recommended she resume twice daily application until she reaches full resolution, and at that point she should reduce application to once a day for an additional week.\nS6: I recommended to gently wash her eyelids once daily with a gentle cleanser and try a gentle cream such as Vanicream.\nS7: Jacqueline Miller is a 40-year-old female who presented today for follow-up for her perioral dermatitis, which has improved but not resolved.\nS8: She decreased her doxycycline per her pharmacist’s recommendation, which possibly stagnated the resolution of symptoms.\nS9: The patient will have a follow-up appointment in 4 weeks.\nS10: The patient was applying doxycycline twice a day with improvement, but her pharmacist advised her to reduce to once daily since it had started to improve; therefore, for approximately the past week, she has been using the doxycycline only once per day.\nS11: • Rosacea, including ocular rosacea\nS12: Follow-up for perioral dermatitis.\nS13: She also has a history of rosacea, including ocular rosacea.\nS14: • Perioral dermatitis\nS15: Apply topically twice daily.\nS16: The patient did not begin Elidel because it is not covered by her insurance, and she was concerned about possible side effects from the medication.\nS17: On bilateral medial cheeks, there are a few, very faint, erythematous papules with mild redness around and underneath the nostrils.\nS18: Perioral dermatitis.\nS19: She also applies MetroCream immediately after using the sulfacetamide wash.\nS20: She is using the sulfacetamide wash twice daily, denies drying of the skin, and reports that her skin is much improved moisturization.\nS21: She will continue with Sulfacetamide face wash once a day.\nS22: Continue using MetroCream twice daily.\nS23: She has not seen continued improvement but it has not worsened.\nS24: Fitzpatrick skin type is 4 to 5.\nS25: Perioral dermatitis.\nS26: The patient will not be using Elidel as I reviewed the cost of the medication and without insurance, it was too expensive.\nS27: Today, she states that her perioral dermatitis is well-controlled, although it has not fully resolved.\nS28: Call the clinic if symptoms worsen.\nS29: She denies using other lotions and products, Cetaphil lotion or soap, or Neutrogena wipes.\nS30: Jacqueline Miller is a 40-year-old female who is being seen today for a follow-up skin exam for perioral dermatitis.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S7\", \"S10\", \"S12\", \"S13\", \"S16\", \"S20\", \"S23\", \"S27\", \"S29\", \"S30\"], \"objective_exam\": [\"S1\", \"S17\", \"S24\"], \"objective_results\": [\"S2\", \"S14\", \"S18\", \"S25\"], \"assessment_and_plan\": [\"S3\", \"S4\", \"S5\", \"S6\", \"S8\", \"S9\", \"S15\", \"S19\", \"S21\", \"S22\", \"S26\", \"S28\"]}",
+  "elapsed_ms": 2515,
+  "usage": {
+    "input_tokens": 1153,
+    "output_tokens": 141
+  },
+  "logprobs": null
+}

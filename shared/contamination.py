@@ -33,12 +33,23 @@ TOPIC_HEADINGS = {
     # of children does not count. Both were found by the model, not the regex:
     # its token probabilities on those two "fabrications" were higher than on
     # the average correct answer, which is what a read answer looks like.
+    # Two more shapes, found on 29 Sep 2026 by opening the cases that still
+    # counted as fabrications: Omeprazole's OTC directions say "children under 18
+    # years of age: ask a doctor" (an age-qualified line ending in a colon, the
+    # Albuterol shape), and Sertraline's dosing section carries "Use of Sertraline
+    # Hydrochloride With Other MAOIs Such as Linezolid or Methylene Blue:", a
+    # co-administration heading that answers the drug-interactions question.
+    # Each pattern matches exactly that one label in the twelve.
     "pediatric_use": (
         r"\b(?:Pediatric|Paediatric)\s+(?:Patients|Use|Population|Dosage|Dosing)\b"
         r"|\b(?:pediatric|paediatric) patients aged \d+ (?:years|months)(?: of age)? and older\s*:"
+        r"|\b[Cc]hildren under \d+ years(?: of age)?\s*:"
     ),
     "pregnancy": r"\bPregnan(?:cy|t)\s+(?:Patients|Women|Use)\b|\bPregnancy\b(?=\s*[:—-])",
-    "drug_interactions": r"\bDrug\s+Interactions?\b|\bConcomitant\s+(?:Use|Medications?|Therapy)\b",
+    "drug_interactions": (
+        r"\bDrug\s+Interactions?\b|\bConcomitant\s+(?:Use|Medications?|Therapy)\b"
+        r"|\bUse of [^\n.:]{3,80}? [Ww]ith (?:Other )?[^\n.:]{2,80}:"
+    ),
     "adverse_reactions": r"\bAdverse\s+Reactions?\b|\bSide\s+Effects?\b",
     "overdosage": r"\bOverdosage\b|\bOverdose\b(?=\s*[:—-])",
 }

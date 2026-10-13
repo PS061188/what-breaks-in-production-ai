@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: The patient has been seen at Point May Orthopedics, by the physical therapy staff and a physician assistant at that practice.\nS2: I recommended a right index trigger finger cortisone injection today, and the patient elected to proceed.\nS3: Dexamethasone causes palpitations.\nS4: Exam of the right hand, there is no swelling or ecchymosis in the palm on the volar surface of his index finger.\nS5: We attempted a 2nd time for a similar injection using the same technique with 1.0 cc of Celestone and 0.5 cc of lidocaine.\nS6: X-rays today, 4 views of the right hand, show no bony abnormalities.\nS7: Treatment options were discussed including conservative management with corticosteroid injections and their statistical effectiveness.\nS8: The patient was scheduled to see Dr.\nS9: He was offered an injection of the A1 pulley region, but he did not want any steroid due to a reaction to dexamethasone that causes his heart to race.\nS10: The patient denies any history of diabetes or rheumatoid arthritis.\nS11: Philip Gutierrez is a pleasant 50-year-old right-hand-dominant male here today for a 2nd opinion regarding evaluation of the right index finger hyperextension injury sustained during a motor vehicle accident in 03/2021.\nS12: Radial and ulnar collateral ligaments of the index MCP joint were intact as was the MCP joint capsule.\nS13: Slightly diminished sensation to light touch over the right PIP joint of the index finger compared to the middle finger.\nS14: An attempt was made to inject 1.0 cc of Celestone with 0.5 cc of lidocaine.\nS15: Employed as x-ray technician.\nS16: He reports only taking medication for hypertension and denies taking any other chronic medications of significance.\nS17: • Stenosing tenosynovitis of right index finger.\nS18: A Band-Aid was applied.\nS19: In summary, the patient was the passenger in a vehicle that was rear-ended.\nS20: No soft tissue shadows of concern.\nS21: I recommended icing it this evening and taking ibuprofen.\nS22: Alice Davis, but he has not seen his yet.\nS23: The pain is exacerbated by driving.\nS24: However, the patient had a dramatic and violent painful reaction to the introduction of the needle with contortions of the hand and with dangerously withdrawing the hand with concerns for secondary needle stick.\nS25: The patient understands the risks and benefits and elected to proceed, signed consent obtained.\nS26: Methylprednisolone causes itching.\nS27: MRI of the right index finger performed on 04/24/2021.\nS28: Independent review of the images shows focal soft tissue swelling over the right index MCP joint, partial-thickness tear of the right FDS, and fluid consistent with tenosynovitis around the FDP and FDS tendons.\nS29: We discussed the pathophysiology and natural history of stenosing tenosynovitis and the anatomy of the flexor tendons and pulley system in the hand.\nS30: Gutierrez is employed as an x-ray technician.\nS31: I explained to the patient that the flexor digitorum superficialis tendon was clearly intact and that He is suffering from post-traumatic inflammation around the flexor digitorum superficialis tendon blocking excursion of the flexor tendons to the A1 pulley.\nS32: He was reassured on multiple occasions that no harm was done to his finger.\nS33: There was a small palmar vein that bled a scant amount, which was cleaned up off the back of the patient's hand.\nS34: The patient states that he is unable to make a fist secondary to pain and swelling in the right index finger.\nS35: Surgical correction was also briefly discussed, although I recommend exhausting non-operative measures with a minimum of 2 injections before proceeding with surgery.\nS36: Very pleasant, healthy appearing, cooperative male in no distress.\nS37: Therefore, the needle was withdrawn.\nS38: The patient and I had a lengthy discussion regarding his history, symptoms, and radiographic findings.\nS39: The patient was counseled as to the importance of attempting to get some therapeutic steroid in the flexor tendon sheath.\nS40: He notes that he has been wearing a right index finger splint.\nS41: He also notes methylprednisolone causes his to itch.\nS42: Index finger rests in a 10 degree PIP joint flexed position with discomfort upon correction.\nS43: I also recommend that the patient report to occupational therapy once a week for the next 6 weeks to work on full active and passive right index finger range of motion with no restrictions.\nS44: The patient verbalizes understanding with the treatment plan and agrees.\nS45: He underwent an MRI of the right index finger because they were concerned about a capsular strain plus or minus a rupture of the \"FDS tendon.\"\nS46: • Endocrine: Denies diabetes.\nS47: Normal creases are noted.\nS48: Joint congruency throughout all lesser digits on the right hand.\nS49: The extensor tendons were also deemed intact.\nS50: Occupational therapy as prescribed.\nS51: • Musculoskeletal: Right index finger pain.\nS52: Philip Gutierrez is a pleasant 50-year-old right-hand-dominant male here today for a 2nd opinion of his right index finger hyperextension injury sustained during a motor vehicle accident in March of this year.\nS53: All questions were answered to the patient's satisfaction today.\nS54: Right index finger hyperextension injury.\nS55: Regular rate and rhythm.\nS56: Bilateral extremities 2+ radial pulses.\nS57: He reports they were hit multiple times as he felt 2 bumps which caused his to sling forward hyperextending his right index finger.\nS58: The findings of his examination are consistent with rather severe post-traumatic stenosing tenosynovitis.\nS59: Right index trigger finger injection.\nS60: He describes a pulling, tearing sensation in the right index finger.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S3\", \"S9\", \"S10\", \"S11\", \"S15\", \"S16\", \"S19\", \"S23\", \"S26\", \"S27\", \"S34\", \"S40\", \"S41\", \"S45\", \"S52\", \"S57\", \"S60\"], \"objective_exam\": [\"S4\", \"S12\", \"S13\", \"S14\", \"S18\", \"S24\", \"S25\", \"S33\", \"S36\", \"S37\", \"S42\", \"S47\", \"S48\", \"S49\", \"S55\", \"S56\"], \"objective_results\": [\"S6\", \"S20\", \"S28\"], \"assessment_and_plan\": [\"S2\", \"S5\", \"S7\", \"S8\", \"S17\", \"S21\", \"S22\", \"S29\", \"S31\", \"S32\", \"S35\", \"S38\", \"S39\", \"S43\", \"S44\", \"S46\", \"S50\", \"S51\", \"S53\", \"S54\", \"S58\", \"S59\"]}",
+  "elapsed_ms": 2419,
+  "usage": {
+    "input_tokens": 2098,
+    "output_tokens": 261
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: The patient was instructed to discontinue use and contact the office if gastrointestinal issues develop.\nS2: I have explained to him that his x-rays revealed hallux rigidus.\nS3: He reports that his pain is present even with the slightest of pressure, which he notes is worse at night when his sheet is touching his right toe.\nS4: He adds that he has been taking 2 ibuprofen per day, which does not provide him with relief.\nS5: Skin: Reports redness.\nS6: The patient states that he has been ambulating on his heel to keep his toe from bending.\nS7: Right foot hallux rigidus.\nS8: We discussed treatment options for this and I have recommended that we begin with conservative treatment in the form of custom orthotics.\nS9: The onset of his pain began 2 weeks ago, however it worsened last week.\nS10: Palpated a bone spur on the right great toe.\nS11: He noticed the pain worsening when he was at a trade show convention and he could not ambulate as he was forced to stand there as the pain was there the whole time.\nS12: He denies any specific injury.\nS13: Pain to palpation of the right great toe, between the big toe and 2nd toe.\nS14: I advised the patient that I want him to continue his regular activities.\nS15: Patient reports that he likes to bicycle ride.\nS16: There is a loss of cartilage with some arthritis present.\nS17: MSK: Examination of the right great toe reveals 10 degrees of plantar flexion with pain.\nS18: Musculoskeletal: Reports right great toe pain.\nS19: After reviewing the patient's examination and radiographic findings today, I have had a lengthy discussion with the patient in regards to his current symptoms.\nS20: X-ray of the right great toe taken today in office reveals a large bone spur on the anterior aspect of the right great toe joint.\nS21: If his pain does not improve with the orthotics, I will recommend a cortisone injection or surgical intervention.\nS22: Right great toe pain.\nS23: The patient describes his pain usually as throbbing and burning, but notes it occasionally changes to sharp, stabbing pain especially with movement or prolonged ambulation.\nS24: I have also prescribed the patient meloxicam once a day to treat the pain.\nS25: His symptoms also include redness to the right great toe.\nS26: Joseph Walker is a pleasant 58-year-old male who presents to the clinic today for the evaluation of right great toe pain.\nS27: The patient will follow up with me in 2 weeks to check on his progress.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S26\", \"S3\", \"S4\", \"S6\", \"S9\", \"S11\", \"S12\", \"S15\", \"S23\", \"S25\"], \"objective_exam\": [\"S5\", \"S10\", \"S13\", \"S17\", \"S18\", \"S22\"], \"objective_results\": [\"S2\", \"S7\", \"S16\", \"S20\"], \"assessment_and_plan\": [\"S1\", \"S8\", \"S14\", \"S19\", \"S21\", \"S24\", \"S27\"]}",
+  "elapsed_ms": 3756,
+  "usage": {
+    "input_tokens": 1050,
+    "output_tokens": 133
+  },
+  "logprobs": null
+}

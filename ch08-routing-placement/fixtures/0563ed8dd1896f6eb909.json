@@ -1,0 +1,13 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: I have recommended a splint.\nS2: If she does not improve, she will follow up with me.\nS3: No tenderness over the proximal phalanx or the MP joint.\nS4: Examination of the right index finger shows tenderness over the distal phalanx.\nS5: She states she was skiing on Sunday and hyperextended her finger when it became caught in a strap on a jump.\nS6: X-rays of the right hand show no obvious signs of fracture or bony abnormalities.\nS7: At this point, I discussed the diagnosis and treatment options with the patient.\nS8: Brooks is a 48-year-old female who presents today for an evaluation of right finger pain.\nS9: Right hand index finger contusion at the tip of the finger.\nS10: She will take Motrin 600 mg every 6 hours for a week.\nS11: She has tried applying ice and taking Ibuprofen, but it is still very painful.\nS12: All questions were answered.\nS13: She has pain with movement.\n</sentences>\n\nReturn only the JSON object with the four keys.",
+  "user": "File the sentences.",
+  "schema": null,
+  "response": "```json\n{\n  \"subjective\": [\n    \"S5\",\n    \"S8\",\n    \"S11\",\n    \"S13\"\n  ],\n  \"objective_exam\": [\n    \"S3\",\n    \"S4\"\n  ],\n  \"objective_results\": [\n    \"S6\"\n  ],\n  \"assessment_and_plan\": [\n    \"S1\",\n    \"S2\",\n    \"S7\",\n    \"S9\",\n    \"S10\",\n    \"S12\"\n  ]\n}\n```",
+  "elapsed_ms": 1739,
+  "usage": {
+    "input_tokens": 390,
+    "output_tokens": 134
+  },
+  "logprobs": null
+}

@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-99980\nDate: 2026-01-17\n\nKestrel Aviation Parts\n89 Ferry Road\nPerth 5749\n\nBluefin Logistics\n91 Beacon Avenue\nGlasgow 4898\n\nPinecrest Retail\n9 Kiln Close\nDundee 8585\n\nItems: 37 cartons, 290 kg\nCarrier reference: CR5556\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Kestrel Aviation Parts, 89 Ferry Road, Perth 5749\",\"source_quote\":\"Kestrel Aviation Parts\\n89 Ferry Road\\nPerth 5749\"},\"destination_address\":{\"value\":\"Bluefin Logistics, 91 Beacon Avenue, Glasgow 4898\",\"source_quote\":\"Bluefin Logistics\\n91 Beacon Avenue\\nGlasgow 4898\"},\"billing_address\":{\"value\":\"Pinecrest Retail, 9 Kiln Close, Dundee 8585\",\"source_quote\":\"Pinecrest Retail\\n9 Kiln Close\\nDundee 8585\"}}",
+  "elapsed_ms": 1780,
+  "usage": {
+    "input_tokens": 638,
+    "output_tokens": 165
+  },
+  "logprobs": null
+}

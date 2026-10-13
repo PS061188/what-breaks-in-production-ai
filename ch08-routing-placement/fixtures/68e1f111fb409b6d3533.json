@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: The patient understands and agrees with the recommended medical treatment plan.\nS2 [ASSESSMENT AND PLAN]: She will discontinue clopidogrel for one week prior to knee replacement surgery; we will provide a reminder to patient of this as well.\nS3 [ASSESSMENT AND PLAN]: Labs were checked and creatinine is appropriate.\nS4 [ASSESSMENT AND PLAN]: A1c is 5.5 on last check, so there is no need for a further A1c today.\nS5 [SUBJECTIVE]: She was increasingly dyspneic.\nS6 [OBJECTIVE RESULTS]: Magnesium 1.7, hemoglobin WNL, potassium 3.9, creatinine 0.7, BUN 23.\nS7 [ASSESSMENT AND PLAN]: Schedule a preop checkup 1st or 2nd week of June.\nS8 [SUBJECTIVE]: No family history of colon cancer.\nS9 [SUBJECTIVE]: We had changed her furosemide to torsemide at 20 mg by mouth daily.\nS10 [ASSESSMENT AND PLAN]: Start magnesium supplement.\nS11 [ASSESSMENT AND PLAN]: She is going to be having a right knee replacement at the end of 06/2021.\nS12 [SUBJECTIVE]: She notes that her heartburn was severe at one point but resolved after trying Prilosec for 2 weeks in 01/2021.\nS13 [SUBJECTIVE]: She denies any concerns with defecation.\nS14 [ASSESSMENT AND PLAN]: No family history of colon cancer.\nS15 [ASSESSMENT AND PLAN]: Otherwise, continue her current regimen.\nS16 [SUBJECTIVE]: She is currently double covered with Medicare and private insurance.\nS17 [ASSESSMENT AND PLAN]: We switched her from furosemide to torsemide and symptomatically, she is doing a lot better.\nS18 [SUBJECTIVE]: Regarding her prior symptoms of heartburn, she denies any recent gastrointestinal issues.\nS19 [SUBJECTIVE]: I last saw her in 04/2021, and she had reported being interested in having her right knee replaced this summer at East Metropolitan Hospital, so it was recommended that we work to control her cardiovascular status prior to surgery.\nS20 [ASSESSMENT AND PLAN]: She may need another one prior to her surgery next month.\nS21 [SUBJECTIVE]: Lisinopril 10 mg daily.\nS22 [ASSESSMENT AND PLAN]: • Preop examination.\nS23 [SUBJECTIVE]: She did report experiencing bilateral leg cramps which she treated with consumption of pickle juice, which did resolve the cramps.\nS24 [SUBJECTIVE]: She is still taking iron supplementation.\nS25 [ASSESSMENT AND PLAN]: Her breathing is nonlabored.\nS26 [ASSESSMENT AND PLAN]: Chronic congestive heart failure with mixed presentation.\nS27 [SUBJECTIVE]: She has since transitioned back to her original \"stomach medication\".\nS28 [ASSESSMENT AND PLAN]: We are going to repeat an EKG today.\nS29 [SUBJECTIVE]: Some of which may be water weight decreasing.\nS30 [SUBJECTIVE]: The patient is not on a potassium supplement currently.\nS31 [ASSESSMENT AND PLAN]: We will schedule a preop check the first week or two of June prior to the surgery.\nS32 [SUBJECTIVE]: She is currently scheduled to have surgery on 06/24/2021.\nS33 [SUBJECTIVE]: She denies any issues with heartburn since that time and has stopped taking Prilosec altogether.\nS34 [SUBJECTIVE]: Chronic Congestive Heart Failure.\nS35 [ASSESSMENT AND PLAN]: Her magnesium is below the preferred 2 at 1.7, with some occurrence of bilateral leg cramping, therefore we will start her on magnesium supplement.\nS36 [SUBJECTIVE]: Torsemide 20 mg by mouth daily.\nS37 [ASSESSMENT AND PLAN]: She is about 1.5 kg down in weight.\nS38 [SUBJECTIVE]: The patient was called in for a follow up with me for chronic congestive heart failure with diastolic dysfunction.\nS39 [SUBJECTIVE]: She thought the cramps were related to her being cold.\nS40 [SUBJECTIVE]: Iron deficiency Anemia.\nS41 [SUBJECTIVE]: The patient is due for a colonoscopy.\nS42 [SUBJECTIVE]: Nicole Miller is a 71-year-old female who presents for follow-up.\nS43 [ASSESSMENT AND PLAN]: • Diabetes mellitus.\nS44 [ASSESSMENT AND PLAN]: This is just a screening colonoscopy that she is overdue for.\nS45 [OBJECTIVE RESULTS]: 03/2020 Hgb A1c 5.5.\nS46 [ASSESSMENT AND PLAN]: She had an exacerbation of CHF earlier in the spring.\nS47 [ASSESSMENT AND PLAN]: The patient is overdue for a colonoscopy, which we will try to have done at County Hospital in the next month, prior to a change in her insurance.\nS48 [SUBJECTIVE]: The patient states that she has lost approximately 3 to 3.5 pounds since her last visit in 04/2021.\nS49 [SUBJECTIVE]: She plans to discontinue clopidogrel a week before her surgery.\nS50 [SUBJECTIVE]: Her lisinopril had also been increased up to 10 mg daily in 03/2021.\nS51 [ASSESSMENT AND PLAN]: Call the clinic with any questions or new symptoms.\nS52 [SUBJECTIVE]: Her BNP had been 3000 in 03/2021, up to 6000 in 04/2021.\nS53 [ASSESSMENT AND PLAN]: • Chronic congestive heart failure with mixed presentation.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\":[\"S5\",\"S8\",\"S9\",\"S12\",\"S13\",\"S16\",\"S18\",\"S19\",\"S21\",\"S23\",\"S24\",\"S27\",\"S29\",\"S30\",\"S32\",\"S33\",\"S34\",\"S36\",\"S38\",\"S39\",\"S40\",\"S41\",\"S42\",\"S48\",\"S49\",\"S50\",\"S52\"],\"objective_exam\":[\"S25\"],\"objective_results\":[\"S6\",\"S45\"],\"assessment_and_plan\":[\"S1\",\"S2\",\"S3\",\"S4\",\"S7\",\"S10\",\"S11\",\"S14\",\"S15\",\"S17\",\"S20\",\"S22\",\"S26\",\"S28\",\"S31\",\"S35\",\"S37\",\"S43\",\"S44\",\"S46\",\"S47\",\"S51\",\"S53\"]}",
+  "elapsed_ms": 3116,
+  "usage": {
+    "input_tokens": 1825,
+    "output_tokens": 188
+  },
+  "logprobs": null
+}

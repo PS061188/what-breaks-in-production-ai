@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: The patient did consume a 7 ounce bottle this morning, but mostly denied the next offered bottle and declined cereal.\nS2 [SUBJECTIVE]: Symptoms began yesterday around dinnertime with clear nasal drainage, pulling on his ears bilaterally, and rubbing his nose frequently.\nS3 [SUBJECTIVE]: When the patient aroused this morning, he was warm to the touch.\nS4 [ASSESSMENT AND PLAN]: I counseled the mother that she should be careful not to get the shampoo in the patient eyes and to not use the extra strength shampoos.\nS5 [ASSESSMENT AND PLAN]: Additionally, I suggested trying Zarbee’s for children under 1 years old.\nS6 [SUBJECTIVE]: Cough, nasal congestion, and rhinorrhea.\nS7 [SUBJECTIVE]: His rectal temperature was 100.3 degrees.\nS8 [ASSESSMENT AND PLAN]: The patient is experiencing worsening symptoms of dandruff.\nS9 [ASSESSMENT AND PLAN]: I also provided counseling to the mother to avoid giving honey to the patient for his first year of life due to botulism spores.\nS10 [SUBJECTIVE]: He is accompanied by his mother.\nS11 [SUBJECTIVE]: Treatment has included saline nasal spray, Tylenol, baby Vick's, and a humidifier.\nS12 [ASSESSMENT AND PLAN]: If a croup cough develops, the patient will receive a 0.5 teaspoon.\nS13 [ASSESSMENT AND PLAN]: Additionally, he may also use baby oil and a soft brush on the area.\nS14 [ASSESSMENT AND PLAN]: The patient presents with a viral infection and does not need antibiotics currently.\nS15 [SUBJECTIVE]: He does not have a barky cough or a sore throat.\nS16 [ASSESSMENT AND PLAN]: I recommended Head and Shoulders shampoo, Selsun Blue, or Nizoral A-D 2 times per week, combined with his usual shampoo.\nS17 [ASSESSMENT AND PLAN]: Return in one week for a re-check.\nS18 [SUBJECTIVE]: The patient has been exposed to an older sister who is sick and a cousin who has a sinus infection.\nS19 [SUBJECTIVE]: When his sleeper was removed, he was quite sweaty despite the air conditioner being on.\nS20 [SUBJECTIVE]: Randy Gutierrez is a 9-month-old male who is being evaluated today for a cough, nasal congestion, and rhinorrhea.\nS21 [OBJECTIVE EXAM]: Ears, Eyes, Nose, Throat\nS22 [SUBJECTIVE]: The patient's dandruff is also worsening.\nS23 [ASSESSMENT AND PLAN]: I advised continuation of fluids, rest.\nS24 [OBJECTIVE EXAM]: Nasal congestion, clear mucus, rhinorrhea.\nS25 [SUBJECTIVE]: The only tried treatment is Aveeno shampoo.\nS26 [OBJECTIVE EXAM]: Bilateral pulling of ears, no sore throat or hoarseness.\nS27 [OBJECTIVE EXAM]: Temperature 100.3 degrees.\nS28 [SUBJECTIVE]: He is irritable and having trouble falling asleep, described “like he is fighting it”.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S3\", \"S6\", \"S7\", \"S10\", \"S11\", \"S15\", \"S18\", \"S19\", \"S20\", \"S22\", \"S25\", \"S28\"], \"objective_exam\": [\"S21\", \"S24\", \"S26\", \"S27\"], \"objective_results\": [], \"assessment_and_plan\": [\"S4\", \"S5\", \"S8\", \"S9\", \"S12\", \"S13\", \"S14\", \"S16\", \"S17\", \"S23\"]}",
+  "elapsed_ms": 1743,
+  "usage": {
+    "input_tokens": 1196,
+    "output_tokens": 138
+  },
+  "logprobs": null
+}

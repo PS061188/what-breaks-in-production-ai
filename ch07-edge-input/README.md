@@ -341,3 +341,13 @@ by the same file.
 - **`ood_distances.json`** caches the embedding distances so a replay
   reproduces the same gate decisions without installing `sentence-transformers`
   or downloading the 90 MB bi-encoder. Delete it and run `--live` to recompute.
+
+
+## Probe: LLM Guard's PromptInjection scanner
+
+`probe_llmguard.py` (Python 3.10+, `pip install llm-guard`, own venv). Same 144
+cases, query and document, default threshold. Default match type: 37/48 attempts
+flagged, buried-document payloads missed (1/12) because only the first 512 tokens
+are read; chunk mode: 48/48. Both modes flag all 12 Hindi questions (risk 1.00) and
+all 12 digit strings; padded questions and documents are not flagged. ~50–80 ms per
+scan on CPU. Full write-up in `FINDINGS.md`.

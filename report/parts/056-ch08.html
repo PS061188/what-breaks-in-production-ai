@@ -1,0 +1,135 @@
+<!-- ============================ CHAPTER 8 ============================ -->
+<!-- Rewritten 29 Sep 2026: experiments 8.3–8.7 added; 8.2's self-report figure and 8.5's "empty fields" withdrawn as scorer artefacts. -->
+<h2 class="part">Chapter 8 — Routing and placement errors</h2>
+<div class="summary">
+<span class="kicker">At a glance &middot; Chapter 8 &middot; Routing and placement</span>
+<p class="oneline">Content is filed under the wrong heading. On documents whose sections differ in wording (drug labels) or carry labels (shipping forms), it did not happen. On documents whose sections are decided by convention (clinical notes) it did: about one sentence in six went under a different heading from the author&rsquo;s when the section tag was lost, and almost none when the tag was kept.</p>
+<h4>What the evidence says</h4>
+<table>
+<tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:30%">Number</th></tr>
+<tr><td>Drug labels, headings present or removed (8.1, 8.4)</td><td>Failure did not occur</td><td class="num">0 real errors of 33</td></tr>
+<tr><td>Shipping forms with labels (8.5)</td><td>Failure did not occur</td><td class="num">0 of 108 a level</td></tr>
+<tr><td>Shipping forms with no labels (8.5)</td><td><strong>Failure occurred</strong></td><td class="num">12 of 36 a run</td></tr>
+<tr><td>Clinical notes, tag lost (8.6)</td><td><strong>Failure occurred</strong></td><td class="num">18% of 2,070</td></tr>
+<tr><td>Section definitions in the prompt (8.6)</td><td>Helped, partly</td><td class="num">18% &rarr; 13%</td></tr>
+<tr><td>Section tag kept through the merge (8.6)</td><td><strong>Removed the failure</strong></td><td class="num">1, 0, 1 of 2,070</td></tr>
+<tr><td>1 &middot; Validate every merged output (8.7)</td><td><strong>Works</strong> for dropped and doubled pieces</td><td class="num">13 of 60 repaired by one re-ask</td></tr>
+<tr><td>2 &middot; Where each piece came from (8.3, 8.6)</td><td><strong>Works</strong></td><td class="num">quote check 65 of 66; tag check finds every one</td></tr>
+<tr><td>Confidence queue (removed from the fixes)</td><td>Does not work; misses most errors</td><td class="num">7 in 10 misplaced graded HIGH</td></tr>
+</table>
+<h4>The one thing to remember</h4>
+<p><strong>Whether this failure exists depends on the documents.</strong> Where the words or a label say which section a piece belongs to, the model does not misplace it. Where only a convention says, it does, and the rate depends on whose notes they are. What prevents it is the section tag carried through the merge step, not a better prompt or a confidence grade.</p>
+</div>
+
+<h3 class="top">Experiment 8.1 — Drug labels: does content end up in the wrong box?</h3>
+
+<p>Eleven FDA labels carrying all three sections (indications, contraindications, adverse reactions), three boxes each: 33 placements, three live runs, the plain prompt and the chapter&rsquo;s constrained prompt. The code locates each returned quotation in the sections to decide where it came from.</p>
+
+<div class="verdict">
+  <span class="label">Result</span>
+  <p><strong>No real placement error in any run, with either prompt.</strong> The single case the scorer reported was an artefact: the locator compared only the first 80 characters of a quote (a constant correct for Chapter 9), and those characters &mdash; the drug name and strength &mdash; open every section of a label. At 200 characters, or on the whole quote, it scores as correctly placed.</p>
+</div>
+
+<h3>Experiment 8.2 — The model&rsquo;s account of its own placement</h3>
+
+<p>The fuller version of the prompt asks for a <code>placement_confidence</code> of HIGH, MEDIUM or LOW per field and a <code>requires_review</code> flag. On the labels it graded 97% of fields HIGH in every run, never issued LOW, and set <code>requires_review</code> on 0 of 11 records; with nothing misplaced, the grade could not be tested.</p>
+
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>An earlier version of this report said the model named the wrong section for its own quotation in 18% of cases (3&ndash;15% on re-runs) and called it &ldquo;the finding nobody was looking for&rdquo;. That figure was produced by the same 80-character locator artefact as 8.1 and is withdrawn. The lesson that survives does not need it: ask your code where a quote is, not the model.</p>
+</div>
+
+<h3>Experiment 8.3 — Does the placement check catch misplacement when there is some?</h3>
+
+<p>Because nothing was misplaced on the labels, misplacement was planted: in the recorded outputs, the value and quote of two boxes were swapped by code, every pair once &mdash; 66 misplacements with known locations, and 33 boxes left untouched.</p>
+
+<table>
+  <tr><th style="width:40%">Locator window</th><th class="num">Swaps caught (of 66)</th><th class="num">Untouched boxes wrongly rejected (of 33)</th></tr>
+  <tr><td>80 characters (as shipped)</td><td class="num">65</td><td class="num">1</td></tr>
+  <tr><td>200 characters</td><td class="num">66</td><td class="num">4</td></tr>
+  <tr><td>Whole quote</td><td class="num">66</td><td class="num">6</td></tr>
+</table>
+<p>Every rejection named the section the quote had really come from. The check works when there is something to check; the window trades recall on long quotes against precision on where a quote came from.</p>
+
+<h3>Experiment 8.4 — Drug labels with the headings removed</h3>
+
+<p>Each label&rsquo;s three sections were split into sentences and shuffled together with no headings, so the model had to decide from the words alone. Both prompts, three draws each. <strong>No real misplacement.</strong> Every flag the scorer raised was, on reading, a correctly placed sentence whose quote the locator could not find, or the 80-character artefact again. The reason is in the documents: &ldquo;indicated for the treatment of&rdquo; and &ldquo;contraindicated in patients with&rdquo; can each belong to only one section.</p>
+
+<h3>Experiment 8.5 — Generated shipping documents: labels varied, then removed</h3>
+
+<p>Forty-eight shipping documents generated by a script with invented company names and streets, so every right answer is known. Each has an origin, a destination and a billing address. Four levels, twelve documents each; three draws per prompt.</p>
+
+<table>
+  <tr><th style="width:34%">Level</th><th class="num">Plain prompt, misplaced (of 36)</th><th class="num">Prompt 8-1, misplaced (null)</th><th class="num">Graded prompt, misplaced (null)</th></tr>
+  <tr><td>1 &middot; plain labels (Ship From, Ship To, Bill To)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>2 &middot; varied labels (Consignee, Payer, Invoice to&hellip;)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>3 &middot; no labels, a line stating the order</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>4 &middot; no labels, no line; half recipient-first</td><td class="num">12, 12, 12</td><td class="num">12, 15, 11 (4, 2, 5)</td><td class="num">12, 12, 12 (2, 3, 2)</td></tr>
+</table>
+
+<p>At level 4 every prompt assumed sender-first and swapped origin and destination on every document written the other way round. Prompt 8-1&rsquo;s rule &mdash; fill a field only from text carrying its keywords, otherwise null &mdash; was not followed. The graded prompt marked 104 of 108 level-4 fields MEDIUM or LOW and flagged all 36 records, but gave MEDIUM to 36 correct fields and 34 wrong ones: it could tell the document gave it nothing, not which guess was wrong.</p>
+
+<p>A fourth prompt asked, per field, whether the document states the role in words. It answered &ldquo;stated&rdquo; on 108 of 108 fields at level 1, 105 at level 2 and 82 at level 3 (every &ldquo;not stated&rdquo; there on a correct field), and &ldquo;not stated&rdquo; on all 108 level-4 fields while still filling them.</p>
+
+<div class="plain">
+  <span class="label">Withdrawn</span>
+  <p>A first write-up said the plain prompt &ldquo;left 6, 9 and 3 fields empty&rdquo; at level 2 and that Prompt 8-1&rsquo;s definitions fixed that. The judge matched company names only; those fields held correct addresses returned without the company line. Scored on company or street, every prompt filled every field at levels 1&ndash;3. Levels 1&ndash;3 were also re-recorded when level 4 was added; the numbers above are the recordings on disk.</p>
+</div>
+
+<h3>Experiment 8.6 — Real clinical notes: the corpus the failure needs</h3>
+
+<h4>The materials</h4>
+<table>
+  <tr><th style="width:26%">Item</th><th>Detail</th></tr>
+  <tr><td><strong>Corpus</strong></td><td>60 reference visit notes from ACI-Bench (Yim et al., <em>Nature Scientific Data</em>, 2023; CC BY 4.0), twenty from each of its three kinds of visit: natural doctor&ndash;patient conversation (<code>aci</code>), a doctor giving spoken commands to a virtual assistant (<code>virtassist</code>), and a doctor dictating to a scribe before and after the visit (<code>virtscribe</code>). Role-played or constructed encounters; notes checked and rewritten by scribes or physicians. File: <code>data/aci_bench_notes.json</code>.</td></tr>
+  <tr><td><strong>Sections</strong></td><td>Four divisions &mdash; subjective, objective exam, objective results, assessment and plan &mdash; assigned with the MEDIQA-Chat 2023 section tagger&rsquo;s rule, which ACI-Bench&rsquo;s own evaluation uses: the first heading of each kind opens the division, which runs to the next such heading. Re-implemented from its header lists; identical spans on all 207 notes of the benchmark.</td></tr>
+  <tr><td><strong>Task</strong></td><td>Each note&rsquo;s sentences numbered and shuffled, headings removed; the model files every sentence under one of the four headings. 2,070 scored sentences. A sentence whose exact text appears in two divisions (46 of them, usually the opening line restated under the assessment) counts as correct under either.</td></tr>
+  <tr><td><strong>Prompts</strong></td><td>Headings only; headings with definitions (Prompt 8-2); definitions plus a confidence grade; headings with each sentence&rsquo;s section tag given in the input. Three draws each, 720 calls, $1.98.</td></tr>
+</table>
+
+<div class="plain">
+  <span class="label">Why the vital-sign lines were not scored</span>
+  <p>In these notes the vital signs (blood pressure, pulse, temperature) sit in a block headed VITALS, placed between the review of systems and the physical exam. The section tagger only recognises the four main headings, so by its rule a VITALS block belongs to whatever main heading came before it: the history. The note&rsquo;s own heading makes VITALS a section of its own, and most clinicians would file vital signs as an objective finding, under the examination. Scoring those lines would have counted a model that files blood pressure under the examination as wrong by the benchmark&rsquo;s rule while most doctors would call it right &mdash; adding disagreements between rules to the error count, not model mistakes. So lines under a VITALS heading were left out of the scoring: 27 sentences in 15 of the 60 notes, against 2,070 scored. The conflict itself is exactly what the chapter is about; it is just not one to score either way.</p>
+</div>
+
+<h4>The numbers</h4>
+<table>
+  <tr><th style="width:40%">What the model was given</th><th class="num">Misplaced, run 1</th><th class="num">Run 2</th><th class="num">Run 3</th></tr>
+  <tr><td>Headings only</td><td class="num">375 (18.1%)</td><td class="num">366 (17.7%)</td><td class="num">381 (18.4%)</td></tr>
+  <tr><td>Headings and definitions (Prompt 8-2)</td><td class="num">286 (13.8%)</td><td class="num">268 (12.9%)</td><td class="num">256 (12.4%)</td></tr>
+  <tr><td>Definitions and a grade</td><td class="num">271 (13.1%)</td><td class="num">266 (12.9%)</td><td class="num">269 (13.0%)</td></tr>
+  <tr><td>Headings and the section tag</td><td class="num">1</td><td class="num">0</td><td class="num">1</td></tr>
+</table>
+
+<ul>
+  <li><strong>By kind of visit</strong> (headings only, three runs summed): conversation 8.8%, virtual assistant 15.9%, scribe dictation 27.7%. Same model, same instructions.</li>
+  <li><strong>Where misplaced sentences went</strong> (headings only, summed): history &rarr; assessment and plan 341; history &rarr; exam 198; assessment and plan &rarr; results 172; assessment and plan &rarr; history 165.</li>
+  <li><strong>Stability:</strong> of 462 sentences misplaced at least once, 283 were misplaced in all three runs &mdash; convention, not chance.</li>
+  <li><strong>Dropped and doubled sentences</strong> (per run): headings only 33, 39, 32 not filed and 3, 2, 0 filed twice; Prompt 8-2 12, 16, 16 and 0, 0, 3; tag kept 3, 2, 1 and none.</li>
+  <li><strong>The grade</strong> (6,201 graded placements, 806 misplaced): misplaced share 10% among HIGH, 39% among MEDIUM, 63% among LOW; LOW issued 68 times. A queue on anything below HIGH receives 206, 199, 188 sentences a run (117, 117, 113 correct), catches 89, 82, 75 and misses 182, 184, 194.</li>
+</ul>
+
+<p><strong>Limit.</strong> The sentences were the notes&rsquo; own, written by their authors. The test measures the merge step when the tag is lost; it says nothing about how often a generator writes a sentence into the wrong section in the first place.</p>
+
+<h3>Experiment 8.7 — What does a strict output schema guarantee?</h3>
+
+<p>The plain prompt on the 60 notes, one draw per condition. The validator requires every sentence exactly once and no unknown ID; on failure the model is re-asked with the error, up to twice (the loop Instructor automates; Instructor 1.17 itself was also run on ten notes and returned a valid filing each time).</p>
+
+<table>
+  <tr><th style="width:36%">Condition</th><th class="num">Invented keys</th><th class="num">Unknown IDs</th><th class="num">Filed twice</th><th class="num">Dropped</th><th class="num">Misplaced</th></tr>
+  <tr><td>No schema</td><td class="num">0</td><td class="num">0</td><td class="num">2</td><td class="num">8</td><td class="num">376</td></tr>
+  <tr><td>Schema enforced by the API</td><td class="num">0</td><td class="num">0</td><td class="num">3</td><td class="num">33</td><td class="num">375</td></tr>
+  <tr><td>Schema + Pydantic validator + re-ask</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">383</td></tr>
+</table>
+<p>13 of 60 outputs failed the validator at first; all 13 were fixed by one re-ask. The schema&rsquo;s guarantee (no invented keys) was never needed; the validator loop is what kept every sentence; none of the three touched misplacement.</p>
+
+<h3>The three engineering fixes</h3>
+<table>
+  <tr><th style="width:30%">Fix (book&rsquo;s order)</th><th>Result</th><th>Verdict</th></tr>
+  <tr><td><strong>1 &middot; Validate every merged output</strong> (merge step)</td><td>No invented keys with or without a schema; schema call dropped 33 sentences, free call 8; validator + re-ask: 0</td><td><strong>Works</strong> &mdash; needs no answer key; keep structured output on as well</td></tr>
+  <tr><td><strong>2 &middot; Where each piece came from</strong></td><td>Quote check (generation step, sectioned sources): 65 of 66 planted swaps. Tag comparison (merge step): every misplacement when the tag exists</td><td><strong>Works</strong> &mdash; code, no cost per call</td></tr>
+  <tr><td><strong>Confidence queue</strong> (was fix 3)</td><td>Labels: nothing to find. Unlabelled forms: flags every document, as a code check for missing labels does. Notes: catches 3 in 10 misplaced sentences, more correct than wrong in the queue</td><td><strong>Removed from the book&rsquo;s fixes</strong>; route on code checks instead</td></tr>
+</table>
+
+<h3>Chapter 8 verdict</h3>
+<p><strong>Real, and document-dependent.</strong> The failure does not occur where the words or a label name the section, and does occur where only a convention does &mdash; at a rate that varies threefold between kinds of visit in one benchmark. The fix that removed it is structural: keep each piece&rsquo;s section tag through the merge step, and compare the tag with where the piece was filed. Prompts reduce it partly; confidence grades do not find it.</p>

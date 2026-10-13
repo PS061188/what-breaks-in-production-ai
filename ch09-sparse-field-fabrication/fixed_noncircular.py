@@ -159,9 +159,10 @@ def main() -> int:
     headline(
         "Fabrication on fields with no supporting section",
         pct(fab, absent),
-        f"{absent} such fields across {len(cases)} labels. Unlike the original "
-        "design, the check CAN pass here — the supporting sections exist for "
-        "other drugs in the same run.",
+        f"{absent} such fields across {len(cases)} labels. Forced to zero, as in "
+        "the original design: each field has one permitted section, and on these "
+        "labels that section is missing, so no quote can be located in it. Only "
+        "the recall line below is a measurement (FINDINGS, Chapter 9 re-read).",
     )
     headline(
         "Recall on fields that do have a supporting section",

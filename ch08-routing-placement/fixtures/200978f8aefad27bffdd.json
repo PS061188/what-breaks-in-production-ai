@@ -1,0 +1,124 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\nFor each sentence also give placement_confidence: HIGH, MEDIUM or LOW, meaning how sure you are that it belongs under that heading rather than another. If any sentence is LOW, set requires_review to true.\n\n<sentences>\nS1: • Respiratory: Lungs are clear to auscultation bilaterally.\nS2: She had a steroid injection for her herniated disc several months ago, which has been doing well.\nS3: The pain is described as burning and is located in the middle of her chest.\nS4: • Neck: No carotid bruits appreciable.\nS5: She has had prior stenting for her heart and heart vessels in the past.\nS6: Her recent echocardiogram demonstrated a reduced ejection fraction of 45%.\nS7: • Medical Reasoning: The patient is doing well postoperatively.\nS8: • Medical Reasoning: She has been asymptomatic since receiving a steroid injection several months ago.\nS9: Over the last month, she reports chest pain approximately 3-4 times a week with ambulation.\nS10: Initiate Crestor 20 mg once daily.\nS11: Endorses chest pain with exertion.\nS12: Evelyn Morris is a 56-year-old female with a past medical history significant for coronary artery disease, prior carpal tunnel release, and a herniated disc.\nS13: Coronary artery disease.\nS14: • Patient Education and Counseling: If she has any recurrent symptoms, she will let me know and we can take it from there.\nS15: • Musculoskeletal: Denies muscle pain.\nS16: Her chest pain does resolve with rest.\nS17: • Cardiovascular: Slight 3/6 systolic ejection murmur.\nS18: Evelyn Morris is a 56-year-old female with a past medical history significant for coronary artery disease, prior carpal tunnel release, and a herniated disc.\nS19: • Constitutional: Denies fevers, chills.\nS20: • Medical Treatment: Continue aspirin and Toprol.\nS21: • Integumentary: Well-healed surgical scars on her right wrist.\nS22: Status post right carpal tunnel release.\nS23: She presents for her annual exam.\nS24: Echocardiogram shows reduced ejection fraction at 45% with a slight mitral regurgitation.\nS25: • Medical Reasoning: She reports a burning chest pain with exertion approximately 3 times per week for the past month.\nS26: She has not had any back pain or any limitations in movement.\nS27: • Cardiovascular: Denies dyspnea.\nS28: She denies pain at rest.\nS29: • Ears, Nose, Mouth and Throat: Endorses nasal congestion form allergies.\nS30: She has had a little bit of nasal congestion from allergies.\nS31: The patient denies, shortness of breath, nausea, vomiting, or lower extremity edema.\nS32: No numbness or tingling in her hands.\nS33: She has full range of motion and it feels really good.\nS34: I do not think we need to refer her for any further steroid injections or physical therapy at this time.\nS35: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS36: ECG prior coronary artery disease.\nS37: She has returned to work and denies any recurrent symptoms.\nS38: No wheezes, rales, or rhonchi.\nS39: • Respiratory: Denies shortness of breath.\nS40: She presents for her annual exam.\nS41: Her right carpal tunnel release was performed a couple of years ago and she is back to work.\nS42: • Additional Testing: We will order a cardiac stress test and a lipid panel for further evaluation.\nS43: The patient states she has been doing okay with her herniated disc in her back.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "placement_confidence": {
+              "type": "string",
+              "enum": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "placement_confidence"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "requires_review": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan",
+      "requires_review"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [{\"id\": \"S2\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S3\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S5\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S9\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S11\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S12\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S16\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S18\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S19\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S23\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S26\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S27\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S28\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S29\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S30\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S31\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S32\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S33\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S37\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S39\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S40\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S41\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S43\", \"placement_confidence\": \"HIGH\"}], \"objective_exam\": [{\"id\": \"S1\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S4\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S15\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S17\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S21\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S38\", \"placement_confidence\": \"HIGH\"}], \"objective_results\": [{\"id\": \"S6\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S24\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S36\", \"placement_confidence\": \"MEDIUM\"}], \"assessment_and_plan\": [{\"id\": \"S7\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S8\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S10\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S13\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S14\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S20\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S22\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S25\", \"placement_confidence\": \"MEDIUM\"}, {\"id\": \"S34\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S35\", \"placement_confidence\": \"HIGH\"}, {\"id\": \"S42\", \"placement_confidence\": \"HIGH\"}], \"requires_review\": true}",
+  "elapsed_ms": 3652,
+  "usage": {
+    "input_tokens": 1981,
+    "output_tokens": 726
+  },
+  "logprobs": null
+}

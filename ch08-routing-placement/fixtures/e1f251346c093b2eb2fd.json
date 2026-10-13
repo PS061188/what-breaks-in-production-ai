@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: Bra strap grooving in shoulders or indentation on lateral chest wall: Occasionally.\nS2: The patient will be switching to a different insurance policy in 07/2021.\nS3: The patient endorses back and neck pain since she was in high school.\nS4: An extensive discussion of breast reduction surgery was performed with the patient with consideration of the patient's age, co-morbidities, previous surgical history, body habitus, BMI, and smoking history.\nS5: She endorses the following symptoms because of her macromastia for 7 years:\nS6: Specific breast size was discussed, also not guaranteed.\nS7: Her minimum required resection based on a BSA of 2.65 with the Schnur scale is 1792 g, which should be attainable.\nS8: Current breast size is a G cup, although she primarily wears a 34 E sports bra for comfort, and desired breast size is a B or C cup.\nS9: Propranolol for migraine prevention.\nS10: The patient understands that the decision for a free nipple graft will be made intraoperatively based on assessment of nipple perfusion.\nS11: Intertrigo, rash or yeast or other skin problems beneath breasts: Yes, persistent sweating.\nS12: I explained the expected outcomes of using a free nipple graft such as an insensate nipple and an inability to breast feed.\nS13: Paresthesia of the hands or arms: Yes.\nS14: Nipple pain or numbness: Yes.\nS15: Stooped posture: Yes.\nS16: Drug: No prior history.\nS17: Surgical time, immediate recovery course, and longer term recovery course were discussed.\nS18: The patient has attempted non-surgical treatments with minimal relief and is an ideal candidate for bilateral reduction mammoplasty.\nS19: She reports weight loss of 10 pounds over the past few months and would like to lose an additional 20 pounds.\nS20: Physical therapy: No.\nS21: Mother with prior history of breast cancer at age 40.\nS22: There is no nipple retraction or discharge bilaterally.\nS23: No breast tenderness, masses, or axillary lymphadenopathy is palpable.\nS24: Currently she has Blue Cross Blue Shield insurance but will be added to her spouse’s insurance plan in 07/2021.\nS25: Physical activity limited by breast size: Yes.\nS26: Return to clinic prior to scheduled surgery date for preoperative counseling and consent.\nS27: Jones reports this is her first visit in regard to a breast reduction and has been interested in getting a breast reduction for approximately 7 years.\nS28: Inspection reveals asymmetrical breasts with severe ptosis bilaterally.\nS29: The patient has undergone the following therapies:\nS30: Julia Jones is a 25-year-old female who presents for evaluation of macromastia.\nS31: Significant for migraine headaches.\nS32: Chronic upper back pain: Yes.\nS33: Her back and neck pain has been managed by a chiropractor for a few years.\nS34: Occupational and Educational: Currently studying to be a psychologist.\nS35: No prior pregnancies, potentially planning on pregnancies in the future, and unsure of breast feeding.\nS36: Risks and benefits of were discussed with the patient The patient understands the above risks, benefits and alternatives to surgery and wishes to proceed with bilateral reduction mammaplasty.\nS37: If approved, she will return for preoperative counseling and consent.\nS38: Non-narcotic pain medication: No.\nS39: Relief of the patient's current symptoms related to macromastia was not guaranteed though is expected to improve.\nS40: Narcotic pain medication: No.\nS41: Once we get the new insurance information from the patient, we will submit it to her insurance company.\nS42: Given her extremely large breasts and the measurements above, there is potential for using a free nipple graft.\nS43: Julia Jones is a 25-year-old female with symptomatic macromastia presenting for evaluation of breast reduction.\nS44: Her previous breast surgery includes:\nS45: Tobacco: No prior history.\nS46: Previous reconstruction: No.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S3\", \"S5\", \"S8\", \"S9\", \"S11\", \"S13\", \"S14\", \"S15\", \"S16\", \"S19\", \"S20\", \"S21\", \"S24\", \"S25\", \"S27\", \"S29\", \"S30\", \"S31\", \"S32\", \"S33\", \"S34\", \"S35\", \"S38\", \"S40\", \"S44\", \"S45\", \"S46\"], \"objective_exam\": [\"S22\", \"S23\", \"S28\"], \"objective_results\": [\"S2\", \"S7\"], \"assessment_and_plan\": [\"S4\", \"S6\", \"S10\", \"S12\", \"S17\", \"S18\", \"S26\", \"S36\", \"S37\", \"S39\", \"S41\", \"S42\", \"S43\"]}",
+  "elapsed_ms": 3145,
+  "usage": {
+    "input_tokens": 1623,
+    "output_tokens": 209
+  },
+  "logprobs": null
+}

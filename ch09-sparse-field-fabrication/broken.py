@@ -107,16 +107,15 @@ def main() -> int:
     headline(
         "Fabrication rate on fields the document does not cover",
         pct(fabricated, absent_total),
-        "Every one of these is a value a downstream system will store and a "
-        "reviewer will read as extracted fact.",
+        "Opened 29 Sep 2026: both are correct readings of the supplied text "
+        "(Furosemide's interaction warning, Omeprazole's children's line), so "
+        "0 are fabrications. See FINDINGS, Chapter 9 re-read.",
     )
     headline(
         "Fabrications whose source_quote IS in the document",
         pct(fabricated - invented_quotes, fabricated) if fabricated else "n/a",
-        "The uncomfortable number. These are not invented quotes — the text is "
-        "really there, in a section that does not support the field it was "
-        "attached to. Asking for a quote does not stop this, and neither does "
-        "checking that the quote exists.",
+        "Withdrawn 29 Sep 2026: the quotes are real because the values are. "
+        "No fabrication is left to carry a quote.",
     )
     note(
         f"{covered_total} field-instances are excluded from that denominator: their "

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: If he fails to improve, we can consider obtaining an MRI for further evaluation.\nS2 [SUBJECTIVE]: Neurological: Reports tingling in the right foot.\nS3 [SUBJECTIVE]: Ice and Advil provided no relief, but his pain is less severe when he is in a seated position and taking a hot shower helped alleviate his pain.\nS4 [ASSESSMENT AND PLAN]: I recommend we treat this conservatively with rest, meloxicam, and formal physical therapy.\nS5 [SUBJECTIVE]: Prior to this, he recalls a similar episode approximately 3 years ago in which his symptoms resolved after 1 day.\nS6 [OBJECTIVE EXAM]: MSK: Examination of the lumbar spine: No pain on extension.\nS7 [OBJECTIVE EXAM]: Dorsiflexion is normal.\nS8 [OBJECTIVE EXAM]: NEURO: Normal strength and sensation.\nS9 [OBJECTIVE RESULTS]: X-rays obtained and reviewed in office today were normal.\nS10 [OBJECTIVE EXAM]: Pulses are equal in all extremities.\nS11 [OBJECTIVE EXAM]: Pain with palpation around L5.\nS12 [ASSESSMENT AND PLAN]: The patient will follow up in 2 weeks.\nS13 [SUBJECTIVE]: He is accompanied today by his partner.\nS14 [SUBJECTIVE]: Approximately 2 hours after he finished raking leaves yesterday, the patient began to feel a tightening sensation in his low back and tingling in his right foot.\nS15 [SUBJECTIVE]: The patient's partner reports that his pain seems to worsen when he stands up.\nS16 [OBJECTIVE EXAM]: Some pain with flexion.\nS17 [SUBJECTIVE]: Bryan Brooks is a pleasant 39-year-old male who presents to the clinic today for the evaluation of low back pain.\nS18 [SUBJECTIVE]: Musculoskeletal: Reports low back pain.\nS19 [ASSESSMENT AND PLAN]: The examination findings and x-ray results were discussed with the patient and his partner today.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S17\", \"S18\", \"S2\", \"S14\", \"S3\", \"S5\", \"S13\", \"S15\"], \"objective_exam\": [\"S6\", \"S11\", \"S16\", \"S7\", \"S8\", \"S10\"], \"objective_results\": [\"S9\"], \"assessment_and_plan\": [\"S19\", \"S4\", \"S1\", \"S12\"]}",
+  "elapsed_ms": 2910,
+  "usage": {
+    "input_tokens": 899,
+    "output_tokens": 101
+  },
+  "logprobs": null
+}

@@ -30,7 +30,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
   <div><span class="n">2</span> Input integrity failures
     <span class="sub">Silent corruption 39% · the stronger model is worse · 1 prompt, 4 fixes</span></div>
   <div><span class="n">3</span> Hallucinations and confident fabrication
-    <span class="sub">92% → 23% from one clause · the best-evidenced chapter · 1 prompt, 4 fixes</span></div>
+    <span class="sub">6% → 91% from one clause · 0% with the grounding prompt · 1 prompt, 4 fixes</span></div>
   <div><span class="n">4</span> Classification cascade errors
     <span class="sub">Barely reproduces · the book's own prompt was the worst classifier · 4 fixes</span></div>
   <div><span class="n">5</span> Extraction and normalisation quality loss
@@ -42,7 +42,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
   <div><span class="n">8</span> Routing and placement errors
     <span class="sub">Did not reproduce · but produced the finding that corrected Chapter 9</span></div>
   <div><span class="n">9</span> Sparse field fabrication
-    <span class="sub">6% fabrication · and the worst mistake in this report, corrected · 4 fixes</span></div>
+    <span class="sub">Did not reproduce · and the worst mistake in this report, corrected · 4 fixes</span></div>
   <div><span class="n">10</span> Silent omissions
     <span class="sub">55 of 55 returned · the fixes made it worse · 4 fixes</span></div>
   <div><span class="n">D</span> Does any of this hold on other models?
@@ -65,10 +65,10 @@ engineering fixes in exactly the order the chapter lists them.</p>
 <h4>The four findings that changed the book</h4>
 <table>
 <tr><th style="width:34%">Finding</th><th>Evidence</th></tr>
-<tr><td><strong>Requiring a source quote does not catch fabrication</strong></td>
-    <td><strong>14 of 14</strong> fabricated values carried a quote that really did appear in the document. The model does not invent quotations; it attaches genuine ones to values it invented.</td></tr>
+<tr><td><strong>A check can be built so that it cannot fail</strong></td>
+    <td>Chapter 9&rsquo;s section check reported <strong>0%</strong> fabrication in two designs, and both zeros were arithmetic: the check let a value through only from the one section the test itself treated as the answer, so on fields with no such section nothing could pass. The book now says so, and prints the check&rsquo;s real cost instead: <strong>5</strong> correct children&rsquo;s doses rejected.</td></tr>
 <tr><td><strong>A model cannot check its own work</strong></td>
-    <td>Measured five separate ways, in five chapters, independently: its confidence, its own source attribution, its own quote, its own item count, its own completeness. All five failed.</td></tr>
+    <td>Measured four separate ways, in four chapters, independently: its confidence, its verdict on its own input, its own item count, its own completeness. All four failed.</td></tr>
 <tr><td><strong>The stronger model is worse at the failure that matters most</strong></td>
     <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 80%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
 <tr><td><strong>Nothing was measured twice until the end</strong></td>
@@ -92,7 +92,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
 </ul>
 
 <h4>The honest headline</h4>
-<p><strong>Four of the nine failures barely reproduced at all on clean, well-formed, professionally edited English documents.</strong> That is not a retraction. These failures are <em>rare, severe and silent</em>, and rare-plus-severe-plus-silent is the worst combination there is for detection: too infrequent to show up in testing, too damaging to absorb, too quiet to notice. The clearest single example in the whole project is two paediatric drug strengths dropped from a warning that three suspensions are not interchangeable &mdash; from one sentence, with nothing flagged, in an output that looked complete.</p>
+<p><strong>Five of the nine failures barely reproduced at all on clean, well-formed, professionally edited English documents.</strong> That is not a retraction. These failures are <em>rare, severe and silent</em>, and rare-plus-severe-plus-silent is the worst combination there is for detection: too infrequent to show up in testing, too damaging to absorb, too quiet to notice. The clearest single example in the whole project is two paediatric drug strengths dropped from a warning that three suspensions are not interchangeable &mdash; from one sentence, with nothing flagged, in an output that looked complete.</p>
 </div>
 
 <h2 class="part">A — Why this report exists</h2>
@@ -102,7 +102,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
 a prompt template and a list of engineering fixes. They were written carefully.
 They were never executed. This report is what happened when they were.</p>
 
-<p>That gap matters more than it might sound. A prompt is not like a paragraph
+<p>That gap matters more than it might seem. A prompt is not like a paragraph
 of prose, where a careful writer can be reasonably confident the words do what
 they intend. A prompt is an instruction to a machine, and the only way to find
 out what a machine does with an instruction is to give it the instruction and
@@ -121,10 +121,10 @@ failure did not occur at all, we say that too.</p>
   <span class="label">The short version</span>
   <p>Most of what the book claims held up, and two prompt fixes work
   dramatically — one of them across four models from two different companies.</p>
-  <p>But <strong>four of the nine failures did not reproduce on a current
+  <p>But <strong>five of the nine failures did not reproduce on a current
   model</strong>. <strong>Five engineering fixes do not work as the book
   describes</strong>, two of them cannot work on the problem they are aimed at,
-  one costs ten times the thing it protects, and one <strong>reproduces the exact
+  one costs five times the thing it protects, and one <strong>reproduces the exact
   harm its own chapter opens by warning about</strong>. Two chapters give the same
   advice and one of them is broken.</p>
   <p>The book also makes a claim five separate times without knowing it: that a

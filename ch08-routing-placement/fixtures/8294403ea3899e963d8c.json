@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Mother, deceased age 45, from complications of breast cancer.\nS2: Employed in healthcare, supports Covid evaluation centers and clinics.\nS3: The patient is being seen regularly for monitoring.\nS4: Her work involves supporting Covid evaluation centers and clinics.\nS5: The patient relates her anxiety to work related stress and possibly aging.\nS6: She is also still using vaginal cream one time per week which has improved symptoms of itching and discomfort.\nS7: Brown started the patient on Buspar, which has successfully controlled her anxiety.\nS8: Bilateral breast cysts.\nS9: This has resolved and she reports she has lost weight in the past 6 months.\nS10: Her last pap smear was in 2019, with negative/negative results.\nS11: Follow-up bilateral breast cysts.\nS12: Initially, she was experiencing spikes in anxiety prior to menstruation, but her anxiety then became more random with an unclear cause.\nS13: The patient agreed to this plan.\nS14: Torres experienced increased anxiety in 11/2021 and 12/2021, stating “it was brutal” and felt she could not manage her symptoms and sought treatment.\nS15: History of abnormal pap smear: 2009.\nS16: Breast: Breast density.\nS17: • Follow-up bilateral breast cysts.\nS18: Donna Torres is a 40-year-old female who presents for follow-up surveillance of bilateral breast cysts.\nS19: Last pap smear: 2019.\nS20: She did have an abnormal pap smear in 2009, which resulted in repeat pap smears per 6 months until her results normalized.\nS21: To note, the patient was started on Singulair, which the patient was told could also cause anxiety.\nS22: She is being seen today for surveillance of the cysts.\nS23: The patient discontinued Camila birth control, which did result in a significant increase in appetite.\nS24: Schedule appointment with breast specialist.\nS25: No additional treatment needed at this time.\nS26: The patient is taking progesterone, which was initially prescribed to support normalization of menstruation, which was effective.\nS27: She confirms receiving both Covid vaccinations.\nS28: Physical exam indicated stable breast density bilaterally.\nS29: The plan is to continue close monitoring and the patient will be referred to breast specialist for additional review.\nS30: The patient reports continual presence of “lumps” in bilateral breasts with some soreness.\nS31: Follow-up bilateral breast cysts\nS32: Call clinic with any additional concerns.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S4\", \"S5\", \"S6\", \"S12\", \"S14\", \"S15\", \"S18\", \"S20\", \"S21\", \"S23\", \"S26\", \"S27\", \"S30\"], \"objective_exam\": [\"S16\", \"S28\"], \"objective_results\": [\"S8\", \"S10\", \"S11\", \"S19\"], \"assessment_and_plan\": [\"S3\", \"S7\", \"S9\", \"S13\", \"S22\", \"S24\", \"S25\", \"S29\", \"S31\", \"S32\"]}",
+  "elapsed_ms": 2608,
+  "usage": {
+    "input_tokens": 1029,
+    "output_tokens": 149
+  },
+  "logprobs": null
+}

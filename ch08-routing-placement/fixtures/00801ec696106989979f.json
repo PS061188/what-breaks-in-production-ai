@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: The patient may also utilize ice or heat packs.\nS2 [ASSESSMENT AND PLAN]: She should rest her left arm and may not lift or carry heavy objects with her left arm.\nS3 [ASSESSMENT AND PLAN]: If the patient does not have relief from the ibuprofen she will take Aleve.\nS4 [ASSESSMENT AND PLAN]: We may repeat the left shoulder x-ray at that time.\nS5 [SUBJECTIVE]: Anderson is a 44-year-old female who presents today for an evaluation of the left shoulder.\nS6 [ASSESSMENT AND PLAN]: The patient should follow up in three to four weeks if the pain persists.\nS7 [SUBJECTIVE]: She states that she was in gymnastics 1 week ago.\nS8 [ASSESSMENT AND PLAN]: I have recommended taking ibuprofen 600 mg three times per day for one week.\nS9 [OBJECTIVE EXAM]: Examination of the left shoulder shows pain with range of motion.\nS10 [OBJECTIVE RESULTS]: X-rays of the left shoulder, 3 views obtained on today's visit show no obvious signs of fracture.\nS11 [SUBJECTIVE]: She had taken Tylenol for 2 to 3 days with no improvement in her symptoms.\nS12 [SUBJECTIVE]: She has pain with any type of movement of her left shoulder.\nS13 [SUBJECTIVE]: The pain has been present since that time.\nS14 [ASSESSMENT AND PLAN]: At this point, I discussed the diagnosis and treatment options with the patient.\nS15 [SUBJECTIVE]: She has a surgical history significant for prior left upper extremity surgery.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S5\", \"S7\", \"S11\", \"S12\", \"S13\", \"S15\"], \"objective_exam\": [\"S9\"], \"objective_results\": [\"S10\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S3\", \"S4\", \"S6\", \"S8\", \"S14\"]}",
+  "elapsed_ms": 1503,
+  "usage": {
+    "input_tokens": 802,
+    "output_tokens": 85
+  },
+  "logprobs": null
+}

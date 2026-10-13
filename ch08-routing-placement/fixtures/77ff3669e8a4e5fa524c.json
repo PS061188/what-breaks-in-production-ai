@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: - Auscultation: Bowel sounds normal in all 4 quadrants.\nS2: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS3: Patient reports history of asthma.\nS4: Patient reports she is a student and enjoys playing water polo as well as being active with aerobics and running.\nS5: - Medical Treatment: I would like for the patient to be seen by a therapist.\nS6: We also discussed Singulair and that she should start to see a difference in her breathing within approximately 1 month.\nS7: - Examination of Throat: Tonsils have been previously removed.\nS8: - Patient Education and Counseling: I explained the side effects of albuterol to the patient.\nS9: Psychiatric: Reports mood changes.\nS10: Constitutional: Reports fatigue.\nS11: Normal capillary refill and perfusion.\nS12: Patient reports history of seasonal allergies.\nS13: - Palpation: No enlarged lymph nodes.\nS14: At this time, we will try a daily medication since it looks like she might be having some allergies.\nS15: - Examination of Mouth: Normal.\nS16: Respiratory: Reports shortness of breath.\nS17: - Medical Reasoning: The patient reports being under a lot of stress with school.\nS18: She is not currently utilizing a daily medication.\nS19: She will also complete our screening questionnaire.\nS20: We will start her on Singulair in about a month.\nS21: I believe this may be attributing to her mood.\nS22: - Examination of Ears: Mild fluid in ears.\nS23: - Examination: No rash or lesions.\nS24: Patient reports history of tonsillectomy.\nS25: The patient will follow up in 6 weeks for recheck.\nS26: Ears, Nose, Mouth, and Throat\nS27: She can continue to use the albuterol inhaler.\nS28: - Medical Reasoning: The patient has experienced an increased need to use her albuterol inhaler.\nS29: Patient reports using an albuterol inhaler, 2 puffs as needed.\nS30: - Medical Treatment: We will start her on a daily asthma medication.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S4\", \"S9\", \"S10\", \"S12\", \"S16\", \"S17\", \"S18\", \"S24\", \"S28\", \"S29\"], \"objective_exam\": [\"S1\", \"S7\", \"S11\", \"S13\", \"S15\", \"S22\", \"S23\"], \"objective_results\": [], \"assessment_and_plan\": [\"S2\", \"S5\", \"S6\", \"S8\", \"S14\", \"S19\", \"S20\", \"S21\", \"S25\", \"S27\", \"S30\"]}",
+  "elapsed_ms": 1765,
+  "usage": {
+    "input_tokens": 964,
+    "output_tokens": 142
+  },
+  "logprobs": null
+}

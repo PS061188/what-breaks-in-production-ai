@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-61963\nDate: 2026-02-24\n\nAddresses appear in the order: sender, recipient, billing party.\nCorvus Data\n155 Meadow Lane\nReading 1708\n\nStonefall Ceramics\n600 Trade Estate\nDurham 3702\n\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nItems: 10 cartons, 332 kg\nCarrier reference: CR1907\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Corvus Data, 155 Meadow Lane, Reading 1708\",\"source_quote\":\"Corvus Data\\n155 Meadow Lane\\nReading 1708\"},\"destination_address\":{\"value\":\"Stonefall Ceramics, 600 Trade Estate, Durham 3702\",\"source_quote\":\"Stonefall Ceramics\\n600 Trade Estate\\nDurham 3702\"},\"billing_address\":{\"value\":\"Ridgeway Components, 7 Station Yard, Cardiff 1926\",\"source_quote\":\"Ridgeway Components\\n7 Station Yard\\nCardiff 1926\"}}",
+  "elapsed_ms": 1601,
+  "usage": {
+    "input_tokens": 649,
+    "output_tokens": 157
+  },
+  "logprobs": null
+}

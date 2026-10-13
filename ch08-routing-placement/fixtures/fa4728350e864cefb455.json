@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-82688\nDate: 2026-05-13\n\nAddresses appear in the order: sender, recipient, billing party.\nStonefall Ceramics\n600 Trade Estate\nDurham 3702\n\nGlasswing Cosmetics\n63 Hillside Terrace\nRipon 8862\n\nThornbury Glass\n199 Canal Street\nSalford 2850\n\nItems: 27 cartons, 873 kg\nCarrier reference: CR7723\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Stonefall Ceramics, 600 Trade Estate, Durham 3702\",\"source_quote\":\"Stonefall Ceramics\\n600 Trade Estate\\nDurham 3702\"},\"destination_address\":{\"value\":\"Glasswing Cosmetics, 63 Hillside Terrace, Ripon 8862\",\"source_quote\":\"Glasswing Cosmetics\\n63 Hillside Terrace\\nRipon 8862\"},\"billing_address\":{\"value\":\"Thornbury Glass, 199 Canal Street, Salford 2850\",\"source_quote\":\"Thornbury Glass\\n199 Canal Street\\nSalford 2850\"}}",
+  "elapsed_ms": 2647,
+  "usage": {
+    "input_tokens": 656,
+    "output_tokens": 169
+  },
+  "logprobs": null
+}

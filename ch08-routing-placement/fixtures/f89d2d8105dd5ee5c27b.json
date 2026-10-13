@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: Musculoskeletal: Reports left-sided low back pain.\nS2 [OBJECTIVE EXAM]: No pain with palpation on the right side.\nS3 [OBJECTIVE EXAM]: MSK: Examination of the lumbar spine: No pain with flexion or extension.\nS4 [ASSESSMENT AND PLAN]: I explained that Vicodin is a strong medication for this issue and that I would need to refer him to pain management for that, but I did provide him with a prescription for Demerol.\nS5 [SUBJECTIVE]: The patient is status post lumbar microdiscectomy performed in 11/2020.\nS6 [OBJECTIVE RESULTS]: These reveal no evidence of fracture or other abnormalities in the spine or vertebrae.\nS7 [SUBJECTIVE]: The patient reports that, prior to his microdiscectomy in 2020, he was taking high-dose gabapentin for severe nerve pain through his back and lower extremities.\nS8 [ASSESSMENT AND PLAN]: After reviewing the patient's examination and radiographic findings today, I believe his symptoms are related to a muscle strain due to spinal misalignment.\nS9 [ASSESSMENT AND PLAN]: The patient requested a prescription for Vicodin and Demerol.\nS10 [OBJECTIVE EXAM]: Normal range of motion.\nS11 [SUBJECTIVE]: He is currently taking ibuprofen 800 mg daily.\nS12 [OBJECTIVE RESULTS]: His previous surgical site is visible and appears to have healed properly.\nS13 [SUBJECTIVE]: Stretching and ibuprofen 800 mg daily are helpful, but he denies having tried icing the area.\nS14 [SUBJECTIVE]: Other than spontaneous flare-ups, his pain is worsened with excessive spinal flexion.\nS15 [OBJECTIVE EXAM]: Pain with weight-bearing.\nS16 [OBJECTIVE RESULTS]: X-ray images of the lumbar spine were obtained and reviewed in office today.\nS17 [OBJECTIVE EXAM]: Dorsiflexion is normal.\nS18 [ASSESSMENT AND PLAN]: Low back pain, left side.\nS19 [SUBJECTIVE]: The patient has been experiencing pain in the left side of his low back, generally localized around the surgical site of his microdiscectomy performed in 11/2020, but occasionally into the right side as well.\nS20 [ASSESSMENT AND PLAN]: I recommend that we treat the patient conservatively with formal physical therapy and meloxicam.\nS21 [SUBJECTIVE]: Sean Phillips is a pleasant 35-year-old male who presents to the clinic today for the evaluation of left-sided low back pain.\nS22 [OBJECTIVE EXAM]: Pain with palpation on the left side around L5.\nS23 [OBJECTIVE EXAM]: No nerve pain in his lower extremities.\nS24 [SUBJECTIVE]: Low back pain, left side.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S5\", \"S7\", \"S11\", \"S13\", \"S14\", \"S19\", \"S21\", \"S24\"], \"objective_exam\": [\"S2\", \"S3\", \"S10\", \"S15\", \"S17\", \"S22\", \"S23\"], \"objective_results\": [\"S6\", \"S12\", \"S16\"], \"assessment_and_plan\": [\"S4\", \"S8\", \"S9\", \"S18\", \"S20\"]}",
+  "elapsed_ms": 2467,
+  "usage": {
+    "input_tokens": 1096,
+    "output_tokens": 121
+  },
+  "logprobs": null
+}

@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-70785\nDate: 2026-01-23\n\nKestrel Aviation Parts\n89 Ferry Road\nPerth 5749\n\nNorthgate Supply\n14 Mill Road\nLeeds 7311\n\nRavenscar Timber\n310 Union Boulevard\nWells 7176\n\nItems: 37 cartons, 830 kg\nCarrier reference: CR7246\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Kestrel Aviation Parts, 89 Ferry Road, Perth 5749\",\"source_quote\":\"Kestrel Aviation Parts\\n89 Ferry Road\\nPerth 5749\"},\"destination_address\":{\"value\":\"Northgate Supply, 14 Mill Road, Leeds 7311\",\"source_quote\":\"Northgate Supply\\n14 Mill Road\\nLeeds 7311\"},\"billing_address\":{\"value\":\"Ravenscar Timber, 310 Union Boulevard, Wells 7176\",\"source_quote\":\"Ravenscar Timber\\n310 Union Boulevard\\nWells 7176\"}}",
+  "elapsed_ms": 2524,
+  "usage": {
+    "input_tokens": 631,
+    "output_tokens": 150
+  },
+  "logprobs": null
+}

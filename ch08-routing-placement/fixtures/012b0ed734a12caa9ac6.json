@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\nSECTION DEFINITIONS\n- SUBJECTIVE: what the patient reports and the history taken before the examination: the reason for the visit, the history of the present illness, the review of systems, past medical, surgical, family and social history, current medications and allergies.\n- OBJECTIVE EXAM: what the clinician found on physical examination at this visit, including vital signs measured at the visit.\n- OBJECTIVE RESULTS: results of laboratory tests, imaging and other studies that were reviewed.\n- ASSESSMENT AND PLAN: the clinician's diagnoses or impressions, the reasoning behind them, treatment decisions, prescriptions, orders, referrals, patient instructions and follow-up.\nA sentence goes under the heading that names its role in the note, not its topic. A symptom the patient reports belongs under SUBJECTIVE even if the plan discusses it again; a sentence that restates a symptom or finding to justify a decision belongs under ASSESSMENT AND PLAN.\n\n<sentences>\nS1: Ears, Nose, Mouth, and Throat\nS2: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS3: Ecchymosis present medially.\nS4: - Medical Treatment: Continue lisinopril 20 mg once a day.\nS5: I will prescribe guaifenesin 600 mg twice a day.\nS6: - Examination of Abdomen: No masses or tenderness.\nS7: HENT: Reports nasal congestion, sore throat, and sinus pressure.\nS8: - Medical Reasoning: The patient's blood pressure in office today looked great and appears stable at this time.\nS9: - Examination: Pain to palpation to the bilateral maxillary sinuses.\nS10: He was also advised of the importance of blood sugar monitoring.\nS11: - Medical Treatment: Hemoglobin A1c ordered.\nS12: Constitutional: Reports \"feeling warm\".\nS13: Referral to physical therapy provided.\nS14: We will contact the patient with his lab results when ready.\nS15: - Patient Education and Counseling: We discussed physical therapy will be beneficial for strengthening the right knee.\nS16: Patient reports that he is a teacher.\nS17: - Auscultation of Heart: Regular rate and rhythm.\nS18: - Patient Education and Counseling: We discussed that antibiotics are not needed at this time, however, if his symptoms worsen we will consider a chest x-ray. - Medical Treatment: Continue over-the-counter medications.\nS19: No evidence of an effusion.\nS20: - General Examination: Bilateral cervical lymphadenopathy noted.\nS21: Decreased flexion and extension.\nS22: Respiratory: Reports productive cough with yellow sputum.\nS23: - Examination of the right knee: Pain to palpation.\nS24: - Examination of Nose: Erythema and edema of the nasal turbinates bilaterally with associated yellow discharge.\nS25: - Auscultation of Lungs: Coarse rhonchi present bilaterally that clears with cough.\nS26: Continue metformin as prescribed.\nS27: - Auscultation: Bowel sounds normal in all 4 quadrants.\nS28: I will order a lipid panel.\nS29: Patient reports taking lisinopril 20 mg daily and metformin 1000 mg twice a day.\nS30: - Medical Reasoning: The patient does not check his blood sugar at home and admits to not watching his diet.\nS31: - Medical Reasoning: The patient presents with a cough likely due to a viral syndrome such as mild bronchitis.\nS32: Start blood sugar monitoring and report levels through patient portal.\nS33: Musculoskeletal: Reports body aches and right knee pain.\nS34: Patient reports history of hypertension and diabetes.\nS35: Right knee x-ray ordered.\nS36: - Examination of Throat: Uvula is midline.\nS37: - Medical Reasoning: The patient's physical exam is consistent with a right medial lateral ligament strain.\nS38: - Medical Treatment: Prescription for meloxicam 15 mg once a day provided.\nS39: Pharynx without erythema, swelling, or exudate in the peritonsillar space.\nS40: Denies right knee instability.\nS41: - Patient Education and Counseling: We discussed the importance of diet as there can be complications with diabetes such as kidney dysfunction and eye problems that we want to avoid.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S7\", \"S12\", \"S16\", \"S22\", \"S29\", \"S33\", \"S34\", \"S40\"], \"objective_exam\": [\"S1\", \"S3\", \"S6\", \"S9\", \"S17\", \"S20\", \"S21\", \"S23\", \"S24\", \"S25\", \"S27\", \"S36\", \"S39\"], \"objective_results\": [\"S19\"], \"assessment_and_plan\": [\"S2\", \"S4\", \"S5\", \"S8\", \"S10\", \"S11\", \"S13\", \"S14\", \"S15\", \"S18\", \"S26\", \"S28\", \"S30\", \"S31\", \"S32\", \"S35\", \"S37\", \"S38\", \"S41\"]}",
+  "elapsed_ms": 2525,
+  "usage": {
+    "input_tokens": 1468,
+    "output_tokens": 189
+  },
+  "logprobs": null
+}

@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "SYSTEM:\nYou are an intake processor. Extract and route data to the correct\nfields. Field confusion causes downstream errors - precision is\nrequired.\n\nFIELD DEFINITIONS (apply these before extracting):\n  - \"origin_address\": where the item comes FROM.\n    Keywords: \"from\", \"sender\", \"origin\", \"pickup location\"\n  - \"destination_address\": where the item is going TO.\n    Keywords: \"to\", \"deliver to\", \"destination\", \"drop-off\"\n  - \"billing_address\": who pays. May differ from both.\n    Keywords: \"bill to\", \"invoice to\", \"charge to\", \"account holder\"\n\nA field may be filled ONLY from text that carries its own keywords. If\nthe text supporting a value carries another field's keywords, that\nvalue\nbelongs to the other field.\n\nFor every field, return the exact sentence you took it from. Copy it\ncharacter for character; do not paraphrase it.\n\nIf no text in the document supports a field, return null for that\nfield\nand null for its quote. A null field is a correct answer.\nReturn:\n{\n  \"origin_address\":      { \"value\": ..., \"source_quote\": ... },\n  \"destination_address\": { \"value\": ..., \"source_quote\": ... },\n  \"billing_address\":     { \"value\": ..., \"source_quote\": ... }\n}\n\n<document>\nSHIPPING DOCUMENT  No. SD-11617\nDate: 2026-07-24\n\nAddresses appear in the order: recipient, sender, billing party.\nWestmoor Print\n5 Copper Court\nPreston 5243\n\nEllery Instruments\n8 Barley Mews\nWigan 9980\n\nRidgeway Components\n7 Station Yard\nCardiff 1926\n\nItems: 35 cartons, 742 kg\nCarrier reference: CR1247\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ellery Instruments, 8 Barley Mews, Wigan 9980\",\"source_quote\":\"Addresses appear in the order: recipient, sender, billing party.\\nWestmoor Print\\n5 Copper Court\\nPreston 5243\\n\\nEllery Instruments\\n8 Barley Mews\\nWigan 9980\"},\"destination_address\":{\"value\":\"Westmoor Print, 5 Copper Court, Preston 5243\",\"source_quote\":\"Addresses appear in the order: recipient, sender, billing party.\\nWestmoor Print\\n5 Copper Court\\nPreston 5243\"},\"billing_address\":{\"value\":\"Ridgeway Components, 7 Station Yard, Cardiff 1926\",\"source_quote\":\"Addresses appear in the order: recipient, sender, billing party.\\nWestmoor Print\\n5 Copper Court\\nPreston 5243\\n\\nEllery Instruments\\n8 Barley Mews\\nWigan 9980\\n\\nRidgeway Components\\n7 Station Yard\\nCardiff 1926\"}}",
+  "elapsed_ms": 3397,
+  "usage": {
+    "input_tokens": 931,
+    "output_tokens": 279
+  },
+  "logprobs": null
+}

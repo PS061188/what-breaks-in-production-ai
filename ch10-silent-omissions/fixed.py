@@ -116,7 +116,7 @@ def main() -> int:
         count_mismatch += int(mismatch)
 
         real_missing = [m for m in a["missing"] if dose_figures(m) & case["expected"]
-                        and not (dose_figures(m) & dose_figures(" ".join(result["doses"])))]
+                        and not (dose_figures(m) & dose_figures(" ".join(result["doses"]), expand_ranges=True))]
         audit_flags += len(a["missing"])
         false_flags += len(a["missing"]) - len(real_missing)
 

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: Roberts went to the emergency room for palpitations and hypertension.\nS2 [SUBJECTIVE]: He has been monitoring his blood pressure at home daily, obtaining systolic blood pressure readings of 146 to 155.\nS3 [OBJECTIVE EXAM]: Normal rate, regular rhythm, S2 normal, normal heart sounds, and normal pulses.\nS4 [SUBJECTIVE]: He denies additional episodes of palpitations.\nS5 [ASSESSMENT AND PLAN]: • Resistant hypertension.\nS6 [SUBJECTIVE]: Several family members positive for hypertension.\nS7 [ASSESSMENT AND PLAN]: He was provided materials to follow the DASH diet and encouraged to meet 30-min of walking most days.\nS8 [SUBJECTIVE]: Jordan Roberts is a 49-year-old with a long history of hypertension and an acute episode of palpitations.\nS9 [SUBJECTIVE]: He does report a family history of hypertension.\nS10 [SUBJECTIVE]: He attributed this to a panic attack, but also stated he consumed several cups of coffee on an empty stomach the morning of.\nS11 [ASSESSMENT AND PLAN]: He is currently on maximal doses for 3 medications.\nS12 [ASSESSMENT AND PLAN]: I have tried to avoid this, given the potential for issues with erectile dysfunction.\nS13 [ASSESSMENT AND PLAN]: Schedule follow up appointment in 2 weeks for blood pressure check and basic metabolic panel.\nS14 [ASSESSMENT AND PLAN]: I have added spironolactone to his regimen which will require monitoring of his potassium and sodium.\nS15 [ASSESSMENT AND PLAN]: I provided and reviewed with Mr.\nS16 [SUBJECTIVE]: Additionally, he has been monitoring his salt intake and feels he is doing well at reducing it.\nS17 [ASSESSMENT AND PLAN]: I counseled the patient about spironolactone side effects, including gynecomastia and electrolyte disturbances, as well as his increased risk of dehydration, with one sign to watch for being dizziness.\nS18 [SUBJECTIVE]: High blood pressure and palpitations.\nS19 [ASSESSMENT AND PLAN]: We will schedule him for a follow up in 2 weeks to complete a basic metabolic panel and check his blood pressure.\nS20 [ASSESSMENT AND PLAN]: Next medication to consider adding is carvedilol.\nS21 [SUBJECTIVE]: He has a new primary care physician who started him on a new medication Benicar HCT, which he has been using for the past month.\nS22 [ASSESSMENT AND PLAN]: Roberts the American Heart association website (heart.org) and encouraged him to access for tips on lowering his salt intake and increasing his potassium intake.\nS23 [ASSESSMENT AND PLAN]: Roberts presents with resistant hypertension, with systolic blood pressure readings between 146-155.\nS24 [OBJECTIVE EXAM]: Breath sounds normal.\nS25 [SUBJECTIVE]: Amlodipine 10 mg daily.\nS26 [ASSESSMENT AND PLAN]: If we are not able to improve his blood pressure with spironolactone, the next step would be sending him to the resistant hypertension clinic.\nS27 [ASSESSMENT AND PLAN]: His maximum salt intake should be 1500 to <2000 mg per day.\nS28 [SUBJECTIVE]: Benicar HCT 40 mg/25 mg\nS29 [ASSESSMENT AND PLAN]: Reduce sodium intake to 1500 to <2000 mg per day.\nS30 [SUBJECTIVE]: He also walks on his treadmill as often as he can.\nS31 [OBJECTIVE EXAM]: There is no tenderness.\nS32 [OBJECTIVE RESULTS]: Thyroid profile 03/01/2021.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S2\", \"S4\", \"S6\", \"S8\", \"S9\", \"S10\", \"S16\", \"S18\", \"S21\", \"S25\", \"S28\", \"S30\"], \"objective_exam\": [\"S3\", \"S24\", \"S31\"], \"objective_results\": [\"S32\"], \"assessment_and_plan\": [\"S5\", \"S7\", \"S11\", \"S12\", \"S13\", \"S14\", \"S15\", \"S17\", \"S19\", \"S20\", \"S22\", \"S23\", \"S26\", \"S27\", \"S29\"]}",
+  "elapsed_ms": 1752,
+  "usage": {
+    "input_tokens": 1309,
+    "output_tokens": 153
+  },
+  "logprobs": null
+}

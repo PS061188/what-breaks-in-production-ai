@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-59051\nDate: 2026-01-26\n\nAddresses appear in the order: recipient, sender, billing party.\nNimbus Software\n15 Turbine Way\nPoole 1201\n\nBrightwater Pharma\n11 Coach Lane\nTruro 3299\n\nIronbridge Tools\n640 Northern Bypass\nHull 8775\n\nItems: 12 cartons, 832 kg\nCarrier reference: CR4271\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Brightwater Pharma, 11 Coach Lane, Truro 3299\",\"source_quote\":\"Brightwater Pharma\\n11 Coach Lane\\nTruro 3299\"},\"destination_address\":{\"value\":\"Nimbus Software, 15 Turbine Way, Poole 1201\",\"source_quote\":\"Nimbus Software\\n15 Turbine Way\\nPoole 1201\"},\"billing_address\":{\"value\":\"Ironbridge Tools, 640 Northern Bypass, Hull 8775\",\"source_quote\":\"Ironbridge Tools\\n640 Northern Bypass\\nHull 8775\"}}",
+  "elapsed_ms": 2692,
+  "usage": {
+    "input_tokens": 651,
+    "output_tokens": 157
+  },
+  "logprobs": null
+}

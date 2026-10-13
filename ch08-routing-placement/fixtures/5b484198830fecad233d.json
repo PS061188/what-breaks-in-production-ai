@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS2 [SUBJECTIVE]: She has been taking her medication as prescribed and has not missed any doses.\nS3 [ASSESSMENT AND PLAN]: • Medical Reasoning: Appears to be relatively stable.\nS4 [SUBJECTIVE]: The patient states she has been doing well.\nS5 [OBJECTIVE EXAM]: Neurologically intact.\nS6 [ASSESSMENT AND PLAN]: She will follow up in about 2 months, at which time we will discuss further treatment recommendations.\nS7 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue lisinopril 10 mg once daily.\nS8 [ASSESSMENT AND PLAN]: Beverly Ortiz is a 24-year-old female patient with a history of type 2 diabetes and high blood pressure.\nS9 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS10 [SUBJECTIVE]: She is here today for her yearly exam.\nS11 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: I encouraged her to check her fasting blood glucose levels each morning and call them in about 2 weeks.\nS12 [ASSESSMENT AND PLAN]: She is still taking metformin twice a day, but does admit to dietary indiscretion with an increase in her sweets intake..\nS13 [OBJECTIVE EXAM]: Grade 2/6 systolic ejection fraction murmur.\nS14 [SUBJECTIVE]: She denies thoughts of self-harm or suicidal ideations.\nS15 [OBJECTIVE EXAM]: Lungs are clear to auscultation bilaterally.\nS16 [OBJECTIVE RESULTS]: Hemoglobin A1c is elevated.\nS17 [SUBJECTIVE]: The patient states her blood pressure has been good despite her blood sugar levels being up and down.\nS18 [SUBJECTIVE]: Beverly Ortiz is a 24-year-old female patient with a history of type 2 diabetes and high blood pressure.\nS19 [SUBJECTIVE]: The patient states her diabetes is uncontrolled.\nS20 [SUBJECTIVE]: She is trying to improve her diet by removing additional sweets.\nS21 [OBJECTIVE EXAM]: No carotid bruits appreciable.\nS22 [OBJECTIVE EXAM]: No extra heart sounds.\nS23 [ASSESSMENT AND PLAN]: Diabetes mellitus type 2.\nS24 [OBJECTIVE EXAM]: • Cardiovascular: Regular rate.\nS25 [SUBJECTIVE]: She has recently began working at a bakery this summer.\nS26 [ASSESSMENT AND PLAN]: She is here today for her yearly exam.\nS27 [ASSESSMENT AND PLAN]: • Medical Reasoning: Her blood glucose levels have been uncontrolled.\nS28 [ASSESSMENT AND PLAN]: Her most recent hemoglobin A1c was elevated.\nS29 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue metformin twice a day.\nS30 [OBJECTIVE EXAM]: • Neurological/Psychological: Grip strength equal bilaterally.\nS31 [SUBJECTIVE]: Her blood sugars have fluctuated recently, which she attributes to her change in diet due to work.\nS32 [SUBJECTIVE]: She has been sleeping well and is able to sleep a full 8 hours.\nS33 [SUBJECTIVE]: She has continued taking metformin twice a day.\nS34 [OBJECTIVE EXAM]: • Neck: Supple without thyromegaly or lymphadenopathy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S4\", \"S10\", \"S2\", \"S14\", \"S17\", \"S19\", \"S20\", \"S25\", \"S31\", \"S32\", \"S33\", \"S18\"], \"objective_exam\": [\"S5\", \"S9\", \"S15\", \"S13\", \"S21\", \"S22\", \"S24\", \"S30\", \"S34\"], \"objective_results\": [\"S16\"], \"assessment_and_plan\": [\"S1\", \"S3\", \"S6\", \"S7\", \"S8\", \"S11\", \"S12\", \"S23\", \"S26\", \"S27\", \"S28\", \"S29\"]}",
+  "elapsed_ms": 2696,
+  "usage": {
+    "input_tokens": 1253,
+    "output_tokens": 161
+  },
+  "logprobs": null
+}

@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: He is not ready to try any medications.\nS2: • Patient Education and Counseling: We will defer initiating medication at this time.\nS3: Regarding his GERD, he is taking his omeprazole.\nS4: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS5: • Additional Testing: I will order a hemoglobin A1c in 1 month.\nS6: He has noticed increased fluid retention following dietary indiscretion.\nS7: • Medical Treatment: He will continue the insulin pump.\nS8: His shortness of breath is primarily with exertion such as walking up the stairs.\nS9: Reducing his alcohol intake has been tough during the holiday season, but he is getting better about this.\nS10: He states that it takes him a little while to get up.\nS11: Labs were all within normal limits, including the WBC.\nS12: Regarding his depression, he states that it has been a crazy year and a half.\nS13: No jugular venous distention.\nS14: He is trying to avoid sugar but admits to an affinity for chocolate bars.\nS15: The patient states he has had some shortness of breath and mild leg swelling which he thinks has to do with eating some salty foods at some house parties recently.\nS16: • Patient Education and Counseling: I advised the patient to monitor and log his daily weights.\nS17: Regarding his type 1 diabetes, he is using his insulin pump.\nS18: He has been consistently monitoring his blood sugars during the working week, but notes that he checks less on the weekends, due to being busy.\nS19: • Medical Treatment: This is currently stable with use of an insulin pump.\nS20: • Respiratory: Denies coughor wheezing.\nS21: This has been going on for about 10 days now.\nS22: Lawrence Walker is a 62-year-old male with a past medical history significant for type 1 diabetes, congestive heart failure, depression, and reflux, who presents with complaints of shortness of breath.\nS23: He woke from sleep once with shortness of breath about a week ago.\nS24: • Medical Reasoning: The patient has been doing well with outdoor stretching.\nS25: He has made some lifestyle modifications like cutting back on his red bull intake and other caffeine.\nS26: The patient will follow up with his endocrinologist.\nS27: He also notes discomfort lying flat in bed and musculoskeletal stiffness in the morning.\nS28: • Musculoskeletal: 1+ pitting bilateral lower extremity edema.\nS29: • Medical Reasoning: The patient is retaining fluid.\nS30: Endorses shortness of breath..\nS31: • Medical Treatment: Initiate Lasix 40 mg a day.\nS32: • Cardiovascular: 3/6 systolic ejection murmur.\nS33: Acute heart failure exacerbation.\nS34: • Cardiovascular: Denies chest pain.\nS35: • Medical Treatment: Continue omeprazole 20 mg a day.\nS36: • Musculoskeletal: Endorses lower extremity edema.\nS37: He has tried some natural solutions.\nS38: • Medical Treatment: I will refer him to psychiatry as his current management strategy is unsustainable due to the change in season.\nS39: He denies suicidal and homicidal ideation.\nS40: He has experienced dyspnea on exertion for the past 10 days.\nS41: He was instructed to call me or 911 if he experiences dyspnea at rest.\nS42: In the summer, he did daily outdoor stretching, which was great; but now that the weather has changed, he needs to find some alternatives.\nS43: • Medical Reasoning: His symptoms are stable with medication.\nS44: Chest x-ray did not show any evidence of airspace disease.\nS45: • Patient Education and Counseling: I encouraged the patient to have an eye exam.\nS46: Endorses dyspnea on exertion.\nS47: He continues to decline the use of medications for this issue.\nS48: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan. his endo\nS49: Shortness of breath.\nS50: • Neck: No carotid bruits appreciable.\nS51: • Constitutional: Denies fevers, chills.\nS52: He will contact me if these continue to increase.\nS53: The patient denies chest pain, fever, chills, cough, and abdominal pain.\nS54: • Psychiatric: Endorses depression.\nS55: • Respiratory: Rales are heard bilaterally at lung bases.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S4\", \"S6\", \"S8\", \"S9\", \"S10\", \"S12\", \"S14\", \"S15\", \"S17\", \"S18\", \"S21\", \"S23\", \"S25\", \"S27\", \"S30\", \"S3\", \"S37\", \"S39\", \"S40\", \"S47\", \"S49\", \"S53\"], \"objective_exam\": [\"S13\", \"S20\", \"S24\", \"S28\", \"S32\", \"S34\", \"S36\", \"S50\", \"S51\", \"S54\", \"S55\"], \"objective_results\": [\"S11\", \"S44\"], \"assessment_and_plan\": [\"S1\", \"S2\", \"S5\", \"S7\", \"S16\", \"S19\", \"S26\", \"S29\", \"S31\", \"S33\", \"S35\", \"S38\", \"S41\", \"S42\", \"S43\", \"S45\", \"S46\", \"S48\", \"S52\"]}",
+  "elapsed_ms": 3391,
+  "usage": {
+    "input_tokens": 1576,
+    "output_tokens": 241
+  },
+  "logprobs": null
+}

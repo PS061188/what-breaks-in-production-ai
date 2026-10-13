@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [SUBJECTIVE]: The patient is a diabetic.\nS2 [ASSESSMENT AND PLAN]: A prescription for clindamycin 400 mg 2 times per day for 7 days will be provided as he does seem to have an infection.\nS3 [ASSESSMENT AND PLAN]: He has been advised to call the office if his symptoms worsen and we will get him in sooner, however, if he starts to develop a fever or necrosis he has been instructed to go to the ER.\nS4 [SUBJECTIVE]: Patient reports history of diabetes.\nS5 [SUBJECTIVE]: He reports the ulcer has recently become red and is draining.\nS6 [ASSESSMENT AND PLAN]: The patient will follow up with me in 2 weeks to assess his progress and for possible repeat debridement.\nS7 [SUBJECTIVE]: Musculoskeletal: Reports right foot pain.\nS8 [OBJECTIVE RESULTS]: 3 views of the right foot were taken.\nS9 [ASSESSMENT AND PLAN]: Right diabetic foot ulcer.\nS10 [SUBJECTIVE]: He is taking medication for this, however, he does not monitor his blood sugar consistently.\nS11 [ASSESSMENT AND PLAN]: I have explained to him that his x-rays did not reveal any evidence of osteomyelitis.\nS12 [ASSESSMENT AND PLAN]: He will also be placed in a surgical shoe to provide increased support for the next month.\nS13 [SUBJECTIVE]: Skin: Reports right foot ulcer with redness and drainage.\nS14 [OBJECTIVE EXAM]: There is some redness and drainage present as well as edema.\nS15 [OBJECTIVE EXAM]: Nontender to palpation.\nS16 [OBJECTIVE EXAM]: No necrosis, odor, or bony exposure.\nS17 [OBJECTIVE RESULTS]: These reveal no evidence of osteomyelitis.\nS18 [SUBJECTIVE]: He has seen his primary care physician and was prescribed antibiotics, however, he has not started them yet and does not recall the name of the medication.\nS19 [ASSESSMENT AND PLAN]: After reviewing the patient's examination and radiographic findings today, I have had a lengthy discussion with the patient in regards to his current symptoms.\nS20 [SUBJECTIVE]: Gregory Hernandez is a pleasant 40-year-old male who presents to the clinic today for the evaluation of a non-healing right foot ulcer.\nS21 [OBJECTIVE EXAM]: MSK: Examination of the right foot: There is a 1 x 2 inch circular wound on the dorsal aspect laterally just proximal to the 5th MTP joint.\nS22 [SUBJECTIVE]: Onset of ulcer was approximately 2 months ago after walking barefoot on the beach.\nS23 [SUBJECTIVE]: At times he will also experience throbbing pain.\nS24 [ASSESSMENT AND PLAN]: I have recommended that we obtain an ankle brachial index to determine the blood supply in his foot.\nS25 [ASSESSMENT AND PLAN]: Debridement will be performed.\nS26 [SUBJECTIVE]: His last A1C was around 10.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S1\", \"S4\", \"S5\", \"S7\", \"S10\", \"S13\", \"S18\", \"S20\", \"S22\", \"S23\", \"S26\"], \"objective_exam\": [\"S14\", \"S15\", \"S16\", \"S21\"], \"objective_results\": [\"S8\", \"S17\"], \"assessment_and_plan\": [\"S2\", \"S3\", \"S6\", \"S9\", \"S11\", \"S12\", \"S19\", \"S24\", \"S25\"]}",
+  "elapsed_ms": 2382,
+  "usage": {
+    "input_tokens": 1149,
+    "output_tokens": 129
+  },
+  "logprobs": null
+}

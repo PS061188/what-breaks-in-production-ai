@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: • Cardiovascular: No murmurs, gallops, or rubs.\nS2 [OBJECTIVE RESULTS]: No airspace disease.\nS3 [SUBJECTIVE]: Upper respiratory infection.\nS4 [SUBJECTIVE]: • Gastrointestinal: Denies nausea or diarrhea.\nS5 [ASSESSMENT AND PLAN]: • Additional Testing: We will repeat a hemoglobin A1c in 4 months.\nS6 [ASSESSMENT AND PLAN]: • Medical Reasoning: I believe he has contracted a viral syndrome.\nS7 [ASSESSMENT AND PLAN]: • Medical Reasoning: His blood glucose levels have been well controlled based on home monitoring, but his recent hemoglobin A1c was elevated.\nS8 [ASSESSMENT AND PLAN]: This was refilled today.\nS9 [ASSESSMENT AND PLAN]: • Additional Testing: We will obtain a COVID-19 test to rule this out.\nS10 [ASSESSMENT AND PLAN]: Upper respiratory infection.\nS11 [SUBJECTIVE]: The patient denies nausea, vomiting, diarrhea.\nS12 [SUBJECTIVE]: He attributed this to exerting himself.\nS13 [OBJECTIVE RESULTS]: X-ray of the chest is unremarkable.\nS14 [SUBJECTIVE]: He reports his blood pressure has been under control.\nS15 [ASSESSMENT AND PLAN]: • Additional Testing: We will order a lipid panel.\nS16 [ASSESSMENT AND PLAN]: • Medical Treatment: He will continue on lisinopril 20 mg once daily.\nS17 [ASSESSMENT AND PLAN]: • Medical Reasoning: He has been compliant with lisinopril and his blood pressures have been well controlled based on home monitoring.\nS18 [OBJECTIVE EXAM]: • Respiratory: Scattered rhonchi bilaterally, clears with cough.\nS19 [SUBJECTIVE]: His diet has been pretty good for the most part, except for some house parties.\nS20 [SUBJECTIVE]: • Psychiatric: Endorses depression.\nS21 [ASSESSMENT AND PLAN]: • Medical Reasoning: He has been practicing barre classes and is doing well overall.\nS22 [SUBJECTIVE]: Andrew Campbell is a 59-year-old male with a past medical history significant for depression, type 2 diabetes, and hypertension.\nS23 [SUBJECTIVE]: He presents today with an upper respiratory infection.\nS24 [SUBJECTIVE]: He denies any history of seasonal allergies.\nS25 [ASSESSMENT AND PLAN]: His chest x-ray was unremarkable and he has received both doses of the COVID-19 vaccination.\nS26 [OBJECTIVE EXAM]: Pain to palpation of the bilateral elbows.\nS27 [SUBJECTIVE]: His wife got him into barre classes and this has been relaxing.\nS28 [OBJECTIVE RESULTS]: Hemoglobin A1c is elevated at 8.\nS29 [SUBJECTIVE]: He reports that his elbows hurt quite a bit.\nS30 [SUBJECTIVE]: The patient attributes these symptoms to lifting heavy bags.\nS31 [OBJECTIVE EXAM]: • Musculoskeletal: Edema in the bilateral lower extremities.\nS32 [OBJECTIVE RESULTS]: No signs of pneumonia.\nS33 [SUBJECTIVE]: The patient has been monitoring his blood pressure at home.\nS34 [ASSESSMENT AND PLAN]: Andrew Campbell is a 59-year-old male with a past medical history significant for depression, type 2 diabetes, and hypertension.\nS35 [ASSESSMENT AND PLAN]: • Medical Treatment: We will increase his metformin to 1000 mg twice daily.\nS36 [SUBJECTIVE]: • Cardiovascular: Endorses dyspnea on exertion.\nS37 [ASSESSMENT AND PLAN]: Follow up: I would like to see him back in approximately 4 months.\nS38 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS39 [SUBJECTIVE]: He has had both of his COVID vaccinations.\nS40 [SUBJECTIVE]: • Constitutional: Denies fever.\nS41 [SUBJECTIVE]: He notes his knees were pretty tired and he felt some tension around his knees.\nS42 [SUBJECTIVE]: • Musculoskeletal: Endorses bilateral elbow and knee pain.\nS43 [SUBJECTIVE]: They have not been elevated since his respiratory symptoms began.\nS44 [OBJECTIVE EXAM]: No extra heart sounds.\nS45 [SUBJECTIVE]: He has not been wearing a mask as much recently.\nS46 [SUBJECTIVE]: Regarding his depression, he states it has been a crazy year and a half.\nS47 [SUBJECTIVE]: He believes that he caught his first cold and his symptoms have worsened.\nS48 [SUBJECTIVE]: He reports that he is very regular with monitoring his blood pressure during the week, though less consistently on weekends.\nS49 [SUBJECTIVE]: • Respiratory: Endorses shortness of breath and cough.\nS50 [ASSESSMENT AND PLAN]: He presents today with an upper respiratory infection.\nS51 [ASSESSMENT AND PLAN]: • Medical Treatment: I offered medication or psychotherapy, but the patient opted to defer at this time.\nS52 [SUBJECTIVE]: He was a little concerned about that, but for the most part, he has been doing well with it.\nS53 [SUBJECTIVE]: He started to feel really tired and short of breath.\nS54 [SUBJECTIVE]: Regarding his diabetes, he has been monitoring his sugar levels while he is at work, but is not as consistent on Saturdays and Sundays.\nS55 [SUBJECTIVE]: The patient reports that he has been doing a bit of work out in the yard in the last week or so.\nS56 [SUBJECTIVE]: The patient denies coughing up anything, but he feels like he will soon be coughing up phlegm.\nS57 [ASSESSMENT AND PLAN]: • Medical Treatment: I recommend he use Robitussin for cough, as well as ibuprofen or Tylenol if he develops a fever.\nS58 [SUBJECTIVE]: He denies having a fever, but he felt a little warm.\nS59 [SUBJECTIVE]: He has continued to utilize lisinopril 20 mg, daily.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S3\", \"S4\", \"S11\", \"S12\", \"S14\", \"S19\", \"S20\", \"S22\", \"S23\", \"S24\", \"S27\", \"S29\", \"S30\", \"S33\", \"S36\", \"S39\", \"S40\", \"S41\", \"S42\", \"S43\", \"S45\", \"S46\", \"S47\", \"S48\", \"S49\", \"S52\", \"S53\", \"S54\", \"S55\", \"S56\", \"S58\", \"S59\"], \"objective_exam\": [\"S1\", \"S18\", \"S26\", \"S31\", \"S44\"], \"objective_results\": [\"S2\", \"S13\", \"S28\", \"S32\"], \"assessment_and_plan\": [\"S5\", \"S6\", \"S7\", \"S8\", \"S9\", \"S10\", \"S15\", \"S16\", \"S17\", \"S21\", \"S25\", \"S34\", \"S35\", \"S37\", \"S38\", \"S50\", \"S51\", \"S57\"]}",
+  "elapsed_ms": 3373,
+  "usage": {
+    "input_tokens": 1925,
+    "output_tokens": 261
+  },
+  "logprobs": null
+}

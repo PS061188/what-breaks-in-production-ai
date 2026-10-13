@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order with their section headings removed. File every sentence under one of these four headings: SUBJECTIVE, OBJECTIVE EXAM, OBJECTIVE RESULTS, ASSESSMENT AND PLAN. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1: Hemoglobin A1c is elevated at 8.\nS2: • Medical Treatment: Continue Keppra at current dosage.\nS3: He notes that he has going from place to place for different events and they've recently had a lot of visitors; therefore, he was not monitoring his sugar intake over the last few weeks.\nS4: The patient denies chest pain, shortness of breath, vomiting, dizziness, fevers, and chills.\nS5: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS6: • Musculoskeletal: Trace pitting edema to the bilateral lower extremities.\nS7: • Neurological: Endorses epilepsy.\nS8: In terms of his anxiety, he states he has had his moments, but now that it is almost the weekend, his symptoms have improved.\nS9: • Respiratory: Denies shortness of breath.\nS10: He presents today with an abnormal lab finding.\nS11: John Brooks is a 55-year-old male with a past medical history significant for anxiety and epilepsy.\nS12: The patient was notified by the emergency room physician that he had elevated blood sugar levels.\nS13: John Brooks is a 55-year-old male with a past medical history significant for anxiety and epilepsy, who presents with an abnormal lab finding.\nS14: He was started on metformin 500 mg twice daily during that time.\nS15: • Psychiatric: Endorses anxiety.\nS16: Newly diagnosed diabetes.\nS17: • Cardiovascular: Denies chest pain or dyspnea.\nS18: He continues to take Keppra.\nS19: • Constitutional: Denies fevers, chills.\nS20: • Cardiovascular: Regular rate and rhythm.\nS21: • Medical Treatment: Continue metformin 500 mg twice daily.\nS22: His blood glucose level is also elevated in clinic today.\nS23: No wheezes, rales, or rhonchi.\nS24: • Medical Reasoning: His past hemoglobin A1c levels have been borderline high, but his most recent level was 8.\nS25: Non-fasting glucose is elevated.\nS26: • Respiratory: Lungs are clear to auscultation bilaterally.\nS27: Regarding his epilepsy, he has not had any seizures in a few months.\nS28: • Additional Testing: Repeat hemoglobin A1c.\nS29: • Medical Reasoning: He saw his neurologist about 3 months ago and has been asymptomatic for the past few months.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S11\", \"S3\", \"S4\", \"S8\", \"S12\", \"S27\"], \"objective_exam\": [\"S6\", \"S7\", \"S9\", \"S15\", \"S17\", \"S19\", \"S20\", \"S23\", \"S26\"], \"objective_results\": [\"S1\", \"S22\", \"S25\"], \"assessment_and_plan\": [\"S2\", \"S5\", \"S10\", \"S13\", \"S14\", \"S16\", \"S18\", \"S21\", \"S24\", \"S28\", \"S29\"]}",
+  "elapsed_ms": 2732,
+  "usage": {
+    "input_tokens": 1039,
+    "output_tokens": 141
+  },
+  "logprobs": null
+}

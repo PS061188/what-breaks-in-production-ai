@@ -50,6 +50,23 @@ def main() -> int:
         return 1
 
     print(f"wrote {PDF.name}  ({PDF.stat().st_size / 1e6:.1f} MB)")
+    try:
+        import fitz
+        doc = fitz.open(PDF)
+        page = doc[min(5, len(doc) - 1)]
+        sizes = [s["size"] for b in page.get_text("dict")["blocks"]
+                 for l in b.get("lines", []) for s in l["spans"]]
+        body = max(sizes) if sizes else 0
+        doc.close()
+        # Chrome shrinks the whole document to fit its widest element, silently.
+        # One nowrap cell full of prose cost 31 pages before anyone noticed
+        # (4 Oct 2026). Body text on a mid page is ~9-14pt when healthy.
+        if body < 8.0:
+            print(f"SCALE WARNING: largest text on a mid page is {body:.1f}pt — "
+                  "an element is wider than the page and Chrome shrank everything.")
+            return 1
+    except ImportError:
+        pass
     return 0
 
 

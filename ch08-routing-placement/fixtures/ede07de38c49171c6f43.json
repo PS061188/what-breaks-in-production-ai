@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [ASSESSMENT AND PLAN]: She is somewhat homeopathic in some of her viewpoints.\nS2 [SUBJECTIVE]: The patient has not received the COVID-19 vaccinations because she does not know the side effects.\nS3 [SUBJECTIVE]: The patient reports taking MiraLAX consistently for her constipation and Lactulose as needed, which takes 2 days produce a bowel movement.\nS4 [ASSESSMENT AND PLAN]: COVID vaccine status\nS5 [ASSESSMENT AND PLAN]: Acute to chronic constipation\nS6 [SUBJECTIVE]: She was provided IV antibiotic therapy and was discharged after clinical improvement of her symptoms.\nS7 [SUBJECTIVE]: She states she did not have a bowel movement in the hospital and when she got home, she had a large bowel movement and felt better.\nS8 [ASSESSMENT AND PLAN]: I do not believe that supplements are necessarily going to help stave this off.\nS9 [SUBJECTIVE]: She reported an increased concern for spasms, lightheadedness, headaches, significant constipation, and diaphoresis.\nS10 [ASSESSMENT AND PLAN]: However, we did have a good discussion regarding her leukocytosis.\nS11 [ASSESSMENT AND PLAN]: She feels like she has got a good bowel regimen.\nS12 [SUBJECTIVE]: The patient has a history quadriplegia from a prior spinal cord injury.\nS13 [ASSESSMENT AND PLAN]: I recommend that the only real, true preventative mechanism for COVID is the vaccine.\nS14 [SUBJECTIVE]: Automatic dysreflexia.\nS15 [ASSESSMENT AND PLAN]: She believes that her hospitalization was more likely due to her constipation and dysreflexia from her quadriplegia.\nS16 [SUBJECTIVE]: Due to her uncontrolled blood pressure, headaches, and vomiting, she was evaluated in the emergency department.\nS17 [ASSESSMENT AND PLAN]: I would recommend in the next 3 or 4 weeks to come back in for some updated fasting labs and we will repeat the CBC and ensure that trends downwards.\nS18 [ASSESSMENT AND PLAN]: I would be concerned that she does not get vaccinated, I would consider her at high risk based on her quadriplegia status.\nS19 [SUBJECTIVE]: MiraLAX as needed by mouth.\nS20 [SUBJECTIVE]: Chronic constipation.\nS21 [SUBJECTIVE]: To note, the patient does require use of a suprapubic catheter.\nS22 [ASSESSMENT AND PLAN]: We had a good discussion.\nS23 [SUBJECTIVE]: The patient also denies receiving the flu vaccine.\nS24 [SUBJECTIVE]: Today, the patient states she is feeling good and claims that she does not think she had an infection.\nS25 [ASSESSMENT AND PLAN]: She does take MiraLAX consistently, and Lactulose for severe constipation.\nS26 [ASSESSMENT AND PLAN]: • Acute to chronic constipation.\nS27 [ASSESSMENT AND PLAN]: Follow-up labs and appointments have been ordered.\nS28 [SUBJECTIVE]: Lactulose as needed by mouth.\nS29 [SUBJECTIVE]: Instead, she believes she was just constipated and that was the cause of her elevated blood pressure.\nS30 [SUBJECTIVE]: Michelle King is a 39-year-old female who presents for a transition care visit.\nS31 [SUBJECTIVE]: Cultures were obtained and reviewed, with a urinary tract infection suspected.\nS32 [ASSESSMENT AND PLAN]: She feels like this was less likely a true urinary tract infection.\nS33 [SUBJECTIVE]: She was admitted to District Regional Hospital on 06/29/2021 and discharged on 07/02/2021.\nS34 [SUBJECTIVE]: She states that she told the medical team in the emergency room that she was constipated, but they did not feel that was the causative agent, although they did complete x-rays and additional tests.\nS35 [SUBJECTIVE]: Transition of care visit.\nS36 [ASSESSMENT AND PLAN]: She does not want to get COVID.\nS37 [ASSESSMENT AND PLAN]: Again, she is hesitant.\nS38 [ASSESSMENT AND PLAN]: Labs pending at the time of discharge have been reviewed.\nS39 [SUBJECTIVE]: She was noted to be febrile, had a significantly elevated white blood cell count of 23,000, and labile blood pressure.\nS40 [ASSESSMENT AND PLAN]: She had a lot of vital sign changes including blood pressure fluctuations.\nS41 [SUBJECTIVE]: She reports taking vitamin C and a multivitamin and she does not feel the need for the vaccine even though her “respiratory status is limited”.\nS42 [ASSESSMENT AND PLAN]: However, she needs to make these decisions.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S3\", \"S6\", \"S7\", \"S9\", \"S12\", \"S14\", \"S16\", \"S19\", \"S20\", \"S21\", \"S23\", \"S24\", \"S28\", \"S29\", \"S30\", \"S31\", \"S33\", \"S34\", \"S35\", \"S39\", \"S41\"], \"objective_exam\": [], \"objective_results\": [], \"assessment_and_plan\": [\"S1\", \"S4\", \"S5\", \"S8\", \"S10\", \"S11\", \"S13\", \"S15\", \"S17\", \"S18\", \"S22\", \"S25\", \"S26\", \"S27\", \"S32\", \"S36\", \"S37\", \"S38\", \"S40\", \"S42\"]}",
+  "elapsed_ms": 1990,
+  "usage": {
+    "input_tokens": 1561,
+    "output_tokens": 195
+  },
+  "logprobs": null
+}

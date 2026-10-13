@@ -8,11 +8,11 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Finding</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>The failure taxonomy</td><td><strong>Holds &mdash; no change</strong></td><td class="num">9 of 9 patterns real</td><td class="num">strong</td></tr><tr><td>Self-assessment across chapters</td><td><strong>New cross-cutting finding</strong></td><td class="num">5 independent measurements</td><td class="num">strong</td></tr><tr><td>Two chapters contradicting each other</td><td>Ch 3 vs Ch 6</td><td class="num">the 90-day clause</td><td class="num">certain</td></tr><tr><td>A fix that reproduces the harm its chapter warns of</td><td>Ch 7 OOD</td><td class="num">Hindi at 0.995</td><td class="num">certain</td></tr><tr><td>Fixes listed first that cannot work</td><td>Ch 4, Ch 10</td><td class="num">0 of 192, 6 of 6</td><td class="num">certain</td></tr><tr><td>Frequency claims</td><td>Overstated on clean input</td><td class="num">4 of 9 barely reproduce</td><td class="num">confident</td></tr></table>
+<tr><td>The failure taxonomy</td><td><strong>Holds &mdash; no change</strong></td><td class="num">9 of 9 patterns real</td><td class="num">strong</td></tr><tr><td>Self-assessment across chapters</td><td><strong>New cross-cutting finding</strong></td><td class="num">4 independent measurements</td><td class="num">strong</td></tr><tr><td>Two chapters contradicting each other</td><td>Ch 3 vs Ch 6</td><td class="num">the 90-day clause</td><td class="num">certain</td></tr><tr><td>A fix that reproduces the harm its chapter warns of</td><td>Ch 7 OOD</td><td class="num">Hindi at 0.995</td><td class="num">certain</td></tr><tr><td>Fixes listed first that cannot work</td><td>Ch 4, Ch 10</td><td class="num">0 of 192, 6 of 6</td><td class="num">certain</td></tr><tr><td>Frequency claims</td><td>Overstated on clean input</td><td class="num">5 of 9 barely reproduce</td><td class="num">confident</td></tr></table>
 <h4>What survives / What to change</h4>
 <ul><li><span class='keep'>YES</span> — <strong>The taxonomy, the diagnosis, and the writing.</strong> Nothing measured here touched them.</li><li><span class='keep'>YES</span> — <strong>The prompt-level fixes.</strong> They are cheap and they are where nearly all the measured benefit came from.</li><li><span class='drop'>NO</span> — <strong>Presenting four fixes per chapter as equally weighted options.</strong> They are not, and the evidence orders them.</li><li><span class='drop'>NO</span> — <strong>Any two-digit precision figure without a spread beside it.</strong></li></ul>
 <h4>The one thing to remember</h4>
-<p><strong>The single change with the most leverage is not a correction, it is an addition.</strong> Five chapters independently measured that a model cannot assess its own work &mdash; its confidence, its own source attribution, its own quote, its own count. Stated once as a principle, that converts a scattered set of negative results into a rule that <em>predicts which fixes will fail before you build them</em>: checking done outside the model works, checking done by a different model partly works and costs multiples, and checking done by the model about itself does not work.</p>
+<p><strong>The single change with the most leverage is not a correction, it is an addition.</strong> Four chapters independently measured that a model cannot assess its own work &mdash; its confidence, its verdict on its own input, its own count. Stated once as a principle, that converts a scattered set of negative results into a rule that <em>predicts which fixes will fail before you build them</em>: checking done outside the model works, checking done by a different model partly works and costs multiples, and checking done by the model about itself does not work.</p>
 <h4>Where this is weakest</h4>
 <p>This part is one author's editorial judgement applied to measurements from one corpus, one domain and mostly one model. The measurements are reproducible; the conclusions drawn from them are arguable, and the places where they are most arguable are listed in Part H rather than defended here.</p>
 </div>
@@ -26,11 +26,12 @@ is inside the noise floor it says so.</p>
 <h3>The finding that should reshape the book</h3>
 
 <div class="verdict">
-  <span class="label">Four of nine failures did not reproduce on a current model</span>
+  <span class="label">Five of nine failures did not reproduce on a current model</span>
   <p>Chapter 4 (classification cascade): 3 and 9 errors out of 96.<br>
   Chapter 7 (edge input): <strong>144 out of 144 correct</strong>, zero injections
   obeyed.<br>
-  Chapter 8 (routing and placement): 0% on three of four models.<br>
+  Chapter 8 (routing and placement): 0% on three of four models. (Drug labels. On real clinical notes the failure occurs: Experiment 8.6.)<br>
+  Chapter 9 (sparse field fabrication): 0 of 33 fields filled without support in the supplied text.<br>
   Chapter 10 (silent omissions): 55 of 55 items returned.</p>
   <p>In every case the <em>mechanism</em> is real — a wrong label really does
   cascade, a filled blank really is plausible. What did not hold is the implied
@@ -39,7 +40,7 @@ is inside the noise floor it says so.</p>
 
 <p>That is not a weakness in the book. It is a more interesting book than the one
 currently written. "Here are nine things that break" is a list. <strong>"Here are
-nine mechanisms, four of which modern models have largely closed on clean input,
+nine mechanisms, five of which modern models have largely closed on clean input,
 and here is what that means for where you should actually spend"</strong> is an
 argument nobody else is making with numbers.</p>
 
@@ -61,9 +62,9 @@ does not help; it makes the counterfeit better.</p>
       <strong>Chapter 3 gives the same fix without it and is correct — the two
       chapters contradict each other.</strong></td></tr>
   <tr><td><strong>9</strong></td>
-      <td>The quote-verification rule, applied to whole quotes, <strong>destroys
-      42 points of legitimate recall</strong> (96% → 54%) to buy 8 points of
-      fabrication catching.</td>
+      <td>The quote-verification rule, applied to whole quotes, <strong>keeps
+      only 54% of correct extractions</strong>. Its effect on fabrication was
+      never measured, because no fabrication occurred.</td>
       <td>Verify a bounded prefix — 80 characters holds recall at 95% — and say
       why. Add that the window is job-specific.</td></tr>
   <tr><td><strong>3</strong></td>
@@ -84,11 +85,11 @@ does not help; it makes the counterfeit better.</p>
       aphasia study; <strong>its own second fix reproduces that harm.</strong></td></tr>
 </table>
 
-<h3>The claim the book makes five times without knowing it</h3>
+<h3>The claim the book makes four times without knowing it</h3>
 
 <div class="headline">
-  Model self-assessment was measured unreliable <b>five independent ways</b>, in
-  five different chapters, by four different authors.
+  Model self-assessment was measured unreliable <b>four independent ways</b>, in
+  four different chapters.
 </div>
 
 <table>
@@ -100,8 +101,9 @@ does not help; it makes the counterfeit better.</p>
       classifications.</strong> 80–100% of errors arrived stamped HIGH.</td></tr>
   <tr><td>7</td><td>The pre-filter said IN_SCOPE or AMBIGUOUS to every direct
       injection. <strong>Never once ADVERSARIAL.</strong></td></tr>
-  <tr><td>8</td><td>The model named the wrong section for its own quotation
-      6–18% of the time.</td></tr>
+  <tr><td>8</td><td><strong>Withdrawn, 29 September 2026:</strong> the 6–18% came from an
+      80-character quote locator that matched the drug name opening every section;
+      no real misnaming was found.</td></tr>
   <tr><td>10</td><td>Asked to count its own source, wrong on <strong>6 of 6
       documents</strong> — once by more than three times, while its extraction was
       perfect.</td></tr>
@@ -132,18 +134,17 @@ police its own confidence"</em> — and then makes that its first fix.</p>
       Fifty-two recorded losses that were otherwise invisible.</td></tr>
   <tr><td>7</td><td>Stratified evaluation</td>
       <td>Listed last; the only fix in the chapter that produced information.</td></tr>
-  <tr><td>9</td><td>Section-provenance checking</td>
-      <td>Not in the book. Works where quote-verification cannot, at a measured
-      cost of ~24 points of recall.</td></tr>
+<tr><td colspan="3" style="font-size:9pt;color:#9a3412"><strong>Withdrawn, 29 September 2026:</strong> Chapter 9&rsquo;s section-provenance check is no longer promoted. Its zero fabrication was forced in both designs, so it was never measured. Its one real measurement is a cost: the map assigned children&rsquo;s dosing to the paediatric-use section, but FDA labels print it under Dosage and Administration (21 CFR 201.57(c)(9)(iv)), so the check rejected 5 correct children&rsquo;s doses. See Chapter 9, Experiment 9.3.</td></tr>
 </table>
 
 <h3>Additions the runs argue for</h3>
 
 <ul>
-  <li><strong>A cross-reference between Chapters 3 and 9.</strong> All 14 of
-  Chapter 9's fabrications carried a genuine quotation — the failure is
-  misattribution, which is Chapter 3's source-tracking failure appearing inside
-  Chapter 9's defences. The book has both halves and never connects them.</li>
+  <li style="font-size:9pt;color:#9a3412"><strong>Withdrawn, 29 September 2026:</strong>
+  a cross-reference between Chapters 3 and 9, proposed here because Chapter 9&rsquo;s
+  fabrications appeared to carry genuine quotations. Chapter 9 had no fabrication:
+  both remaining cases are correct readings of the supplied text, so their
+  quotations were real because the values were. See Chapter 9, Experiment 9.1.</li>
   <li><strong>The cheapest-checks-first ordering, in Chapter 3.</strong> Chapter 9
   already argues it. Chapter 3's most expensive fix is the one that most needs
   it.</li>
@@ -172,6 +173,7 @@ police its own confidence"</em> — and then makes that its first fix.</p>
       <td>Re-runs put it nearer 6–9%. The direction is solid, the magnitude is
       not. It should appear as "some of the time, and you cannot tell which
       times."</td></tr>
+<tr><td colspan="3" style="font-size:9pt;color:#9a3412"><strong>Withdrawn, 29 September 2026:</strong> the 18% figure and its 6&ndash;9% re-runs came from the 80-character locator artefact and are withdrawn, not merely reduced. See Chapter 8, Experiment 8.2.</td></tr>
   <tr><td><strong>Chapter 5's range-collapse null</strong></td>
       <td>Committed at 7/11; re-runs gave 9, 8, 8. The null I defended may itself
       be noise.</td></tr>

@@ -1,0 +1,89 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "Extract the origin address, the destination address and the billing address from the shipping document below. For each one, give the value and the exact line you took it from.\n\n<document>\nSHIPPING DOCUMENT  No. SD-46340\nDate: 2026-02-20\n\nAddresses appear in the order: sender, recipient, billing party.\nRavenscar Timber\n310 Union Boulevard\nWells 7176\n\nEllery Instruments\n8 Barley Mews\nWigan 9980\n\nDelta Grain Co\n31 Weavers Row\nSwansea 8411\n\nItems: 7 cartons, 790 kg\nCarrier reference: CR7957\n</document>",
+  "user": "Fill in the fields.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "origin_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "destination_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      },
+      "billing_address": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_quote": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "value",
+          "source_quote"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "origin_address",
+      "destination_address",
+      "billing_address"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"origin_address\":{\"value\":\"Ravenscar Timber, 310 Union Boulevard, Wells 7176\",\"source_quote\":\"Ravenscar Timber\\n310 Union Boulevard\\nWells 7176\"},\"destination_address\":{\"value\":\"Ellery Instruments, 8 Barley Mews, Wigan 9980\",\"source_quote\":\"Ellery Instruments\\n8 Barley Mews\\nWigan 9980\"},\"billing_address\":{\"value\":\"Delta Grain Co, 31 Weavers Row, Swansea 8411\",\"source_quote\":\"Delta Grain Co\\n31 Weavers Row\\nSwansea 8411\"}}",
+  "elapsed_ms": 1625,
+  "usage": {
+    "input_tokens": 657,
+    "output_tokens": 168
+  },
+  "logprobs": null
+}

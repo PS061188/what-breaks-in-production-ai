@@ -1,0 +1,48 @@
+{
+  "model": "claude-haiku-4-5",
+  "system": "You are assembling a clinical visit note. The sentences of one note are listed below in random order. Each sentence carries, in square brackets, the heading it was written under. File every sentence under that heading. In the JSON, the headings are the keys subjective, objective_exam, objective_results and assessment_and_plan. Return each sentence ID under exactly one heading. Do not leave any sentence out and do not invent IDs.\n\n<sentences>\nS1 [OBJECTIVE EXAM]: No murmurs, gallops, or rubs.\nS2 [SUBJECTIVE]: The patient states that she has been doing well with her depression.\nS3 [ASSESSMENT AND PLAN]: Christine Flores is a 63-year-old female presenting for her yearly exam.\nS4 [SUBJECTIVE]: She states that she has been going to therapy every week, which has helped her manage her symptoms.\nS5 [SUBJECTIVE]: The patient states that she has been checking her blood pressure at home.\nS6 [SUBJECTIVE]: She denies any thoughts of self-harm or harming others.\nS7 [ASSESSMENT AND PLAN]: • Medical Treatment: Continue current regimen.\nS8 [SUBJECTIVE]: She also had a right carpal tunnel release done about 2 years ago.\nS9 [SUBJECTIVE]: Christine Flores is a 63-year-old female presenting for her yearly exam.\nS10 [ASSESSMENT AND PLAN]: • Medical Reasoning: She is doing well 2 years postoperatively and is asymptomatic at this time.\nS11 [SUBJECTIVE]: She notes that her blood pressure has fluctuated lately.\nS12 [SUBJECTIVE]: The patient states that her right carpal tunnel release has been doing well.\nS13 [SUBJECTIVE]: The patient has continued utilizing her medications.\nS14 [OBJECTIVE EXAM]: • Neurological/Psychological: Appropriate mood and affect.\nS15 [OBJECTIVE EXAM]: • Respiratory: Lungs are clear to auscultation bilaterally.\nS16 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: She will contact us if her symptoms return.\nS17 [ASSESSMENT AND PLAN]: Patient Agreements: The patient understands and agrees with the recommended medical treatment plan.\nS18 [OBJECTIVE EXAM]: Bilateral grip strength equal.\nS19 [OBJECTIVE EXAM]: No wheezes, rales, or rhonchi.\nS20 [SUBJECTIVE]: She states that her diet has been a little all over the place.\nS21 [SUBJECTIVE]: She denies numbness or tingling in her hands or fingers.\nS22 [SUBJECTIVE]: • Psychiatric: Endorses depression.\nS23 [ASSESSMENT AND PLAN]: • Patient Education and Counseling: She should continue to monitor this at home and follow up in 1 month.\nS24 [SUBJECTIVE]: • Neurological: Endorses headaches.\nS25 [SUBJECTIVE]: • Cardiovascular: Endorses blood pressure issues.\nS26 [SUBJECTIVE]: She reports that she has had some headaches, however, she thought that it was related to her increased screen time.\nS27 [ASSESSMENT AND PLAN]: • Medical Treatment: Increase lisinopril to 10 mg once daily.\nS28 [SUBJECTIVE]: She notes that she has been taking her medication as prescribed at her last visit.\nS29 [SUBJECTIVE]: The patient notes that she is sleeping well at night and has been getting a full 8 hours.\nS30 [OBJECTIVE EXAM]: No extra heart sounds.\nS31 [SUBJECTIVE]: She has a history of high blood pressure and depression in the past.\nS32 [SUBJECTIVE]: She states that she has not had a normal reading in a couple of weeks.\nS33 [OBJECTIVE EXAM]: • Cardiovascular: Regular rate and rhythm.\nS34 [OBJECTIVE EXAM]: Neurologically intact.\nS35 [ASSESSMENT AND PLAN]: She does admit to dietary indiscretion due to her increased workload.\nS36 [ASSESSMENT AND PLAN]: • Medical Reasoning: She is doing well and managing this with medication and weekly therapy.\nS37 [ASSESSMENT AND PLAN]: Carpal tunnel release.\nS38 [ASSESSMENT AND PLAN]: • Medical Reasoning: Her blood pressures have been fluctuating lately.\nS39 [OBJECTIVE RESULTS]: Laboratory studies are all within normal limits.\nS40 [SUBJECTIVE]: The patient notes that she has been working more hours.\nS41 [OBJECTIVE EXAM]: • Neck: Supple without thyromegaly or cervical lymphadenopathy.\n</sentences>",
+  "user": "File the sentences.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "subjective": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_exam": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "objective_results": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "assessment_and_plan": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "subjective",
+      "objective_exam",
+      "objective_results",
+      "assessment_and_plan"
+    ],
+    "additionalProperties": false
+  },
+  "response": "{\"subjective\": [\"S2\", \"S4\", \"S5\", \"S6\", \"S8\", \"S9\", \"S11\", \"S12\", \"S13\", \"S20\", \"S21\", \"S22\", \"S24\", \"S25\", \"S26\", \"S28\", \"S29\", \"S31\", \"S32\", \"S40\"], \"objective_exam\": [\"S1\", \"S14\", \"S15\", \"S18\", \"S19\", \"S30\", \"S33\", \"S34\", \"S41\"], \"objective_results\": [\"S39\"], \"assessment_and_plan\": [\"S3\", \"S7\", \"S10\", \"S16\", \"S17\", \"S23\", \"S27\", \"S35\", \"S36\", \"S37\", \"S38\"]}",
+  "elapsed_ms": 2269,
+  "usage": {
+    "input_tokens": 1397,
+    "output_tokens": 189
+  },
+  "logprobs": null
+}
