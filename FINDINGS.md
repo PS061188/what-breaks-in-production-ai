@@ -2703,3 +2703,92 @@ the extraction side and no wrong call. Book: the "Adapt this before you use it" 
 carries the line with its measured effect; "Where this prompt works" has the before/after
 counts; numbers table row 10.7 updated. The printed prompt is unchanged (it is the one
 the FDA-label results were measured with).
+
+## Chapter 10 — the fixes on output that cannot be counted (Experiment 10.9, 13 Oct 2026)
+
+Prachi: the fixes all assume enumerable items; run them on a task without them and
+report inside each fix. Task: Experiment 9.4's 360 recorded template/permission notes
+from the 60 ACI-Bench dialogues (prose output; no new note generation).
+
+**Fix 1 — tagger count on prose** (`probe_note_count.py`, Med7 DRUG spans, local, 235 s).
+Dialogue vs note distinct-drug-name counts; note flagged when lower. Per dialogue: 1–10
+names, median 3. Flags: template 33/30/32, permission 31/33/29 of 60 → 188 of 360.
+Classified then read: 109 flags = junk only (Med7 on spoken text tags first names —
+sarah, michelle, katherine, linda, clark, walmart, atlanta — and fillers — um, hey, i —
+as DRUG). Remaining 79 read at their four strongest: D2N139 Benicar IS in the note
+(olmesartan combo line) and carvedilol is "next medication… which I try to avoid" (a
+future option); D2N026 Eliquis IS in the note, prednisone was a doctor question the
+patient never confirmed; D2N064 Tylenol appears as acetaminophen (generic rename);
+D2N186 Vicodin requested and declined, note records "non-narcotic options". Verified
+omissions: 0. Mechanisms: tagger out of distribution + prose renames + a note is
+selective by design (the case study's reproduce-vs-compress line).
+
+**Fix 2 — list-length assertion**: no list on prose; does not run. Printed as the result.
+
+**Fix 3 — completeness audit on prose** (`probe_note_audit.py`, 64 calls incl. 4
+re-records of unparsable replies, $2.16 notional, 3,282 s; every claim printed in
+note_audit_log.txt with a content-word check against note and dialogue). 91 claims on
+45 of 60 notes; 1 unparsable left. Checks: 1 claim names a dose and is false by 10.5's
+settled record (D2N088 metformin, in the note as "metformin increased to 1000 mg twice
+daily" — the audit's quote even carries the dose); 17 claims' content words are mostly
+in the note already; 0 quotes absent from the dialogue (no invented quotes). The rest
+are real absent content — hydration counselling on a new diuretic (D2N008), the
+betamethasone-over-methylprednisolone rationale (D2N022), "extremely low" days
+(D2N015), a missed Dr-Davis appointment (D2N022) — whose note-worthiness is editorial.
+No enumerable ground truth exists; that is the experiment's stated point.
+
+**Fix 4 — not_extracted field**: no answer schema on prose output; na. 10.7 is its
+free-text measurement (input side).
+
+**Book**: a "same check on output that cannot be counted" passage in fix 1, one-sentence
+results in fixes 2 and 4, a "one fix left standing" passage in fix 3, numbers-table row
+10.9. Scorer notes: the junk/real split in probe-note-count is a regex suggestion over
+the printed per-case list; the four strongest real-looking flags were opened in both
+dialogue and note before "0 verified omissions" was printed.
+
+## Fix 4 checked in code (Experiment 10.10, 14 Oct 2026)
+
+Prachi: the field is an engineering fix, so check it through code — deterministic
+results may differ. The deterministic half is verification of the model-written
+entries: `probe_field_codecheck.py` replays all 360 recorded 10.7 replies and traces
+each `extracted` item and `not_extracted` entry to its dialogue (digits → spoken
+forms → item words; entries read when flagged).
+
+Per run (field / extracted NOT TRACED after the final matcher): as-printed 1/0, 0/0,
+1/0; narrowed 1/0, 0/1, 0/0 → 4 of 1,192. Read: D2N104 "methoprexate" (dialogue says
+methotrexate — a corrupted drug name, the one real catch); D2N104 "Unit of measurement
+for prednisone doses" (describes an ambiguity, quotes nothing); D2N160 "90 (or 79)"
+(the transcript itself is garbled: "seven over ninety"); D2N104 "prednisone: one
+(additional dose taken occasionally)" (paraphrase of "i take an extra one"). Zero
+invented values anywhere.
+
+Checker archaeology, kept because it is the finding: the first strict run raised 43
+alarms and 39 were the checker — "a thousand milligrams", "seven and a half", "two and
+a half milligram pills", "a half a cc", "one fifty", "one thirties", "a hundred and
+eighty over eighty", PSA written ".5", Fitzpatrick "iv to v", plus a double-normalised
+0.6 (my bug). Each fixed form is in `spoken_variants()` / `numbers_in()`; every case
+was read before any count was printed. Same lesson as 10.8, now on the checker's side:
+a deterministic verifier is only as good as its spelling of the domain.
+
+Book: fix 4 gained "Check the field in code." with the numbers and the lesson; numbers
+table row 10.10; report subsection; README entry.
+
+## Fix 4: the code-check trimmed in the book; enforcement measured (14 Oct 2026)
+
+Prachi: is the trace check needed in the omission chapter, since it measures
+fabrication? Verdict agreed: it is a precondition for trusting the queue, not an
+omission finding — the book now carries two sentences inside the routing block (no
+invented value, one corrupted drug name, Experiment 10.10) and the 43-alarms
+spoken-number story lives only here and in the report (it duplicated fix 1's lesson
+in the book).
+
+Her second ask, run as **Experiment 10.11**: enforcement through the answer schema.
+Decoder-level (API structured outputs) not available on the subscription stack.
+Engineering enforcement is deterministic given a reply, so it was computed by replay
+over the 360 recorded 10.7 replies instead of a 180-call live arm: 359 conform to the
+strict schema as generated; the one failure (as-printed s2 D2N049: extracted items as
+{'medication','dose'} objects) was corrected with one live CLI call — same three
+medicines re-written as strings, not_extracted identical before and after. Conclusion
+printed in fix 4: the schema requirement is cheap to meet; enforcement changed format
+once in 360 and content never; what the field holds is governed by the prompt. The
+unmeasured remainder stays named: generation-time enforcement via structured outputs.

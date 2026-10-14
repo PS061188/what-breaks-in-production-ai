@@ -4037,6 +4037,59 @@ needs the same domain work but you control it, and on these documents it was
 the only count that caught every drop with no false alarm. Output in
 <code>ner_dose_med7_out.txt</code> and <code>ner_dose_deberta_out.txt</code>.</p>
 
+<h4>Experiment 10.9 &mdash; the four fixes on output that cannot be counted</h4>
+
+<p>Every fix above was measured on an extraction task, where the output is a
+list. Prachi&rsquo;s question (13 Oct 2026): what do the fixes do on a task
+whose output has no countable items? The task: Experiment 9.4&rsquo;s recorded
+clinic notes, written by Claude Haiku 4.5 from the 60 ACI-Bench conversations.
+A note is prose. Four fixes, four answers.</p>
+
+<p><strong>Fix 1, the tagger count</strong> (<code>probe_note_count.py</code>, local,
+no model calls). Med7 counted distinct DRUG spans in each dialogue and each of
+its six notes; a note with fewer was flagged. 188 of 360 notes flagged; 29 to
+33 per condition and run. Reading them: 109 flags contain nothing but Med7
+misreading conversation &mdash; first names (Sarah, Michelle, Katherine),
+filler words (&ldquo;um&rdquo;, &ldquo;hey&rdquo;, &ldquo;i&rdquo;), a place
+(Atlanta) tagged as drugs; the model was trained on written notes and spoken
+text sits outside that training. The 79 others dissolved on reading the four
+strongest: Benicar is in its note; Eliquis is in its note; Tylenol appears as
+acetaminophen (prose renames); prednisone was asked about and never confirmed;
+Vicodin was requested, declined, and the note says &ldquo;non-narcotic
+options&rdquo;; carvedilol is a future option the note left out. Verified
+omissions: none. Two breakages, named: the tagger misfires outside its
+training text, and a note renames and selects by design, so a count difference
+is a case to read, not a defect.</p>
+
+<p><strong>Fix 2, the list-length assertion</strong>: does not run. A note has no
+list and the assertion has no length to check. Recorded as the result, not
+skipped.</p>
+
+<p><strong>Fix 3, the completeness audit</strong>
+(<code>probe_note_audit.py</code>, 64 CLI calls with 4 re-records, $2.16
+notional, every claim in <code>note_audit_log.txt</code>). Shown dialogue and
+note, asked what the note leaves out: 91 claims across 45 of 60 notes, 1 reply
+unparsable after a retry. One claim is a known false alarm by Experiment
+10.5&rsquo;s record: metformin reported missing from a note that carries
+&ldquo;metformin increased to 1000 mg twice daily&rdquo;. Seventeen claims name
+content whose words are mostly in the note already. The rest name real
+conversational content absent from the note &mdash; a hydration counselling
+exchange on a new diuretic (D2N008), the stated reason for choosing
+betamethasone (D2N022), a patient&rsquo;s &ldquo;extremely low&rdquo; days
+(D2N015), a missed referral appointment (D2N022). Whether each belongs in a
+note is editorial judgement; there is no enumerable ground truth, which is the
+point of the experiment. On prose the audit is a reading feed, not a gate.</p>
+
+<p><strong>Fix 4, the not-extracted field</strong>: has no place to live. The
+field belongs to an extraction answer schema; a prose note has none. Its
+free-text measurement is Experiment 10.7, on the input side.</p>
+
+<p><strong>Verdict.</strong> On output that cannot be counted, the two counting
+fixes break or do not apply, the field has nowhere to go, and the audit alone
+still runs &mdash; as a sampled reading feed. Completeness measurement for
+prose output falls to the prevention section&rsquo;s instrument, the edit rate,
+which needs no count of the source.</p>
+
 <h4>Fix 2 — the model counting its own source</h4>
 
 <p>The first run of this fix compared the model&rsquo;s count with the number of
@@ -4257,6 +4310,59 @@ entirely, left the extraction unchanged, and kept every judgement call the
 labels had produced. The queue is still around one entry per stated dose and
 still varies run to run, so it remains a sampled review aid, not a completeness
 check; but it is now a list a person can read.</p>
+
+<h4>Experiment 10.10 &mdash; the field&rsquo;s entries, verified by code</h4>
+
+<p>Prachi&rsquo;s question (14 Oct 2026): fix 4 is an engineering fix, so should
+it not be checked through code? The schema half is deterministic already; what
+code can add is verification of the model-written content.
+<code>probe_field_codecheck.py</code> replays every recorded reply of Experiment
+10.7 (as-printed and narrowed, three runs each; no model calls) and checks each
+<code>extracted</code> item and each <code>not_extracted</code> entry against
+its dialogue: digits first, then the transcript&rsquo;s spoken forms, then the
+entry&rsquo;s item words.</p>
+
+<table>
+  <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
+  <tr><td>Strings traced (6 runs: 610 field entries + 582 extracted items)</td><td class="num">1,188 of 1,192</td></tr>
+  <tr><td>First strict run&rsquo;s alarms / of which the checker&rsquo;s own blindness</td><td class="num">43 / 39</td></tr>
+  <tr><td>Alarms after the checker learned spoken numbers</td><td class="num">4</td></tr>
+  <tr><td>&nbsp;&nbsp;a corrupted drug name (&ldquo;methoprexate&rdquo;) &mdash; the one real catch</td><td class="num">1</td></tr>
+  <tr><td>&nbsp;&nbsp;an entry describing an ambiguity rather than quoting one</td><td class="num">1</td></tr>
+  <tr><td>&nbsp;&nbsp;an entry pointing at a garbled stretch of transcript (&ldquo;seven over ninety&rdquo;)</td><td class="num">1</td></tr>
+  <tr><td>&nbsp;&nbsp;a paraphrased extracted item (&ldquo;prednisone: one&rdquo;)</td><td class="num">1</td></tr>
+  <tr><td>Invented values anywhere in the 360 replies</td><td class="num"><strong>0</strong></td></tr>
+</table>
+
+<p><strong>What the blindness was.</strong> The transcripts speak their numbers:
+&ldquo;a thousand milligrams&rdquo; (metformin 1000), &ldquo;seven and a half
+milligrams&rdquo; (methotrexate 7.5), &ldquo;two and a half milligram
+pills&rdquo; (2.5), &ldquo;a half a cc&rdquo; (0.5 cc), &ldquo;one
+thirties&rdquo; (130s), a PSA written &ldquo;.5&rdquo;. Each of the 39 was a
+correct model statement that the strict digit matcher could not see &mdash; the
+same lesson as Experiment 10.8&rsquo;s dose labels, now on the checker&rsquo;s
+side. <strong>Verdict.</strong> Tracing the field in code is cheap, replayable
+and worth shipping: it found the one corrupted drug name in 360 replies and
+proved the rest grounded. Build its number matcher from your transcripts&rsquo;
+own spellings, or nearly every alarm will be the checker, not the model.</p>
+
+<h4>Experiment 10.11 &mdash; the field enforced through the answer schema</h4>
+
+<p>Does enforcing the field at the schema level change what the model writes in
+it? Decoder-level enforcement (the API&rsquo;s structured outputs) was not run:
+no API on this stack. Engineering enforcement &mdash; validate each reply
+against the strict schema in code, send it back for correction until it
+conforms &mdash; is deterministic given a reply, and every reply of Experiment
+10.7 is recorded, so the enforced arm is computable by replay
+(<code>probe_field_enforce.py</code>): 359 of 360 replies conform as generated
+(the strict schema: exactly two keys, strings in <code>extracted</code>,
+{text, reason} pairs in <code>not_extracted</code>). The one failure, run 2 of
+D2N049, had written its three extracted items as objects
+(<code>{'medication': 'Norvasc', 'dose': '2.5 mg'}</code>). One live correction
+call returned the same three medicines as strings and left the
+<code>not_extracted</code> entries identical. Verdict: on this corpus,
+enforcement changes format once in 360 and content never; the field&rsquo;s
+behaviour belongs to the prompt, not to the schema.</p>
 
 <h4>One document, all three checks, side by side</h4>
 

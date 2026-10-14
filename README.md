@@ -511,12 +511,6 @@ Code: [`ch10-silent-omissions/probe_count.py`](ch10-silent-omissions/probe_count
 en_core_web_trf (the model the chapter names) has no dose type: used as printed it flagged all 4 really short runs and 10 of 50 complete ones — the catches all in the one document where the entity count matches a complete list, the false flags all one lab value; it finds no doses in either dosing table, so a list can lose up to 11 figures unflagged; the small model flags nothing; the repo's pattern count, same rule, flags 4 of 4 with no false flag  
 Code: [`ch10-silent-omissions/probe_ner.py`](ch10-silent-omissions/probe_ner.py) · needs its own spaCy environment (install line in the docstring)
 
-### Experiment 10.8
-
-**Does a tagger with a dose label remove the domain work?**  
-Med7 (`en_core_med7_lg`, STRENGTH/DOSAGE) and `blaze999/Medical-NER` (DeBERTa, DOSAGE) over the same six dosing sections and 60 recorded extractions as 10.4: 0 false alarms in 50 complete runs for each (the general tagger had 10), but neither labels doses written per kg, per day or as paired suspension strengths — Med7 saw 1 of Levothyroxine's 11 doses, DeBERTa 3 of 11 and 2 of Warfarin's 6 — and each caught 3 of the 4 real drops, missing the Amoxicillin drop because the two lost figures are ones it cannot see. A tagger's count flags only the loss of what it counts. Amazon Comprehend Medical (DOSAGE/STRENGTH attributes) not run: no AWS account  
-Code: [`ch10-silent-omissions/probe_ner_dose.py`](ch10-silent-omissions/probe_ner_dose.py) · own environment `.venv-med` (spaCy 3.4 + transformers; install lines in the docstring) · no model calls · outputs in `ner_dose_med7_out.txt`, `ner_dose_deberta_out.txt`
-
 ### Experiment 10.5
 
 **Does a long conversation's dose survive into the note?**  
@@ -534,6 +528,30 @@ Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit
 **What does the `not_extracted` field hold on text whose items are not delimited?**  
 Prompt 10-1 as printed, item type "medication dose amount", three runs over the 60 ACI-Bench conversations. The extraction dropped none of the 64 stated doses in any run (the one ruler miss is a dose the doctor retracted mid-sentence). The field filled on 49, 51 and 50 of 60 conversations (19, 20 and 19 of the 21 with no dose) with 137, 149 and 147 entries: 95, 91 and 88 a medicine named without an amount, 13, 9 and 9 a frequency only, the rest correct judgement calls (lab values, vitals, salt targets, a declined dose). No entry held back a dose the extraction should have carried. Volume, not wrong calls. One added line — "Do not list items that simply have no amount. List only values that could be mistaken for a medication dose amount." — run three more times (`--condition narrowed`): 57, 62 and 58 entries on 26, 32 and 30 conversations, the medicine inventory down to 5, 2 and 3, extraction unchanged, judgement calls kept  
 Code: [`ch10-silent-omissions/probe_field_conversation.py`](ch10-silent-omissions/probe_field_conversation.py) · 360 Haiku 4.5 calls through the subscription CLI, $8.12 notional · every entry in [`field_conversation_log.txt`](ch10-silent-omissions/field_conversation_log.txt) and [`field_conversation_narrowed_log.txt`](ch10-silent-omissions/field_conversation_narrowed_log.txt)
+
+### Experiment 10.8
+
+**Does a tagger with a dose label remove the domain work?**  
+Med7 (`en_core_med7_lg`, STRENGTH/DOSAGE) and `blaze999/Medical-NER` (DeBERTa, DOSAGE) over the same six dosing sections and 60 recorded extractions as 10.4: 0 false alarms in 50 complete runs for each (the general tagger had 10), but neither labels doses written per kg, per day or as paired suspension strengths — Med7 saw 1 of Levothyroxine's 11 doses, DeBERTa 3 of 11 and 2 of Warfarin's 6 — and each caught 3 of the 4 real drops, missing the Amoxicillin drop because the two lost figures are ones it cannot see. A tagger's count flags only the loss of what it counts. Amazon Comprehend Medical (DOSAGE/STRENGTH attributes) not run: no AWS account  
+Code: [`ch10-silent-omissions/probe_ner_dose.py`](ch10-silent-omissions/probe_ner_dose.py) · own environment `.venv-med` (spaCy 3.4 + transformers; install lines in the docstring) · no model calls · outputs in `ner_dose_med7_out.txt`, `ner_dose_deberta_out.txt`
+
+### Experiment 10.9
+
+**What do the fixes do on output that cannot be counted?**  
+The four fixes against Experiment 9.4's 360 recorded clinic notes (prose output from the 60 ACI-Bench conversations). Fix 1 (Med7 drug-name count, dialogue vs note): 188 of 360 notes flagged, zero verified omissions — 109 flags are the tagger misreading conversation (first names and filler words tagged as drugs), the rest are renames (Tylenol → acetaminophen), declined or unconfirmed medicines, and editorial selection. Fix 2: does not run (no list, no length). Fix 3 (audit, 64 CLI calls, $2.16 notional): 91 claims across 45 of 60 notes — 1 false by Experiment 10.5's record (metformin), 17 already in the note in other words, the rest real but judgement-dependent content (counselling, reasoning, patient statements). Fix 4: no answer schema to hold the field. On prose, only the audit still runs, as a reading feed  
+Code: [`ch10-silent-omissions/probe_note_count.py`](ch10-silent-omissions/probe_note_count.py) (local, `.venv-med`) · [`ch10-silent-omissions/probe_note_audit.py`](ch10-silent-omissions/probe_note_audit.py) · logs [`note_count_out.txt`](ch10-silent-omissions/note_count_out.txt), [`note_audit_log.txt`](ch10-silent-omissions/note_audit_log.txt)
+
+### Experiment 10.10
+
+**Do the field's entries trace back to the source?**  
+Fix 4's deterministic half: code verification of every string in Experiment 10.7's 360 recorded replies (1,192 extracted items + field entries) against their dialogues. After the matcher learned the transcripts' spoken numbers ("a thousand milligrams", "seven and a half", "one thirties", ".5"), 1,188 traced; the 4 alarms, read: one corrupted drug name ("methoprexate" — the one real catch), one ambiguity-describing entry, one note on a garbled transcript stretch, one paraphrase. Zero invented values. First strict run: 43 alarms, 39 of them the checker's own blindness  
+Code: [`ch10-silent-omissions/probe_field_codecheck.py`](ch10-silent-omissions/probe_field_codecheck.py) · replay only, no model calls · output in [`field_codecheck_out.txt`](ch10-silent-omissions/field_codecheck_out.txt)
+
+### Experiment 10.11
+
+**Does enforcing the field through the answer schema change its content?**  
+Engineering enforcement (validate against the strict schema in code, correct until it conforms) computed by replay over Experiment 10.7's 360 recorded replies: 359 conform as generated; the one failure (extracted items written as objects, D2N049 run 2) was corrected in a single live call that returned the same three medicines as strings and left the field unchanged. Format once in 360, content never. Decoder-level enforcement (API structured outputs) not run: no API on this stack  
+Code: [`ch10-silent-omissions/probe_field_enforce.py`](ch10-silent-omissions/probe_field_enforce.py) · 1 CLI call · output in [`field_enforce_out.txt`](ch10-silent-omissions/field_enforce_out.txt)
 
 ### Experiment C.1
 
