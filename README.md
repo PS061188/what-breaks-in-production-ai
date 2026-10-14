@@ -337,6 +337,12 @@ Code: [`ch03-hallucination/probe_logprobs.py`](ch03-hallucination/probe_logprobs
 LOW never issued in 192 classifications; ensemble is stable, not just accurate  
 Code: [`ch04-classification-cascade/`](ch04-classification-cascade/)
 
+### Experiment 4.2
+
+**Three different systems voting, not three prompts**  
+Haiku 4.5 (shipped template), GPT-4.1-mini (one-line prompt) and bart-large-mnli zero-shot, majority vote: matched the best member (99/99/98 of 96 opening, 96/96/94 of 96 body) and all-three-disagree sent 0-2 of 96 to review  
+Code: [`ch04-classification-cascade/model_ensemble.py`](ch04-classification-cascade/model_ensemble.py)
+
 ### Experiment 5.1
 
 **What does 'extract into clean values' cost?**  
@@ -358,7 +364,7 @@ Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 ### Experiment 6.1
 
 **The answer is right about something no longer true**  
-status rule alone 17%, the book's six-rule protocol 33%  
+status rule alone 17%, the book's six-rule protocol 30%  
 Code: [`ch06-state-mismatch/`](ch06-state-mismatch/)
 
 ### Experiment 6.2

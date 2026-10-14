@@ -2792,3 +2792,26 @@ medicines re-written as strings, not_extracted identical before and after. Concl
 printed in fix 4: the schema requirement is cheap to meet; enforcement changed format
 once in 360 and content never; what the field holds is governed by the prompt. The
 unmeasured remainder stays named: generation-time enforcement via structured outputs.
+
+
+## Correction — Chapter 5, the normaliser's loss count is 40, not 52 (14 Oct 2026)
+
+The book and the section "Where the Numbers Come From" printed "52 recorded
+losses" for Experiment 5.2, and §10 above says 53 discard rows. A replay of the
+committed `ch05-extraction-normalisation/fixed.py` from its fixtures prints 40
+losses, and the README has said 40 since the repository was first published. The
+52 and 53 came from runs that predate the initial commit; `fixed.py` has never
+changed in git. Found by the 14 Oct book-to-repository cross-check. The book now
+prints 40 in both places. The earlier §10 sentence stands as a record of the
+pre-commit run it describes.
+
+## Correction — README quoted the wrong arm for Chapter 6's protocol (14 Oct 2026)
+
+The top-level README's Experiment 6.1 line said "the book's six-rule protocol
+33%"; 33% is the status+date+version arm. The full protocol's measured rate is
+30% (arm table above). README corrected. COSTS.md and the report's front page
+also still carried the withdrawn $41 / ten-times judge figures after the 3 Oct
+re-measure ($22, about five times); both corrected. The section "Where the
+Numbers Come From" in the book gained Experiment 4.2 as a repository identifier
+(the three-system ensemble, previously recorded only as "Chapter 4 fix 2"
+above), and its dataset summary now names every ACI-Bench experiment.

@@ -66,20 +66,20 @@ Replaying costs nothing and takes seconds — `python run_all.py`.
 | **Structured schema** (citations + unverified_claims) | included above | +output tokens for citations, ~20% here | none | number of claims per answer |
 | **Citation enforcement in code** | $0 | <1 ms | none | nothing. It is an `if`. |
 | **Fuzzy quote verification** (`shared/scoring.py`) | $0 | <1 ms per quote with RapidFuzz | `pip install rapidfuzz`, 2 MB | quote length × document length. Bounded by `VERIFY_WINDOW`. |
-| **LLM-as-judge** (`fix_judge.py`, Sonnet 5) | **$41** | **+4.1 s** | none | every answer, forever. The most expensive fix in the book. |
+| **LLM-as-judge** (`fix_judge.py`, Sonnet 5) | **$22** | **+4.1 s** | none | every answer, forever. The most expensive fix in the book. |
 | **Cross-encoder similarity** (`fix_similarity.py`) | $0 API | +0.23 s | 367 MB weights, 10.3 s model load | **claims × passages.** 6,752 pairs for 72 answers. |
 | **Bi-encoder cosine** (`fix_similarity.py`) | $0 API | +0.05 s | shares the same weights | claims + passages (not the product) |
 | **Version-locked retrieval** (`fix_retrieval.py`) | $0 | **0 ms** — one `where` clause | 79 MB embedding model, 0.9 s index build, 2 MB index for 48 docs | index size at ingest, not at query |
 
-### The judge is 10× the generation it audits
+### The judge is about five times the generation it audits
 
 Generating an answer with Haiku costs ~$0.0042. Auditing it with Sonnet 5 costs
-**$0.0412** — and adds 4.1 seconds. Run as a pre-delivery gate on every answer,
+**~$0.022** (re-measured 3 Oct 2026) — and adds 4.1 seconds. Run as a pre-delivery gate on every answer,
 as Chapter 3 specifies, the audit dominates the bill and the latency budget.
 
 Three levers, in the order worth trying:
 
-1. **Sample.** 10% of traffic turns $41 into $4.10 per 1,000. You lose the gate
+1. **Sample.** 10% of traffic turns $22 into $2.20 per 1,000. You lose the gate
    and keep the monitor — which for many systems is the honest trade.
 2. **Cheaper judge.** Haiku judging Haiku costs ~$8 per 1,000, but violates the
    chapter's own rule about self-verification. Judge with a *different* cheap
