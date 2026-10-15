@@ -2815,3 +2815,33 @@ re-measure ($22, about five times); both corrected. The section "Where the
 Numbers Come From" in the book gained Experiment 4.2 as a repository identifier
 (the three-system ensemble, previously recorded only as "Chapter 4 fix 2"
 above), and its dataset summary now names every ACI-Bench experiment.
+
+## The audit with a second, different model (Experiment 10.12, 14 Oct 2026)
+
+Prachi caught the heading/evidence mismatch: fix 3 said "secondary model call" while
+10.6's auditor was the same Haiku that wrote the extractions. Fixes: the heading is now
+"Completeness audit via a second call" with a clarifying sentence; the prevention
+sentence, the takeaway bullet and the numbers-table row for 10.6 no longer say "second
+model" where the same model was measured; and the different-model arm was run at her
+ask.
+
+`probe_audit.py --auditor claude-sonnet-5` (new flag; per-auditor fixture subdir and
+per-auditor call budget — the first attempt died on the shared 60-call budget already
+consumed by Haiku's fixtures). Same 60 recorded extractions, same question verbatim.
+
+| | Haiku (10.6) | Sonnet 5 (10.12) |
+|---|---|---|
+| known-missing named (of 41) | 10 | **39** |
+| incomplete: all/some/none (of 12) | 5/3/4 | 11/1/0 |
+| worst extraction | "nothing missing" | all but two figures (42.9, 600 — inside the paired strengths) |
+| complete alarmed (of 48) | 6 | 12 |
+| invented figures | 1 | **0** |
+| notional cost | $2.04 | $1.98 |
+
+Alarms read: restatements or real off-task content (water volumes, INR target,
+creatinine clearance, intervals); one complete Sertraline extraction drew 15 entries,
+nearly all restatements. Verdict in the book: the auditor decides what the audit is
+worth — the same model misses what it wrote past; a stronger different model caught
+nearly everything at the same per-call cost, paying in off-task alarms. "Sampled
+monitor, never the only check" stands for both arms. Takeaway bullet rewritten to
+carry both arms without numbers.

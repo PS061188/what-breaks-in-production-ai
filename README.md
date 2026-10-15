@@ -525,7 +525,7 @@ Code: [`ch10-silent-omissions/exp105_dialogue_doses/`](ch10-silent-omissions/exp
 
 ### Experiment 10.6
 
-**Does the secondary "what is missing?" audit catch known omissions?**  
+**Does a "what is missing?" audit in a second call catch known omissions?**  
 The chapter's completeness-audit fix, run once over all 60 recorded extractions of Experiment 10.3 (12 short by a known set of figures, 48 complete). It caught 10 of 41 known-missing figures — every full catch a one-figure gap — answered "nothing is missing" on the extraction that had dropped eight strength figures, and raised alarms on 6 of 48 complete extractions, mostly figures the extraction already carried in other words, once a figure in neither the source nor the extraction. The same missing dose was caught in 4 runs and missed in 2  
 Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Haiku 4.5 calls through the subscription CLI, $2.04 notional · every case in [`audit_log.txt`](ch10-silent-omissions/audit_log.txt)
 
@@ -558,6 +558,12 @@ Code: [`ch10-silent-omissions/probe_field_codecheck.py`](ch10-silent-omissions/p
 **Does enforcing the field through the answer schema change its content?**  
 Engineering enforcement (validate against the strict schema in code, correct until it conforms) computed by replay over Experiment 10.7's 360 recorded replies: 359 conform as generated; the one failure (extracted items written as objects, D2N049 run 2) was corrected in a single live call that returned the same three medicines as strings and left the field unchanged. Format once in 360, content never. Decoder-level enforcement (API structured outputs) not run: no API on this stack  
 Code: [`ch10-silent-omissions/probe_field_enforce.py`](ch10-silent-omissions/probe_field_enforce.py) · 1 CLI call · output in [`field_enforce_out.txt`](ch10-silent-omissions/field_enforce_out.txt)
+
+### Experiment 10.12
+
+**Does a different, stronger auditor catch what the same-model audit missed?**  
+Experiment 10.6 rerun with Claude Sonnet 5 as the auditor (`probe_audit.py --auditor claude-sonnet-5`), same 60 recorded extractions: 39 of 41 known-missing figures named (Haiku: 10), every incomplete extraction flagged, 11 of 12 fully caught, and the extraction Haiku passed as complete got all but two of its figures named. Twelve of 48 complete extractions drew alarms — restatements or real off-task source content (water volumes, INR target, intervals), nothing invented. $1.98 notional. The auditor decides what the audit is worth  
+Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Sonnet 5 calls through the subscription CLI · every case in [`audit_sonnet_log.txt`](ch10-silent-omissions/audit_sonnet_log.txt)
 
 ### Experiment C.1
 

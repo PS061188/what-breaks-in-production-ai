@@ -50,6 +50,8 @@ sys.path.insert(0, str(HERE))
 from common import build_cases, dose_figures  # noqa: E402
 from probe_count import MODEL, parse  # noqa: E402
 
+AUDITOR = MODEL   # overridden by --auditor for Experiment 10.12
+
 FIXTURES = HERE / "fixtures_audit"
 SOURCE_CLI = HERE / "fixtures_count"
 SOURCE_API = HERE / "fixtures"
@@ -83,7 +85,7 @@ def call_cli(system: str, prompt: str, budget_used: int) -> dict:
     """
     global _attempts
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
-    cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", system,
+    cmd = [CLI, "-p", "--model", AUDITOR, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
     proc = None
     with tempfile.TemporaryDirectory() as cwd:
@@ -190,7 +192,8 @@ def propose_tags(entry: str, comp: dict, source: str) -> list:
 
 
 def get(ext: dict, live: bool) -> dict:
-    path = FIXTURES / ext["condition"] / f"{ext['drug']}__s{ext['run']}.json"
+    sub = "" if AUDITOR == MODEL else AUDITOR + "/"
+    path = FIXTURES / (sub + ext["condition"]) / f"{ext['drug']}__s{ext['run']}.json"
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
     if not live:
@@ -199,7 +202,7 @@ def get(ext: dict, live: bool) -> dict:
     doses = json.dumps(ext["doses"], ensure_ascii=False, indent=1)
     out = call_cli(SYSTEM, USER.format(text=ext["case"]["text"], doses=doses), budget_used=_pre_recorded)
     record = {"condition": ext["condition"], "drug": ext["case"]["drug"], "run": ext["run"],
-              "model_requested": MODEL, "models_used": sorted((out.get("modelUsage") or {}).keys()),
+              "model_requested": AUDITOR, "models_used": sorted((out.get("modelUsage") or {}).keys()),
               "reply": out.get("result", ""), "seconds": round(time.time() - started, 1),
               "notional_cost_usd": out.get("total_cost_usd")}
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -211,7 +214,10 @@ def get(ext: dict, live: bool) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--live", action="store_true", help="record missing audits through the claude CLI")
+    ap.add_argument("--auditor", default=MODEL, help="auditor model (Experiment 10.12: a different model than the extractor)")
     args = ap.parse_args()
+    global AUDITOR
+    AUDITOR = args.auditor
 
     extractions = load_extractions()
     comps = [comparison(e) for e in extractions]
@@ -243,7 +249,8 @@ def main() -> int:
 
     if args.live:
         global _pre_recorded
-        _pre_recorded = len(list(FIXTURES.glob("*/*.json")))
+        root = FIXTURES if AUDITOR == MODEL else FIXTURES / AUDITOR
+        _pre_recorded = len(list(root.glob("*/*.json")))
         with cf.ThreadPoolExecutor(max_workers=6) as pool:
             list(pool.map(lambda e: get(e, live=True), extractions))
 

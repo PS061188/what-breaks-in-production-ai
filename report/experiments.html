@@ -4135,14 +4135,14 @@ task where the extraction was essentially perfect.</p>
 complete, so it could not say whether the audit catches omissions that are
 known to have happened. <code>probe_audit.py</code> put the book&rsquo;s
 question, word for word, to Claude Haiku 4.5 once for each of the 60 recorded
-extractions of Experiment 10.3 &mdash; 12 short by a known set of figures, 48
+extractions of Experiment 10.3 &mdash; 12 of them missing a known set of figures, 48
 complete, 41 known-missing figures in all. 60 calls through the subscription
 CLI, $2.04 notional; every case is printed in <code>audit_log.txt</code>.</p>
 
 <table>
   <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
   <tr><td>Known-missing figures named by the audit</td><td class="num"><strong>10 of 41</strong></td></tr>
-  <tr><td>Short extractions: all figures caught / some / none</td><td class="num">5 / 3 / 4 of 12</td></tr>
+  <tr><td>Extractions with missing figures: all caught / some / none</td><td class="num">5 / 3 / 4 of 12</td></tr>
   <tr><td>Reply on the worst extraction (8 figures dropped)</td><td class="num">&ldquo;nothing missing&rdquo;</td></tr>
   <tr><td>Alarms on complete extractions</td><td class="num">6 of 48</td></tr>
   <tr><td>The same missing dose, over the 6 runs that dropped it</td><td class="num">caught 4, missed 2</td></tr>
@@ -4159,6 +4159,38 @@ other two alarms named real source content outside the dose task &mdash;
 treatment durations and an INR threshold. As a sampled monitor the audit is
 cheap and sometimes names the exact missing line; as the only completeness
 check it would have passed the worst extraction in the record.</p>
+
+<h4>Experiment 10.12 &mdash; the audit with a second, different model</h4>
+
+<p>Prachi&rsquo;s catch (14 Oct 2026): the fix was headed &ldquo;secondary model
+call&rdquo; while Experiment 10.6&rsquo;s auditor was the same Haiku that wrote
+the extractions. The heading now says &ldquo;second call&rdquo;, and the
+different-model arm was run: <code>probe_audit.py --auditor claude-sonnet-5</code>,
+the book&rsquo;s question word for word, same 60 recorded extractions, 60 CLI
+calls, $1.98 notional, every case in <code>audit_sonnet_log.txt</code>.</p>
+
+<table>
+  <tr><th style="width:46%">Measure</th><th class="num">Same model (Haiku, 10.6)</th><th class="num">Second model (Sonnet 5, 10.12)</th></tr>
+  <tr><td>Known-missing figures named (of 41)</td><td class="num">10</td><td class="num"><strong>39</strong></td></tr>
+  <tr><td>Incomplete extractions: all figures / some / none (of 12)</td><td class="num">5 / 3 / 4</td><td class="num">11 / 1 / 0</td></tr>
+  <tr><td>Reply on the extraction that dropped the most</td><td class="num">&ldquo;nothing missing&rdquo;</td><td class="num">named all but two figures</td></tr>
+  <tr><td>Complete extractions alarmed (of 48)</td><td class="num">6</td><td class="num">12</td></tr>
+  <tr><td>Invented figures in alarms</td><td class="num">1 (&ldquo;1000 mg/day&rdquo;)</td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Notional cost</td><td class="num">$2.04</td><td class="num">$1.98</td></tr>
+</table>
+
+<p><strong>Alarm quality, read.</strong> Sonnet&rsquo;s twelve alarms on complete
+extractions name either a dose the extraction already carries in other words, or
+real source values outside the dose task: reconstitution water volumes, an INR
+target, creatinine clearance, monitoring intervals. Nothing invented. One
+complete Sertraline extraction drew fifteen entries, nearly all restatements
+&mdash; wide scope, not fabrication. The two figures it missed (42.9 mg and 600
+mg on the worst extraction) sit inside the paired suspension strengths.
+<strong>Verdict.</strong> The auditor decides what the audit is worth: the
+same model misses what it wrote past; a stronger different model turned the
+audit into a real omission detector at the same per-call cost, paying in
+off-task alarms. The fix&rsquo;s verdict &mdash; sampled monitor, never the only
+check &mdash; stands for both arms.</p>
 
 <h4>Fix 4 — the "what I did not extract" field, with what it actually contained</h4>
 
