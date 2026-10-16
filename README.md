@@ -35,7 +35,7 @@ GPT-5-mini. Upgrading the model made this failure harder to see, not rarer.
 → [`ch02-input-integrity/`](ch02-input-integrity/)
 
 **A model cannot grade its own confidence.** Across 192 classifications it
-returned `LOW` **zero times**, and stamped 80% to 100% of its errors `HIGH`. Any
+returned `LOW` **zero times**, and stamped 67% to 89% of its errors `HIGH` across the recorded runs. Any
 guardrail of the form "route anything below HIGH to review" has nothing to act
 on.
 → [`ch04-classification-cascade/`](ch04-classification-cascade/)
@@ -93,7 +93,7 @@ Full template, with the numbers behind each line, in
 | [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −91 pts** from the grounding prompt, across 4 models |
 | [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
 | [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges level |
-| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone does better than the book's six-rule protocol, **17% vs 33%** |
+| [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone does better than the book's six-rule protocol, **17% vs 30%** |
 | [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
 | [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
 | [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **did not reproduce** — 0 of 33; the section check rejected 5 correct children's doses |
@@ -300,6 +300,12 @@ Code: [`ch02-input-integrity/`](ch02-input-integrity/)
 **Real OCR, and the confidence scores it emits**  
 85.5% word accuracy; 0 of 840 lines below confidence 1.000  
 Code: [`ch02-input-integrity/`](ch02-input-integrity/)
+
+### Experiment 2.6
+
+**Does cutting at a sentence or heading boundary prevent truncation damage?**  
+A cut at a fixed character count asserted a dose the excerpt did not contain in 2 of 39 answers; a cut that backed off to the last sentence or heading boundary did so in 0 of 39 (36 distinct excerpts; several budgets land on the same boundary). Every measured failure was a cut inside a numeric range or a table row. A mechanism, not an established rate (FINDINGS 13)  
+Code: [`ch06-state-mismatch/common.py`](ch06-state-mismatch/common.py) (`naive_cut` / `boundary_cut`; kept beside Chapter 6's context tooling, taught in Chapter 2's prompt section)
 
 ### Experiment 3.1
 
