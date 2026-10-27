@@ -2588,6 +2588,7 @@ never happened.</strong></p>
   <li><strong>6.4 &middot; The newest-date monitor.</strong> No model calls. As an arrival detector: 32 of 40 new labels caught, against the overlap monitor&rsquo;s 20 of 40, with 0 false alarms in 1,381 checks. As a stall alarm it is useless: healthy gaps run 1 to 274 weeks, so &ldquo;stopped advancing&rdquo; fires 35, 24, 19 and 6 times in healthy operation at 4-, 13-, 26- and 52-week windows.</li>
   <li><strong>6.5 &middot; Scenario 3, memory against the document.</strong> 90 calls, $0.08. Memory alone disagreed with the current label for 2 of 6 drugs in every run; with the document in context and the instruction to follow it, 0 of 30 answers used a dose not in the label.</li>
   <li><strong>6.6 &middot; Scenario 2, the model&rsquo;s half of reconciliation.</strong> 90 calls, $0.15. Told a document had changed: new value 28 of 30, stale 0. Not told: 25 of 30, stale 0. The reconciliation is easy once the document has been re-read; the fix&rsquo;s value is the re-read.</li>
+  <li><strong>6.7 &middot; Retrieval fetched the wrong document.</strong> No model calls, deterministic. BM25 over the twelve labels&rsquo; 123 sections, 72 queries (Chapter 3&rsquo;s six questions &times; 12 drugs), each scored against the one label it asks about. Drug named: top-1 from the wrong label 9 of 72 on section chunks, 25 of 72 on 800-character fixed chunks, and all 25 winning chunks lack the asked drug&rsquo;s name. Name replaced by &ldquo;this medicine&rdquo; (the follow-up-turn form): 66 of 72 wrong, right label in the top 3 only 16 of 72. <strong>The wrong-document rate is set by vocabulary match, chunk boundaries and query construction, before any model runs.</strong></li>
 </ul>
 <p>History truncation and session isolation were moved to Chapter 2 on 19 September: a context cut mid-sentence is incomplete input, and another customer&rsquo;s data in the context is contaminated input.</p>
 
@@ -2602,6 +2603,7 @@ never happened.</strong></p>
   <tr><td>A prompt instead of a status field</td><td><strong>Does not work</strong></td><td>superseded label used 20 of 30 either way</td></tr>
   <tr><td>Context-integrity block</td><td>Changes behaviour after a conflict only</td><td>prevents none of its named mistakes</td></tr>
   <tr><td>Re-read on change (scenario 2)</td><td><strong>Works</strong></td><td>stale value used 0 of 60</td></tr>
+  <tr><td>Retrieval subject check (6.7)</td><td><strong>Needed</strong></td><td>wrong label 9&ndash;66 of 72, set by chunking and query form</td></tr>
 </table>
 <p><strong>Timing failures are fixed in data, not in prompts.</strong> A status field, a re-read when a document changes, and a monitor keyed on arrival do the work; every prompt-only substitute tested here moved the wording of the answer, not the answer.</p>
 

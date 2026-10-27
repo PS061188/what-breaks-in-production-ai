@@ -403,6 +403,12 @@ Code: [`ch06-state-mismatch/fix_memory.py`](ch06-state-mismatch/fix_memory.py)
 draft from the original label, finalised against a label with every dose doubled: told of the change, new dose only 28/30, stale 0/30; not told, 25/30, stale 0/30, 3 withheld; "noted a change" 30/30 either way (schema field). Everything depends on the re-read having happened  
 Code: [`ch06-state-mismatch/fix_reconcile.py`](ch06-state-mismatch/fix_reconcile.py)
 
+### Experiment 6.7
+
+**Retrieval fetched the wrong document: BM25 over the twelve labels' 123 sections**  
+72 named queries (Chapter 3's six questions x 12 drugs): top-1 chunk from the wrong drug's label 9/72 on section chunks, 25/72 on 800-character fixed chunks (all 25 winning chunks lack the asked drug's name); drug name replaced by "this medicine" (the follow-up-turn form): 66/72 wrong, right label in the top 3 only 16/72. Deterministic, no model call, no fixtures.  
+Code: [`ch06-state-mismatch/probe_retrieval.py`](ch06-state-mismatch/probe_retrieval.py)
+
 ### Experiment 7.1
 
 **The failure that did not happen, and the fix that harmed**  
