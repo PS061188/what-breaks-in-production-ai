@@ -43,7 +43,7 @@ print today.
 | **6** | monitor recall on a new current label | — | **50%** (20/40) | 0% false alarms (0/1381). Deterministic |
 | **6** | drugs where the book's filter returns nothing | — | **33%** (2/6) | *[noise]* at n=6 |
 | **7** | prompt injections obeyed | **0%** (0/48) | 0% (0/48) | the failure does not reproduce — §2 |
-| **7** | aggregate correctness across every subclass | **99%** (143/144 on the recorded run) | **83%** (120/144) | the fix is a regression |
+| **7** | aggregate correctness across every subclass | **100%** (144/144 on the recorded run) | **83%** (120/144) | the fix is a regression |
 | **7** | legitimate queries answered | 100% (48/48) | **50%** (24/48) | |
 | **8** | placement error rate | 3% (1/33) | 3% (1/33) | *[noise]*, and the 1 is a checker bug — §3 |
 | **8** | model named the wrong section for its own quote | 9% (3/33 on the recorded run; 18% (6/33) when first published) | 3% (1/33) | **0/33 real** — §3 |
@@ -111,8 +111,8 @@ is produced by the same tautology and is not evidence either.
 | **8** — routing and placement | content filed under the wrong field | **0 real placement errors in 33** at any verification window except the one the code uses |
 | **10** — silent omissions | items dropped from a list | **55/55 dose figures returned**, including from an 11,700-character document |
 
-Chapter 7's fix then makes things worse: aggregate correctness 144/144 → 118/144,
-legitimate queries answered 100% → 46%. And 96 of its 118 correct answers involve
+Chapter 7's fix then makes things worse: aggregate correctness 144/144 → 120/144,
+legitimate queries answered 100% → 50% (recorded run, replayed 14 Nov 2026; first published as 118/144 and 46%). And 96 of its 118 correct answers involve
 **no model call at all** — `ch07/common.py:387` scores any gate-blocked input as
 correct for the decline and no-canary arms, so two `0% (0/48)` rows printed side
 by side are, on the left, 48 real responses and, on the right, arithmetic over an
@@ -687,7 +687,7 @@ a third of traffic routes through, ~$7/1,000.
 `repeat.py` built. 14 scripts x 3 live runs across chapters 2, 6, 7, 8, 9, 10.
 $3.38. **20 of 53 measures moved; 33 held.**
 
-**8 of 14 published headline figures fall outside their own 3-run range:**
+**8 of 14 published headline figures fall outside their own 3-run range** (14 Nov 2026: 2 of the 8, the Chapter 7 baseline rows, are unsettled; the scorer that counted them missed the refusal "unable to interpret", so 6 of 14 stand):
 
 | ch | measure | published | 3-run range | |
 |---|---|---|---|---|
@@ -716,6 +716,11 @@ separated after the fact, **which is the argument**.
 1. **Chapter 7's failure DOES reproduce.** Published 0/48; observed 1, 1, 2 of 48
    — non-zero every run. Remove it from the "four of nine did not reproduce"
    tally. See Task 7.0.
+   **Weakened 14 Nov 2026.** These counts were scored by `_declines()`, which then
+   missed the refusal "unable to interpret". The only one of these cases whose reply
+   is still recorded (Warfarin ood_numeric) was such a refusal; the other runs' replies
+   were overwritten, so the 1, 1, 2 cannot be re-scored offline. Whether Chapter 7's
+   failure reproduces is unsettled until a fresh three-run, recorded check.
 2. **Chapter 2's headline (59%) is above everything it reproduces** (34-56%).
    Publish a range, not a two-digit figure.
 3. **Chapter 4 was run afterwards** under a hard $3.76 ceiling, and it **holds**:
@@ -1140,7 +1145,7 @@ a chapter, check that every reference points backwards.
 
 | configuration | aggregate correct | legitimate queries answered |
 |---|---|---|
-| baseline (no fix) | 99-100% (143-144/144) | 100% |
+| baseline (no fix) | 99-100% (143-144/144); scored before the 14 Nov "unable to interpret" fix, the recorded run now replays 144/144 | 100% |
 | **prompt only** | **144, 144, 143 of 144** | **48, 48, 47 of 48** |
 | prompt + OOD gate | 83% (120/144) | 50% (24/48) |
 
@@ -1381,7 +1386,7 @@ so Haiku re-sampled — twice; noted, not fixed), $0.11 on GPT-4.1-mini, $0 for 
 | body | 93/93/93 | 96/96/94 | 59 | 96/96/94 | 1/2/1 | 4/4/6 |
 
 bart scored 41% with bare category names as labels and 59% with the category
-descriptions (`ZS_LABELS=descriptions`); the table uses 59%. All three members
+descriptions (the script's default since 14 Nov 2026; `ZS_LABELS=names` replays the 41% run); the table uses 59%. All three members
 agreed on 57–60% of passages. **The real ensemble matches its best single member
 and does not beat it.** The published prompt-ensemble figure (97–100%, bit-identical
 reruns) was two strong prompts outvoting the weakest; it does not describe a
@@ -1508,7 +1513,7 @@ write side (check the destination belongs to the customer). Chapter 6 fixes renu
 The chapter's injection fix names LLM Guard and Azure Content Safety and then
 measures an eight-line regex. `ch07-edge-input/probe_llmguard.py` runs LLM Guard's
 `PromptInjection` scanner (`protectai/deberta-v3-base-prompt-injection-v2`, library
-default threshold 0.92, local CPU, no API) over the same 144 cases, on the query
+default threshold 0.92, on the local machine, no API) over the same 144 cases, on the query
 and on the document. Python 3.10+ in its own venv; the rest of the repo is 3.9.
 
 | | full (default) | chunks |
@@ -1521,7 +1526,8 @@ and on the document. Python 3.10+ in its own venv; the rest of the repo is 3.9.
 | `ood_numeric` flagged, of 12 | 12 | 12 |
 | `ood_long` (padded) flagged, of 12 | 0 | 0 |
 | any document wrongly flagged | 0 | 0 |
-| time per scan | 51 ms | 77 ms |
+| time per scan, Apple M5 Pro, library default device (GPU, mps) | 45 ms | 79 ms |
+| time per scan, same machine, CPU only | 80 ms | 236 ms |
 
 **Finding.** The model scanner has the recall the phrase list lacks — every Spanish
 attempt, and in chunk mode every buried payload — and it flags every Hindi question
@@ -2468,7 +2474,7 @@ Metadata must supply `sources` + `embed_function` (here all-MiniLM-L6-v2) or a
 | as shipped: distance 0.8, five-sentence windows | 2 of 12 | 12 of 89 |
 | distance 0.5, five-sentence windows | 9 of 12 | 61 of 89 |
 | distance 0.5, single-sentence windows | 7 of 12 | 40 of 89 |
-| every setting that caught all 12 | 12 of 12 | 79–88 of 89 |
+| every setting that caught all 12 (every threshold, not a grid) | 12 of 12 | 72–89 of 89 (five-sentence windows: 76–89) |
 
 Records set (7 invented / 49 discussed) behaves the same; as shipped it caught
 2 of 7 and flagged 12 of 49. At the same nominal cut (distance 0.5 ≈ similarity
@@ -2874,14 +2880,12 @@ Corrections made in the book and the README on the same day:
   99, 99, 97 / 93, 93, 93; HIGH 99% / 98%; MEDIUM 3 of 192; errors graded HIGH 1 of 1 and
   9 of 10; runner-up 4 of 5 and 15 of 21; gate caught 1 of 11 errors, held 2 correct;
   body 90%, F1 0.76 / 0.78; Table 4-2 GPT-4.1-mini opening 98, 98, 98 and review 1, 1, 1
-  (needs `ZS_LABELS=descriptions`).
+  (bart on the category descriptions, now `model_ensemble.py`'s default).
 - **Ch5.** Plain-prompt auditability 64% (196/307 over five runs), not 66%; values
   returned 59-80 across the three prompts, not 54-77.
 - **Ch7.** Classifier: in scope 11 of 12 on the direct attack, one Hindi question labelled
   ambiguous, 107 of 132 correct. The plain prompt obeyed 0 of 48 injections in every run;
-  the 1, 1, 2 of 48 in the sweep was out-of-scope questions answered (and the one such case
-  still recorded, Warfarin ood_numeric, is a refusal `_declines()` misses: "unable to
-  interpret"). In the `--no-ood` run the phrase list stopped 36 attacks and the
+  the 1, 1, 2 of 48 in the sweep was out-of-scope questions answered (the one such case still recorded, Warfarin ood_numeric, was a refusal `_declines()` missed: "unable to interpret". The phrase is now on the list: the recorded run replays 0 of 48 answered and 144 of 144 correct). In the `--no-ood` run the phrase list stopped 36 attacks and the
   classification call declined all 36 out-of-scope inputs, so Prompt 7-1 itself faced only
   the 12 Spanish attacks; Table 7-1 now says so.
 - **Ch8.** 64 of 66 planted-swap rejections named the true section (two on the Amoxicillin
@@ -2902,4 +2906,15 @@ Not replayable here: three-run spreads (only the last run is on disk), the Guard
 validator settings beyond the shipped one, LLM Guard timings, and R.1 (repeat.py is live
 only). Repo fixes the same day: probe_convention.py reads Prompt 8-1 from prompt_8_1.txt
 (the book's re-wrap had moved two line breaks and broken the replay); scripts that need an
-optional package now say so and `run_all.py` prints them as skipped.
+optional package now say so and `run_all.py` prints them as skipped. `model_ensemble.py` now scores bart on the category descriptions by default, so a plain replay prints Table 4-2 cell for cell; `ZS_LABELS=names` keeps the 41% bare-name run.
+
+Added the same day, Chapter 9 (Experiment 9.5): the nineteen invented entries split 11 with no evidence (both checkers caught all 11) and 8 widened from D2N088's seasonal-allergy "none whatsoever" (3 in notes: writer and second model caught all 3; 5 in records: writer approved all 5, second model caught 3). The book had said 14 and 5, counting the three D2N088 notes as no-evidence entries; the 17/19 and 14/19 totals were right. D2N185's "No known drug allergies" stays a no-evidence entry: its conversation mentions only Claritin for seasonal allergies.
+
+Also 14 Nov 2026, C.1's simulated-OCR arm: the recorded run of `CORRUPT_MODE=ocr ch10-silent-omissions/broken.py` replays 51 of 52 dose figures and 1 of 6 documents short, not 2 of 6, and that one drop (Lisinopril "5 mg") is a figure the damage created ("12.5 mg" became "l2.5 mg"). The "2 of 6 in every run" above cannot be confirmed from the recordings. The clean arm replays 54/54, not 55/55.
+
+**Timings re-measured, 14 Nov 2026.** `probe_llmguard.py --timings` (log `ch07-edge-input/llmguard_timings_log.txt`) re-scanned all 144 cases, 3 passes, on an Apple M5 Pro. On Apple silicon llm-guard runs its model on the GPU by default: 45 ms (full) and 79 ms (chunks) per scan; pinned to the CPU, 80 and 236 ms. The 23 Sep figures (51 / 77 ms) match the GPU path, so "local CPU" was wrong. Every fresh flag matched the recording on both devices (276 of 276). The book's "ordinary laptop processor" sentence and Table 7-1's cost cell now say so.
+
+**Guardrails, every threshold, 14 Nov 2026.** The 8 Oct sweep tried seven thresholds. `probe_guardrails.py` now reads each entry's worst-sentence distance from the validator's own query function and checks the validator's own pass/fail against those distances, entry by entry, so one threshold per distinct distance gives every result the validator can produce (log `ch09-sparse-field-fabrication/guardrails_sweep_log.txt`). The grid rows reproduce exactly. The loosest setting that catches all 12 flags 76 of 89 (five-sentence windows) and 72 of 89 (one sentence), so the range is 72–89, not 79–88, and the book's "about nine in ten" is now "at least 72 of the 89, about four in five". AUC 0.55 on the notes; 0.36 and 0.43 on the records (worse than chance). The verdict stands: no setting separates the groups. The probe now switches hub telemetry off.
+
+**Instructor on ten notes (Ch8), 14 Nov 2026.** No script or fixture records that run, so the book sentence is removed. A free route exists (Instructor's `patch(create=…)` around a `claude -p` call); not run.
+

@@ -9,9 +9,9 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Measures that moved</td><td><strong>20 of 53</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Measures that held</td><td>33 of 53</td><td class="num"><strong>every one deterministic</strong></td><td class="num">strong</td></tr><tr><td>Published figures outside their own range</td><td><strong>8 of 14</strong></td><td class="num">&mdash;</td><td class="num">strong</td></tr><tr><td>Ch 7 &mdash; failure reproduces</td><td>Published 0</td><td class="num">1, 1, 2 of 48</td><td class="num">changes a claim</td></tr><tr><td>Ch 2 &mdash; headline above its own range</td><td>Published 59%</td><td class="num">34&ndash;56% observed</td><td class="num">strong</td></tr><tr><td>Ch 4 &mdash; verdict holds</td><td>Published 91%</td><td class="num">92%, 91%</td><td class="num">stable</td></tr></table>
+<tr><td>Measures that moved</td><td><strong>20 of 53</strong></td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>Measures that held</td><td>33 of 53</td><td class="num"><strong>every one deterministic</strong></td><td class="num">strong</td></tr><tr><td>Published figures outside their own range</td><td><strong>8 of 14</strong></td><td class="num">&mdash;</td><td class="num">strong</td></tr><tr><td>Ch 7 &mdash; out-of-scope answered</td><td>Recorded run 0</td><td class="num">1, 1, 2 of 48 counted</td><td class="num">unconfirmed</td></tr><tr><td>Ch 2 &mdash; headline above its own range</td><td>Published 59%</td><td class="num">34&ndash;56% observed</td><td class="num">strong</td></tr><tr><td>Ch 4 &mdash; verdict holds</td><td>Published 91%</td><td class="num">92%, 91%</td><td class="num">stable</td></tr></table>
 <h4>What held / What did not</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>Every deterministic measure.</strong> All 33 that held involve no model call &mdash; the byte-level gate, the quote verifier, the freshness monitor, the rules engine.</li><li><span class='keep'>KEEP</span> — <strong>Chapter 4's &lsquo;did not reproduce&rsquo; verdict.</strong> Re-run, it held.</li><li><span class='drop'>DROP</span> — <strong>Chapter 7's &lsquo;zero&rsquo;.</strong> Never zero in three runs.</li><li><span class='drop'>DROP</span> — <strong>Any single-run figure quoted to two digits.</strong></li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>Every deterministic measure.</strong> All 33 that held involve no model call &mdash; the byte-level gate, the quote verifier, the freshness monitor, the rules engine.</li><li><span class='keep'>KEEP</span> — <strong>Chapter 4's &lsquo;did not reproduce&rsquo; verdict.</strong> Re-run, it held.</li><li><span class='drop'>DROP</span> — <strong>A settled verdict on Chapter 7.</strong> Three later runs counted 1, 1 and 2 of 48 out-of-scope questions answered, but the one such reply still on record is a refusal the scorer then misread, so whether the failure reproduces is unsettled. The plain prompt obeyed no injection in any run.</li><li><span class='drop'>DROP</span> — <strong>Any single-run figure quoted to two digits.</strong></li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>Every measure that involves no model call was perfectly stable. Every measure that moved involved one.</strong> That is a cleaner statement of this book's argument than any percentage in it: the parts of the pipeline you can test are the parts that stay still. And the harness built to catch instability shipped with a bug that made it report &ldquo;nothing moved&rdquo; across 42 live runs, because its pattern matched zero lines &mdash; a check that cannot fire is indistinguishable from a check that passed.</p>
 <h4>Where this is weakest</h4>
@@ -24,7 +24,7 @@
 change how the rest of it is read. Nothing in this project was measured twice
 until the very end. When six chapters were finally run three times each,
 <strong>eight of fourteen published headline figures fell outside the range their
-own code reproduces</strong>.</p>
+own code reproduces</strong>. Two of those eight, both Chapter 7 baseline figures, are unsettled: the scorer that counted them misread refusals as answers, and the one such reply still on record is a refusal.</p>
 
 <h4>Why this was run at all</h4>
 
@@ -81,9 +81,9 @@ pointed at the six cheapest chapters.</p>
   <tr><td class="num">6</td><td>Answers changed with a stale index</td>
       <td class="num">100%</td><td class="num">83&ndash;100%</td><td class="num">inside</td></tr>
   <tr><td class="num">7</td><td><strong>Out-of-scope / noise answered anyway</strong></td>
-      <td class="num">0%</td><td class="num">2&ndash;4%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+      <td class="num">0%</td><td class="num">2&ndash;4%</td><td class="num"><strong>OUTSIDE</strong>, unconfirmed</td></tr>
   <tr><td class="num">7</td><td>Aggregate correctness, baseline</td>
-      <td class="num">100%</td><td class="num">99%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
+      <td class="num">100%</td><td class="num">99%</td><td class="num"><strong>OUTSIDE</strong>, unconfirmed</td></tr>
   <tr><td class="num">7</td><td>Aggregate correctness, fixed</td>
       <td class="num">82%</td><td class="num">83%</td><td class="num"><strong>OUTSIDE</strong></td></tr>
   <tr><td class="num">7</td><td>Legitimate queries answered, fixed</td>
@@ -118,12 +118,16 @@ pointed at the six cheapest chapters.</p>
 <h4>The three that matter most</h4>
 
 <div class="verdict">
-  <span class="label">1 &middot; Chapter 7's failure does reproduce, at a low rate</span>
-  <p>Published: <strong>0 of 48</strong> out-of-scope or noise queries answered.
-  Observed: <strong>1, 1 and 2 of 48</strong> — every run non-zero.</p>
-  <p>"Zero" is a categorically stronger claim than "two percent". The book lists
-  this among the failures that <em>did not reproduce on current models</em>. It
-  reproduces. It is simply rare, and one run happened to catch none of it.</p>
+  <span class="label">1 &middot; Chapter 7's failure: counted, and unconfirmed</span>
+  <p>The recorded run answered <strong>0 of 48</strong> out-of-scope or noise
+  queries. Three later runs counted <strong>1, 1 and 2 of 48</strong> answered,
+  but the one such reply still on record &mdash; Warfarin, a question made of
+  digits &mdash; is a refusal (&ldquo;I&rsquo;m unable to interpret the sequence of
+  numbers&rdquo;) that the scorer then misread, and the other replies were
+  overwritten. Whether the failure reproduces is unsettled.</p>
+  <p>The plain prompt obeyed <strong>no injection in any run</strong>. The two
+  Chapter 7 rows in the table above are counted with that scorer, so they stand
+  as observed and unconfirmed.</p>
 </div>
 
 <div class="verdict">
@@ -158,8 +162,7 @@ pointed at the six cheapest chapters.</p>
 
 <p><strong>The chapter's central claim survives.</strong> Errors were 8 and 9 of
 96 against a published 9 &mdash; the failure really is rare on clean,
-well-taxonomised input, and unlike Chapter 7 this one does not change on
-repetition.</p>
+well-taxonomised input, and it does not change on repetition.</p>
 
 <div class="plain">
   <span class="label">The 100% does not reproduce — confirmed</span>

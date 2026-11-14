@@ -48,8 +48,8 @@ standard pharmacology where the excerpt is thin"* took it from 2 to **29 of 32**
 (6% to 91%). The dangerous prompt is the one that grants permission.
 → [`ch03-hallucination/`](ch03-hallucination/)
 
-**Eight of fourteen published figures fell outside the range their own code
-reproduces.** Nothing here was measured twice until late in the project. When it
+**Six of fourteen published figures fell outside the range their own code
+reproduces, and two more may have.** Nothing here was measured twice until late in the project. When it
 was, a result reported as "no effect" pointed the same way in four runs of five,
 and a fix's headline benefit disappeared against a fair baseline. That is why [`repeat.py`](repeat.py) exists.
 → [`report/`](report/)
@@ -57,7 +57,7 @@ and a fix's headline benefit disappeared against a fair baseline. That is why [`
 Findings that contradict the book are in **[FINDINGS.md](FINDINGS.md)** rather
 than quietly fixed in one place. **[FIX_STATUS.md](FIX_STATUS.md)** rates every
 prompt and every fix. **[REVIEW.md](REVIEW.md)** is an adversarial read of the
-whole thing. **[report/](report/)** is a 108-page write-up with the corpus,
+whole thing. **[report/](report/)** is a 146-page write-up with the corpus,
 settings, worked input/output samples, costs and limits for every experiment.
 
 ## What actually goes in a prompt
@@ -252,11 +252,14 @@ evidence looks orphaned and would otherwise be deleted.
 
 ## Honest limits
 
-- **One recorded answer per request.** The cache keeps the latest answer to each
-  request, so where a figure is a spread across several live runs, only the last
-  run replays. Experiments 9.5 (the Guardrails validator) and 10.4 (spaCy
-  `en_core_web_trf`) need their own environments, described at the top of their
-  scripts.
+- **One recorded answer per request.** Where a figure is a spread across live runs
+  made with `repeat.py` (Chapter 2, 6.1, Chapter 7, 8.1–8.2, the Chapter 3 judge's
+  four runs, C.1 and R.1), only the last run replays; spreads drawn with a sample
+  index, and every subscription-CLI experiment, replay in full. LLM Guard's timings
+  depend on the machine (`probe_llmguard.py --timings`, last run in
+  `llmguard_timings_log.txt`). Experiments 9.5 (the Guardrails validator,
+  `guardrails_sweep_log.txt`) and 10.4 (spaCy `en_core_web_trf`) need their own
+  environments, described at the top of their scripts.
 - **One model family for most of it.** Claude Haiku 4.5 is the default, and the
   cross-model comparisons cover Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini.
   Where a result is single-model, the chapter says so.
@@ -357,7 +360,7 @@ Code: [`ch04-classification-cascade/`](ch04-classification-cascade/)
 ### Experiment 4.2
 
 **Three different systems voting, not three prompts**  
-Haiku 4.5 (shipped template), GPT-4.1-mini (one-line prompt) and bart-large-mnli zero-shot, majority vote: matched the best member (99/99/98 of 96 opening, 96/96/94 of 96 body) and all-three-disagree sent 1-2 of 96 to review (bart scored on the category descriptions: `ZS_LABELS=descriptions`)  
+Haiku 4.5 (shipped template), GPT-4.1-mini (one-line prompt) and bart-large-mnli zero-shot, majority vote: matched the best member (99/99/98 of 96 opening, 96/96/94 of 96 body) and all-three-disagree sent 1-2 of 96 to review (bart scores the category descriptions, the script's default; `ZS_LABELS=names` scores bare section names instead, 41%)  
 Code: [`ch04-classification-cascade/model_ensemble.py`](ch04-classification-cascade/model_ensemble.py)
 
 ### Experiment 5.1
@@ -501,7 +504,7 @@ Code: [`ch09-sparse-field-fabrication/probe_conversation.py`](ch09-sparse-field-
 ### Experiment 9.5
 
 **Do the chapter's checks catch real invented entries?**  
-On Experiment 9.4's notes, 12 invented entries and 89 on discussed topics: a keyword topic search caught 6 of 12 (3 false flags); an embedding check 6 of 12 at 0.5 (19 flagged); Claude Sonnet 5 shown the conversation 12 of 12, and Claude Haiku 4.5, the model that wrote the notes, also 12 of 12; Sonnet 5 shown only the note caught 9 of 12 and flagged 48 of 89. Most flags on discussed entries were real errors, read one by one. Extended to Experiment 9.6's record values (`--source schema`): both models caught the two zero-evidence inventions, and the five "No allergies"-from-a-seasonal-denial entries were approved by the writer five of five while Sonnet caught three of five — combined over 19 invented entries, a second model caught 17 and the writer 14. The packaged Guardrails ProvenanceEmbeddings validator was then run over the identical entries: as shipped (distance 0.8, five-sentence source windows) it caught 2 of 12 and still flagged 12 of 89, and no setting in its range separated the groups; it also crashes on single-chunk sources, needs punkt_tab its setup does not fetch, and phones telemetry home  
+On Experiment 9.4's notes, 12 invented entries and 89 on discussed topics: a keyword topic search caught 6 of 12 (3 false flags); an embedding check 6 of 12 at 0.5 (19 flagged); Claude Sonnet 5 shown the conversation 12 of 12, and Claude Haiku 4.5, the model that wrote the notes, also 12 of 12; Sonnet 5 shown only the note caught 9 of 12 and flagged 48 of 89. Most flags on discussed entries were real errors, read one by one. Extended to Experiment 9.6's record values (`--source schema`): both models caught the two zero-evidence inventions, and the five "No allergies"-from-a-seasonal-denial entries were approved by the writer five of five while Sonnet caught three of five — combined over 19 invented entries, a second model caught 17 and the writer 14. The packaged Guardrails ProvenanceEmbeddings validator was then run over the identical entries: as shipped (distance 0.8, five-sentence source windows) it caught 2 of 12 and still flagged 12 of 89, and no threshold separated the groups (every one tried: the loosest that caught all 12 still flagged 72 of 89); it also crashes on single-chunk sources, needs punkt_tab its setup does not fetch, and phones telemetry home unless switched off (the probe switches it off)  
 Code: [`ch09-sparse-field-fabrication/probe_checks.py`](ch09-sparse-field-fabrication/probe_checks.py) · [`probe_guardrails.py`](ch09-sparse-field-fabrication/probe_guardrails.py) (runs in its own environment; install line in the docstring)
 
 ### Experiment 9.6
@@ -597,7 +600,7 @@ Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
 ### Experiment R.1
 
 **Every experiment run three times**  
-8 of 14 published figures outside their own reproducible range  
+8 of 14 published figures outside their own reproducible range as first counted; 2 of the 8 (Chapter 7's baseline) are unsettled, because the scorer that counted them misread refusals as answers  
 Write-up: [`report/`](report/)
 
 ### Experiment P.1

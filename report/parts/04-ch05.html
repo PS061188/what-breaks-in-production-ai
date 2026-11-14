@@ -4,15 +4,15 @@
 <span class="kicker">At a glance &middot; Chapter 5 &middot; Extraction and normalisation quality loss</span>
 <p class="oneline">Asking one model call to both read a value and tidy it into a database shape destroys the qualifiers and ranges that carried the clinical meaning. Separating the two steps makes the loss <em>visible</em> &mdash; it does not prevent it, and on dose ranges the chapter&rsquo;s fix performs worse than saying nothing.</p>
 <h4>How it was tested</h4>
-<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code></td></tr><tr><td style="width:26%">Measures</td><td>Three: values still findable in the source, qualifier retention, dose ranges preserved. All deterministic, no model judging</td></tr><tr><td style="width:26%">Ground truth</td><td>Qualifiers (38) and range-bearing labels (11) derived from the source and fixed. Values-findable has a denominator <em>the model chooses</em></td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; GPT-5-mini, GPT-4.1-mini and Opus 5 in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens=1500</code>, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>5 live runs of each arm</strong>, plus a third &lsquo;plain&rsquo; baseline added after the prompt audit</td></tr><tr><td style="width:26%">Cost</td><td>$0.04 per arm per run</td></tr></table>
+<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code></td></tr><tr><td style="width:26%">Measures</td><td>Three: values still findable in the source, qualifier retention, dose ranges preserved. All deterministic, no model judging</td></tr><tr><td style="width:26%">Ground truth</td><td>Qualifiers (38) and range-bearing labels (8) derived from the source and fixed. Values-findable has a denominator <em>the model chooses</em></td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 primary; GPT-5-mini, GPT-4.1-mini and Opus 5 in the cross-model arm</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens=1500</code>, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td><strong>5 live runs of each arm</strong>, plus a third &lsquo;plain&rsquo; baseline added after the prompt audit</td></tr><tr><td style="width:26%">Cost</td><td>$0.04 per arm per run</td></tr></table>
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Capture prompt &mdash; auditability</td><td><strong>Works</strong></td><td class="num">66% &rarr; 93%, 5 of 5 runs</td><td class="num">strong</td></tr><tr><td>Capture prompt &mdash; qualifiers</td><td><strong>Does not work</strong></td><td class="num">38% vs 39%</td><td class="num">null, clean</td></tr><tr><td>Capture prompt &mdash; ranges</td><td>Level, on a corrected denominator</td><td class="num">5 of 8 vs 5 of 8</td><td class="num">one run</td></tr><tr><td>1 &middot; Validators</td><td>Works, partly untested</td><td class="num">doses and frequencies only</td><td class="num">structural</td></tr><tr><td>2 &middot; Retry loop</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>3 &middot; Discard log</td><td><strong>Works</strong></td><td class="num">40 recorded losses</td><td class="num">strong</td></tr><tr><td>4 &middot; Golden set</td><td>Not implemented as written</td><td class="num">no labelled set</td><td class="num">&mdash;</td></tr></table>
+<tr><td>Capture prompt &mdash; auditability</td><td><strong>Works</strong></td><td class="num">64% &rarr; 93%, 5 of 5 runs</td><td class="num">strong</td></tr><tr><td>Capture prompt &mdash; qualifiers</td><td><strong>Does not work</strong></td><td class="num">37% vs 39%</td><td class="num">null, clean</td></tr><tr><td>Capture prompt &mdash; ranges</td><td>Level, on a corrected denominator</td><td class="num">5 of 8 vs 5 of 8</td><td class="num">one run</td></tr><tr><td>1 &middot; Validators</td><td>Works, partly untested</td><td class="num">doses and frequencies only</td><td class="num">structural</td></tr><tr><td>2 &middot; Retry loop</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">&mdash;</td></tr><tr><td>3 &middot; Discard log</td><td><strong>Works</strong></td><td class="num">40 recorded losses</td><td class="num">strong</td></tr><tr><td>4 &middot; Golden set</td><td>Not implemented as written</td><td class="num">no labelled set</td><td class="num">&mdash;</td></tr></table>
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The separation, for auditability only.</strong> 66% &rarr; 93% of values still findable in the source, ahead in every run. That is the real result.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the discard log.</strong> 40 rows, each naming a specific thing the conversion could not carry, on a specific field, in a specific document.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;29% &rarr; 45% qualifier retention.&rdquo;</strong> Against a fair baseline it is 38% vs 39% &mdash; nothing. The gain was the fix repairing damage the baseline prompt caused itself.</li><li><span class='drop'>DROP</span> — <strong>The claim that the capture prompt loses ranges.</strong> Withdrawn. The 11-document denominator included three labels with no dose range at all &mdash; an INR band, a dosing interval, a time-to-effect. Corrected to 8, plain and capture prompt are level at 5 of 8; the arm that loses ranges is normalising inside the model call, at 2 of 8. One run.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;52 versus 0&rdquo;.</strong> The zero is a definition: the baseline never ran the converter.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>The separation, for auditability only.</strong> 64% &rarr; 93% of values still findable in the source, ahead in every run. That is the real result.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the discard log.</strong> 40 rows, each naming a specific thing the conversion could not carry, on a specific field, in a specific document.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;29% &rarr; 45% qualifier retention.&rdquo;</strong> Against a fair baseline it is 37% vs 39% &mdash; nothing. The gain was the fix repairing damage the baseline prompt caused itself.</li><li><span class='drop'>DROP</span> — <strong>The claim that the capture prompt loses ranges.</strong> Withdrawn. The 11-document denominator included three labels with no dose range at all &mdash; an INR band, a dosing interval, a time-to-effect. Corrected to 8, plain and capture prompt are level at 5 of 8; the arm that loses ranges is normalising inside the model call, at 2 of 8. One run.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;52 versus 0&rdquo;.</strong> The zero is a definition: the baseline never ran the converter.</li></ul>
 <h4>The one thing to remember</h4>
-<p><strong>Two of the three measures have source-derived denominators, and those two show no benefit and one harm.</strong> The single measure showing a large benefit is the one whose denominator the model chooses &mdash; and it swung 54 to 77 across identical runs. In a book about measurement, that ordering deserves saying out loud.</p>
+<p><strong>Two of the three measures have source-derived denominators, and those two show no benefit.</strong> The single measure showing a large benefit is the one whose denominator the model chooses &mdash; and it moved from 72 to 80 values across identical runs of the capture prompt. In a book about measurement, that ordering deserves saying out loud.</p>
 <h4>Where this is weakest</h4>
 <p>The baseline prompt named all three scored failures as instructions &mdash; <em>&ldquo;one canonical value per field&rdquo;</em> is the range collapse, written down. This was found only by re-reading the prompts after the same defect surfaced in Chapter 3. Twelve documents, one model.</p>
 </div>
@@ -167,30 +167,31 @@ information from the label text below.</pre>
   <tr><th style="width:30%">Measure</th><th class="num">Plain</th>
       <th class="num">Fix</th><th class="num">Fix wins</th><th class="num">Sign p</th></tr>
   <tr><td>Values findable in source</td>
-      <td class="num">66%</td><td class="num"><strong>93%</strong></td>
+      <td class="num">64%</td><td class="num"><strong>93%</strong></td>
       <td class="num">5 of 5</td><td class="num">0.062</td></tr>
   <tr><td>Qualifier retention</td>
-      <td class="num">38%</td><td class="num">39%</td>
-      <td class="num">4 of 5</td><td class="num">0.375</td></tr>
-  <tr><td><strong>Dose ranges preserved</strong></td>
-      <td class="num"><strong>85%</strong></td><td class="num"><strong>65%</strong></td>
-      <td class="num"><strong>0 of 5</strong></td><td class="num">0.062</td></tr>
+      <td class="num">37%</td><td class="num">39%</td>
+      <td class="num">1 of 5, behind in 3</td><td class="num">0.62</td></tr>
+  <tr><td><strong>Dose ranges preserved</strong> (of 8)</td>
+      <td class="num">4 or 5</td><td class="num">5 every run</td>
+      <td class="num">2 of 5, level in 3</td><td class="num">0.50</td></tr>
 </table>
 
 <div class="verdict">
-  <span class="label">One of three claims survives, and one reverses</span>
-  <p><strong>Auditability is real.</strong> 66% &rarr; 93%, the fix ahead in every
+  <span class="label">One of three claims survives</span>
+  <p><strong>Auditability is real.</strong> 64% &rarr; 93%, the fix ahead in every
   run. This is the chapter's genuine result.</p>
-  <p><strong>Qualifier retention is nothing.</strong> 38% against 39%. The
+  <p><strong>Qualifier retention is nothing.</strong> 37% against 39%, the fix ahead
+  in one run and behind in three. The
   published "29% &rarr; 45%" was the fix repairing damage the baseline prompt had
   inflicted on itself. Against a prompt that never told the model to tidy
   anything, the fix retains no more qualifiers than saying nothing at all — even
   though it contains the line <em>"Put every one you find in qualifiers — never
   drop it."</em></p>
-  <p><strong>Ranges got worse.</strong> The plain prompt preserved 9&ndash;10 of 11
-  in every run. The fix preserved 6&ndash;8, and was <strong>behind in all five
-  runs with no overlap between the two spreads</strong> — despite containing the
-  instruction <em>"Never collapse a range to a single number."</em></p>
+  <p><strong>Ranges are level.</strong> The fix preserved 5 of the 8 ranges in
+  every run and the plain prompt 4 or 5, so the instruction <em>"Never collapse a
+  range to a single number"</em> bought at most one range. The arm that loses
+  ranges is normalising inside the model call: 1 to 4 of 8.</p>
 </div>
 
 <h4>Which of these three numbers you can actually trust</h4>
@@ -203,20 +204,20 @@ chapter's headline.</p>
       <th>Consequence</th></tr>
   <tr><td>Values findable</td><td><strong>the model</strong> — it decides how many
       fields to return</td>
-      <td>Swings 56&ndash;72 (plain) and 54&ndash;77 (fixed) across runs. A 43%
-      swing in the denominator on an identical prompt.</td></tr>
+      <td>Moves 59&ndash;63 (plain) and 72&ndash;80 (fix) across runs: up to 11%
+      in the denominator on an identical prompt.</td></tr>
   <tr><td>Qualifier retention</td><td>the source — 38 every run</td>
       <td>Stable. Directly comparable.</td></tr>
-  <tr><td>Dose ranges</td><td>the source — 11 every run</td>
+  <tr><td>Dose ranges</td><td>the source — 8 every run</td>
       <td>Stable. Directly comparable.</td></tr>
 </table>
 
 <div class="plain">
   <span class="label">Read that table against the results table</span>
   <p>The two measures with <strong>stable, source-derived denominators</strong>
-  are the two that show <em>no benefit and one harm</em>. The single measure
+  are the two that show <em>no benefit</em>. The single measure
   showing a large benefit is the one whose denominator the model chooses, and
-  which moves by up to 43% between identical runs.</p>
+  which moves by up to 11% between identical runs.</p>
   <p>That does not make the auditability result wrong — it is a proportion, and it
   held in 5 of 5 runs. It does mean it is the weakest-founded of the three, and
   the chapter currently leads with it.</p>
@@ -232,7 +233,7 @@ Same document, same run:</p>
       <th class="num">Fix: values / range kept</th></tr>
   <tr><td>Metformin</td><td class="num">11 &middot; <strong>yes</strong></td>
       <td class="num">4 &middot; <strong>NO</strong></td></tr>
-  <tr><td>Sertraline</td><td class="num">13 &middot; <strong>yes</strong></td>
+  <tr><td>Sertraline</td><td class="num">13 &middot; <strong>NO</strong></td>
       <td class="num">4 &middot; <strong>NO</strong></td></tr>
   <tr><td>Atorvastatin</td><td class="num">4 &middot; yes</td>
       <td class="num">12 &middot; yes</td></tr>
@@ -241,10 +242,10 @@ Same document, same run:</p>
 </table>
 
 <p>Field counts swing between 4 and 13 on the same document depending on the
-instruction, and the drugs that lost their range are among those where the fix
-returned fewest fields. <strong>That is a partial explanation, not a
-demonstrated mechanism</strong> — Levothyroxine returned 4 fields in both arms and
-lost its range only under the fix. The effect reproduces; the cause does not yet.</p>
+instruction, and every drug that lost its range under the fix (Metformin,
+Sertraline, Levothyroxine) is one where the fix returned four fields.
+<strong>That is a partial explanation, not a demonstrated mechanism</strong> —
+the plain prompt lost Sertraline&rsquo;s range while returning 13 fields.</p>
 
 <h4>Cost and time</h4>
 
@@ -270,7 +271,7 @@ Prednisone   dose_adjustment  no parsable dose in 'decreasing the initial drug d
                               decrements at appropriate time intervals'
 Lisinopril   dose_adjustment  no parsable dose in 'greater than 30 mL/min/1.73 m2'</pre>
 
-<p>Fifty-two such rows. Each names a specific thing the conversion could not
+<p>Forty such rows. Each names a specific thing the conversion could not
 carry, on a specific field, in a specific document.</p>
 
 <div class="plain">
@@ -312,7 +313,7 @@ carry, on a specific field, in a specific document.</p>
       <td>Not implemented as written — schema-enforced output removed the class of
       error it exists to catch</td></tr>
   <tr><td><strong>3 · Normalisation as separate code</strong></td>
-      <td class="num">52 discard rows</td>
+      <td class="num">40 discard rows</td>
       <td><strong>Works</strong> — the strongest idea in the chapter</td></tr>
   <tr><td><strong>4 · Golden-set regression tests</strong></td>
       <td class="num">not built</td>

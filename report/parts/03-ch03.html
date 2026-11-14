@@ -5,16 +5,16 @@
 <p class="oneline">The model answers a question the document does not cover, in the document's own register, with no signal that anything is wrong. This is the best-evidenced chapter in the book &mdash; and the single largest effect comes from one clause in the prompt that the chapter never mentions.</p>
 
 <h4>How it was tested</h4>
-<table><tr><td style="width:26%">Documents</td><td>12 FDA labels. The model sees exactly two sections: <code>indications_and_usage</code> and <code>dosage_and_administration</code></td></tr><tr><td style="width:26%">Questions</td><td>6 per drug, 72 total: 24 answerable from what was supplied, 48 that need a withheld section. The ground-truth audit removes 16 of the 48, because the supplied text covers their topic anyway; 32 remain</td></tr><tr><td style="width:26%">Ground truth</td><td>Taken from the labels, not written by hand: a question counts as unanswerable when the section that would answer it was not supplied</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 generating; Sonnet 5 judging; grounding template re-run on Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 400&ndash;3,000 by prompt, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>Plain and soft-words prompts: 5 live runs each on all 48, but only one run&rsquo;s answers were kept, and that run is the one recounted here. Judge: 4 runs, one kept. Retrieval: 1</td></tr><tr><td style="width:26%">Cost</td><td>$0.63 for the baselines, $1.58 per judge run</td></tr></table>
+<table><tr><td style="width:26%">Documents</td><td>12 FDA labels. The model sees exactly two sections: <code>indications_and_usage</code> and <code>dosage_and_administration</code></td></tr><tr><td style="width:26%">Questions</td><td>6 per drug, 72 total: 24 answerable from what was supplied, 48 that need a withheld section. The ground-truth audit removes 16 of the 48, because the supplied text covers their topic anyway; 32 remain</td></tr><tr><td style="width:26%">Ground truth</td><td>Taken from the labels, not written by hand: a question counts as unanswerable when the section that would answer it was not supplied</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 generating; Sonnet 5 judging; grounding template re-run on Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 400&ndash;3,000 by prompt, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>Plain and soft-words prompts: 5 live runs each on all 48, but only one run&rsquo;s answers were kept, and that run is the one recounted here. Judge: 4 runs, one kept. Retrieval: 1</td></tr><tr><td style="width:26%">Cost</td><td>$0.63 for the baselines, $1.18 per judge run (answers and audits)</td></tr></table>
 
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Soft vocabulary alone</td><td>Weakly supported</td><td class="num">1 &rarr; 2 of 32, inside noise</td><td class="num">weak</td></tr><tr><td>Explicit permission clause</td><td><strong>Confirmed</strong></td><td class="num">2 &rarr; 29 of 32</td><td class="num">decisive</td></tr><tr><td>Grounding template</td><td><strong>Works</strong></td><td class="num">&minus;91 pts or better, 4 models</td><td class="num">strongest in book</td></tr><tr><td>1 &middot; Citation enforcement</td><td>Did nothing here</td><td class="num">0 of 72 rejected</td><td class="num">&mdash;</td></tr><tr><td>2 &middot; Similarity check</td><td><strong>Works &mdash; retune to 0.3</strong></td><td class="num">29 of 29 caught / 3 of 24 false</td><td class="num">strong</td></tr><tr><td>3 &middot; Second-AI auditor</td><td>Works, with a caveat</td><td class="num">29 of 29 caught / 6 of 24 false / $22</td><td class="num">strong</td></tr><tr><td>4 &middot; Version-locked retrieval</td><td><strong>Works</strong></td><td class="num">83% of retrievals stale</td><td class="num">strong</td></tr>
+<tr><td>Soft vocabulary alone</td><td>Weakly supported</td><td class="num">1 &rarr; 2 of 32, inside noise</td><td class="num">weak</td></tr><tr><td>Explicit permission clause</td><td><strong>Confirmed</strong></td><td class="num">2 &rarr; 29 of 32</td><td class="num">decisive</td></tr><tr><td>Grounding template</td><td><strong>Works</strong></td><td class="num">&minus;91 pts or better, 4 models</td><td class="num">strongest in book</td></tr><tr><td>1 &middot; Citation enforcement</td><td>Did nothing here</td><td class="num">0 of 72 rejected</td><td class="num">&mdash;</td></tr><tr><td>2 &middot; Similarity check</td><td><strong>Works &mdash; retune to 0.3</strong></td><td class="num">29 of 29 caught / 3 of 24 false</td><td class="num">strong</td></tr><tr><td>3 &middot; Second-AI auditor</td><td>Works, with a caveat</td><td class="num">29 of 29 caught / 6 of 24 false / $16 per 1,000</td><td class="num">strong</td></tr><tr><td>4 &middot; Version-locked retrieval</td><td><strong>Works</strong></td><td class="num">83% of retrievals stale</td><td class="num">strong</td></tr>
 </table>
 
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>The grounding template.</strong> At least &minus;91 points across four models and two providers: 0 of 32 fabricated on every model. The cheapest change in the book and the largest effect.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2 at threshold 0.3</strong> &mdash; 29 of 29 caught for 3 false alarms in 24, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, version-locked retrieval.</strong> One clause, $0, and 83% of retrieved passages were superseded without it.</li><li><span class='drop'>DROP</span> — <strong>Blaming soft adjectives.</strong> The chapter attributes 63 points to <em>relevant, complete, useful</em>. Recounted on 32 questions, they add one fabrication (1 to 2 of 32); the permission clause adds 27 more.</li><li><span class='drop'>DROP</span> — <strong>The printed threshold 0.4 with a cross-encoder.</strong> That model returns an unbounded logit, not a cosine &mdash; the pairing is invalid, and 0.3 gives fewer false alarms (3 of 24, against 5 at 0.4).</li><li><span class='drop'>DROP</span> — <strong>Running the LLM judge on every request.</strong> $22 per 1,000, no threshold to tune, and the false alarms moved between 4 and 6 of 24 across four identical runs.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>The grounding template.</strong> At least &minus;91 points across four models and two providers: 0 of 32 fabricated on every model. The cheapest change in the book and the largest effect.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2 at threshold 0.3</strong> &mdash; 29 of 29 caught for 3 false alarms in 24, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, version-locked retrieval.</strong> One clause, $0, and 83% of retrieved passages were superseded without it.</li><li><span class='drop'>DROP</span> — <strong>Blaming soft adjectives.</strong> The chapter attributes 63 points to <em>relevant, complete, useful</em>. Recounted on 32 questions, they add one fabrication (1 to 2 of 32); the permission clause adds 27 more.</li><li><span class='drop'>DROP</span> — <strong>The printed threshold 0.4 with a cross-encoder.</strong> That model returns an unbounded logit, not a cosine &mdash; the pairing is invalid, and 0.3 gives fewer false alarms (3 of 24, against 5 at 0.4).</li><li><span class='drop'>DROP</span> — <strong>Running the LLM judge on every request.</strong> $16 per 1,000, about four times the answer it checks, no threshold to tune, and the false alarms moved between 4 and 6 of 24 across four identical runs.</li></ul>
 
 <h4>The one thing to remember</h4>
 <p><strong>The danger is permission.</strong> Adding one clause took fabrication from 6% to 91% (2 to 29 of 32 unanswerable questions): <em>&ldquo;drawing on the label excerpt below and on standard pharmacology where the excerpt is thin.&rdquo;</em> That sentence arrives in real prompts as a well-meaning fix after someone complains the assistant is unhelpful. Readers can search their prompts for that clause; they cannot search for a vague tone.</p>
@@ -404,7 +404,7 @@ in the chapter's README.</p>
   <tr><td><strong>3 · A second AI as auditor</strong></td>
       <td class="num"><strong>29 of 29 caught<br>6 of 24 false alarms</strong><br>
       <span style="color:#6a7681">4 runs: 4&ndash;6 of 24</span></td>
-      <td class="num"><strong>$22</strong> · +4.1 s</td>
+      <td class="num"><strong>$16</strong> per 1,000 · +4.1 s</td>
       <td>Works better than first reported — but no threshold to tune, and the
       rate moves run to run.</td></tr>
   <tr><td><strong>4 · Version-locked retrieval</strong></td>
@@ -493,18 +493,16 @@ answer</em> — minutes. Chunking is the lever, not hardware.</p>
 
 <table>
   <tr><th style="width:30%">Run</th><th class="num">Caught (of 29)</th>
-      <th class="num">False alarms (of 24)</th><th class="num">Cost / 1,000</th></tr>
-  <tr><td>1</td><td class="num">&mdash;</td><td class="num">4</td><td class="num">$22</td></tr>
-  <tr><td>2</td><td class="num">&mdash;</td><td class="num">5</td><td class="num">$22</td></tr>
-  <tr><td>3</td><td class="num">&mdash;</td><td class="num">4</td><td class="num">$22</td></tr>
-  <tr><td>4 (answers kept)</td><td class="num"><strong>29</strong></td><td class="num">6</td><td class="num">$22</td></tr>
+      <th class="num">False alarms (of 24)</th></tr>
+  <tr><td>1</td><td class="num">&mdash;</td><td class="num">4</td></tr>
+  <tr><td>2</td><td class="num">&mdash;</td><td class="num">5</td></tr>
+  <tr><td>3</td><td class="num">&mdash;</td><td class="num">4</td></tr>
+  <tr><td>4 (answers kept)</td><td class="num"><strong>29</strong></td><td class="num">6</td></tr>
   <tr style="background:#f4efe6"><td><strong>Four runs</strong></td>
-      <td class="num">&mdash;</td><td class="num"><strong>19 of 96 &mdash; 20%</strong></td>
-      <td class="num"><strong>$22</strong></td></tr>
+      <td class="num">&mdash;</td><td class="num"><strong>19 of 96 &mdash; 20%</strong></td></tr>
   <tr><td style="color:#8a5c3b">originally published</td>
       <td class="num" style="color:#8a5c3b">85%</td>
-      <td class="num" style="color:#8a5c3b">38%</td>
-      <td class="num" style="color:#8a5c3b">$41</td></tr>
+      <td class="num" style="color:#8a5c3b">38%</td></tr>
 </table>
 
 <p>Only run 4&rsquo;s answers were kept, so the catches of runs 1 to 3 cannot be
@@ -514,7 +512,7 @@ answerable questions, which the audit does not change.</p>
 <div class="verdict">
   <span class="label">The fix is better than reported, and less trustworthy</span>
   <p><strong>Better:</strong> in the kept run it caught all 29 ungrounded answers,
-  for 6 false alarms out of 24, at $22 per thousand. The published 38% sits well
+  for 6 false alarms out of 24, at $16 per thousand audits on the recorded run. The published 38% sits well
   outside the four-run spread of 4 to 6 in 24 (17&ndash;25%) and does not
   reproduce. The $41 was measured against a costlier judge model.</p>
   <p><strong>Less trustworthy:</strong> the false-alarm rate moved between 4 and 6
@@ -525,9 +523,9 @@ answerable questions, which the audit does not change.</p>
 
 <h4>Why cost still argues against running it on everything</h4>
 
-<p>Generating an answer costs about $0.004. Auditing it costs about $0.022 —
-<strong>five times the price of the thing being checked</strong>, plus four
-seconds of latency on every request.</p>
+<p>On the recorded run, generating an answer costs about $0.0042 and auditing it
+costs about $0.0164 &mdash; <strong>about four times the price of the thing being
+checked</strong>, plus four seconds of latency on every request.</p>
 
 <p>And unlike fix 2, <strong>there is no threshold to turn</strong>. The judge
 returns a verdict, not a score, so you cannot trade recall for precision. You take
@@ -536,7 +534,7 @@ the rate you get, and the rate you get is not stable.</p>
 <p>At 20%, roughly <strong>one in five good answers</strong> reaches a human who
 finds nothing wrong with it. That is survivable on a small queue and corrosive on
 a large one: reviewers learn what most flags are worth, and the gate becomes
-decorative while still costing $22 per thousand.</p>
+decorative while still costing $16 per thousand.</p>
 
 <div class="verdict">
   <span class="label">The recommendation: run it behind fix 2, not in front</span>
@@ -588,7 +586,7 @@ everything, once searching only current documents.</p>
       <td>29 &rarr; 0 of 32; at least &minus;91 points on four models — strong</td></tr>
   <tr><td>1 · Citation enforcement</td><td>Did nothing here</td><td>rejected 0 of 72 answers</td></tr>
   <tr><td>2 · Similarity check</td><td><strong>Works — retune to 0.3</strong></td><td>29 of 29 caught, 3 of 24 false alarms; the book&rsquo;s 0.4 gives 5, and its model and threshold do not belong together</td></tr>
-  <tr><td>3 · Second-AI auditor</td><td>Works, with a caveat</td><td>29 of 29 caught, 6 of 24 false alarms (kept run), $22 per 1,000; <strong>false alarms 4 to 6 of 24 over four runs</strong> — run it behind fix 2</td></tr>
+  <tr><td>3 · Second-AI auditor</td><td>Works, with a caveat</td><td>29 of 29 caught, 6 of 24 false alarms (kept run), $16 per 1,000; <strong>false alarms 4 to 6 of 24 over four runs</strong> — run it behind fix 2</td></tr>
   <tr><td>4 · Version-locked retrieval</td><td>Works</td><td>strong behaviour, <strong>version-chain modelling questioned</strong></td></tr>
 </table>
 

@@ -10,14 +10,14 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Prompt template</td><td>Works, with a caveat</td><td class="num">&mdash;</td><td class="num">weak</td></tr><tr><td>1 &middot; Pre-flight validation</td><td><strong>Works</strong></td><td class="num">85% stopped (35/41)</td><td class="num">strong</td></tr><tr><td>2 &middot; OCR confidence</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">untestable here</td></tr><tr><td>3 &middot; Unicode gate</td><td><strong>Works</strong></td><td class="num">17 of 17</td><td class="num">deterministic</td></tr><tr><td>4 &middot; Dead-letter queue</td><td><strong>Works</strong></td><td class="num">37 rejections logged</td><td class="num">qualitative</td></tr>
+<tr><td>Prompt template</td><td>Works, with a caveat</td><td class="num">95&ndash;98% flagged, never aborts</td><td class="num">3 runs</td></tr><tr><td>1 &middot; Pre-flight validation</td><td><strong>Works</strong></td><td class="num">85% stopped (35/41)</td><td class="num">strong</td></tr><tr><td>2 &middot; OCR confidence</td><td>Not implemented as written</td><td class="num">&mdash;</td><td class="num">untestable here</td></tr><tr><td>3 &middot; Unicode gate</td><td><strong>Works</strong></td><td class="num">17 of 17</td><td class="num">deterministic</td></tr><tr><td>4 &middot; Dead-letter queue</td><td><strong>Works</strong></td><td class="num">37 rejections logged</td><td class="num">qualitative</td></tr>
 </table>
 
 <h4>What to keep, what to drop</h4>
 <ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the pre-flight gate.</strong> Four questions about the raw text, no AI. Stopped 85% of damage and avoided 37 model calls &mdash; one of only two fixes in the whole book that <em>saves</em> money.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, the Unicode gate.</strong> 17 of 17, deterministic, free.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, the queue</strong> &mdash; as a reviewable list, not as upstream attribution.</li><li><span class='drop'>DROP</span> — <strong>The claim that confidence signals damage.</strong> Confidence was just as high on clean input. It carries no information either way.</li><li><span class='drop'>DROP</span> — <strong>The headline &ldquo;39% &rarr; 10%&rdquo;.</strong> It compares two differently-defined populations. Say <em>prevents by refusing</em>, not <em>improves</em>.</li></ul>
 
 <h4>The one thing to remember</h4>
-<p><strong>The stronger model is worse at this.</strong> Silent corruption rose from 39% on Haiku 4.5 to 68% on Opus 5 and 80% on GPT-5-mini. A more capable model reconstructs damaged text more fluently, which is exactly what makes the corruption silent. Upgrading the model makes this failure harder to see, not rarer.</p>
+<p><strong>The stronger model is worse at this.</strong> Silent corruption rose from 39% on Haiku 4.5 to 68% on Opus 5 and 88% on GPT-5-mini. A more capable model reconstructs damaged text more fluently, which is exactly what makes the corruption silent. Upgrading the model makes this failure harder to see, not rarer.</p>
 
 <h4>Where this is weakest</h4>
 <p>The headline silent-corruption rate moved 34&ndash;56% across three runs against a published 59% &mdash; <strong>outside its own reproducible range</strong>. Publish a range, not a two-digit figure. And the gate catches only 6 of 12 scanning-damage cases, because OCR errors are made of ordinary letters.</p>
@@ -171,8 +171,8 @@ any model call.</p>
 
 <table>
   <tr><th style="width:52%">Measure</th><th class="num">Haiku 4.5</th><th class="num">Opus 5</th></tr>
-  <tr><td>Silent corruption rate</td><td class="num">39%</td><td class="num"><strong>73%</strong></td></tr>
-  <tr><td>Confident on damaged input</td><td class="num">83%</td><td class="num">80%</td></tr>
+  <tr><td>Silent corruption rate</td><td class="num">39%</td><td class="num"><strong>68%</strong></td></tr>
+  <tr><td>Confident on damaged input</td><td class="num">83%</td><td class="num">83%</td></tr>
 </table>
 
 <p><strong>The stronger model is nearly twice as bad at this.</strong> It is
@@ -292,10 +292,12 @@ later.</p>
 
 <p>The baseline measured earlier in this chapter uses a plain extraction
 instruction &mdash; a demonstration of the failure, not the chapter's fix. The
-chapter's actual prompt is an <strong>INPUT QUALITY PROTOCOL</strong>: the model
-inspects its own input for corruption signals, reports a quality grade and a
-confidence-to-proceed, and <em>aborts</em> rather than extract from a document it
-judges severely corrupted. It had never been run.</p>
+chapter's protocol in this form is an <strong>INPUT QUALITY PROTOCOL</strong>
+(<code>book_prompt.py</code>): the model inspects its own input for corruption
+signals, reports a quality grade and a confidence-to-proceed, and <em>aborts</em>
+rather than extract from a document it judges severely corrupted. It had never been
+run. Prompt 2-1 as the book prints it drops the abort step; Experiment 2.7 below
+runs that text.</p>
 
 <p>Three live runs over the same 53 cases returned <strong>identical numbers every
 time</strong>.</p>
@@ -374,6 +376,50 @@ quality grade the model returns rather than on the confidence it assigns itself.
   runs. The numbers above are three clean runs at 1,400.</p>
 </div>
 
+<h4>Experiment 2.7 &mdash; Prompt 2-1 as printed: report the damage, never abort</h4>
+
+<p>Prompt 2-1 as the book prints it is the report-only version. The model lists
+every corruption signal it finds, quotes the passage it trusts least, grades the
+input <code>CLEAN</code>, <code>DEGRADED</code> or <code>SEVERELY_CORRUPTED</code>,
+and extracts in every case, leaving the decision to the calling code. The printed
+text (<code>prompt_2_1.txt</code>) was run on the same 53 cases, three times, on
+Claude Haiku 4.5 through the subscription CLI: 159 calls, $1.27 notional
+(<code>probe_prompt21.py</code>).</p>
+
+<table>
+  <tr><th style="width:34%">Graded not CLEAN</th><th class="num">Run 1</th>
+      <th class="num">Run 2</th><th class="num">Run 3</th></tr>
+  <tr><td>Lookalike letters</td><td class="num">12/12</td><td class="num">12/12</td><td class="num">12/12</td></tr>
+  <tr><td>Encoding damage</td><td class="num">5/5</td><td class="num">5/5</td><td class="num">5/5</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Scanning damage</strong></td>
+      <td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td></tr>
+  <tr><td>Truncation</td><td class="num">11/12</td><td class="num">10/12</td><td class="num">10/12</td></tr>
+  <tr><td><strong>All damaged</strong></td><td class="num"><strong>98%</strong> (40/41)</td>
+      <td class="num"><strong>95%</strong> (39/41)</td><td class="num"><strong>95%</strong> (39/41)</td></tr>
+  <tr><td>Clean controls graded not CLEAN</td><td class="num">3/12</td>
+      <td class="num">4/12</td><td class="num">3/12</td></tr>
+  <tr><td>&nbsp;&nbsp;of which a real defect in the label text</td><td class="num">3</td>
+      <td class="num">3</td><td class="num">3</td></tr>
+  <tr><td><code>SEVERELY_CORRUPTED</code> issued</td><td class="num">0</td>
+      <td class="num">0</td><td class="num">0</td></tr>
+</table>
+
+<div class="verdict">
+  <span class="label">Every miss is a truncated copy, and all but one clean flag is real</span>
+  <p>The three clean controls flagged in every run carry real defects in the label
+  text as supplied: Amoxicillin&rsquo;s zero-width spaces (the same characters the
+  code gate found, below), Gabapentin&rsquo;s &ldquo;ADMlNlSTRATION&rdquo;, with a
+  lower-case l for a capital I, and Metformin&rsquo;s &ldquo;1.73 m 2&rdquo;, its
+  superscript lost. The one false alarm in 36 clean readings is Atorvastatin in
+  run 2, reported as &ldquo;text cuts off&rdquo; where the excerpt ends at a full
+  stop.</p>
+  <p><strong>The grade separates clean from damaged; it does not rank the
+  damage.</strong> <code>SEVERELY_CORRUPTED</code> was never issued, so code that
+  acts on the grade has to act on <code>DEGRADED</code>, the grade the model does
+  return. That is the design the printed prompt asks for: the model reports, the
+  calling code decides.</p>
+</div>
+
 <h4>Experiment 2.3 &mdash; Fix 1, as the chapter actually prescribes it</h4>
 
 <p>The gate measured above is <strong>not the gate the chapter describes.</strong>
@@ -448,19 +494,23 @@ API-shaped inputs and it cannot be scored on this corpus.</p>
 and instructive reasons.</p>
 
 <p><strong>Language detection answers a different question.</strong> On a document
-carrying 65 Cyrillic characters, <code>langdetect</code> returned English with a
+carrying 55 Cyrillic characters, the most in the set, <code>langdetect</code> returned English with a
 confidence of <strong>0.99999</strong>. It is right. The document <em>is</em> in
 English &mdash; it is also corrupted, and that is not the question the library was
 asked. A homoglyph substituted into <em>administration</em> leaves a token that is
-still overwhelmingly English-shaped, and 65 characters in 1,800 do not move an
+still overwhelmingly English-shaped, and 55 characters in 1,800 do not move an
 n-gram model.</p>
 
-<p><strong>Entropy is the wrong statistic, by construction.</strong> Homoglyph
-substitution replaces one symbol with another of the same frequency: the shape of
-the character distribution is untouched, only the alphabet changed. Measured
-entropy on the damaged documents &mdash; 4.66, 4.72, 4.81 &mdash; sits inside the
-clean band of 4.15 to 4.91 every time. Entropy measures how <em>surprising</em> a
-distribution is, not whether its symbols belong.</p>
+<p><strong>Entropy moves, but not far enough to leave the band.</strong> The clean
+documents measure 4.30 to 4.76 bits per character, and the band calibrated on them,
+padded by 0.15 at each end, runs 4.15 to 4.91. Lookalike letters do raise entropy:
+in all 12 documents, by 0.145 to 0.207 bits per character, because each Cyrillic
+twin is a new symbol that takes a share of the frequency of the Latin letter it
+replaced. The damaged copies land at 4.47 to 4.90, still inside the band. Across
+all 41 damaged documents entropy runs 4.30 to 4.90, the same spread as clean text.
+Entropy measures how <em>surprising</em> a distribution is, not whether its symbols
+belong, and a small shift inside the normal spread of clean documents is
+invisible.</p>
 
 <div class="plain">
   <span class="label">A prediction made before running this, and wrong twice</span>
@@ -471,7 +521,8 @@ distribution is, not whether its symbols belong.</p>
   different language, and that mangled encoding looks statistically random &mdash;
   is exactly the reasoning in the chapter, and it is wrong for the same reason in
   both cases. <strong>Corruption that preserves the statistics of the original is
-  invisible to statistical checks.</strong></p>
+  invisible to statistical checks when it stays inside the normal spread of clean
+  documents.</strong></p>
 </div>
 
 <h4>What this means for the chapter</h4>

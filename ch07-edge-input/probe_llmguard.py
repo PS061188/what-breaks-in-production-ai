@@ -26,14 +26,27 @@ Threshold is the library default (0.92 on the model's risk score).
 Usage:
   python probe_llmguard.py            # replay from llmguard_scan.json
   python probe_llmguard.py --live     # re-scan (downloads the model on first use)
+  python probe_llmguard.py --timings | tee llmguard_timings_log.txt
+                                      # time every scan; writes nothing to the cache
+
+Timings are a property of the machine, so they cannot be replayed: --timings
+scans all 144 cases again, times each scan, checks the fresh flags against
+llmguard_scan.json, and prints the machine. llmguard_timings_log.txt is its
+last output. On a Mac with Apple silicon the library runs the model on the
+GPU (torch "mps") by default, so --timings times that and the CPU separately.
 
 Needs Python 3.10+ and `pip install llm-guard`. The rest of the repo runs on
 3.9; keep this probe in its own environment.
 """
 
 import argparse
+import dataclasses
 import hashlib
 import json
+import os
+import platform
+import statistics
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -44,6 +57,7 @@ sys.path.insert(0, str(HERE.parent))
 from common import build_cases  # noqa: E402
 
 CACHE = HERE / "llmguard_scan.json"
+TIMINGS_LOG = HERE / "llmguard_timings_log.txt"
 CONFIGS = ("full", "chunks")
 INJECTION = ("inj_direct", "inj_roleplay", "inj_spanish", "inj_buried_doc")
 SUBCLASS_ORDER = [
@@ -58,12 +72,17 @@ def _key(config: str, threshold: float, text: str) -> str:
     return h
 
 
-def load_scanner(config: str, threshold: float):
+def load_scanner(config: str, threshold: float, device=None):
     from llm_guard.input_scanners import PromptInjection
     from llm_guard.input_scanners.prompt_injection import MatchType, V2_MODEL
+    from llm_guard.util import configure_logger
 
+    configure_logger(log_level="ERROR")  # it logs every scan to stdout at DEBUG
     match = MatchType.FULL if config == "full" else MatchType.CHUNKS
-    return PromptInjection(threshold=threshold, match_type=match), V2_MODEL
+    model = V2_MODEL
+    if device is not None:  # same model, pinned to one device instead of the library's pick
+        model = dataclasses.replace(V2_MODEL, pipeline_kwargs={**V2_MODEL.pipeline_kwargs, "device": device})
+    return PromptInjection(threshold=threshold, match_type=match, model=model), V2_MODEL
 
 
 def scan_all(cases, threshold: float, live: bool):
@@ -124,15 +143,81 @@ def report(cases, results, timings, model_name, threshold):
         print(f">> Legitimate inputs wrongly flagged (query or document): {false} of {len(legit)}")
         print(f"   Hindi questions flagged: {hindi_f} of 12   Padded questions flagged: {padded_f} of 12")
         if config in timings:
-            print(f">> Time per scan: {timings[config]*1000:.0f} ms (local CPU), no API calls")
+            print(f">> Time per scan: {timings[config]*1000:.0f} ms (local machine), no API calls")
+        else:
+            print(f">> Time per scan: not replayable; last measured in {TIMINGS_LOG.name} (--timings)")
+
+
+def machine() -> str:
+    cpu = platform.processor() or platform.machine()
+    if sys.platform == "darwin":
+        cpu = subprocess.run(["sysctl", "-n", "machdep.cpu.brand_string"],
+                             capture_output=True, text=True).stdout.strip() or cpu
+    return f"{platform.platform()} · {cpu} · {os.cpu_count()} cores · Python {platform.python_version()}"
+
+
+def time_scans(cases, threshold: float, passes: int) -> None:
+    """Scan every non-blank query and document live, timing each scan.
+
+    Writes nothing: llmguard_scan.json stays as recorded, and the fresh flags
+    are compared with it. Model load and one warm-up scan are not timed.
+    """
+    from importlib.metadata import version
+
+    import torch
+    from llm_guard.util import device as library_device
+
+    cache = json.loads(CACHE.read_text())
+    texts = [(kind, t) for c in cases for kind, t in (("query", c["query"]), ("document", c["context"]))]
+    scanned = [(kind, t) for kind, t in texts if t.strip()]
+    print(f"machine: {machine()}")
+    print(f"llm-guard {version('llm-guard')} · torch {version('torch')} · transformers {version('transformers')}"
+          f" · torch CPU threads {torch.get_num_threads()} · threshold {threshold}")
+    print(f"{len(scanned)} scans per pass ({len(texts)} texts, {len(texts) - len(scanned)} blank queries skipped)"
+          f" × {passes} passes; model load and one warm-up scan not timed\n")
+    devices = [str(library_device())] + ([] if library_device().type == "cpu" else ["cpu"])
+    for dev in devices:
+        for config in CONFIGS:
+            scanner, _ = load_scanner(config, threshold, dev)
+            scanner.scan(scanned[0][1])
+            ms = {"query": [], "document": []}
+            pass_means, agree, compared, worst = [], 0, 0, 0.0
+            for p in range(passes):
+                t_pass = []
+                for kind, t in scanned:
+                    t0 = time.perf_counter()
+                    _, is_valid, risk = scanner.scan(t)
+                    took = (time.perf_counter() - t0) * 1000
+                    ms[kind].append(took)
+                    t_pass.append(took)
+                    rec = cache.get(_key(config, threshold, t)) if p == 0 else None
+                    if rec:  # recorded only at the thresholds a --live run used
+                        compared += 1
+                        agree += (not is_valid) == rec["flagged"]
+                        worst = max(worst, abs(round(float(risk), 4) - rec["risk"]))
+                pass_means.append(statistics.mean(t_pass))
+            every = ms["query"] + ms["document"]
+            label = dev + (" (library default)" if dev == devices[0] else "")
+            print(f"=== device {label} · match type {config}")
+            print(f"   mean {statistics.mean(every):.0f} ms · median {statistics.median(every):.0f} ms"
+                  f" · queries {statistics.mean(ms['query']):.0f} ms · documents {statistics.mean(ms['document']):.0f} ms"
+                  f" · slowest {max(every):.0f} ms")
+            print("   mean per pass: " + ", ".join(f"{m:.0f}" for m in pass_means) + " ms")
+            print(f"   flags agree with {CACHE.name} on {agree} of {compared} recorded scans;"
+                  f" largest risk difference {worst:.4f}\n")
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--live", action="store_true")
+    ap.add_argument("--timings", action="store_true", help="time every scan live; writes nothing to the cache")
+    ap.add_argument("--passes", type=int, default=3, help="passes over the corpus for --timings")
     ap.add_argument("--threshold", type=float, default=0.92)
     args = ap.parse_args()
     cases = build_cases()
+    if args.timings:
+        time_scans(cases, args.threshold, args.passes)
+        return 0
     results, timings, model_name = scan_all(cases, args.threshold, args.live)
     report(cases, results, timings, model_name, args.threshold)
     return 0

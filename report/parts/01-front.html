@@ -16,8 +16,7 @@
 <!-- ============================ CORRECTIONS ============================ -->
 <div class="summary">
 <span class="kicker">Correction notice, 14 November 2026</span>
-<p class="oneline">Every experiment was replayed from its recorded answers and checked against this report, the README and the book. <strong>Some figures in the chapter parts below are older than the recordings now in the repository</strong>, because later live runs overwrote earlier answers.</p>
-<p>Affected: Chapter 2 (the entropy check and the OCR word-accuracy figure), Chapter 3 (the second-model judge costs about four times the call it checks on the recorded run, not five), Chapter 4 (classification accuracy, confidence grades, the runner-up field and the gate), Chapter 5 (auditability of the plain instruction, values returned), Chapter 7 (the classifier&rsquo;s labels; the plain prompt obeyed no injection in any run), Chapter 10 (the second-model audit named all eight missing figures), and the repeatability section. The corrected figures, and the new Experiment 2.7 (Prompt 2-1 as printed), are in <code>FINDINGS.md</code> under &ldquo;Replay audit (14 Nov 2026)&rdquo; and in the README. Where this report and the README disagree, the README is current.</p>
+<p class="oneline">On 14 November 2026 every figure in this report was brought in line with what the repository&rsquo;s recordings replay; <code>FINDINGS.md</code> (&ldquo;Replay audit (14 Nov 2026)&rdquo;) lists what changed.</p>
 </div>
 
 <!-- ============================ CONTENTS ============================ -->
@@ -41,7 +40,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
   <div><span class="n">4</span> Classification cascade errors
     <span class="sub">Barely reproduces · the book's own prompt was the worst classifier · 4 fixes</span></div>
   <div><span class="n">5</span> Extraction and normalisation quality loss
-    <span class="sub">52% → 91% auditability · 52 losses made visible · 4 fixes</span></div>
+    <span class="sub">64% → 93% auditability · 40 losses made visible · 4 fixes</span></div>
   <div><span class="n">6</span> State mismatch failures
     <span class="sub">Two chapters of this book contradict each other · 4 fixes</span></div>
   <div><span class="n">7</span> Edge input failures
@@ -51,11 +50,11 @@ engineering fixes in exactly the order the chapter lists them.</p>
   <div><span class="n">9</span> Sparse field fabrication
     <span class="sub">Did not reproduce · and the worst mistake in this report, corrected · 4 fixes</span></div>
   <div><span class="n">10</span> Silent omissions
-    <span class="sub">55 of 55 returned · the fixes made it worse · 4 fixes</span></div>
+    <span class="sub">54 of 54 returned · the fixes made it worse · 4 fixes</span></div>
   <div><span class="n">D</span> Does any of this hold on other models?
     <span class="sub">Four models, two providers — and one finding that inverts the usual advice</span></div>
   <div><span class="n">E</span> What everything cost
-    <span class="sub">$24 for the whole project · and the one fix that costs about five times what it protects</span></div>
+    <span class="sub">$24 for the whole project · and the one fix that costs about four times what it protects</span></div>
   <div><span class="n">F</span> The experiments had bugs too
     <span class="sub">Fourteen of them, five that would have published false numbers</span></div>
   <div><span class="n">G</span> What the book should change
@@ -77,9 +76,9 @@ engineering fixes in exactly the order the chapter lists them.</p>
 <tr><td><strong>A model cannot check its own work</strong></td>
     <td>Measured four separate ways, in four chapters, independently: its confidence, its verdict on its own input, its own item count, its own completeness. All four failed.</td></tr>
 <tr><td><strong>The stronger model is worse at the failure that matters most</strong></td>
-    <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 80%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
+    <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 88%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
 <tr><td><strong>Nothing was measured twice until the end</strong></td>
-    <td>When it finally was, <strong>8 of 14</strong> published headline figures fell outside the range their own code reproduces.</td></tr>
+    <td>When it finally was, <strong>8 of 14</strong> published headline figures fell outside the range their own code reproduces. Two of those eight, both Chapter 7 baseline figures, are unsettled: the scorer that counted them misread refusals as answers, and the one such reply still on record is a refusal.</td></tr>
 </table>
 
 <h4>What the fixes sorted into</h4>
@@ -87,7 +86,7 @@ engineering fixes in exactly the order the chapter lists them.</p>
 <table>
 <tr><th style="width:30%">Who checks</th><th>What happened</th></tr>
 <tr><td><strong>Code, outside the model</strong></td><td><span class="keep">WORKED</span> almost always, usually free, and returned an identical number on every run.</td></tr>
-<tr><td><strong>A second, different model</strong></td><td>Partly worked. <strong>5&ndash;10&times;</strong> the cost of what it checks, and the false-alarm rate moves between runs of an identical setup.</td></tr>
+<tr><td><strong>A second, different model</strong></td><td>Partly worked. About <strong>four times</strong> the cost of what it checks, and the false-alarm rate moves between runs of an identical setup.</td></tr>
 <tr><td><strong>The model, about itself</strong></td><td><span class="drop">FAILED</span> every time it was tested.</td></tr>
 </table>
 
@@ -131,7 +130,7 @@ failure did not occur at all, we say that too.</p>
   <p>But <strong>five of the nine failures did not reproduce on a current
   model</strong>. <strong>Five engineering fixes do not work as the book
   describes</strong>, two of them cannot work on the problem they are aimed at,
-  one costs five times the thing it protects, and one <strong>reproduces the exact
+  one costs four times the thing it protects, and one <strong>reproduces the exact
   harm its own chapter opens by warning about</strong>. Two chapters give the same
   advice and one of them is broken.</p>
   <p>The book also makes a claim five separate times without knowing it: that a

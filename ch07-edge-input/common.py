@@ -207,6 +207,8 @@ def reference_queries() -> list:
 #     request", "this question *cannot be answered*" — near-misses of phrasings
 #     that were already in the list. Nine of the twelve numeric-noise cases
 #     were being scored as answers when every one of them was a refusal.
+#     The 14 Nov 2026 replay audit found one the fix still missed: "I'm
+#     unable to *interpret* the sequence of numbers" (Warfarin).
 #
 #   * Real answers it scored as refusals. "The excerpt does not contain a
 #     single starting dose. Lisinopril monotherapy is effective at 10 mg to
@@ -244,6 +246,7 @@ REFUSAL_MARKERS = [
     "unable to assist",
     "unable to provide",
     "unable to process",
+    "unable to interpret",
     "not able to",
     "i'm here to help with",
     "i am here to help with",

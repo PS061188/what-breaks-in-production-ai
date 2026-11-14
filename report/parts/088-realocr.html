@@ -8,9 +8,9 @@
 <h4>How it was done</h4>
 <table>
 <tr><td style="width:26%">Corpus</td><td>The same 12 FDA labels, <code>dosage_and_administration</code>, typeset onto pages and rendered at 105 DPI</td></tr>
-<tr><td>Degradation</td><td>Greyscale, Gaussian blur 1.0, JPEG quality 28 &mdash; chosen by sweeping until word accuracy landed near a plausible mid-quality office scan</td></tr>
+<tr><td>Degradation</td><td>Greyscale, Gaussian blur 1.0, JPEG quality 28 &mdash; chosen by sweeping to a plausible mid-quality office scan</td></tr>
 <tr><td>OCR engine</td><td><strong>Apple Vision</strong>, via <code>ocrmac</code>. A real, current, widely deployed commercial engine &mdash; not a simulation</td></tr>
-<tr><td>Result</td><td><strong>85.5% word accuracy</strong> across 840 recognised lines. Roughly one word in seven is wrong</td></tr>
+<tr><td>Result</td><td><strong>840 recognised lines</strong>, every one at confidence 1.000, carrying real recognition errors &mdash; dose figures among them changed and invented</td></tr>
 <tr><td>Runs</td><td>3 live runs of Chapter 10 and Chapter 2 over the OCR'd corpus; the gate comparison is pure code and deterministic</td></tr>
 <tr><td>Cost</td><td>OCR is local and free; <strong>$0.21</strong> of model calls</td></tr>
 </table>
@@ -20,13 +20,13 @@
 <tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
 <tr><td><strong>Fix 2 &mdash; OCR confidence</strong></td><td><strong>Cannot work on this engine</strong></td><td class="num"><strong>0 of 840 lines</strong> below 1.000</td><td class="num">decisive</td></tr>
 <tr><td>Fix 1 &mdash; byte-level gate</td><td>Catches under half</td><td class="num">5 of 12 documents</td><td class="num">deterministic</td></tr>
-<tr><td>Ch 10 &mdash; silent omission</td><td><strong>Much worse</strong></td><td class="num">0% &rarr; <strong>57%</strong> of documents</td><td class="num">3 runs, identical</td></tr>
+<tr><td>Ch 10 &mdash; silent omission</td><td>Worse, mostly on invented figures</td><td class="num">0 &rarr; 4 of 7 documents; 1 a real dose</td><td class="num">3 runs, identical</td></tr>
 <tr><td>Ch 2 &mdash; silent corruption</td><td>Reproduces</td><td class="num">42%, 44%, 53%</td><td class="num">3 runs</td></tr>
 <tr><td>OCR inventing doses</td><td><strong>Yes</strong></td><td class="num">4 documents</td><td class="num">deterministic</td></tr>
 </table>
 
 <h4>The one thing to remember</h4>
-<p><strong>A document at 60.6% word accuracy &mdash; two words in five wrong &mdash; passed the byte-level gate and reported OCR confidence of 1.000.</strong> Both of the checks Chapter 2 offers for scanning damage looked at that document and said it was fine. The fix that was supposed to catch what the cheap check misses reported maximum confidence on every line of every document, while the engine was getting one word in seven wrong.</p>
+<p><strong>Lisinopril came back reading &ldquo;10 mg to 50 mg&rdquo; where the label says 80 mg, passed the byte-level gate, and reported OCR confidence of 1.000.</strong> Both of the checks Chapter 2 offers for scanning damage looked at that document and said it was fine. The fix that was supposed to catch what the cheap check misses reported maximum confidence on every one of 840 lines, including the lines where the engine had changed or invented a dose.</p>
 
 <h4>Where this is weakest</h4>
 <p><strong>One engine.</strong> Apple Vision reports a confidence that is pinned at 1.0 in normal operation; Tesseract emits genuinely varying per-character confidence and might well support the fix as written. The honest claim is not <em>&ldquo;OCR confidence never works&rdquo;</em> but <em>&ldquo;it is a property of your engine, it is not guaranteed, and you must check before you build on it.&rdquo;</em> One degradation profile, one document type, 12 documents.</p>
@@ -50,37 +50,40 @@ have.</p>
 <h4>What the OCR did to the documents</h4>
 
 <table>
-  <tr><th style="width:26%">Document</th><th class="num">Word accuracy</th>
+  <tr><th style="width:26%">Document</th><th class="num">Lines read</th>
       <th class="num">Lowest OCR confidence</th><th>Byte-level gate</th></tr>
-  <tr><td>Prednisone</td><td class="num">96.4%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr><td>Furosemide</td><td class="num">95.9%</td><td class="num">1.000</td><td>flagged</td></tr>
-  <tr><td>Gabapentin</td><td class="num">93.5%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr><td>Albuterol</td><td class="num">92.8%</td><td class="num">1.000</td><td>flagged</td></tr>
-  <tr><td>Lisinopril</td><td class="num">92.4%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr><td>Warfarin</td><td class="num">89.5%</td><td class="num">1.000</td><td>flagged</td></tr>
-  <tr><td>Omeprazole</td><td class="num">87.8%</td><td class="num">1.000</td><td>flagged</td></tr>
-  <tr><td>Metformin</td><td class="num">87.0%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr><td>Amoxicillin</td><td class="num">83.5%</td><td class="num">1.000</td><td>flagged</td></tr>
-  <tr><td>Sertraline</td><td class="num">79.9%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr><td>Levothyroxine</td><td class="num">77.6%</td><td class="num">1.000</td><td>passes</td></tr>
-  <tr style="background:#f4efe6"><td><strong>Atorvastatin</strong></td>
-      <td class="num"><strong>60.6%</strong></td><td class="num"><strong>1.000</strong></td>
-      <td><strong>passes &mdash; looks fine</strong></td></tr>
+  <tr><td>Prednisone</td><td class="num">83</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr style="background:#f4efe6"><td><strong>Lisinopril</strong></td>
+      <td class="num">25</td><td class="num"><strong>1.000</strong></td>
+      <td><strong>passes &mdash; and reads &ldquo;10 mg to 50 mg&rdquo; where the label says 80</strong></td></tr>
+  <tr><td>Metformin</td><td class="num">30</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Atorvastatin</td><td class="num">26</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Levothyroxine</td><td class="num">248</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Amoxicillin</td><td class="num">45</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Sertraline</td><td class="num">95</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Warfarin</td><td class="num">107</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Albuterol</td><td class="num">19</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Gabapentin</td><td class="num">86</td><td class="num">1.000</td><td>passes</td></tr>
+  <tr><td>Furosemide</td><td class="num">68</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td>Omeprazole</td><td class="num">8</td><td class="num">1.000</td><td>flagged</td></tr>
+  <tr><td><strong>All twelve</strong></td><td class="num"><strong>840</strong></td>
+      <td class="num"><strong>1.000</strong></td><td><strong>5 flagged, 7 passed</strong></td></tr>
 </table>
 
 <div class="verdict">
-  <span class="label">Read the last row</span>
-  <p>Two words in five are wrong in that document. <strong>Both of this chapter's
-  checks for scanning damage examined it and passed it.</strong> The byte-level
-  gate saw ordinary English letters, because that is what OCR errors are made of.
-  The confidence check saw 1.000, because that is what this engine reports.</p>
+  <span class="label">Read the Lisinopril row</span>
+  <p>The scan changed the top of a dose range from 80 mg to 50 mg. <strong>Both of this
+  chapter's checks for scanning damage examined it and passed it.</strong> The
+  byte-level gate saw ordinary English letters, because that is what OCR errors
+  are made of. The confidence check saw 1.000, because that is what this engine
+  reports.</p>
 </div>
 
 <h4>Fix 2, measured at last</h4>
 
 <div class="headline">
   <b>0 of 840</b> recognised lines reported a confidence below 1.000, across a
-  corpus the same engine was reading at <b>85.5%</b> word accuracy.
+  corpus in which the same engine had changed and invented dose figures.
 </div>
 
 <p>The fix says: carry the confidence numbers downstream and treat low-confidence
@@ -96,7 +99,7 @@ principle turns out not to be about language models at all.</p>
 
 <h4>What the OCR did to the doses, which is the part that matters</h4>
 
-<p>Word accuracy is an abstraction. Here is what it means on this corpus.</p>
+<p>Here is what the recognition errors did to the doses.</p>
 
 <pre>Lisinopril     "...doses of 10 mg to 80 mg..."   ->   "...doses of 10 mg to 50 mg..."
 Furosemide     "...80 mg,..."                    ->   "...50 mg."
@@ -153,10 +156,14 @@ by a scanner.</p>
       <td class="num">81%, 83%, 83%</td></tr>
 </table>
 
-<p><strong>Real OCR damage is worse than the simulation was.</strong> Chapter 10's
-silent omission affected <strong>57% of documents on every run</strong>, against
-33% under simulated damage and 0% on clean text. The synthetic corruption used
-elsewhere in this report was, if anything, too gentle.</p>
+<p><strong>Most of the real-OCR omissions are figures the OCR invented.</strong>
+Chapter 10&rsquo;s silent-drop count rose to <strong>4 of 7 documents on every
+run</strong>, against 0 on clean text. In three of the four, what the model left
+out is a figure the scanner made up: Lisinopril&rsquo;s 5 mg, Amoxicillin&rsquo;s
+9 mg, 429 mg and 7777272600 mg, and Furosemide&rsquo;s 0 mg. Only
+Gabapentin&rsquo;s 400 mg is a real dose the model dropped. Measured against the
+original label, real OCR produced one silent omission in seven documents; the
+count against the damaged text mostly measures what the scanner added.</p>
 
 <h4>What to do with this</h4>
 

@@ -6,12 +6,19 @@ Members:
   B  GPT-4.1-mini, the one-line prompt — a second provider
   C  facebook/bart-large-mnli, zero-shot, run locally on CPU — no API at all
 
+C's candidate labels are the category descriptions in common.py ("This text
+is about {description}."), the same definitions A and B read in their prompts.
+Bare section names ("This text is from the {name} section of a drug label.")
+score 41% instead of 59%; ZS_LABELS=names runs that version. The book's
+Table 4-2 is the descriptions run.
+
 Majority label wins; when all three disagree the passage goes to review.
 Three runs: A and B are sampled three times (A's are already recorded), C is
 deterministic and runs once.
 
-    python model_ensemble.py --live      # ~$0.30 for B, plus a 1.6 GB model download
-    python model_ensemble.py             # replay
+    python model_ensemble.py --live            # ~$0.30 for B, plus a 1.6 GB model download
+    python model_ensemble.py                   # replay: Table 4-2
+    ZS_LABELS=names python model_ensemble.py   # replay with bart on bare names
 """
 
 import json
@@ -29,7 +36,7 @@ from shared.scoring import pct, rule, table  # noqa: E402
 HERE = Path(__file__).parent
 import os
 from common import CATEGORY_DESCRIPTIONS  # noqa: E402
-DESC = os.environ.get("ZS_LABELS") == "descriptions"
+DESC = os.environ.get("ZS_LABELS", "descriptions") != "names"
 ZS_CACHE = HERE / "fixtures" / ("zeroshot_bart_large_mnli_desc.json" if DESC else "zeroshot_bart_large_mnli.json")
 PRETTY = {c: (CATEGORY_DESCRIPTIONS[c] if DESC else c.replace("_", " ")) for c in CATEGORIES}
 

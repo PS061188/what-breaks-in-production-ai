@@ -8,13 +8,13 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>The failure itself</td><td>Barely reproduces</td><td class="num">8&ndash;9 errors of 96</td><td class="num">stable, 2 runs</td></tr><tr><td>Prompt template</td><td><strong>Harmful here</strong></td><td class="num">6 pts below a one-line prompt</td><td class="num">confident</td></tr><tr><td>1 &middot; Confidence gating</td><td><strong>Cannot work</strong></td><td class="num">LOW never issued in 192</td><td class="num">decisive</td></tr><tr><td>2 &middot; Ensemble vote</td><td><strong>Works</strong></td><td class="num">98%, and perfectly stable</td><td class="num">strong</td></tr><tr><td>3 &middot; Per-category F1 gate</td><td><strong>Works</strong></td><td class="num">2 broken categories found</td><td class="num">strong</td></tr><tr><td>4 &middot; Audit trail</td><td><strong>Works</strong></td><td class="num">runner-up correct 67&ndash;100%</td><td class="num">strong</td></tr></table>
+<tr><td>The failure itself</td><td>Barely reproduces</td><td class="num">1 and 10 errors of 96</td><td class="num">recorded run</td></tr><tr><td>Prompt template</td><td><strong>Harmful here</strong></td><td class="num">6 pts below a one-line prompt</td><td class="num">confident</td></tr><tr><td>1 &middot; Confidence gating</td><td><strong>Cannot work</strong></td><td class="num">LOW never issued in 192</td><td class="num">decisive</td></tr><tr><td>2 &middot; Ensemble vote</td><td>Matches its best member</td><td class="num">1&ndash;2 of 96 to review</td><td class="num">3 runs</td></tr><tr><td>3 &middot; Per-category F1 gate</td><td><strong>Works</strong></td><td class="num">2 broken categories found</td><td class="num">strong</td></tr><tr><td>4 &middot; Audit trail</td><td><strong>Works</strong></td><td class="num">runner-up true on 10 of 11 errors</td><td class="num">strong</td></tr></table>
 <h4>What to keep, what to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>Fix 3, the per-category F1 gate.</strong> The only fix that would have caught this chapter&rsquo;s own dominant error before a user complained. Costs no model calls.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2, the ensemble</strong> &mdash; but sell it on <em>stability</em>, not accuracy. Three runs returned bit-identical numbers on all ten measures while the single classifier moved on every one.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, the audit trail.</strong> <code>alternative_considered</code> held the true category 67&ndash;100% of the time it was wrong.</li><li><span class='drop'>DROP</span> — <strong>Confidence-gated routing as the first fix.</strong> LOW was never issued once in 192 classifications. A gate on &ldquo;below HIGH&rdquo; has nothing to bite on.</li><li><span class='drop'>DROP</span> — <strong>The claim that the chapter&rsquo;s template improves accuracy.</strong> It scored 6 points <em>below</em> a one-line prompt on the harder set.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;200+ documents per category.&rdquo;</strong> 7&ndash;12 per category caught both broken categories. Volume was not what mattered; derivable ground truth was.</li><li><span class='drop'>DROP</span> — <strong>The fix&rsquo;s &ldquo;100% accuracy&rdquo;.</strong> Three fresh runs all gave 98% &mdash; and the denominator moved because the ensemble discards disagreements before scoring.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 3, the per-category F1 gate.</strong> The only fix that would have caught this chapter&rsquo;s own dominant error before a user complained. Costs no model calls.</li><li><span class='keep'>KEEP</span> — <strong>Fix 2&rsquo;s disagreement lane.</strong> Three different systems voting matched their best member and did not beat it; the useful part is that a three-way disagreement sent 1 to 2 of 96 passages to review.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, the audit trail.</strong> <code>alternative_considered</code> held the true category on 10 of the 11 errors (1 of 1 opening, 9 of 10 body).</li><li><span class='drop'>DROP</span> — <strong>Confidence-gated routing as the first fix.</strong> LOW was never issued once in 192 classifications. A gate on &ldquo;below HIGH&rdquo; has nothing to bite on.</li><li><span class='drop'>DROP</span> — <strong>The claim that the chapter&rsquo;s template improves accuracy.</strong> It scored 6 points <em>below</em> a one-line prompt on the harder set.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;200+ documents per category.&rdquo;</strong> 7&ndash;12 per category caught both broken categories. Volume was not what mattered; derivable ground truth was.</li><li><span class='drop'>DROP</span> — <strong>The fix&rsquo;s &ldquo;100% accuracy&rdquo;.</strong> The recorded run gives 100% on openings and 97% (91 of 94) on bodies &mdash; and the denominator moved because the gates hold cases back before scoring.</li></ul>
 <h4>The one thing to remember</h4>
-<p><strong>The ensemble&rsquo;s real advantage is that it does not move.</strong> Its accuracy edge is modest &mdash; 98% against 91&ndash;92%. But three live runs returned identical numbers on every measure, while the single classifier varied on all of them. A metric that moves on its own is a metric you cannot alert on. The caveat is half the lesson: those identical runs contain identical <em>errors</em>. Stable is not correct.</p>
+<p><strong>A passing aggregate hid the two broken categories.</strong> The chapter&rsquo;s template scored 90% on body passages, and under that number <code>how_supplied</code> sat at F1 0.76 and <code>description</code> at 0.78, both below the 0.80 gate. The per-category check found both with 7 to 12 passages per category and no model call. The confidence grade could not have: 9 of the 10 body errors arrived stamped HIGH.</p>
 <h4>Where this is weakest</h4>
-<p>Every cascade percentage in this chapter has a denominator under ten. The cascade itself is well-evidenced &mdash; a wrong label produced confident wrong-category output 56&ndash;100% of the time &mdash; but on this input the wrong label is rare, so the rates rest on 8 or 9 cases.</p>
+<p>Every cascade percentage in this chapter has a denominator of ten or fewer. The cascade itself is real &mdash; a wrong label produced confident wrong-category output on 4 of the 10 body errors and on the single opening error &mdash; but on this input the wrong label is rare, so the rates rest on 1 and 10 cases.</p>
 </div>
 
 <h3 class="top">Experiment 4.1 &mdash; The failure: one wrong label, and every step after it is correct</h3>
@@ -57,19 +57,19 @@ invisible at every one of them.</p>
 
 <table>
   <tr><th style="width:44%">Prompt / fix</th><th class="num">Opening passages</th><th class="num">Body passages</th></tr>
-  <tr><td>Naive one-line classifier</td><td class="num">99% — 95/96</td><td class="num">97% — 93/96</td></tr>
-  <tr><td><strong>Chapter 4's prompt template</strong></td><td class="num">97% — 93/96</td>
-      <td class="num"><strong>91% — 87/96</strong></td></tr>
+  <tr><td>Naive one-line classifier</td><td class="num">100% — 96/96</td><td class="num">96% — 92/96</td></tr>
+  <tr><td><strong>Chapter 4's prompt template</strong></td><td class="num">99% — 95/96</td>
+      <td class="num"><strong>90% — 86/96</strong></td></tr>
   <tr><td>Heading prompt, options reversed</td><td class="num">99%</td><td class="num">99%</td></tr>
   <tr><td><strong>Cascade rate</strong> (wrong label → confident wrong-category output)</td>
-      <td class="num">100% — 3/3</td><td class="num">56% — 5/9</td></tr>
+      <td class="num">100% — 1/1</td><td class="num">40% — 4/10</td></tr>
   <tr><td>Counter-metric: downstream answered when the label was right</td>
-      <td class="num">85%</td><td class="num">86%</td></tr>
+      <td class="num">86%</td><td class="num">86%</td></tr>
 </table>
 
 <div class="verdict">
   <span class="label">The chapter's own prompt was the worst classifier tested</span>
-  <p>Two points below a one-line prompt on openings; <strong>six points below on
+  <p>One point below a one-line prompt on openings; <strong>six points below on
   body passages</strong>. A reader who adopts the template may end up with a worse
   classifier than the one they had.</p>
   <p>It buys something real — an <code>alternative_considered</code> field, which
@@ -79,40 +79,42 @@ invisible at every one of them.</p>
 
 <h4>The failure barely reproduces</h4>
 
-<p>91–99% accuracy. Three errors out of 96 on openings, nine on bodies.
-<strong>Every cascade percentage in this chapter has a denominator under
-ten.</strong> The mechanism holds — a wrong label really does produce confident
-wrong-category output more than half the time — but the frequency the chapter
-implies does not, on structured documents with a clean taxonomy.</p>
+<p>90–99% accuracy. One error out of 96 on openings, ten on bodies.
+<strong>Every cascade percentage in this chapter has a denominator of ten or
+fewer.</strong> The mechanism holds — on 4 of the 10 body errors the downstream
+stage answered confidently for the wrong category instead of declining — but the
+frequency the chapter implies does not, on structured documents with a clean
+taxonomy.</p>
 
 <h4>The four engineering fixes</h4>
 
 <table>
   <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
   <tr><td><strong>1 · Confidence-gated routing</strong></td>
-      <td class="num">caught 2 of 9 body errors;<br>60% of the queue it created was already correct</td>
+      <td class="num">caught 1 of 10 body errors;<br>1 of the 2 passages it queued was already correct</td>
       <td><strong>Cannot work</strong> — see below</td></tr>
   <tr><td><strong>2 · Ensemble majority vote</strong></td>
-      <td class="num">8 of 9 errors removed, 1% sent to review, <strong>0 correct
+      <td class="num">7 of 10 body errors removed, 1% sent to review, <strong>0 correct
       answers held</strong></td>
-      <td><strong>Works</strong> — the strongest fix in the chapter</td></tr>
+      <td>Three prompts on one model, not an ensemble &mdash; see 4.3</td></tr>
   <tr><td><strong>3 · Per-category F1 gate</strong></td>
-      <td class="num">fires: <code>description</code> 0.74,
-      <code>pediatric_use</code> 0.77 — under a 91% aggregate</td>
+      <td class="num">fires: <code>how_supplied</code> 0.76,
+      <code>description</code> 0.78 — under a 90% aggregate</td>
       <td><strong>Works</strong>, and is under-sold in the chapter</td></tr>
   <tr><td><strong>4 · Classification audit trail</strong></td>
-      <td class="num">runner-up was the true category on 67–100% of errors</td>
+      <td class="num">runner-up was the true category on 10 of 11 errors</td>
       <td><strong>Works</strong></td></tr>
 </table>
 
 <h4>Fix 1 — the fourth measurement of the same thing</h4>
 
 <div class="headline">
-  <b>LOW confidence was never issued once in 192 classifications.</b> 98–100% came
-  back HIGH; 67–89% of the errors arrived stamped HIGH across the recorded runs.
+  <b>LOW confidence was never issued once in 192 classifications.</b> 99% of opening
+  and 98% of body passages came back HIGH; 10 of the 11 errors arrived stamped HIGH
+  (1 of 1 opening, 9 of 10 body).
 </div>
 
-<p>MEDIUM was issued twice in 192 classifications, which is far too few to say
+<p>MEDIUM was issued three times in 192 classifications, which is far too few to say
 whether the grade carries information. What the numbers do establish is that the
 grade is <strong>almost never issued</strong>, so a "route anything below HIGH to
 review" gate has nothing to bite on.</p>
@@ -127,10 +129,11 @@ its first fix ask the classifier to police its own confidence.</p>
 
 <h4>Fix 3 — the one that should lead</h4>
 
-<p>Aggregate accuracy of 91% hides two categories at F1 0.74 and 0.77. It is the
+<p>Aggregate accuracy of 90% hides two categories at F1 0.76 and 0.78,
+<code>how_supplied</code> and <code>description</code>. It is the
 <strong>only fix of the four that would have caught this chapter's own dominant
 error</strong> — <code>description</code> misread as <code>how_supplied</code>, 4
-of 11 body errors — before a user complained. It costs no model calls.</p>
+of 10 body errors — before a user complained. It costs no model calls.</p>
 
 <p>The chapter's stated threshold of "200+ documents per category" is also wrong
 here: <strong>7–12 per category caught both broken categories.</strong> What
@@ -145,13 +148,14 @@ including the "no gate" baseline — against the ensemble majority; a second
 function credited the confidence gate with errors the ensemble had already
 removed, printing "errors the router caught: 100%".</p>
 
-<p>Fixing it is what turned fix 1 from looking effective into measuring 22%.
+<p>Fixing it is what turned fix 1 from looking effective into catching 1 of 10 body errors.
 It surfaced because two numbers in one run could not both be true.</p>
 
 <h4>Sampling noise exceeds two of the four fixes</h4>
 
-<p>Same prompt, same passages, two runs: 94/96 then 93/96. Fix 1 moves one to two
-cases on the opening run — <strong>inside that spread</strong>. This is why
+<p>Same prompt, same passages, two live runs before the one now recorded: 94/96
+then 93/96. Fix 1 moves one case on the opening passages — <strong>inside that
+spread</strong>. This is why
 <code>fixed.py</code> replays the baseline's calls rather than re-sampling them;
 otherwise part of the measured difference is the sampler.</p>
 
@@ -167,31 +171,31 @@ iterations).</p>
 <table>
   <tr><th style="width:40%">Prompt</th><th class="num">Opening passage</th><th class="num">Body passage</th></tr>
   <tr><td>One-line prompt (replayed)</td><td class="num">100% (96/96)</td><td class="num">96% (92/96)</td></tr>
-  <tr><td>Full template, with confidence (replayed)</td><td class="num">98%</td><td class="num">90%</td></tr>
-  <tr><td>Shipped template, runs 1 / 2 / 3</td><td class="num">97 / 98 / 99%</td><td class="num">94 / 92 / 91%</td></tr>
+  <tr><td>Full template, with confidence (replayed)</td><td class="num">99%</td><td class="num">90%</td></tr>
+  <tr><td>Shipped template, runs 1 / 2 / 3</td><td class="num">99 / 99 / 97%</td><td class="num">93 / 93 / 93%</td></tr>
 </table>
-<p>Dropping the confidence fields recovered one to four points on the body passages; the template still trails the one-line prompt. <code>runner_up</code> held the true category on 6 of 6 opening errors and 18 of 23 body errors.</p>
+<p>Dropping the confidence fields recovered three points on the body passages (90% to 93% in every run) and none on the openings; the template still trails the one-line prompt. <code>runner_up</code> held the true category on 4 of 5 opening errors and 15 of 21 body errors.</p>
 
 <h4>4.3 &mdash; Fix 2 as the chapter describes it: three different systems</h4>
 <p>Haiku 4.5 with the shipped template, GPT-4.1-mini with the one-line prompt, and <code>facebook/bart-large-mnli</code> zero-shot on CPU; majority vote, and a three-way disagreement goes to review. Three runs each position.</p>
 <table>
   <tr><th style="width:24%">Position</th><th class="num">Haiku</th><th class="num">GPT-4.1-mini</th><th class="num">bart</th><th class="num">Ensemble</th><th class="num">Sent to review</th></tr>
-  <tr><td>Opening</td><td class="num">99 / 99 / 97</td><td class="num">97 / 97 / 99</td><td class="num">59</td><td class="num">99 / 99 / 98</td><td class="num">2 / 2 / 0</td></tr>
+  <tr><td>Opening</td><td class="num">99 / 99 / 97</td><td class="num">98 / 98 / 98</td><td class="num">59</td><td class="num">99 / 99 / 98</td><td class="num">1 / 1 / 1</td></tr>
   <tr><td>Body</td><td class="num">93 / 93 / 93</td><td class="num">96 / 96 / 94</td><td class="num">59</td><td class="num">96 / 96 / 94</td><td class="num">1 / 2 / 1</td></tr>
 </table>
 <div class="plain">
   <span class="label">Withdrawn</span>
-  <p>The earlier &ldquo;ensemble vote works, 8 of 9&rdquo; (97&ndash;100%) was three prompts on one model, where two strong prompts outvoted the weakest. It does not describe a model ensemble. The real ensemble matches its best member and does not beat it; its useful part is the disagreement lane, which sent 0 to 2 of 96 passages to review.</p>
+  <p>The earlier &ldquo;ensemble vote works, 8 of 9&rdquo; (97&ndash;100%) was three prompts on one model, where two strong prompts outvoted the weakest. It does not describe a model ensemble. The real ensemble matches its best member and does not beat it; its useful part is the disagreement lane, which sent 1 to 2 of 96 passages to review.</p>
 </div>
 
 <h3>Chapter 4 verdict</h3>
 <table>
   <tr><th style="width:38%">Item</th><th style="width:26%">Verdict</th><th>Evidence strength</th></tr>
-  <tr><td>The failure itself</td><td>Barely reproduces</td><td>3 and 9 errors of 96</td></tr>
-  <tr><td>Prompt template (shipped)</td><td>Trails a one-line prompt</td><td>1&ndash;3 points opening, 2&ndash;5 body, three runs</td></tr>
+  <tr><td>The failure itself</td><td>Barely reproduces</td><td>1 and 10 errors of 96</td></tr>
+  <tr><td>Prompt template (shipped)</td><td>Trails a one-line prompt</td><td>1&ndash;3 points opening, 3 body, three runs</td></tr>
   <tr><td>Confidence gating</td><td><strong>Cannot work</strong></td><td>LOW never issued in 192 cases</td></tr>
   <tr><td>Per-category F1 gate</td><td><strong>Works</strong></td><td>two categories caught under a passing aggregate</td></tr>
-  <tr><td>Audit trail (<code>runner_up</code>)</td><td><strong>Works</strong></td><td>true category held on 24 of 29 errors</td></tr>
-  <tr><td>Model ensemble</td><td>Matches its best member</td><td>disagreement lane: 0&ndash;2 of 96 to review</td></tr>
+  <tr><td>Audit trail (<code>runner_up</code>)</td><td><strong>Works</strong></td><td>true category held on 19 of 26 errors</td></tr>
+  <tr><td>Model ensemble</td><td>Matches its best member</td><td>disagreement lane: 1&ndash;2 of 96 to review</td></tr>
 </table>
 <p><strong>Order the fixes by result:</strong> the F1 gate, then the audit trail, then the ensemble&rsquo;s disagreement lane. Confidence gating cannot work on a grade the model never issues.</p>

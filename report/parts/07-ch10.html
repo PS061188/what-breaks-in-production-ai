@@ -8,7 +8,7 @@
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">1&ndash;2 of 54 figures</td><td class="num">4 runs</td></tr><tr><td>Failure &mdash; doses from long conversations</td><td><strong>Did not reproduce</strong></td><td class="num">64 of 64 reached all notes</td><td class="num">360 notes, 3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">count = own list, 54 of 54</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Misses large gaps</td><td class="num">10 of 41 known-missing caught</td><td class="num">60 runs</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
+<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">1&ndash;2 of 54 figures</td><td class="num">4 runs</td></tr><tr><td>Failure &mdash; doses from long conversations</td><td><strong>Did not reproduce</strong></td><td class="num">63 of 64 reached all six notes</td><td class="num">360 notes, 3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">count = own list, 54 of 54</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Misses large gaps</td><td class="num">10 of 41 known-missing caught</td><td class="num">60 runs</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
 <h4>What to keep / What to drop</h4>
 <ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the independent count.</strong> Free, no model, and the only thing that found the real omission. It is also what makes fixes 2, 3 and 4 measurable &mdash; without it this chapter has no findings at all.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, renamed.</strong> Describe it as <em>&ldquo;where I had to make a judgement&rdquo;</em> and use it as a review queue and as schema feedback.</li><li><span class='drop'>DROP</span> — <strong>Fix 2 in any form where the model supplies the count.</strong> Wrong on every document tested, always by overcounting &mdash; once claiming 41 items where 13 existed, while listing those 13 correctly.</li><li><span class='drop'>DROP</span> — <strong>Reading an empty &ldquo;not extracted&rdquo; list as a completeness claim.</strong> It was empty on the one document that actually failed.</li></ul>
 <h4>The one thing to remember</h4>
@@ -144,7 +144,7 @@ titration range. Nothing dropped, nothing added.</p>
 <table>
   <tr><th style="width:56%">Measure</th><th class="num">Plain request</th><th class="num">Completeness prompt</th></tr>
   <tr><td>Dose figures returned</td>
-      <td class="num"><strong>100%</strong> — 55/55</td><td class="num">96% — 53/55</td></tr>
+      <td class="num"><strong>100%</strong> — 54/54</td><td class="num">96% — 52/54</td></tr>
 </table>
 
 <p><strong>The prompt asking the model to be careful about completeness made it
@@ -242,10 +242,10 @@ fact is the chapter&rsquo;s own, dose amounts. No model calls; every note replay
 
 <p><strong>Zero true omissions.</strong> The dialogues state 64 unique dose facts
 across 39 conversations, spoken as digits and as words (&ldquo;a thousand
-milligrams&rdquo;, &ldquo;seven and a half&rdquo;). Every one reaches all six of
-its notes, within 80 characters of its own drug&rsquo;s name (396 attachment
-checks). The one candidate, in all six cells, is a dose the doctor retracted
-mid-sentence &mdash; &ldquo;5000 units on sundays, and two thous&hellip; or
+milligrams&rdquo;, &ldquo;seven and a half&rdquo;). Sixty-three of them reach all
+six of their notes, within 80 characters of their own drug&rsquo;s name (396
+attachment checks). The sixty-fourth, absent from all six notes, is a dose the
+doctor retracted mid-sentence &mdash; &ldquo;5000 units on sundays, and two thous&hellip; or
 50,000 units on sundays, excuse me&rdquo; &mdash; and every note carries the
 corrected figure, which is right scribing. Doses the conversation left uncertain
 were flagged, not guessed. The limits: dose facts are what the MEDICATIONS
@@ -446,7 +446,8 @@ CLI, $2.04 notional; every case is printed in <code>audit_log.txt</code>.</p>
   <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
   <tr><td>Known-missing figures named by the audit</td><td class="num"><strong>10 of 41</strong></td></tr>
   <tr><td>Extractions with missing figures: all caught / some / none</td><td class="num">5 / 3 / 4 of 12</td></tr>
-  <tr><td>Reply on the worst extraction (8 figures dropped)</td><td class="num">&ldquo;nothing missing&rdquo;</td></tr>
+  <tr><td>Reply on one extraction that dropped 8 figures</td><td class="num">&ldquo;nothing missing&rdquo;</td></tr>
+  <tr><td>Named on the extraction that dropped the most (9)</td><td class="num">1 of 9</td></tr>
   <tr><td>Alarms on complete extractions</td><td class="num">6 of 48</td></tr>
   <tr><td>The same missing dose, over the 6 runs that dropped it</td><td class="num">caught 4, missed 2</td></tr>
 </table>
@@ -454,14 +455,14 @@ CLI, $2.04 notional; every case is printed in <code>audit_log.txt</code>.</p>
 <p>Every full catch was a one-figure gap &mdash; the methylene-blue dose,
 Warfarin&rsquo;s 100&nbsp;mg cap, the clavulanate component. The more an
 extraction was missing, the smaller the share the audit named: at best 2 of 8
-strength figures, and on the single worst extraction it reported nothing
-missing at all. Four of the six alarms listed doses the extraction already
+strength figures, 1 of 9 on the extraction that dropped the most, and on one
+extraction that had dropped eight it reported nothing missing at all. Four of the six alarms listed doses the extraction already
 carried in different words; one of those four also named &ldquo;1000
 mg/day&rdquo;, a figure that appears in neither the source nor the output. The
 other two alarms named real source content outside the dose task &mdash;
 treatment durations and an INR threshold. As a sampled monitor the audit is
 cheap and sometimes names the exact missing line; as the only completeness
-check it would have passed the worst extraction in the record.</p>
+check it would have passed an extraction missing eight figures.</p>
 
 <h4>Experiment 10.12 &mdash; the audit with a second, different model</h4>
 
@@ -476,7 +477,8 @@ calls, $1.98 notional, every case in <code>audit_sonnet_log.txt</code>.</p>
   <tr><th style="width:46%">Measure</th><th class="num">Same model (Haiku, 10.6)</th><th class="num">Second model (Sonnet 5, 10.12)</th></tr>
   <tr><td>Known-missing figures named (of 41)</td><td class="num">10</td><td class="num"><strong>39</strong></td></tr>
   <tr><td>Incomplete extractions: all figures / some / none (of 12)</td><td class="num">5 / 3 / 4</td><td class="num">11 / 1 / 0</td></tr>
-  <tr><td>Reply on the extraction that dropped the most</td><td class="num">&ldquo;nothing missing&rdquo;</td><td class="num">named all but two figures</td></tr>
+  <tr><td>Reply on the extraction Haiku passed as complete (8 dropped)</td><td class="num">&ldquo;nothing missing&rdquo;</td><td class="num">named all 8</td></tr>
+  <tr><td>On the extraction that dropped the most (9)</td><td class="num">named 1</td><td class="num">named 7</td></tr>
   <tr><td>Complete extractions alarmed (of 48)</td><td class="num">6</td><td class="num">12</td></tr>
   <tr><td>Invented figures in alarms</td><td class="num">1 (&ldquo;1000 mg/day&rdquo;)</td><td class="num"><strong>0</strong></td></tr>
   <tr><td>Notional cost</td><td class="num">$2.04</td><td class="num">$1.98</td></tr>
@@ -488,7 +490,8 @@ real source values outside the dose task: reconstitution water volumes, an INR
 target, creatinine clearance, monitoring intervals. Nothing invented. One
 complete Sertraline extraction drew fifteen entries, nearly all restatements
 &mdash; wide scope, not fabrication. The two figures it missed (42.9 mg and 600
-mg on the worst extraction) sit inside the paired suspension strengths.
+mg, on the extraction that dropped nine) sit inside the paired suspension
+strengths.
 <strong>Verdict.</strong> The auditor decides what the audit is worth: the
 same model misses what it wrote past; a stronger different model turned the
 audit into a real omission detector at the same per-call cost, paying in
@@ -1054,7 +1057,7 @@ answer is negative:</p>
   <tr><td>2 · List-length assertions</td><td>Cannot work as described</td>
       <td>count = its own list, 54 of 54 — decisive</td></tr>
   <tr><td>3 · Completeness audit</td><td>Weak on its own</td><td>caught 10 of 41 known-missing figures; reported
-      nothing missing on the worst extraction (10.6)</td></tr>
+      nothing missing on an extraction that had dropped eight (10.6); a second model, Sonnet 5, named 39 of 41 (10.12)</td></tr>
   <tr><td>4 · "Not extracted" field</td><td><strong>Works</strong>, differently</td>
       <td>labels: 8 entries, 0 omissions, all correct; conversations: 137–149 entries per run, two in three a medicine with no amount, none wrong; one added line → 57–62 entries, medicine inventory gone (10.7)</td></tr>
 </table>
