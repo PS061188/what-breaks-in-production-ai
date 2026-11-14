@@ -25,7 +25,8 @@ which. The documents are GENERATED, with exact ground truth, at three levels:
 
 Three prompts, three live draws each (the helper's `sample` index):
   plain     extract the three addresses, quote your source
-  chapter   Prompt 8-1 exactly as printed in the book (loaded from draft/ebook.html)
+  chapter   Prompt 8-1 as printed in the book, as recorded (prompt_8_1.txt; the
+            book's later layout moved two line breaks, the words are the same)
   graded    Prompt 8-1 plus placement_confidence HIGH/MEDIUM/LOW and requires_review,
             the fuller version the chapter's "What did not survive testing" tests
   evidence  Prompt 8-1 plus, per field, role_stated (true if the document says
@@ -47,9 +48,7 @@ Usage:
   python probe_convention.py --live    # record three draws per prompt (~$1)
 """
 
-import html
 import random
-import re
 import sys
 from pathlib import Path
 
@@ -58,7 +57,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
 from shared.llm import LLM, base_args  # noqa: E402
 
-BOOK = HERE.parent.parent / "draft" / "ebook.html"
+PROMPT_8_1 = HERE / "prompt_8_1.txt"
 ROLES = ("origin", "destination", "billing")
 FIELDS = {r: f"{r}_address" for r in ROLES}
 RUNS = (1, 2, 3)
@@ -119,10 +118,7 @@ def make_docs():
 
 
 def book_prompt():
-    s = BOOK.read_text(encoding="utf-8")
-    a = s.index('<h3 id="prompt-8-1">'); b = s.index("<h4>What this prompt does</h4>", a)
-    pres = re.findall(r"<pre[^>]*>(.*?)</pre>", s[a:b], re.S)
-    return "\n".join(html.unescape(re.sub(r"<[^>]+>", "", x)) for x in pres)
+    return PROMPT_8_1.read_text(encoding="utf-8")
 
 
 PLAIN = ("Extract the origin address, the destination address and the billing address from the shipping "

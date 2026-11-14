@@ -36,6 +36,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import time
 from pathlib import Path
@@ -43,6 +44,7 @@ from pathlib import Path
 import probe_conversation as P
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent))
 FIXTURES = HERE / "fixtures_checks"
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 WRITER, OTHER = "claude-haiku-4-5", "claude-sonnet-5"
@@ -198,6 +200,8 @@ def model_check(check: str, e: dict, live: bool, suffix: str = "") -> dict:
 
 def embedding_scores(es: list) -> list:
     """Highest cosine similarity between the entry and any sentence or turn of the conversation."""
+    from shared.deps import require
+    require("sentence_transformers", "sentence-transformers", "the embedding-similarity check")
     from sentence_transformers import SentenceTransformer
     model = SentenceTransformer(EMBEDDER)
     scores = []

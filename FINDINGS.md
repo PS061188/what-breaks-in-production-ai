@@ -43,10 +43,10 @@ print today.
 | **6** | monitor recall on a new current label | — | **50%** (20/40) | 0% false alarms (0/1381). Deterministic |
 | **6** | drugs where the book's filter returns nothing | — | **33%** (2/6) | *[noise]* at n=6 |
 | **7** | prompt injections obeyed | **0%** (0/48) | 0% (0/48) | the failure does not reproduce — §2 |
-| **7** | aggregate correctness across every subclass | **100%** (144/144) | **82%** (118/144) | the fix is a regression |
-| **7** | legitimate queries answered | 100% (48/48) | **46%** (22/48) | |
+| **7** | aggregate correctness across every subclass | **99%** (143/144 on the recorded run) | **83%** (120/144) | the fix is a regression |
+| **7** | legitimate queries answered | 100% (48/48) | **50%** (24/48) | |
 | **8** | placement error rate | 3% (1/33) | 3% (1/33) | *[noise]*, and the 1 is a checker bug — §3 |
-| **8** | model named the wrong section for its own quote | 18% (6/33) | 3% (1/33) | **0/33 real** — §3 |
+| **8** | model named the wrong section for its own quote | 9% (3/33 on the recorded run; 18% (6/33) when first published) | 3% (1/33) | **0/33 real** — §3 |
 | **9** | fabrication on fields with no source content | ~~6% (2/35)~~ **0 of 35** | 0% (0/35) | both "fabrications" are correct readings; the fixed side is forced — see *Chapter 9 re-read (29 Sep)* |
 | **9** | recall on fields the document does cover | 96% (23/24) | 92% (22/24) | *[noise]* — but it did move |
 | **9** | fabrications whose quote IS in the document | ~~100% (14/14)~~ withdrawn | — | no fabrication left to carry a quote — *Chapter 9 re-read (29 Sep)* |
@@ -2651,7 +2651,7 @@ Same six sections, same 60 recorded extractions, same rule as 10.4.
 | Warfarin (6) | — | 6 | 2 |
 | real drops flagged (of 4) | 4 | 3 | 3 |
 | complete runs flagged, false (of 50) | 10 | 0 | 0 |
-| short only by another drug's dose, flagged (of 6) | 6 | 0 | 6 |
+| short only by another drug's dose, flagged (of 6) | 0 (corrected 14 Nov 2026: trf counts 6 doses on Sertraline, so the 6-item lists are not flagged; §10.4's 0 was right) | 0 | 6 |
 
 Forms neither label covered: "90 mg/kg/day", "1.6 mcg/kg/day", "200 mcg/day", "50-200
 mg/day", "600 mg/42.9 mg per 5 mL", the genotype table cells. Med7 tags "3 mg/dL" as
@@ -2845,3 +2845,61 @@ worth — the same model misses what it wrote past; a stronger different model c
 nearly everything at the same per-call cost, paying in off-task alarms. "Sampled
 monitor, never the only check" stands for both arms. Takeaway bullet rewritten to
 carry both arms without numbers.
+
+
+## Replay audit (14 Nov 2026): every experiment replayed against the README and the book
+
+All 56 README experiments were replayed offline from the committed recordings and every
+stated number compared with the README entry and the book (full list:
+`../questions/replay-audit-2026-11-14.md`). Most reproduce exactly. The rest share one cause:
+**the cache keeps one recorded answer per request**, and later live runs (the Aug repeat
+sweep, `shipped_prompt.py --live` 13 Sep, `model_ensemble.py --live` 14 Sep, the Ch7
+`--no-ood --live` runs) overwrote earlier answers while the book kept the earlier numbers.
+Git history starts 7 Sep and Tables 4-1 and 4-2 sample the same keys, so the old answers
+cannot be restored; the book and README now print what the repo replays.
+
+Corrections made in the book and the README on the same day:
+
+- **Ch2.** Prompt 2-1 as printed had never been run (its figures were book_prompt.py's):
+  now Experiment 2.7, three runs through the subscription CLI. The p.46 grade table is
+  book_prompt.py's (HIGH 24 / MEDIUM 29), not why_no_low.py arm A's (14 / 39); the
+  grade-only row replays 12 / 41 / 0. Entropy: lookalike letters RAISE entropy by
+  0.145-0.207 bits/char; they escape because clean labels spread 4.30-4.76 and the band is
+  4.15-4.91 (the old "the number does not move" was wrong). Most Cyrillic in one document:
+  55, not 65. l/1 swaps: 39 (33 one way, 6 the other). The 85.5% OCR word accuracy came
+  from difflib's default autojunk and no scorer is committed: dropped from the book.
+- **Ch3.** Self-consistency: 280 calls, $0.86 (290/$0.91 was the pre-recount set). Judge:
+  $0.0164 per audit vs $0.0042 per answer on the recorded run, about four times, not five.
+- **Ch4.** Every figure moved to the recorded runs: template 99%/90%; Prompt 4-1
+  99, 99, 97 / 93, 93, 93; HIGH 99% / 98%; MEDIUM 3 of 192; errors graded HIGH 1 of 1 and
+  9 of 10; runner-up 4 of 5 and 15 of 21; gate caught 1 of 11 errors, held 2 correct;
+  body 90%, F1 0.76 / 0.78; Table 4-2 GPT-4.1-mini opening 98, 98, 98 and review 1, 1, 1
+  (needs `ZS_LABELS=descriptions`).
+- **Ch5.** Plain-prompt auditability 64% (196/307 over five runs), not 66%; values
+  returned 59-80 across the three prompts, not 54-77.
+- **Ch7.** Classifier: in scope 11 of 12 on the direct attack, one Hindi question labelled
+  ambiguous, 107 of 132 correct. The plain prompt obeyed 0 of 48 injections in every run;
+  the 1, 1, 2 of 48 in the sweep was out-of-scope questions answered (and the one such case
+  still recorded, Warfarin ood_numeric, is a refusal `_declines()` misses: "unable to
+  interpret"). In the `--no-ood` run the phrase list stopped 36 attacks and the
+  classification call declined all 36 out-of-scope inputs, so Prompt 7-1 itself faced only
+  the 12 Spanish attacks; Table 7-1 now says so.
+- **Ch8.** 64 of 66 planted-swap rejections named the true section (two on the Amoxicillin
+  boilerplate quote).
+- **Ch9.** Five of the six passed inventions quote the seasonal-allergy denial; the sixth
+  quotes a medications line.
+- **Ch10.** Sonnet named all 8 figures on the extraction Haiku passed as complete (the 7/9
+  case is api-protocol, which Haiku did not pass). "Dropped the most" was the 9-figure
+  api-protocol case, not the 8-figure one. The general tagger (rebuilt .venv-ner, spaCy
+  3.8.7, en_core_web_trf 3.8.0) counts 6 doses on Sertraline: the six Sertraline runs are
+  NOT flagged (the 10.8 table above said 6). mL is not a counted unit; the pattern count is
+  fix 1, not fix 2; 63 of 64 dose facts reached all six notes.
+- **X.1.** GPT-5-mini silent corruption replays 88% (36/41), not the sweep's 80%;
+  GPT-4.1-mini 73%. **C.1.** Three of the four "silent omissions" under real OCR are figures
+  the OCR invented.
+
+Not replayable here: three-run spreads (only the last run is on disk), the Guardrails
+validator settings beyond the shipped one, LLM Guard timings, and R.1 (repeat.py is live
+only). Repo fixes the same day: probe_convention.py reads Prompt 8-1 from prompt_8_1.txt
+(the book's re-wrap had moved two line breaks and broken the replay); scripts that need an
+optional package now say so and `run_all.py` prints them as skipped.

@@ -76,10 +76,10 @@ def quote_supported(
     haystack *of the needle's own length*, so its tolerance for small
     differences shrinks as the quote grows. A 600-character quote that dropped
     three words scores in the 60s and gets rejected. Measured on this corpus,
-    verifying whole quotes at threshold 85 nulled 42 points of legitimate recall
-    (96% -> 54%) to buy 8 points of fabrication.
+    verifying whole quotes at threshold 85 kept 11 of 23 correct extractions
+    (48%, Prompt 9-1) and caught no fabrication, because none occurred.
 
-    Verifying the first `VERIFY_WINDOW` characters instead keeps recall at 95%
+    Verifying the first `VERIFY_WINDOW` characters instead keeps all 23
     and still rejects invented quotes, which cannot match on their opening
     either. Sweep in ch09-sparse-field-fabrication/README.md.
     """

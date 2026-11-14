@@ -1,4 +1,4 @@
-# Experiment 10.4 — case log
+# Experiment 10.5 — case log
 
 Every candidate omission, every exclusion, and every near-miss, with quotes.
 A scorer's count is a claim until the cases are read; these were read.

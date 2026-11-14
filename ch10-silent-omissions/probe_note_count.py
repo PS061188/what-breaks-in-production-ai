@@ -27,6 +27,7 @@ from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parent))
 CH9 = HERE.parent / "ch09-sparse-field-fabrication" / "fixtures_conversation"
 DATA = HERE.parent / "data" / "aci_bench_dialogues.json"
 
@@ -47,8 +48,9 @@ def drug_names(nlp, text: str) -> set:
 
 
 def main() -> int:
-    import spacy
-    nlp = spacy.load("en_core_med7_lg")
+    from shared.deps import load_spacy
+    nlp = load_spacy("en_core_med7_lg", "Experiment 10.9",
+                     "en_core_med7_lg 3.4.2.1 on spaCy 3.4, from huggingface.co/kormilitzin/en_core_med7_lg")
     dialogues = {(d["split"], d["encounter_id"]): d["dialogue"]
                  for d in json.loads(DATA.read_text())["dialogues"]}
     started = time.time()

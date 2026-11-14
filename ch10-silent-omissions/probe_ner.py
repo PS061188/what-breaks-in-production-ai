@@ -158,10 +158,10 @@ def main() -> int:
     ap.add_argument("--model", default="en_core_web_trf", help="spaCy pipeline (default: the one the book names)")
     args = ap.parse_args()
 
-    import spacy
+    from shared.deps import load_spacy
 
     started = time.time()
-    nlp = spacy.load(args.model)
+    nlp = load_spacy(args.model, "Experiment 10.4", "install lines are at the top of probe_ner.py")
     load_seconds = time.time() - started
     cases = build_cases()
     lists = recorded_lists(cases)

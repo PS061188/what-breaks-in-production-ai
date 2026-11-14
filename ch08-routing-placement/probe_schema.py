@@ -33,11 +33,13 @@ import sys
 from pathlib import Path
 from typing import List
 
-from pydantic import BaseModel, ConfigDict, ValidationError, model_validator
-
 HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
+from shared.deps import require  # noqa: E402
+
+require("pydantic", "pydantic", "the schema-validated extraction")
+from pydantic import BaseModel, ConfigDict, ValidationError, model_validator  # noqa: E402
 from shared.llm import LLM, base_args, map_parallel  # noqa: E402
 import probe_clinical as pc  # noqa: E402
 

@@ -11,7 +11,7 @@ chunks, take the best cosine, reject below a threshold — rather than installin
 and the threshold is swept instead of assumed.
 
 It scores the **baseline** extractions from broken.py, so the question it
-answers is precise: of the 14 fabrications that broken.py produced, how many
+answers is precise: of the 12 values once counted as fabrications (every one a correct reading), how many
 would this rail have stopped, and what would it have cost in real extractions?
 
 There is a reason to doubt it in advance. Every one of those fabrications is

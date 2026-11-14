@@ -1,6 +1,7 @@
 # What Breaks in Production AI — the experiments
 
-Companion code for *What Breaks in Production AI* by Prachi Sharma.
+Companion code for [*What Breaks in Production AI*](https://ps0611.gumroad.com/l/what-breaks-in-production-ai)
+by Prachi Sharma ([read Chapter 3 free](https://ps0611.gumroad.com/l/what-breaks-in-production-ai-sample)).
 
 The book gives nine failure patterns and, for each, a prompt and a set of
 engineering fixes. **This repository runs every one of them against real
@@ -24,18 +25,18 @@ of each label and asked to fill six fields, the model filled 1 of the 33 fields
 counted as not covered by the supplied text, and it is a correct reading of that
 text: **no fabrication in 33**. On the other 32 it wrote "N/A". What the run could
 measure is cost: checked over the whole quote, the book's quote-verification rule
-kept only **54%** of correct extractions, against 95% over the first 80 characters.
+kept only **48%** of correct extractions (11 of 23), against all 23 over the first 80 characters.
 → [`ch09-sparse-field-fabrication/`](ch09-sparse-field-fabrication/)
 
 **The stronger model is worse at silent corruption.** Feed a damaged document to
 a weaker model and it garbles the answer visibly. Feed it to a better one and it
 reconstructs the damage fluently, producing a confident, clean, wrong answer.
-Silent corruption rose **39% → 68% → 80%** from Claude Haiku 4.5 to Opus 5 to
+Silent corruption rose **39% → 68% → 88%** from Claude Haiku 4.5 to Opus 5 to
 GPT-5-mini. Upgrading the model made this failure harder to see, not rarer.
 → [`ch02-input-integrity/`](ch02-input-integrity/)
 
 **A model cannot grade its own confidence.** Across 192 classifications it
-returned `LOW` **zero times**, and stamped 67% to 89% of its errors `HIGH` across the recorded runs. Any
+returned `LOW` **zero times**, and stamped 10 of its 11 errors `HIGH`. Any
 guardrail of the form "route anything below HIGH to review" has nothing to act
 on.
 → [`ch04-classification-cascade/`](ch04-classification-cascade/)
@@ -49,9 +50,8 @@ standard pharmacology where the excerpt is thin"* took it from 2 to **29 of 32**
 
 **Eight of fourteen published figures fell outside the range their own code
 reproduces.** Nothing here was measured twice until late in the project. When it
-was, a reported null turned out to be a real effect, a fix's headline benefit
-disappeared against a fair baseline, and one fix turned out to make its target
-metric *worse*. That is why [`repeat.py`](repeat.py) exists.
+was, a result reported as "no effect" pointed the same way in four runs of five,
+and a fix's headline benefit disappeared against a fair baseline. That is why [`repeat.py`](repeat.py) exists.
 → [`report/`](report/)
 
 Findings that contradict the book are in **[FINDINGS.md](FINDINGS.md)** rather
@@ -68,7 +68,7 @@ Every prompt template in the book was run against the same documents. Sorted by
 | The instruction asks for | Outcome |
 |---|---|
 | **A restriction on what may be asserted** — *only from the sources* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −91 pts** fabrication, **67% → 17%**, **95% flagged** |
-| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Little, in four chapters.** Lowest grade returned **0 times in 400+ assessments** of damaged or mislabelled inputs; it appeared only when Chapter 2 made the damage extreme. On real clinical notes, **7 in 10 misplaced sentences graded HIGH**. A self-count was **its own list's length in 54 of 54** calls |
+| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Little, in four chapters.** Lowest grade returned **0 times in 400+ assessments** of damaged or mislabelled inputs; it appeared only when Chapter 2 made the damage extreme. On role-played clinical notes, **7 in 10 misplaced sentences graded HIGH**. A self-count was **its own list's length in 54 of 54** calls |
 
 A restriction changes what the model may output, and the code reading the response
 can enforce it. A self-assessment adds a field and changes nothing else — it is a
@@ -91,11 +91,11 @@ Full template, with the numbers behind each line, in
 |---|---|---|
 | [2 — Input integrity](ch02-input-integrity/) | damaged documents stopped before the model runs | **85%** stopped, 37 model calls avoided — but the four checks the book *prescribed* catch **37%** |
 | [3 — Hallucination](ch03-hallucination/) | fabrication on questions the sources cannot answer | **at least −91 pts** from the grounding prompt, across 4 models |
-| [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (8–9 of 96); the ensemble is *stable*, not just accurate |
-| [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **66% → 93%**; qualifiers unchanged; ranges level |
+| [4 — Classification cascade](ch04-classification-cascade/) | wrong label, and what the pipeline does with it | failure is **rare** (10 of 96 on body text); 10 of the 11 errors graded `HIGH` |
+| [5 — Extraction quality loss](ch05-extraction-normalisation/) | specificity surviving into storage | auditability **64% → 93%**; qualifiers unchanged; ranges level |
 | [6 — State mismatch](ch06-state-mismatch/) | superseded documents reaching the model | status check alone does better than the book's six-rule protocol, **17% vs 30%** |
-| [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | failure is rare but **never zero**; the OOD fix rejects Hindi at cosine 0.995 |
-| [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce** — 0 real errors in 33 |
+| [7 — Edge input](ch07-edge-input/) | injection, out-of-scope, out-of-distribution | **no injection obeyed**, even with no defence; the OOD fix rejects Hindi at cosine 0.995 |
+| [8 — Routing and placement](ch08-routing-placement/) | content filed under the wrong field | **did not reproduce on drug labels** (0 real errors in 33); 18% of sentences misfiled on role-played clinical notes |
 | [9 — Sparse field fabrication](ch09-sparse-field-fabrication/) | fields the document does not cover | **did not reproduce** — 0 of 33; the section check rejected 5 correct children's doses |
 | [10 — Silent omissions](ch10-silent-omissions/) | items dropped without a signal | rare on numeric lists, **absent** on a 185-item prose enumeration |
 
@@ -107,11 +107,13 @@ appear in the cross-model comparisons.
 Every run in this repo is recorded. **Replaying costs nothing and needs no API
 key.** Most of it needs nothing but the standard library.
 
-Four scripts do real local work and need one package each: the three vector-store
-scripts want `chromadb`, and the two embedding scripts want
-`sentence-transformers`. If either is missing, that script says so in one line and
-`run_all.py` carries on without it — the other results still print. `pip install
--r requirements.txt` gets you everything.
+A few scripts do real local work and need one package: the vector-store scripts
+want `chromadb`, the embedding scripts want `sentence-transformers`, and Chapter
+2's `book_checks.py` wants `langdetect` and `tiktoken`. Four probes in Chapters 9
+and 10 need their own environments (spaCy taggers and the Guardrails validator);
+the install notes are at the top of each script. If anything is missing, the
+script says what in one line, `run_all.py` prints it as skipped, and the other
+results still print.
 
 ```bash
 git clone <this repo> && cd what-breaks-in-production-ai
@@ -150,15 +152,13 @@ python3 repeat.py ch02-input-integrity/broken.py --runs 3
 flagging any that moved. **Use it before believing a difference.**
 
 This is not optional advice. Nothing in this repo was measured twice until
-August 2026. When it was, four published numbers turned out to be wrong:
+August 2026. When it was, three published numbers turned out to be wrong:
 
 - a result reported as "no effect" pointed the same way in 4 of 5 runs (about 5
   points, on 48 questions before the ground-truth audit), which one underpowered
   run could not see
 - a fix reported as improving qualifier retention improves nothing once compared
   against a fair baseline
-- a fix instructed to preserve dose ranges preserves *fewer* of them than saying
-  nothing at all — in all five runs
 - an LLM-judge false-alarm rate published at 38% came back 17-25% across four
   fresh runs of an identical configuration
 
@@ -252,6 +252,11 @@ evidence looks orphaned and would otherwise be deleted.
 
 ## Honest limits
 
+- **One recorded answer per request.** The cache keeps the latest answer to each
+  request, so where a figure is a spread across several live runs, only the last
+  run replays. Experiments 9.5 (the Guardrails validator) and 10.4 (spaCy
+  `en_core_web_trf`) need their own environments, described at the top of their
+  scripts.
 - **One model family for most of it.** Claude Haiku 4.5 is the default, and the
   cross-model comparisons cover Opus 5, Sonnet 5, GPT-5-mini and GPT-4.1-mini.
   Where a result is single-model, the chapter says so.
@@ -307,6 +312,12 @@ Code: [`ch02-input-integrity/`](ch02-input-integrity/)
 A cut at a fixed character count asserted a dose the excerpt did not contain in 2 of 39 answers; a cut that backed off to the last sentence or heading boundary did so in 0 of 39 (36 distinct excerpts; several budgets land on the same boundary). Every measured failure was a cut inside a numeric range or a table row. A mechanism, not an established rate (FINDINGS 13)  
 Code: [`ch06-state-mismatch/common.py`](ch06-state-mismatch/common.py) (`naive_cut` / `boundary_cut`; kept beside Chapter 6's context tooling, taught in Chapter 2's prompt section)
 
+### Experiment 2.7
+
+**Prompt 2-1 exactly as printed: report the damage, never abort**
+The printed report-only prompt (prompt_2_1.txt) on the same 53 documents, three runs on Claude Haiku 4.5 through the subscription CLI: graded 40, 39 and 39 of the 41 damaged documents not CLEAN (every miss a truncated copy), 12 of 12 OCR-damaged in every run. It flagged 3 of the 12 clean controls in every run, each a real defect in the label text (Amoxicillin's zero-width spaces, Gabapentin's "ADMlNlSTRATION", Metformin's "1.73 m 2"), and raised 1 false alarm in 36 clean readings (Atorvastatin, run 2: "text cuts off", where the excerpt ends at a full stop). SEVERELY_CORRUPTED never issued
+Code: [`ch02-input-integrity/probe_prompt21.py`](ch02-input-integrity/probe_prompt21.py) · 159 calls through the subscription CLI, recorded in `fixtures_prompt21/`
+
 ### Experiment 3.1
 
 **Does prompt wording change the fabrication rate?**  
@@ -340,19 +351,19 @@ Code: [`ch03-hallucination/probe_logprobs.py`](ch03-hallucination/probe_logprobs
 ### Experiment 4.1
 
 **One wrong label, and every step after it**  
-LOW never issued in 192 classifications; ensemble is stable, not just accurate  
+LOW never issued in 192 classifications; 10 of the 11 errors graded `HIGH`  
 Code: [`ch04-classification-cascade/`](ch04-classification-cascade/)
 
 ### Experiment 4.2
 
 **Three different systems voting, not three prompts**  
-Haiku 4.5 (shipped template), GPT-4.1-mini (one-line prompt) and bart-large-mnli zero-shot, majority vote: matched the best member (99/99/98 of 96 opening, 96/96/94 of 96 body) and all-three-disagree sent 0-2 of 96 to review  
+Haiku 4.5 (shipped template), GPT-4.1-mini (one-line prompt) and bart-large-mnli zero-shot, majority vote: matched the best member (99/99/98 of 96 opening, 96/96/94 of 96 body) and all-three-disagree sent 1-2 of 96 to review (bart scored on the category descriptions: `ZS_LABELS=descriptions`)  
 Code: [`ch04-classification-cascade/model_ensemble.py`](ch04-classification-cascade/model_ensemble.py)
 
 ### Experiment 5.1
 
 **What does 'extract into clean values' cost?**  
-auditability 66%->93%; qualifiers unchanged; ranges level at 5 of 8  
+auditability 64%->93%; qualifiers unchanged; ranges level at 5 of 8  
 Code: [`ch05-extraction-normalisation/`](ch05-extraction-normalisation/)
 
 ### Experiment 5.2
@@ -430,7 +441,7 @@ Code: [`ch08-routing-placement/`](ch08-routing-placement/)
 ### Experiment 8.2
 
 **The model's account of its own placement**  
-97% of fields graded HIGH in every run, LOW never issued, `requires_review` set on 0 of 11 records; an earlier "wrong section named 3–15%" figure was the 80-character locator artefact and is withdrawn  
+97% of fields graded HIGH in every run, LOW never issued, `requires_review` set on 0 of 11 records; an earlier "wrong section named 3–15%" figure came from abbreviated section names and the 80-character locator, and is withdrawn  
 Code: [`ch08-routing-placement/`](ch08-routing-placement/)
 
 ### Experiment 8.3
@@ -448,12 +459,12 @@ Code: [`ch08-routing-placement/probe_hardcorpus.py`](ch08-routing-placement/prob
 ### Experiment 8.5
 
 **Generated shipping documents: does the prompt prevent misplacement when the labels vary, then vanish?**  
-With any label or an order line, 0 misplaced of 108 fields a level for every prompt (an earlier "empty fields" claim was a company-only scorer artefact, withdrawn); with no labels and no line, both prompts assumed sender-first and swapped origin and destination on every reversed document — plain 12, 12, 12 of 36 a run, Prompt 8-1 12, 15, 11 with null on only 4, 2, 5; the graded prompt marked 104 of 108 unlabelled fields MEDIUM or LOW and flagged all 36 records; asked per field whether the document states the role, the model said "not stated" on all 108 unlabelled fields (and on 29 labelled ones, all correct) while still filling them  
+With any label or an order line, 0 misplaced of 108 fields a level for every prompt (an earlier "empty fields" claim was a company-only scorer artefact, withdrawn); with no labels and no line, both prompts assumed sender-first and swapped origin and destination on every reversed document — plain 12, 12, 12 of 36 a run, Prompt 8-1 12, 15, 11 with null on only 4, 2, 5; the graded prompt marked 104 of 108 unlabelled fields MEDIUM or LOW and flagged all 36 records; asked per field whether the document states the role, the model said "not stated" on all 108 unlabelled fields (and on 29 others, all correct, 26 of them on documents where only an order line named the roles) while still filling them  
 Code: [`ch08-routing-placement/probe_convention.py`](ch08-routing-placement/probe_convention.py)
 
 ### Experiment 8.6
 
-**Placement on real clinical notes: does the failure appear when sections are decided by convention?**  
+**Placement on role-played clinical notes (ACI-Bench): does the failure appear when sections are decided by convention?**  
 Yes — of 2,070 sentences from 60 ACI-Bench notes, headings removed and shuffled, 375 / 366 / 381 filed under a different heading from the author's by words alone (18%), 286 / 268 / 256 with section definitions, 1 / 0 / 1 with each sentence's section tag kept; the rate ran 8.8% to 27.7% across the benchmark's three note styles; the confidence grade carried signal (error rate 10% HIGH → 39% MEDIUM → 63% LOW) but 7 in 10 misplaced sentences were graded HIGH  
 Code: [`ch08-routing-placement/probe_clinical.py`](ch08-routing-placement/probe_clinical.py) · corpus: [`data/aci_bench_notes.json`](data/aci_bench_notes.json)
 
@@ -574,13 +585,13 @@ Code: [`ch10-silent-omissions/probe_field_enforce.py`](ch10-silent-omissions/pro
 ### Experiment 10.12
 
 **Does a different, stronger auditor catch what the same-model audit missed?**  
-Experiment 10.6 rerun with Claude Sonnet 5 as the auditor (`probe_audit.py --auditor claude-sonnet-5`), same 60 recorded extractions: 39 of 41 known-missing figures named (Haiku: 10), every incomplete extraction flagged, 11 of 12 fully caught, and the extraction Haiku passed as complete got all but two of its figures named. Twelve of 48 complete extractions drew alarms — restatements or real off-task source content (water volumes, INR target, intervals), nothing invented. $1.98 notional. The auditor decides what the audit is worth  
+Experiment 10.6 rerun with Claude Sonnet 5 as the auditor (`probe_audit.py --auditor claude-sonnet-5`), same 60 recorded extractions: 39 of 41 known-missing figures named (Haiku: 10), every incomplete extraction flagged, 11 of 12 fully caught, and on the extraction Haiku passed as complete it named all 8 missing figures. Twelve of 48 complete extractions drew alarms — restatements or real off-task source content (water volumes, INR target, intervals), nothing invented. $1.98 notional. The auditor decides what the audit is worth  
 Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Sonnet 5 calls through the subscription CLI · every case in [`audit_sonnet_log.txt`](ch10-silent-omissions/audit_sonnet_log.txt)
 
 ### Experiment C.1
 
 **The same failures over deliberately damaged input**  
-three of four chapters unchanged; silent omission 0/6 -> 4/7  
+three of four chapters unchanged; silent omission 0/6 -> 4/7, though three of the four drops are figures the OCR invented (only Gabapentin 400 mg is a real dose)  
 Code: [`ch10-silent-omissions/`](ch10-silent-omissions/)
 
 ### Experiment R.1
@@ -598,7 +609,7 @@ Write-up: [`report/`](report/)
 ### Experiment X.1
 
 **The same experiments on four models, two providers**  
-silent corruption 39% -> 80% as the model gets stronger  
+silent corruption 39% -> 88% as the model gets stronger  
 Write-up: [`report/`](report/)
 
 ### Experiment G.1

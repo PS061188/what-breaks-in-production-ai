@@ -26,3 +26,17 @@ def require(module: str, package: str, needed_for: str):
             f"  Everything else in this repository replays without it — "
             f"`python3 run_all.py` will skip this script and carry on.\n"
         )
+
+
+def load_spacy(model: str, needed_for: str, install: str):
+    """spacy.load(model), or exit with a message naming the model and where to get it."""
+    spacy = require("spacy", "spacy", needed_for)
+    try:
+        return spacy.load(model)
+    except OSError:
+        raise MissingDependency(
+            f"\n  This script needs the spaCy model `{model}` for {needed_for}.\n"
+            f"      {install}\n"
+            f"  Everything else in this repository replays without it — "
+            f"`python3 run_all.py` will skip this script and carry on.\n"
+        )

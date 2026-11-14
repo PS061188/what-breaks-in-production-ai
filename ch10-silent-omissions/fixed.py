@@ -8,8 +8,9 @@ cannot demonstrate. It runs the chapter's fixes anyway and reports what they
 cost and what they catch when the model is already doing the job:
 
 1. **An independent count**, made without the model, compared against what came
-   back. On this corpus it agreed every time — and on an earlier run it caught a
-   discrepancy that turned out to be a bug in the counting, not in the model.
+   back. On the recorded run it flagged the one extraction that lost figures (Amoxicillin
+   200 mg and 400 mg); on an earlier run it caught a discrepancy that turned out to
+   be a bug in the counting, not in the model.
 2. **An explicit "what I did not extract" field**, which forces the model to
    state its own omissions rather than leaving a short list looking complete.
 3. **A completeness audit**: a second call showing the source and the extraction
@@ -136,7 +137,7 @@ def main() -> int:
     returned = sum(s["returned"] for s in scores)
 
     headline("Dose figures returned", pct(returned, expected),
-             "Unchanged from the baseline. There was no omission to fix.")
+             "The two missing are Amoxicillin 200 mg and 400 mg; the independent count flags that run.")
     headline(
         "Model's own count of the source vs the independent count",
         pct(len(scores) - count_mismatch, len(scores)),

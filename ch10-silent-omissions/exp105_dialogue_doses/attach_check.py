@@ -1,4 +1,4 @@
-"""Experiment 10.4, step 3: attachment check (stricter than the spec's
+"""Experiment 10.5, step 3: attachment check (stricter than the spec's
 "amount+unit anywhere").
 
 The spec-level matcher counts a dose PRESENT if its amount+unit appears

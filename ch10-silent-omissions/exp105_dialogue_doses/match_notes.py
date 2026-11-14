@@ -1,4 +1,4 @@
-"""Experiment 10.4, step 2: which conversation doses reach each of the 360 notes?
+"""Experiment 10.5, step 2: which conversation doses reach each of the 360 notes?
 
 For every note (60 encounters x {template, permission} x s1..s3):
   - note's dose set = permissive extraction (digits incl. "20mg"/"20-mg",

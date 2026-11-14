@@ -1,4 +1,4 @@
-"""Experiment 10.4, step 1: the reference extractor.
+"""Experiment 10.5, step 1: the reference extractor.
 
 Finds every medication-dose mention (number + mass/unit word) in the 60
 ACI-Bench dialogues, in digit form ("20 mg", "81 milligrams", "50,000 units")

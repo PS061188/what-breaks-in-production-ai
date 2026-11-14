@@ -60,7 +60,9 @@ withdrawn as fabrication rates. So is "every fabrication carried a real quote"
 (14 of 14, then 2 of 2): the quotes were real because the values were correct.
 The failure needs a form that asks for more than the source contains, such as a
 visit note written from a conversation. That test, on ACI-Bench's doctor–patient
-dialogues with a full note template, has not been run.
+dialogues with a full note template, ran as Experiment 9.4 (`probe_conversation.py`):
+a heading template wrote "No known drug allergies" into 4, 3 and 4 of 58 notes where
+allergies never came up.
 
 ## Run it
 
@@ -119,20 +121,20 @@ discards correct extractions — and the reason is not obvious from reading it.
 
 `partial_ratio` scores the needle against the best-matching window of the
 haystack *of the needle's own length*, so its tolerance for small differences
-shrinks as the quote grows. The model returns quotes of 240–720 characters that
+shrinks as the quote grows. The model returns quotes of 153–1,072 characters that
 are near-verbatim with a few words left out. Those score in the 60s and 70s and
 get rejected.
 
 Measured on these labels, sweeping how much of the quote is verified:
 
-| verified | recall (fields with source) |
-|---|---|
-| whole quote — the book's rule | **54%** |
-| first 80 chars | **95%** |
-| first 150 chars | 83% |
-| first 200 chars | 66% |
+| verified | plain prompt | Prompt 9-1 |
+|---|---|---|
+| whole quote — the book's rule | **39%** (9/23) | **48%** (11/23) |
+| first 80 chars | **100%** (23/23) | **100%** (23/23) |
+| first 150 chars | 83% (19/23) | 87% (20/23) |
+| first 200 chars | 61% (14/23) | 65% (15/23) |
 
-Verifying whole quotes discards nearly half of the correct extractions, and
+Verifying whole quotes discards half or more of the correct extractions, and
 nothing in the chapter warns that it will. The effect on fabrication could not
 be measured, because no fabrication occurred.
 

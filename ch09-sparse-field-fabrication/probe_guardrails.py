@@ -17,22 +17,27 @@ How the validator works (read from its source):
     chunk_overlap 2 by default: five-sentence windows, not single sentences.
   - metadata must carry either query_function, or sources + embed_function.
 
-Run it with the experiment's own environment, not the system python:
-
-    .../scratchpad/venv-guardrails/bin/python probe_guardrails.py
+It needs its own environment: guardrails-ai 0.6.8, the validator package from
+github.com/guardrails-ai/provenance_embeddings, and sentence-transformers.
+run_all.py skips it when they are missing.
 """
 
 import sys
 import warnings
 from pathlib import Path
 
-import numpy as np
-
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
 warnings.filterwarnings("ignore")
 
+from shared.deps import require  # noqa: E402
+
+require("guardrails", "guardrails-ai==0.6.8", "Experiment 9.5's packaged-validator rerun")
+require("validator", "git+https://github.com/guardrails-ai/provenance_embeddings", "Experiment 9.5's packaged-validator rerun")
+require("sentence_transformers", "sentence-transformers", "Experiment 9.5's packaged-validator rerun")
+
+import numpy as np  # noqa: E402
 import probe_checks as C  # noqa: E402
 from validator import ProvenanceEmbeddings  # noqa: E402
 from guardrails.validator_base import FailResult  # noqa: E402

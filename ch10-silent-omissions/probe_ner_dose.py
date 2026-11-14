@@ -56,8 +56,9 @@ MODELS = {
 
 
 def spacy_entities(model: str):
-    import spacy
-    nlp = spacy.load(model)
+    from shared.deps import load_spacy
+    nlp = load_spacy(model, "Experiment 10.8 (med7)",
+                     "en_core_med7_lg 3.4.2.1 on spaCy 3.4, from huggingface.co/kormilitzin/en_core_med7_lg")
     meta = f"{model} {nlp.meta['version']} · spaCy {installed('spacy')}"
 
     def run(text: str) -> list:
@@ -67,6 +68,9 @@ def spacy_entities(model: str):
 
 def hf_entities(model: str, window: int = 1500):
     """Token classification in character windows cut at sentence ends; offsets re-based."""
+    from shared.deps import require
+    require("torch", "torch", "Experiment 10.8 (deberta)")
+    require("transformers", "transformers", "Experiment 10.8 (deberta)")
     from transformers import pipeline
     pipe = pipeline("token-classification", model=model, aggregation_strategy="simple")
     meta = f"{model} · transformers {installed('transformers')} · torch {installed('torch')}"
@@ -103,10 +107,14 @@ def model_amounts(ents: list, labels: tuple, skip_lab: bool = False) -> set:
     return found
 
 
-def main() -> int:
+def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--model", choices=sorted(MODELS), required=True)
-    args = ap.parse_args()
+    ap.add_argument("--model", choices=sorted(MODELS), help="default: med7, then deberta")
+    args = ap.parse_args(argv)
+    if args.model is None:
+        for name in MODELS:
+            main(["--model", name])
+        return 0
     spec = MODELS[args.model]
     started = time.time()
     run, meta = (spacy_entities if args.model == "med7" else hf_entities)(spec["name"])

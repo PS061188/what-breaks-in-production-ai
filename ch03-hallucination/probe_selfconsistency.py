@@ -144,7 +144,7 @@ def main() -> int:
     )
     note(
         f"{unans['always_declines']} of {n_un} unanswerable questions declined on every "
-        f"draw. The plain instruction fabricates on 11% of single draws; across {n} draws "
+        f"draw. Across {n} draws "
         f"the share of questions it fabricated on at least once is "
         f"{pct(unans['split'] + unans['always_fabricates'], n_un)}."
     )

@@ -31,6 +31,9 @@ def run(script: Path, extra: list) -> str:
         text=True,
     )
     if result.returncode != 0:
+        needs = [line.strip() for line in result.stderr.splitlines() if line.strip().startswith("This script needs")]
+        if needs:
+            return f"    skipped: {needs[0]}"
         return f"    FAILED: {result.stderr.strip().splitlines()[-1] if result.stderr else '?'}"
     lines = [line for line in result.stdout.splitlines() if line.startswith(">>")]
     return "\n".join("    " + line for line in lines) or "    (no summary lines)"
