@@ -113,7 +113,7 @@
 
 <h3>Experiment 8.7 — What does a strict output schema guarantee?</h3>
 
-<p>The plain prompt on the 60 notes, one draw per condition. The validator requires every sentence exactly once and no unknown ID; on failure the model is re-asked with the error, up to twice (the loop Instructor automates; Instructor 1.17 itself was also run on ten notes and returned a valid filing each time).</p>
+<p>The plain prompt on the 60 notes, one draw per condition. The validator requires every sentence exactly once and no unknown ID; on failure the model is re-asked with the error, up to twice (the loop the Instructor library automates).</p>
 
 <table>
   <tr><th style="width:36%">Condition</th><th class="num">Invented keys</th><th class="num">Unknown IDs</th><th class="num">Filed twice</th><th class="num">Dropped</th><th class="num">Misplaced</th></tr>
@@ -122,6 +122,7 @@
   <tr><td>Schema + Pydantic validator + re-ask</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">383</td></tr>
 </table>
 <p>13 of 60 outputs failed the validator at first; all 13 were fixed by one re-ask. The schema&rsquo;s guarantee (no invented keys) was never needed; the validator loop is what kept every sentence; none of the three touched misplacement.</p>
+<p><strong>Instructor itself.</strong> Instructor 1.17 with the same validator and up to two re-asks, on the first ten notes (<code>probe_instructor.py</code>; Haiku 4.5 through the subscription CLI with thinking off, so the schema is written into the prompt rather than enforced): 9 of 10 ended with a valid filing, after 16 calls. 4 of the 10 first replies failed, 3 of them because the model wrote each sentence&rsquo;s text after its ID. The tenth note kept that form through both re-asks; with the text removed, its filing was complete. The validator&rsquo;s error listed those entries as not in the input and never said that only the IDs were wanted. On the same ten notes the loop above, with the API&rsquo;s schema, failed 1 at first and fixed it with one re-ask.</p>
 
 <h3>The three engineering fixes</h3>
 <table>

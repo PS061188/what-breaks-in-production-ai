@@ -42,9 +42,11 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-CH9 = HERE.parent / "ch09-sparse-field-fabrication" / "fixtures_conversation" / "template"
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+CH9 = HERE.parent / "ch09-sparse-field-fabrication" / ("fixtures_conversation" + SUFFIX) / "template"
 DATA = HERE.parent / "data" / "aci_bench_dialogues.json"
-FIXTURES = HERE / "fixtures_note_audit"
+FIXTURES = HERE / ("fixtures_note_audit" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
 
@@ -78,6 +80,7 @@ def call_cli(prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", SYSTEM,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)

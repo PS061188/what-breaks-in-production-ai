@@ -10,21 +10,33 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "result": "```json\n{\n  \"extracted\": [],\n  \"not_extracted\": [\n    {\n      \"text\": \"one\",\n      \"reason\": \"Patient states 'i'm just on one now' when referring to prednisone, but lacks specification of pharmaceutical unit (mg, tablet, etc.)\"\n    },\n    {\n      \"text\": \"an extra one\",\n      \"reason\": \"Patient took 'an extra one' of prednisone for pain, but the unit and specific dose amount are not specified\"\n    }\n  ]\n}\n```",
+ "result": "```json\n{\n  \"extracted\": [\n    \"one prednisone\",\n    \"an extra one prednisone\",\n    \"methotrexate\"\n  ],\n  \"not_extracted\": [\n    {\n      \"text\": \"one\",\n      \"reason\": \"Patient states 'i'm just on one now' referring to prednisone dose, but no specific dose amount (mg) is provided - only the quantity of tablets/units\"\n    },\n    {\n      \"text\": \"an extra one\",\n      \"reason\": \"Patient mentions taking 'an extra one' for pain, but this is a tablet count without a specified dose amount in mg or other units\"\n    },\n    {\n      \"text\": \"once a week\",\n      \"reason\": \"This is a frequency of additional doses, not a dose amount itself\"\n    },\n    {\n      \"text\": \"methotrexate\",\n      \"reason\": \"Medication name mentioned but no specific dose amount (mg, frequency, etc.) is stated in the conversation\"\n    }\n  ]\n}\n```",
  "parsed": {
-  "extracted": [],
+  "extracted": [
+   "one prednisone",
+   "an extra one prednisone",
+   "methotrexate"
+  ],
   "not_extracted": [
    {
     "text": "one",
-    "reason": "Patient states 'i'm just on one now' when referring to prednisone, but lacks specification of pharmaceutical unit (mg, tablet, etc.)"
+    "reason": "Patient states 'i'm just on one now' referring to prednisone dose, but no specific dose amount (mg) is provided - only the quantity of tablets/units"
    },
    {
     "text": "an extra one",
-    "reason": "Patient took 'an extra one' of prednisone for pain, but the unit and specific dose amount are not specified"
+    "reason": "Patient mentions taking 'an extra one' for pain, but this is a tablet count without a specified dose amount in mg or other units"
+   },
+   {
+    "text": "once a week",
+    "reason": "This is a frequency of additional doses, not a dose amount itself"
+   },
+   {
+    "text": "methotrexate",
+    "reason": "Medication name mentioned but no specific dose amount (mg, frequency, etc.) is stated in the conversation"
    }
   ]
  },
  "attempts": 1,
- "seconds": 20.6,
- "notional_cost_usd": 0.014369
+ "seconds": 4.2,
+ "notional_cost_usd": 0.004921999999999999
 }

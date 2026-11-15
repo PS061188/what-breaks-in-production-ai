@@ -841,7 +841,7 @@ every corruption signal it finds, quotes the passage it trusts least, grades the
 input <code>CLEAN</code>, <code>DEGRADED</code> or <code>SEVERELY_CORRUPTED</code>,
 and extracts in every case, leaving the decision to the calling code. The printed
 text (<code>prompt_2_1.txt</code>) was run on the same 53 cases, three times, on
-Claude Haiku 4.5 through the subscription CLI: 159 calls, $1.27 notional
+Claude Haiku 4.5 through the subscription CLI at the API&rsquo;s default setting (no thinking): 159 calls, $0.73 notional
 (<code>probe_prompt21.py</code>).</p>
 
 <table>
@@ -851,31 +851,37 @@ Claude Haiku 4.5 through the subscription CLI: 159 calls, $1.27 notional
   <tr><td>Encoding damage</td><td class="num">5/5</td><td class="num">5/5</td><td class="num">5/5</td></tr>
   <tr style="background:#f4efe6"><td><strong>Scanning damage</strong></td>
       <td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td></tr>
-  <tr><td>Truncation</td><td class="num">11/12</td><td class="num">10/12</td><td class="num">10/12</td></tr>
-  <tr><td><strong>All damaged</strong></td><td class="num"><strong>98%</strong> (40/41)</td>
+  <tr><td>Truncation</td><td class="num">10/12</td><td class="num">10/12</td><td class="num">10/12</td></tr>
+  <tr><td><strong>All damaged</strong></td><td class="num"><strong>95%</strong> (39/41)</td>
       <td class="num"><strong>95%</strong> (39/41)</td><td class="num"><strong>95%</strong> (39/41)</td></tr>
-  <tr><td>Clean controls graded not CLEAN</td><td class="num">3/12</td>
-      <td class="num">4/12</td><td class="num">3/12</td></tr>
-  <tr><td>&nbsp;&nbsp;of which a real defect in the label text</td><td class="num">3</td>
-      <td class="num">3</td><td class="num">3</td></tr>
-  <tr><td><code>SEVERELY_CORRUPTED</code> issued</td><td class="num">0</td>
-      <td class="num">0</td><td class="num">0</td></tr>
+  <tr><td>Clean controls graded not CLEAN</td><td class="num">2/12</td>
+      <td class="num">2/12</td><td class="num">2/12</td></tr>
+  <tr><td>&nbsp;&nbsp;of which a real defect in the label text</td><td class="num">2</td>
+      <td class="num">2</td><td class="num">2</td></tr>
+  <tr><td><code>SEVERELY_CORRUPTED</code> issued</td><td class="num">1</td>
+      <td class="num">2</td><td class="num">1</td></tr>
 </table>
 
 <div class="verdict">
-  <span class="label">Every miss is a truncated copy, and all but one clean flag is real</span>
-  <p>The three clean controls flagged in every run carry real defects in the label
+  <span class="label">Every miss is a truncated copy, and every clean flag is real</span>
+  <p>The two clean controls flagged in every run carry real defects in the label
   text as supplied: Amoxicillin&rsquo;s zero-width spaces (the same characters the
-  code gate found, below), Gabapentin&rsquo;s &ldquo;ADMlNlSTRATION&rdquo;, with a
-  lower-case l for a capital I, and Metformin&rsquo;s &ldquo;1.73 m 2&rdquo;, its
-  superscript lost. The one false alarm in 36 clean readings is Atorvastatin in
-  run 2, reported as &ldquo;text cuts off&rdquo; where the excerpt ends at a full
-  stop.</p>
-  <p><strong>The grade separates clean from damaged; it does not rank the
-  damage.</strong> <code>SEVERELY_CORRUPTED</code> was never issued, so code that
-  acts on the grade has to act on <code>DEGRADED</code>, the grade the model does
-  return. That is the design the printed prompt asks for: the model reports, the
+  code gate found, below) and Gabapentin&rsquo;s &ldquo;ADMlNlSTRATION&rdquo;, with a
+  lower-case l for a capital I. A third real defect, Metformin&rsquo;s &ldquo;1.73 m
+  2&rdquo; with its superscript lost, passed in every run. No false alarm in 36 clean
+  readings.</p>
+  <p><strong>The grade separates clean from damaged; it rarely ranks the
+  damage.</strong> <code>SEVERELY_CORRUPTED</code> was issued 1, 2 and 1 times, each on
+  a truncated copy cut off inside the dosing passage (Metformin every run, Furosemide
+  once); the other damaged documents it caught were all <code>DEGRADED</code>. Code that
+  acts on the grade has to act on <code>DEGRADED</code>, the grade the model mostly
+  returns. That is the design the printed prompt asks for: the model reports, the
   calling code decides.</p>
+  <p>Recorded 14 Nov 2026 at the API&rsquo;s default setting. The first recording ran
+  with Claude Code&rsquo;s default thinking on (kept in
+  <code>fixtures_prompt21_cli_defaults/</code>): 40, 39 and 39 damaged caught, 3, 4 and 3
+  clean controls flagged (Metformin&rsquo;s defect caught, one false alarm), and no
+  <code>SEVERELY_CORRUPTED</code>.</p>
 </div>
 
 <h4>Experiment 2.3 &mdash; Fix 1, as the chapter actually prescribes it</h4>
@@ -2988,7 +2994,7 @@ to a file so the OOD gate replays without installing anything.</p>
 
 <h3>Experiment 8.7 — What does a strict output schema guarantee?</h3>
 
-<p>The plain prompt on the 60 notes, one draw per condition. The validator requires every sentence exactly once and no unknown ID; on failure the model is re-asked with the error, up to twice (the loop Instructor automates; Instructor 1.17 itself was also run on ten notes and returned a valid filing each time).</p>
+<p>The plain prompt on the 60 notes, one draw per condition. The validator requires every sentence exactly once and no unknown ID; on failure the model is re-asked with the error, up to twice (the loop the Instructor library automates).</p>
 
 <table>
   <tr><th style="width:36%">Condition</th><th class="num">Invented keys</th><th class="num">Unknown IDs</th><th class="num">Filed twice</th><th class="num">Dropped</th><th class="num">Misplaced</th></tr>
@@ -2997,6 +3003,7 @@ to a file so the OOD gate replays without installing anything.</p>
   <tr><td>Schema + Pydantic validator + re-ask</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">383</td></tr>
 </table>
 <p>13 of 60 outputs failed the validator at first; all 13 were fixed by one re-ask. The schema&rsquo;s guarantee (no invented keys) was never needed; the validator loop is what kept every sentence; none of the three touched misplacement.</p>
+<p><strong>Instructor itself.</strong> Instructor 1.17 with the same validator and up to two re-asks, on the first ten notes (<code>probe_instructor.py</code>; Haiku 4.5 through the subscription CLI with thinking off, so the schema is written into the prompt rather than enforced): 9 of 10 ended with a valid filing, after 16 calls. 4 of the 10 first replies failed, 3 of them because the model wrote each sentence&rsquo;s text after its ID. The tenth note kept that form through both re-asks; with the text removed, its filing was complete. The validator&rsquo;s error listed those entries as not in the input and never said that only the IDs were wanted. On the same ten notes the loop above, with the API&rsquo;s schema, failed 1 at first and fixed it with one re-ask.</p>
 
 <h3>The three engineering fixes</h3>
 <table>
@@ -3014,11 +3021,11 @@ to a file so the OOD gate replays without installing anything.</p>
 <h2 class="part">Chapter 9 — Sparse field fabrication</h2>
 <div class="summary">
 <span class="kicker">At a glance &middot; Chapter 9 &middot; Sparse field fabrication</span>
-<p class="oneline">The chapter&rsquo;s failure is a form field the source does not cover, filled with a plausible value anyway. On 12 FDA drug labels it did not happen. On visit notes written from 60 doctor&ndash;patient conversations it did: the template prompt wrote &ldquo;No known drug allergies&rdquo; where drug allergies never came up, in 4, 3 and 4 of 58 notes across three runs. One rule in the prompt removed every case.</p>
+<p class="oneline">The chapter&rsquo;s failure is a form field the source does not cover, filled with a plausible value anyway. On 12 FDA drug labels it did not happen. On visit notes written from 60 doctor&ndash;patient conversations it did: the template prompt filled 9, 3 and 1 of the 201 entries per run whose topic never came up, with &ldquo;No known drug allergies&rdquo; and denials of tobacco and alcohol. One rule in the prompt removed every case.</p>
 <h4>How it was tested</h4>
 <table>
 <tr><td style="width:26%">Documents</td><td>9.1&ndash;9.3: 12 FDA drug labels, two sections supplied (four in 9.3). 9.4: 60 ACI-Bench doctor&ndash;patient conversations, a note under eleven headings</td></tr>
-<tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 101 filled entries from 9.4&rsquo;s template notes &mdash; 12 invented, 89 on discussed topics</td></tr>
+<tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 96 filled entries from 9.4&rsquo;s template notes &mdash; 13 invented, 83 on discussed topics</td></tr>
 <tr><td style="width:26%">Ground truth</td><td>Labels: a field is unanswerable when its section was not supplied. Conversations: a topic is never discussed when no related word appears in the dialogue</td></tr>
 <tr><td style="width:26%">Model</td><td>Claude Haiku 4.5; 9.4 ran through <code>claude -p</code> on my Claude subscription</td></tr>
 <tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr>
@@ -3029,16 +3036,16 @@ to a file so the OOD gate replays without installing anything.</p>
 <table>
 <tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:24%">Number</th></tr>
 <tr><td>The failure, drug labels (9.1)</td><td><strong>Did not reproduce</strong></td><td class="num">0 fabrications in 33</td></tr>
-<tr><td>The failure, conversations (9.4)</td><td><strong>Reproduces</strong>: &ldquo;No known drug allergies&rdquo;</td><td class="num">4, 3, 4 of 58</td></tr>
+<tr><td>The failure, conversations (9.4)</td><td><strong>Reproduces</strong>: &ldquo;No known drug allergies&rdquo;, &ldquo;Denies tobacco, alcohol&rdquo;</td><td class="num">9, 3, 1 of 201</td></tr>
 <tr><td>A &ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Removed it</strong>, all three runs</td><td class="num">0, 0, 0 of 58</td></tr>
-<tr><td>1 &middot; Optional fields, no defaults</td><td><strong>Works</strong>; the harm of &ldquo;required&rdquo; is fillers (9.6)</td><td class="num">577 fillers + 5 invented of 603 &rarr; 0 + 2</td></tr>
-<tr><td>2 &middot; Quote verification</td><td>Catches quote-less inventions only; real quotes pass (9.6); the window matters</td><td class="num">caught 1 of 7; 11 vs 23 of 23 kept</td></tr>
-<tr><td>2c &middot; A list of quotes, one per place (9.7)</td><td><strong>Removes the quote check&rsquo;s main false alarm</strong>; the model states fewer values; existence is still not support</td><td class="num">wrong rejections 0 of 75, from 3 of 92</td></tr>
+<tr><td>1 &middot; Optional fields, no defaults</td><td><strong>Works</strong>; the harm of &ldquo;required&rdquo; is fillers (9.6)</td><td class="num">565 fillers + 19 invented of 603 &rarr; 0 + 1</td></tr>
+<tr><td>2 &middot; Quote verification</td><td>Catches inventions whose quote is a sentence about the conversation; real quotes about something else pass (9.6); the window matters</td><td class="num">caught 16 of 20; 11 vs 23 of 23 kept</td></tr>
+<tr><td>2c &middot; A list of quotes, one per place (9.7)</td><td><strong>Removes the quote check&rsquo;s main false alarm</strong>; existence is still not support</td><td class="num">rejections 1 of 80, from 7 of 75</td></tr>
 <tr><td>2b &middot; Section check (9.2, 9.3)</td><td><strong>Fabrication side forced</strong>; rejected correct values</td><td class="num">5 of 40 lost</td></tr>
 <tr><td>3 &middot; Null-rate monitoring</td><td>Not tested</td><td class="num">comparison withdrawn</td></tr>
-<tr><td>4 &middot; Embedding provenance</td><td>Withdrawn on labels; <strong>separates poorly</strong> on the notes (9.5)</td><td class="num">at 0.5: 6 of 12 caught, 19 of 89 flagged</td></tr>
-<tr><td>A checker shown the conversation (9.5)</td><td><strong>A second model caught most; the writer approved its own generalisations</strong></td><td class="num">17 vs 14 of 19</td></tr>
-<tr><td>A checker shown only the output (9.5)</td><td>Missed invented entries and flagged half of the rest</td><td class="num">notes 9 of 12, 48 of 89; records 2 of 7, 11 of 49</td></tr>
+<tr><td>4 &middot; Embedding provenance</td><td>Withdrawn on labels; <strong>separates in part</strong> on the notes (9.5)</td><td class="num">at 0.3: 9 of 13 caught, 0 of 83 flagged; all 13 only with 46 flagged</td></tr>
+<tr><td>A checker shown the conversation (9.5)</td><td><strong>Both models caught nearly all; the choice of model made no difference</strong></td><td class="num">31 and 31 of 33</td></tr>
+<tr><td>A checker shown only the output (9.5)</td><td>Missed invented entries and flagged half of the rest</td><td class="num">notes 9 of 13, 55 of 83; records 15 of 20, 11 of 55</td></tr>
 </table>
 <h4>What to keep, what to drop</h4>
 <ul><li><span class='keep'>KEEP</span> — <strong>A rule that lets the note say &ldquo;Not discussed&rdquo;.</strong> It removed every case in three runs.</li><li><span class='keep'>KEEP</span> — <strong>A bounded window when checking a quote.</strong> Checked over the whole quote, the book&rsquo;s matching rule kept 11 of 23 correct extractions; checked over the first 80 characters, all 23.</li><li><span class='drop'>DROP</span> — <strong>The section map as written, for FDA labels.</strong> It allows a children&rsquo;s dose only from the paediatric-use section. FDA labels print children&rsquo;s doses under Dosage and Administration, so the map rejected 5 correct values.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;Fabrications carry real quotes&rdquo; (14 of 14, then 2 of 2).</strong> Withdrawn. The quotes were real because the values were correct.</li><li><span class='drop'>DROP</span> — <strong>The embedding and null-rate results.</strong> The label result is withdrawn (the 12 values the check scored as fabrications are all correct), &ldquo;0% vs 100% nulls&rdquo; compared two schemas, and on the notes no cut-off separated invented entries from discussed ones (9.5).</li><li><span class='keep'>KEEP</span> — <strong>Show the checker the conversation, ask a narrow question, and prefer a model that did not write the entry.</strong> Shown the conversation, a second model caught 17 of the 19 invented entries across both sets and the writer 14; most flags on other entries were real errors (9.5).</li><li><span class='keep'>KEEP</span> — <strong>&ldquo;The writing model, asked to check, applies the same sense and approves&rdquo; &mdash; for entries born from its own habit.</strong> On the 14 zero-evidence inventions the writer, asked separately with the conversation shown, caught every one; on the five &ldquo;No allergies&rdquo; entries it had generalised from a seasonal denial, it approved all five, while a second model caught three (9.5). Independence is a measured preference, not a mechanism that always bites.</li></ul>
@@ -3367,9 +3374,10 @@ never touch.</p>
       allergies, family history, social history, physical examination, results,
       assessment and plan.</td></tr>
   <tr><td><strong>Model</strong></td><td>Claude Haiku 4.5, through the Claude Code
-      command-line tool (<code>claude -p</code>) on my Claude subscription: default
-      system prompt replaced, no tools or tool servers, no settings files. The tool still adds a
-      short environment block to each call.</td></tr>
+      command-line tool (<code>claude -p</code>) on my Claude subscription, at the
+      API&rsquo;s default setting (no thinking): default system prompt replaced, no tools
+      or tool servers, no settings files. The tool still adds a short environment block
+      to each call.</td></tr>
   <tr><td><strong>Prompts</strong></td><td>Two, identical except for one rule. The
       <strong>template prompt</strong> gives the headings only. The <strong>one-rule
       prompt</strong> adds: &ldquo;If the conversation does not cover a section, write
@@ -3381,7 +3389,7 @@ never touch.</p>
       drug allergies, an allergy exchange about medicines, &ldquo;allergic to&rdquo;
       or &ldquo;reaction to&rdquo;; for tobacco, smok-, tobacco, cigar or vape; for
       alcohol, alcohol, drink, beer or wine.</td></tr>
-  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $8.6
+  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $3.0
       that was not billed, because the calls ran on the subscription.</td></tr>
 </table>
 
@@ -3394,18 +3402,20 @@ each of the three runs:</p>
 <table>
   <tr><th style="width:40%">Topic never discussed</th><th class="num">Template prompt</th>
       <th class="num">One-rule prompt</th></tr>
-  <tr><td><strong>Drug allergies</strong> (58 notes)</td><td class="num"><strong>4, 3, 4</strong></td><td class="num"><strong>0, 0, 0</strong></td></tr>
-  <tr><td>Tobacco (53 notes)</td><td class="num">0, 1, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Drug allergies (58 notes)</td><td class="num">2, 1, 1</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Tobacco (53 notes)</td><td class="num">4, 1, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Alcohol (49 notes)</td><td class="num">3, 1, 0</td><td class="num">0, 0, 0</td></tr>
   <tr><td>Family history (41 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
-  <tr><td>Alcohol (49 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td><strong>All four (201 per run)</strong></td><td class="num"><strong>9, 3, 1</strong></td><td class="num"><strong>0, 0, 0</strong></td></tr>
 </table>
 </div>
 
 <ul>
-  <li><strong>The failure took one form:</strong> the standard phrase &ldquo;No known
-  drug allergies&rdquo;, in 11 notes over the three runs, about half of them with
-  &ldquo;documented&rdquo; or &ldquo;noted&rdquo; after it. Once, a note said
-  &ldquo;Denies tobacco&rdquo;.</li>
+  <li><strong>The failure took the form of a standard negative:</strong> &ldquo;No
+  known drug allergies&rdquo; (4 entries over the three runs, three of them in D2N088,
+  whose doctor asked only about seasonal allergies) and a denial of tobacco or alcohol
+  (9 entries in five notes), such as &ldquo;Denies tobacco, alcohol, and illicit drug
+  use.&rdquo; The count moved a great deal between runs: 9, then 3, then 1.</li>
   <li><strong>The one rule removed every case in all three runs</strong>, and cost
   nothing that was measured. Both prompts kept the two real drug-allergy answers
   (D2N018, D2N022) in every run. Where a patient reported seasonal allergies, the
@@ -3418,18 +3428,20 @@ each of the three runs:</p>
 <table>
   <tr><th style="width:13%">Case</th><th style="width:33%">What the conversation says</th>
       <th>Template prompt, Allergies</th><th>One-rule prompt, Allergies</th></tr>
-  <tr><td>D2N099</td><td>Nothing about allergies anywhere in the conversation.</td>
-      <td>&ldquo;No known drug allergies.&rdquo;</td><td>&ldquo;Not discussed.&rdquo;</td></tr>
+  <tr><td>D2N008</td><td>Nothing about smoking or drinking anywhere in the
+      conversation.</td>
+      <td>Social history: &ldquo;Denies tobacco, alcohol, and illicit drug
+      use.&rdquo;</td><td>Social history: travel and diet only; no tobacco or alcohol
+      claim.</td></tr>
   <tr><td>D2N088</td><td>Doctor: &ldquo;do you have any history of any seasonal
       allergies at all?&rdquo; Patient: &ldquo;none whatsoever.&rdquo; Drug
       allergies never come up.</td>
-      <td>&ldquo;No known drug allergies. No seasonal allergies.&rdquo;</td>
-      <td>&ldquo;Not discussed.&rdquo; The review of systems carries &ldquo;No
-      seasonal allergies.&rdquo;</td></tr>
+      <td>&ldquo;No known drug allergies documented&rdquo;</td>
+      <td>&ldquo;Not discussed.&rdquo;</td></tr>
 </table>
 
-<p>In D2N088 the template note&rsquo;s second sentence is what the patient said. The
-first answers a question nobody asked.</p>
+<p>In D2N088 the template note answers a question nobody asked: the patient denied
+seasonal allergies, not allergies to medicines.</p>
 
 <h4>Three scorer corrections, made before these numbers were taken</h4>
 
@@ -3451,10 +3463,23 @@ scorer was wrong in three ways:</p>
   patient.</li>
 </ul>
 
+<p>A fourth correction came with the re-recording at the API&rsquo;s default setting
+(14 Nov 2026): without thinking, the model wrote silence in new words, &ldquo;Not
+explicitly stated in conversation&rdquo;, &ldquo;Not explicitly documented&rdquo;,
+&ldquo;Not specified in conversation&rdquo;, and once filed a seasonal allergy
+(&ldquo;allergies causing nasal congestion&rdquo;) under Allergies. Four such entries
+were scored as claims until the silence filter and the non-drug list were widened; the
+first recording scores identically under the widened rules.</p>
+
 <p>The rule now: &ldquo;No known drug allergies&rdquo;, with or without
 &ldquo;documented&rdquo; after it, and &ldquo;No drug allergies noted&rdquo; state
 the usual claim about the patient and count. Sentences that describe the
 conversation do not count.</p>
+
+<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+(kept in <code>fixtures_conversation_cli_defaults/</code>), gave 4, 3 and 4
+&ldquo;No known drug allergies&rdquo; and 0, 1 and 0 tobacco denials, 4 entries per run
+in all, and 0 with the rule.</p>
 
 <h4>Where this is weakest</h4>
 
@@ -3463,7 +3488,7 @@ conversation do not count.</p>
   word lists, which is why every counted case was read.</li>
   <li><strong>The conversations are role-played</strong> or constructed, not real
   patients.</li>
-  <li><strong>One model:</strong> Claude Haiku 4.5.</li>
+  <li><strong>One model:</strong> Claude Haiku 4.5, at the API&rsquo;s default setting.</li>
   <li><strong>The command-line tool adds a short environment block</strong> to every
   call, so the model did not see exactly the prompt given here.</li>
 </ul>
@@ -3476,161 +3501,162 @@ conversation do not count.</p>
 where the model invented nothing, so no check had ever been seen catching
 anything. Experiment 9.4 produced the missing material: notes with real invented
 entries, each read against its conversation. This experiment runs the checks on
-them. (<code>probe_checks.py</code>)</p>
+them. (<code>probe_checks.py</code>; notes and verdicts recorded at the API&rsquo;s
+default setting.)</p>
 
 <h4>The materials</h4>
 
 <p>The template-prompt notes from all three runs of Experiment 9.4 hold
-<strong>101 filled entries</strong> about the four optional topics: <strong>12
-invented</strong> (11 &ldquo;No known drug allergies&rdquo;, one &ldquo;Denies
-tobacco&rdquo;, from 8 conversations) and <strong>89 whose topic the conversation
+<strong>96 filled entries</strong> about the four optional topics: <strong>13
+invented</strong> (4 &ldquo;No known drug allergies&rdquo;, 5 tobacco denials and 4
+alcohol denials, from 6 conversations) and <strong>83 whose topic the conversation
 discussed</strong>. Five checks, cheapest first, one verdict per entry:</p>
 
 <table>
-  <tr><th style="width:30%">Check</th><th>What it is</th></tr>
-  <tr><td>Keyword topic search</td><td>Code: does the conversation mention the
-      topic at all? A plain keyword list per field, written as a team would write
-      it &mdash; deliberately not the scorer&rsquo;s own patterns</td></tr>
-  <tr><td>Embedding</td><td>Code: highest cosine similarity between the entry and
-      any sentence of the conversation (all-MiniLM-L6-v2), flag below a
-      cut-off &mdash; the chapter&rsquo;s fix 4</td></tr>
-  <tr><td>A second model, shown the conversation</td><td>Claude Sonnet 5:
-      &ldquo;does the conversation support the entry?&rdquo;</td></tr>
-  <tr><td>The writing model, shown the conversation</td><td>Claude Haiku 4.5
-      &mdash; the model that wrote the notes &mdash; asked the same question in a
-      separate call</td></tr>
-  <tr><td>A second model, shown only the note</td><td>Claude Sonnet 5, no
-      conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
+<tr><th style="width:30%">Check</th><th>What it is</th></tr>
+<tr><td>Keyword topic search</td><td>Code: does the conversation mention the
+topic at all? A plain keyword list per field, written as a team would write
+it &mdash; deliberately not the scorer&rsquo;s own patterns</td></tr>
+<tr><td>Embedding</td><td>Code: highest cosine similarity between the entry and
+any sentence of the conversation (all-MiniLM-L6-v2), flag below a
+cut-off &mdash; the chapter&rsquo;s fix 6, written directly</td></tr>
+<tr><td>A second model, shown the conversation</td><td>Claude Sonnet 5:
+&ldquo;does the conversation support the entry?&rdquo;</td></tr>
+<tr><td>The writing model, shown the conversation</td><td>Claude Haiku 4.5
+&mdash; the model that wrote the notes &mdash; asked the same question in a
+separate call</td></tr>
+<tr><td>A second model, shown only the note</td><td>Claude Sonnet 5, no
+conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
 </table>
 
-<p>The model checks ran through <code>claude -p</code> on my Claude subscription:
-303 verdicts, a notional $4.0, about 6.5 seconds per call.</p>
+<p>The model checks ran through <code>claude -p</code> on my Claude subscription,
+each model at its API default (Haiku 4.5 without thinking, Sonnet 5 at effort high):
+288 verdicts, a notional $3.4, about 3.7 seconds per call.</p>
 
 <h4>The numbers</h4>
 
 <table>
-  <tr><th style="width:34%">Check</th><th class="num">Invented caught (of 12)</th>
-      <th class="num">Discussed-topic entries flagged (of 89)</th></tr>
-  <tr><td>Keyword topic search</td><td class="num">6</td><td class="num">3</td></tr>
-  <tr><td>Embedding, cut-off 0.5</td><td class="num">6</td><td class="num">19</td></tr>
-  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">6</td></tr>
-  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">7</td></tr>
-  <tr><td>Sonnet 5, shown only the note</td><td class="num">9</td><td class="num">48</td></tr>
+<tr><th style="width:34%">Check</th><th class="num">Invented caught (of 13)</th>
+<th class="num">Discussed-topic entries flagged (of 83)</th></tr>
+<tr><td>Keyword topic search</td><td class="num">9</td><td class="num">3</td></tr>
+<tr><td>Embedding, cut-off 0.3</td><td class="num">9</td><td class="num">0</td></tr>
+<tr><td>Embedding, cut-off 0.5</td><td class="num">10</td><td class="num">18</td></tr>
+<tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>13</strong></td><td class="num">11</td></tr>
+<tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>13</strong></td><td class="num">1</td></tr>
+<tr><td>Sonnet 5, shown only the note</td><td class="num">9</td><td class="num">55</td></tr>
 </table>
 
-<p>The embedding sweep, caught / flagged: 0.3 gives 2/1, 0.4 gives 4/4, 0.5 gives
-6/19, 0.6 gives 8/51, 0.7 gives 10/72. No cut-off separates the groups.</p>
+<p>The embedding sweep, caught / flagged: 0.3 gives 9/0, 0.4 gives 9/2, 0.5 gives
+10/18, 0.6 gives 13/46, 0.7 gives 13/66. At the strict end it catches the nine
+denials and nothing else; the four it misses at every cut below 0.6 are the four
+&ldquo;No known drug allergies&rdquo;, worded close to the conversations&rsquo; talk
+of seasonal allergies. No cut-off catches all thirteen without flagging more than
+half of the discussed entries.</p>
 
 <h4>The flagged discussed-topic entries, read one by one</h4>
 
-<p>&ldquo;Discussed&rdquo; does not mean &ldquo;correct&rdquo;. Nine entries were
-flagged by a model that saw the conversation, and seven are real errors on topics
-the conversation did discuss:</p>
+<p>&ldquo;Discussed&rdquo; does not mean &ldquo;correct&rdquo;. Of Sonnet&rsquo;s
+eleven flags, seven are real errors on topics the conversation did discuss:</p>
 
 <ul>
-  <li>A renal family history with relatives mixed up in two of its three runs; one
-  run added &ldquo;patient&rsquo;s father has undergone renal
-  transplantation&rdquo;, which nobody said &mdash; the conversation&rsquo;s
-  transplant belongs to the grandfather, and the aunt is &ldquo;my dad&rsquo;s
-  sister, so her great aunt&rdquo;.</li>
-  <li>&ldquo;Denies tobacco and drug use&rdquo; when the doctor asked about
-  tobacco, drugs and alcohol together and the patient answered only &ldquo;i drink
-  a little wine on occasion&rdquo;.</li>
-  <li>&ldquo;Patient is a smoker&rdquo; for a patient who said &ldquo;i stopped
-  smoking probably about seven years ago&rdquo; &mdash; the same entry also carries
-  the correct quit-history, contradicting itself.</li>
-  <li>A question about the patient&rsquo;s own history of lung infections,
-  answered &ldquo;no&rdquo;, recorded as a <em>family</em>-history denial, in two
-  runs.</li>
-  <li>Increased caffeine the patient never mentioned &mdash; the doctor&rsquo;s
-  advice to cut caffeine turned into a report of consuming it.</li>
+<li>A renal family history with the relatives mixed up in all three runs, each adding
+&ldquo;died at age 47&rdquo;, which nobody said &mdash; the conversation&rsquo;s
+transplant belongs to the grandfather.</li>
+<li>&ldquo;Denies tobacco use&rdquo; when the doctor asked about tobacco, drugs and
+alcohol together and the patient answered only &ldquo;i drink a little wine on
+occasion&rdquo;.</li>
+<li>A sister who had &ldquo;been sick&rdquo; recorded as family history.</li>
+<li>Alcohol twice: &ldquo;Denies specific alcohol and caffeine use&rdquo; for a
+patient who said &ldquo;i&rsquo;ve been drinking more&rdquo;, and &ldquo;counseled to
+avoid alcohol&rdquo; where the doctor said &ldquo;decrease&rdquo;.</li>
 </ul>
 
-<p>The other two flags: one borderline inference (a sister &ldquo;currently ill
-with upper respiratory infection&rdquo; when she had &ldquo;been sick&rdquo; and,
-per the doctor, probably shared the patient&rsquo;s virus) and one trivial
-(&ldquo;Friday and Saturday evenings&rdquo; for &ldquo;on the weekends&rdquo;).
-So Sonnet&rsquo;s six flags are five real errors plus the borderline one, and
-Haiku&rsquo;s seven are six real plus the trivial one. The 89 were not all read:
-seven real errors is a floor.</p>
+<p>The other four: two false alarms (a smoking history and a cigarette count the
+conversation states) and two entries that add one unstated detail (&ldquo;lives with
+family who supported smoking cessation&rdquo;, where the patient said &ldquo;my kids
+were on me all the time&rdquo;). Haiku&rsquo;s one flag is a real error, the first of
+the renal family histories. The 83 were not all read: seven real errors is a
+floor.</p>
 
 <h4>Why the cheap checks miss</h4>
 
 <p>The keyword search catches an invented entry only when the topic word never
-appears. Six of the eleven &ldquo;No known drug allergies&rdquo; came from
-conversations that mention allergies in another sense &mdash; seasonal allergies,
-a cat. Its three flags are one conversation, in all three runs, that describes
-drug reactions without the word: a steroid avoided &ldquo;because of the reaction
-to dexamethasone, which causes his heart to race&rdquo;, and methylprednisolone
-that &ldquo;itched me like crazy&rdquo;. The entry is correct; the keyword list
-cannot see it.</p>
+appears: it caught the nine denials and missed the four &ldquo;No known drug
+allergies&rdquo;, whose conversations mention allergies in another sense. Its three
+flags are one conversation, in all three runs, that describes drug reactions
+without the word: a steroid avoided &ldquo;because of the reaction to dexamethasone,
+which causes his heart to race&rdquo;, and methylprednisolone that &ldquo;itched me
+like crazy&rdquo;. The entry is correct; the keyword list cannot see it.</p>
 
-<p>The blind check flags what reads as unusually precise &mdash; 28 of its 48
-flags are family histories &mdash; and passed the plainest invented line,
-&ldquo;No known drug allergies. No seasonal allergies.&rdquo;, in all three runs
-of its conversation. A fabricated line reads perfectly well on its own.</p>
+<p>The blind check flagged two in three discussed entries and passed four plain
+denials, such as &ldquo;Denies tobacco and alcohol use during this visit&rdquo;. A
+fabricated line reads perfectly well on its own.</p>
 
 <h4>The extension: the same checks on Experiment 9.6&rsquo;s record values</h4>
 
-<p>The note-set result needed wider evidence before the book could lean on it, so
-the three model checks were rerun on Experiment 9.6&rsquo;s values: its 7 invented
-values and its 49 run-1 values on discussed topics (<code>--source schema</code>;
-168 verdicts, a notional $1.8).</p>
+<p>The three model checks were rerun on Experiment 9.6&rsquo;s values: its 20
+invented values and its 55 run-1 values on discussed topics (<code>--source
+schema</code>; 225 verdicts, a notional $2.1).</p>
 
 <table style="table-layout:fixed;width:100%">
-  <tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 7)</th>
-      <th>Discussed-topic values flagged (of 49)</th></tr>
-  <tr><td>Keyword topic search</td><td class="num">2</td><td class="num">2</td></tr>
-  <tr><td>Embedding, cut-off 0.5</td><td class="num">3</td><td class="num">9</td></tr>
-  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>5</strong></td><td class="num">1</td></tr>
-  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>2</strong></td><td class="num">3</td></tr>
-  <tr><td>Sonnet 5, shown only the record</td><td class="num">2</td><td class="num">11</td></tr>
+<tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 20)</th>
+<th>Discussed-topic values flagged (of 55)</th></tr>
+<tr><td>Keyword topic search</td><td class="num">17</td><td class="num">2</td></tr>
+<tr><td>Embedding, cut-off 0.5</td><td class="num">18</td><td class="num">10</td></tr>
+<tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>18</strong></td><td class="num">5</td></tr>
+<tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>18</strong></td><td class="num">2</td></tr>
+<tr><td>Sonnet 5, shown only the record</td><td class="num">15</td><td class="num">11</td></tr>
 </table>
 
-<p><strong>The split reverses half of the note-set conclusion.</strong> The two
-zero-evidence inventions were caught by both models, as all twelve note-set
-inventions were. The five misses are one judgement call: &ldquo;No allergies&rdquo;,
-written from the patient&rsquo;s denial of <em>seasonal</em> allergies, with that
-denial attached as the supporting quote. <strong>The writer approved its own
-generalisation five of five.</strong> Sonnet caught three of five &mdash; and
-returned different verdicts on identical entry text from the same conversation.
-The note-set entries said &ldquo;No known <em>drug</em> allergies&rdquo;, a specific
-claim a seasonal denial plainly cannot support, which is why both models caught
-all of those. Combined: 19 invented entries, a second model 17, the writer 14,
-every zero-evidence entry caught by both. The extension&rsquo;s flags on
-discussed-topic values are again real errors (the D2N185 relative mix-ups; a
-patient&rsquo;s own answer filed as family history).</p>
+<p><strong>The checking model made no difference.</strong> Both models caught every
+invented value with no evidence behind it: the sixteen negatives that quote a sentence
+about the conversation, and &ldquo;No known allergies&rdquo; written from &ldquo;no
+additional past medical history&rdquo;. The misses are D2N088&rsquo;s records, written
+from the patient&rsquo;s denial of <em>seasonal</em> allergies: Sonnet passed two of the
+three and the writer passed two, not the same two. Combined over the 33 invented
+entries, notes and records: 31 for each model. The extension&rsquo;s flags on
+discussed-topic values are again mostly real errors (the renal relatives mixed up, the
+sick sister filed as family history, a family-history denial nobody gave; one, a
+patient said to avoid second-hand smoke, not checked).</p>
+
+<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_checks_cli_defaults/</code>, 12 and 7 invented entries), had the writer
+approving five of its own eight generalisations, all records, while Sonnet caught
+seventeen of nineteen; that difference did not recur at the API default.</p>
 
 <h4>The packaged validator itself</h4>
 
 <p>Prachi then asked for the product, not only the from-scratch version
 (<code>probe_guardrails.py</code>; guardrails-ai 0.6.8, validator installed from
 its GitHub source because the hub&rsquo;s API host does not resolve here; no
-model calls). As shipped &mdash; threshold a cosine <em>distance</em> of 0.8,
-five-sentence source windows, any failing output sentence fails the value &mdash;
-it caught 2 of the 12 invented note entries and flagged 12 of the 89 on
-discussed topics; every setting in its range that caught all 12 flagged 79&ndash;88
-of the 89. At the same nominal cut it flags twice what the from-scratch check
-flagged (40 vs 19 of 89 at 0.5): the any-sentence rule punishes multi-sentence
-entries, and punkt chunking struggles on sparse-punctuation transcripts. Its
-read flags are paraphrase distance, not missing support. It also crashes when a
-source chunks to a single window (a squeeze makes the embedding matrix 1-D),
-needs an nltk resource its setup does not fetch, and attempts to send telemetry.
-The product confirms the from-scratch conclusion.</p>
+model calls; log in <code>guardrails_sweep_log.txt</code>). As shipped &mdash;
+threshold a cosine <em>distance</em> of 0.8, five-sentence source windows, any failing
+output sentence fails the value &mdash; it caught 7 of the 13 invented note entries and
+flagged 15 of the 83 on discussed topics. Every one of those 15 comes from a transcript
+the sentence splitter cannot divide (19 of the 60 have no full stops to split at): the
+whole conversation becomes one window, and an entry close to one line, such as
+&ldquo;Alcohol use: one to two beers on weekends&rdquo; (distance 0.19 to the
+patient&rsquo;s answer), sits far from the average of everything said (0.96). Every
+threshold was tried: the loosest that caught all 13 still flagged 60 of the 83 with
+one-sentence windows, 69 with five-sentence windows. AUC 0.71 on the notes, 0.77 on the
+records: some signal, no usable setting. It also crashes when a source chunks to a
+single window (a squeeze makes the embedding matrix 1-D), needs an nltk resource its
+setup does not fetch, and attempts to send telemetry. The first recording&rsquo;s sweep
+is kept in <code>guardrails_sweep_log_cli_defaults.txt</code> (2 of 12 caught as
+shipped; at least 72 of 89 flagged at the loosest catch-all).</p>
 
 <h4>Where this is weakest</h4>
 
 <ul>
-  <li><strong>19 invented entries, 9 conversations, two surface families.</strong>
-  Eleven of the nineteen are one phrase, and the five habit-born entries are one
-  judgement call from one conversation. One verdict per checker per entry, no
-  re-sampling &mdash; and on that judgement call the second model&rsquo;s verdict
-  moved between identical entries.</li>
-  <li><strong>The 89 discussed-topic entries were not all read</strong>, so the
-  false-alarm columns count flags, not confirmed false alarms &mdash; at least
-  seven flags are real errors.</li>
-  <li><strong>The checker prompts are one wording each.</strong> A different
-  question could move both columns.</li>
+<li><strong>33 invented entries from 14 conversations, two surface families.</strong>
+Twenty-five are a denial or a negative about tobacco, alcohol, family history or
+allergies; the seven stretched claims come from two conversations. One verdict per
+checker per entry, no re-sampling.</li>
+<li><strong>The 83 discussed-topic entries were not all read</strong>, so the
+false-alarm columns count flags, not confirmed false alarms &mdash; at least seven
+flags are real errors.</li>
+<li><strong>The checker prompts are one wording each.</strong> A different
+question could move both columns.</li>
 </ul>
 
 <h3>Experiment 9.6 — The schema fix and the quote check, where the model invents</h3>
@@ -3638,35 +3664,47 @@ The product confirms the from-scratch conclusion.</p>
 <p>The chapter&rsquo;s first two fixes had never met an invented value. This
 experiment asks for the four optional topics as a JSON record from each of the 60
 conversations &mdash; two conditions, identical but for the field rule, three runs
-each, 360 replies through the subscription CLI (<code>probe_schema.py</code>; the
-recording stalled at a session limit at 182 replies and was resumed; every counted
-case below was then read by hand).</p>
+each, 360 replies through the subscription CLI at the API&rsquo;s default setting, no
+thinking (<code>probe_schema.py</code>; every counted case below was read by hand).</p>
 
 <table style="table-layout:fixed;width:100%">
   <tr><th style="width:52%">Of 603 fields per condition whose topic the conversation never discussed</th>
       <th class="num">required</th><th class="num">optional (fix 1)</th></tr>
-  <tr><td>Invented values</td><td class="num">5</td><td class="num">2</td></tr>
-  <tr><td>Silence fillers stored as strings</td><td class="num"><strong>577</strong></td><td class="num">0</td></tr>
-  <tr><td>Null</td><td class="num">0</td><td class="num">585</td></tr>
-  <tr><td>Replies breaking the condition&rsquo;s format rule</td><td class="num">0 of 180</td><td class="num">0 of 180</td></tr>
+  <tr><td>Invented values</td><td class="num">19</td><td class="num">1</td></tr>
+  <tr><td>Silence fillers stored as strings</td><td class="num"><strong>565</strong></td><td class="num">0</td></tr>
+  <tr><td>Null</td><td class="num">0</td><td class="num">583</td></tr>
+  <tr><td>Replies breaking the condition&rsquo;s format rule</td><td class="num">0 of 180</td><td class="num">1 of 180</td></tr>
 </table>
 
 <p><strong>Fix 1 works, and the measured harm of a required field is fillers, not
 inventions.</strong> Forced to fill, the model stored &ldquo;Not discussed&rdquo;-style
-fillers in 577 of 603 no-source fields &mdash; the exact failure the book predicts
-&mdash; and invented in 5. Allowed null, no fillers and 2 inventions.</p>
+fillers in 565 of 603 no-source fields &mdash; the exact failure the book predicts
+&mdash; and invented in 19. Allowed null, no fillers and 1 invention.</p>
 
-<p><strong>The seven invented values, read:</strong> five are one conversation,
-D2N088, where a denial of <em>seasonal</em> allergies (&ldquo;none whatsoever&rdquo;)
-became &ldquo;No allergies&rdquo; or &ldquo;No known allergies&rdquo;; one rests on
-&ldquo;i&rsquo;m not taking any medications&rdquo;; one came with no quote.
-<strong>The quote check caught only the quote-less one.</strong> The other six carry
-real lines of the conversation that do not support the value &mdash; the
-fabrication-side version of Experiment 9.2&rsquo;s lesson. Under &ldquo;required&rdquo;
-the check did null 546 of 611 fillers (their quotes are empty or absent), and its
-cost was 7 of 97 and 3 of 92 discussed-topic values rejected; the read sample is a correct
-steroid-reactions value whose quote stitched two real passages and scored 82
-against the 85 cut-off.</p>
+<p><strong>The twenty invented values, read:</strong> sixteen are negatives such as
+&ldquo;No tobacco use reported&rdquo; or &ldquo;No alcohol use reported&rdquo; whose own
+quote said only that the topic never came up (&ldquo;No tobacco use mentioned in the
+conversation&rdquo;); three are D2N088, where a denial of <em>seasonal</em> allergies
+(&ldquo;none whatsoever&rdquo;) became &ldquo;No allergies&rdquo;, &ldquo;No known drug
+allergies&rdquo; or &ldquo;None&rdquo;; one, &ldquo;No known allergies mentioned&rdquo;,
+rests on &ldquo;no additional past medical history&rdquo;. <strong>The quote check caught
+the sixteen</strong>: a sentence about the conversation appears nowhere in it. The other
+four carry real lines that do not support the value &mdash; the fabrication-side
+version of Experiment 9.2&rsquo;s lesson.</p>
+
+<p><strong>Its cost, read one by one.</strong> Under &ldquo;required&rdquo; the check
+nulled 584 of 595 fillers. On values that state something it rejected 18 of 106
+(required) and 10 of 94 (optional): 19 correct values wrongly rejected, most a doctor&rsquo;s
+question and the patient&rsquo;s answer joined into one quote with the speaker label
+dropped (D2N018&rsquo;s correct &ldquo;No known drug allergies&rdquo; in four of six
+records), and D2N022&rsquo;s steroid-reactions value once, its quote joining three places
+and scoring 84 against the 85 cut-off; 7 values the conversation does not support, such
+as &ldquo;No tobacco use&rdquo; for a patient who mentioned only wine; 2 a sick sister
+filed as family history. Unparsable JSON replies: 4 (required) and 5 (optional).</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_schema_cli_defaults/</code>): 577 fillers, 5 and 2 inventions, the quote
+check catching 1 of 7, and 7 of 97 and 3 of 92 values rejected.</p>
 
 <h3>Experiment 9.7 — A list of quotes, one per place</h3>
 
@@ -3675,27 +3713,33 @@ model joined both into one quote and the check rejected it. Prachi asked for the
 proposed repair to be measured: <code>source_quotes</code> as a list, one item
 per place, every item checked on its own, a value kept only when every item is
 found (<code>probe_schema_list.py</code>; same sixty conversations, fields
-optional, three runs, 180 records).</p>
+optional, three runs, 180 records, at the API&rsquo;s default setting).</p>
 
 <table style="table-layout:fixed;width:100%">
-  <tr><th style="width:56%">Of the values on discussed topics</th>
+  <tr><th style="width:56%">Of the values that state something on discussed topics</th>
       <th class="num">single quote (9.6)</th><th class="num">quote list (9.7)</th></tr>
-  <tr><td>Wrongly rejected by the quote gate</td><td class="num">3 of 92</td><td class="num"><strong>0 of 75</strong></td></tr>
-  <tr><td>Invented values, of 603 no-source fields</td><td class="num">2</td><td class="num">1</td></tr>
-  <tr><td>Values stated at all</td><td class="num">92</td><td class="num">75</td></tr>
+  <tr><td>Rejected by the quote gate</td><td class="num">7 of 75</td><td class="num"><strong>1 of 80</strong></td></tr>
+  <tr><td>Invented values, of 603 no-source fields</td><td class="num">1</td><td class="num">0</td></tr>
+  <tr><td>Values stated at all</td><td class="num">75</td><td class="num">80</td></tr>
 </table>
 
 <p><strong>The target case is fixed, and read.</strong> D2N022&rsquo;s
-steroid-reactions value returns three to four quotes in every run, each one
-continuous passage, each found; a third of non-null values used two or more
-quotes, legitimately (a question and its answer; two separate mentions of a
-father&rsquo;s kidney stones). The costs, also read: the model grew more
-conservative (75 stated values against 92, nulls up accordingly), and existence
-is still not support &mdash; the one invented value passed on a found quote
-(the seasonal-denial case again), and one correct value arrived backed by
-&ldquo;yeah i think so&rdquo;, an answer quoted without its question, in a
-conversation whose speaker labels are scrambled. <strong>Adopted as the
-chapter&rsquo;s fix 3, with the two costs printed beside it.</strong></p>
+steroid-reactions value returns three or more quotes in every run, each one
+continuous passage, each found; 47 of 102 non-null values used two or more quotes.
+The one rejection is the habit the instruction forbids: D2N075&rsquo;s question and
+answer (&ldquo;are you aware of any family history of gi problems? i do n&rsquo;t think
+so.&rdquo;) put into one item. Of the seven single-quote rejections, six were correct
+values. Existence is still not support: one correct value arrived backed by &ldquo;yeah
+i think so&rdquo;, an answer quoted without its question, in a conversation whose
+speaker labels are scrambled, in every run. <strong>Adopted as the chapter&rsquo;s fix 3,
+with that cost printed beside it.</strong></p>
+
+<p>Counting note. The first write-up compared 75 values (states, discussed topics only)
+with 92 (which also counted other-allergy values) and reported the model &ldquo;more
+conservative&rdquo; with the list. Counted with the same filter, the first recording
+gives 75 against 76, and this one 80 against 75: the list did not make the model hold
+back. The first recording (thinking on): 0 of 75 rejected against 3 of 76, 1 invention
+(passed), 32 of 93 values with two or more quotes.</p>
 
 <h3>Chapter 9 verdict</h3>
 
@@ -3705,35 +3749,38 @@ chapter&rsquo;s fix 3, with the two costs printed beside it.</strong></p>
       <td>0 fabrications in 33; the one filled field is a correct reading of the
       supplied text</td></tr>
   <tr><td>The failure, conversations</td><td><strong>Reproduces</strong></td>
-      <td>&ldquo;No known drug allergies&rdquo; with no allergy exchange: 4, 3 and 4
-      of 58 notes; &ldquo;Denies tobacco&rdquo; once in 53</td></tr>
+      <td>Entries on a topic the conversation never raised: 9, 3 and 1 of 201
+      (&ldquo;No known drug allergies&rdquo; 2, 1, 1 of 58; tobacco denials 4, 1, 0 of
+      53; alcohol denials 3, 1, 0 of 49)</td></tr>
   <tr><td>&ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Works</strong></td>
       <td>0 of 58 in all three runs, both real allergy answers kept; on labels
       the plain prompt already declined</td></tr>
   <tr><td>1 · Optional, no defaults</td><td><strong>Works</strong></td>
-      <td>Required fields: 577 fillers and 5 inventions in 603 no-source fields;
-      optional: none and 2 (9.6)</td></tr>
+      <td>Required fields: 565 fillers and 19 inventions in 603 no-source fields;
+      optional: none and 1 (9.6)</td></tr>
   <tr><td>2c · Quote list, one per place</td><td><strong>Works</strong></td>
-      <td>Wrong rejections 0 of 75, from 3 of 92; stated values fell to 75;
+      <td>Rejections 1 of 80, from 7 of 75 with one quote (six of them correct values);
       existence still not support (9.7)</td></tr>
-  <tr><td>2 · Quote verification</td><td>Catches only quote-less inventions</td>
-      <td>1 of 7 invented values caught; the six passed carry real quotes about
-      something else (9.6). Whole quote kept 11 of 23 correct extractions; first
+  <tr><td>2 · Quote verification</td><td>Catches inventions with no real quote</td>
+      <td>16 of 20 invented values caught, each quoting a sentence about the conversation;
+      the four passed carry real quotes about something else (9.6). Wrongly rejects about
+      one correct value in ten, most a question and answer joined into one quote. Whole quote kept 11 of 23 correct extractions; first
       80 characters, all 23</td></tr>
   <tr><td>2b · Section check</td><td>Fabrication side forced</td>
       <td>0 of 6 is arithmetic; the map rejected 5 correct children&rsquo;s
       doses</td></tr>
   <tr><td>3 · Null-rate monitoring</td><td>Not tested</td>
       <td>&ldquo;0% vs 100%&rdquo; compared two schemas</td></tr>
-  <tr><td>4 · Embedding provenance</td><td><strong>Separates poorly</strong></td>
+  <tr><td>4 · Embedding provenance</td><td><strong>Separates in part</strong></td>
       <td>Label result withdrawn (all 12 scored values correct); on the notes, at
-      0.5, 6 of 12 invented caught for 19 of 89 flagged (9.5)</td></tr>
-  <tr><td>A checker shown the conversation</td><td><strong>Works, best when independent</strong></td>
-      <td>Across 19 invented entries, a second model caught 17 and the writer 14;
-      the writer approved all five entries born from its own generalisation;
-      most further flags were real errors (9.5)</td></tr>
+      0.3, 9 of 13 invented caught for 0 of 83 flagged, the four misses all &ldquo;No
+      known drug allergies&rdquo;; all 13 only at 0.6, with 46 flagged (9.5)</td></tr>
+  <tr><td>A checker shown the conversation</td><td><strong>Works; the checking model made no difference</strong></td>
+      <td>Across 33 invented entries, a second model and the writer each caught 31,
+      each passing two different seasonal-denial records; most further flags were
+      real errors (9.5)</td></tr>
   <tr><td>A checker shown only the note</td><td><strong>Does not work</strong></td>
-      <td>9 of 12, and 48 of 89 discussed-topic entries flagged (9.5)</td></tr>
+      <td>9 of 13, and 55 of 83 discussed-topic entries flagged (9.5)</td></tr>
 </table>
 
 <p><strong>On drug labels the failure did not occur, so no fix could be tested
@@ -3768,15 +3815,15 @@ invented line.</p>
 <h2 class="part">Chapter 10 — Silent omissions</h2>
 <div class="summary">
 <span class="kicker">At a glance &middot; Chapter 10 &middot; Silent omissions</span>
-<p class="oneline">The model returns a list, the list looks complete, and two items are missing. Nothing errors and nothing is flagged, because a list always looks complete. This chapter has one fix that works, and it is the fix that makes the other three measurable at all.</p>
+<p class="oneline">The model returns a list, the list looks complete, and two items are missing. Nothing errors and nothing is flagged, because a list always looks complete. The independent count is the fix that makes the other three measurable at all, and a second call that asks what is missing works as a sampled monitor.</p>
 <h4>How it was tested</h4>
-<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code>, up to 12,000 characters &mdash; long enough that omission is a load failure rather than a reading one</td></tr><tr><td style="width:26%">Ground truth</td><td>A regular expression counts the dose figures in the source. No model involved on the checking side</td></tr><tr><td style="width:26%">Second corpus</td><td>Sertraline's ADVERSE REACTIONS section &mdash; 18,791 characters, <strong>185 distinct reactions</strong> derived from the label's own delimiters</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 extracting; Sonnet 5 auditing</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 1,500&ndash;4,000, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>3 live runs of the numeric experiment, 4 of the prose experiment</td></tr><tr><td style="width:26%">Cost</td><td>$0.02&ndash;0.18 per run; $1.39 for the prose experiment</td></tr></table>
+<table><tr><td style="width:26%">Corpus</td><td>12 FDA labels, <code>dosage_and_administration</code>, up to 12,000 characters &mdash; long enough that omission is a load failure rather than a reading one</td></tr><tr><td style="width:26%">Ground truth</td><td>A regular expression counts the dose figures in the source. No model involved on the checking side</td></tr><tr><td style="width:26%">Second corpus</td><td>Sertraline's ADVERSE REACTIONS section &mdash; 18,791 characters, <strong>185 distinct reactions</strong> derived from the label's own delimiters</td></tr><tr><td style="width:26%">Models</td><td>Claude Haiku 4.5 extracting; Sonnet 5 auditing; the subscription-CLI experiments at each model&rsquo;s API default (Haiku without thinking, Sonnet at effort high)</td></tr><tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 1,500&ndash;4,000, JSON schema enforced</td></tr><tr><td style="width:26%">Runs</td><td>3 live runs of the numeric experiment, 4 of the prose experiment</td></tr><tr><td style="width:26%">Cost</td><td>$0.02&ndash;0.18 per run; $1.39 for the prose experiment</td></tr></table>
 <h4>What the evidence says</h4>
 <table>
 <tr><th style="width:30%">Item</th><th>Verdict</th><th class="num" style="width:20%">Number</th><th class="num" style="width:14%">Strength</th></tr>
-<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">1&ndash;2 of 54 figures</td><td class="num">4 runs</td></tr><tr><td>Failure &mdash; doses from long conversations</td><td><strong>Did not reproduce</strong></td><td class="num">63 of 64 reached all six notes</td><td class="num">360 notes, 3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong></td><td class="num">found every real omission</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">count = own list, 54 of 54</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td>Misses large gaps</td><td class="num">10 of 41 known-missing caught</td><td class="num">60 runs</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
+<tr><td>Failure &mdash; short numeric lists</td><td><strong>Reproduces, rarely</strong></td><td class="num">1&ndash;2 of 54 figures</td><td class="num">4 runs</td></tr><tr><td>Failure &mdash; doses from long conversations</td><td><strong>Did not reproduce</strong></td><td class="num">63 of 64 reached all six notes</td><td class="num">360 notes, 3 runs</td></tr><tr><td>Failure &mdash; long prose enumeration</td><td><strong>Did not reproduce</strong></td><td class="num">185 of 185, 3 runs of 4</td><td class="num">strong</td></tr><tr><td><strong>Failure &mdash; scanning-damaged input</strong></td><td><strong>Reproduces reliably</strong></td><td class="num">100% &rarr; 89%; 0 &rarr; 2 of 6 docs</td><td class="num"><strong>p &lt; 0.00001</strong></td></tr><tr><td>Prompt template</td><td>Did nothing here</td><td class="num">&minus;2 cases</td><td class="num">inside noise</td></tr><tr><td>1 &middot; Independent count</td><td><strong>Works</strong>, within what its pattern can see</td><td class="num">4 of 9 drops; 5 by figure</td><td class="num">strong</td></tr><tr><td>2 &middot; List-length self-assertion</td><td><strong>Cannot work</strong></td><td class="num">count = own list, 46 of 54</td><td class="num">decisive</td></tr><tr><td>3 &middot; Completeness audit</td><td><strong>Works as a sampled monitor</strong></td><td class="num">27 of 31 known-missing named</td><td class="num">60 runs</td></tr><tr><td>4 &middot; &ldquo;Not extracted&rdquo; field</td><td><strong>Works, differently</strong></td><td class="num">11 entries, 0 omissions</td><td class="num">strong</td></tr></table>
 <h4>What to keep / What to drop</h4>
-<ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the independent count.</strong> Free, no model, and the only thing that found the real omission. It is also what makes fixes 2, 3 and 4 measurable &mdash; without it this chapter has no findings at all.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, renamed.</strong> Describe it as <em>&ldquo;where I had to make a judgement&rdquo;</em> and use it as a review queue and as schema feedback.</li><li><span class='drop'>DROP</span> — <strong>Fix 2 in any form where the model supplies the count.</strong> Wrong on every document tested, always by overcounting &mdash; once claiming 41 items where 13 existed, while listing those 13 correctly.</li><li><span class='drop'>DROP</span> — <strong>Reading an empty &ldquo;not extracted&rdquo; list as a completeness claim.</strong> It was empty on the one document that actually failed.</li></ul>
+<ul><li><span class='keep'>KEEP</span> — <strong>Fix 1, the independent count.</strong> Free, no model, and no false alarm in any test; it catches only what its pattern can see. It is also what makes fixes 2, 3 and 4 measurable &mdash; without it this chapter has no findings at all.</li><li><span class='keep'>KEEP</span> — <strong>Fix 3, as a sampled monitor.</strong> In a separate call, shown the source, the same model named most known gaps; a second model named all of them, at about six times the cost.</li><li><span class='keep'>KEEP</span> — <strong>Fix 4, renamed.</strong> Describe it as <em>&ldquo;where I had to make a judgement&rdquo;</em> and use it as a review queue and as schema feedback.</li><li><span class='drop'>DROP</span> — <strong>Fix 2 in any form where the model supplies the count.</strong> Wrong on every document tested, always by overcounting &mdash; once claiming 41 items where 13 existed, while listing those 13 correctly.</li><li><span class='drop'>DROP</span> — <strong>Reading an empty &ldquo;not extracted&rdquo; list as a completeness claim.</strong> It was empty on the one document that actually failed.</li></ul>
 <h4>The one thing to remember</h4>
 <p><strong>Damage matters more than length.</strong> On clean documents the model returned every dose figure in every run; with scanning damage applied to the same documents it silently dropped figures from a third of them. A 185-item prose list, by contrast, came back complete.  A 185-item prose enumeration came back complete, three runs out of four. The real failure was two paediatric strengths dropped from a <em>three-part sentence</em> &mdash; 200 mg and 400 mg lost from a warning that the three suspensions are not interchangeable. And the model's own &ldquo;what I did not extract&rdquo; field listed three careful, correct judgements about quantities of water, and said nothing about the two drug strengths it had just deleted. A model reports the decisions it made; an omission is precisely where no decision was made.</p>
 <h4>Where this is weakest</h4>
@@ -3923,13 +3970,15 @@ the improvement the chapter implies, and the direction is wrong.</p>
 <table style="table-layout:fixed;width:100%">
   <tr><th style="width:30%">Fix (book's order)</th><th class="num">Result</th><th>Verdict</th></tr>
   <tr><td><strong>1 · Independent entity count</strong></td>
-      <td>pattern count: caught every real drop, no false flag; a general
-      NER model (10.4): 4 of 4 and 10 false flags, none of a table&rsquo;s doses seen</td>
-      <td><strong>Works in code</strong> — the only fix here worth keeping; the
-      &ldquo;lightweight NER model&rdquo; of the book&rsquo;s wording does the job only
-      after the same domain filtering the pattern needed</td></tr>
+      <td>pattern count: caught the real drop in this run, no false flag; on the
+      sixty extractions of 10.4 and 10.8, 4 of 9 real drops with no false flag (5 of 9
+      compared figure by figure); a general NER model (10.4): the same 4 of 9 and 10
+      false flags, none of a table&rsquo;s doses seen</td>
+      <td><strong>Works in code</strong> — the fix every other measurement here depends
+      on; the &ldquo;lightweight NER model&rdquo; of the book&rsquo;s wording does the job
+      only after the same domain filtering the pattern needed</td></tr>
   <tr><td><strong>2 · List-length assertions</strong></td>
-      <td class="num">the model&rsquo;s count was its own list&rsquo;s length, <strong>54 of 54</strong></td>
+      <td>the model&rsquo;s count was its own list&rsquo;s length, <strong>46 of 54</strong>; none of the other 8 on a real drop</td>
       <td>Works with a real range; <strong>cannot work</strong> when the model
       supplies the number</td></tr>
   <tr><td><strong>3 · Completeness audit call</strong></td>
@@ -3993,7 +4042,7 @@ number of a range (&ldquo;0.5 to 2 mg&rdquo;), the cells of a dosing table whose
 carries the unit. That error runs the safe way: a count that is too low hides a
 gap, it does not invent one.</p>
 
-<p><strong>This is why fix 1 is the only fix in the chapter worth keeping.</strong>
+<p><strong>This is why fix 1 comes first.</strong>
 It is free, it involves no model, and the one real error it caught was in the
 measuring apparatus — which is the error you are least likely to find any other
 way, because nothing else in the pipeline is looking at it.</p>
@@ -4009,8 +4058,9 @@ fact is the chapter&rsquo;s own, dose amounts. No model calls; every note replay
 <p><strong>Zero true omissions.</strong> The dialogues state 64 unique dose facts
 across 39 conversations, spoken as digits and as words (&ldquo;a thousand
 milligrams&rdquo;, &ldquo;seven and a half&rdquo;). Sixty-three of them reach all
-six of their notes, within 80 characters of their own drug&rsquo;s name (396
-attachment checks). The sixty-fourth, absent from all six notes, is a dose the
+six of their notes, and all but one sit within 80 characters of their own drug&rsquo;s
+name (396 attachment checks); the exception, read, is attached correctly: &ldquo;a dose
+increase to 175 milligrams&rdquo;, with testosterone named in the next sentence. The sixty-fourth, absent from all six notes, is a dose the
 doctor retracted mid-sentence &mdash; &ldquo;5000 units on sundays, and two thous&hellip; or
 50,000 units on sundays, excuse me&rdquo; &mdash; and every note carries the
 corrected figure, which is right scribing. Doses the conversation left uncertain
@@ -4018,7 +4068,10 @@ were flagged, not guessed. The limits: dose facts are what the MEDICATIONS
 heading asks for; durations, intervals and lab values were not measured;
 dialogues run 2&ndash;8k characters, not fifty pages. The external studies carry
 the real-world rate; this experiment says the failure did not occur here, not
-that it does not happen.</p>
+that it does not happen. The notes are 9.4&rsquo;s recording at the API&rsquo;s
+default setting (14 Nov 2026); the first recording, with the command-line tool&rsquo;s
+default thinking on, gave the same result with no exception to the 80-character
+window.</p>
 
 <h4>Experiment 10.4 — the named-entity model the chapter names, run as printed</h4>
 
@@ -4026,15 +4079,17 @@ that it does not happen.</p>
 en_core_web_trf or AWS Comprehend&rdquo;. The repo had always used a regular
 expression instead. <code>probe_ner.py</code> runs en_core_web_trf 3.8.0 over the
 six dosing sections and holds all 60 recorded extractions against its count
-(<code>probe_ner.py</code>; spaCy 3.8.7, its own environment, no model calls).</p>
+(spaCy 3.8.7, its own environment, no model calls). The sixty are Experiment
+10.3&rsquo;s recording at the API&rsquo;s default setting plus fixed.py&rsquo;s API run:
+9 really short, 4 short only by another drug&rsquo;s dose, 47 complete.</p>
 
 <table>
   <tr><th style="width:44%">Check, over 60 document-runs</th>
-      <th class="num">Really short (4)</th><th class="num">Complete (50), false flags</th></tr>
+      <th class="num">Really short (9)</th><th class="num">Complete (47), false flags</th></tr>
   <tr><td>NER rule as printed</td><td class="num"><strong>4</strong></td><td class="num"><strong>10</strong></td></tr>
   <tr><td>NER rule, lab values skipped in code</td><td class="num">4</td><td class="num">0</td></tr>
-  <tr><td>NER count against the number of items listed</td><td class="num">0</td><td class="num">5</td></tr>
   <tr><td>The repo&rsquo;s pattern count, same rule</td><td class="num">4</td><td class="num">0</td></tr>
+  <tr><td>The pattern, compared figure by figure</td><td class="num">5</td><td class="num">0</td></tr>
 </table>
 
 <p>Both headline numbers are narrower than they look. The four catches all sit in
@@ -4043,12 +4098,27 @@ ten false flags are all one lab value, serum creatinine &ldquo;3 mg/dL&rdquo;,
 counted as a dose. The model has no dose type &mdash; doses land in QUANTITY,
 next to lab values and volumes &mdash; and it finds no doses at all in either
 dosing table: Warfarin&rsquo;s genotype ranges and 37 of Gabapentin&rsquo;s 40
-renal-table cells get no entity, so a list can lose up to 11 figures there
-unflagged. The small model, en_core_web_sm, flags nothing: it reads the
-&ldquo;50&rdquo; of &ldquo;50 mg&rdquo; as a bare number. The hand-read behind
-this experiment also caught a matcher bug of ours &mdash; a returned range
-&ldquo;10 to 15 mg/kg/day&rdquo; was scored as dropping the 10 &mdash; which is
-corrected above and in Experiment 10.3&rsquo;s figures.</p>
+renal-table cells get no entity. Its counts sit below every list on Gabapentin,
+Levothyroxine (3) and Warfarin (2), so the four Gabapentin lists that lost 1,400
+mg/day and the Levothyroxine list that lost 200 and 300 mcg/day go unflagged. None
+of the four short-by-another-drug lists is flagged. The small model, en_core_web_sm,
+flags nothing: it reads the &ldquo;50&rdquo; of &ldquo;50 mg&rdquo; as a bare number.
+The hand-read behind this experiment also caught a matcher bug of ours &mdash; a
+returned range &ldquo;10 to 15 mg/kg/day&rdquo; was scored as dropping the 10 &mdash;
+which is corrected above and in Experiment 10.3&rsquo;s figures.</p>
+
+<p><strong>How these flags were produced.</strong> The tagger&rsquo;s count depends only
+on the label text, which did not change, so the flags were computed from the
+per-document counts the first run recorded (Amoxicillin 10, Lisinopril 8, Sertraline
+6, Levothyroxine 3, Warfarin 2, Gabapentin below every list) against the new
+extractions. The model itself was not re-run on 14 Nov 2026: its 457 MB download could
+not be completed on this machine. <code>probe_ner.py</code> reproduces the table once
+the model is installed.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_count_cli_defaults/</code>; 4 really short, 50 complete): 4 of 4 real
+drops flagged and 10 false flags as printed, 4 and 0 with the lab exclusion, and 0 and
+5 when the count was held against the number of items listed.</p>
 
 <h4>Experiment 10.8 &mdash; fix 1 with taggers that have a dose label</h4>
 
@@ -4075,9 +4145,11 @@ among them) and no medication type.</p>
   <tr><td>Distinct doses seen: Levothyroxine (pattern 11)</td><td class="num">&mdash;</td><td class="num">1</td><td class="num">3</td></tr>
   <tr><td>&nbsp;&nbsp;Amoxicillin (pattern 10)</td><td class="num">&mdash;</td><td class="num">8</td><td class="num">6</td></tr>
   <tr><td>&nbsp;&nbsp;Warfarin (pattern 6)</td><td class="num">&mdash;</td><td class="num">6</td><td class="num">2</td></tr>
-  <tr><td>Real drops flagged (of 4)</td><td class="num">4</td><td class="num">3</td><td class="num">3</td></tr>
-  <tr><td>Complete extractions flagged, false (of 50)</td><td class="num">10</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Real drops flagged (of 9)</td><td class="num">4</td><td class="num">3</td><td class="num">1</td></tr>
+  <tr><td>Short only by another drug&rsquo;s dose, flagged (of 4)</td><td class="num">0</td><td class="num">0</td><td class="num">3</td></tr>
+  <tr><td>Complete extractions flagged, false (of 47)</td><td class="num">10</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
   <tr><td>Pattern count, same rule</td><td class="num">4 / 0</td><td class="num">4 / 0</td><td class="num">4 / 0</td></tr>
+  <tr><td>Pattern, compared figure by figure</td><td class="num">5 / 0</td><td class="num">5 / 0</td><td class="num">5 / 0</td></tr>
 </table>
 
 <p><strong>What the label bought.</strong> The look-alike false alarms are gone: no
@@ -4087,67 +4159,114 @@ knows the way its training text wrote the fact. Hospital notes write &ldquo;500
 mg&rdquo;; the labels write &ldquo;90 mg/kg/day&rdquo;, &ldquo;200 mcg/day&rdquo;,
 &ldquo;50-200 mg/day&rdquo; and &ldquo;600 mg/42.9 mg per 5 mL&rdquo;, and neither
 tagger put those in a dose label. Med7 therefore saw 1 of Levothyroxine&rsquo;s 11
-doses and DeBERTa 3; both missed Amoxicillin&rsquo;s 200 mg and 400 mg. Those two
-are exactly the figures the extraction drops, so each tagger missed that one
-real drop: a tagger&rsquo;s count can only flag the loss of a figure it counts
-itself. DeBERTa also flagged the six Sertraline runs that were short only by
-another drug&rsquo;s dose (methylene blue, 1 mg/kg), which the chapter does not
-count as a drop.</p>
+doses and DeBERTa 3; both missed Amoxicillin&rsquo;s 200 mg and 400 mg, the two
+figures every short Amoxicillin list had lost, so neither flagged the list that lost
+only those. Neither could flag the Gabapentin and Levothyroxine drops, because its
+counts there sat below every list&rsquo;s length: a tagger&rsquo;s count can only flag
+the loss of a figure it counts itself. Med7 caught the three Amoxicillin lists that
+had lost more than the two strengths; DeBERTa, counting 6 on Amoxicillin, caught only
+the list that had shrunk to 4. DeBERTa also flagged the three Sertraline runs that were
+short only by another drug&rsquo;s dose (methylene blue, 1 mg/kg), which the chapter
+does not count as a drop.</p>
 
 <p><strong>Verdict.</strong> As shipped, Med7 is the safer tagger (no false alarm,
 no code, fastest) and en_core_web_trf the more complete one; with the one-line
-lab exclusion in code the general tagger catches all four drops with no false
-alarm, the best of the three here, and none of them sees the dosing tables. Read
+lab exclusion in code the general tagger catches the four Amoxicillin drops with
+no false alarm, the same four as the pattern, and none of them sees the dosing
+tables. Read
 the label list first: a label for your fact type removes the look-alike false
 alarms. Then measure the label&rsquo;s coverage on
 your own documents against a hand-read sample, because the label was learned
 from one way of writing the fact. Where coverage is poor, the pattern you write
-needs the same domain work but you control it, and on these documents it was
-the only count that caught every drop with no false alarm. Output in
-<code>ner_dose_med7_out.txt</code> and <code>ner_dose_deberta_out.txt</code>.</p>
+needs the same domain work but you control it; on these documents it caught four of
+the nine drops with no false alarm, five when its figures are compared one by one
+rather than counted. The four Gabapentin drops are a table cell without a unit, which
+no counter here can see. Output in <code>ner_dose_med7_out.txt</code> and
+<code>ner_dose_deberta_out.txt</code>.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_count_cli_defaults/</code>; 4 real drops, 6 short only by methylene
+blue, 50 complete): Med7 and DeBERTa each caught 3 of the 4 drops with no false alarm,
+the general tagger 4 with 10 false alarms, the pattern 4 with none; DeBERTa flagged all
+six Sertraline runs.</p>
 
 <h4>Experiment 10.9 &mdash; the four fixes on output that cannot be counted</h4>
 
 <p>Every fix above was measured on an extraction task, where the output is a
 list. Prachi&rsquo;s question (13 Oct 2026): what do the fixes do on a task
 whose output has no countable items? The task: Experiment 9.4&rsquo;s recorded
-clinic notes, written by Claude Haiku 4.5 from the 60 ACI-Bench conversations.
+clinic notes, written by Claude Haiku 4.5 at the API&rsquo;s default setting (no thinking) from the 60 ACI-Bench conversations.
 A note is prose. Four fixes, four answers.</p>
 
 <p><strong>Fix 1, the tagger count</strong> (<code>probe_note_count.py</code>, local,
 no model calls). Med7 counted distinct DRUG spans in each dialogue and each of
-its six notes; a note with fewer was flagged. 188 of 360 notes flagged; 29 to
-33 per condition and run. Reading them: 109 flags contain nothing but Med7
+its six notes; a note with fewer was flagged. 208 of 360 notes flagged; 32 to
+37 per condition and run. Every flag was read. 110 contain nothing but Med7
 misreading conversation &mdash; first names (Sarah, Michelle, Katherine),
 filler words (&ldquo;um&rdquo;, &ldquo;hey&rdquo;, &ldquo;i&rdquo;), a place
 (Atlanta) tagged as drugs; the model was trained on written notes and spoken
-text sits outside that training. The 79 others dissolved on reading the four
-strongest: Benicar is in its note; Eliquis is in its note; Tylenol appears as
-acetaminophen (prose renames); prednisone was asked about and never confirmed;
-Vicodin was requested, declined, and the note says &ldquo;non-narcotic
-options&rdquo;; carvedilol is a future option the note left out. Verified
-omissions: none. Two breakages, named: the tagger misfires outside its
-training text, and a note renames and selects by design, so a count difference
-is a case to read, not a defect.</p>
+text sits outside that training. In 68 every drug word is in the note: renamed
+(Tylenol as acetaminophen, 20; Celestone as betamethasone, 3), the same word
+that Med7 did not count in the note, or a class word (&ldquo;migraine
+medication&rdquo; is propranolol, named in the note). The other 30: prednisone
+asked about and never confirmed (D2N026); Vicodin requested and declined, the
+note saying &ldquo;non-narcotic options&rdquo; (D2N186); antibiotics judged
+unnecessary (D2N099); carvedilol a future option (D2N139); insulin named only
+because the patient does not take it (D2N160); ibuprofen recorded as
+&ldquo;avoid NSAIDs&rdquo;; past treatments and an alternative left out; and one
+note (D2N145) that leaves out the doctor removing clindamycin from the list,
+which the other five notes record. Medicines in use left out, among the flags:
+none. Two breakages, named: the tagger misfires outside its training text, and
+a note renames and selects by design, so a count difference is a case to read,
+not a defect. A third, from fix 3 below: the one medicine a note did drop,
+oxybutynin, is invisible to the count, because the transcript spells it
+&ldquo;oxyglutinine&rdquo;.</p>
 
 <p><strong>Fix 2, the list-length assertion</strong>: does not run. A note has no
 list and the assertion has no length to check. Recorded as the result, not
 skipped.</p>
 
 <p><strong>Fix 3, the completeness audit</strong>
-(<code>probe_note_audit.py</code>, 64 CLI calls with 4 re-records, $2.16
-notional, every claim in <code>note_audit_log.txt</code>). Shown dialogue and
-note, asked what the note leaves out: 91 claims across 45 of 60 notes, 1 reply
-unparsable after a retry. One claim is a known false alarm by Experiment
-10.5&rsquo;s record: metformin reported missing from a note that carries
-&ldquo;metformin increased to 1000 mg twice daily&rdquo;. Seventeen claims name
-content whose words are mostly in the note already. The rest name real
-conversational content absent from the note &mdash; a hydration counselling
-exchange on a new diuretic (D2N008), the stated reason for choosing
-betamethasone (D2N022), a patient&rsquo;s &ldquo;extremely low&rdquo; days
-(D2N015), a missed referral appointment (D2N022). Whether each belongs in a
-note is editorial judgement; there is no enumerable ground truth, which is the
-point of the experiment. On prose the audit is a reading feed, not a gate.</p>
+(<code>probe_note_audit.py</code>, 60 CLI calls, $0.48 notional, every claim in
+<code>note_audit_log.txt</code>). Shown dialogue and note, asked what the note
+leaves out: 223 claims across 57 of 60 notes; 2 replies unparsable (commentary
+written inside the JSON). Each claim was read against both texts:</p>
+
+<table style="table-layout:fixed;width:100%">
+  <tr><th style="width:62%">Claim</th><th class="num">Claims</th></tr>
+  <tr><td>Already in the note, in the same or other words (one a dose, false by Experiment 10.5&rsquo;s record)</td><td class="num">84</td></tr>
+  <tr><td>Content the conversation never states: sections nobody discussed, vital signs read off a screen, medicines never named</td><td class="num">30</td></tr>
+  <tr><td>Real absent content whose place in a note is editorial, or trivia</td><td class="num">99</td></tr>
+  <tr><td><strong>Real omission that matters</strong></td><td class="num"><strong>3</strong></td></tr>
+  <tr><td><strong>Points at an error written into the note</strong></td><td class="num"><strong>7</strong></td></tr>
+</table>
+
+<p>The three omissions: oxybutynin, which the patient says is helping, is in
+neither the medication list nor the text of D2N025&rsquo;s note; D2N093&rsquo;s
+note leaves out the patient&rsquo;s &ldquo;absolutely not&rdquo; when asked about
+hurting himself or anyone else; D2N023&rsquo;s note leaves out the
+gynecomastia that the doctor named as the patient&rsquo;s other concern. The
+seven errors:</p>
+<ul>
+  <li>the right hand for the left (D2N036);</li>
+  <li>&ldquo;denies use of television or phone during sleep&rdquo; for a patient who sleeps with both (D2N118);</li>
+  <li>80% of glucose checks recorded as 80% of readings in range (D2N123);</li>
+  <li>a tacrolimus strength nobody stated (D2N145);</li>
+  <li>an age of 18 for a 7th-grader (D2N100);</li>
+  <li>&ldquo;right flank bilaterally&rdquo; (D2N049);</li>
+  <li>Eliquis listed beside &ldquo;denies use of blood thinners&rdquo;, before an epidural injection, a contradiction already in the conversation (D2N026).</li>
+</ul>
+<p>Whether the 99 belong in a note is editorial judgement; there is no enumerable
+ground truth, which is the point of the experiment. On prose the audit is a
+reading feed, not a gate, and a feed worth sampling.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_note_audit_cli_defaults/</code>), had the drug-name count flag 188
+notes and the audit make 91 claims across 45 notes. Among them were the same
+oxybutynin and gynecomastia omissions (oxybutynin called &ldquo;an SGLT2
+inhibitor&rdquo;), filed then with the editorial content. With thinking off the audit
+writes about twice as much per reply and makes 2.5 times as many claims, more of them
+about content already present or never stated.</p>
 
 <p><strong>Fix 4, the not-extracted field</strong>: has no place to live. The
 field belongs to an extraction answer schema; a prose note has none. Its
@@ -4155,7 +4274,7 @@ free-text measurement is Experiment 10.7, on the input side.</p>
 
 <p><strong>Verdict.</strong> On output that cannot be counted, the two counting
 fixes break or do not apply, the field has nowhere to go, and the audit alone
-still runs &mdash; as a sampled reading feed. Completeness measurement for
+still runs &mdash; as a sampled reading feed, one that found a dropped medicine and errors the note introduced. Completeness measurement for
 prose output falls to the prevention section&rsquo;s instrument, the edit rate,
 which needs no count of the source.</p>
 
@@ -4166,25 +4285,32 @@ which needs no count of the source.</p>
 in the source&rdquo;, which also reads as every mention. Every answer sat between the
 two counts, so &ldquo;wrong on 6 of 6&rdquo; measured the question as much as the model.
 Experiment 10.3 asked again, three runs each, Claude Haiku 4.5 through the
-subscription CLI, with every answer kept:</p>
+subscription CLI at its API default (no thinking), with every answer kept:</p>
 
 <table>
   <tr><th style="width:62%">Instruction</th><th class="num">Count = items it listed</th></tr>
-  <tr><td>fixed.py&rsquo;s prompt, word for word</td><td class="num">18 of 18</td></tr>
+  <tr><td>fixed.py&rsquo;s prompt, word for word</td><td class="num">15 of 18</td></tr>
   <tr><td>The same, with the count defined as distinct amounts</td><td class="num">18 of 18</td></tr>
-  <tr><td>The chapter&rsquo;s inventory protocol, Step 1</td><td class="num">18 of 18</td></tr>
+  <tr><td>The chapter&rsquo;s inventory protocol, Step 1</td><td class="num">13 of 18</td></tr>
 </table>
 
 <div class="headline">
-  The model&rsquo;s count of the source was the length of its own list in <b>54 of
-  54</b> calls.
+  The model&rsquo;s count of the source was the length of its own list in <b>46 of
+  54</b> calls, and none of the other eight pointed at a real drop.
 </div>
 
-<p>Defining the count removed the mention-counting (0 answers of 18 nearer the
-mention count, against 3 as printed), but it did not make the count independent.
-<strong>A model asked to audit itself is the same reader reading twice:</strong> when
-the list drops an item, the count drops with it, and the comparison reports no
-gap.</p>
+<p>The eight that differed were off by one to seven items, and each sat on a list
+that was complete or short only by a second drug&rsquo;s dose; on every list that had
+lost a dose of the drug itself, the count equalled the list. Defining the count
+reduced the mention-counting (1 answer of 18 nearer the mention count, against 9 as
+printed), but it did not make the count independent. <strong>A model asked to audit
+itself is the same reader reading twice:</strong> when the list drops an item, the
+count drops with it, and the comparison reports no gap.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_count_cli_defaults/</code>): 18 of 18 for each instruction, 54 of 54
+calls; 0 answers of 18 nearer the mention count with the count defined, against 3 as
+printed.</p>
 
 <h4>Fix 3 — the expensive audit, priced</h4>
 
@@ -4203,32 +4329,39 @@ task where the extraction was essentially perfect.</p>
 <p>The 8-flags run above audited an extraction set that was essentially
 complete, so it could not say whether the audit catches omissions that are
 known to have happened. <code>probe_audit.py</code> put the book&rsquo;s
-question, word for word, to Claude Haiku 4.5 once for each of the 60 recorded
-extractions of Experiment 10.3 &mdash; 12 of them missing a known set of figures, 48
-complete, 41 known-missing figures in all. 60 calls through the subscription
-CLI, $2.04 notional; every case is printed in <code>audit_log.txt</code>.</p>
+question, word for word, to Claude Haiku 4.5 at its API default (no thinking) once
+for each of the 60 recorded extractions of Experiment 10.3 &mdash; 11 of them missing
+a known set of figures, 49 complete, 31 known-missing figures in all. 60 calls through
+the subscription CLI, $0.41 notional; every case is printed in
+<code>audit_log.txt</code>.</p>
 
 <table>
   <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
-  <tr><td>Known-missing figures named by the audit</td><td class="num"><strong>10 of 41</strong></td></tr>
-  <tr><td>Extractions with missing figures: all caught / some / none</td><td class="num">5 / 3 / 4 of 12</td></tr>
-  <tr><td>Reply on one extraction that dropped 8 figures</td><td class="num">&ldquo;nothing missing&rdquo;</td></tr>
-  <tr><td>Named on the extraction that dropped the most (9)</td><td class="num">1 of 9</td></tr>
-  <tr><td>Alarms on complete extractions</td><td class="num">6 of 48</td></tr>
-  <tr><td>The same missing dose, over the 6 runs that dropped it</td><td class="num">caught 4, missed 2</td></tr>
+  <tr><td>Known-missing figures named by the audit</td><td class="num"><strong>27 of 31</strong></td></tr>
+  <tr><td>Extractions with missing figures: all caught / some / none</td><td class="num">8 / 1 / 2 of 11</td></tr>
+  <tr><td>Named on the extraction that dropped the most (9)</td><td class="num">9 of 9</td></tr>
+  <tr><td>Alarms on complete extractions</td><td class="num">17 of 49</td></tr>
+  <tr><td>The methylene-blue dose, over the 3 extractions that dropped it</td><td class="num">caught 1, missed 2</td></tr>
+  <tr><td>On the 6 API extractions, unchanged input: first recording / this one</td><td class="num">2 of 11 / 11 of 11</td></tr>
 </table>
 
-<p>Every full catch was a one-figure gap &mdash; the methylene-blue dose,
-Warfarin&rsquo;s 100&nbsp;mg cap, the clavulanate component. The more an
-extraction was missing, the smaller the share the audit named: at best 2 of 8
-strength figures, 1 of 9 on the extraction that dropped the most, and on one
-extraction that had dropped eight it reported nothing missing at all. Four of the six alarms listed doses the extraction already
-carried in different words; one of those four also named &ldquo;1000
-mg/day&rdquo;, a figure that appears in neither the source nor the output. The
-other two alarms named real source content outside the dose task &mdash;
-treatment durations and an INR threshold. As a sampled monitor the audit is
-cheap and sometimes names the exact missing line; as the only completeness
-check it would have passed an extraction missing eight figures.</p>
+<p>The two incomplete extractions it missed entirely had each lost only the
+methylene-blue dose, which it named on the third; the one partial catch missed two
+tablet strengths, 500 and 875 mg. Of the 17 alarms on complete extractions, read: 6
+named only real source content outside the dose task (reconstitution water volumes,
+weight bands, INR targets, intervals), 6 that content plus a restatement of a dose the
+extraction already carried, 4 only restatements, and 1 a real drop the pattern count
+cannot see: Gabapentin&rsquo;s 1,400 mg/day, the top of a range in a table cell without
+a unit. One entry misquotes an INR range. Nothing invented. As a sampled monitor the
+audit is cheap and usually names the exact missing line; as the only completeness
+check it would have passed two extractions that had each lost a dose.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_audit_cli_defaults/</code>, against that recording&rsquo;s extractions:
+12 short, 48 complete, 41 known-missing): 10 of 41 named; 5 / 3 / 4 of 12; &ldquo;nothing
+missing&rdquo; on an extraction that had dropped eight; 1 of 9 on the extraction that
+dropped the most; 6 of 48 complete extractions alarmed, one of them naming &ldquo;1000
+mg/day&rdquo;, a figure in neither the source nor the output; $2.04 notional.</p>
 
 <h4>Experiment 10.12 &mdash; the audit with a second, different model</h4>
 
@@ -4236,33 +4369,38 @@ check it would have passed an extraction missing eight figures.</p>
 call&rdquo; while Experiment 10.6&rsquo;s auditor was the same Haiku that wrote
 the extractions. The heading now says &ldquo;second call&rdquo;, and the
 different-model arm was run: <code>probe_audit.py --auditor claude-sonnet-5</code>,
-the book&rsquo;s question word for word, same 60 recorded extractions, 60 CLI
-calls, $1.98 notional, every case in <code>audit_sonnet_log.txt</code>.</p>
+at Sonnet 5&rsquo;s API default (adaptive thinking, effort high), the book&rsquo;s
+question word for word, same 60 recorded extractions, 60 CLI calls, $2.42 notional,
+every case in <code>audit_sonnet_log.txt</code>.</p>
 
 <table>
   <tr><th style="width:46%">Measure</th><th class="num">Same model (Haiku, 10.6)</th><th class="num">Second model (Sonnet 5, 10.12)</th></tr>
-  <tr><td>Known-missing figures named (of 41)</td><td class="num">10</td><td class="num"><strong>39</strong></td></tr>
-  <tr><td>Incomplete extractions: all figures / some / none (of 12)</td><td class="num">5 / 3 / 4</td><td class="num">11 / 1 / 0</td></tr>
-  <tr><td>Reply on the extraction Haiku passed as complete (8 dropped)</td><td class="num">&ldquo;nothing missing&rdquo;</td><td class="num">named all 8</td></tr>
-  <tr><td>On the extraction that dropped the most (9)</td><td class="num">named 1</td><td class="num">named 7</td></tr>
-  <tr><td>Complete extractions alarmed (of 48)</td><td class="num">6</td><td class="num">12</td></tr>
-  <tr><td>Invented figures in alarms</td><td class="num">1 (&ldquo;1000 mg/day&rdquo;)</td><td class="num"><strong>0</strong></td></tr>
-  <tr><td>Notional cost</td><td class="num">$2.04</td><td class="num">$1.98</td></tr>
+  <tr><td>Known-missing figures named (of 31)</td><td class="num">27</td><td class="num"><strong>31</strong></td></tr>
+  <tr><td>Incomplete extractions: all figures / some / none (of 11)</td><td class="num">8 / 1 / 2</td><td class="num">11 / 0 / 0</td></tr>
+  <tr><td>On the extraction that dropped the most (9)</td><td class="num">named 9</td><td class="num">named 9</td></tr>
+  <tr><td>Gabapentin 1,400 mg/day named (of 4 lists that lost it)</td><td class="num">1</td><td class="num">3</td></tr>
+  <tr><td>Complete extractions alarmed (of 49)</td><td class="num">17</td><td class="num">22</td></tr>
+  <tr><td>Invented figures in alarms</td><td class="num">0</td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Notional cost</td><td class="num">$0.41</td><td class="num">$2.42</td></tr>
 </table>
 
-<p><strong>Alarm quality, read.</strong> Sonnet&rsquo;s twelve alarms on complete
-extractions name either a dose the extraction already carries in other words, or
-real source values outside the dose task: reconstitution water volumes, an INR
-target, creatinine clearance, monitoring intervals. Nothing invented. One
-complete Sertraline extraction drew fifteen entries, nearly all restatements
-&mdash; wide scope, not fabrication. The two figures it missed (42.9 mg and 600
-mg, on the extraction that dropped nine) sit inside the paired suspension
-strengths.
-<strong>Verdict.</strong> The auditor decides what the audit is worth: the
-same model misses what it wrote past; a stronger different model turned the
-audit into a real omission detector at the same per-call cost, paying in
+<p><strong>Alarm quality, read.</strong> Sonnet&rsquo;s 22 alarms on complete
+extractions: 7 name only real source content outside the dose task (water volumes,
+an INR target, monitoring intervals), 6 only restate a dose the extraction already
+carries, 4 point at Levothyroxine&rsquo;s starting dose written as a fraction of the full
+replacement dose, a dose stated without a figure, 3 are the real Gabapentin 1,400
+mg/day drop, and 2 mix these kinds. Nothing invented.
+<strong>Verdict.</strong> A second call is worth making at this setting: the same
+model named most known gaps; the different, stronger model named all of them and
+three the code could not see, at about six times the notional cost and with more
 off-task alarms. The fix&rsquo;s verdict &mdash; sampled monitor, never the only
 check &mdash; stands for both arms.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_audit_cli_defaults/claude-sonnet-5/</code>): 39 of 41 named; 11 / 1 / 0
+of 12; all 8 named on the extraction Haiku had passed as complete; 7 of 9 on the
+extraction that dropped the most; 12 of 48 complete extractions alarmed; $1.98
+notional, about the cost of the same-model audit then.</p>
 
 <h4>Fix 4 — the "what I did not extract" field, with what it actually contained</h4>
 
@@ -4313,107 +4451,99 @@ are not clearly delimited the field &ldquo;fills with noise rather than
 judgement&rdquo;. Nothing had measured that. <code>probe_field_conversation.py</code>
 put Prompt 10-1, as printed, with the item type set to &ldquo;medication dose
 amount&rdquo;, to the 60 ACI-Bench doctor&ndash;patient conversations, three
-runs, Claude Haiku 4.5 through the subscription CLI: 180 calls, $3.43 notional,
-4,563 recorded seconds. The ruler is Experiment 10.5&rsquo;s extractor: 64 unique
-doses across 39 conversations; 21 state none. Every entry and every extra is in
-<code>field_conversation_log.txt</code>.</p>
+runs, Claude Haiku 4.5 through the subscription CLI at its API default (no thinking):
+180 calls, $1.09 notional, 611 recorded seconds. The ruler is Experiment 10.5&rsquo;s
+extractor: 64 unique doses across 39 conversations; 21 state none. Every entry and
+every extra is in <code>field_conversation_log.txt</code>.</p>
 
 <table>
   <tr><th style="width:58%">Measure, per run</th><th class="num">Run 1</th><th class="num">Run 2</th><th class="num">Run 3</th></tr>
-  <tr><td>Ruler doses in <code>extracted</code></td><td class="num">62 of 64</td><td class="num">63 of 64</td><td class="num">63 of 64</td></tr>
+  <tr><td>Ruler doses in <code>extracted</code></td><td class="num">63 of 64</td><td class="num">63 of 64</td><td class="num">63 of 64</td></tr>
   <tr><td>True silent omissions (after reading the misses)</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
-  <tr><td>Conversations where the field was filled (of 60; of the 21 with no dose)</td><td class="num">49 (19)</td><td class="num">51 (20)</td><td class="num">50 (19)</td></tr>
-  <tr><td>Entries in the field</td><td class="num">137</td><td class="num">149</td><td class="num">147</td></tr>
-  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">95</td><td class="num">91</td><td class="num">88</td></tr>
-  <tr><td>&nbsp;&nbsp;frequency, duration or route, no amount</td><td class="num">13</td><td class="num">9</td><td class="num">9</td></tr>
-  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, exam grade, measurement, habit)</td><td class="num">17</td><td class="num">36</td><td class="num">37</td></tr>
-  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium target, per-decilitre lab, tissue grams)</td><td class="num">4</td><td class="num">4</td><td class="num">5</td></tr>
-  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers, all read</td><td class="num">7</td><td class="num">9</td><td class="num">8</td></tr>
-  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+  <tr><td>Medicine names with no amount inside <code>extracted</code></td><td class="num"><strong>72</strong></td><td class="num"><strong>77</strong></td><td class="num"><strong>74</strong></td></tr>
+  <tr><td>Conversations where the field was filled (of 60; of the 21 with no dose)</td><td class="num">56 (19)</td><td class="num">57 (19)</td><td class="num">59 (20)</td></tr>
+  <tr><td>Entries in the field</td><td class="num">177</td><td class="num">190</td><td class="num">169</td></tr>
+  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, exam grade, measurement, habit)</td><td class="num">93</td><td class="num">111</td><td class="num">91</td></tr>
+  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">59</td><td class="num">48</td><td class="num">51</td></tr>
+  <tr><td>&nbsp;&nbsp;frequency, duration or route, no amount</td><td class="num">7</td><td class="num">11</td><td class="num">6</td></tr>
+  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium target, per-decilitre lab, tissue grams)</td><td class="num">4</td><td class="num">7</td><td class="num">5</td></tr>
+  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers</td><td class="num">14</td><td class="num">12</td><td class="num">14</td></tr>
+  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">0</td><td class="num">1</td><td class="num">1</td></tr>
+  <tr><td>&nbsp;&nbsp;not found in the dialogue</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
   <tr><td>Entries that held back a dose the extraction should have carried</td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td><td class="num"><strong>0</strong></td></tr>
 </table>
 
-<p><strong>The misses, read.</strong> The one ruler dose missing from every run
-is D2N027&rsquo;s &ldquo;5000 units&rdquo;, which the doctor retracts in the same
-sentence (&ldquo;or 50,000 units on sundays, excuse me&rdquo;); every run
-extracted the corrected 50,000 and 2,000 units. Run 1&rsquo;s second miss, 175
-mg, sat in the field with the right reason: the patient proposed the increase
-and the doctor did not agree to it. So the extraction dropped nothing, three
-times, the same null as Experiment 10.5.</p>
+<p><strong>The misses, read.</strong> The one ruler dose missing from every run is
+D2N027&rsquo;s &ldquo;5000 units&rdquo;, which the doctor retracts in the same
+sentence (&ldquo;or 50,000 units on sundays, excuse me&rdquo;); every run extracted
+the corrected 50,000 and 2,000 units, and runs 2 and 3 put the retracted figure in the
+field with the right reason. So the extraction dropped nothing, three times, the same
+null as Experiment 10.5.</p>
 
-<p><strong>What the ruler cannot see.</strong> <code>extracted</code> also carried
-12, 14 and 12 amounts per run in forms the pattern has no unit for &mdash; two
-puffs, one to two tablets, 1 cc, 1 millilitre, half a teaspoon &mdash; and 8, 4
-and 8 numbers the dialogue states without a unit (&ldquo;two . five of
-norvasc&rdquo;, &ldquo;five hundred of metformin&rdquo;). In 3, 7 and 3 strings
-the model added the unit itself (&ldquo;Norvasc 2.5 mg&rdquo;, &ldquo;2,000
-units&rdquo; for &ldquo;2000s&rdquo;); each matched the conversation&rsquo;s own
-context, and no run produced a number absent from its conversation. The
-over-inclusions were 9, 7 and 8 strings with no amount at all, nearly all
-application schedules from one dermatology conversation (D2N145).</p>
+<p><strong>What the extracted list carried.</strong> Beside the doses,
+<code>extracted</code> held 13, 10 and 17 amounts per run in forms the pattern has no
+unit for (two puffs, one to two tablets, cc, millilitres, teaspoons), 7, 5 and 5
+numbers the dialogue states without a unit, and 5, 6 and 5 strings where the model
+added the unit itself. The new volume is elsewhere: 72, 77 and 74 medicine names with
+no amount at all (&ldquo;aspirin&rdquo;, &ldquo;toprol&rdquo;, &ldquo;Coreg (for
+hypertension)&rdquo;) and 16, 23 and 19 items that give only how often a medicine is
+taken. Nearly one extracted item in two names no amount.</p>
 
-<p><strong>Verdict.</strong> The field did not fill with wrong calls: 433
-entries read, none held back a dose. It filled with volume. About two in three
-entries name a medicine the conversation mentions without an amount, one line
-per medicine, on conversations that state no dose as readily as on those that
-do. The judgement calls are there &mdash; lab values, vital signs, salt targets,
-a declined dose, an unclear utterance (&ldquo;lortab 500-&rdquo;) &mdash; but a
-reader has to go through about 140 lines per 60 conversations to find the 30
-to 50 of them. The chapter&rsquo;s sentence now says that; &ldquo;noise rather
-than judgement&rdquo; is withdrawn.</p>
+<p><strong>Verdict.</strong> The field held no wrong call: across 536 entries,
+classified by code and sampled by hand, the only dose in the field is the retracted one,
+set aside with the right reason. At this setting the field is mostly numbers that are
+not doses (lab values, vital signs, weights, durations) and medicines named without an
+amount. The extracted list is where the volume moved: a list of doses that is nearly
+half medicine names. A reader needs to check both lists, not only the field.</p>
 
-<p><strong>The fourth condition: one line added (12 Oct 2026).</strong> The volume
-came from entries the prompt never asked for: medicines named without an amount
-are not &ldquo;values that could be mistaken for a dose&rdquo;. The printed
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_field_conversation_cli_defaults/</code>; $3.43 notional): the field held
+137, 149 and 147 entries, about two in three a medicine named without an amount, and
+<code>extracted</code> carried 4, 2 and 2 such names.</p>
+
+<p><strong>The fourth condition: one line added (12 Oct 2026).</strong> The printed
 prompt plus one line &mdash; <em>&ldquo;Do not list items that simply have no
 amount. List only values that could be mistaken for a medication dose
 amount.&rdquo;</em> &mdash; ran three more times over the same 60 conversations
-(180 calls, $4.69 notional; <code>--condition narrowed</code>; every entry in
+(180 calls, $1.10 notional; <code>--condition narrowed</code>; every entry in
 <code>field_conversation_narrowed_log.txt</code>).</p>
 
 <table>
   <tr><th style="width:52%">Per run</th><th class="num">as printed 1 / 2 / 3</th><th class="num">one line added 1 / 2 / 3</th></tr>
-  <tr><td>Ruler doses in <code>extracted</code> (of 64)</td><td class="num">62 / 63 / 63</td><td class="num">62 / 63 / 63</td></tr>
+  <tr><td>Ruler doses in <code>extracted</code> (of 64)</td><td class="num">63 / 63 / 63</td><td class="num">64 / 63 / 63</td></tr>
   <tr><td>True silent omissions, after reading</td><td class="num">0 / 0 / 0</td><td class="num">0 / 0 / 0</td></tr>
-  <tr><td>Conversations where the field was filled (of 60)</td><td class="num">49 / 51 / 50</td><td class="num"><strong>26 / 32 / 30</strong></td></tr>
-  <tr><td>&nbsp;&nbsp;of the 21 that state no dose</td><td class="num">19 / 20 / 19</td><td class="num">13 / 11 / 10</td></tr>
-  <tr><td>Entries</td><td class="num">137 / 149 / 147</td><td class="num"><strong>57 / 62 / 58</strong></td></tr>
-  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">95 / 91 / 88</td><td class="num"><strong>5 / 2 / 3</strong></td></tr>
-  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, grade, measurement, habit)</td><td class="num">17 / 36 / 37</td><td class="num">28 / 40 / 36</td></tr>
-  <tr><td>&nbsp;&nbsp;frequency, duration or route only</td><td class="num">13 / 9 / 9</td><td class="num">9 / 3 / 5</td></tr>
-  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium, per-dL lab, tissue grams)</td><td class="num">4 / 4 / 5</td><td class="num">7 / 7 / 5</td></tr>
-  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers</td><td class="num">7 / 9 / 8</td><td class="num">7 / 9 / 9</td></tr>
-  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">1 / 0 / 0</td><td class="num">1 / 1 / 0</td></tr>
+  <tr><td>Conversations where the field was filled (of 60)</td><td class="num">56 / 57 / 59</td><td class="num"><strong>53 / 57 / 55</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;of the 21 that state no dose</td><td class="num">19 / 19 / 20</td><td class="num">19 / 20 / 20</td></tr>
+  <tr><td>Entries</td><td class="num">177 / 190 / 169</td><td class="num"><strong>210 / 226 / 203</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;a number that is not a dose (lab, vital, grade, measurement, habit)</td><td class="num">93 / 111 / 91</td><td class="num"><strong>134 / 149 / 128</strong></td></tr>
+  <tr><td>&nbsp;&nbsp;a medicine named without any amount</td><td class="num">59 / 48 / 51</td><td class="num">52 / 48 / 46</td></tr>
+  <tr><td>&nbsp;&nbsp;frequency, duration or route only</td><td class="num">7 / 11 / 6</td><td class="num">9 / 10 / 13</td></tr>
+  <tr><td>&nbsp;&nbsp;excluded by the ruler (sodium, per-dL lab, tissue grams)</td><td class="num">4 / 7 / 5</td><td class="num">1 / 3 / 2</td></tr>
+  <tr><td>&nbsp;&nbsp;other quantities and unit-less numbers</td><td class="num">14 / 12 / 14</td><td class="num">14 / 15 / 13</td></tr>
+  <tr><td>&nbsp;&nbsp;a ruler dose set aside with a reason</td><td class="num">0 / 1 / 1</td><td class="num">0 / 1 / 1</td></tr>
+  <tr><td>Medicine names with no amount inside <code>extracted</code></td><td class="num">72 / 77 / 74</td><td class="num">54 / 50 / 45</td></tr>
   <tr><td>Entries that held back a dose the extraction should have carried</td><td class="num">0 / 0 / 0</td><td class="num">0 / 0 / 0</td></tr>
 </table>
 
-<p><strong>Read, not just counted.</strong> The two ruler doses set aside with a
-reason are the right two: 175 mg (the patient&rsquo;s proposed increase, which
-the doctor did not agree to) and, in run 2, the retracted 5000 units
-(&ldquo;initial dose mentioned but corrected to 50,000 units&rdquo;). The
-remaining medicine-without-amount entries are tablet counts with no unit
-(&ldquo;i&rsquo;m just on one now&rdquo;) and &ldquo;a little tylenol&rdquo;.
-The look-alike class now carries what the field is for: A1C values, a white
-cell count of 23,000, blood pressures, reflex grades, SPF 30, a wound size, a
-temperature of 100.3, and in run 2 four drug prices in dollars. The contents
-vary between runs: on D2N088 run 1 listed two A1C values and run 2 nothing; on
-D2N013 run 1 listed nothing and run 2 the glucose of 162.</p>
+<p><strong>Read, not just counted.</strong> A sample of fourteen run-1 entries with the
+line added: &ldquo;seven ounces&rdquo; of formula, &ldquo;one year&rdquo;, a birth weight
+of &ldquo;4 pounds, 8 ounces&rdquo;, &ldquo;ten pounds&rdquo;, an oxygen reading of
+&ldquo;97 percent&rdquo;, &ldquo;blood pressure one twenty over seventy&rdquo;,
+&ldquo;tylenol for two or three days&rdquo;, &ldquo;fluocinonide &mdash; no dose amount
+mentioned&rdquo;, &ldquo;one month&rdquo;, &ldquo;digoxin&rdquo;, &ldquo;blood sugar
+162&rdquo;, a TSH of &ldquo;2.68&rdquo;, &ldquo;one in 100 guys&rdquo;,
+&ldquo;miralax&rdquo;. Each is true; few are values anyone would mistake for a dose. With
+the line, run 1 also extracted D2N027&rsquo;s retracted &ldquo;5000 units&rdquo; beside the
+corrected figures.</p>
 
-<p>Two conversations, before and after, run 1. D2N107 (no dose stated):
-as printed, <code>extracted ["Two Advils"]</code> and the field
-<code>["meloxicam — medication prescribed but no specific dose amount provided"]</code>;
-with the line, the same extraction and an empty field. D2N088: as printed, the
-field held <code>Robitussin</code>, <code>Ibuprofen</code>, <code>Tylenol</code>, each
-&ldquo;mentioned without dose amount specified&rdquo;; with the line, it held
-<code>"at eight" — hemoglobin a1c lab value</code> and <code>"around six or
-seven" — target a1c values</code>.</p>
+<p><strong>Verdict, revised again.</strong> At the API default the line did the opposite
+of what it did with thinking on: the model read &ldquo;values that could be mistaken for a
+dose&rdquo; as every number in the conversation, and the field grew. An instruction that
+narrows a field must be measured on the model setting it will run under.</p>
 
-<p><strong>Verdict, revised.</strong> One line that says what the field is for
-cut the queue by more than half, removed the medicine inventory almost
-entirely, left the extraction unchanged, and kept every judgement call the
-labels had produced. The queue is still around one entry per stated dose and
-still varies run to run, so it remains a sampled review aid, not a completeness
-check; but it is now a list a person can read.</p>
+<p>The first recording, with the command-line tool&rsquo;s default thinking on ($4.69
+notional): with the line, the field fell to 57, 62 and 58 entries on 26, 32 and 30
+conversations, and the medicine names without an amount fell to 5, 2 and 3.</p>
 
 <h4>Experiment 10.10 &mdash; the field&rsquo;s entries, verified by code</h4>
 
@@ -4428,27 +4558,33 @@ entry&rsquo;s item words.</p>
 
 <table>
   <tr><th style="width:58%">Measure</th><th class="num">Result</th></tr>
-  <tr><td>Strings traced (6 runs: 610 field entries + 582 extracted items)</td><td class="num">1,188 of 1,192</td></tr>
-  <tr><td>First strict run&rsquo;s alarms / of which the checker&rsquo;s own blindness</td><td class="num">43 / 39</td></tr>
-  <tr><td>Alarms after the checker learned spoken numbers</td><td class="num">4</td></tr>
-  <tr><td>&nbsp;&nbsp;a corrupted drug name (&ldquo;methoprexate&rdquo;) &mdash; the one real catch</td><td class="num">1</td></tr>
-  <tr><td>&nbsp;&nbsp;an entry describing an ambiguity rather than quoting one</td><td class="num">1</td></tr>
-  <tr><td>&nbsp;&nbsp;an entry pointing at a garbled stretch of transcript (&ldquo;seven over ninety&rdquo;)</td><td class="num">1</td></tr>
-  <tr><td>&nbsp;&nbsp;a paraphrased extracted item (&ldquo;prednisone: one&rdquo;)</td><td class="num">1</td></tr>
+  <tr><td>Strings traced (6 runs: 1,175 field entries + 1,110 extracted items)</td><td class="num">2,228 of 2,285</td></tr>
+  <tr><td>Alarms, all read</td><td class="num">57</td></tr>
+  <tr><td>&nbsp;&nbsp;items written as data objects (the 12 replies 10.11 corrects)</td><td class="num">36</td></tr>
+  <tr><td>&nbsp;&nbsp;values with a note in brackets (&ldquo;124/76 mmHg (blood pressure)&rdquo;)</td><td class="num">10</td></tr>
+  <tr><td>&nbsp;&nbsp;blood pressures spoken in words (&ldquo;one twenty five over sixty two&rdquo;)</td><td class="num">4</td></tr>
+  <tr><td>&nbsp;&nbsp;entries describing an ambiguity rather than quoting one</td><td class="num">4</td></tr>
+  <tr><td>&nbsp;&nbsp;&ldquo;aspirin&rdquo; where the transcript spells &ldquo;asprin&rdquo;</td><td class="num">3</td></tr>
   <tr><td>Invented values anywhere in the 360 replies</td><td class="num"><strong>0</strong></td></tr>
+  <tr><td>Real catches</td><td class="num">0</td></tr>
 </table>
 
-<p><strong>What the blindness was.</strong> The transcripts speak their numbers:
-&ldquo;a thousand milligrams&rdquo; (metformin 1000), &ldquo;seven and a half
-milligrams&rdquo; (methotrexate 7.5), &ldquo;two and a half milligram
-pills&rdquo; (2.5), &ldquo;a half a cc&rdquo; (0.5 cc), &ldquo;one
-thirties&rdquo; (130s), a PSA written &ldquo;.5&rdquo;. Each of the 39 was a
-correct model statement that the strict digit matcher could not see &mdash; the
-same lesson as Experiment 10.8&rsquo;s dose labels, now on the checker&rsquo;s
-side. <strong>Verdict.</strong> Tracing the field in code is cheap, replayable
-and worth shipping: it found the one corrupted drug name in 360 replies and
-proved the rest grounded. Build its number matcher from your transcripts&rsquo;
-own spellings, or nearly every alarm will be the checker, not the model.</p>
+<p><strong>What the blindness was.</strong> The matcher already knows the
+transcripts&rsquo; spoken numbers &mdash; &ldquo;a thousand milligrams&rdquo;, &ldquo;seven
+and a half milligrams&rdquo;, &ldquo;a half a cc&rdquo;, &ldquo;one thirties&rdquo;
+&mdash; learned on the first recording, where 39 of a first strict run&rsquo;s 43 alarms
+were that blindness. At the API default the alarms are a new kind: the model wrote 36
+extracted items as data objects instead of strings, added notes in brackets, and
+corrected a transcript&rsquo;s spelling. <strong>Verdict.</strong> Tracing the field in
+code is cheap, replayable and worth shipping: it found no invented value in 360
+replies, and every alarm was the checker&rsquo;s blindness, nearly two in three of them items
+the model wrote as data objects, so the check also tells you when the reply format slipped.
+Build its number matcher from your transcripts&rsquo; own spellings, or nearly every
+alarm will be the checker, not the model.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on: 1,188 of
+1,192 strings traced; four alarms, one a real catch, a corrupted drug name
+(&ldquo;methoprexate&rdquo;).</p>
 
 <h4>Experiment 10.11 &mdash; the field enforced through the answer schema</h4>
 
@@ -4458,15 +4594,24 @@ no API on this stack. Engineering enforcement &mdash; validate each reply
 against the strict schema in code, send it back for correction until it
 conforms &mdash; is deterministic given a reply, and every reply of Experiment
 10.7 is recorded, so the enforced arm is computable by replay
-(<code>probe_field_enforce.py</code>): 359 of 360 replies conform as generated
-(the strict schema: exactly two keys, strings in <code>extracted</code>,
-{text, reason} pairs in <code>not_extracted</code>). The one failure, run 2 of
-D2N049, had written its three extracted items as objects
-(<code>{'medication': 'Norvasc', 'dose': '2.5 mg'}</code>). One live correction
-call returned the same three medicines as strings and left the
-<code>not_extracted</code> entries identical. Verdict: on this corpus,
-enforcement changes format once in 360 and content never; the field&rsquo;s
-behaviour belongs to the prompt, not to the schema.</p>
+(<code>probe_field_enforce.py</code>): 348 of 360 replies conform as generated
+(169 of 180 as printed, 179 of 180 with the added line; the strict schema: exactly two
+keys, strings in <code>extracted</code>, {text, reason} pairs in
+<code>not_extracted</code>). All 12 failures had written extracted items as objects
+(<code>{'medication': 'lasix', 'dose': '40 milligrams a day'}</code>). One live
+correction call each made them conform (12 calls, $0.07 notional). In 7 the corrected
+reply held the same items as strings. In 5 the correction also moved content: a
+duplicate dose-less protonix dropped (D2N089); pepcid moved to the field (D2N018);
+ibuprofen and miralax dropped from <code>extracted</code>, already in the field (D2N072);
+metformin dropped, already in the field (D2N134); fluocinonide, ibuprofen and tylenol
+moved to the field (D2N017, with the added line). No dose was lost. Verdict: enforcement
+changed format 12 times in 360 and moved content in 5, each time a dose-less medicine
+leaving the extracted list; check what a correction changed, not only that it
+conforms.</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on: 359 of
+360 conformed; the one correction returned the same three medicines as strings and left
+the field unchanged.</p>
 
 <h4>One document, all three checks, side by side</h4>
 
@@ -4604,8 +4749,8 @@ it a completeness signal.</p>
 <h3>So what is actually left for this chapter?</h3>
 
 <p class="lede">Two of four fixes failed and the prompt did nothing. That reads
-like an empty chapter. It is not — but what survives is one fix and a principle,
-not four fixes.</p>
+like an empty chapter. It is not — but what survives is one default fix, a sampled
+monitor and a principle, not four fixes.</p>
 
 <h4>First: the failure does reproduce. It was called too early.</h4>
 
@@ -4656,8 +4801,9 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
       <th>Result</th></tr>
   <tr><td><strong>1 · Independent count</strong></td>
       <td><strong>Code, outside the model</strong></td>
-      <td><strong>Works.</strong> Detected every real omission, and caught a bug in
-      the checker itself</td></tr>
+      <td><strong>Works.</strong> Detected the real omission in this run, and caught a
+      bug in the checker itself; on the sixty extractions of 10.4 and 10.8, 4 of 9 drops
+      with no false flag (5 of 9 compared figure by figure)</td></tr>
   <tr><td>3 · Second-model audit</td><td>A different model</td>
       <td>Partly. Found the 2 real omissions and 6 false ones —
       <strong>87% of the total bill</strong> for that</td></tr>
@@ -4665,8 +4811,8 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
       <td><strong>0 of 11 entries were omissions.</strong> On Amoxicillin it
       declared 3 gaps, none of them the 2 doses it actually dropped</td></tr>
   <tr><td>2 · Model counts the source</td><td>The model, about itself</td>
-      <td><strong>Its count was its own list&rsquo;s length</strong> in 54 of 54
-      calls, so it cannot show a gap</td></tr>
+      <td><strong>Its count was its own list&rsquo;s length</strong> in 46 of 54
+      calls, and none of the other 8 pointed at a real drop, so it cannot show a gap</td></tr>
 </table>
 
 <div class="verdict">
@@ -4676,6 +4822,9 @@ rare is the harder case — it is exactly the rate at which nobody notices.</p>
 list, and 0 omissions in 11 entries.</strong>
   The second-model audit sits in between, which is what you would predict: better
   than self-report, still a model, still expensive.</p>
+  <p>The boundary is self-report inside the call that produced the output. Asked again
+  in a separate call, shown the source, the same model named 27 of 31 known-missing
+  figures (Experiment 10.6, above), and a second model all 31 (10.12).</p>
   <p>This is the fifth independent measurement in this report that a model cannot
   assess its own work. Chapter 10's contribution is that it is the cleanest,
   because completeness has an objective answer a regular expression can compute.</p>
@@ -4693,8 +4842,10 @@ list, and 0 omissions in 11 entries.</strong>
   on the document that failed.</li>
   <li><strong>Fix 3, only where fix 1 cannot reach.</strong> If your items cannot
   be counted by a pattern &mdash; obligations in a contract, findings in a report
-  &mdash; a second model is the only option left. Price it honestly: 87% of the
-  bill, and 6 false flags for 2 real ones.</li>
+  &mdash; a second call is the only option left. Price it honestly: here 87% of the
+  bill, and 6 false flags for 2 real ones; on the sixty extractions with known gaps the
+  same model in a separate call named 27 of 31 missing figures for $0.41, and a second
+  model all 31 for $2.42 (10.6, 10.12).</li>
   <li><strong>Fix 2, never with the model&rsquo;s own count.</strong> The count it gives is the length of the list it is checking.</li>
 </ol>
 
@@ -4816,16 +4967,18 @@ answer is negative:</p>
       <td><strong>Did not reproduce</strong></td>
       <td><strong>185/185 in 3 of 4 runs</strong>, 184/185 in the fourth</td></tr>
   <tr><td>Prompt template</td><td>Did nothing here</td><td>−2 cases, inside the noise</td></tr>
-  <tr><td>1 · Independent count</td><td><strong>Works, in code</strong></td>
-      <td>caught a real error — a gene variant read as a 1,639 g dose; the general
-      NER model the fix names needs the same domain filtering and misses whole
-      tables (10.4)</td></tr>
+  <tr><td>1 · Independent count</td><td><strong>Works, in code</strong>, within what its pattern can see</td>
+      <td>caught a real error — a gene variant read as a 1,639 g dose; on the sixty
+      extractions, 4 of 9 real drops with no false flag, 5 of 9 compared figure by figure
+      (10.8); the general NER model the fix names needs the same domain filtering and
+      misses whole tables (10.4)</td></tr>
   <tr><td>2 · List-length assertions</td><td>Cannot work as described</td>
-      <td>count = its own list, 54 of 54 — decisive</td></tr>
-  <tr><td>3 · Completeness audit</td><td>Weak on its own</td><td>caught 10 of 41 known-missing figures; reported
-      nothing missing on an extraction that had dropped eight (10.6); a second model, Sonnet 5, named 39 of 41 (10.12)</td></tr>
+      <td>count = its own list in 46 of 54; none of the other 8 on a real drop</td></tr>
+  <tr><td>3 · Completeness audit</td><td><strong>Works as a sampled monitor</strong></td><td>the same model named 27 of 31
+      known-missing figures (10.6); Sonnet 5 named 31 of 31 and 3 drops the pattern cannot see (10.12); 17 and 22 of
+      49 complete extractions alarmed, nothing invented</td></tr>
   <tr><td>4 · "Not extracted" field</td><td><strong>Works</strong>, differently</td>
-      <td>labels: 8 entries, 0 omissions, all correct; conversations: 137–149 entries per run, two in three a medicine with no amount, none wrong; one added line → 57–62 entries, medicine inventory gone (10.7)</td></tr>
+      <td>labels: 8 entries, 0 omissions, all correct; conversations: 169–190 entries per run, none holding back a dose, mostly numbers that are not doses; the extracted list itself carried 72–77 dose-less medicine names; one added line → 203–226 entries (10.7)</td></tr>
 </table>
 
 <div class="verdict">
@@ -4834,8 +4987,9 @@ answer is negative:</p>
   four fixes worth deploying. On this evidence it is the weakest of the nine
   patterns, its prompt costs a little accuracy, and two of its four fixes are
   measuring the model with itself.</p>
-  <p>What survives is the independent count — free, effective, and the one thing
-  in the chapter that caught a real error.</p>
+  <p>What survives is the independent count — free, with no false alarm in any test,
+  and limited to what its pattern can see — and a second call that asks what is
+  missing, as a sampled monitor.</p>
   <p><strong>This is the largest editorial call in the report.</strong> When it was
   first made it rested on six documents of short, salient, numeric items. Since
   then the long prose enumeration (185 items, Experiment 10.1) and doses across

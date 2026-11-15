@@ -57,7 +57,9 @@ sys.path.insert(0, str(HERE / "exp105_dialogue_doses"))
 from count_doses import dialogue_doses, extract  # noqa: E402
 
 DATA = HERE.parent / "data" / "aci_bench_dialogues.json"
-FIXTURES = HERE / "fixtures_field_conversation"
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_field_conversation" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
 ITEM_TYPE = "medication dose amount"
@@ -112,6 +114,7 @@ def call_cli(prompt: str, system: str = SYSTEM) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)
@@ -197,7 +200,9 @@ def subclass(text: str, reason: str, in_field: bool) -> str:
         return "frequency, duration or route, no amount"
     if UNITLESS_NUMBER.search(t):
         return "a number the dialogue states without a unit"
-    if in_field:
+    if in_field or not re.search(r"\d", t):
+        # With thinking off (the API default), the extraction itself lists bare
+        # medicine names ("aspirin", "Coreg (for hypertension)"); no digit, no amount.
         return "a medicine named without any amount"
     return "other"
 

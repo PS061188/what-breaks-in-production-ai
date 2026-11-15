@@ -7,7 +7,7 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "reply": "```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"âââââââ (appears before '600 mg/42.9 mg per 5 mL' in table header)\",\n    \"âââââââ (appears at end of table as separator)\"\n  ],\n  \"worst_affected_text\": \"Table 1 header and footer rows containing the garbled 'âââââââ' sequences\",\n  \"extraction\": {\n    \"starting_dose\": \"90 mg/kg/day divided every 12 hours\",\n    \"duration\": \"10 days\",\n    \"population\": \"Pediatric patients aged 3 months to 12 years weighing ≤40 kg\",\n    \"formulation\": \"Amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL\",\n    \"administration_instruction\": \"Take at the start of a meal\"\n  }\n}\n```\n\n**Summary:** The text contains encoded character corruption (likely UTF-8 garbling of dashes or formatting marks appearing as \"âââââââ\") in the table structure, but the critical dosing information remains readable and intact.",
- "seconds": 11.2,
- "notional_cost_usd": 0.006654
+ "reply": "```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"âââââââ600 mg/42.9 mg per 5 mL providing 90 mg/kg/day — garbled character sequence (â repeated) before dosage value in table header\",\n    \"âââââââ — garbled character sequence (â repeated) at end of table\"\n  ],\n  \"worst_affected_text\": \"Table 1 header row and footer contain corrupted text with repeated 'â' characters where clean spacing or dashes should appear\",\n  \"extraction\": {\n    \"starting_dose_pediatric_3mo_to_12yr_leq40kg\": \"90 mg/kg/day divided every 12 hours\",\n    \"duration\": \"10 days\",\n    \"formulation\": \"amoxicillin and clavulanate potassium for oral suspension, 600 mg/42.9 mg per 5 mL\",\n    \"administration_timing\": \"at the start of a meal\",\n    \"clavulanic_acid_component\": \"6.4 mg/kg/day\"\n  }\n}\n```\n\n**Key Finding:** The starting dose for pediatric patients aged 3 months to 12 years weighing ≤40 kg is **90 mg/kg/day divided every 12 hours for 10 days**.",
+ "seconds": 5.5,
+ "notional_cost_usd": 0.004103
 }

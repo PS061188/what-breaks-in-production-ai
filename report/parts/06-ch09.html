@@ -3,11 +3,11 @@
 <h2 class="part">Chapter 9 — Sparse field fabrication</h2>
 <div class="summary">
 <span class="kicker">At a glance &middot; Chapter 9 &middot; Sparse field fabrication</span>
-<p class="oneline">The chapter&rsquo;s failure is a form field the source does not cover, filled with a plausible value anyway. On 12 FDA drug labels it did not happen. On visit notes written from 60 doctor&ndash;patient conversations it did: the template prompt wrote &ldquo;No known drug allergies&rdquo; where drug allergies never came up, in 4, 3 and 4 of 58 notes across three runs. One rule in the prompt removed every case.</p>
+<p class="oneline">The chapter&rsquo;s failure is a form field the source does not cover, filled with a plausible value anyway. On 12 FDA drug labels it did not happen. On visit notes written from 60 doctor&ndash;patient conversations it did: the template prompt filled 9, 3 and 1 of the 201 entries per run whose topic never came up, with &ldquo;No known drug allergies&rdquo; and denials of tobacco and alcohol. One rule in the prompt removed every case.</p>
 <h4>How it was tested</h4>
 <table>
 <tr><td style="width:26%">Documents</td><td>9.1&ndash;9.3: 12 FDA drug labels, two sections supplied (four in 9.3). 9.4: 60 ACI-Bench doctor&ndash;patient conversations, a note under eleven headings</td></tr>
-<tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 101 filled entries from 9.4&rsquo;s template notes &mdash; 12 invented, 89 on discussed topics</td></tr>
+<tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 96 filled entries from 9.4&rsquo;s template notes &mdash; 13 invented, 83 on discussed topics</td></tr>
 <tr><td style="width:26%">Ground truth</td><td>Labels: a field is unanswerable when its section was not supplied. Conversations: a topic is never discussed when no related word appears in the dialogue</td></tr>
 <tr><td style="width:26%">Model</td><td>Claude Haiku 4.5; 9.4 ran through <code>claude -p</code> on my Claude subscription</td></tr>
 <tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr>
@@ -18,16 +18,16 @@
 <table>
 <tr><th style="width:34%">Item</th><th>Verdict</th><th class="num" style="width:24%">Number</th></tr>
 <tr><td>The failure, drug labels (9.1)</td><td><strong>Did not reproduce</strong></td><td class="num">0 fabrications in 33</td></tr>
-<tr><td>The failure, conversations (9.4)</td><td><strong>Reproduces</strong>: &ldquo;No known drug allergies&rdquo;</td><td class="num">4, 3, 4 of 58</td></tr>
+<tr><td>The failure, conversations (9.4)</td><td><strong>Reproduces</strong>: &ldquo;No known drug allergies&rdquo;, &ldquo;Denies tobacco, alcohol&rdquo;</td><td class="num">9, 3, 1 of 201</td></tr>
 <tr><td>A &ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Removed it</strong>, all three runs</td><td class="num">0, 0, 0 of 58</td></tr>
-<tr><td>1 &middot; Optional fields, no defaults</td><td><strong>Works</strong>; the harm of &ldquo;required&rdquo; is fillers (9.6)</td><td class="num">577 fillers + 5 invented of 603 &rarr; 0 + 2</td></tr>
-<tr><td>2 &middot; Quote verification</td><td>Catches quote-less inventions only; real quotes pass (9.6); the window matters</td><td class="num">caught 1 of 7; 11 vs 23 of 23 kept</td></tr>
-<tr><td>2c &middot; A list of quotes, one per place (9.7)</td><td><strong>Removes the quote check&rsquo;s main false alarm</strong>; the model states fewer values; existence is still not support</td><td class="num">wrong rejections 0 of 75, from 3 of 92</td></tr>
+<tr><td>1 &middot; Optional fields, no defaults</td><td><strong>Works</strong>; the harm of &ldquo;required&rdquo; is fillers (9.6)</td><td class="num">565 fillers + 19 invented of 603 &rarr; 0 + 1</td></tr>
+<tr><td>2 &middot; Quote verification</td><td>Catches inventions whose quote is a sentence about the conversation; real quotes about something else pass (9.6); the window matters</td><td class="num">caught 16 of 20; 11 vs 23 of 23 kept</td></tr>
+<tr><td>2c &middot; A list of quotes, one per place (9.7)</td><td><strong>Removes the quote check&rsquo;s main false alarm</strong>; existence is still not support</td><td class="num">rejections 1 of 80, from 7 of 75</td></tr>
 <tr><td>2b &middot; Section check (9.2, 9.3)</td><td><strong>Fabrication side forced</strong>; rejected correct values</td><td class="num">5 of 40 lost</td></tr>
 <tr><td>3 &middot; Null-rate monitoring</td><td>Not tested</td><td class="num">comparison withdrawn</td></tr>
-<tr><td>4 &middot; Embedding provenance</td><td>Withdrawn on labels; <strong>separates poorly</strong> on the notes (9.5)</td><td class="num">at 0.5: 6 of 12 caught, 19 of 89 flagged</td></tr>
-<tr><td>A checker shown the conversation (9.5)</td><td><strong>A second model caught most; the writer approved its own generalisations</strong></td><td class="num">17 vs 14 of 19</td></tr>
-<tr><td>A checker shown only the output (9.5)</td><td>Missed invented entries and flagged half of the rest</td><td class="num">notes 9 of 12, 48 of 89; records 2 of 7, 11 of 49</td></tr>
+<tr><td>4 &middot; Embedding provenance</td><td>Withdrawn on labels; <strong>separates in part</strong> on the notes (9.5)</td><td class="num">at 0.3: 9 of 13 caught, 0 of 83 flagged; all 13 only with 46 flagged</td></tr>
+<tr><td>A checker shown the conversation (9.5)</td><td><strong>Both models caught nearly all; the choice of model made no difference</strong></td><td class="num">31 and 31 of 33</td></tr>
+<tr><td>A checker shown only the output (9.5)</td><td>Missed invented entries and flagged half of the rest</td><td class="num">notes 9 of 13, 55 of 83; records 15 of 20, 11 of 55</td></tr>
 </table>
 <h4>What to keep, what to drop</h4>
 <ul><li><span class='keep'>KEEP</span> — <strong>A rule that lets the note say &ldquo;Not discussed&rdquo;.</strong> It removed every case in three runs.</li><li><span class='keep'>KEEP</span> — <strong>A bounded window when checking a quote.</strong> Checked over the whole quote, the book&rsquo;s matching rule kept 11 of 23 correct extractions; checked over the first 80 characters, all 23.</li><li><span class='drop'>DROP</span> — <strong>The section map as written, for FDA labels.</strong> It allows a children&rsquo;s dose only from the paediatric-use section. FDA labels print children&rsquo;s doses under Dosage and Administration, so the map rejected 5 correct values.</li><li><span class='drop'>DROP</span> — <strong>&ldquo;Fabrications carry real quotes&rdquo; (14 of 14, then 2 of 2).</strong> Withdrawn. The quotes were real because the values were correct.</li><li><span class='drop'>DROP</span> — <strong>The embedding and null-rate results.</strong> The label result is withdrawn (the 12 values the check scored as fabrications are all correct), &ldquo;0% vs 100% nulls&rdquo; compared two schemas, and on the notes no cut-off separated invented entries from discussed ones (9.5).</li><li><span class='keep'>KEEP</span> — <strong>Show the checker the conversation, ask a narrow question, and prefer a model that did not write the entry.</strong> Shown the conversation, a second model caught 17 of the 19 invented entries across both sets and the writer 14; most flags on other entries were real errors (9.5).</li><li><span class='keep'>KEEP</span> — <strong>&ldquo;The writing model, asked to check, applies the same sense and approves&rdquo; &mdash; for entries born from its own habit.</strong> On the 14 zero-evidence inventions the writer, asked separately with the conversation shown, caught every one; on the five &ldquo;No allergies&rdquo; entries it had generalised from a seasonal denial, it approved all five, while a second model caught three (9.5). Independence is a measured preference, not a mechanism that always bites.</li></ul>
@@ -356,9 +356,10 @@ never touch.</p>
       allergies, family history, social history, physical examination, results,
       assessment and plan.</td></tr>
   <tr><td><strong>Model</strong></td><td>Claude Haiku 4.5, through the Claude Code
-      command-line tool (<code>claude -p</code>) on my Claude subscription: default
-      system prompt replaced, no tools or tool servers, no settings files. The tool still adds a
-      short environment block to each call.</td></tr>
+      command-line tool (<code>claude -p</code>) on my Claude subscription, at the
+      API&rsquo;s default setting (no thinking): default system prompt replaced, no tools
+      or tool servers, no settings files. The tool still adds a short environment block
+      to each call.</td></tr>
   <tr><td><strong>Prompts</strong></td><td>Two, identical except for one rule. The
       <strong>template prompt</strong> gives the headings only. The <strong>one-rule
       prompt</strong> adds: &ldquo;If the conversation does not cover a section, write
@@ -370,7 +371,7 @@ never touch.</p>
       drug allergies, an allergy exchange about medicines, &ldquo;allergic to&rdquo;
       or &ldquo;reaction to&rdquo;; for tobacco, smok-, tobacco, cigar or vape; for
       alcohol, alcohol, drink, beer or wine.</td></tr>
-  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $8.6
+  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $3.0
       that was not billed, because the calls ran on the subscription.</td></tr>
 </table>
 
@@ -383,18 +384,20 @@ each of the three runs:</p>
 <table>
   <tr><th style="width:40%">Topic never discussed</th><th class="num">Template prompt</th>
       <th class="num">One-rule prompt</th></tr>
-  <tr><td><strong>Drug allergies</strong> (58 notes)</td><td class="num"><strong>4, 3, 4</strong></td><td class="num"><strong>0, 0, 0</strong></td></tr>
-  <tr><td>Tobacco (53 notes)</td><td class="num">0, 1, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Drug allergies (58 notes)</td><td class="num">2, 1, 1</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Tobacco (53 notes)</td><td class="num">4, 1, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td>Alcohol (49 notes)</td><td class="num">3, 1, 0</td><td class="num">0, 0, 0</td></tr>
   <tr><td>Family history (41 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
-  <tr><td>Alcohol (49 notes)</td><td class="num">0, 0, 0</td><td class="num">0, 0, 0</td></tr>
+  <tr><td><strong>All four (201 per run)</strong></td><td class="num"><strong>9, 3, 1</strong></td><td class="num"><strong>0, 0, 0</strong></td></tr>
 </table>
 </div>
 
 <ul>
-  <li><strong>The failure took one form:</strong> the standard phrase &ldquo;No known
-  drug allergies&rdquo;, in 11 notes over the three runs, about half of them with
-  &ldquo;documented&rdquo; or &ldquo;noted&rdquo; after it. Once, a note said
-  &ldquo;Denies tobacco&rdquo;.</li>
+  <li><strong>The failure took the form of a standard negative:</strong> &ldquo;No
+  known drug allergies&rdquo; (4 entries over the three runs, three of them in D2N088,
+  whose doctor asked only about seasonal allergies) and a denial of tobacco or alcohol
+  (9 entries in five notes), such as &ldquo;Denies tobacco, alcohol, and illicit drug
+  use.&rdquo; The count moved a great deal between runs: 9, then 3, then 1.</li>
   <li><strong>The one rule removed every case in all three runs</strong>, and cost
   nothing that was measured. Both prompts kept the two real drug-allergy answers
   (D2N018, D2N022) in every run. Where a patient reported seasonal allergies, the
@@ -407,18 +410,20 @@ each of the three runs:</p>
 <table>
   <tr><th style="width:13%">Case</th><th style="width:33%">What the conversation says</th>
       <th>Template prompt, Allergies</th><th>One-rule prompt, Allergies</th></tr>
-  <tr><td>D2N099</td><td>Nothing about allergies anywhere in the conversation.</td>
-      <td>&ldquo;No known drug allergies.&rdquo;</td><td>&ldquo;Not discussed.&rdquo;</td></tr>
+  <tr><td>D2N008</td><td>Nothing about smoking or drinking anywhere in the
+      conversation.</td>
+      <td>Social history: &ldquo;Denies tobacco, alcohol, and illicit drug
+      use.&rdquo;</td><td>Social history: travel and diet only; no tobacco or alcohol
+      claim.</td></tr>
   <tr><td>D2N088</td><td>Doctor: &ldquo;do you have any history of any seasonal
       allergies at all?&rdquo; Patient: &ldquo;none whatsoever.&rdquo; Drug
       allergies never come up.</td>
-      <td>&ldquo;No known drug allergies. No seasonal allergies.&rdquo;</td>
-      <td>&ldquo;Not discussed.&rdquo; The review of systems carries &ldquo;No
-      seasonal allergies.&rdquo;</td></tr>
+      <td>&ldquo;No known drug allergies documented&rdquo;</td>
+      <td>&ldquo;Not discussed.&rdquo;</td></tr>
 </table>
 
-<p>In D2N088 the template note&rsquo;s second sentence is what the patient said. The
-first answers a question nobody asked.</p>
+<p>In D2N088 the template note answers a question nobody asked: the patient denied
+seasonal allergies, not allergies to medicines.</p>
 
 <h4>Three scorer corrections, made before these numbers were taken</h4>
 
@@ -440,10 +445,23 @@ scorer was wrong in three ways:</p>
   patient.</li>
 </ul>
 
+<p>A fourth correction came with the re-recording at the API&rsquo;s default setting
+(14 Nov 2026): without thinking, the model wrote silence in new words, &ldquo;Not
+explicitly stated in conversation&rdquo;, &ldquo;Not explicitly documented&rdquo;,
+&ldquo;Not specified in conversation&rdquo;, and once filed a seasonal allergy
+(&ldquo;allergies causing nasal congestion&rdquo;) under Allergies. Four such entries
+were scored as claims until the silence filter and the non-drug list were widened; the
+first recording scores identically under the widened rules.</p>
+
 <p>The rule now: &ldquo;No known drug allergies&rdquo;, with or without
 &ldquo;documented&rdquo; after it, and &ldquo;No drug allergies noted&rdquo; state
 the usual claim about the patient and count. Sentences that describe the
 conversation do not count.</p>
+
+<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+(kept in <code>fixtures_conversation_cli_defaults/</code>), gave 4, 3 and 4
+&ldquo;No known drug allergies&rdquo; and 0, 1 and 0 tobacco denials, 4 entries per run
+in all, and 0 with the rule.</p>
 
 <h4>Where this is weakest</h4>
 
@@ -452,7 +470,7 @@ conversation do not count.</p>
   word lists, which is why every counted case was read.</li>
   <li><strong>The conversations are role-played</strong> or constructed, not real
   patients.</li>
-  <li><strong>One model:</strong> Claude Haiku 4.5.</li>
+  <li><strong>One model:</strong> Claude Haiku 4.5, at the API&rsquo;s default setting.</li>
   <li><strong>The command-line tool adds a short environment block</strong> to every
   call, so the model did not see exactly the prompt given here.</li>
 </ul>
@@ -465,161 +483,162 @@ conversation do not count.</p>
 where the model invented nothing, so no check had ever been seen catching
 anything. Experiment 9.4 produced the missing material: notes with real invented
 entries, each read against its conversation. This experiment runs the checks on
-them. (<code>probe_checks.py</code>)</p>
+them. (<code>probe_checks.py</code>; notes and verdicts recorded at the API&rsquo;s
+default setting.)</p>
 
 <h4>The materials</h4>
 
 <p>The template-prompt notes from all three runs of Experiment 9.4 hold
-<strong>101 filled entries</strong> about the four optional topics: <strong>12
-invented</strong> (11 &ldquo;No known drug allergies&rdquo;, one &ldquo;Denies
-tobacco&rdquo;, from 8 conversations) and <strong>89 whose topic the conversation
+<strong>96 filled entries</strong> about the four optional topics: <strong>13
+invented</strong> (4 &ldquo;No known drug allergies&rdquo;, 5 tobacco denials and 4
+alcohol denials, from 6 conversations) and <strong>83 whose topic the conversation
 discussed</strong>. Five checks, cheapest first, one verdict per entry:</p>
 
 <table>
-  <tr><th style="width:30%">Check</th><th>What it is</th></tr>
-  <tr><td>Keyword topic search</td><td>Code: does the conversation mention the
-      topic at all? A plain keyword list per field, written as a team would write
-      it &mdash; deliberately not the scorer&rsquo;s own patterns</td></tr>
-  <tr><td>Embedding</td><td>Code: highest cosine similarity between the entry and
-      any sentence of the conversation (all-MiniLM-L6-v2), flag below a
-      cut-off &mdash; the chapter&rsquo;s fix 4</td></tr>
-  <tr><td>A second model, shown the conversation</td><td>Claude Sonnet 5:
-      &ldquo;does the conversation support the entry?&rdquo;</td></tr>
-  <tr><td>The writing model, shown the conversation</td><td>Claude Haiku 4.5
-      &mdash; the model that wrote the notes &mdash; asked the same question in a
-      separate call</td></tr>
-  <tr><td>A second model, shown only the note</td><td>Claude Sonnet 5, no
-      conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
+<tr><th style="width:30%">Check</th><th>What it is</th></tr>
+<tr><td>Keyword topic search</td><td>Code: does the conversation mention the
+topic at all? A plain keyword list per field, written as a team would write
+it &mdash; deliberately not the scorer&rsquo;s own patterns</td></tr>
+<tr><td>Embedding</td><td>Code: highest cosine similarity between the entry and
+any sentence of the conversation (all-MiniLM-L6-v2), flag below a
+cut-off &mdash; the chapter&rsquo;s fix 6, written directly</td></tr>
+<tr><td>A second model, shown the conversation</td><td>Claude Sonnet 5:
+&ldquo;does the conversation support the entry?&rdquo;</td></tr>
+<tr><td>The writing model, shown the conversation</td><td>Claude Haiku 4.5
+&mdash; the model that wrote the notes &mdash; asked the same question in a
+separate call</td></tr>
+<tr><td>A second model, shown only the note</td><td>Claude Sonnet 5, no
+conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
 </table>
 
-<p>The model checks ran through <code>claude -p</code> on my Claude subscription:
-303 verdicts, a notional $4.0, about 6.5 seconds per call.</p>
+<p>The model checks ran through <code>claude -p</code> on my Claude subscription,
+each model at its API default (Haiku 4.5 without thinking, Sonnet 5 at effort high):
+288 verdicts, a notional $3.4, about 3.7 seconds per call.</p>
 
 <h4>The numbers</h4>
 
 <table>
-  <tr><th style="width:34%">Check</th><th class="num">Invented caught (of 12)</th>
-      <th class="num">Discussed-topic entries flagged (of 89)</th></tr>
-  <tr><td>Keyword topic search</td><td class="num">6</td><td class="num">3</td></tr>
-  <tr><td>Embedding, cut-off 0.5</td><td class="num">6</td><td class="num">19</td></tr>
-  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">6</td></tr>
-  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>12</strong></td><td class="num">7</td></tr>
-  <tr><td>Sonnet 5, shown only the note</td><td class="num">9</td><td class="num">48</td></tr>
+<tr><th style="width:34%">Check</th><th class="num">Invented caught (of 13)</th>
+<th class="num">Discussed-topic entries flagged (of 83)</th></tr>
+<tr><td>Keyword topic search</td><td class="num">9</td><td class="num">3</td></tr>
+<tr><td>Embedding, cut-off 0.3</td><td class="num">9</td><td class="num">0</td></tr>
+<tr><td>Embedding, cut-off 0.5</td><td class="num">10</td><td class="num">18</td></tr>
+<tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>13</strong></td><td class="num">11</td></tr>
+<tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>13</strong></td><td class="num">1</td></tr>
+<tr><td>Sonnet 5, shown only the note</td><td class="num">9</td><td class="num">55</td></tr>
 </table>
 
-<p>The embedding sweep, caught / flagged: 0.3 gives 2/1, 0.4 gives 4/4, 0.5 gives
-6/19, 0.6 gives 8/51, 0.7 gives 10/72. No cut-off separates the groups.</p>
+<p>The embedding sweep, caught / flagged: 0.3 gives 9/0, 0.4 gives 9/2, 0.5 gives
+10/18, 0.6 gives 13/46, 0.7 gives 13/66. At the strict end it catches the nine
+denials and nothing else; the four it misses at every cut below 0.6 are the four
+&ldquo;No known drug allergies&rdquo;, worded close to the conversations&rsquo; talk
+of seasonal allergies. No cut-off catches all thirteen without flagging more than
+half of the discussed entries.</p>
 
 <h4>The flagged discussed-topic entries, read one by one</h4>
 
-<p>&ldquo;Discussed&rdquo; does not mean &ldquo;correct&rdquo;. Nine entries were
-flagged by a model that saw the conversation, and seven are real errors on topics
-the conversation did discuss:</p>
+<p>&ldquo;Discussed&rdquo; does not mean &ldquo;correct&rdquo;. Of Sonnet&rsquo;s
+eleven flags, seven are real errors on topics the conversation did discuss:</p>
 
 <ul>
-  <li>A renal family history with relatives mixed up in two of its three runs; one
-  run added &ldquo;patient&rsquo;s father has undergone renal
-  transplantation&rdquo;, which nobody said &mdash; the conversation&rsquo;s
-  transplant belongs to the grandfather, and the aunt is &ldquo;my dad&rsquo;s
-  sister, so her great aunt&rdquo;.</li>
-  <li>&ldquo;Denies tobacco and drug use&rdquo; when the doctor asked about
-  tobacco, drugs and alcohol together and the patient answered only &ldquo;i drink
-  a little wine on occasion&rdquo;.</li>
-  <li>&ldquo;Patient is a smoker&rdquo; for a patient who said &ldquo;i stopped
-  smoking probably about seven years ago&rdquo; &mdash; the same entry also carries
-  the correct quit-history, contradicting itself.</li>
-  <li>A question about the patient&rsquo;s own history of lung infections,
-  answered &ldquo;no&rdquo;, recorded as a <em>family</em>-history denial, in two
-  runs.</li>
-  <li>Increased caffeine the patient never mentioned &mdash; the doctor&rsquo;s
-  advice to cut caffeine turned into a report of consuming it.</li>
+<li>A renal family history with the relatives mixed up in all three runs, each adding
+&ldquo;died at age 47&rdquo;, which nobody said &mdash; the conversation&rsquo;s
+transplant belongs to the grandfather.</li>
+<li>&ldquo;Denies tobacco use&rdquo; when the doctor asked about tobacco, drugs and
+alcohol together and the patient answered only &ldquo;i drink a little wine on
+occasion&rdquo;.</li>
+<li>A sister who had &ldquo;been sick&rdquo; recorded as family history.</li>
+<li>Alcohol twice: &ldquo;Denies specific alcohol and caffeine use&rdquo; for a
+patient who said &ldquo;i&rsquo;ve been drinking more&rdquo;, and &ldquo;counseled to
+avoid alcohol&rdquo; where the doctor said &ldquo;decrease&rdquo;.</li>
 </ul>
 
-<p>The other two flags: one borderline inference (a sister &ldquo;currently ill
-with upper respiratory infection&rdquo; when she had &ldquo;been sick&rdquo; and,
-per the doctor, probably shared the patient&rsquo;s virus) and one trivial
-(&ldquo;Friday and Saturday evenings&rdquo; for &ldquo;on the weekends&rdquo;).
-So Sonnet&rsquo;s six flags are five real errors plus the borderline one, and
-Haiku&rsquo;s seven are six real plus the trivial one. The 89 were not all read:
-seven real errors is a floor.</p>
+<p>The other four: two false alarms (a smoking history and a cigarette count the
+conversation states) and two entries that add one unstated detail (&ldquo;lives with
+family who supported smoking cessation&rdquo;, where the patient said &ldquo;my kids
+were on me all the time&rdquo;). Haiku&rsquo;s one flag is a real error, the first of
+the renal family histories. The 83 were not all read: seven real errors is a
+floor.</p>
 
 <h4>Why the cheap checks miss</h4>
 
 <p>The keyword search catches an invented entry only when the topic word never
-appears. Six of the eleven &ldquo;No known drug allergies&rdquo; came from
-conversations that mention allergies in another sense &mdash; seasonal allergies,
-a cat. Its three flags are one conversation, in all three runs, that describes
-drug reactions without the word: a steroid avoided &ldquo;because of the reaction
-to dexamethasone, which causes his heart to race&rdquo;, and methylprednisolone
-that &ldquo;itched me like crazy&rdquo;. The entry is correct; the keyword list
-cannot see it.</p>
+appears: it caught the nine denials and missed the four &ldquo;No known drug
+allergies&rdquo;, whose conversations mention allergies in another sense. Its three
+flags are one conversation, in all three runs, that describes drug reactions
+without the word: a steroid avoided &ldquo;because of the reaction to dexamethasone,
+which causes his heart to race&rdquo;, and methylprednisolone that &ldquo;itched me
+like crazy&rdquo;. The entry is correct; the keyword list cannot see it.</p>
 
-<p>The blind check flags what reads as unusually precise &mdash; 28 of its 48
-flags are family histories &mdash; and passed the plainest invented line,
-&ldquo;No known drug allergies. No seasonal allergies.&rdquo;, in all three runs
-of its conversation. A fabricated line reads perfectly well on its own.</p>
+<p>The blind check flagged two in three discussed entries and passed four plain
+denials, such as &ldquo;Denies tobacco and alcohol use during this visit&rdquo;. A
+fabricated line reads perfectly well on its own.</p>
 
 <h4>The extension: the same checks on Experiment 9.6&rsquo;s record values</h4>
 
-<p>The note-set result needed wider evidence before the book could lean on it, so
-the three model checks were rerun on Experiment 9.6&rsquo;s values: its 7 invented
-values and its 49 run-1 values on discussed topics (<code>--source schema</code>;
-168 verdicts, a notional $1.8).</p>
+<p>The three model checks were rerun on Experiment 9.6&rsquo;s values: its 20
+invented values and its 55 run-1 values on discussed topics (<code>--source
+schema</code>; 225 verdicts, a notional $2.1).</p>
 
 <table style="table-layout:fixed;width:100%">
-  <tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 7)</th>
-      <th>Discussed-topic values flagged (of 49)</th></tr>
-  <tr><td>Keyword topic search</td><td class="num">2</td><td class="num">2</td></tr>
-  <tr><td>Embedding, cut-off 0.5</td><td class="num">3</td><td class="num">9</td></tr>
-  <tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>5</strong></td><td class="num">1</td></tr>
-  <tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>2</strong></td><td class="num">3</td></tr>
-  <tr><td>Sonnet 5, shown only the record</td><td class="num">2</td><td class="num">11</td></tr>
+<tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 20)</th>
+<th>Discussed-topic values flagged (of 55)</th></tr>
+<tr><td>Keyword topic search</td><td class="num">17</td><td class="num">2</td></tr>
+<tr><td>Embedding, cut-off 0.5</td><td class="num">18</td><td class="num">10</td></tr>
+<tr><td>Sonnet 5, shown the conversation</td><td class="num"><strong>18</strong></td><td class="num">5</td></tr>
+<tr><td>Haiku 4.5 &mdash; the writer &mdash; shown the conversation</td><td class="num"><strong>18</strong></td><td class="num">2</td></tr>
+<tr><td>Sonnet 5, shown only the record</td><td class="num">15</td><td class="num">11</td></tr>
 </table>
 
-<p><strong>The split reverses half of the note-set conclusion.</strong> The two
-zero-evidence inventions were caught by both models, as all twelve note-set
-inventions were. The five misses are one judgement call: &ldquo;No allergies&rdquo;,
-written from the patient&rsquo;s denial of <em>seasonal</em> allergies, with that
-denial attached as the supporting quote. <strong>The writer approved its own
-generalisation five of five.</strong> Sonnet caught three of five &mdash; and
-returned different verdicts on identical entry text from the same conversation.
-The note-set entries said &ldquo;No known <em>drug</em> allergies&rdquo;, a specific
-claim a seasonal denial plainly cannot support, which is why both models caught
-all of those. Combined: 19 invented entries, a second model 17, the writer 14,
-every zero-evidence entry caught by both. The extension&rsquo;s flags on
-discussed-topic values are again real errors (the D2N185 relative mix-ups; a
-patient&rsquo;s own answer filed as family history).</p>
+<p><strong>The checking model made no difference.</strong> Both models caught every
+invented value with no evidence behind it: the sixteen negatives that quote a sentence
+about the conversation, and &ldquo;No known allergies&rdquo; written from &ldquo;no
+additional past medical history&rdquo;. The misses are D2N088&rsquo;s records, written
+from the patient&rsquo;s denial of <em>seasonal</em> allergies: Sonnet passed two of the
+three and the writer passed two, not the same two. Combined over the 33 invented
+entries, notes and records: 31 for each model. The extension&rsquo;s flags on
+discussed-topic values are again mostly real errors (the renal relatives mixed up, the
+sick sister filed as family history, a family-history denial nobody gave; one, a
+patient said to avoid second-hand smoke, not checked).</p>
+
+<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_checks_cli_defaults/</code>, 12 and 7 invented entries), had the writer
+approving five of its own eight generalisations, all records, while Sonnet caught
+seventeen of nineteen; that difference did not recur at the API default.</p>
 
 <h4>The packaged validator itself</h4>
 
 <p>Prachi then asked for the product, not only the from-scratch version
 (<code>probe_guardrails.py</code>; guardrails-ai 0.6.8, validator installed from
 its GitHub source because the hub&rsquo;s API host does not resolve here; no
-model calls). As shipped &mdash; threshold a cosine <em>distance</em> of 0.8,
-five-sentence source windows, any failing output sentence fails the value &mdash;
-it caught 2 of the 12 invented note entries and flagged 12 of the 89 on
-discussed topics; every setting in its range that caught all 12 flagged 79&ndash;88
-of the 89. At the same nominal cut it flags twice what the from-scratch check
-flagged (40 vs 19 of 89 at 0.5): the any-sentence rule punishes multi-sentence
-entries, and punkt chunking struggles on sparse-punctuation transcripts. Its
-read flags are paraphrase distance, not missing support. It also crashes when a
-source chunks to a single window (a squeeze makes the embedding matrix 1-D),
-needs an nltk resource its setup does not fetch, and attempts to send telemetry.
-The product confirms the from-scratch conclusion.</p>
+model calls; log in <code>guardrails_sweep_log.txt</code>). As shipped &mdash;
+threshold a cosine <em>distance</em> of 0.8, five-sentence source windows, any failing
+output sentence fails the value &mdash; it caught 7 of the 13 invented note entries and
+flagged 15 of the 83 on discussed topics. Every one of those 15 comes from a transcript
+the sentence splitter cannot divide (19 of the 60 have no full stops to split at): the
+whole conversation becomes one window, and an entry close to one line, such as
+&ldquo;Alcohol use: one to two beers on weekends&rdquo; (distance 0.19 to the
+patient&rsquo;s answer), sits far from the average of everything said (0.96). Every
+threshold was tried: the loosest that caught all 13 still flagged 60 of the 83 with
+one-sentence windows, 69 with five-sentence windows. AUC 0.71 on the notes, 0.77 on the
+records: some signal, no usable setting. It also crashes when a source chunks to a
+single window (a squeeze makes the embedding matrix 1-D), needs an nltk resource its
+setup does not fetch, and attempts to send telemetry. The first recording&rsquo;s sweep
+is kept in <code>guardrails_sweep_log_cli_defaults.txt</code> (2 of 12 caught as
+shipped; at least 72 of 89 flagged at the loosest catch-all).</p>
 
 <h4>Where this is weakest</h4>
 
 <ul>
-  <li><strong>19 invented entries, 9 conversations, two surface families.</strong>
-  Eleven of the nineteen are one phrase, and the five habit-born entries are one
-  judgement call from one conversation. One verdict per checker per entry, no
-  re-sampling &mdash; and on that judgement call the second model&rsquo;s verdict
-  moved between identical entries.</li>
-  <li><strong>The 89 discussed-topic entries were not all read</strong>, so the
-  false-alarm columns count flags, not confirmed false alarms &mdash; at least
-  seven flags are real errors.</li>
-  <li><strong>The checker prompts are one wording each.</strong> A different
-  question could move both columns.</li>
+<li><strong>33 invented entries from 14 conversations, two surface families.</strong>
+Twenty-five are a denial or a negative about tobacco, alcohol, family history or
+allergies; the seven stretched claims come from two conversations. One verdict per
+checker per entry, no re-sampling.</li>
+<li><strong>The 83 discussed-topic entries were not all read</strong>, so the
+false-alarm columns count flags, not confirmed false alarms &mdash; at least seven
+flags are real errors.</li>
+<li><strong>The checker prompts are one wording each.</strong> A different
+question could move both columns.</li>
 </ul>
 
 <h3>Experiment 9.6 — The schema fix and the quote check, where the model invents</h3>
@@ -627,35 +646,47 @@ The product confirms the from-scratch conclusion.</p>
 <p>The chapter&rsquo;s first two fixes had never met an invented value. This
 experiment asks for the four optional topics as a JSON record from each of the 60
 conversations &mdash; two conditions, identical but for the field rule, three runs
-each, 360 replies through the subscription CLI (<code>probe_schema.py</code>; the
-recording stalled at a session limit at 182 replies and was resumed; every counted
-case below was then read by hand).</p>
+each, 360 replies through the subscription CLI at the API&rsquo;s default setting, no
+thinking (<code>probe_schema.py</code>; every counted case below was read by hand).</p>
 
 <table style="table-layout:fixed;width:100%">
   <tr><th style="width:52%">Of 603 fields per condition whose topic the conversation never discussed</th>
       <th class="num">required</th><th class="num">optional (fix 1)</th></tr>
-  <tr><td>Invented values</td><td class="num">5</td><td class="num">2</td></tr>
-  <tr><td>Silence fillers stored as strings</td><td class="num"><strong>577</strong></td><td class="num">0</td></tr>
-  <tr><td>Null</td><td class="num">0</td><td class="num">585</td></tr>
-  <tr><td>Replies breaking the condition&rsquo;s format rule</td><td class="num">0 of 180</td><td class="num">0 of 180</td></tr>
+  <tr><td>Invented values</td><td class="num">19</td><td class="num">1</td></tr>
+  <tr><td>Silence fillers stored as strings</td><td class="num"><strong>565</strong></td><td class="num">0</td></tr>
+  <tr><td>Null</td><td class="num">0</td><td class="num">583</td></tr>
+  <tr><td>Replies breaking the condition&rsquo;s format rule</td><td class="num">0 of 180</td><td class="num">1 of 180</td></tr>
 </table>
 
 <p><strong>Fix 1 works, and the measured harm of a required field is fillers, not
 inventions.</strong> Forced to fill, the model stored &ldquo;Not discussed&rdquo;-style
-fillers in 577 of 603 no-source fields &mdash; the exact failure the book predicts
-&mdash; and invented in 5. Allowed null, no fillers and 2 inventions.</p>
+fillers in 565 of 603 no-source fields &mdash; the exact failure the book predicts
+&mdash; and invented in 19. Allowed null, no fillers and 1 invention.</p>
 
-<p><strong>The seven invented values, read:</strong> five are one conversation,
-D2N088, where a denial of <em>seasonal</em> allergies (&ldquo;none whatsoever&rdquo;)
-became &ldquo;No allergies&rdquo; or &ldquo;No known allergies&rdquo;; one rests on
-&ldquo;i&rsquo;m not taking any medications&rdquo;; one came with no quote.
-<strong>The quote check caught only the quote-less one.</strong> The other six carry
-real lines of the conversation that do not support the value &mdash; the
-fabrication-side version of Experiment 9.2&rsquo;s lesson. Under &ldquo;required&rdquo;
-the check did null 546 of 611 fillers (their quotes are empty or absent), and its
-cost was 7 of 97 and 3 of 92 discussed-topic values rejected; the read sample is a correct
-steroid-reactions value whose quote stitched two real passages and scored 82
-against the 85 cut-off.</p>
+<p><strong>The twenty invented values, read:</strong> sixteen are negatives such as
+&ldquo;No tobacco use reported&rdquo; or &ldquo;No alcohol use reported&rdquo; whose own
+quote said only that the topic never came up (&ldquo;No tobacco use mentioned in the
+conversation&rdquo;); three are D2N088, where a denial of <em>seasonal</em> allergies
+(&ldquo;none whatsoever&rdquo;) became &ldquo;No allergies&rdquo;, &ldquo;No known drug
+allergies&rdquo; or &ldquo;None&rdquo;; one, &ldquo;No known allergies mentioned&rdquo;,
+rests on &ldquo;no additional past medical history&rdquo;. <strong>The quote check caught
+the sixteen</strong>: a sentence about the conversation appears nowhere in it. The other
+four carry real lines that do not support the value &mdash; the fabrication-side
+version of Experiment 9.2&rsquo;s lesson.</p>
+
+<p><strong>Its cost, read one by one.</strong> Under &ldquo;required&rdquo; the check
+nulled 584 of 595 fillers. On values that state something it rejected 18 of 106
+(required) and 10 of 94 (optional): 19 correct values wrongly rejected, most a doctor&rsquo;s
+question and the patient&rsquo;s answer joined into one quote with the speaker label
+dropped (D2N018&rsquo;s correct &ldquo;No known drug allergies&rdquo; in four of six
+records), and D2N022&rsquo;s steroid-reactions value once, its quote joining three places
+and scoring 84 against the 85 cut-off; 7 values the conversation does not support, such
+as &ldquo;No tobacco use&rdquo; for a patient who mentioned only wine; 2 a sick sister
+filed as family history. Unparsable JSON replies: 4 (required) and 5 (optional).</p>
+
+<p>The first recording, with the command-line tool&rsquo;s default thinking on
+(<code>fixtures_schema_cli_defaults/</code>): 577 fillers, 5 and 2 inventions, the quote
+check catching 1 of 7, and 7 of 97 and 3 of 92 values rejected.</p>
 
 <h3>Experiment 9.7 — A list of quotes, one per place</h3>
 
@@ -664,27 +695,33 @@ model joined both into one quote and the check rejected it. Prachi asked for the
 proposed repair to be measured: <code>source_quotes</code> as a list, one item
 per place, every item checked on its own, a value kept only when every item is
 found (<code>probe_schema_list.py</code>; same sixty conversations, fields
-optional, three runs, 180 records).</p>
+optional, three runs, 180 records, at the API&rsquo;s default setting).</p>
 
 <table style="table-layout:fixed;width:100%">
-  <tr><th style="width:56%">Of the values on discussed topics</th>
+  <tr><th style="width:56%">Of the values that state something on discussed topics</th>
       <th class="num">single quote (9.6)</th><th class="num">quote list (9.7)</th></tr>
-  <tr><td>Wrongly rejected by the quote gate</td><td class="num">3 of 92</td><td class="num"><strong>0 of 75</strong></td></tr>
-  <tr><td>Invented values, of 603 no-source fields</td><td class="num">2</td><td class="num">1</td></tr>
-  <tr><td>Values stated at all</td><td class="num">92</td><td class="num">75</td></tr>
+  <tr><td>Rejected by the quote gate</td><td class="num">7 of 75</td><td class="num"><strong>1 of 80</strong></td></tr>
+  <tr><td>Invented values, of 603 no-source fields</td><td class="num">1</td><td class="num">0</td></tr>
+  <tr><td>Values stated at all</td><td class="num">75</td><td class="num">80</td></tr>
 </table>
 
 <p><strong>The target case is fixed, and read.</strong> D2N022&rsquo;s
-steroid-reactions value returns three to four quotes in every run, each one
-continuous passage, each found; a third of non-null values used two or more
-quotes, legitimately (a question and its answer; two separate mentions of a
-father&rsquo;s kidney stones). The costs, also read: the model grew more
-conservative (75 stated values against 92, nulls up accordingly), and existence
-is still not support &mdash; the one invented value passed on a found quote
-(the seasonal-denial case again), and one correct value arrived backed by
-&ldquo;yeah i think so&rdquo;, an answer quoted without its question, in a
-conversation whose speaker labels are scrambled. <strong>Adopted as the
-chapter&rsquo;s fix 3, with the two costs printed beside it.</strong></p>
+steroid-reactions value returns three or more quotes in every run, each one
+continuous passage, each found; 47 of 102 non-null values used two or more quotes.
+The one rejection is the habit the instruction forbids: D2N075&rsquo;s question and
+answer (&ldquo;are you aware of any family history of gi problems? i do n&rsquo;t think
+so.&rdquo;) put into one item. Of the seven single-quote rejections, six were correct
+values. Existence is still not support: one correct value arrived backed by &ldquo;yeah
+i think so&rdquo;, an answer quoted without its question, in a conversation whose
+speaker labels are scrambled, in every run. <strong>Adopted as the chapter&rsquo;s fix 3,
+with that cost printed beside it.</strong></p>
+
+<p>Counting note. The first write-up compared 75 values (states, discussed topics only)
+with 92 (which also counted other-allergy values) and reported the model &ldquo;more
+conservative&rdquo; with the list. Counted with the same filter, the first recording
+gives 75 against 76, and this one 80 against 75: the list did not make the model hold
+back. The first recording (thinking on): 0 of 75 rejected against 3 of 76, 1 invention
+(passed), 32 of 93 values with two or more quotes.</p>
 
 <h3>Chapter 9 verdict</h3>
 
@@ -694,35 +731,38 @@ chapter&rsquo;s fix 3, with the two costs printed beside it.</strong></p>
       <td>0 fabrications in 33; the one filled field is a correct reading of the
       supplied text</td></tr>
   <tr><td>The failure, conversations</td><td><strong>Reproduces</strong></td>
-      <td>&ldquo;No known drug allergies&rdquo; with no allergy exchange: 4, 3 and 4
-      of 58 notes; &ldquo;Denies tobacco&rdquo; once in 53</td></tr>
+      <td>Entries on a topic the conversation never raised: 9, 3 and 1 of 201
+      (&ldquo;No known drug allergies&rdquo; 2, 1, 1 of 58; tobacco denials 4, 1, 0 of
+      53; alcohol denials 3, 1, 0 of 49)</td></tr>
   <tr><td>&ldquo;Not discussed&rdquo; rule in the prompt</td><td><strong>Works</strong></td>
       <td>0 of 58 in all three runs, both real allergy answers kept; on labels
       the plain prompt already declined</td></tr>
   <tr><td>1 · Optional, no defaults</td><td><strong>Works</strong></td>
-      <td>Required fields: 577 fillers and 5 inventions in 603 no-source fields;
-      optional: none and 2 (9.6)</td></tr>
+      <td>Required fields: 565 fillers and 19 inventions in 603 no-source fields;
+      optional: none and 1 (9.6)</td></tr>
   <tr><td>2c · Quote list, one per place</td><td><strong>Works</strong></td>
-      <td>Wrong rejections 0 of 75, from 3 of 92; stated values fell to 75;
+      <td>Rejections 1 of 80, from 7 of 75 with one quote (six of them correct values);
       existence still not support (9.7)</td></tr>
-  <tr><td>2 · Quote verification</td><td>Catches only quote-less inventions</td>
-      <td>1 of 7 invented values caught; the six passed carry real quotes about
-      something else (9.6). Whole quote kept 11 of 23 correct extractions; first
+  <tr><td>2 · Quote verification</td><td>Catches inventions with no real quote</td>
+      <td>16 of 20 invented values caught, each quoting a sentence about the conversation;
+      the four passed carry real quotes about something else (9.6). Wrongly rejects about
+      one correct value in ten, most a question and answer joined into one quote. Whole quote kept 11 of 23 correct extractions; first
       80 characters, all 23</td></tr>
   <tr><td>2b · Section check</td><td>Fabrication side forced</td>
       <td>0 of 6 is arithmetic; the map rejected 5 correct children&rsquo;s
       doses</td></tr>
   <tr><td>3 · Null-rate monitoring</td><td>Not tested</td>
       <td>&ldquo;0% vs 100%&rdquo; compared two schemas</td></tr>
-  <tr><td>4 · Embedding provenance</td><td><strong>Separates poorly</strong></td>
+  <tr><td>4 · Embedding provenance</td><td><strong>Separates in part</strong></td>
       <td>Label result withdrawn (all 12 scored values correct); on the notes, at
-      0.5, 6 of 12 invented caught for 19 of 89 flagged (9.5)</td></tr>
-  <tr><td>A checker shown the conversation</td><td><strong>Works, best when independent</strong></td>
-      <td>Across 19 invented entries, a second model caught 17 and the writer 14;
-      the writer approved all five entries born from its own generalisation;
-      most further flags were real errors (9.5)</td></tr>
+      0.3, 9 of 13 invented caught for 0 of 83 flagged, the four misses all &ldquo;No
+      known drug allergies&rdquo;; all 13 only at 0.6, with 46 flagged (9.5)</td></tr>
+  <tr><td>A checker shown the conversation</td><td><strong>Works; the checking model made no difference</strong></td>
+      <td>Across 33 invented entries, a second model and the writer each caught 31,
+      each passing two different seasonal-denial records; most further flags were
+      real errors (9.5)</td></tr>
   <tr><td>A checker shown only the note</td><td><strong>Does not work</strong></td>
-      <td>9 of 12, and 48 of 89 discussed-topic entries flagged (9.5)</td></tr>
+      <td>9 of 13, and 55 of 83 discussed-topic entries flagged (9.5)</td></tr>
 </table>
 
 <p><strong>On drug labels the failure did not occur, so no fix could be tested

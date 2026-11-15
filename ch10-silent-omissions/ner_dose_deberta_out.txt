@@ -1,7 +1,9 @@
+/Users/drprachi/claude/projects/ebook-what-breaks-production-ai/code/ch10-silent-omissions/.venv-med/lib/python3.9/site-packages/urllib3/__init__.py:35: NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL 2.8.3'. See: https://github.com/urllib3/urllib3/issues/3020
+  warnings.warn(
 Device set to use mps:0
 Asking to truncate to max_length but no maximum length is provided and the model has no predefined maximum length. Default to no truncation.
 Python 3.9.6 (arm64, CPU) · blaze999/Medical-NER · transformers 4.57.6 · torch 2.8.0
-load 80.0s · per document 0.6s, 0.6s, 0.2s, 0.5s, 0.6s, 0.3s
+load 3.2s · per document 0.2s, 0.5s, 0.2s, 0.4s, 0.5s, 0.3s
 dose labels counted: DOSAGE · variant: DOSAGE + MASS
 
 Where the pattern's dose mentions land, by entity label
@@ -55,11 +57,11 @@ Each recorded extraction: distinct figures in the list, against the model count
 drug           pattern  model  api  ap1  ap2  ap3  di1  di2  di3  pr1  pr2  pr3
 -------------  -------  -----  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---
 Lisinopril     7        7      7    7    7    7    7    7    7    7    7    7  
-Levothyroxine  11       3      14   14   14   14   14   14   14   14   14   14 
-Amoxicillin    10       6      8*   10   10   10   2!*  10   10   2!*  2!*  10 
-Sertraline Hy  7        7      7    6!~  6!~  6!~  7    6!~  7    6!~  6!~  7  
-Warfarin Sodi  6        2      8    8    8    8    8    8    8    8    8    8  
-Gabapentin     13       13     13   24   24   24   24   24   24   24   24   24 
+Levothyroxine  11       3      14   14   14   14   14   14   14   14   14   12*
+Amoxicillin    10       6      8*   10   10   10   10   10   10   6*   6*   4!*
+Sertraline Hy  7        7      7    7    7    7    6!~  6!~  7    7    7    6!~
+Warfarin Sodi  6        2      8    8    8    8    9    9    9    8    8    7~ 
+Gabapentin     13       13     13   21   21   21   23*  23*  23*  21   18*  21 
   ap = as-printed, di = distinct, pr = protocol (fixtures_count/); api = fixed.py's run (fixtures/)
   ! flagged by the model rule   * really short (read)   ~ short only by another drug's dose
 
@@ -67,7 +69,6 @@ What each check flags, of 60 document-runs
 ------------------------------------------
 check                       really short, flagged  other drug only, flagged  complete, flagged (false)
 --------------------------  ---------------------  ------------------------  -------------------------
-model rule                  3/4                    6/6                       0/50                     
-model rule, variant labels  3/4                    6/6                       0/50                     
-pattern count, same rule    4/4                    6/6                       0/50                     
-exit 0
+model rule                  1/9                    3/4                       0/47                     
+model rule, variant labels  1/9                    3/4                       0/47                     
+pattern count, same rule    4/9                    3/4                       0/47                     

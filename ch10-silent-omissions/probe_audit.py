@@ -52,8 +52,9 @@ from probe_count import MODEL, parse  # noqa: E402
 
 AUDITOR = MODEL   # overridden by --auditor for Experiment 10.12
 
-FIXTURES = HERE / "fixtures_audit"
-SOURCE_CLI = HERE / "fixtures_count"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_audit" + SUFFIX)
+SOURCE_CLI = HERE / ("fixtures_count" + SUFFIX)
 SOURCE_API = HERE / "fixtures"
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 CONDITIONS = ("as-printed", "distinct", "protocol", "api-protocol")
@@ -87,6 +88,7 @@ def call_cli(system: str, prompt: str, budget_used: int) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", AUDITOR, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(AUDITOR, env, cmd)
     proc = None
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(MAX_ATTEMPTS):

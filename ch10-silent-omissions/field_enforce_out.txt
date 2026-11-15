@@ -1,9 +1,86 @@
 
-as-printed s2 D2N049 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+as-printed s1 D2N089 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string', '"extracted"[3] must be a string']
   after one correction call: conforms
-  content before: extracted=["{'medication': 'Metformin', 'dose': '500 mg'}", "{'medication': 'Norvasc', 'dose': '2.5 mg'}", "{'medication': 'Oxycodone', 'dose': '5 mg'}"]
-  content after:  extracted=['Metformin 500 mg', 'Norvasc 2.5 mg', 'Oxycodone 5 mg']
-  field before: ['2300 milligrams', '300', '7.3', 'Ibuprofen', 'Tylenol', 'blood pressure readings (130-150 systolic, 70-80 diastolic)']
-  field after:  ['2300 milligrams', '300', '7.3', 'Ibuprofen', 'Tylenol', 'blood pressure readings (130-150 systolic, 70-80 diastolic)']
-as-printed: {'replies': 180, 'conform as generated': 179, 'corrected by enforcement': 1}
-narrowed: {'replies': 180, 'conform as generated': 180}
+  content before: extracted=["{'medication': 'methotrexate', 'dose': '2.5 mg once weekly'}", "{'medication': 'methotrexate', 'dose': 'once a week'}", "{'medication': 'protonix', 'dose': '40 mg a day'}", "{'medication': 'protonix', 'dose': 'not specified in initial mention'}"]
+  content after:  extracted=['methotrexate 2.5 mg once weekly', 'methotrexate once a week', 'protonix 40 mg a day']
+  field before: ['2/6 systolic ejection murmur']
+  field after:  ['2/6 systolic ejection murmur']
+
+as-printed s1 D2N093 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'lasix', 'dose': '40 milligrams a day'}", "{'medication': 'omeprazole', 'dose': '20 milligrams a day'}"]
+  content after:  extracted=['lasix, 40 milligrams a day', 'omeprazole, 20 milligrams a day']
+  field before: ['insulin pump']
+  field after:  ['insulin pump']
+
+as-printed s1 D2N018 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose': 'every six hours', 'route': 'oral (implied)', 'frequency': 'every six hours'}", "{'medication': 'lortab', 'dose': '5 milligram', 'route': 'oral (implied)', 'frequency': 'every 6 hours as needed', 'quantity': 'one to two tablets', 'total_prescribed': '20 tablets'}", "{'medication': 'pepcid', 'dose': 'not specified', 'route': 'oral (implied)', 'frequency': 'not specified'}"]
+  content after:  extracted=['ibuprofen every six hours', 'lortab 5 milligram one to two tablets every 6 hours as needed for pain, quantity 20 tablets']
+  field before: ['lortab 500']
+  field after:  ['lortab 500', 'pepcid']
+
+as-printed s1 D2N072 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose': 'not specified by patient', 'context': 'Patient mentioned taking ibuprofen but did not specify dose'}", "{'medication': 'miralax', 'dose': 'not specified', 'context': 'Patient takes miralax for constipation but no dose mentioned'}", "{'medication': 'motrin', 'dose': '600 milligrams', 'frequency': 'every six hours', 'duration': 'about a week'}"]
+  content after:  extracted=['600 milligrams motrin every six hours']
+  field before: ['ibuprofen dose amount', 'miralax dose amount']
+  field after:  ['ibuprofen dose', 'miralax dose']
+
+as-printed s2 D2N088 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string', '"extracted"[3] must be a string', '"extracted"[4] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose': 'not specified'}", "{'medication': 'lisinopril', 'dose': '20 milligrams a day'}", "{'medication': 'metformin', 'dose': '1000 milligrams twice daily'}", "{'medication': 'robitussin', 'dose': 'not specified'}", "{'medication': 'tylenol', 'dose': 'not specified'}"]
+  content after:  extracted=['ibuprofen (dose not specified)', 'lisinopril 20 milligrams a day', 'metformin 1000 milligrams twice daily', 'robitussin (dose not specified)', 'tylenol (dose not specified)']
+  field before: ['hemoglobin a1c at eight', 'hemoglobin a1c...around six or seven']
+  field after:  ['hemoglobin a1c around six or seven', 'hemoglobin a1c at eight']
+
+as-printed s2 D2N129 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'lisinopril', 'dose': '10 mg once a day'}", "{'medication': 'metformin', 'dose': 'twice a day'}"]
+  content after:  extracted=['lisinopril 10 mg once a day', 'metformin twice a day']
+  field before: ['check your blood sugars in the morning', 'hemoglobin a1c under seven, preferably under six']
+  field after:  ['check your blood sugars in the morning', 'hemoglobin a1c under seven, preferably under six']
+
+as-printed s2 D2N134 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'doxycycline', 'dose': '100 milligrams', 'frequency': 'twice a day', 'duration': 'three weeks'}", "{'medication': 'lisinopril', 'dose': '10 milligrams', 'frequency': 'a day'}", "{'medication': 'metformin', 'dose': 'not specified in document'}"]
+  content after:  extracted=['doxycycline 100 milligrams twice a day', 'lisinopril 10 milligrams a day']
+  field before: ['metformin dose amount']
+  field after:  ['metformin']
+
+as-printed s2 D2N018 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose': 'every six hours', 'dose_amount': 'not specified', 'frequency': 'every six hours'}", "{'medication': 'lortab', 'dose': '5 milligram', 'dose_amount': '5 mg', 'frequency': 'one to two tablets every 6 hours as needed', 'quantity_prescribed': '20 tablets'}", "{'medication': 'pepcid', 'dose': 'not specified', 'dose_amount': 'not specified', 'frequency': 'not specified'}"]
+  content after:  extracted=['ibuprofen every six hours', 'lortab 5 milligram, one to two tablets every 6 hours as needed, quantity 20 tablets', 'pepcid']
+  field before: ['lortab 500']
+  field after:  ['lortab 500']
+
+as-printed s3 D2N094 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose_amount': 'not specified', 'notes': 'patient-reported, amount not mentioned'}", "{'medication': 'miralax', 'dose_amount': 'not specified', 'notes': 'patient-reported for chronic constipation, amount not mentioned'}", "{'medication': 'mobic', 'dose_amount': '15 milligrams', 'frequency': 'once a day', 'quantity': '14 tablets'}"]
+  content after:  extracted=['ibuprofen (dose amount not specified)', 'miralax (dose amount not specified)', 'mobic 15 milligrams once a day (14 tablets prescribed)']
+  field before: ['ibuprofen dose amount', 'miralax dose amount']
+  field after:  ['ibuprofen dose amount', 'miralax dose amount']
+
+as-printed s3 D2N018 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string', '"extracted"[3] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose_amount': 'every six hours', 'context': 'Patient states she has been taking ibuprofen every six hours'}", "{'medication': 'lortab', 'dose_amount': '5 milligram', 'context': 'Doctor prescribes lortab 5 milligram'}", "{'medication': 'lortab', 'dose_amount': 'one to two tablets every 6 hours', 'context': 'Dosing instructions: take one to two tablets every 6 hours as needed for pain'}", "{'medication': 'pepcid', 'dose_amount': 'not specified', 'context': 'Patient takes pepcid for gallstones, but no dose amount given'}"]
+  content after:  extracted=['ibuprofen every six hours', 'lortab 5 milligram', 'lortab one to two tablets every 6 hours as needed for pain', 'pepcid (dose not specified)']
+  field before: ['20 of those', 'lortab 500']
+  field after:  ['20 of those', 'lortab 500']
+
+as-printed s3 D2N072 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'ibuprofen', 'dose': 'not specified by patient'}", "{'medication': 'miralax', 'dose': 'not specified'}", "{'medication': 'motrin', 'dose': '600 milligrams', 'frequency': 'every six hours', 'duration': 'about a week'}"]
+  content after:  extracted=['ibuprofen - dose not specified by patient', 'miralax - dose not specified', 'motrin 600 milligrams every six hours for about a week']
+  field before: ['ice']
+  field after:  ['ice']
+as-printed: {'replies': 180, 'conform as generated': 169, 'corrected by enforcement': 11}
+
+narrowed s1 D2N017 failed strict validation: ['"extracted"[0] must be a string', '"extracted"[1] must be a string', '"extracted"[2] must be a string', '"extracted"[3] must be a string']
+  after one correction call: conforms
+  content before: extracted=["{'medication': 'fluocinonide', 'dose_amount': 'not specified in document'}", "{'medication': 'ibuprofen', 'dose_amount': 'not specified in document'}", "{'medication': 'mobic', 'dose_amount': '15 milligrams', 'frequency': 'once a day'}", "{'medication': 'tylenol', 'dose_amount': 'not specified in document'}"]
+  content after:  extracted=['mobic 15 milligrams once a day']
+  field before: ['fluocinonide - no dose amount mentioned', 'ibuprofen - no dose amount mentioned', 'tylenol - no dose amount mentioned']
+  field after:  ['fluocinonide', 'ibuprofen', 'tylenol']
+narrowed: {'replies': 180, 'conform as generated': 179, 'corrected by enforcement': 1}

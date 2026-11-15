@@ -37,10 +37,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE / "exp105_dialogue_doses"))
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX  # noqa: E402
 
 from probe_field_conversation import load_dialogues, doses_in, stated_without_unit  # noqa: E402
 
-FIXTURES = HERE / "fixtures_field_conversation"
+FIXTURES = HERE / ("fixtures_field_conversation" + SUFFIX)
 STOP = set("""the a an and or of for with without from into onto over under to in on at by as is are was were
 be been than then that this these those it its his her their there not no none any some but if when
 while during after before patient doctor medication medications medicine drug dose doses amount amounts

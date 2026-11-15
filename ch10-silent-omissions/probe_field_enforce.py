@@ -26,8 +26,10 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from probe_field_conversation import SYSTEM, USER, call_cli, load_dialogues, parse_json  # noqa: E402
 
-FIXTURES = HERE / "fixtures_field_conversation"
-CORRECTIONS = HERE / "fixtures_field_enforce"
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_field_conversation" + SUFFIX)
+CORRECTIONS = HERE / ("fixtures_field_enforce" + SUFFIX)
 
 
 def strict_errors(obj) -> list:

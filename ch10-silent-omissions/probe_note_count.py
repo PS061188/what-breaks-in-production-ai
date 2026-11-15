@@ -28,7 +28,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-CH9 = HERE.parent / "ch09-sparse-field-fabrication" / "fixtures_conversation"
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX  # noqa: E402
+CH9 = HERE.parent / "ch09-sparse-field-fabrication" / ("fixtures_conversation" + SUFFIX)
 DATA = HERE.parent / "data" / "aci_bench_dialogues.json"
 
 CONDITIONS = ("template", "permission")

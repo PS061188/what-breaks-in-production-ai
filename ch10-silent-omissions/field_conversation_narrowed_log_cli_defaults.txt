@@ -1,0 +1,340 @@
+
+=== Run 1 · narrowed · 60 conversations · Prompt 10-1, item type "medication dose amount" · claude-haiku-4-5 via the subscription CLI
+replies that were not a JSON object: 0
+ground-truth doses: 64 across 39 conversations (21 state none)
+  returned in `extracted`:            62 of 64
+  silent omissions:                   1   [('D2N027', '5000 units')]
+  routed to `not_extracted` instead:  1   [('D2N023', '175 mg')]
+extras in `extracted` (strings whose dose is not a ground-truth dose):
+   13  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    7  a number the dialogue states without a unit
+    6  frequency, duration or route, no amount
+    2  other
+    1  unit added to a number the dialogue states without one
+`not_extracted` filled: 13 of 39 conversations with a dose, 13 of 21 without; 57 entries
+   28  a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)
+    9  frequency, duration or route, no amount
+    5  a medicine named without any amount
+    4  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    4  excluded by ruler: dietary sodium target, not a medication dose
+    2  a number the dialogue states without a unit
+    2  excluded by ruler: lab concentration (per deciliter)
+    1  excluded by ruler: body/tissue mass in grams, not a dose
+    1  unit added to a number the dialogue states without one
+    1  ground-truth dose
+
+--- every `not_extracted` entry ---
+  [a medicine named without any amount] D2N104: «one» — Patient states 'i'm just on one now' when referring to prednisone, but lacks specification of pharmaceutical unit (mg, tablet, etc.)
+  [a medicine named without any amount] D2N104: «an extra one» — Patient took 'an extra one' of prednisone for pain, but the unit and specific dose amount are not specified
+  [a medicine named without any amount] D2N030: «one or two cycles» — numbers one and two could be mistaken for dose quantities (e.g., 1-2 tablets), but refer to menstrual cycles
+  [a medicine named without any amount] D2N030: «two cycles» — number two could be mistaken for a dose quantity, but refers to menstrual cycles
+  [a medicine named without any amount] D2N057: «a little bit of anti-inflammatory medication» — Vague qualitative descriptor, not a measurable dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N179: «1+» — reflex grade from neurologic examination, not a medication dose but could be confused with dose notation
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N179: «2+» — reflex grade from neurologic examination, not a medication dose but could be confused with dose notation
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N182: «23,000» — Lab value (white blood cell count) that could be mistaken for a medication dose amount (e.g., '23,000 units'), but is a clinical measurement, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N088: «at eight» — Hemoglobin a1c lab value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N088: «around six or seven» — Target hemoglobin a1c values, not medication dose amounts
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N100: «spf 30; spf 30 or higher» — SPF ratings denote sunscreen UV protection strength, not medication dose amounts in standard pharmaceutical units (mg, mcg, ml, etc.)
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N108: «around ten» — A1C lab value; numeric value could be confused with a dose amount if decontextualized, but context makes it clear this is a lab reading
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N123: «seven . four» — This is a hemoglobin A1C laboratory test result value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N139: «4.0» — Potassium level lab value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N145: «IV to V» — Fitzpatrick skin type classification - numeric notation resembles a dose range but is a skin classification metric, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «150» — Blood pressure systolic reading - could be mistaken for a 150mg medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «90 (or 79)» — Blood pressure diastolic reading (transcription unclear: 'seven over ninety') - could be mistaken for a 90mg or 79mg dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «80 to 100» — Blood glucose readings - individual values could be mistaken for 80mg or 100mg medication doses
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N015: «once a day» — cigarette smoking frequency, not medication dosing, but resembles a dose frequency instruction
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N015: «couple cigarettes a day» — cigarette smoking quantity, not medication, but has dose-like structure
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N015: «covid 15» — numeric value for colloquial weight gain term, not a medication amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N025: «3,000» — BMP (B-type Natriuretic Peptide) test value from March, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N025: «6,000» — BMP test value from April, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N038: «one to two cigarettes per day» — Dose-like format (numeric range plus per-day frequency) but refers to cigarette smoking, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N043: «a pack and a half a day» — Refers to cigarette consumption quantity with dose-like structure (amount per time interval), but not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N049: «three hundred» — glucose test reading (approximately 300 mg/dL), not a medication dose, but numerical value could be mistaken for one
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «9» — age of patient's brother in years, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «8 to 10» — count of wet diapers per 24 hours, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «20» — hypothetical wet diaper count for comparison, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «one pound» — weight difference between twins, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «2» — patient's age in years (turning two next month), not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «22» — patient's age in months at time of visit, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «34 and 3» — gestational age at birth (34 weeks and 3 days), not a medication dose
+  [a number the dialogue states without a unit] D2N018: «lortab 500» — Doctor says 'lortab 500-' then immediately corrects with 'lortab 5 milligram'; unclear whether '500' refers to acetaminophen component or was a misspoken phrase
+  [a number the dialogue states without a unit] D2N018: «20» — Total number of tablets being dispensed to patient, not a per-dose medication amount
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «seven ounces from the bottle» — Specific quantity with units, but context makes clear this refers to infant formula feeding amount ('he ate about seven ounces'), not a medication dose
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N025: «4 ounces» — Patient's consumption of pickle juice for leg cramps, not a medication dose
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N076: «4 pounds, 8 ounces» — Katherine's birth weight, not a medication dose
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N076: «3 pounds, 13 ounces» — twin sister's birth weight, not a medication dose
+  [excluded by ruler: body/tissue mass in grams, not a dose] D2N101: «1,792 grams» — Refers to minimum required breast tissue resection amount for surgery, not a medication dose; context makes this clear but the quantity-unit format could be mistaken for a dosage
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N118: «2300 milligrams of sodium per day» — Dietary sodium intake recommendation, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «2000 milligrams a day» — Salt intake recommendation, not a medication dose, but has medication dose format
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «1500 milligrams per day» — Salt intake recommendation, not a medication dose, but has medication dose format
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N049: «twenty three hundred milligrams» — dietary salt intake recommendation (2300 mg/day target), not a medication dose, but numerical value could be mistaken for one
+  [excluded by ruler: lab concentration (per deciliter)] D2N023: «265 milligrams per deciliter» — Triglyceride blood level measurement, not a medication dose amount
+  [excluded by ruler: lab concentration (per deciliter)] D2N023: «145 milligrams per deciliter» — Triglyceride blood level measurement, not a medication dose amount
+  [frequency, duration or route, no amount] D2N185: «two liters per day of water» — Follows medication instruction format (quantity + frequency interval) but explicitly specified as water hydration recommendation, not medication
+  [frequency, duration or route, no amount] D2N122: «four hundred bills a day» — refers to hay bales loaded per day; the number 400 could resemble a medication dose amount (e.g., 400 mg) but is not
+  [frequency, duration or route, no amount] D2N145: «five to 10» — Appears in 'five to 10 minutes after you put it on' - numeric range resembles a dose amount (e.g., 5-10 mg) but is actually a time duration
+  [frequency, duration or route, no amount] D2N015: «two packs a day» — smoking history amount, not medication, but has dose-like structure (quantity + frequency)
+  [frequency, duration or route, no amount] D2N024: «twice a day» — This is a dosing frequency/schedule, not a dose amount (e.g., not specifying mg, ml, tablets, etc.)
+  [frequency, duration or route, no amount] D2N024: «everyday» — This is a dosing frequency/schedule, not a dose amount
+  [frequency, duration or route, no amount] D2N030: «nine days» — number nine could be mistaken for a dose quantity (e.g., 9 mg), but refers to time period for test results
+  [frequency, duration or route, no amount] D2N030: «once a week» — resembles medication dosing frequency instruction, but specifies cream application frequency rather than a dose amount
+  [frequency, duration or route, no amount] D2N057: «once a day (for meloxicam)» — This is frequency/timing instruction, not a dose amount; no specific mg or unit quantity is provided
+  [ground-truth dose] D2N023: «175 milligrams» — Ambiguous: patient asks about 'increasing my testosterone to 175 milligrams' but doctor responds about 'levels,' unclear if dose or blood level
+  [unit added to a number the dialogue states without one] D2N023: «140 milligrams» — Ambiguous: patient says 'I'm at 140 now' in context of testosterone, but doctor interprets as blood level, not clear if this refers to a dose amount
+
+--- every extra in `extracted` ---
+  [a number the dialogue states without a unit] D2N100: «0.1%»
+  [a number the dialogue states without a unit] D2N118: «2.5 (Norvasc)»
+  [a number the dialogue states without a unit] D2N139: «40-25»
+  [a number the dialogue states without a unit] D2N026: «300»
+  [a number the dialogue states without a unit] D2N026: «100»
+  [a number the dialogue states without a unit] D2N049: «2.5 norvasc»
+  [a number the dialogue states without a unit] D2N049: «500 metformin»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon of his sister's medicine»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon for five days»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N107: «two advils»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Combivent 2 puffs twice a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Albuterol 2 puffs as needed»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N018: «one to two tablets»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «Betamethasone 1 cc»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «Celestone 1 cc»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «Lidocaine 0.5 cc»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N023: «1 milliliter every 10 days - testosterone injection»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N057: «two ibuprofen a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N059: «two puffs»
+  [frequency, duration or route, no amount] D2N145: «doxycycline - twice a day»
+  [frequency, duration or route, no amount] D2N145: «doxycycline - once a day»
+  [frequency, duration or route, no amount] D2N145: «sulfacetamide wash - twice a day»
+  [frequency, duration or route, no amount] D2N145: «sulfacetamide wash - once a day»
+  [frequency, duration or route, no amount] D2N145: «vanicream - once a day»
+  [frequency, duration or route, no amount] D2N145: «bruder mask - as needed»
+  [other] D2N145: «tacrolimus ointment - twice daily»
+  [other] D2N015: «Prednisone taper pack»
+  [unit added to a number the dialogue states without one] D2N027: «2000 units (vitamin D3, other six days)»
+
+recorded seconds 2207 · notional cost $1.5542 (claude.ai plan, not billed) · models ['claude-haiku-4-5', 'claude-haiku-4-5-20251001']
+
+=== Run 2 · narrowed · 60 conversations · Prompt 10-1, item type "medication dose amount" · claude-haiku-4-5 via the subscription CLI
+replies that were not a JSON object: 0
+ground-truth doses: 64 across 39 conversations (21 state none)
+  returned in `extracted`:            63 of 64
+  silent omissions:                   0   []
+  routed to `not_extracted` instead:  1   [('D2N027', '5000 units')]
+extras in `extracted` (strings whose dose is not a ground-truth dose):
+   10  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    7  frequency, duration or route, no amount
+    4  a number the dialogue states without a unit
+    4  other
+    3  unit added to a number the dialogue states without one
+`not_extracted` filled: 21 of 39 conversations with a dose, 11 of 21 without; 62 entries
+   40  a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)
+    8  a number the dialogue states without a unit
+    4  excluded by ruler: dietary sodium target, not a medication dose
+    3  frequency, duration or route, no amount
+    2  a medicine named without any amount
+    2  excluded by ruler: lab concentration (per deciliter)
+    1  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    1  excluded by ruler: body/tissue mass in grams, not a dose
+    1  ground-truth dose
+
+--- every `not_extracted` entry ---
+  [a medicine named without any amount] D2N101: «propranolol» — Medication mentioned but no dose amount specified
+  [a medicine named without any amount] D2N002: «a little tylenol» — Vague quantity descriptor ('a little'), not a specific measurable dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N177: «your hemoglobin a1c is elevated. it's at eight» — The '8' is a lab value expressed as a percentage, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N177: «i'd like to see it closer to six» — The '6' is a target lab value expressed as a percentage, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N179: «1+» — Reflex grade from neurological examination, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N179: «2+» — Reflex grade from knee examination, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N185: «2 liters per day of water» — hydration recommendation, not a medication dose, but quantity format could be mistaken for medication dosing
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N094: «7» — Patient's pain rating on a 0-10 scale, not a medication dose amount, but numeric value could be confused with a dose quantity like 7 mg
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N099: «100.3» — Temperature reading (100.3°F), could be mistaken for a dose quantity like '100.3 mg'
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N100: «SPF 30» — Sun protection factor specification, not a medication dose amount, but numeric value could be confused with one
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N108: «one by two inch» — Wound size measurement, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N108: «around ten» — A1C lab result value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N123: «seven . four» — Hemoglobin a1c lab value (7.4%), not a medication dose amount, but could be mistaken for a small dose like 7.4 mg
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N139: «4.0» — potassium lab value (mEq/L), not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N145: «fitzpatrick skin type iv» — Skin classification using Roman numerals; could be confused with dose notation but is a dermatologic classification
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N145: «iv to v» — Skin type classification range (Roman numerals); could be confused with dose notation but refers to Fitzpatrick scale
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «twenty minutes» — Time duration for ice application, not a medication dose amount, but the numeric value could be confused with a dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N007: «three out of six systolic ejection murmur» — Cardiac exam finding (murmur grade on 0-6 scale), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N008: «8.2» — Hemoglobin lab value (g/dL); numeric value could be mistaken for a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N008: «three out of six» — Cardiac murmur grading; numeric component could be mistaken for a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N013: «162» — Blood glucose laboratory value (not a medication dose), but numerical format could resemble a dose amount like '162 mg' or '162 units'
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N023: «less than 300» — Baseline testosterone lab level value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N023: «greater than 1,500» — Testosterone lab level value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N023: «around 700» — Testosterone lab level value at time of visit, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N025: «3,000» — BNP/BMP test result for heart failure monitoring, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N025: «6,000» — BNP/BMP test result for heart failure monitoring, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «156» — Alkaline phosphatase lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «247» — Total cholesterol lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «66» — HDL lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «166» — LDL lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «74» — Triglycerides lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «2.68» — TSH lab value, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «94» — Vitamin D serum level (lab result), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N038: «one to two cigarettes per day» — Has the structure of a dose amount (quantity + unit + frequency) but refers to cigarettes, not a medication
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N050: «point five centimeters» — Radiological measurement of kidney stone size, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N064: «an eight» — Pain intensity rating on 0-10 scale; not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N064: «seven» — Pain intensity rating on 0-10 scale; not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N072: «48» — Patient's age (48 year old female), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N072: «18» — Patient's age when appendix was removed, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N072: «four» — Time reference (days since injury), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N074: «three out of 10 severity» — Numeric pain severity rating on a 0-10 scale, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N074: «six out of 10 severity» — Numeric pain severity rating on a 0-10 scale, not a medication dose amount
+  [a number the dialogue states without a unit] D2N094: «14» — Total quantity of tablets prescribed for mobic, not the dose per administration, but could be mistaken for a dose amount like 14 mg
+  [a number the dialogue states without a unit] D2N145: «around 30 to $ 40» — Price quote for elidel medication, not a dose amount
+  [a number the dialogue states without a unit] D2N145: «around $ 850» — Price quote for tacrolimus via GoodRx coupon, not a dose amount
+  [a number the dialogue states without a unit] D2N145: «$ 70» — Price quote for eucrisa medication, not a dose amount
+  [a number the dialogue states without a unit] D2N145: «around $ 200» — Price threshold mentioned by patient, not a dose amount
+  [a number the dialogue states without a unit] D2N005: «8» — total quantity of tablets to dispense, not a dose amount per administration
+  [a number the dialogue states without a unit] D2N018: «lortab 500» — Doctor started to say this but immediately corrected to 'lortab 5 milligram'; unclear if this was meant to be a different dose or a verbal error
+  [a number the dialogue states without a unit] D2N026: «300 or 100 (gabapentin)» — Presented as a question ('are you taking 300 or 100?'); patient response is 'um, not sure' so no confirmed dose is established
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «seven ounces» — Amount of formula consumed at breakfast, could be mistaken for a liquid medication dose
+  [excluded by ruler: body/tissue mass in grams, not a dose] D2N101: «1,792 grams» — Uses dose-like unit (grams) but refers to minimum tissue resection amount for surgery, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N118: «2300 milligrams or less of sodium per day» — Dietary recommendation for sodium intake, not a medication dose amount, but expressed in milligrams like a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «2000 milligrams a day» — dietary salt intake limit, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «1500 milligrams per day» — dietary salt recommendation, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N049: «2300 milligrams a day» — Described as salt intake recommendation, not a medication dose
+  [excluded by ruler: lab concentration (per deciliter)] D2N023: «265 milligrams per deciliter» — Lab value for triglyceride level, not a medication dose amount
+  [excluded by ruler: lab concentration (per deciliter)] D2N023: «145 milligrams per deciliter» — Lab value for triglyceride level, not a medication dose amount
+  [frequency, duration or route, no amount] D2N171: «three times a week» — Describes frequency of symptom occurrence (chest pain), not medication dosing; resembles dosing frequency format (e.g., 'X times daily')
+  [frequency, duration or route, no amount] D2N104: «once a week» — Describes frequency of taking an additional dose, not a dose amount
+  [frequency, duration or route, no amount] D2N015: «prednisone taper pack» — Taper pack is a dosing schedule description, not a specific quantified dose amount; ambiguous whether it qualifies as a dose amount
+  [ground-truth dose] D2N027: «5000 units» — Initial Vitamin D3 dose mentioned but corrected to 50,000 units
+
+--- every extra in `extracted` ---
+  [a number the dialogue states without a unit] D2N100: «adapalene, 0.1%»
+  [a number the dialogue states without a unit] D2N139: «Benicar HCT 40-25»
+  [a number the dialogue states without a unit] D2N049: «Norvasc 2.5»
+  [a number the dialogue states without a unit] D2N049: «Metformin 500»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N107: «two advils»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Combivent 2 puffs twice a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Albuterol 2 puffs as needed»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N018: «one to two tablets»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «1 cc of betamethasone (celestone)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «0.5 cc of lidocaine»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N023: «1 milliliter every 10 days (testosterone)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N057: «two ibuprofen a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N059: «two puffs of albuterol inhaler»
+  [frequency, duration or route, no amount] D2N145: «one a day»
+  [frequency, duration or route, no amount] D2N145: «once a day»
+  [frequency, duration or route, no amount] D2N145: «twice a day»
+  [frequency, duration or route, no amount] D2N145: «as needed»
+  [frequency, duration or route, no amount] D2N145: «for a week»
+  [frequency, duration or route, no amount] D2N145: «for another week»
+  [frequency, duration or route, no amount] D2N145: «for a couple days»
+  [other] D2N104: «prednisone: one (current daily dose)»
+  [other] D2N104: «prednisone: one (additional dose taken occasionally)»
+  [other] D2N145: «twice daily»
+  [other] D2N145: «a little bit»
+  [unit added to a number the dialogue states without one] D2N118: «2.5 mg of norvasc»
+  [unit added to a number the dialogue states without one] D2N023: «140 milligrams (testosterone)»
+  [unit added to a number the dialogue states without one] D2N027: «Vitamin D3 2,000 units (other six days)»
+
+recorded seconds 2182 · notional cost $1.5642 (claude.ai plan, not billed) · models ['claude-haiku-4-5', 'claude-haiku-4-5-20251001']
+
+=== Run 3 · narrowed · 60 conversations · Prompt 10-1, item type "medication dose amount" · claude-haiku-4-5 via the subscription CLI
+replies that were not a JSON object: 0
+ground-truth doses: 64 across 39 conversations (21 state none)
+  returned in `extracted`:            63 of 64
+  silent omissions:                   1   [('D2N027', '5000 units')]
+  routed to `not_extracted` instead:  0   []
+extras in `extracted` (strings whose dose is not a ground-truth dose):
+   13  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    5  unit added to a number the dialogue states without one
+    4  a number the dialogue states without a unit
+`not_extracted` filled: 20 of 39 conversations with a dose, 10 of 21 without; 58 entries
+   36  a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)
+    5  frequency, duration or route, no amount
+    5  a number the dialogue states without a unit
+    4  amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)
+    4  excluded by ruler: dietary sodium target, not a medication dose
+    3  a medicine named without any amount
+    1  excluded by ruler: body/tissue mass in grams, not a dose
+
+--- every `not_extracted` entry ---
+  [a medicine named without any amount] D2N099: «the dose for kids under a year of age» — vague reference to standard package dosing without a specific numeric amount stated in the document
+  [a medicine named without any amount] D2N002: «tylenol» — Medication mentioned but no specific dose amount given, only vague quantity 'a little'
+  [a medicine named without any amount] D2N002: «synthroid» — Medication prescribed to continue but no dose amount specified
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N177: «eight» — hemoglobin a1c lab value (8%), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N177: «six» — target hemoglobin a1c goal (6%), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N182: «23,000» — White blood cell count value, not a medication dose, but a numerical value that could be mistaken for a dose amount (e.g., 23,000 units)
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N088: «8» — Hemoglobin A1C lab value, not a medication dose, but numeric value could be mistaken for one
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N088: «six or seven» — Target hemoglobin A1C values, not medication doses, but numeric values could be mistaken for doses
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N089: «2/6 systolic ejection murmur» — Cardiac murmur grade (not a medication dose); the numeric fraction format could be mistaken for a dose ratio
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N094: «14» — Quantity of tablets prescribed ('i'll prescribe 14 of those'), not a dose amount, but could be mistaken for a dosing value
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N099: «100.3» — temperature reading in degrees Fahrenheit, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N100: «spf 30» — sunscreen SPF protection rating, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N104: «i'm just on one now» — Lacks explicit unit of measurement (mg, tablet, etc.); appears to indicate a prednisone dose but the measure is unspecified
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N108: «around ten» — A1C lab value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N111: «a hundred and eighty over eighty (180/80)» — Blood pressure reading, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N123: «seven . four» — HbA1c lab result value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N123: «one twenty over fifty» — Blood pressure vital sign reading, not medication dose amounts
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «one fifty over seven over ninety» — blood pressure reading, not a medication dose; numbers could be confused with dose amounts; transcription format is unclear (150/79/90 or similar)
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N160: «twenty minutes» — time duration for ice application ('ice it three times a day for twenty minutes at a time'), not a medication dose amount; the number could be mistaken for a dose if extracted without context
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N008: «8.2» — Lab value (hemoglobin result in g/dL), not a medication dose, but numeric format could be mistaken for a dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N008: «45%» — Clinical measurement (ejection fraction), not a medication dose, but percentage format could be confused with a dose percentage
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N013: «8» — HbA1c lab value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N013: «6» — Previous HbA1c lab value, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N013: «162» — Blood glucose reading, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N013: «55» — Patient age, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N023: «265» — Triglyceride lab value (mg/dL), not medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N023: «145» — Triglyceride lab value (mg/dL), not medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N027: «two to three millimeters» — This is a measurement of the testicular nodule size, not a medication dose, though it resembles a numerical dose range
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N038: «thirty nine» — Lab result value (AST enzyme level), not a medication dose, though bare number in medical context could be superficially confused with dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N043: «pack and a half a day» — Refers to daily cigarette consumption amount, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N043: «two over six systolic murmur» — Cardiac murmur grade notation, not a medication dose
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N050: «point five centimeters» — Measurement of kidney stone size, not a medication dose amount, but numeric value with unit could potentially be mistaken for one (e.g., 0.5 mg)
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N064: «eight» — Pain severity rating (8/10 scale), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N064: «seven» — Pain severity rating (7/10 scale), not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N074: «three out of 10» — Pain severity score, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N074: «six out of 10» — Pain severity score, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «8 to 10» — Count of wet diapers in 24 hours, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «22-month-old» — Patient age, not a medication dose amount
+  [a number that is not a dose (lab value, vital sign, exam grade, measurement, habit)] D2N076: «34 and 3-week-old» — Gestational age at birth, not a medication dose amount
+  [a number the dialogue states without a unit] D2N018: «lortab 500» — Incomplete or corrected phrase (appears as 'lortab 500-' then doctor clarifies 'lortab 5 milligram'); ambiguous what '500' refers to
+  [a number the dialogue states without a unit] D2N018: «20» — Total quantity of tablets being dispensed (20 tablets), not a dose amount; the actual dose is one to two tablets per administration
+  [a number the dialogue states without a unit] D2N023: «1,500» — Testosterone blood level (ng/dL), not medication dose amount
+  [a number the dialogue states without a unit] D2N023: «700» — Testosterone blood level (ng/dL), not medication dose amount
+  [a number the dialogue states without a unit] D2N023: «300» — Testosterone blood level reference point, not medication dose amount
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «seven ounces» — volume of infant formula consumed, not a medication dose amount
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N025: «4 ounces» — Amount of pickle juice consumed by patient, not a medication dose but could potentially be confused if context is overlooked
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N076: «4 pounds, 8 ounces» — Birth weight of patient, not a medication dose amount
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N076: «3 pounds, 13 ounces» — Birth weight of twin, not a medication dose amount
+  [excluded by ruler: body/tissue mass in grams, not a dose] D2N101: «1,792 grams» — This is a surgical tissue resection measurement, not a medication dose, but the numerical format with units could be mistaken for a dosage amount.
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N118: «2300 milligrams of sodium per day» — Dietary sodium limit, not a medication dose amount, but could be mistaken for one due to numeric value paired with unit
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «2000 milligrams a day» — Salt intake dietary recommendation, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N139: «1500 milligrams per day» — Salt intake dietary recommendation, not a medication dose
+  [excluded by ruler: dietary sodium target, not a medication dose] D2N049: «twenty three hundred milligrams» — Refers to daily sodium intake limit for hypertension management, not a medication dose
+  [frequency, duration or route, no amount] D2N099: «two times per week» — dosing frequency for topical shampoo, not a dose amount
+  [frequency, duration or route, no amount] D2N145: «one a day» — frequency specification for doxycycline, not a dose amount
+  [frequency, duration or route, no amount] D2N145: «twice a day» — frequency specification, not a dose amount
+  [frequency, duration or route, no amount] D2N145: «once a day» — frequency specification, not a dose amount
+  [frequency, duration or route, no amount] D2N145: «twice daily» — frequency specification for tacrolimus ointment, not a dose amount
+
+--- every extra in `extracted` ---
+  [a number the dialogue states without a unit] D2N100: «adapalene 0.1% cream»
+  [a number the dialogue states without a unit] D2N139: «Benicar HCT 40-25»
+  [a number the dialogue states without a unit] D2N026: «300 (gabapentin)»
+  [a number the dialogue states without a unit] D2N026: «100 (gabapentin)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon (if barky cough develops)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N099: «half a teaspoon (prescribed for five days)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N107: «two advils»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Combivent 2 puffs twice a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N015: «Albuterol 2 puffs as needed»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N018: «one to two tablets»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «a cc of betamethasone»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «one cc of celestone»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «a half a cc of lidocaine»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N022: «half a cc of lidocaine»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N023: «1 milliliter every 10 days (testosterone)»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N057: «two ibuprofen a day»
+  [amount in a form the ruler cannot see (puffs, tablets, cc, mL, teaspoons, %)] D2N059: «two puffs»
+  [unit added to a number the dialogue states without one] D2N118: «2.5 mg Norvasc»
+  [unit added to a number the dialogue states without one] D2N023: «140 milligrams (testosterone current)»
+  [unit added to a number the dialogue states without one] D2N027: «2000 units (vitamin D3 on other six days)»
+  [unit added to a number the dialogue states without one] D2N049: «Norvasc 2.5 mg»
+  [unit added to a number the dialogue states without one] D2N049: «Metformin 500 mg»
+
+recorded seconds 2186 · notional cost $1.5679 (claude.ai plan, not billed) · models ['claude-haiku-4-5', 'claude-haiku-4-5-20251001']

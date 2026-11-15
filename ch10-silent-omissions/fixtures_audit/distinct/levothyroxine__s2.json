@@ -7,7 +7,7 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "reply": "```json\n{\n  \"missing\": []\n}\n```\n\nThe extraction is complete. All distinct dose amounts mentioned in the document are included:\n- All pediatric weight-based doses (10-15, 8-10, 6-8, 5-6, 4-5, 2-3 mcg/kg/day)\n- All adult starting doses (1.6, 1.0 mcg/kg/day)\n- Titration increments (12.5 to 25 mcg)\n- Reference thresholds (200, 300 mcg/day)\n\nOther numerical values in the document (5-10 mL of water, timing intervals in weeks/hours/days, TSH laboratory values in mIU, and fractional references like \"one-fourth\") are not medication dose amounts and correctly excluded.",
- "seconds": 43.5,
- "notional_cost_usd": 0.037311
+ "reply": "```json\n{\n  \"missing\": [\n    \"one-half to one hour\",\n    \"4 hours\",\n    \"2 days\",\n    \"4 to 6 weeks\",\n    \"5 to 10 mL\"\n  ]\n}\n```\n\nWait, let me reconsider. The task is to extract \"every distinct dose amount mentioned in the document.\" Let me re-examine what qualifies as a \"dose amount\":\n\n- \"5 to 10 mL\" - this is a volume, included in extraction ✓\n- Timing/administration intervals (one-half to one hour, 4 hours, 2 days, 4 to 6 weeks) - these are NOT dose amounts, they're timing instructions\n- All the mcg and mcg/kg/day measurements - these ARE dose amounts, all included ✓\n\nUpon careful review, the extraction appears complete for actual dose amounts. The timing intervals mentioned (one-half to one hour before breakfast, 4 hours before/after drugs, 2 days before testing, 4 to 6 weeks for titration, 6 to 8 weeks monitoring, 2 weeks monitoring, 3 to 12 months monitoring, weekly basis) are administration timing instructions, not dose amounts.\n\n```json\n{\n  \"missing\": []\n}\n```",
+ "seconds": 4.6,
+ "notional_cost_usd": 0.009666999999999999
 }

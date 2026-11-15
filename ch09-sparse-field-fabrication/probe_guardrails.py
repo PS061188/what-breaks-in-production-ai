@@ -5,8 +5,7 @@ measured the check it packages with a from-scratch implementation. Prachi asked
 for the product itself to be run. This probe runs the installed validator
 (guardrails-ai 0.6.8; the validator package installed from its GitHub source,
 because the hub's API host does not resolve from this machine) over the same
-labelled entries as 9.5: the 101 note entries (12 invented) and the 56 record
-values (7 invented). No model calls; everything is local embeddings.
+labelled entries as 9.5: the note entries and the record values. No model calls; everything is local embeddings.
 
 How the validator works (read from its source):
   - the OUTPUT is split into sentences with nltk; each sentence is scored
@@ -34,7 +33,8 @@ run_all.py skips it when they are missing.
   python -m nltk.downloader punkt_tab        # the validator needs it; its setup does not fetch it
   python probe_guardrails.py | tee guardrails_sweep_log.txt
 
-guardrails_sweep_log.txt is the last run's output.
+guardrails_sweep_log.txt is the last run's output; guardrails_sweep_log_cli_defaults.txt
+is the same sweep on the first recordings (CLI_SETTINGS=cli).
 """
 
 import sys
@@ -180,7 +180,13 @@ def main() -> int:
         print("   (the validator's own pass/fail was checked against these distances, entry by entry,")
         print("    at the seven thresholds in the table and at every distance named above)\n")
     print("from-scratch 9.5 on the notes, for comparison (similarity cut = 1 - distance):")
-    print("  sim 0.5 -> caught 6/12, flagged 19/89 · sim 0.7 -> caught 10/12, flagged 72/89")
+    sims = C.embedding_scores(note)
+    cells = []
+    for cut in (0.3, 0.5, 0.7):
+        caught = sum(1 for e, x in zip(note, sims) if e["invented"] and x < cut)
+        flagged = sum(1 for e, x in zip(note, sims) if not e["invented"] and x < cut)
+        cells.append(f"sim {cut} -> caught {caught}/{sets[0][2]}, flagged {flagged}/{len(note) - sets[0][2]}")
+    print("  " + " · ".join(cells))
     return 0
 
 

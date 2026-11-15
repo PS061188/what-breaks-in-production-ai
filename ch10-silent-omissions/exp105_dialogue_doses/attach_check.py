@@ -22,7 +22,9 @@ sys.path.insert(0, str(HERE))
 from count_doses import dialogue_doses, extract  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
-FIXTURES = REPO / "ch09-sparse-field-fabrication" / "fixtures_conversation"
+sys.path.insert(0, str(REPO))
+from shared.cli_defaults import SUFFIX  # noqa: E402
+FIXTURES = REPO / "ch09-sparse-field-fabrication" / ("fixtures_conversation" + SUFFIX)
 
 SYN = {
     "protonix": "protonix|pantoprazole",

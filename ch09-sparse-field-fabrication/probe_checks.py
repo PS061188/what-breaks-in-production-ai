@@ -45,7 +45,8 @@ import probe_conversation as P
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-FIXTURES = HERE / "fixtures_checks"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_checks" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 WRITER, OTHER = "claude-haiku-4-5", "claude-sonnet-5"
 EMBEDDER = "sentence-transformers/all-MiniLM-L6-v2"
@@ -151,6 +152,7 @@ def call_cli(model: str, system: str, prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", model, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(model, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             try:

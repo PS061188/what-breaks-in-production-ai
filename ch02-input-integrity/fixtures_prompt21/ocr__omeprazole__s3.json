@@ -7,7 +7,7 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "reply": "```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"swal1ow — digit '1' (one) substituted for letter 'l' in word 'swallow' (OCR/scanner error)\"\n  ],\n  \"worst_affected_text\": \"swal1ow 1 tablet with a glass of water before eating in the morning\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"administration\": \"Swallow whole with a glass of water before eating in the morning\",\n    \"frequency\": \"Once daily (every 24 hours)\",\n    \"duration\": \"14 days\"\n  }\n}\n```\n\n**Summary:** One scanner artifact detected (digit substitution in \"swallow\"), but the passage containing the dose information is still readable. The starting dose is **1 tablet taken orally in the morning with water before eating**.",
- "seconds": 8.7,
- "notional_cost_usd": 0.005488
+ "reply": "# INPUT QUALITY REPORT\n\n**Scanning for corruption signals:**\n\n1. **\"swal1ow\"** - Letter \"1\" (digit one) substituted for letter \"l\" in \"swallow\"\n2. **\"swal1ow 1 tablet\"** - Digit \"1\" welded into word; also standalone \"1\" that may be OCR error for \"l\"\n\n**Analysis:**\n- One clear OCR scanning error detected: \"swal1ow\" should read \"swallow\"\n- The corruption appears in non-critical context (instruction text, not dosage values)\n- Dosage information itself is legible and unambiguous\n- No unclosed brackets, mid-sentence cutoffs, or encoding artifacts\n- No Cyrillic, Greek, or unexpected accents\n\n---\n\n```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"\\\"swal1ow\\\" (digit 1 replacing letter l in swallow)\"\n  ],\n  \"worst_affected_text\": \"swal1ow 1 tablet with a glass of water before eating in the morning\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"frequency\": \"Once daily (every 24 hours)\",\n    \"duration\": \"14 days\",\n    \"administration\": \"Swallow whole with water before eating in the morning. Do not chew or crush.\"\n  }\n}\n```",
+ "seconds": 5.8,
+ "notional_cost_usd": 0.0037389999999999997
 }

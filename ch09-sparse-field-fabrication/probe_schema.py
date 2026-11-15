@@ -100,7 +100,8 @@ sys.path.insert(0, str(HERE.parent))
 
 from shared.scoring import VERIFY_WINDOW, normalise_ws, quote_score, quote_supported  # noqa: E402
 
-FIXTURES = HERE / "fixtures_schema"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_schema" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
 
@@ -146,6 +147,7 @@ def call_cli(prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", SYSTEM,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)

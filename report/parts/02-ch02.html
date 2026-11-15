@@ -383,7 +383,7 @@ every corruption signal it finds, quotes the passage it trusts least, grades the
 input <code>CLEAN</code>, <code>DEGRADED</code> or <code>SEVERELY_CORRUPTED</code>,
 and extracts in every case, leaving the decision to the calling code. The printed
 text (<code>prompt_2_1.txt</code>) was run on the same 53 cases, three times, on
-Claude Haiku 4.5 through the subscription CLI: 159 calls, $1.27 notional
+Claude Haiku 4.5 through the subscription CLI at the API&rsquo;s default setting (no thinking): 159 calls, $0.73 notional
 (<code>probe_prompt21.py</code>).</p>
 
 <table>
@@ -393,31 +393,37 @@ Claude Haiku 4.5 through the subscription CLI: 159 calls, $1.27 notional
   <tr><td>Encoding damage</td><td class="num">5/5</td><td class="num">5/5</td><td class="num">5/5</td></tr>
   <tr style="background:#f4efe6"><td><strong>Scanning damage</strong></td>
       <td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td><td class="num"><strong>12/12</strong></td></tr>
-  <tr><td>Truncation</td><td class="num">11/12</td><td class="num">10/12</td><td class="num">10/12</td></tr>
-  <tr><td><strong>All damaged</strong></td><td class="num"><strong>98%</strong> (40/41)</td>
+  <tr><td>Truncation</td><td class="num">10/12</td><td class="num">10/12</td><td class="num">10/12</td></tr>
+  <tr><td><strong>All damaged</strong></td><td class="num"><strong>95%</strong> (39/41)</td>
       <td class="num"><strong>95%</strong> (39/41)</td><td class="num"><strong>95%</strong> (39/41)</td></tr>
-  <tr><td>Clean controls graded not CLEAN</td><td class="num">3/12</td>
-      <td class="num">4/12</td><td class="num">3/12</td></tr>
-  <tr><td>&nbsp;&nbsp;of which a real defect in the label text</td><td class="num">3</td>
-      <td class="num">3</td><td class="num">3</td></tr>
-  <tr><td><code>SEVERELY_CORRUPTED</code> issued</td><td class="num">0</td>
-      <td class="num">0</td><td class="num">0</td></tr>
+  <tr><td>Clean controls graded not CLEAN</td><td class="num">2/12</td>
+      <td class="num">2/12</td><td class="num">2/12</td></tr>
+  <tr><td>&nbsp;&nbsp;of which a real defect in the label text</td><td class="num">2</td>
+      <td class="num">2</td><td class="num">2</td></tr>
+  <tr><td><code>SEVERELY_CORRUPTED</code> issued</td><td class="num">1</td>
+      <td class="num">2</td><td class="num">1</td></tr>
 </table>
 
 <div class="verdict">
-  <span class="label">Every miss is a truncated copy, and all but one clean flag is real</span>
-  <p>The three clean controls flagged in every run carry real defects in the label
+  <span class="label">Every miss is a truncated copy, and every clean flag is real</span>
+  <p>The two clean controls flagged in every run carry real defects in the label
   text as supplied: Amoxicillin&rsquo;s zero-width spaces (the same characters the
-  code gate found, below), Gabapentin&rsquo;s &ldquo;ADMlNlSTRATION&rdquo;, with a
-  lower-case l for a capital I, and Metformin&rsquo;s &ldquo;1.73 m 2&rdquo;, its
-  superscript lost. The one false alarm in 36 clean readings is Atorvastatin in
-  run 2, reported as &ldquo;text cuts off&rdquo; where the excerpt ends at a full
-  stop.</p>
-  <p><strong>The grade separates clean from damaged; it does not rank the
-  damage.</strong> <code>SEVERELY_CORRUPTED</code> was never issued, so code that
-  acts on the grade has to act on <code>DEGRADED</code>, the grade the model does
-  return. That is the design the printed prompt asks for: the model reports, the
+  code gate found, below) and Gabapentin&rsquo;s &ldquo;ADMlNlSTRATION&rdquo;, with a
+  lower-case l for a capital I. A third real defect, Metformin&rsquo;s &ldquo;1.73 m
+  2&rdquo; with its superscript lost, passed in every run. No false alarm in 36 clean
+  readings.</p>
+  <p><strong>The grade separates clean from damaged; it rarely ranks the
+  damage.</strong> <code>SEVERELY_CORRUPTED</code> was issued 1, 2 and 1 times, each on
+  a truncated copy cut off inside the dosing passage (Metformin every run, Furosemide
+  once); the other damaged documents it caught were all <code>DEGRADED</code>. Code that
+  acts on the grade has to act on <code>DEGRADED</code>, the grade the model mostly
+  returns. That is the design the printed prompt asks for: the model reports, the
   calling code decides.</p>
+  <p>Recorded 14 Nov 2026 at the API&rsquo;s default setting. The first recording ran
+  with Claude Code&rsquo;s default thinking on (kept in
+  <code>fixtures_prompt21_cli_defaults/</code>): 40, 39 and 39 damaged caught, 3, 4 and 3
+  clean controls flagged (Metformin&rsquo;s defect caught, one false alarm), and no
+  <code>SEVERELY_CORRUPTED</code>.</p>
 </div>
 
 <h4>Experiment 2.3 &mdash; Fix 1, as the chapter actually prescribes it</h4>

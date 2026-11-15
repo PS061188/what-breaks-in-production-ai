@@ -12,8 +12,8 @@ ACI-Bench conversations (data/aci_bench_dialogues.json), one condition:
                  one item per place in the conversation.
 
 Three runs. The comparison baseline is Experiment 9.6's recorded "optional"
-condition (single quote): wrong rejections there were 3 of 92 discussed-topic
-values; invented values 2 of 603, one caught by the quote gate.
+condition (single quote), counted with the same filter as here (values that state
+something on a discussed topic) and computed from its recordings on each run.
 
 Gate semantics reported here, strictest first:
   all-found   a value is kept only when every quote in its list is found
@@ -126,6 +126,19 @@ def rows_for(record: dict, dialogue: str) -> list:
     return out
 
 
+def single_quote_baseline() -> str:
+    """Experiment 9.6's optional condition, the same filter: discussed-topic values that state something."""
+    import probe_conversation as P
+    rows = []
+    for enc in P.load_dialogues():
+        for run in RUNS:
+            path = S.fixture_path("optional", enc, run)
+            if path.exists():
+                rows += [x for x in S.rows_for(json.loads(path.read_text(encoding="utf-8")), enc["dialogue"])
+                         if x["kind"] == "states" and x["discussed"]]
+    return f"{sum(not x['quote_ok'] for x in rows)} of {len(rows)}"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--live", action="store_true")
@@ -164,7 +177,7 @@ def main() -> int:
     inv = [x for x in rows if x["invented"]]
     print(f"\n>> Discussed-topic values wrongly rejected, every quote must be found: "
           f"{sum(1 for x in disc if not x['all_found'])} of {len(disc)} "
-          f"(Experiment 9.6's single quote: 3 of 92)")
+          f"(Experiment 9.6's single quote: {single_quote_baseline()})")
     no_source = sum(1 for x in rows if not x["discussed"])
     print(f">> Invented values: {len(inv)} of {no_source} fields with no source; "
           f"quote gate (all-found) caught {sum(1 for x in inv if not x['all_found'])}")

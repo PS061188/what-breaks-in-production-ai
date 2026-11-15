@@ -76,7 +76,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE.parent / "data" / "aci_bench_dialogues.json"
-FIXTURES = HERE / "fixtures_conversation"
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_conversation" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
 
@@ -128,23 +130,25 @@ TOPICS = {
 # A section that only reports the conversation's silence.
 SILENT = re.compile(
     r"^\s*(?:none|nothing|no information|no (?:family history|allergies|allergy history))?\s*"
-    r"(?:was |were )?(?:not |none )?(?:discussed|documented|mentioned|addressed|obtained|reported|"
-    r"reviewed|elicited|stated|provided|assessed)\b[^.]*\.?\s*$"
+    r"(?:was |were )?(?:not |none )?(?:explicitly |specifically )?(?:discussed|documented|mentioned|addressed|obtained|reported|"
+    r"reviewed|elicited|stated|provided|assessed|specified)\b[^.]*\.?\s*$"
     r"|^\s*(?:not discussed|none reported|none mentioned|none discussed|none documented|none stated|"
     r"not documented|not mentioned|not reported|not obtained|not addressed|n/?a|unknown)\.?\s*$",
     re.I,
 )
 
 NON_DRUG = re.compile(r"seasonal|environment|pollen|hay fever|food|milk|lactose|intoleran|beverage|carbonat"
-                      r"|dust|\bpets?\b|\bcats?\b|\bdogs?\b|latex|\bnuts?\b|shellfish|\beggs?\b", re.I)
+                      r"|dust|\bpets?\b|\bcats?\b|\bdogs?\b|latex|\bnuts?\b|shellfish|\beggs?\b"
+                      r"|nasal|congestion|sneez|rhinitis", re.I)
 DRUG_WORD = re.compile(r"drug|medic|NKDA|no known allerg|^\s*none\b|penicillin|sulfa|codeine|antibiot|causes"
                        r"|dexameth|prednis|steroid", re.I)
 # Clauses that describe the conversation rather than the patient: "not documented",
-# "not discussed", and "No drug allergies discussed". "No known drug allergies",
+# "not discussed", "not explicitly stated" (14 Nov 2026, seen first at the API
+# default), and "No drug allergies discussed". "No known drug allergies",
 # with or without a trailing "documented", and "No drug allergies noted" state
 # the usual claim about the patient and are left in.
 NOT_COVERED = re.compile(
-    r"[^.;()]*\bnot (?:discussed|documented|mentioned|reported|obtained|addressed|asked|reviewed)\b[^.;()]*"
+    r"[^.;()]*\bnot (?:explicitly |specifically )?(?:discussed|documented|mentioned|reported|obtained|addressed|asked|reviewed|stated|specified)\b[^.;()]*"
     r"|[^.;()]*\bno (?!known)[a-z ]{0,40}?(?:discussed|mentioned|asked|addressed|reviewed)\b[^.;()]*", re.I)
 
 
@@ -182,6 +186,7 @@ def call_cli(prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", SYSTEM,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)

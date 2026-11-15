@@ -1,0 +1,13 @@
+{
+ "mode": "unicode",
+ "drug": "Furosemide",
+ "run": 2,
+ "model_requested": "claude-haiku-4-5",
+ "models_used": [
+  "claude-haiku-4-5",
+  "claude-haiku-4-5-20251001"
+ ],
+ "reply": "# INPUT QUALITY REPORT\n\n**Status: DEGRADED**\n\n**Corruption Signals Found:**\nExtensive character encoding corruption with Cyrillic lookalike characters systematically replacing Latin characters throughout:\n- \"ADMINISTRATIоN\" (Cyrillic о)\n- \"pаtient\" (Cyrillic а)\n- \"respоnse\" (Cyrillic о)\n- \"dоse\" (Cyrillic о)\n- \"Ordіnarily\" (Cyrillic і)\n- \"аdministered\" (Cyrillic а)\n- \"detеrmined\", \"dosе\", \"thеn\" (Cyrillic е)\n- \"cаrеfullу\", \"tіtrated\", \"patіеnts\" (multiple Cyrillic: а, е, і, у)\n- \"рm\", \"рRECAUTIONS\", \"рatients\" (Cyrillic р)\n- \"сonsecutіve\", \"сautious\" (Cyrillic с)\n- \"eхceeding\" (Cyrillic х)\n- \"pediatriс\" (Cyrillic с)\n- And many more throughout\n\n**Worst Affected Text:** The scattered nature of the corruption (roughly every 5-10 words) affects nearly every section, but the starting dose passage remains legible.\n\n---\n\n## EXTRACTION\n\n```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\"Systematic Cyrillic character substitution for Latin characters throughout entire document\"],\n  \"worst_affected_text\": \"Multiple sections corrupted equally; entire document affected\",\n  \"extraction\": {\n    \"starting_dose_adults\": \"20 to 80 mg given as a single dose\",\n    \"starting_dose_pediatric\": \"2 mg/kg body weight, given as a single dose\"\n  }\n}\n```",
+ "seconds": 15.0,
+ "notional_cost_usd": 0.011184
+}

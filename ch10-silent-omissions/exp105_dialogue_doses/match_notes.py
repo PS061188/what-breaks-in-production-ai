@@ -23,13 +23,15 @@ sys.path.insert(0, str(HERE))
 from count_doses import dialogue_doses, extract  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO))
+from shared.cli_defaults import SUFFIX  # noqa: E402
 spec = importlib.util.spec_from_file_location(
     "probe_conversation", REPO / "ch09-sparse-field-fabrication" / "probe_conversation.py")
 probe = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(probe)
 sections = probe.sections
 
-FIXTURES = REPO / "ch09-sparse-field-fabrication" / "fixtures_conversation"
+FIXTURES = REPO / "ch09-sparse-field-fabrication" / ("fixtures_conversation" + SUFFIX)
 CONDITIONS = ("template", "permission")
 SAMPLES = (1, 2, 3)
 

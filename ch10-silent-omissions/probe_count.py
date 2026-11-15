@@ -42,7 +42,8 @@ sys.path.insert(0, str(HERE))
 from common import DOSE, FOLLOWED_BY_COMPARISON, IDENTIFIER_BEFORE, LAB_UNIT_AFTER, build_cases, dose_figures  # noqa: E402
 from fixed import SYSTEM as AS_PRINTED  # noqa: E402
 
-FIXTURES = HERE / "fixtures_count"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_count" + SUFFIX)
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
 RUNS = (1, 2, 3)
@@ -81,6 +82,7 @@ def call_cli(system: str, prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)
@@ -93,6 +95,12 @@ def call_cli(system: str, prompt: str) -> dict:
 
 
 def parse(reply: str) -> dict:
+    """The reply's JSON object. With thinking off, a reply can carry a second,
+    corrected object after the first ("CORRECTION - Proper Extraction"); the
+    last fenced object is the model's final answer, so it is the one read."""
+    blocks = re.findall(r"```(?:json)?\s*(\{.*?\})\s*```", reply, re.S)
+    if len(blocks) > 1:
+        return json.loads(blocks[-1])
     body = re.sub(r"^```(?:json)?\s*|\s*```$", "", reply.strip())
     return json.loads(body[body.find("{"): body.rfind("}") + 1])
 

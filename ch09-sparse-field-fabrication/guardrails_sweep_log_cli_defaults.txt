@@ -1,0 +1,40 @@
+validator: guardrails/provenance_embeddings · sentence method · k=1 · cosine distance
+guardrails-ai 0.6.8 · provenance-embeddings 0.0.2 · sentence-transformers 6.3.0 · nltk 3.10.4 · embeddings all-MiniLM-L6-v2
+threshold is a DISTANCE: pass when nearest-chunk distance < threshold
+
+== default chunking (5-sentence windows, overlap 2)
+distance threshold | notes: caught/of 12, flagged/of 89 | records: caught/of 7, flagged/of 49
+               0.8 | notes: 2/12, 12/89 | records: 2/7, 12/49
+               0.7 | notes: 4/12, 25/89 | records: 3/7, 15/49
+               0.6 | notes: 7/12, 47/89 | records: 3/7, 27/49
+               0.5 | notes: 9/12, 61/89 | records: 3/7, 29/49
+               0.4 | notes: 11/12, 74/89 | records: 3/7, 40/49
+               0.3 | notes: 12/12, 87/89 | records: 7/7, 48/49
+               0.2 | notes: 12/12, 88/89 | records: 7/7, 49/49
+   every threshold — one per distinct distance. Best balance = highest share caught minus
+   share flagged. AUC = chance an invented entry sits further from its source than a
+   discussed one (0.5 = coin flip, 1.0 = perfect separation):
+   notes: 89 settings · loosest that catches all 12: distance 0.379, flags 76/89 (85%) · best balance: distance 0.541, catches 9/12, flags 53/89 · AUC 0.55
+   records: 48 settings · loosest that catches all 7: distance 0.302, flags 48/49 (98%) · best balance: distance 0.702, catches 3/7, flags 15/49 · AUC 0.36
+   (the validator's own pass/fail was checked against these distances, entry by entry,
+    at the seven thresholds in the table and at every distance named above)
+
+== sentence-fine chunking (size 1, overlap 0)
+distance threshold | notes: caught/of 12, flagged/of 89 | records: caught/of 7, flagged/of 49
+               0.8 | notes: 2/12, 11/89 | records: 1/7, 12/49
+               0.7 | notes: 2/12, 21/89 | records: 1/7, 13/49
+               0.6 | notes: 4/12, 30/89 | records: 2/7, 18/49
+               0.5 | notes: 7/12, 40/89 | records: 3/7, 22/49
+               0.4 | notes: 11/12, 70/89 | records: 3/7, 32/49
+               0.3 | notes: 12/12, 79/89 | records: 5/7, 39/49
+               0.2 | notes: 12/12, 84/89 | records: 7/7, 44/49
+   every threshold — one per distinct distance. Best balance = highest share caught minus
+   share flagged. AUC = chance an invented entry sits further from its source than a
+   discussed one (0.5 = coin flip, 1.0 = perfect separation):
+   notes: 89 settings · loosest that catches all 12: distance 0.348, flags 72/89 (81%) · best balance: distance 0.348, catches 12/12, flags 72/89 · AUC 0.55
+   records: 48 settings · loosest that catches all 7: distance 0.285, flags 41/49 (84%) · best balance: distance 0.285, catches 7/7, flags 41/49 · AUC 0.43
+   (the validator's own pass/fail was checked against these distances, entry by entry,
+    at the seven thresholds in the table and at every distance named above)
+
+from-scratch 9.5 on the notes, for comparison (similarity cut = 1 - distance):
+  sim 0.5 -> caught 6/12, flagged 19/89 · sim 0.7 -> caught 10/12, flagged 72/89

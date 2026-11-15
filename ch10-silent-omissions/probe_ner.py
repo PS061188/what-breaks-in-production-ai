@@ -45,6 +45,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 sys.path.insert(0, str(HERE))
+sys.path.insert(0, str(HERE.parent))
+from shared.cli_defaults import SUFFIX  # noqa: E402
 
 from common import DOSE, FOLLOWED_BY_COMPARISON, IDENTIFIER_BEFORE, LAB_UNIT_AFTER, build_cases, dose_figures  # noqa: E402
 from fixed import SCHEMA, SYSTEM  # noqa: E402
@@ -92,7 +94,7 @@ def recorded_lists(cases: list) -> dict:
         lists[key, "api"] = answer["doses"]
         for tag, condition in CONDITIONS.items():
             for run in RUNS:
-                path = HERE / "fixtures_count" / condition / f"{key}__s{run}.json"
+                path = HERE / ("fixtures_count" + SUFFIX) / condition / f"{key}__s{run}.json"
                 lists[key, f"{tag}{run}"] = parse(json.loads(path.read_text(encoding="utf-8"))["reply"])["doses"]
     return lists
 

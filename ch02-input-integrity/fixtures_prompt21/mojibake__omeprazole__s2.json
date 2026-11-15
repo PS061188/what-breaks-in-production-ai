@@ -7,7 +7,7 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "reply": "```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"â¢ (corrupted bullet point) appears 10 times throughout — should be •\",\n    \"Character encoding fault: UTF-8 bullet point decoded as Latin-1\"\n  ],\n  \"worst_affected_text\": \"All bullet-point markers display as 'â¢' instead of '•', but this does not obscure the meaning\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"frequency\": \"Once daily (every 24 hours)\",\n    \"administration\": \"Swallow whole with a glass of water before eating in the morning\",\n    \"duration\": \"14 days\",\n    \"note_on_efficacy\": \"May take 1 to 4 days for full effect; some people get complete relief within 24 hours\"\n  }\n}\n```",
- "seconds": 9.9,
- "notional_cost_usd": 0.0062369999999999995
+ "reply": "# INPUT QUALITY REPORT\n\n**Corruption Signals Found:**\n\n1. `â¢` — Character encoding fault: bullet point rendered as multi-byte sequence instead of proper Unicode bullet (•)\n2. `â¢` — Same encoding artifact appears multiple times throughout the document (8+ instances)\n\n**Assessment:**\n\n- **Input Quality Grade: DEGRADED**\n- **Worst Affected Text:** The entire document uses corrupted bullet points (`â¢` instead of `•`), but this does not impair readability or meaning. The core instructional text is intact and legible.\n\n---\n\n# EXTRACTION RESULT\n\n```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"â¢ (encoding fault: should be bullet point •)\",\n    \"Multiple instances throughout document\"\n  ],\n  \"worst_affected_text\": \"Directions â¢ for adults 18 years of age and older â¢ this product is to be used once a day...\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"frequency\": \"Once a day (every 24 hours)\",\n    \"duration\": \"14 days\",\n    \"administration\": \"Swallow with a glass of water before eating in the morning; swallow whole, do not chew or crush\"\n  }\n}\n```",
+ "seconds": 5.5,
+ "notional_cost_usd": 0.003666
 }

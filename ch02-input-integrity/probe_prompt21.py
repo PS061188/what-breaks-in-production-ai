@@ -33,7 +33,8 @@ sys.path.insert(0, str(HERE))
 from common import build_cases  # noqa: E402
 from shared.scoring import headline, pct, rule, table  # noqa: E402
 
-FIXTURES = HERE / "fixtures_prompt21"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_prompt21" + SUFFIX)
 PROMPT = (HERE / "prompt_2_1.txt").read_text(encoding="utf-8")
 CLI = str(Path.home() / ".local" / "bin" / "claude")
 MODEL = "claude-haiku-4-5"
@@ -53,6 +54,7 @@ def call_cli(system: str, prompt: str) -> dict:
     env = {k: v for k, v in os.environ.items() if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     cmd = [CLI, "-p", "--model", MODEL, "--output-format", "json", "--system-prompt", system,
            "--tools", "", "--strict-mcp-config", "--setting-sources", "", "--no-session-persistence"]
+    env, cmd = api_defaults(MODEL, env, cmd)
     with tempfile.TemporaryDirectory() as cwd:
         for attempt in range(3):
             proc = subprocess.run(cmd, input=prompt, capture_output=True, text=True, env=env, cwd=cwd, timeout=600)

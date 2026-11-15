@@ -64,3 +64,10 @@ invented no keys and no IDs in any condition; the schema dropped more sentences
 (33) than the free call (8); the validator loop removed every duplicate and
 omission with 13 re-asks; misplacement was the same in all three. Write-up in
 `../FINDINGS.md`.
+
+`probe_instructor.py` runs the Instructor library itself (1.17.0, its own
+environment; setup at the top of the script) with the same validator on the
+first ten notes, through `claude -p` on a subscription with thinking off. 9 of
+10 ended valid after 16 calls. The tenth wrote each sentence's text after its ID
+in all three replies; the validator's error never said that only the IDs were
+wanted. Replays from `fixtures_instructor/` with no key.

@@ -7,7 +7,7 @@
   "claude-haiku-4-5",
   "claude-haiku-4-5-20251001"
  ],
- "reply": "```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"â¢ (appears 11 times) — character encoding fault; the bullet point • has been corrupted into this two-character sequence, indicating UTF-8 misinterpretation\"\n  ],\n  \"worst_affected_text\": \"The entire passage is uniformly affected by the â¢ corruption, but it does not obscure the dosing instructions.\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"frequency\": \"Once a day (every 24 hours)\",\n    \"duration\": \"14 days\",\n    \"administration\": \"Swallow whole with a glass of water before eating in the morning. Do not chew or crush.\"\n  }\n}\n```",
- "seconds": 10.2,
- "notional_cost_usd": 0.006716
+ "reply": "# INPUT QUALITY REPORT\n\n**Corruption Signals Found:**\n\n1. `â¢` — The bullet point character is encoded incorrectly, appearing as a multi-byte sequence instead of a proper bullet (•). This occurs multiple times throughout the text.\n\n2. `â` in \"Directions â¢\" — Garbled character encoding artifact at the start of the directions section.\n\n**Analysis:**\n- The corruption is consistent and isolated to bullet-point rendering\n- All textual content is legible and complete\n- No mid-sentence cutoffs or unclosed brackets\n- No digit-letter confusion or scanner artifacts\n- The passage containing the dosage instructions (the answer) is NOT damaged—it reads clearly despite the encoding issue\n\n---\n\n# RESULT\n\n```json\n{\n  \"input_quality\": \"DEGRADED\",\n  \"corruption_signals\": [\n    \"Directions â¢\",\n    \"Multiple instances of 'â¢' instead of proper bullet character (•)\"\n  ],\n  \"worst_affected_text\": \"The bullet characters throughout, though this does not obscure meaning\",\n  \"extraction\": {\n    \"starting_dose\": \"1 tablet\",\n    \"frequency\": \"once a day (every 24 hours)\",\n    \"duration\": \"14 days\",\n    \"administration\": \"swallow with a glass of water before eating in the morning\",\n    \"population\": \"adults 18 years of age and older\"\n  }\n}\n```",
+ "seconds": 5.8,
+ "notional_cost_usd": 0.003739
 }

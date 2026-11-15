@@ -30,7 +30,8 @@ from book_prompt import SYSTEM  # noqa: E402
 from common import build_cases, dose_figures  # noqa: E402
 from probe_count import MODEL, RUNS, call_cli, parse  # noqa: E402
 
-FIXTURES = HERE / "fixtures_count" / "protocol"
+from shared.cli_defaults import SUFFIX, api_defaults  # noqa: E402
+FIXTURES = HERE / ("fixtures_count" + SUFFIX) / "protocol"
 USER = ("Run the protocol and return the result.\n\n"
         "Return only a JSON object with exactly these keys and no other text: "
         "\"inventory_count\" (integer), \"doses\" (array of strings), \"completeness_check\" "
