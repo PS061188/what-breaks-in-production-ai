@@ -9,8 +9,10 @@ documents and measures what happens.** Several did not survive it. Those are
 marked here and corrected in the book, because a fix that sounds right and does
 not work is worth more to you than one more piece of untested advice.
 
-**Replaying costs nothing and needs no API key.** All 5,137 model responses are
-recorded and committed.
+**Replaying costs nothing and needs no API key.** All 12,903 model responses
+behind the figures are recorded and committed, one file per call, and so are
+the 2,125 first recordings of the re-recorded experiments (the `_cli_defaults`
+folders).
 
 ```bash
 git clone https://github.com/PS061188/what-breaks-in-production-ai
@@ -543,20 +545,20 @@ Code: [`ch10-silent-omissions/probe_count.py`](ch10-silent-omissions/probe_count
 ### Experiment 10.4
 
 **Can a general named-entity model supply the independent count?**  
-en_core_web_trf (the model the chapter names) has no dose type: used as printed, against the 60 recorded extractions of Experiment 10.3 at the API default (9 really short, 4 short only by another drug's dose, 47 complete), it flags 4 of the 9 real drops, all on Amoxicillin, the one document where its entity count equals a complete list, and 10 of the 47 complete runs, all one lab value (Lisinopril's serum creatinine 3 mg/dL); it finds no doses in either dosing table, so the Gabapentin, Levothyroxine and Warfarin drops go unflagged; the small model flags nothing; the repo's pattern count, same rule, flags 4 of 9 with no false flag, 5 of 9 compared figure by figure. Computed 14 Nov 2026 from the tagger's per-document counts recorded in the first run (the label text did not change; the model's 457 MB download could not be completed on this machine); `probe_ner.py` reproduces it once installed. First recording: 4 of 4 real drops, 10 of 50 complete runs flagged  
+en_core_web_trf (the model the chapter names) has no dose type: used as printed, against the 60 recorded extractions of Experiment 10.3 at the API default (9 really short, 4 short only by another drug's dose, 47 complete), it flags 4 of the 9 real drops, all on Amoxicillin, the one document where its entity count equals a complete list, and 10 of the 47 complete runs, all one lab value (Lisinopril's serum creatinine 3 mg/dL); it finds no doses in either dosing table, so the Gabapentin, Levothyroxine and Warfarin drops go unflagged; the small model flags nothing; the repo's pattern count, same rule, flags 4 of 9 with no false flag, 5 of 9 compared figure by figure. Run 15 Nov 2026 with spaCy 3.8.7 and en_core_web_trf 3.8.0 on CPU; output in [`ner_trf_out.txt`](ch10-silent-omissions/ner_trf_out.txt). First recording: 4 of 4 real drops, 10 of 50 complete runs flagged  
 Code: [`ch10-silent-omissions/probe_ner.py`](ch10-silent-omissions/probe_ner.py) · needs its own spaCy environment (install line in the docstring)
 
 ### Experiment 10.5
 
 **Does a long conversation's dose survive into the note?**  
-On Experiment 9.4's 360 recorded ACI-Bench notes, 64 unique dose facts stated across 39 conversations all reached every one of their notes, attached to the right drug (396 proximity checks, 7 failures — six the one dose the doctor retracted mid-sentence, which every note correctly replaced, and one a correct attachment whose drug name sits a sentence away: "dose increase to 175 milligrams"); uncertain doses were flagged, not invented. A null at this length and fact type; the chapter's real-world rate rests on the outside studies  
+On Experiment 9.4's 360 recorded ACI-Bench notes, 63 of the 64 unique dose facts stated across 39 conversations reached every one of their notes, attached to the right drug; the 64th, a vitamin D dose the doctor corrected mid-sentence, rightly reached none, because every note carries the corrected dose (396 proximity checks, 7 failures: that dose in all six notes, and one a correct attachment whose drug name sits a sentence away: "dose increase to 175 milligrams"); uncertain doses were flagged, not invented. A null at this length and fact type; the chapter's real-world rate rests on the outside studies  
 Code: [`ch10-silent-omissions/exp105_dialogue_doses/`](ch10-silent-omissions/exp105_dialogue_doses/) · no model calls, replays Experiment 9.4's notes
 
 ### Experiment 10.6
 
 **Does a "what is missing?" audit in a second call catch known omissions?**  
 The chapter's completeness-audit fix, run once over all 60 recorded extractions of Experiment 10.3 (11 short by a known set of figures, 49 complete), Claude Haiku 4.5 at its API default (thinking off). It named 27 of 31 known-missing figures and every figure in 8 of the 11 short extractions, including all 9 on the extraction that dropped the most; it missed the methylene-blue dose in 2 of the 3 extractions that dropped it, and 2 tablet strengths in one. It raised alarms on 17 of 49 complete extractions: real source content outside the dose task (water volumes, weight bands, INR targets, intervals) or doses the extraction already carried in other words, plus one real drop the pattern count cannot see (Gabapentin's 1,400 mg/day); no invented figure. On the 6 API extractions, whose input did not change, the first recording (Claude Code's default thinking, `CLI_SETTINGS=cli`) named 2 of 11 missing figures; this one names 11 of 11 (first recording overall: 10 of 41)  
-Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Haiku 4.5 calls through the subscription CLI, $2.04 notional · every case in [`audit_log.txt`](ch10-silent-omissions/audit_log.txt)
+Code: [`ch10-silent-omissions/probe_audit.py`](ch10-silent-omissions/probe_audit.py) · 60 Haiku 4.5 calls through the subscription CLI, $0.41 notional (first recording: $2.04) · every case in [`audit_log.txt`](ch10-silent-omissions/audit_log.txt)
 
 ### Experiment 10.7
 

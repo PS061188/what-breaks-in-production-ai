@@ -2945,3 +2945,37 @@ Every recording where the two settings differ sits on the thinking side; 9.5's o
 
 **Experiment 10.9 at the API's default setting, 14 Nov 2026.** The 9.4 notes it reads and the fix-3 audit were re-recorded with thinking off (MAX_THINKING_TOKENS=0; first recording kept in the _cli_defaults folders). Fix 1: 208 of 360 notes flagged (template 37/32/35, permission 32/36/36; first recording 188). Every flag classified, every remaining drug word opened in dialogue and note: 110 junk only (first names, fillers, months, places, conditions, tests, diet words); 68 with every drug word in the note (24 renamed — acetaminophen 20, betamethasone 3, ibuprofen 1; 22 the same word, which Med7 did not count in the note; 22 a class or other words, e.g. "migraine medication" = propranolol); 30 with a drug word absent: prednisone asked about and never confirmed (D2N026, 6), Vicodin declined / antibiotics judged unnecessary / carvedilol a future option (8), insulin named only because the patient does not take it (D2N160, 6), ibuprofen as "avoid NSAIDs" (2), an alternative or past treatment (Aleve beside the prescribed ibuprofen, past ED and childhood antibiotics, past high-dose gabapentin; 7), and one list change left out (D2N145 permission run 3: clindamycin removed from the list; the other five notes record it). Medicines in use dropped, among the flags: 0. Fix 2: does not run. Fix 3: 60 calls, $0.48 notional, 268 s; 223 claims across 57 of 60 notes; 2 replies unparsable (commentary written after a closing quote inside the JSON: D2N030, D2N182). Every claim read against dialogue and note: 83 already in the note, 1 a dose the note carries (amlodipine 10 mg, false by 10.5's record), 30 not in the conversation (13 "allergies / family history / vital signs not documented" where nobody discussed them; vital-sign, A1c and blood-pressure values the doctor read from a screen without saying them; an AF drug, an antidepressant name, a prior lisinopril dose, a "new anxiety medication", a methotrexate dose, never named; two age/date-arithmetic claims; one critique of the plan), 96 real absent content whose note-worthiness is editorial, 3 trivial. Three are real omissions that matter: D2N025 oxybutynin ("i think the oxyglutinine is helping as well", urgency much better) is in neither the note's medication list nor its text (absent from 4 of the conversation's 6 notes; Med7 does not tag the garbled spelling, so fix 1 cannot see it); D2N093 the negative suicide/homicide screen ("you don't want to hurt yourself or anyone else?" — "absolutely not") is not recorded (the first recording's note had it); D2N023 gynecomastia, named by the doctor as the patient's other area of concern, is absent. Seven claims point at errors written into the note: D2N036 right hand for the left; D2N118 "denies use of television or phone during sleep" where the patient sleeps with the TV on and the phone by the bed; D2N123 "80% of readings within range" where the patient checks 80% of the time; D2N145 tacrolimus "0.1%", a strength nobody stated; D2N100 "18-year-old" for a 7th-grader whose age was never stated, only a date of birth; D2N049 "right flank bilaterally"; D2N026 Eliquis listed beside "denies use of blood thinners", before a planned epidural — a contradiction the conversation itself contains. First recording: the oxybutynin and gynecomastia omissions were in its notes too and its audit flagged both (oxybutynin as "an SGLT2 inhibitor"); the 13 Oct write-up filed them with the editorial content, so "the rest real but judgement-dependent" understated the audit. What thinking off changed: audit replies about twice as long (median 809 vs 363 characters) and 2.5 times as many claims, more of them about content already present or never stated; notes the same length (median about 2,560 characters), but four of the seven note errors (D2N036, D2N118, D2N145, D2N049) and the lost suicide screen (D2N093) are new. Verdict unchanged in kind: on prose the audit is the one fix that runs, and it is a reading feed, not a gate. It is a feed worth reading, because it finds a dropped medicine and errors the note introduced among claims that mostly need no action.
 
+
+## Chapter 3's verification advice follows Chapter 9 (15 Nov 2026)
+
+Chapter 3 said "Any verification mechanism that uses the same model that
+generated the content will fail at exactly the class of fabrication that the
+generative step failed at", and its desk tip said never to ask the model that
+produced an output to check it. Neither claim was ever measured in this
+repository. The one measurement of it here contradicts the absolute: at the API
+default (Experiment 9.5, on 9.4's notes and 9.6's records, re-recorded 14 Nov
+2026), the model that wrote them, shown the conversation in a call of its own, caught every invented
+entry with no evidence behind it, and so did Claude Sonnet 5; on the seven that
+widened a real answer each caught five, not the same five. The same-call
+self-check measured in Chapter 10 (Experiment 10.3, step 3) still flagged none
+of the lists that were missing doses. What separates the two is whether the
+checker gets the source, in a separate call. Chapter 3's tip, its
+"Do not use the same model" paragraph, prevention item 4, two Quick-reference
+cells and one Monday-morning question now say that: the checker must see the
+source; it can be the same model, another model, a rules pass or a person; a
+claim that widens the source goes to a person. Book only: no experiment or
+number changed.
+
+## Experiment 10.4 re-run with the model installed (15 Nov 2026)
+
+The 14 Nov note above computed 10.4 from the first run's recorded counts because
+the model's 457 MB download from GitHub would not finish (about 29 KB/s per
+connection). It finished over 32 parallel range requests (zip CRC check clean)
+and `probe_ner.py` ran (spaCy 3.8.7, en_core_web_trf 3.8.0, CPU; output in
+`ch10-silent-omissions/ner_trf_out.txt`). Every flag matches the computed
+result: 4 of 9 real drops, all Amoxicillin; 10 of 47 complete runs flagged, all
+the Lisinopril lab value, 0 with lab values skipped; pattern count 4 of 9, 5 of 9
+by figure comparison, 0 false. One recorded count was wrong: Levothyroxine's
+tagger count is 8, not 3. Its flag does not change (8 is below the 12 to 14
+figures every Levothyroxine list carries); Table 10-2 and the report now print 8,
+and Gabapentin's cell prints its count, 13.

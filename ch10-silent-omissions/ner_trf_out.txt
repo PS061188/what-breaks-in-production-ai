@@ -1,0 +1,65 @@
+Python 3.9.6 (arm64, CPU) · spaCy 3.8.7 · en_core_web_trf 3.8.0 · spacy-curated-transformers 0.3.1 · torch 2.8.0
+load 34.5s · per document 0.2s, 0.6s, 0.3s, 0.5s, 0.6s, 0.5s
+
+Where the dose amounts land
+---------------------------
+drug           dose printed  mentions  QUANTITY  CARDINAL  DATE  other  no entity
+-------------  ------------  --------  --------  --------  ----  -----  ---------
+Lisinopril     with unit     17        17        0         0     0      0        
+Lisinopril     no unit       0         0         0         0     0      0        
+Levothyroxine  with unit     16        13        0         1     0      2        
+Levothyroxine  no unit       8         6         1         1     0      0        
+Amoxicillin    with unit     44        42        0         0     0      2        
+Amoxicillin    no unit       0         0         0         0     0      0        
+Sertraline Hy  with unit     24        23        0         0     0      1        
+Sertraline Hy  no unit       7         7         0         0     0      0        
+Warfarin Sodi  with unit     21        2         0         0     0      19       
+Warfarin Sodi  no unit       20        2         0         0     0      18       
+Gabapentin     with unit     57        56        0         0     0      1        
+Gabapentin     no unit       42        2         3         0     0      37       
+all six        with unit     179       153       0         1     0      25       
+all six        no unit       77        17        4         1     0      55       
+
+Examples of doses with a unit that did not land in QUANTITY:
+  Levothyroxine no entity entity '-'            in ...othyroidism in Adults* *Dosages greater than 200 mcg/day are seldom required....
+  Levothyroxine no entity entity '-'            in ...quate response to daily dosages greater than 300 mcg/day is rare and may indi...
+  Levothyroxine DATE      entity '5 to 6 mcg'   in ...2 months 6 to 8 mcg/kg/day 1 to 5 years 5 to 6 mcg/kg/day 6 to 12 years 4 t...
+  Amoxicillin   no entity entity '-'            in ...lanate Potassium for Oral Suspension, [7 zero-width spaces]600 mg/42.9 mg per 5 mL providi...
+  Sertraline Hy no entity entity '-'            in ...ion) or in intravenous doses much lower than 1 mg/kg with Sertraline hydro...
+  Warfarin Sodi no entity entity '-'            in ...R, 2 to 3) warfarin plus low-dose aspirin (≤ 100 mg/day) for at least 3 mont...
+  Warfarin Sodi no entity entity '-'            in ...*1/*1 *1/*2 *1/*3 *2/*2 *2/*3 *3/*3 GG 5 to 7 mg 5 to 7 mg 3 to 4 mg 3 to...
+  Gabapentin    no entity entity '-'            in ...wo times a day), and on Day 3 as 900 mg/day (300 mg three times a day). The...
+
+Counts of distinct dose amounts per document
+--------------------------------------------
+drug           pattern  read  QUANTITY ents  NER rule  NER, no lab  NER only  pattern only            
+-------------  -------  ----  -------------  --------  -----------  --------  ------------------------
+Lisinopril     7        7     13             8         7            3 mg      -                       
+Levothyroxine  11       14    17             8         8            -         6 mcg, 200 mcg, 300 mcg 
+Amoxicillin    10       10    54             10        10           -         -                       
+Sertraline Hy  7        7     23             6         6            -         1 mg                    
+Warfarin Sodi  6        8     2              2         2            -         2 mg, 4 mg, 7 mg, 100 mg
+Gabapentin     13       24    61             13        13           -         -                       
+
+Each recorded extraction: distinct figures in the list, against the NER count
+-----------------------------------------------------------------------------
+drug           pattern  NER  api  ap1  ap2  ap3  di1  di2  di3  pr1  pr2  pr3
+-------------  -------  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---  ---
+Lisinopril     7        8    7!   7!   7!   7!   7!   7!   7!   7!   7!   7! 
+Levothyroxine  11       8    14   14   14   14   14   14   14   14   14   12*
+Amoxicillin    10       10   8!*  10   10   10   10   10   10   6!*  6!*  4!*
+Sertraline Hy  7        6    7    7    7    7    6~   6~   7    7    7    6~ 
+Warfarin Sodi  6        2    8    8    8    8    9    9    9    8    8    7~ 
+Gabapentin     13       13   13   21   21   21   23*  23*  23*  21   18*  21 
+  ap = as-printed, di = distinct, pr = protocol (fixtures_count/); api = fixed.py's run (fixtures/)
+  ! flagged by the NER rule   * really short (read)   ~ short only by another drug's dose
+
+What each check flags, of 60 document-runs
+------------------------------------------
+check                                             really short, flagged  other drug only, flagged  complete, flagged (false)
+------------------------------------------------  ---------------------  ------------------------  -------------------------
+NER rule                                          4/9                    0/4                       10/47                    
+NER rule, lab values skipped                      4/9                    0/4                       0/47                     
+NER rule, items listed (len of the list)          0/9                    0/4                       0/47                     
+pattern count, same rule                          4/9                    3/4                       0/47                     
+pattern set comparison (as common.score matches)  5/9                    4/4                       0/47                     

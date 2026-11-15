@@ -286,7 +286,7 @@ counted as a dose. The model has no dose type &mdash; doses land in QUANTITY,
 next to lab values and volumes &mdash; and it finds no doses at all in either
 dosing table: Warfarin&rsquo;s genotype ranges and 37 of Gabapentin&rsquo;s 40
 renal-table cells get no entity. Its counts sit below every list on Gabapentin,
-Levothyroxine (3) and Warfarin (2), so the four Gabapentin lists that lost 1,400
+Levothyroxine (8) and Warfarin (2), so the four Gabapentin lists that lost 1,400
 mg/day and the Levothyroxine list that lost 200 and 300 mcg/day go unflagged. None
 of the four short-by-another-drug lists is flagged. The small model, en_core_web_sm,
 flags nothing: it reads the &ldquo;50&rdquo; of &ldquo;50 mg&rdquo; as a bare number.
@@ -294,13 +294,10 @@ The hand-read behind this experiment also caught a matcher bug of ours &mdash; a
 returned range &ldquo;10 to 15 mg/kg/day&rdquo; was scored as dropping the 10 &mdash;
 which is corrected above and in Experiment 10.3&rsquo;s figures.</p>
 
-<p><strong>How these flags were produced.</strong> The tagger&rsquo;s count depends only
-on the label text, which did not change, so the flags were computed from the
-per-document counts the first run recorded (Amoxicillin 10, Lisinopril 8, Sertraline
-6, Levothyroxine 3, Warfarin 2, Gabapentin below every list) against the new
-extractions. The model itself was not re-run on 14 Nov 2026: its 457 MB download could
-not be completed on this machine. <code>probe_ner.py</code> reproduces the table once
-the model is installed.</p>
+<p><strong>How these flags were produced.</strong> <code>probe_ner.py</code> run on
+15 Nov 2026 (spaCy 3.8.7, en_core_web_trf 3.8.0, CPU, its own environment) against
+the 60 extractions at the API default; the output is saved in
+<code>ner_trf_out.txt</code>.</p>
 
 <p>The first recording, with the command-line tool&rsquo;s default thinking on
 (<code>fixtures_count_cli_defaults/</code>; 4 really short, 50 complete): 4 of 4 real
