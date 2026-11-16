@@ -1,6 +1,6 @@
 """Experiment 10.10 — the not_extracted field, verified by code (fix 4's deterministic half).
 
-Prachi's question (14 Oct 2026): the field is an engineering fix, so should it
+The author's question (14 Oct 2026): the field is an engineering fix, so should it
 not be checked through code, where results are deterministic? The schema half
 already is deterministic (a reply without the field fails validation). The
 field's content is model-written, so the deterministic thing code can add is

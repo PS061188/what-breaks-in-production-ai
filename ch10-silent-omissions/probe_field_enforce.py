@@ -1,9 +1,9 @@
 """Experiment 10.11 — the field enforced through the answer schema.
 
-Prachi's question (14 Oct 2026): does enforcing the field through the answer
+The author's question (14 Oct 2026): does enforcing the field through the answer
 schema change what the model writes in it, compared with asking in prompt
 words? Two kinds of enforcement exist. Decoder-level enforcement (the API's
-structured outputs) constrains generation itself; it needs the paid API and was
+structured outputs) constrains generation itself; it was
 not run. Engineering enforcement validates each reply against the schema in
 code and sends it back for correction until it conforms. That layer is
 deterministic given a reply, and every reply of Experiment 10.7 is recorded, so

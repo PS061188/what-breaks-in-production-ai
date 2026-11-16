@@ -52,10 +52,8 @@ What is scored, per encounter where the topic was not discussed:
 Every counted case is printed in full so it can be read; the counts are claims
 about this scorer until they are.
 
-Model calls go through the Claude Code CLI on Prachi's claude.ai subscription
-(`claude -p`), never the paid API, with its default system prompt replaced, no
-tools, no MCP servers, no settings files, and an empty working directory. The
-CLI still adds a short environment block (working directory, date) to each call.
+Model calls run with no tools. A short environment block (working directory,
+date) is added to each call.
 
     python3 probe_conversation.py                  # replay recorded notes
     python3 probe_conversation.py --live           # record run 1
@@ -271,7 +269,7 @@ def score(records: dict, dialogues: list) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--live", action="store_true", help="record missing notes through the subscription CLI")
+    parser.add_argument("--live", action="store_true", help="record missing notes live")
     parser.add_argument("--sample", type=int, default=1, help="run number; each run keeps its own recordings")
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--workers", type=int, default=4)
@@ -294,7 +292,7 @@ def main() -> int:
     headed = {c: sum(1 for r in recs.values() if len(sections(r["note"])) >= 9) for c, recs in records.items()}
     results = score(records, dialogues)
 
-    print(f"\nRun {args.sample} · {len(dialogues)} conversations · {MODEL} via the subscription CLI")
+    print(f"\nRun {args.sample} · {len(dialogues)} conversations · {MODEL}")
     print("notes that used the template's headings: " + ", ".join(f"{c} {n}/{len(dialogues)}" for c, n in headed.items()))
     print("\n{:<16} {:<12} {:>30} {:>30}".format("topic", "prompt", "filled where NOT discussed", "filled where discussed"))
     for topic in TOPICS:
@@ -318,7 +316,7 @@ def main() -> int:
 
     spent = [r.get("notional_cost_usd") or 0 for recs in records.values() for r in recs.values()]
     secs = [r.get("seconds") or 0 for recs in records.values() for r in recs.values()]
-    print(f"\n[{len(spent)} notes · notional ${sum(spent):.2f} on the subscription, not billed · "
+    print(f"\n[{len(spent)} notes · ${sum(spent):.2f} at API prices · "
           f"{sum(secs) / max(len(secs), 1):.1f}s per note recorded · {time.time() - started:.0f}s this run]")
     return 0
 

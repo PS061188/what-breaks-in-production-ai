@@ -14,12 +14,10 @@ the kept API protocol run (fixtures/, book_prompt.py's last run, 6 documents)
 are compared against the pattern's reference count with the corrected matcher
 (lab-unit exclusion on the source side, expand_ranges=True on the list side
 only). That comparison names which extractions are short and by which figures.
-One audit call per recorded extraction — Claude Haiku 4.5 through the
-`claude -p` CLI on the claude.ai plan (never the paid API), default system
-prompt replaced, no tools, no MCP servers, no settings files, an empty working
-directory, at most 2 attempts per case and at most 60 calls in all. The CLI has
-no schema enforcement, so the prompt adds a JSON format instruction after the
-book's question, and the reply is parsed.
+One audit call per recorded extraction — Claude Haiku 4.5, no tools, at most
+2 attempts per case and at most 60 calls in all. No schema is enforced, so the
+prompt adds a JSON format instruction after the book's question, and the reply
+is parsed.
 
 Scoring is proposed, not concluded: every non-empty missing[] list is printed
 in full, every known-missing figure no entry contained is printed, and entries
@@ -66,7 +64,7 @@ SYSTEM = ("You are auditing an extraction for completeness. An extraction system
           "You will be shown the source document and the list it extracted.")
 
 # The book's question, verbatim, after the source and the extraction. The JSON
-# instruction is an addition for scorability — the CLI enforces no schema.
+# instruction is an addition for scorability — no schema is enforced.
 USER = ("SOURCE:\n{text}\n\n"
         "EXTRACTED:\n{doses}\n\n"
         "What information present in the source is missing from the extraction?\n\n"
@@ -113,7 +111,7 @@ def call_cli(system: str, prompt: str, budget_used: int) -> dict:
 def load_extractions() -> list:
     """Every recorded extraction, with its doses list and its case.
 
-    The three CLI conditions come from fixtures_count/. The kept API protocol
+    The three conditions of Experiment 10.3 come from fixtures_count/. The kept API protocol
     run (book_prompt.py's last run) comes from fixtures/ — a different envelope
     (model/system/user/response, no condition or drug fields), but the reply
     JSON inside has the same "doses" list, so it qualifies. Its drug is
@@ -215,7 +213,7 @@ def get(ext: dict, live: bool) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--live", action="store_true", help="record missing audits through the claude CLI")
+    ap.add_argument("--live", action="store_true", help="record missing audits live")
     ap.add_argument("--auditor", default=MODEL, help="auditor model (Experiment 10.12: a different model than the extractor)")
     args = ap.parse_args()
     global AUDITOR
@@ -238,7 +236,7 @@ def main() -> int:
         print(f"{ext['condition']:13} {ext['drug']:14} {ext['run']:>3} {len(comp['reference']):>11} "
               f"{len(comp['reference'] & comp['own']):>7}  {', '.join(km) if km else '-'}")
     n_figures = sum(len(c["known_missing"]) for c in comps)
-    print(f"\n{len(extractions)} recorded extractions (54 CLI + {len(extractions) - 54} API protocol); "
+    print(f"\n{len(extractions)} recorded extractions (54 from Experiment 10.3 + {len(extractions) - 54} from the protocol prompt); "
           f"{short} short, {len(extractions) - short} complete; "
           f"{n_figures} known-missing figures in all")
     print("fixtures/ note: the API protocol files have a different envelope (model/system/"
@@ -355,8 +353,8 @@ def main() -> int:
     used = sorted({m for r in records for m in r.get("models_used", [])})
     print(f"\nRecorded audit calls: {len(records)} (one per extraction; retries would appear "
           f"in the live run's attempt count)")
-    print(f"CLI attempts this run: {_attempts} (budget {BUDGET}, recorded fixtures count against it)")
-    print(f"Total notional cost: ${cost:.4f} (claude.ai plan — notional, not billed)")
+    print(f"Live attempts this run: {_attempts} (budget {BUDGET}, recorded fixtures count against it)")
+    print(f"Total cost at API prices: ${cost:.4f}")
     print(f"Total recorded seconds: {seconds:.0f}")
     print(f"Models used: {used}")
     return 0

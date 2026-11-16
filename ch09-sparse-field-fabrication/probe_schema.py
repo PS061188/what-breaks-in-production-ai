@@ -26,7 +26,7 @@ conditions, identical except for one sentence, the field rule:
   optional   A "value" is optional: it may be null when the conversation does
              not cover that field, and its "source_quote" is then null too. Fix 1.
 
-The CLI has no schema enforcement, so the format is stated in the prompt and
+No schema is enforced, so the format is stated in the prompt and
 the reply parsed. A reply that breaks its condition's rule (no JSON object, a
 field missing, a null or empty value under "required", a value that is neither
 null nor a non-empty string under "optional") is counted separately; its fields
@@ -69,10 +69,8 @@ conversation did discuss, how many it would set to null.
 Every counted case is printed with --show so it can be read against its
 conversation; the counts are claims about this scorer until they are.
 
-Model calls go through the Claude Code CLI on Prachi's claude.ai subscription
-(`claude -p`), never the paid API, with its default system prompt replaced, no
-tools, no MCP servers, no settings files, and an empty working directory. The
-CLI still adds a short environment block (working directory, date) to each call.
+Model calls run with no tools. A short environment block (working directory,
+date) is added to each call.
 Each run keeps its own recordings (fixtures_schema/<condition>/..._s<run>.json).
 
     python3 probe_schema.py                     # replay runs 1-3
@@ -393,10 +391,10 @@ def print_block(title: str, rows: list) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--live", action="store_true", help="record missing replies through the subscription CLI")
+    parser.add_argument("--live", action="store_true", help="record missing replies live")
     parser.add_argument("--runs", default="1,2,3", help="run numbers; each run keeps its own recordings")
     parser.add_argument("--limit", type=int, default=0)
-    parser.add_argument("--workers", type=int, default=3, help="parallel CLI calls when recording (at most 3)")
+    parser.add_argument("--workers", type=int, default=3, help="parallel calls when recording (at most 3)")
     parser.add_argument("--show", action="store_true", help="print every invented value and every rejected one")
     parser.add_argument("--discussed", type=int, default=0, help="also print N values that are not invented")
     args = parser.parse_args()
@@ -417,7 +415,7 @@ def main() -> int:
 
     rows = [x for rec in records for x in rows_for(rec, by_id[rec["encounter_id"]])]
 
-    print(f"\n{len(dialogues)} conversations · runs {args.runs} · {MODEL} via the subscription CLI")
+    print(f"\n{len(dialogues)} conversations · runs {args.runs} · {MODEL}")
     for r in runs:
         print_block(f"Run {r}", [x for x in rows if x["run"] == r])
     if len(runs) > 1:
@@ -452,7 +450,7 @@ def main() -> int:
 
     spent = [r.get("notional_cost_usd") or 0 for r in records]
     secs = [r.get("seconds") or 0 for r in records]
-    print(f"\n[{len(records)} replies · notional ${sum(spent):.2f} on the subscription, not billed · "
+    print(f"\n[{len(records)} replies · ${sum(spent):.2f} at API prices · "
           f"{sum(secs) / max(len(secs), 1):.1f}s per reply recorded · {time.time() - started:.0f}s this run]")
     return 0
 

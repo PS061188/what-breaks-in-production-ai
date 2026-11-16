@@ -28,9 +28,9 @@ engineering fixes in exactly the order the chapter lists them.</p>
 
 <div class="toc">
   <div><span class="n">A</span> Why this report exists
-    <span class="sub">A book full of code that had never been run</span></div>
+    <span class="sub">Every prompt and fix in the book, tested on real documents</span></div>
   <div><span class="n">B</span> How the experiments work
-    <span class="sub">The documents, the trick that gives us right answers, and the words you need</span></div>
+    <span class="sub">The documents, the trick that supplies the right answers, and the words you need</span></div>
   <div><span class="n">C</span> How to read a chapter
     <span class="sub">The five things reported for every prompt and every fix</span></div>
   <div><span class="n">2</span> Input integrity failures
@@ -66,15 +66,15 @@ engineering fixes in exactly the order the chapter lists them.</p>
 <!-- ============================ A ============================ -->
 <div class="summary">
 <span class="kicker">The whole report, in one page</span>
-<p class="oneline">A book of nine failure patterns, each with a prompt and a set of engineering fixes, none of which had ever been run. All of them were run, against 12 real FDA drug labels. <strong>The taxonomy held. Several of the fixes did not.</strong></p>
+<p class="oneline">A book of nine failure patterns, each with a prompt and a set of engineering fixes. Every prompt and fix was run on real documents: twelve FDA drug labels and, in Chapters 8 to 10, role-played doctor&ndash;patient conversations from the ACI-Bench benchmark. <strong>The taxonomy held. Several of the fixes did not.</strong></p>
 
 <h4>The four findings that changed the book</h4>
 <table>
 <tr><th style="width:34%">Finding</th><th>Evidence</th></tr>
 <tr><td><strong>A check can be built so that it cannot fail</strong></td>
     <td>Chapter 9&rsquo;s section check reported <strong>0%</strong> fabrication in two designs, and both zeros were arithmetic: the check let a value through only from the one section the test itself treated as the answer, so on fields with no such section nothing could pass. The book now says so, and prints the check&rsquo;s real cost instead: <strong>5</strong> correct children&rsquo;s doses rejected.</td></tr>
-<tr><td><strong>A model cannot check its own work</strong></td>
-    <td>Measured four separate ways, in four chapters, independently: its confidence, its verdict on its own input, its own item count, its own completeness. All four failed.</td></tr>
+<tr><td><strong>A model cannot check its own work in the call that produced it</strong></td>
+    <td>Measured four separate ways, in four chapters, independently: its confidence, its verdict on its own input, its own item count, its own completeness. All four failed. Asked in a separate call and shown the source, the same model caught <strong>31 of 33</strong> invented entries (Chapter 9) and named <strong>27 of 31</strong> missing dose figures (Chapter 10).</td></tr>
 <tr><td><strong>The stronger model is worse at the failure that matters most</strong></td>
     <td>Silent corruption rose <strong>39% &rarr; 68% &rarr; 88%</strong> from Haiku 4.5 to Opus 5 to GPT-5-mini. A better model reconstructs damaged input more fluently, so the wrong answer arrives better written.</td></tr>
 <tr><td><strong>Nothing was measured twice until the end</strong></td>
@@ -86,8 +86,8 @@ engineering fixes in exactly the order the chapter lists them.</p>
 <table>
 <tr><th style="width:30%">Who checks</th><th>What happened</th></tr>
 <tr><td><strong>Code, outside the model</strong></td><td><span class="keep">WORKED</span> almost always, usually free, and returned an identical number on every run.</td></tr>
-<tr><td><strong>A second, different model</strong></td><td>Partly worked. About <strong>four times</strong> the cost of what it checks, and the false-alarm rate moves between runs of an identical setup.</td></tr>
-<tr><td><strong>The model, about itself</strong></td><td><span class="drop">FAILED</span> every time it was tested.</td></tr>
+<tr><td><strong>A model in a separate call, shown the source</strong></td><td>Caught most errors: <strong>31 of 33</strong> invented entries with either model (Chapter 9); <strong>27 of 31</strong> missing dose figures with the model that wrote the list, and all 31 with a second model (Chapter 10). Both raised false alarms, on 17 and 22 of 49 complete lists, and the second model cost about six times as much.</td></tr>
+<tr><td><strong>The model, about itself, in the same call</strong></td><td><span class="drop">FAILED</span> every time it was tested.</td></tr>
 </table>
 
 <h4>How to read this report</h4>
@@ -102,13 +102,13 @@ engineering fixes in exactly the order the chapter lists them.</p>
 </div>
 
 <h2 class="part">A — Why this report exists</h2>
-<h3 class="top">A book full of code that had never been run</h3>
+<h3 class="top">Every prompt and fix in the book, tested on real documents</h3>
 
 <p class="lede">Every chapter of <em>What Breaks in Production AI</em> ends with
-a prompt template and a list of engineering fixes. They were written carefully.
-They were never executed. This report is what happened when they were.</p>
+a prompt template and a list of engineering fixes. This report runs each one on real
+documents and measures what it changes.</p>
 
-<p>That gap matters more than it might seem. A prompt is not like a paragraph
+<p>A prompt is not like a paragraph
 of prose, where a careful writer can be reasonably confident the words do what
 they intend. A prompt is an instruction to a machine, and the only way to find
 out what a machine does with an instruction is to give it the instruction and
@@ -117,11 +117,11 @@ completely differently in production. A fix that sounds obviously correct can
 turn out to break something else that nobody was measuring.</p>
 
 <p>So the exercise here is deliberately narrow, and deliberately unkind to the
-book. For all nine failure patterns, we took the exact prompt the chapter
+book. For all nine failure patterns, I took the exact prompt the chapter
 recommends and the exact engineering fixes it lists, ran them against real
-documents, and measured what changed. Where a fix worked, we say by how much.
-Where it did nothing, we say that in the same size type. Where a chapter's
-failure did not occur at all, we say that too.</p>
+documents, and measured what changed. Where a fix worked, I say by how much.
+Where it did nothing, I say that in the same size type. Where a chapter's
+failure did not occur at all, I say that too.</p>
 
 <div class="plain">
   <span class="label">The short version</span>
@@ -133,9 +133,10 @@ failure did not occur at all, we say that too.</p>
   one costs four times the thing it protects, and one <strong>reproduces the exact
   harm its own chapter opens by warning about</strong>. Two chapters give the same
   advice and one of them is broken.</p>
-  <p>The book also makes a claim five separate times without knowing it: that a
-  model cannot be trusted to assess its own work. Three fixes are built on
-  exactly that signal.</p>
+  <p>Five measurements in four chapters found the same thing: a model cannot be
+  trusted to judge its own work inside the call that produced it. Three fixes are
+  built on exactly that signal. Asked in a separate call and shown the source,
+  the same model caught most of its own errors.</p>
   <p>None of that was knowable from reading. All of it cost about twenty-four
   dollars.</p>
 </div>
@@ -144,8 +145,8 @@ failure did not occur at all, we say that too.</p>
 
 <p>You do not need to write software to read this. Part B explains every
 technical term as it arrives, and the experiments are described the way you
-would describe them to a colleague over coffee: here is what we asked the
-machine, here is what it did, here is why that is a problem, here is what we
+would describe them to a colleague over coffee: here is what I asked the
+machine, here is what it did, here is why that is a problem, here is what I
 changed, here is what happened next.</p>
 
 <p>If you do write software, everything here is in a public code repository.
@@ -156,15 +157,20 @@ seconds without paying anything or creating an account anywhere.</p>
 <h2 class="part">B — How the experiments work</h2>
 <h3 class="top">The documents</h3>
 
-<p>Every experiment uses the same source material: the printed labels that come
+<p>Most experiments use the same source material: the printed labels that come
 with prescription drugs. Not the leaflet in the box — the full regulatory
 document a manufacturer files with the US Food and Drug Administration, running
 to dozens of pages and covering what the drug treats, how much to give, who
 should not take it, what happens in overdose, and so on.</p>
 
 <p>The FDA publishes all of these free in a machine-readable form. They are in
-the public domain, so anyone can download the same ones we used. We took twelve
+the public domain, so anyone can download the same ones I used. I took twelve
 common drugs — prednisone, lisinopril, metformin, warfarin, and nine others.</p>
+
+<p>Chapters 8, 9 and 10 add a second set: sixty role-played doctor&ndash;patient
+conversations from ACI-Bench, a public research benchmark, each paired with the
+clinical note written from it. Those chapters describe the set where they first
+use it.</p>
 
 <h4>Why these documents, and not something more exciting</h4>
 
@@ -183,7 +189,7 @@ phrasings is the entire subject of one of the chapters.</p>
 <p>Third — and this is the trick that makes the whole report possible — the
 labels are <strong>naturally incomplete, in ways nobody arranged</strong>.</p>
 
-<h3>The trick: how we know the right answer</h3>
+<h3>The trick: how I know the right answer</h3>
 
 <p>The hardest problem in testing an AI system is knowing what the correct
 answer was supposed to be. Usually somebody has to sit down and write out the
@@ -191,27 +197,27 @@ right answers by hand, which is slow, expensive, and produces an answer key that
 people can argue with. Two experts often disagree about what a summary should
 have said.</p>
 
-<p>We avoided all of that, because the documents gave us the answer key for
+<p>I avoided all of that, because the documents supplied the answer key for
 free.</p>
 
 <p>Not every drug label has every section. Prednisone's label has no
 pediatric-use section at all. Sertraline's has no pregnancy section.
-Omeprazole's is missing nine of the fourteen sections we looked for. These gaps
+Omeprazole's is missing nine of the fourteen sections I looked for. These gaps
 are real — they are simply how those documents were filed — and they are
 recorded in the data, so a computer can check them without a human making a
 judgement call.</p>
 
-<p>That gives us something unusually clean. If we hand the AI only two sections
-of a label and then ask a question that could only be answered from a third, we
+<p>That makes the test unusually clean. If I hand the AI only two sections
+of a label and then ask a question that could only be answered from a third, I
 know with certainty that the correct response is <em>"I cannot answer that from
 what you gave me."</em> Not because an expert decided so, but because the text
 simply is not there.</p>
 
 <div class="plain">
   <span class="label">In one sentence</span>
-  <p>We can measure making-things-up exactly, because we know exactly which
+  <p>I can measure making-things-up exactly, because I know exactly which
   questions have no answer in the material — and the machine has no way of
-  knowing that we know.</p>
+  knowing that I know.</p>
 </div>
 
 <h3>Broken and fixed</h3>
@@ -287,7 +293,7 @@ recordings instead of asking the model afresh.</p>
 <h3 class="top">The same five things, every time</h3>
 
 <p class="lede">Each chapter part below opens with the failure in plain words and
-how we tested for it. Then the chapter's prompt template. Then its engineering
+how I tested for it. Then the chapter's prompt template. Then its engineering
 fixes, numbered in the order the book lists them.</p>
 
 <p>For the prompt and for every single fix, the same five things are reported,
@@ -297,7 +303,7 @@ in the same order, so you can review them without hunting:</p>
   <tr><th style="width:22%">Heading</th><th>What it tells you</th></tr>
   <tr><td><strong>What it is</strong></td>
       <td>The fix explained without jargon, and what the book says about it.</td></tr>
-  <tr><td><strong>What we ran</strong></td>
+  <tr><td><strong>What was run</strong></td>
       <td>Exactly what was done, and against what.</td></tr>
   <tr><td><strong>Result</strong></td>
       <td>The measured numbers, with the denominators shown.</td></tr>

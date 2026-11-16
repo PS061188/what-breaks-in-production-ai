@@ -14,10 +14,8 @@ This probe asks the same question two ways, on the same six documents:
 
 and compares every answer with three numbers the code computes without the model:
 distinct figures in the source, mentions in the source, and distinct figures in the
-model's own list. Three runs of each, Claude Haiku 4.5, called through the `claude -p`
-CLI on the claude.ai plan (never the paid API) with its default system prompt
-replaced, no tools, no MCP servers, no settings files and an empty working
-directory. The CLI has no schema enforcement, so the prompt asks for the JSON
+model's own list. Three runs of each, Claude Haiku 4.5, no tools. No schema is enforced, so the
+prompt asks for the JSON
 object fixed.py's schema defines and the reply is parsed.
 
     python3 probe_count.py           # replay recorded answers
@@ -123,7 +121,7 @@ def get(condition: str, case: dict, run: int, live: bool) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--live", action="store_true", help="record missing runs through the claude CLI")
+    ap.add_argument("--live", action="store_true", help="record missing runs live")
     args = ap.parse_args()
     cases = build_cases()
     jobs = [(c, case, r) for c in PROMPTS for case in cases for r in RUNS]

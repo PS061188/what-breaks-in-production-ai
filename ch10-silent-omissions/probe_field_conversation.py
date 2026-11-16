@@ -32,9 +32,7 @@ What is scored, per run:
 Every entry and every extra is printed verbatim with its reason. The classes
 are the scorer's claim; the printed cases are the record. Read them.
 
-Model calls go through the Claude Code CLI on Prachi's claude.ai subscription
-(`claude -p`), never the paid API, with the printed prompt as the system prompt,
-no tools, no MCP servers, no settings files, an empty working directory.
+Model calls use the printed prompt as the system prompt, no tools.
 
     python3 probe_field_conversation.py                  # replay recorded runs
     python3 probe_field_conversation.py --live --sample 1
@@ -327,7 +325,7 @@ def stated_without_unit(canons: set, dialogue: str) -> bool:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--live", action="store_true", help="record missing replies through the subscription CLI")
+    parser.add_argument("--live", action="store_true", help="record missing replies live")
     parser.add_argument("--sample", type=int, default=0, help="run number (0 = every recorded run)")
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--workers", type=int, default=4)
@@ -362,7 +360,7 @@ def main() -> int:
         s = score(records, truth_all)
         n_entries = sum(len(v) for v in s["entries"].values())
         print(f"\n=== Run {sample} · {args.condition} · {s['dialogues']} conversations · Prompt 10-1, item type "
-              f"\"{ITEM_TYPE}\" · {MODEL} via the subscription CLI")
+              f"\"{ITEM_TYPE}\" · {MODEL}")
         print(f"replies that were not a JSON object: {s['unparsable']}")
         print(f"ground-truth doses: {s['gt']} across {s['n_with_doses']} conversations "
               f"({s['n_without_doses']} state none)")
@@ -387,7 +385,7 @@ def main() -> int:
                     print(f"  [{label}] {enc}: «{text}»")
             for key, kind, text in s["cases"]:
                 print(f"  [{kind}] {key[1]}: {text}")
-    print(f"\nrecorded seconds {grand_seconds:.0f} · notional cost ${grand_cost:.4f} (claude.ai plan, not billed) "
+    print(f"\nrecorded seconds {grand_seconds:.0f} · cost at API prices ${grand_cost:.4f} "
           f"· models {sorted(models)}")
     return 0
 

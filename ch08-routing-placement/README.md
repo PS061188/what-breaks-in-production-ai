@@ -67,7 +67,7 @@ omission with 13 re-asks; misplacement was the same in all three. Write-up in
 
 `probe_instructor.py` runs the Instructor library itself (1.17.0, its own
 environment; setup at the top of the script) with the same validator on the
-first ten notes, through `claude -p` on a subscription with thinking off. 9 of
+first ten notes, Claude Haiku 4.5 with thinking off. 9 of
 10 ended valid after 16 calls. The tenth wrote each sentence's text after its ID
 in all three replies; the validator's error never said that only the IDs were
 wanted. Replays from `fixtures_instructor/` with no key.

@@ -6,7 +6,7 @@ independent count, and flag the extraction for review when the model returned
 fewer items than the NER model found. common.py stands a regular expression in
 for that model. This probe runs the model the book names on the same six
 documents and holds every recorded extraction against it: fixed.py's API run
-(fixtures/) and the nine subscription runs of Experiment 10.3 (fixtures_count/),
+(fixtures/) and the nine runs of Experiment 10.3 (fixtures_count/),
 sixty document-runs. No model calls; every answer replays.
 
 Counting rule. A dose amount is a number with a dose unit (mg, mcg, g, unit: the

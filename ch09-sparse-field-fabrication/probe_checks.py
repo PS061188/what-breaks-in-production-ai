@@ -20,9 +20,7 @@ Checks, cheapest first, as the chapter orders them:
 The last two test step 3's two conditions: a checker that shares the writer's
 habits, and a checker that cannot see the input.
 
-Model checks run through the `claude -p` CLI on the claude.ai plan, never the paid
-API, with the default system prompt replaced, no tools, no MCP servers, no settings
-files and an empty working directory. One check per entry; the entries come from
+Model checks run with no tools, one check per entry; the entries come from
 three runs of the notes.
 
     python3 probe_checks.py              # replay recorded verdicts

@@ -156,7 +156,7 @@ def main() -> int:
     for (d, r), rec in zip(jobs, records):
         rows.extend(rows_for(rec, by_id[(d["split"], d["encounter_id"])]))
 
-    print(f"{len(dialogues)} conversations x runs {RUNS} · {S.MODEL} via the subscription CLI · "
+    print(f"{len(dialogues)} conversations x runs {RUNS} · {S.MODEL} · "
           f"condition {COND}\n")
     print(f"{'run':>3} {'states/disc':>11} {'rej all-found':>13} {'rej any-found':>13} "
           f"{'invented':>8} {'inv caught (all/any)':>20} {'null':>5} {'multi-quote':>11}")

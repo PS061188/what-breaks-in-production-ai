@@ -1,9 +1,9 @@
-"""Chapter 10's completeness protocol, three recorded runs on the CLI (Experiment 10.3, second half).
+"""Chapter 10's completeness protocol, three recorded runs (Experiment 10.3, second half).
 
 book_prompt.py ran the protocol three times through repeat.py, which keeps only the
 last run's answers, so two of the three runs behind the book's figures cannot be
 reopened. This probe reruns it three times and keeps every run, through the same
-`claude -p` setup as probe_count.py, so the protocol can be compared with the
+setup as probe_count.py, so the protocol can be compared with the
 one-line instruction's three runs recorded there (condition "as-printed").
 
 What it reports, per run:
@@ -56,7 +56,7 @@ def get(case: dict, run: int, live: bool) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--live", action="store_true", help="record missing runs through the claude CLI")
+    ap.add_argument("--live", action="store_true", help="record missing runs live")
     args = ap.parse_args()
     cases = build_cases()
     jobs = [(case, r) for r in RUNS for case in cases]

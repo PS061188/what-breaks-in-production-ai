@@ -1,7 +1,7 @@
 """Experiment 10.9, part 1 — the completeness audit (fix 3) on prose output.
 
 Every fix in Chapter 10 was measured on an extraction task: the output is a
-list, and a count can say whether the list is short. Prachi's question (13 Oct
+list, and a count can say whether the list is short. The author's question (13 Oct
 2026): what do the fixes do on a task whose output has no countable items? The
 task here is the chapter's own second corpus, 60 ACI-Bench role-played
 doctor-patient conversations turned into clinic notes (Experiment 9.4's
@@ -10,7 +10,7 @@ counted the way doses in a list can.
 
 Fix 3 is the one fix that runs unchanged on prose: show a second model the
 conversation and the note, ask what is missing. One call per conversation,
-Claude Haiku 4.5 through the subscription CLI.
+Claude Haiku 4.5.
 
 Scoring is the hard part, and it is stated rather than hidden: there is no
 enumerable ground truth, which is the point of the experiment. Three things
@@ -197,7 +197,7 @@ def main() -> int:
     print(f"  claims naming a dose (known false alarms): {len(dose_claims)}  {dose_claims[:6]}")
     print(f"  claims whose content words are mostly in the note already: {note_has}")
     print(f"  claims whose quote is not found in the dialogue: {dlg_lacks}")
-    print(f"recorded seconds {seconds:.0f} · notional cost ${cost:.4f} (claude.ai plan, not billed)")
+    print(f"recorded seconds {seconds:.0f} · cost at API prices ${cost:.4f}")
     return 0
 
 

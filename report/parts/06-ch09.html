@@ -9,10 +9,10 @@
 <tr><td style="width:26%">Documents</td><td>9.1&ndash;9.3: 12 FDA drug labels, two sections supplied (four in 9.3). 9.4: 60 ACI-Bench doctor&ndash;patient conversations, a note under eleven headings</td></tr>
 <tr><td style="width:26%">Cases</td><td>9.1: 33 label fields the supplied text does not cover. 9.4: per run, 58 notes whose conversation never touched drug allergies, 53 tobacco, 41 family history, 49 alcohol. 9.5: the 96 filled entries from 9.4&rsquo;s template notes &mdash; 13 invented, 83 on discussed topics</td></tr>
 <tr><td style="width:26%">Ground truth</td><td>Labels: a field is unanswerable when its section was not supplied. Conversations: a topic is never discussed when no related word appears in the dialogue</td></tr>
-<tr><td style="width:26%">Model</td><td>Claude Haiku 4.5; 9.4 ran through <code>claude -p</code> on my Claude subscription</td></tr>
+<tr><td style="width:26%">Model</td><td>Claude Haiku 4.5</td></tr>
 <tr><td style="width:26%">Settings</td><td><code>max_tokens</code> 2,000&ndash;2,500, JSON schema enforced</td></tr>
 <tr><td style="width:26%">Runs</td><td>9.1: 1 run and 3 re-samples. 9.2, 9.3: 1 run each. 9.4: 3 runs per prompt, 360 notes. 9.5: one verdict per checker per entry, 303 calls. 9.6: 2 conditions &times; 3 runs, 360 records. 9.7: 1 condition &times; 3 runs, 180 records</td></tr>
-<tr><td style="width:26%">Cost</td><td>Per run: $0.06 (9.1), $0.08 (9.2), $0.09 (9.3). 9.4: a notional $8.6 in all, not billed. 9.5: a notional $4.0 plus $1.8 for the extension, not billed. 9.6: a notional $6.2, not billed. 9.7: a notional $2.0, not billed</td></tr>
+<tr><td style="width:26%">Cost</td><td>Per run: $0.06 (9.1), $0.08 (9.2), $0.09 (9.3). At API prices, in all: $8.6 (9.4), $4.0 plus $1.8 for the extension (9.5), $6.2 (9.6), $2.0 (9.7)</td></tr>
 </table>
 <h4>What the evidence says</h4>
 <table>
@@ -34,7 +34,7 @@
 <h4>The one thing to remember</h4>
 <p><strong>The failure depends on the source.</strong> On drug labels the model wrote &ldquo;N/A&rdquo; where the text was silent. From a conversation it wrote &ldquo;No known drug allergies&rdquo; when drug allergies never came up. One rule in the prompt stopped it.</p>
 <h4>Where this is weakest</h4>
-<p>On labels no fix was measured on fabrication: there was none, and the section check&rsquo;s zero is forced. On conversations the ground truth is a word search, the dialogues are role-played, and the command-line tool adds an environment block. 9.5 rests on 19 invented entries from 9 conversations, one verdict per checker per entry, and its five habit-born entries are one judgement call from one conversation; the discussed-topic entries were not all read, so the real errors found among them are a floor, not a count.</p>
+<p>On labels no fix was measured on fabrication: there was none, and the section check&rsquo;s zero is forced. On conversations the ground truth is a word search, the dialogues are role-played, and a short environment block was added to each call. 9.5 rests on 19 invented entries from 9 conversations, one verdict per checker per entry, and its five habit-born entries are one judgement call from one conversation; the discussed-topic entries were not all read, so the real errors found among them are a floor, not a count.</p>
 </div>
 
 <h3 class="top">The failure: a blank the system will not accept gets filled</h3>
@@ -355,11 +355,9 @@ never touch.</p>
       of present illness, review of systems, past medical history, medications,
       allergies, family history, social history, physical examination, results,
       assessment and plan.</td></tr>
-  <tr><td><strong>Model</strong></td><td>Claude Haiku 4.5, through the Claude Code
-      command-line tool (<code>claude -p</code>) on my Claude subscription, at the
-      API&rsquo;s default setting (no thinking): default system prompt replaced, no tools
-      or tool servers, no settings files. The tool still adds a short environment block
-      to each call.</td></tr>
+  <tr><td><strong>Model</strong></td><td>Claude Haiku 4.5 at the
+      API&rsquo;s default setting (no thinking), no tools. A short environment block
+      was added to each call.</td></tr>
   <tr><td><strong>Prompts</strong></td><td>Two, identical except for one rule. The
       <strong>template prompt</strong> gives the headings only. The <strong>one-rule
       prompt</strong> adds: &ldquo;If the conversation does not cover a section, write
@@ -371,8 +369,7 @@ never touch.</p>
       drug allergies, an allergy exchange about medicines, &ldquo;allergic to&rdquo;
       or &ldquo;reaction to&rdquo;; for tobacco, smok-, tobacco, cigar or vape; for
       alcohol, alcohol, drink, beer or wine.</td></tr>
-  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, a notional $3.0
-      that was not billed, because the calls ran on the subscription.</td></tr>
+  <tr><td><strong>Runs</strong></td><td>Three per prompt: 360 notes, $3.0 at API prices.</td></tr>
 </table>
 
 <h4>The numbers</h4>
@@ -458,7 +455,7 @@ first recording scores identically under the widened rules.</p>
 the usual claim about the patient and count. Sentences that describe the
 conversation do not count.</p>
 
-<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+<p>The first recording, made with thinking on
 (kept in <code>fixtures_conversation_cli_defaults/</code>), gave 4, 3 and 4
 &ldquo;No known drug allergies&rdquo; and 0, 1 and 0 tobacco denials, 4 entries per run
 in all, and 0 with the rule.</p>
@@ -471,7 +468,7 @@ in all, and 0 with the rule.</p>
   <li><strong>The conversations are role-played</strong> or constructed, not real
   patients.</li>
   <li><strong>One model:</strong> Claude Haiku 4.5, at the API&rsquo;s default setting.</li>
-  <li><strong>The command-line tool adds a short environment block</strong> to every
+  <li><strong>A short environment block was added</strong> to every
   call, so the model did not see exactly the prompt given here.</li>
 </ul>
 
@@ -511,9 +508,9 @@ separate call</td></tr>
 conversation: &ldquo;keep, or flag as possibly invented?&rdquo;</td></tr>
 </table>
 
-<p>The model checks ran through <code>claude -p</code> on my Claude subscription,
+<p>The model checks ran with
 each model at its API default (Haiku 4.5 without thinking, Sonnet 5 at effort high):
-288 verdicts, a notional $3.4, about 3.7 seconds per call.</p>
+288 verdicts, $3.4 at API prices, about 3.7 seconds per call.</p>
 
 <h4>The numbers</h4>
 
@@ -578,7 +575,7 @@ fabricated line reads perfectly well on its own.</p>
 
 <p>The three model checks were rerun on Experiment 9.6&rsquo;s values: its 20
 invented values and its 55 run-1 values on discussed topics (<code>--source
-schema</code>; 225 verdicts, a notional $2.1).</p>
+schema</code>; 225 verdicts, $2.1 at API prices).</p>
 
 <table style="table-layout:fixed;width:100%">
 <tr><th style="width:40%">Check</th><th style="width:26%">Invented caught (of 20)</th>
@@ -601,7 +598,7 @@ discussed-topic values are again mostly real errors (the renal relatives mixed u
 sick sister filed as family history, a family-history denial nobody gave; one, a
 patient said to avoid second-hand smoke, not checked).</p>
 
-<p>The first recording, made with the command-line tool&rsquo;s default thinking on
+<p>The first recording, made with thinking on
 (<code>fixtures_checks_cli_defaults/</code>, 12 and 7 invented entries), had the writer
 approving five of its own eight generalisations, all records, while Sonnet caught
 seventeen of nineteen; that difference did not recur at the API default.</p>
@@ -646,7 +643,7 @@ question could move both columns.</li>
 <p>The chapter&rsquo;s first two fixes had never met an invented value. This
 experiment asks for the four optional topics as a JSON record from each of the 60
 conversations &mdash; two conditions, identical but for the field rule, three runs
-each, 360 replies through the subscription CLI at the API&rsquo;s default setting, no
+each, 360 replies at the API&rsquo;s default setting, no
 thinking (<code>probe_schema.py</code>; every counted case below was read by hand).</p>
 
 <table style="table-layout:fixed;width:100%">
@@ -684,7 +681,7 @@ and scoring 84 against the 85 cut-off; 7 values the conversation does not suppor
 as &ldquo;No tobacco use&rdquo; for a patient who mentioned only wine; 2 a sick sister
 filed as family history. Unparsable JSON replies: 4 (required) and 5 (optional).</p>
 
-<p>The first recording, with the command-line tool&rsquo;s default thinking on
+<p>The first recording, with thinking on
 (<code>fixtures_schema_cli_defaults/</code>): 577 fillers, 5 and 2 inventions, the quote
 check catching 1 of 7, and 7 of 97 and 3 of 92 values rejected.</p>
 

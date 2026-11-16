@@ -1109,7 +1109,7 @@ font size, not just that the build completed.
 
 ## Prompts rewritten to ship working, not annotated (Sep 2026)
 
-Editorial correction, on Prachi's direction: an engineering fix can be listed with
+Editorial correction, on the author's direction: an engineering fix can be listed with
 "this is the standard advice and it does not work" beside it. **A prompt cannot.**
 A reader copies a prompt; they do not copy a caveat. So each template is now the
 version that measured well, with the removed part described *after* it as
@@ -1863,7 +1863,7 @@ deployed scribes wrote examinations for telephone consultations; Taylor et al.
 the outside evidence for permitting "unknown". Chapter 3's pointer, Chapter 12's
 "6% to zero" and *Where the Numbers Come From* follow.
 
-*Box revised 30 Sep 2026 at Prachi's review.* The three figures above counted
+*Box revised 30 Sep 2026 at the author's review.* The three figures above counted
 hallucination anywhere in a note (Ontario, Taylor) or history filed as
 examination (Fox, telephone consultations — Chapter 8's pattern), not a field the
 source left empty. The box now carries two external measurements that do: Fox et
@@ -1872,15 +1872,14 @@ stated, the note supplies one and uses it throughout", 34 of 142 consultations,
 all three products; and Banerjee et al. 2024 (arXiv 2406.06496) — 52% (95% CI
 48.95–54.23) of chest X-ray reports from a research model on the MIMIC-CXR test
 set (1,383 studies) referred to a prior exam it never saw. Ontario and Taylor
-were removed from the references. *Same day, Prachi's final choice:* Banerjee was
+were removed from the references. *Same day, the author's final choice:* Banerjee was
 replaced by this repo's Experiment 9.4 ("No known drug allergies" in 4, 3, 4 of 58
 notes; 0 in every run with the "Not discussed." rule), labelled as the companion
 repository; the Banerjee reference was removed.
 
 **Open.** The failure needs a template that asks for more than the source
 contains — a note written from a conversation. ACI-Bench's dialogues (the repo
-holds only its notes) with a full note template are the test to run. Per Prachi's
-standing rule it runs on her subscription through `claude -p`, not the API.
+holds only its notes) with a full note template are the test to run.
 
 ---
 
@@ -1963,12 +1962,11 @@ and *Where the Numbers Come From* rows 3.1–3.5, 9.1 and G.1 ("16 of 48").
 `ch09-sparse-field-fabrication/probe_conversation.py`. The setup the failure needs:
 60 ACI-Bench conversations (the Chapter 8 encounters, now with their dialogues in
 `data/aci_bench_dialogues.json`), a note under eleven headings, Claude Haiku 4.5
-through `claude -p` on Prachi's subscription (default system prompt replaced, no
-tools, no MCP, no settings; the CLI still adds a short environment block). Two
+(no tools; a short environment block is added to each call). Two
 prompts, identical except for one rule: *template* (headings only) and
 *permission* ("If the conversation does not cover a section, write exactly 'Not
 discussed.' … Do not infer, assume, or fill a section with typical content.").
-Three runs each, 360 notes, notional $8.6 on the subscription, not billed.
+Three runs each, 360 notes, $8.6 at API prices.
 
 Ground truth is a strict word search over the dialogue: a topic counts as not
 discussed only when no related word appears at all (family: the word "family" or
@@ -2028,10 +2026,10 @@ comes from the permission clause, and on Haiku 4.5 Prompt 3-1 moved the plain
 baseline by one question of 32. *(Corrected 3 Oct: "one question" holds for Haiku
 only; see the resolution below.)* "State the rule in exactly those words" points at words the
 printed prompt does not contain. The book is unchanged on this point pending
-Prachi's decision; the same defect in Chapter 9 was fixed by printing
+the author's decision; the same defect in Chapter 9 was fixed by printing
 `fixed.SYSTEM` (§ Chapter 9 re-read).
 
-**Resolved 3 Oct 2026, on Prachi's "yes".** Every figure below is a replay of
+**Resolved 3 Oct 2026, on the author's "yes".** Every figure below is a replay of
 committed fixtures; no live calls.
 
 - **The book now prints `fixed.SYSTEM`**, re-wrapped to the page, with
@@ -2074,7 +2072,7 @@ committed fixtures; no live calls.
 ## Chapter 10 — the model's own count, asked without ambiguity (Experiment 10.3, 3 Oct 2026)
 
 Closes the §16 caveat ("Chapter 10's 0/6 self-count agreement measures a prompt
-ambiguity"). Two probes, Claude Haiku 4.5 through `claude -p` on the claude.ai plan,
+ambiguity"). Two probes, Claude Haiku 4.5,
 the same six labels, every run kept (`fixtures_count/`):
 
 - `probe_count.py`: fixed.py's prompt word for word ("as-printed"), and the same
@@ -2104,7 +2102,7 @@ answer was nearer the mention count (0 of 18, against 3 of 18 as printed).
   Not changed: a stricter reference count misses gaps, it does not invent them.
 - It ignores mL, so Amoxicillin's weight-band volumes never count.
 
-**The inventory protocol, same setup as the one-line instruction (CLI):**
+**The inventory protocol, same setup as the one-line instruction:**
 
 | | run 1 | run 2 | run 3 |
 |---|---|---|---|
@@ -2171,8 +2169,8 @@ so no check had ever been seen catching anything. `probe_checks.py` runs them on
 Experiment 9.4's recorded template-prompt notes (60 ACI-Bench conversations × 3 runs):
 **101 entries about the four optional topics — 12 invented** (11 "No known drug
 allergies", 1 "Denies tobacco", from 8 conversations; each read against its
-conversation in 9.4) **and 89 whose topic the conversation discussed.** Model checks
-through `claude -p` on the subscription, one verdict per entry.
+conversation in 9.4) **and 89 whose topic the conversation discussed.** Model checks:
+one verdict per entry.
 
 | check | invented caught (of 12) | discussed entries flagged (of 89) |
 |---|---|---|
@@ -2286,7 +2284,7 @@ ACI-Bench omission measurement in progress becomes Experiment 10.5.
 
 ## Chapter 10 — omission measured where the length pressure is real (Experiment 10.5, 4–6 Oct 2026)
 
-Prachi's direction: if the drug labels cannot produce the failure, test on a free
+The author's direction: if the drug labels cannot produce the failure, test on a free
 corpus where it can occur naturally. The corpus already existed: Experiment 9.4's
 360 recorded notes (60 ACI-Bench conversations × 2 prompts × 3 runs), long
 role-played visits compressed into eleven-heading notes. The checkable fact type
@@ -2321,10 +2319,10 @@ fact type, not that it does not happen.
 
 The chapter's first two fixes had never met an invented value. `probe_schema.py`
 (drafted by a subagent that stalled at the session limit at 182 of 360
-recordings; resumed and completed on the CLI, and every counted case below read
+recordings; resumed and completed, and every counted case below read
 by hand) asks for the four optional topics as a JSON record over the 60
-Experiment 9.4 conversations — two conditions, three runs each, Claude Haiku 4.5
-through `claude -p`, 360 replies, a notional $6.23:
+Experiment 9.4 conversations — two conditions, three runs each, Claude Haiku 4.5,
+360 replies, $6.23 at API prices:
 
 - **required** — every value must be a non-empty string (what fix 1 removes);
 - **optional** — a value may be null when the conversation does not cover it (fix 1).
@@ -2366,7 +2364,7 @@ Numbering: this is Experiment 9.6; 9.5 is the checks probe above.
 Prachi asked for the step-3 wording to stand on wider evidence, so the three
 model checks were rerun on Experiment 9.6's values (`probe_checks.py --source
 schema`): the 7 invented values and the 49 run-1 values on discussed topics.
-168 verdicts, notional $1.77; one hung CLI call killed the first attempt and the
+168 verdicts, $1.77 at API prices; one hung call killed the first attempt and the
 retry loop now treats a timeout as a failed attempt. Every verdict on an
 invented value, and every flag on a control, was read.
 
@@ -2410,7 +2408,7 @@ the wider run was for.
 Prachi asked for the fix-2 note's schema change to be tested and, if it helps,
 promoted to an engineering fix. `probe_schema_list.py` reran Experiment 9.6's
 extraction over the same sixty ACI-Bench conversations, one condition, three
-runs (180 CLI replies, notional $2.01): fields optional, and `source_quotes` a
+runs (180 replies, $2.01 at API prices): fields optional, and `source_quotes` a
 LIST — "one list item for each separate place in the conversation; never join
 two places into one item." Gate: a value is kept only when every quote in its
 list is found (partial_ratio ≥ 85, first eighty characters).
@@ -2495,15 +2493,15 @@ The chapter's third engineering fix is a second model call — show a model the
 source document and the extracted output and ask, verbatim, "What information
 present in the source is missing from the extraction?" The book recommended it
 without a measurement. `probe_audit.py` ran that audit once over every recorded
-extraction of Experiment 10.3: the 54 CLI runs (as-printed, distinct, protocol)
+extraction of Experiment 10.3: the 54 runs (as-printed, distinct, protocol)
 plus the kept API protocol run's 6 — 60 extractions over the chapter's six FDA
 labels. The corrected pattern comparison (lab-unit fix on the source side,
 `expand_ranges=True` on the list side) names the ground truth: 12 extractions
 short, 48 complete, 41 known-missing figures in all. Auditor: Claude Haiku 4.5
-through `claude -p` on the claude.ai plan — the same model that produced the 54
-CLI extractions. The question was asked word for word, with one addition for
+— the same model that produced the 54
+extractions. The question was asked word for word, with one addition for
 scorability: "Answer with JSON only: {\"missing\": [...]}". 60 calls, no
-retries, $2.04 notional. Every counted case is printed in full in
+retries, $2.04 at API prices. Every counted case is printed in full in
 `audit_log.txt`, and `python3 probe_audit.py` rescores the recorded replies.
 
 **Caught: 10 of 41 known-missing figures** (as-printed 3/3, distinct 0/9,
@@ -2543,7 +2541,7 @@ beyond the pattern's reach was non-dose content on complete extractions — that
 is, alarms under the task. As a sampled monitor it is cheap and sometimes names
 the exact missing line; as the only completeness check it would have passed the
 worst extraction in the record. Caveats: one document type, one task, one
-auditor model, and the auditor is the same model that wrote the CLI
+auditor model, and the auditor is the same model that wrote the
 extractions. Book changes: fix 3 carries this as its "Measured here", the
 prevention section's input-coverage paragraph points to it, and the takeaway
 box gained one bullet.
@@ -2580,7 +2578,7 @@ the takeaway box).
 
 `probe_field_conversation.py`: Prompt 10-1 **as printed** (system prompt), `{item_type}`
 = "medication dose amount", the 60 ACI-Bench dialogues as the document, 3 runs,
-Claude Haiku 4.5 via `claude -p` on the subscription, 180 calls, $3.43 notional,
+Claude Haiku 4.5, 180 calls, $3.43 at API prices,
 4,563 recorded seconds, fixtures in `fixtures_field_conversation/s{1,2,3}/`. Ruler:
 Experiment 10.5's `count_doses.py` (64 unique doses, 39 dialogues; 21 state none).
 Every reply parsed as JSON on the first attempt.
@@ -2677,7 +2675,7 @@ loss of what it sees; the count must come from outside the model either way.
 Prachi: "do the 4th run". The line: "Do not list items that simply have no amount. List
 only values that could be mistaken for a medication dose amount." — inserted before the
 printed prompt's "An empty not_extracted list is a claim…". Three runs, same 60
-conversations, same ruler, 180 calls, $4.69 notional, 6,575 recorded seconds
+conversations, same ruler, 180 calls, $4.69 at API prices, 6,575 recorded seconds
 (`--condition narrowed`, fixtures in `fixtures_field_conversation/narrowed/s{1,2,3}/`).
 
 | per run | as printed 1/2/3 | one line added 1/2/3 |
@@ -2732,7 +2730,7 @@ selective by design (the case study's reproduce-vs-compress line).
 **Fix 2 — list-length assertion**: no list on prose; does not run. Printed as the result.
 
 **Fix 3 — completeness audit on prose** (`probe_note_audit.py`, 64 calls incl. 4
-re-records of unparsable replies, $2.16 notional, 3,282 s; every claim printed in
+re-records of unparsable replies, $2.16 at API prices, 3,282 s; every claim printed in
 note_audit_log.txt with a content-word check against note and dialogue). 91 claims on
 45 of 60 notes; 1 unparsable left. Checks: 1 claim names a dose and is false by 10.5's
 settled record (D2N088 metformin, in the note as "metformin increased to 1000 mg twice
@@ -2789,11 +2787,11 @@ spoken-number story lives only here and in the report (it duplicated fix 1's les
 in the book).
 
 Her second ask, run as **Experiment 10.11**: enforcement through the answer schema.
-Decoder-level (API structured outputs) not available on the subscription stack.
+Decoder-level (API structured outputs) was not run.
 Engineering enforcement is deterministic given a reply, so it was computed by replay
 over the 360 recorded 10.7 replies instead of a 180-call live arm: 359 conform to the
 strict schema as generated; the one failure (as-printed s2 D2N049: extracted items as
-{'medication','dose'} objects) was corrected with one live CLI call — same three
+{'medication','dose'} objects) was corrected with one live call — same three
 medicines re-written as strings, not_extracted identical before and after. Conclusion
 printed in fix 4: the schema requirement is cheap to meet; enforcement changed format
 once in 360 and content never; what the field holds is governed by the prompt. The
@@ -2842,7 +2840,7 @@ consumed by Haiku's fixtures). Same 60 recorded extractions, same question verba
 | worst extraction | "nothing missing" | all but two figures (42.9, 600 — inside the paired strengths) |
 | complete alarmed (of 48) | 6 | 12 |
 | invented figures | 1 | **0** |
-| notional cost | $2.04 | $1.98 |
+| cost at API prices | $2.04 | $1.98 |
 
 Alarms read: restatements or real off-task content (water volumes, INR target,
 creatinine clearance, intervals); one complete Sertraline extraction drew 15 entries,
@@ -2867,7 +2865,7 @@ cannot be restored; the book and README now print what the repo replays.
 Corrections made in the book and the README on the same day:
 
 - **Ch2.** Prompt 2-1 as printed had never been run (its figures were book_prompt.py's):
-  now Experiment 2.7, three runs through the subscription CLI. The p.46 grade table is
+  now Experiment 2.7, three runs. The p.46 grade table is
   book_prompt.py's (HIGH 24 / MEDIUM 29), not why_no_low.py arm A's (14 / 39); the
   grade-only row replays 12 / 41 / 0. Entropy: lookalike letters RAISE entropy by
   0.145-0.207 bits/char; they escape because clean labels spread 4.30-4.76 and the band is
@@ -2916,9 +2914,9 @@ Also 14 Nov 2026, C.1's simulated-OCR arm: the recorded run of `CORRUPT_MODE=ocr
 
 **Guardrails, every threshold, 14 Nov 2026.** The 8 Oct sweep tried seven thresholds. `probe_guardrails.py` now reads each entry's worst-sentence distance from the validator's own query function and checks the validator's own pass/fail against those distances, entry by entry, so one threshold per distinct distance gives every result the validator can produce (log `ch09-sparse-field-fabrication/guardrails_sweep_log.txt`). The grid rows reproduce exactly. The loosest setting that catches all 12 flags 76 of 89 (five-sentence windows) and 72 of 89 (one sentence), so the range is 72–89, not 79–88, and the book's "about nine in ten" is now "at least 72 of the 89, about four in five". AUC 0.55 on the notes; 0.36 and 0.43 on the records (worse than chance). The verdict stands: no setting separates the groups. The probe now switches hub telemetry off.
 
-**Instructor on ten notes (Ch8), 14 Nov 2026.** No script or fixture recorded the earlier run, so the book sentence was removed and the run was made again: `ch08-routing-placement/probe_instructor.py`, Instructor 1.17.0 in its own environment, the same `Filing` validator, `max_retries=2`, the plain prompt, the first ten of the 60 notes, Haiku 4.5 through `claude -p` on the subscription with thinking off (the CLI thinks by default: 2,685 output tokens for a 476-character reply with it on, about 250 with it off). The CLI has no enforced schema, so Instructor ran in Mode.JSON: it writes the schema into the system prompt and parses the reply. 16 calls, recorded in `fixtures_instructor/`. **9 of 10 notes ended with a valid filing**; 4 failed at first, 2 fixed by one re-ask, 1 by two, 1 still failing. 3 of the 4 first failures wrote each sentence's text after its ID ("S21: Sean Phillips is…"), which the validator reads as unknown IDs plus missing ones; the fourth left S22 unfiled. The still-failing note (D2N186) kept that form in all three replies; with the text after each ID removed its filing is complete (0 missing, 0 doubled). The validator's error listed the entries as "not in the input" and never said that only the IDs were wanted. On the same ten notes, the hand-built loop of 8.7 (schema enforced by the API) failed 1 at first and fixed it with one re-ask. One draw each, and two differences at once (enforced schema, and the error wording Instructor wraps), so the gap is not attributed.
+**Instructor on ten notes (Ch8), 14 Nov 2026.** No script or fixture recorded the earlier run, so the book sentence was removed and the run was made again: `ch08-routing-placement/probe_instructor.py`, Instructor 1.17.0 in its own environment, the same `Filing` validator, `max_retries=2`, the plain prompt, the first ten of the 60 notes, Haiku 4.5 with thinking off (with thinking on, a 476-character reply took 2,685 output tokens; about 250 with it off). No schema was enforced, so Instructor ran in Mode.JSON: it writes the schema into the system prompt and parses the reply. 16 calls, recorded in `fixtures_instructor/`. **9 of 10 notes ended with a valid filing**; 4 failed at first, 2 fixed by one re-ask, 1 by two, 1 still failing. 3 of the 4 first failures wrote each sentence's text after its ID ("S21: Sean Phillips is…"), which the validator reads as unknown IDs plus missing ones; the fourth left S22 unfiled. The still-failing note (D2N186) kept that form in all three replies; with the text after each ID removed its filing is complete (0 missing, 0 doubled). The validator's error listed the entries as "not in the input" and never said that only the IDs were wanted. On the same ten notes, the hand-built loop of 8.7 (schema enforced by the API) failed 1 at first and fixed it with one re-ask. One draw each, and two differences at once (enforced schema, and the error wording Instructor wraps), so the gap is not attributed.
 
-**The subscription-CLI experiments ran with thinking on, 14 Nov 2026.** `claude -p` lets the model think before it answers unless told not to (`MAX_THINKING_TOKENS=0`), and no CLI script in the repo set it; the API experiments (`shared/llm.py`) send no thinking parameter. The CLI recordings keep a notional cost but no token counts, so one recorded request per CLI script was rebuilt by the script itself (its recording deleted in a scratch copy, the script run with `--live`) and sent twice, thinking on and off, 18 calls in all (2 of them lost to an error in the checking harness). Output tokens implied by the recorded cost, after subtracting the input cost seen today, against today's two calls:
+**The first recordings of some experiments ran with thinking on, 14 Nov 2026.** The first recordings of 2.7, 9.4–9.7, 10.3, 10.6, 10.7, 10.9, 10.11 and 10.12 ran with thinking on; the API experiments (`shared/llm.py`) send no thinking parameter. Those recordings keep a cost at API prices but no token counts, so one recorded request per script was rebuilt by the script itself (its recording deleted in a scratch copy, the script run with `--live`) and sent twice, thinking on and off, 18 calls in all (2 of them lost to an error in the checking harness). Output tokens implied by the recorded cost, after subtracting the input cost seen today, against today's two calls:
 
 | Script (experiments) | Recorded cost | Implied output tokens then | Today, thinking off | Today, thinking on |
 |---|---|---|---|---|
@@ -2931,19 +2929,19 @@ Also 14 Nov 2026, C.1's simulated-OCR arm: the recorded run of `CORRUPT_MODE=ocr
 | ch10 probe_field_conversation (10.7) | $0.0070 | ~580 | 105 | 1,136 |
 | ch10 probe_note_audit (10.9) | $0.0247 | ~3,680 | 145 | 5,634 |
 
-Every recording where the two settings differ sits on the thinking side; 9.5's one-word verdicts show no thinking either way. probe_schema_list (9.7), probe_protocol (10.3) and probe_field_enforce (10.11) reuse those scripts' CLI call, so they ran the same way (seen in code, not re-sent). So two configurations of Claude Haiku 4.5 sit in this repository: the API experiments without thinking, the CLI experiments with the CLI's default thinking. No recorded number changes. Two consequences: a reader re-running a CLI experiment through the API without thinking is not repeating it; and Ch10's audit (10.6, 10.12), described in the book as put "to the same model that wrote the extractions", read 60 extractions of which 54 came from CLI runs (thinking on, like the audit) and 6 from the API protocol run (no thinking). `probe_instructor.py` (8.7) runs with thinking off on purpose, to match 8.7's API calls. Prachi decided the same day that every experiment should run each model at its API default; the CLI experiments were re-recorded that evening (next entries), so the paragraph above describes the first recordings.
+Every recording where the two settings differ sits on the thinking side; 9.5's one-word verdicts show no thinking either way. probe_schema_list (9.7), probe_protocol (10.3) and probe_field_enforce (10.11) reuse those scripts' model call, so they ran the same way (seen in code, not re-sent). So two configurations of Claude Haiku 4.5 sit in this repository: the API experiments without thinking, these experiments with thinking on. No recorded number changes. Two consequences: a reader re-running one of these experiments without thinking is not repeating it; and Ch10's audit (10.6, 10.12), described in the book as put "to the same model that wrote the extractions", read 60 extractions of which 54 came from runs with thinking on (like the audit) and 6 from the API protocol run (no thinking). `probe_instructor.py` (8.7) runs with thinking off on purpose, to match 8.7's API calls. Prachi decided the same day that every experiment should run each model at its API default; these experiments were re-recorded that evening (next entries), so the paragraph above describes the first recordings.
 
-**Re-recorded at the API default, 14 Nov 2026.** Every subscription-CLI script now calls `shared/cli_defaults.api_defaults()`: Haiku 4.5 with `MAX_THINKING_TOKENS=0`, Sonnet 5 with `--effort high` (its API default; Claude Code's own default effort is higher). The first recordings moved to `*_cli_defaults/` folders (git mv; old logs to `*_cli_defaults.txt`) and replay with `CLI_SETTINGS=cli`; every script was checked to replay them byte for byte under that setting before any new call. 2,125 calls re-recorded (2.7, 9.4–9.7, 10.3, 10.6, 10.7, 10.9, 10.11, 10.12) plus 225 for 9.5's record-value checks; downstream analyses (10.4, 10.5, 10.8, 10.9's count, 10.10) read the new recordings.
+**Re-recorded at the API default, 14 Nov 2026.** Every one of these scripts now calls `shared/cli_defaults.api_defaults()`: Haiku 4.5 with `MAX_THINKING_TOKENS=0`, Sonnet 5 with `--effort high` (its API default; the first recordings ran it at a higher effort). The first recordings moved to `*_cli_defaults/` folders (git mv; old logs to `*_cli_defaults.txt`) and replay with `CLI_SETTINGS=cli`; every script was checked to replay them byte for byte under that setting before any new call. 2,125 calls re-recorded (2.7, 9.4–9.7, 10.3, 10.6, 10.7, 10.9, 10.11, 10.12) plus 225 for 9.5's record-value checks; downstream analyses (10.4, 10.5, 10.8, 10.9's count, 10.10) read the new recordings.
 
 *Chapter 2 (2.7).* 39 of 41 damaged flagged in every run (first recording 40, 39, 39; misses the truncated Atorvastatin and Omeprazole copies each time); 12 of 12 OCR-damaged; clean controls 2 of 12 in every run, both real defects (Metformin's "1.73 m 2" now passed); no false alarm in 36; SEVERELY_CORRUPTED 1, 2, 1 times, each a truncated copy cut inside the dosing passage (Metformin every run, Furosemide once), as the prompt's own rule says.
 
 *Chapter 9.* 9.4: template prompt filled 9, 3, 1 of 201 uncovered entries per run (NKDA 2, 1, 1 of 58; tobacco denials 4, 1, 0 of 53; alcohol denials 3, 1, 0 of 49); rule prompt 0, 0, 0. Scorer widened: silence statements with "explicitly/specifically" and "specified" ("Not explicitly stated in conversation", "Not specified in conversation"), and nasal-symptom words as non-drug allergy; four such entries had scored as claims; the first recording scores identically under the widened rules. 9.6: required fields 565 fillers and 19 inventions of 603 (16 negatives such as "No tobacco use reported" whose own quote says the topic was never mentioned), optional 1; the quote check caught 16 of 20 inventions, nulled 584 of 595 fillers, and rejected 18 of 106 and 10 of 94 sound values: read, 19 correct values wrongly rejected (most a question and its answer joined into one quote), 7 unsupported values rightly rejected, 2 misfiled. 9.7: rejections 1 of 80 with the list against 7 of 75 with one quote (same filter: values that state something on a discussed topic; the first write-up's "3 of 92 / 75 vs 92, model more conservative" compared different filters, same filter 3 of 76 vs 0 of 75); no invention; 47 of 102 values carried two or more quotes. 9.5: notes 13 invented / 83 discussed, records 20 / 55; Sonnet 5 and the writer each caught 31 of 33, each passing two different D2N088 seasonal-denial records, so the checking model made no difference (first recording: 17 vs 14 of 19, the writer approving 5 of its 8 generalisations); the book's step 3 no longer asks for a different model. Embedding (from scratch): 9 of 13 caught with 0 of 83 flagged at similarity 0.3, the misses the four NKDA; all 13 only at 0.6 with 46 flagged. Guardrails (rebuilt `.venv-guardrails`, reproduces the first log exactly on the first recordings): as shipped 7 of 13 caught, 15 of 83 flagged, every one of the 15 from a transcript the sentence splitter cannot divide (19 of 60 have no full stops; the whole conversation becomes one window: "Alcohol use: one to two beers on weekends" is 0.19 from the patient's answer and 0.96 from the window); loosest catch-all flags 60 of 83 (one-sentence windows); AUC 0.71 notes, 0.77 records. Figure 9-2 now shows that case.
 
-**Chapter 10 re-recorded at the API default, 14 Nov 2026.** Every Chapter 10 CLI experiment was recorded again with each model at its API default (Haiku 4.5 thinking off; Sonnet 5 adaptive thinking at effort high); the first recordings stay in the `_cli_defaults` folders and replay with `CLI_SETTINGS=cli`. Five conclusions moved. (1) 10.7: Haiku now lists 72–77 medicine names with no amount in `extracted` itself, and the one-line narrowing instruction made the field longer (210/226/203 entries against 177/190/169); with thinking it had cut 137–149 to 57–62. Its effect depends on the model setting. (2) The sixty-extraction test of 10.4/10.8 now holds 9 real drops (was 4): the pattern count flags 4, Med7 3, DeBERTa 1; a figure-by-figure comparison with the pattern flags 5; the remaining 4 are Gabapentin's 1,400 mg/day, a table cell with no unit. "The pattern flagged every short list" no longer holds. (3) 10.6: the same-model audit named 27 of 31 known-missing figures (was 10 of 41); on the 6 unchanged API extractions, 11 of 11 against 2 of 11 with thinking. (4) 10.12: Sonnet named 31 of 31 and 3 of the 4 pattern-invisible 1400s, at about six times the notional cost. (5) 10.11: 12 of 360 replies failed the strict schema (objects instead of strings), and 5 corrections moved dose-less medicines; 10.10's 57 alarms were all the checker's blindness, no invented value, no real catch. 10.3 holds in substance (count = list length in 46 of 54; no mismatch pointed at a real drop). Scorer changes: `probe_count.parse` reads the last fenced JSON block (one reply wrote a corrected second answer); `probe_field_conversation.subclass` files a digit-free extracted item as "a medicine named without any amount" (was "other"). Both leave the first recordings' results unchanged except that label.
+**Chapter 10 re-recorded at the API default, 14 Nov 2026.** Every affected Chapter 10 experiment was recorded again with each model at its API default (Haiku 4.5 thinking off; Sonnet 5 adaptive thinking at effort high); the first recordings stay in the `_cli_defaults` folders and replay with `CLI_SETTINGS=cli`. Five conclusions moved. (1) 10.7: Haiku now lists 72–77 medicine names with no amount in `extracted` itself, and the one-line narrowing instruction made the field longer (210/226/203 entries against 177/190/169); with thinking it had cut 137–149 to 57–62. Its effect depends on the model setting. (2) The sixty-extraction test of 10.4/10.8 now holds 9 real drops (was 4): the pattern count flags 4, Med7 3, DeBERTa 1; a figure-by-figure comparison with the pattern flags 5; the remaining 4 are Gabapentin's 1,400 mg/day, a table cell with no unit. "The pattern flagged every short list" no longer holds. (3) 10.6: the same-model audit named 27 of 31 known-missing figures (was 10 of 41); on the 6 unchanged API extractions, 11 of 11 against 2 of 11 with thinking. (4) 10.12: Sonnet named 31 of 31 and 3 of the 4 pattern-invisible 1400s, at about six times the cost. (5) 10.11: 12 of 360 replies failed the strict schema (objects instead of strings), and 5 corrections moved dose-less medicines; 10.10's 57 alarms were all the checker's blindness, no invented value, no real catch. 10.3 holds in substance (count = list length in 46 of 54; no mismatch pointed at a real drop). Scorer changes: `probe_count.parse` reads the last fenced JSON block (one reply wrote a corrected second answer); `probe_field_conversation.subclass` files a digit-free extracted item as "a medicine named without any amount" (was "other"). Both leave the first recordings' results unchanged except that label.
 
 *10.4, computed rather than re-run.* en_core_web_trf's per-document counts from the first run (Amoxicillin 10, Lisinopril 8 with the lab value, Sertraline 6, Levothyroxine 3, Warfarin 2, Gabapentin below every list; the label text did not change) against the new 60 extractions: 4 of 9 real drops (all Amoxicillin), 0 of 4 other-drug, 10 of 47 complete flagged (Lisinopril; 0 with the "/dL" skip). The model's 457 MB wheel could not be downloaded here (about 26 KB/s from GitHub); `probe_ner.py` will confirm once installed.
 
-**Experiment 10.9 at the API's default setting, 14 Nov 2026.** The 9.4 notes it reads and the fix-3 audit were re-recorded with thinking off (MAX_THINKING_TOKENS=0; first recording kept in the _cli_defaults folders). Fix 1: 208 of 360 notes flagged (template 37/32/35, permission 32/36/36; first recording 188). Every flag classified, every remaining drug word opened in dialogue and note: 110 junk only (first names, fillers, months, places, conditions, tests, diet words); 68 with every drug word in the note (24 renamed — acetaminophen 20, betamethasone 3, ibuprofen 1; 22 the same word, which Med7 did not count in the note; 22 a class or other words, e.g. "migraine medication" = propranolol); 30 with a drug word absent: prednisone asked about and never confirmed (D2N026, 6), Vicodin declined / antibiotics judged unnecessary / carvedilol a future option (8), insulin named only because the patient does not take it (D2N160, 6), ibuprofen as "avoid NSAIDs" (2), an alternative or past treatment (Aleve beside the prescribed ibuprofen, past ED and childhood antibiotics, past high-dose gabapentin; 7), and one list change left out (D2N145 permission run 3: clindamycin removed from the list; the other five notes record it). Medicines in use dropped, among the flags: 0. Fix 2: does not run. Fix 3: 60 calls, $0.48 notional, 268 s; 223 claims across 57 of 60 notes; 2 replies unparsable (commentary written after a closing quote inside the JSON: D2N030, D2N182). Every claim read against dialogue and note: 83 already in the note, 1 a dose the note carries (amlodipine 10 mg, false by 10.5's record), 30 not in the conversation (13 "allergies / family history / vital signs not documented" where nobody discussed them; vital-sign, A1c and blood-pressure values the doctor read from a screen without saying them; an AF drug, an antidepressant name, a prior lisinopril dose, a "new anxiety medication", a methotrexate dose, never named; two age/date-arithmetic claims; one critique of the plan), 96 real absent content whose note-worthiness is editorial, 3 trivial. Three are real omissions that matter: D2N025 oxybutynin ("i think the oxyglutinine is helping as well", urgency much better) is in neither the note's medication list nor its text (absent from 4 of the conversation's 6 notes; Med7 does not tag the garbled spelling, so fix 1 cannot see it); D2N093 the negative suicide/homicide screen ("you don't want to hurt yourself or anyone else?" — "absolutely not") is not recorded (the first recording's note had it); D2N023 gynecomastia, named by the doctor as the patient's other area of concern, is absent. Seven claims point at errors written into the note: D2N036 right hand for the left; D2N118 "denies use of television or phone during sleep" where the patient sleeps with the TV on and the phone by the bed; D2N123 "80% of readings within range" where the patient checks 80% of the time; D2N145 tacrolimus "0.1%", a strength nobody stated; D2N100 "18-year-old" for a 7th-grader whose age was never stated, only a date of birth; D2N049 "right flank bilaterally"; D2N026 Eliquis listed beside "denies use of blood thinners", before a planned epidural — a contradiction the conversation itself contains. First recording: the oxybutynin and gynecomastia omissions were in its notes too and its audit flagged both (oxybutynin as "an SGLT2 inhibitor"); the 13 Oct write-up filed them with the editorial content, so "the rest real but judgement-dependent" understated the audit. What thinking off changed: audit replies about twice as long (median 809 vs 363 characters) and 2.5 times as many claims, more of them about content already present or never stated; notes the same length (median about 2,560 characters), but four of the seven note errors (D2N036, D2N118, D2N145, D2N049) and the lost suicide screen (D2N093) are new. Verdict unchanged in kind: on prose the audit is the one fix that runs, and it is a reading feed, not a gate. It is a feed worth reading, because it finds a dropped medicine and errors the note introduced among claims that mostly need no action.
+**Experiment 10.9 at the API's default setting, 14 Nov 2026.** The 9.4 notes it reads and the fix-3 audit were re-recorded with thinking off (MAX_THINKING_TOKENS=0; first recording kept in the _cli_defaults folders). Fix 1: 208 of 360 notes flagged (template 37/32/35, permission 32/36/36; first recording 188). Every flag classified, every remaining drug word opened in dialogue and note: 110 junk only (first names, fillers, months, places, conditions, tests, diet words); 68 with every drug word in the note (24 renamed — acetaminophen 20, betamethasone 3, ibuprofen 1; 22 the same word, which Med7 did not count in the note; 22 a class or other words, e.g. "migraine medication" = propranolol); 30 with a drug word absent: prednisone asked about and never confirmed (D2N026, 6), Vicodin declined / antibiotics judged unnecessary / carvedilol a future option (8), insulin named only because the patient does not take it (D2N160, 6), ibuprofen as "avoid NSAIDs" (2), an alternative or past treatment (Aleve beside the prescribed ibuprofen, past ED and childhood antibiotics, past high-dose gabapentin; 7), and one list change left out (D2N145 permission run 3: clindamycin removed from the list; the other five notes record it). Medicines in use dropped, among the flags: 0. Fix 2: does not run. Fix 3: 60 calls, $0.48 at API prices, 268 s; 223 claims across 57 of 60 notes; 2 replies unparsable (commentary written after a closing quote inside the JSON: D2N030, D2N182). Every claim read against dialogue and note: 83 already in the note, 1 a dose the note carries (amlodipine 10 mg, false by 10.5's record), 30 not in the conversation (13 "allergies / family history / vital signs not documented" where nobody discussed them; vital-sign, A1c and blood-pressure values the doctor read from a screen without saying them; an AF drug, an antidepressant name, a prior lisinopril dose, a "new anxiety medication", a methotrexate dose, never named; two age/date-arithmetic claims; one critique of the plan), 96 real absent content whose note-worthiness is editorial, 3 trivial. Three are real omissions that matter: D2N025 oxybutynin ("i think the oxyglutinine is helping as well", urgency much better) is in neither the note's medication list nor its text (absent from 4 of the conversation's 6 notes; Med7 does not tag the garbled spelling, so fix 1 cannot see it); D2N093 the negative suicide/homicide screen ("you don't want to hurt yourself or anyone else?" — "absolutely not") is not recorded (the first recording's note had it); D2N023 gynecomastia, named by the doctor as the patient's other area of concern, is absent. Seven claims point at errors written into the note: D2N036 right hand for the left; D2N118 "denies use of television or phone during sleep" where the patient sleeps with the TV on and the phone by the bed; D2N123 "80% of readings within range" where the patient checks 80% of the time; D2N145 tacrolimus "0.1%", a strength nobody stated; D2N100 "18-year-old" for a 7th-grader whose age was never stated, only a date of birth; D2N049 "right flank bilaterally"; D2N026 Eliquis listed beside "denies use of blood thinners", before a planned epidural — a contradiction the conversation itself contains. First recording: the oxybutynin and gynecomastia omissions were in its notes too and its audit flagged both (oxybutynin as "an SGLT2 inhibitor"); the 13 Oct write-up filed them with the editorial content, so "the rest real but judgement-dependent" understated the audit. What thinking off changed: audit replies about twice as long (median 809 vs 363 characters) and 2.5 times as many claims, more of them about content already present or never stated; notes the same length (median about 2,560 characters), but four of the seven note errors (D2N036, D2N118, D2N145, D2N049) and the lost suicide screen (D2N093) are new. Verdict unchanged in kind: on prose the audit is the one fix that runs, and it is a reading feed, not a gate. It is a feed worth reading, because it finds a dropped medicine and errors the note introduced among claims that mostly need no action.
 
 
 ## Chapter 3's verification advice follows Chapter 9 (15 Nov 2026)

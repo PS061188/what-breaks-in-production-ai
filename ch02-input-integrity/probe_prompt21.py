@@ -7,8 +7,7 @@ and always extract, leaving the decision to the caller. Its "What this prompt
 does" figures had been carried over from the earlier protocol. This runs the
 printed text (prompt_2_1.txt) on the same 53 documents, three times.
 
-Runs through the Claude Code CLI on the claude.ai plan (never the paid API),
-Claude Haiku 4.5, no tools, no settings. Each reply is recorded in
+Runs Claude Haiku 4.5, no tools. Each reply is recorded in
 fixtures_prompt21/ and replays for free.
 
     python3 probe_prompt21.py           # replay
@@ -69,7 +68,7 @@ def call_cli(system: str, prompt: str) -> dict:
 def grade(reply: str):
     """The input_quality the reply gave, or None if it gave none.
 
-    The CLI has no schema, so some replies grade in prose ("Classification:
+    No schema is enforced, so some replies grade in prose ("Classification:
     DEGRADED") before or instead of the JSON. The JSON field wins when present.
     """
     m = re.search(r'"input_quality"\s*:\s*"([A-Z_]+)"', reply)
@@ -97,7 +96,7 @@ def get(case: dict, run: int, live: bool) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--live", action="store_true", help="record missing runs through the claude CLI")
+    ap.add_argument("--live", action="store_true", help="record missing runs live")
     args = ap.parse_args()
 
     cases = build_cases()
@@ -130,7 +129,7 @@ def main() -> int:
                  f"real defects {len(flagged) - len(false_alarms)}, false alarms {len(false_alarms)}"
                  + (f" ({', '.join(false_alarms)})" if false_alarms else ""))
     cost = sum(rec.get("notional_cost_usd") or 0 for rec in records)
-    print(f"\n  {len(records)} replies · notional cost ${cost:.2f} (claude.ai plan, not billed per call)")
+    print(f"\n  {len(records)} replies · cost at API prices ${cost:.2f}")
     return 0
 
 

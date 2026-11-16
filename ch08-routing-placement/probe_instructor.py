@@ -8,19 +8,18 @@ itself with the same Pydantic model (probe_schema.Filing), the same plain
 prompt, and the first ten of the 60 ACI-Bench notes, at max_retries=2: up to
 three calls a note, as in probe_schema.py.
 
-The model is Claude Haiku 4.5 through the Claude Code CLI (`claude -p`) on a
-subscription, never the paid API, with thinking switched off
-(MAX_THINKING_TOKENS=0): the CLI thinks by default, and the API calls of
-probe_schema.py did not. Instructor accepts any function that returns
-an Anthropic Message (`instructor.patch(create=...)`); the one here turns each
-request into one `claude -p` call. Instructor runs in Mode.JSON, because the
-CLI has no tool calls and no enforced schema: Instructor writes the JSON schema
-into the system prompt and parses the reply. Its re-ask appends a user message
+The model is Claude Haiku 4.5 with thinking switched off
+(MAX_THINKING_TOKENS=0), as in the API calls of probe_schema.py. Instructor
+accepts any function that returns an Anthropic Message
+(`instructor.patch(create=...)`); the one here turns each request into one
+model call. Instructor runs in Mode.JSON, because these calls have no tool
+calls and no enforced schema: Instructor writes the JSON schema into the
+system prompt and parses the reply. Its re-ask appends a user message
 (the validation error and the failed reply), so every message in a request is
 a user message; they are joined into one prompt with a blank line between them.
 
 Every call is saved in fixtures_instructor/, named by note and a hash of the
-exact request, so a replay needs Instructor installed but no key and no CLI.
+exact request, so a replay needs Instructor installed but no key.
 
   uv venv --python 3.11 .venv-instructor
   uv pip install --python .venv-instructor/bin/python instructor==1.17.0 anthropic
@@ -106,7 +105,7 @@ def run_note(case: dict, model: str, live: bool):
 
     def create(**kw):
         if any(m["role"] != "user" for m in kw["messages"]):
-            raise RuntimeError("a non-user message cannot be carried by one `claude -p` prompt")
+            raise RuntimeError("a non-user message cannot be carried by one prompt")
         system = text_of(kw.get("system") or "")
         prompt = "\n\n".join(text_of(m["content"]) for m in kw["messages"])
         rec = recorded(case, model, system, prompt, live)
@@ -145,7 +144,7 @@ def main() -> int:
     args = base_args(__doc__).parse_args()
     cases = pc.build_cases()[: args.limit or NOTES]
     n_units = sum(len(c["items"]) for c in cases)
-    print(f"Instructor {instructor.__version__} · Mode.JSON · max_retries={MAX_RETRIES} · {args.model} via claude -p, thinking off")
+    print(f"Instructor {instructor.__version__} · Mode.JSON · max_retries={MAX_RETRIES} · {args.model}, thinking off")
     print(f"{len(cases)} ACI-Bench notes (the first ten of probe_clinical.py's 60), {n_units} sentences; plain prompt\n")
     with ThreadPoolExecutor(max_workers=4) as pool:
         results = list(pool.map(lambda c: run_note(c, args.model, bool(args.live)), cases))
