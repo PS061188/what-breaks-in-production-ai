@@ -59,7 +59,7 @@ and a fix's headline benefit disappeared against a fair baseline. That is why [`
 Findings that contradict the book are in **[FINDINGS.md](FINDINGS.md)** rather
 than quietly fixed in one place. **[FIX_STATUS.md](FIX_STATUS.md)** rates every
 prompt and every fix. **[REVIEW.md](REVIEW.md)** is an adversarial read of the
-whole thing. **[report/](report/)** is a 149-page write-up with the corpus,
+whole thing. **[report/](report/)** is a 150-page write-up with the corpus,
 settings, worked input/output samples, costs and limits for every experiment.
 
 ## What actually goes in a prompt
@@ -70,7 +70,7 @@ Every prompt template in the book was run against the same documents. Sorted by
 | The instruction asks for | Outcome |
 |---|---|
 | **A restriction on what may be asserted** — *only from the sources* · *the document must be marked ACTIVE* · *scan for these four specific signals* | Every large gain here: **at least −91 pts** fabrication, **67% → 17%**, **95% flagged** |
-| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Little, in four chapters.** Lowest grade returned **0 times in 400+ assessments** of damaged or mislabelled inputs; it appeared only when Chapter 2 made the damage extreme. On role-played clinical notes, **7 in 10 misplaced sentences graded HIGH**. A self-count was **its own list's length in 54 of 54** calls |
+| **A self-assessment** — *rate your confidence* · *set requires_review if unsure* · *count the items then check yourself* | **Little, in four chapters.** Lowest grade returned **0 times in 400+ assessments** of damaged or mislabelled inputs; it appeared only when Chapter 2 made the damage extreme. On role-played clinical notes, **7 in 10 misplaced sentences graded HIGH**. A self-count was **its own list's length in 46 of 54** calls |
 
 A restriction changes what the model may output, and the code reading the response
 can enforce it. A self-assessment adds a field and changes nothing else — it is a
